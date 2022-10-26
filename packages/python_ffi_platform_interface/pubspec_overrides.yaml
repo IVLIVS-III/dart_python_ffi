@@ -1,0 +1,4 @@
+# melos_managed_dependency_overrides: python_ffi_lint
+dependency_overrides:
+  python_ffi_lint:
+    path: ../python_ffi_lint

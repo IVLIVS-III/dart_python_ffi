@@ -19,3 +19,9 @@ doc/api/
 *.js_
 *.js.deps
 *.js.map
+
+# IDE configuration files
+.idea/
+
+# melos configuration files
+melos*.iml

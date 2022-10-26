@@ -1,0 +1,15 @@
+name: dart_python_ffi
+repository: https://github.com/IVLIVS-III/dart_python_ffi
+
+packages:
+  - packages/**
+
+command:
+  bootstrap:
+    usePubspecOverrides: true
+
+scripts:
+  analyze:
+    exec: dart analyze . --fatal-infos
+  format:
+    exec: dart format .
