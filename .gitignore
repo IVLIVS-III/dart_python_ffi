@@ -25,3 +25,7 @@ doc/api/
 
 # melos configuration files
 melos*.iml
+
+# macOS
+**/.DS_Store
+**/Podfile.lock

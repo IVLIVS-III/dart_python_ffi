@@ -5,9 +5,9 @@
 Pod::Spec.new do |s|
   s.name             = 'python_ffi_macos'
   s.version          = '0.0.1'
-  s.summary          = 'A Python-FFI for Dart'
+  s.summary          = 'A new Flutter FFI plugin project.'
   s.description      = <<-DESC
-A Python-FFI for Dart
+A new Flutter FFI plugin project.
                        DESC
   s.homepage         = 'http://example.com'
   s.license          = { :file => '../LICENSE' }
@@ -19,9 +19,13 @@ A Python-FFI for Dart
   # `../src/*` so that the C sources can be shared among all target platforms.
   s.source           = { :path => '.' }
   s.source_files     = 'Classes/**/*'
-  s.dependency 'FlutterMacOS'
 
   s.platform = :osx, '10.11'
-  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
-  s.swift_version = '5.0'
+  # s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
+
+  s.xcconfig = {
+     # here on LDFLAG, I had to set -l and then the library name (without lib prefix although the file name has it).
+     # 'OTHER_LDFLAGS' => '-llibpython3.11',
+  }
+  # s.vendored_libraries = 'python/libpython3.11'
 end

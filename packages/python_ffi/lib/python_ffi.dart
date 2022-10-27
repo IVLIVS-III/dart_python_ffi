@@ -5,10 +5,21 @@
 // platforms in the `pubspec.yaml` at
 // https://flutter.dev/docs/development/packages-and-plugins/developing-packages#plugin-platforms.
 
-import 'python_ffi_platform_interface.dart';
+import 'package:python_ffi_platform_interface/python_ffi_platform_interface.dart';
 
 class PythonFfi {
-  Future<String?> getPlatformVersion() {
-    return PythonFfiPlatform.instance.getPlatformVersion();
+  PythonFfi._() {
+    PythonFfiPlatform.instance.initialize();
+  }
+
+  static PythonFfi? _instance;
+
+  static PythonFfi get instance {
+    _instance ??= PythonFfi._();
+    return _instance!;
+  }
+
+  void helloWorld() {
+    PythonFfiPlatform.instance.helloWorld();
   }
 }
