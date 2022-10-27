@@ -11,5 +11,10 @@ command:
 scripts:
   analyze:
     exec: dart analyze . --fatal-infos
+  ffigen:
+    exec: dart run ffigen
+    select-package:
+      scope: python_ffi_macos
   format:
     exec: dart format .
+  postbootstrap: melos run ffigen
