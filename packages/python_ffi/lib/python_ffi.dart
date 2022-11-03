@@ -5,7 +5,7 @@
 // platforms in the `pubspec.yaml` at
 // https://flutter.dev/docs/development/packages-and-plugins/developing-packages#plugin-platforms.
 
-import 'package:python_ffi_platform_interface/python_ffi_platform_interface.dart';
+import "package:python_ffi_platform_interface/python_ffi_platform_interface.dart";
 
 class PythonFfi {
   PythonFfi._() {
@@ -17,6 +17,13 @@ class PythonFfi {
   static PythonFfi get instance {
     _instance ??= PythonFfi._();
     return _instance!;
+  }
+
+  Future<PythonModulePlatform> importModule(String name) async =>
+      PythonFfiPlatform.instance.importModule(name);
+
+  Future<void> appendToPath(String path) async {
+    await PythonFfiPlatform.instance.appendToPath(path);
   }
 
   void helloWorld() {

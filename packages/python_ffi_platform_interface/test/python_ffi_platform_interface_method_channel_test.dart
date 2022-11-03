@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:python_ffi_platform_interface/python_ffi_method_channel.dart';
+import 'package:python_ffi_platform_interface/src/python_ffi_method_channel.dart';
 
 void main() {
   MethodChannelPythonFfiPlatformInterface platform =
