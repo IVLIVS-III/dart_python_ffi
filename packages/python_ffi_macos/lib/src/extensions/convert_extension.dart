@@ -17,6 +17,9 @@ extension ConvertToPythonExtension on Object? {
     if (value is bool) {
       object = value ? platform.bindings.Py_True : platform.bindings.Py_False;
     }
+    if (value is int) {
+      object = platform.bindings.PyLong_FromLong(value);
+    }
     if (value is String) {
       object = value.toNativeUtf8().useAndFree(
             (Pointer<Utf8> pointer) =>
@@ -43,8 +46,31 @@ extension ConvertToDartExtension on Pointer<PyObject> {
       platform.bindings.Py_DecRef(object);
       return null;
     }
+    if (object == platform.bindings.Py_True) {
+      platform.bindings.Py_DecRef(object);
+      return true;
+    }
+    if (object == platform.bindings.Py_False) {
+      platform.bindings.Py_DecRef(object);
+      return false;
+    }
+    final String nameString =
+        object.ref.ob_type.ref.tp_name.cast<Utf8>().toDartString();
 
-    throw Exception("Unsupported type: $runtimeType");
+    switch (nameString) {
+      case "int":
+        return asInt(platform);
+    }
+
+    throw Exception("Unsupported type: $nameString($runtimeType)");
+  }
+
+  int asInt(PythonFfiMacOS platform) {
+    final int result = platform.bindings.PyLong_AsLong(this);
+    if (result == -1 && platform.bindings.PyErr_Occurred() != nullptr) {
+      throw PythonFfiException("Failed to convert to int");
+    }
+    return result;
   }
 
   String asString(PythonFfiMacOS platform) {

@@ -48,10 +48,12 @@ class PythonFfiMacOS extends PythonFfiPlatform<Pointer<PyObject>> {
   final Map<String, PythonModuleMacos> _modules = <String, PythonModuleMacos>{};
 
   /// Checks whether the Python C-bindings are available
-  bool get isInitialized => _bindings != null;
+  bool get areBindingsInitialized => _bindings != null;
 
   /// Checks whether the Python runtime was initialized
-  bool get pyInitialized => bindings.Py_IsInitialized() != 0;
+  @override
+  bool get isInitialized =>
+      areBindingsInitialized && bindings.Py_IsInitialized() != 0;
 
   // Attempt to bundle the python library with the app via flutter assets.
   /*
@@ -94,11 +96,12 @@ class PythonFfiMacOS extends PythonFfiPlatform<Pointer<PyObject>> {
 
   @override
   Future<void> initialize() async {
-    if (!isInitialized) {
+    if (!areBindingsInitialized) {
       _openDylib();
     }
 
     await _copySingleFileModule("hello_world");
+    await _copySingleFileModule("primitives");
 
     bindings.Py_Initialize();
 
@@ -127,11 +130,12 @@ class PythonFfiMacOS extends PythonFfiPlatform<Pointer<PyObject>> {
 
     // convert the module name to a Python string
     final Pointer<PyObject> pythonModuleName =
-        moduleName.toNativeUtf8().useAndFree(
-              (Pointer<Utf8> pointer) =>
-                  bindings.PyUnicode_DecodeFSDefault(pointer.cast<Char>()),
-            );
-
+        moduleName.toNativeUtf8().useAndFree((Pointer<Utf8> pointer) {
+      final Pointer<Char> charPointer = pointer.cast<Char>();
+      final Pointer<PyObject> result =
+          bindings.PyUnicode_DecodeFSDefault(charPointer);
+      return result;
+    });
     // import the module
     final Pointer<PyObject> pyImport =
         bindings.PyImport_Import(pythonModuleName);
@@ -186,17 +190,6 @@ class PythonFfiMacOS extends PythonFfiPlatform<Pointer<PyObject>> {
       throw PythonFfiException("Failed to append $path to sys.path");
     }
   }
-
-  @override
-  void helloWorld() {
-    final PythonModuleMacos helloWorldModule = importModule("hello_world");
-    final PythonFunctionMacos helloWorldFunction =
-        helloWorldModule.getFunction("hello_world");
-    helloWorldFunction();
-
-    // unload the hello_world module again
-    helloWorldModule.dispose();
-  }
 }
 
 class PythonFunctionMacos
@@ -204,7 +197,31 @@ class PythonFunctionMacos
     with PythonObjectMacosMixin {
   PythonFunctionMacos(super.platform, super.reference);
 
-  Object? call() => null;
+  @override
+  T call<T extends Object?>(
+    List<Object?> args, {
+    Map<String, Object?>? kwargs,
+  }) {
+    final List<Pointer<PyObject>> mappedArgs = args
+        .map((Object? arg) => arg.toPythonObject(platform).reference)
+        .toList();
+
+    final Map<String, Pointer<PyObject>>? mappedKwargs = kwargs?.map(
+      (String key, Object? value) => MapEntry<String, Pointer<PyObject>>(
+        key,
+        value.toPythonObject(platform).reference,
+      ),
+    );
+
+    final Pointer<PyObject> rawResult =
+        rawCall(args: mappedArgs, kwargs: mappedKwargs);
+
+    final PythonObjectMacos result = PythonObjectMacos(platform, rawResult);
+    final Object? mappedResult = result.toDartObject();
+    result.dispose();
+
+    return mappedResult as T;
+  }
 
   /// Calls the python function with raw pyObject args and kwargs
   Pointer<PyObject> rawCall({
@@ -221,6 +238,7 @@ class PythonFunctionMacos
       platform.bindings.PyTuple_SetItem(pArgs, i, args![i]);
     }
 
+    // TODO: prepare kwargs
     // prepare kwargs
     final Pointer<PyObject> pKwargs = nullptr;
 
@@ -348,4 +366,7 @@ mixin PythonObjectMacosMixin
   void dispose() {
     platform.bindings.Py_DecRef(reference);
   }
+
+  @override
+  Object? toDartObject() => reference.toDartObject(platform);
 }

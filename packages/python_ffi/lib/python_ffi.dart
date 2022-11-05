@@ -5,12 +5,55 @@
 // platforms in the `pubspec.yaml` at
 // https://flutter.dev/docs/development/packages-and-plugins/developing-packages#plugin-platforms.
 
+import "dart:async";
+
 import "package:python_ffi_platform_interface/python_ffi_platform_interface.dart";
 
-class PythonFfi {
-  PythonFfi._() {
-    PythonFfiPlatform.instance.initialize();
+/*
+typedef PythonModule
+    = PythonModulePlatform<PythonFfiPlatform<Object?>, Object?>;
+*/
+
+typedef PythonModuleFrom<T extends PythonModule> = T Function(
+  PythonModulePlatform<PythonFfiPlatform<Object?>, Object?> pythonModule,
+);
+
+class PythonModule
+    extends PythonModulePlatform<PythonFfiPlatform<Object?>, Object?> {
+  PythonModule.from(
+    PythonModulePlatform<PythonFfiPlatform<Object?>, Object?> pythonModule,
+  )   : _pythonModule = pythonModule,
+        super(pythonModule.platform, pythonModule.reference);
+
+  static FutureOr<T> import<T extends PythonModule>(
+    String moduleName,
+    PythonModuleFrom<T> from,
+  ) =>
+      PythonFfi.instance.importModule(moduleName, from);
+
+  final PythonModulePlatform<PythonFfiPlatform<Object?>, Object?> _pythonModule;
+
+  @override
+  void dispose() {
+    _pythonModule.dispose();
   }
+
+  @override
+  Object? getAttribute(String attributeName) =>
+      _pythonModule.getAttribute(attributeName);
+
+  @override
+  PythonFunctionPlatform<PythonFfiPlatform<Object?>, Object?> getFunction(
+    String functionName,
+  ) =>
+      _pythonModule.getFunction(functionName);
+
+  @override
+  Object? toDartObject() => _pythonModule.toDartObject();
+}
+
+class PythonFfi {
+  PythonFfi._();
 
   static PythonFfi? _instance;
 
@@ -19,14 +62,27 @@ class PythonFfi {
     return _instance!;
   }
 
-  Future<PythonModulePlatform> importModule(String name) async =>
-      PythonFfiPlatform.instance.importModule(name);
+  FutureOr<void> initialize() async =>
+      await PythonFfiPlatform.instance.initialize();
 
-  Future<void> appendToPath(String path) async {
-    await PythonFfiPlatform.instance.appendToPath(path);
+  void _ensureInitialized() {
+    if (!PythonFfiPlatform.instance.isInitialized) {
+      throw PythonFfiException(
+        "PythonFfi is not initialized. Call `PythonFfi.instance.initialize()` before using it.",
+      );
+    }
   }
 
-  void helloWorld() {
-    PythonFfiPlatform.instance.helloWorld();
+  Future<T> importModule<T extends PythonModule>(
+    String name,
+    PythonModuleFrom<T> from,
+  ) async {
+    _ensureInitialized();
+    return from(await PythonFfiPlatform.instance.importModule(name));
+  }
+
+  Future<void> appendToPath(String path) async {
+    _ensureInitialized();
+    await PythonFfiPlatform.instance.appendToPath(path);
   }
 }

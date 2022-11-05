@@ -10,6 +10,9 @@ class MethodChannelPythonFfi extends PythonFfiPlatform<Object?> {
       const MethodChannel("dartpythonffi.ivlivs.dev/python_ffi");
 
   @override
+  bool get isInitialized => false;
+
+  @override
   Future<void> initialize() async {
     await methodChannel.invokeMethod<void>("initialize");
   }

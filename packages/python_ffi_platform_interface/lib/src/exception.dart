@@ -11,8 +11,8 @@ class PythonFfiException implements Exception {
 }
 
 /// A dart exception wrapping a python exception
-class PythonExceptionPlatform<P extends PythonFfiPlatform<R>, R extends Object?>
-    extends PythonObjectPlatform<P, R> implements Exception {
+abstract class PythonExceptionPlatform<P extends PythonFfiPlatform<R>,
+    R extends Object?> extends PythonObjectPlatform<P, R> implements Exception {
   PythonExceptionPlatform(super.platform, super.reference);
 
   @override

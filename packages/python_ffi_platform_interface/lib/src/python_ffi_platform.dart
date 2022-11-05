@@ -26,6 +26,9 @@ abstract class PythonFfiPlatform<R extends Object?> extends PlatformInterface {
     _instance = instance;
   }
 
+  /// Checks whether the Python runtime was initialized
+  bool get isInitialized;
+
   /// Initializes the native platform Python runtime
   FutureOr<void> initialize() async {
     throw UnimplementedError("initialize() has not been implemented.");
@@ -58,9 +61,5 @@ abstract class PythonFfiPlatform<R extends Object?> extends PlatformInterface {
   /// Appends a path to the Python sys.path
   FutureOr<void> appendToPath(String path) async {
     throw UnimplementedError("appendToPath() has not been implemented.");
-  }
-
-  void helloWorld() {
-    throw UnimplementedError("helloWorld() has not been implemented.");
   }
 }

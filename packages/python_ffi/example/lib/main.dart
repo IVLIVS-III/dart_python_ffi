@@ -1,7 +1,13 @@
 import "package:flutter/material.dart";
 import "package:python_ffi/python_ffi.dart";
+import "package:python_ffi_example/python-modules/hello_world.dart";
+import "package:python_ffi_example/python-modules/primitives.dart";
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await PythonFfi.instance.initialize();
+
   runApp(const MyApp());
 }
 
@@ -13,7 +19,23 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final PythonFfi _pythonFfiPlugin = PythonFfi.instance;
+  Future<void> helloWorld() async {
+    final HelloWorldModule helloWorldModule = await HelloWorldModule.import();
+
+    helloWorldModule
+      ..hello_world()
+      ..dispose();
+  }
+
+  Future<void> primitivesSum() async {
+    final PrimitivesModule primitivesModule = await PrimitivesModule.import();
+
+    final int sum = primitivesModule.sum(2, 3);
+
+    primitivesModule.dispose();
+
+    print("Sum: $sum");
+  }
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -24,8 +46,12 @@ class _MyAppState extends State<MyApp> {
           body: ButtonBar(
             children: <Widget>[
               ElevatedButton(
-                onPressed: _pythonFfiPlugin.helloWorld,
-                child: const Text("Run Python 'hello_world'"),
+                onPressed: helloWorld,
+                child: const Text("Run Python 'hello_world.hello_world()'"),
+              ),
+              ElevatedButton(
+                onPressed: primitivesSum,
+                child: const Text("Run Python 'primitives.sum(2, 3)'"),
               ),
             ],
           ),

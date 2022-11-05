@@ -8,16 +8,20 @@ abstract class PythonObjectPlatform<P extends PythonFfiPlatform<R>,
   final P platform;
   final R reference;
 
+  Object? toDartObject();
+
   Object? getAttribute(String attributeName);
 
   /// Disposes the python object
   @mustCallSuper
   void dispose();
 
+  /*
   @override
   @mustCallSuper
   dynamic noSuchMethod(Invocation invocation) {
     print("PythonObject.noSuchMethod: $invocation");
     return super.noSuchMethod(invocation);
   }
+  */
 }
