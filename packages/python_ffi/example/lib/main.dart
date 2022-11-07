@@ -37,6 +37,16 @@ class _MyAppState extends State<MyApp> {
     print("Sum: $sum");
   }
 
+  Future<void> primitivesSqrt() async {
+    final PrimitivesModule primitivesModule = await PrimitivesModule.import();
+
+    final int sqrt = primitivesModule.sqrt(9);
+
+    primitivesModule.dispose();
+
+    print("Sqrt: $sqrt");
+  }
+
   @override
   Widget build(BuildContext context) => MaterialApp(
         home: Scaffold(
@@ -52,6 +62,10 @@ class _MyAppState extends State<MyApp> {
               ElevatedButton(
                 onPressed: primitivesSum,
                 child: const Text("Run Python 'primitives.sum(2, 3)'"),
+              ),
+              ElevatedButton(
+                onPressed: primitivesSqrt,
+                child: const Text("Run Python 'primitives.sqrt(3)'"),
               ),
             ],
           ),
