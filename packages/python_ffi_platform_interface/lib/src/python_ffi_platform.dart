@@ -52,10 +52,18 @@ abstract class PythonFfiPlatform<R extends Object?> extends PlatformInterface {
 
   /// Imports a Python module.
   /// The module must be builtin or bundled with the app via flutter assets.
-  FutureOr<PythonModulePlatform<PythonFfiPlatform<R>, R>> importModule(
+  PythonModulePlatform<PythonFfiPlatform<R>, R> importModule(
     String moduleName,
-  ) async {
+  ) {
     throw UnimplementedError("importModule() has not been implemented.");
+  }
+
+  /// Imports a Python class from the specified module.
+  PythonClassPlatform<PythonFfiPlatform<R>, R> importClass(
+    String moduleName,
+    String className,
+  ) {
+    throw UnimplementedError("importClass() has not been implemented.");
   }
 
   /// Appends a path to the Python sys.path

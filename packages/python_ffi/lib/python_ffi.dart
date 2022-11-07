@@ -18,6 +18,10 @@ typedef PythonModuleFrom<T extends PythonModule> = T Function(
   PythonModulePlatform<PythonFfiPlatform<Object?>, Object?> pythonModule,
 );
 
+typedef PythonClassFrom<T extends PythonClass> = T Function(
+  PythonClassPlatform<PythonFfiPlatform<Object?>, Object?> pythonClass,
+);
+
 class PythonModule
     extends PythonModulePlatform<PythonFfiPlatform<Object?>, Object?> {
   PythonModule.from(
@@ -25,7 +29,7 @@ class PythonModule
   )   : _pythonModule = pythonModule,
         super(pythonModule.platform, pythonModule.reference);
 
-  static FutureOr<T> import<T extends PythonModule>(
+  static T import<T extends PythonModule>(
     String moduleName,
     PythonModuleFrom<T> from,
   ) =>
@@ -52,6 +56,37 @@ class PythonModule
   Object? toDartObject() => _pythonModule.toDartObject();
 }
 
+abstract class _PythonClass
+    extends PythonClassPlatform<PythonFfiPlatform<Object?>, Object?> {
+  _PythonClass.from(
+    PythonClassPlatform<PythonFfiPlatform<Object?>, Object?> pythonClass,
+  )   : _pythonClass = pythonClass,
+        super(pythonClass.platform, pythonClass.reference);
+
+  final PythonClassPlatform<PythonFfiPlatform<Object?>, Object?> _pythonClass;
+
+  @override
+  void dispose() {
+    _pythonClass.dispose();
+  }
+
+  @override
+  Object? getAttribute(String attributeName) =>
+      _pythonClass.getAttribute(attributeName);
+
+  @override
+  Object? toDartObject() => _pythonClass.toDartObject();
+}
+
+abstract class PythonClass extends _PythonClass {
+  PythonClass.from(
+    PythonClassPlatform<PythonFfiPlatform<Object?>, Object?> pythonClass,
+  ) : super.from(pythonClass);
+
+  PythonClass.import(String moduleName, String className, PythonClassFrom from)
+      : super.from(PythonFfi.instance.importClass(moduleName, className, from));
+}
+
 class PythonFfi {
   PythonFfi._();
 
@@ -73,12 +108,21 @@ class PythonFfi {
     }
   }
 
-  Future<T> importModule<T extends PythonModule>(
+  T importModule<T extends PythonModule>(
     String name,
     PythonModuleFrom<T> from,
-  ) async {
+  ) {
     _ensureInitialized();
-    return from(await PythonFfiPlatform.instance.importModule(name));
+    return from(PythonFfiPlatform.instance.importModule(name));
+  }
+
+  T importClass<T extends PythonClass>(
+    String moduleName,
+    String className,
+    PythonClassFrom<T> from,
+  ) {
+    _ensureInitialized();
+    return from(PythonFfiPlatform.instance.importClass(moduleName, className));
   }
 
   Future<void> appendToPath(String path) async {

@@ -100,8 +100,10 @@ class PythonFfiMacOS extends PythonFfiPlatform<Pointer<PyObject>> {
       _openDylib();
     }
 
+    // TODO: move this into the client package
     await _copySingleFileModule("hello_world");
     await _copySingleFileModule("primitives");
+    await _copySingleFileModule("structs");
 
     bindings.Py_Initialize();
 
@@ -161,6 +163,13 @@ class PythonFfiMacOS extends PythonFfiPlatform<Pointer<PyObject>> {
 
   void _disposeModule(PythonModuleMacos module) {
     _modules.removeWhere((_, PythonModuleMacos value) => value == module);
+  }
+
+  @override
+  PythonClassPlatform<PythonFfiPlatform<Pointer<PyObject>>, Pointer<PyObject>>
+      importClass(String moduleName, String className) {
+    // TODO: implement importClass
+    return super.importClass(moduleName, className);
   }
 
   @override
@@ -287,6 +296,13 @@ class PythonModuleMacos
     platform._disposeModule(this);
     super.dispose();
   }
+}
+
+abstract class PythonClassMacos
+    extends PythonClassPlatform<PythonFfiMacOS, Pointer<PyObject>>
+    with PythonObjectMacosMixin {
+  PythonClassMacos(PythonFfiMacOS platform, Pointer<PyObject> reference)
+      : super(platform, reference);
 }
 
 class PythonObjectMacos
