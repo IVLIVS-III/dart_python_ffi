@@ -48,17 +48,16 @@ class PythonModule
 
   @override
   PythonFunctionPlatform<PythonFfiPlatform<Object?>, Object?> getFunction(
-    String functionName,
-  ) =>
+          String functionName) =>
       _pythonModule.getFunction(functionName);
 
   @override
   Object? toDartObject() => _pythonModule.toDartObject();
 }
 
-abstract class _PythonClass
+abstract class PythonClass
     extends PythonClassPlatform<PythonFfiPlatform<Object?>, Object?> {
-  _PythonClass.from(
+  PythonClass.from(
     PythonClassPlatform<PythonFfiPlatform<Object?>, Object?> pythonClass,
   )   : _pythonClass = pythonClass,
         super(pythonClass.platform, pythonClass.reference);
@@ -75,16 +74,12 @@ abstract class _PythonClass
       _pythonClass.getAttribute(attributeName);
 
   @override
+  PythonFunctionPlatform<PythonFfiPlatform<Object?>, Object?> getFunction(
+          String functionName) =>
+      _pythonClass.getFunction(functionName);
+
+  @override
   Object? toDartObject() => _pythonClass.toDartObject();
-}
-
-abstract class PythonClass extends _PythonClass {
-  PythonClass.from(
-    PythonClassPlatform<PythonFfiPlatform<Object?>, Object?> pythonClass,
-  ) : super.from(pythonClass);
-
-  PythonClass.import(String moduleName, String className, PythonClassFrom from)
-      : super.from(PythonFfi.instance.importClass(moduleName, className, from));
 }
 
 class PythonFfi {
@@ -120,9 +115,15 @@ class PythonFfi {
     String moduleName,
     String className,
     PythonClassFrom<T> from,
-  ) {
+    List<Object?> args, [
+    Map<String, Object?>? kwargs,
+  ]) {
     _ensureInitialized();
-    return from(PythonFfiPlatform.instance.importClass(moduleName, className));
+    // TODO: integrate pythonClassType properly
+    return from(
+      PythonFfiPlatform.instance
+          .importClass(moduleName, className, args, kwargs),
+    );
   }
 
   Future<void> appendToPath(String path) async {

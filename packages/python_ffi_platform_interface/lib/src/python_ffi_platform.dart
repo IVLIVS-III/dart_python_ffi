@@ -2,7 +2,6 @@ import "dart:async";
 
 import "package:plugin_platform_interface/plugin_platform_interface.dart";
 import "package:python_ffi_platform_interface/python_ffi_platform_interface.dart";
-import "package:python_ffi_platform_interface/src/module.dart";
 import "package:python_ffi_platform_interface/src/python_ffi_method_channel.dart";
 
 abstract class PythonFfiPlatform<R extends Object?> extends PlatformInterface {
@@ -62,7 +61,9 @@ abstract class PythonFfiPlatform<R extends Object?> extends PlatformInterface {
   PythonClassPlatform<PythonFfiPlatform<R>, R> importClass(
     String moduleName,
     String className,
-  ) {
+    List<Object?> args, [
+    Map<String, Object?>? kwargs,
+  ]) {
     throw UnimplementedError("importClass() has not been implemented.");
   }
 

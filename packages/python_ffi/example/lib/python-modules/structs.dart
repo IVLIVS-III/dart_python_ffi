@@ -2,14 +2,16 @@ import "package:python_ffi/python_ffi.dart";
 
 class Coordinate extends PythonClass {
   factory Coordinate(double latitude, double longitude) {
-    final Coordinate coordinate = Coordinate._();
-    // TODO: get function init, invoke init, return result
+    final Coordinate coordinate = PythonFfi.instance.importClass(
+      "structs",
+      "Coordinate",
+      Coordinate.from,
+      <Object?>[latitude, longitude],
+    );
     return coordinate;
   }
 
   Coordinate.from(super.pythonClass) : super.from();
-
-  Coordinate._() : super.import("structs", "Coordinate", Coordinate.from);
 
   @override
   StructsModule get module => StructsModule.import();

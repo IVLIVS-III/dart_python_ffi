@@ -167,9 +167,14 @@ class PythonFfiMacOS extends PythonFfiPlatform<Pointer<PyObject>> {
 
   @override
   PythonClassPlatform<PythonFfiPlatform<Pointer<PyObject>>, Pointer<PyObject>>
-      importClass(String moduleName, String className) {
+      importClass(
+    String moduleName,
+    String className,
+    List<Object?> args, [
+    Map<String, Object?>? kwargs,
+  ]) {
     // TODO: implement importClass
-    return super.importClass(moduleName, className);
+    return super.importClass(moduleName, className, args, kwargs);
   }
 
   @override
