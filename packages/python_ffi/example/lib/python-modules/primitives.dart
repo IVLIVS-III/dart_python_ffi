@@ -1,12 +1,9 @@
-import "dart:async";
-
 import "package:python_ffi/python_ffi.dart";
 
 class PrimitivesModule extends PythonModule {
   PrimitivesModule.from(super.pythonModule) : super.from();
 
-  static FutureOr<PrimitivesModule> import() async =>
-      PythonFfi.instance.importModule(
+  static PrimitivesModule import() => PythonFfi.instance.importModule(
         "primitives",
         PrimitivesModule.from,
       );

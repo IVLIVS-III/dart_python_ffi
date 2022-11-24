@@ -5,9 +5,13 @@ import "dart:io";
 import "package:ffi/ffi.dart";
 import "package:flutter/services.dart";
 import "package:path_provider/path_provider.dart";
+import "package:python_ffi_macos/src/class.dart";
+import "package:python_ffi_macos/src/exception.dart";
 import "package:python_ffi_macos/src/extensions/convert_extension.dart";
 import "package:python_ffi_macos/src/extensions/malloc_extension.dart";
 import "package:python_ffi_macos/src/ffi/generated_bindings.g.dart";
+import "package:python_ffi_macos/src/module.dart";
+import "package:python_ffi_macos/src/object.dart";
 import "package:python_ffi_platform_interface/python_ffi_platform_interface.dart";
 
 // const String _libName = "libpython3.11";
@@ -161,7 +165,7 @@ class PythonFfiMacOS extends PythonFfiPlatform<Pointer<PyObject>> {
     return module;
   }
 
-  void _disposeModule(PythonModuleMacos module) {
+  void disposeModule(PythonModuleMacos module) {
     _modules.removeWhere((_, PythonModuleMacos value) => value == module);
   }
 
@@ -173,8 +177,9 @@ class PythonFfiMacOS extends PythonFfiPlatform<Pointer<PyObject>> {
     List<Object?> args, [
     Map<String, Object?>? kwargs,
   ]) {
-    // TODO: implement importClass
-    return super.importClass(moduleName, className, args, kwargs);
+    final PythonModuleMacos module = importModule(moduleName);
+    final PythonClassMacos class_ = module.getClass(className, args, kwargs);
+    return class_;
   }
 
   @override
@@ -204,190 +209,4 @@ class PythonFfiMacOS extends PythonFfiPlatform<Pointer<PyObject>> {
       throw PythonFfiException("Failed to append $path to sys.path");
     }
   }
-}
-
-class PythonFunctionMacos
-    extends PythonFunctionPlatform<PythonFfiMacOS, Pointer<PyObject>>
-    with PythonObjectMacosMixin {
-  PythonFunctionMacos(super.platform, super.reference);
-
-  @override
-  T call<T extends Object?>(
-    List<Object?> args, {
-    Map<String, Object?>? kwargs,
-  }) {
-    final List<Pointer<PyObject>> mappedArgs = args
-        .map((Object? arg) => arg.toPythonObject(platform).reference)
-        .toList();
-
-    final Map<String, Pointer<PyObject>>? mappedKwargs = kwargs?.map(
-      (String key, Object? value) => MapEntry<String, Pointer<PyObject>>(
-        key,
-        value.toPythonObject(platform).reference,
-      ),
-    );
-
-    final Pointer<PyObject> rawResult =
-        rawCall(args: mappedArgs, kwargs: mappedKwargs);
-
-    final PythonObjectMacos result = PythonObjectMacos(platform, rawResult);
-    final Object? mappedResult = result.toDartObject();
-    result.dispose();
-
-    return mappedResult as T;
-  }
-
-  /// Calls the python function with raw pyObject args and kwargs
-  Pointer<PyObject> rawCall({
-    List<Pointer<PyObject>>? args,
-    Map<String, Pointer<PyObject>>? kwargs,
-  }) {
-    // prepare args
-    final int argsLen = args?.length ?? 0;
-    final Pointer<PyObject> pArgs = platform.bindings.PyTuple_New(argsLen);
-    if (pArgs == nullptr) {
-      throw PythonFfiException("Creating argument tuple failed");
-    }
-    for (int i = 0; i < argsLen; i++) {
-      platform.bindings.PyTuple_SetItem(pArgs, i, args![i]);
-    }
-
-    // TODO: prepare kwargs
-    // prepare kwargs
-    final Pointer<PyObject> pKwargs = nullptr;
-
-    // call function
-    final Pointer<PyObject> result =
-        platform.bindings.PyObject_Call(reference, pArgs, pKwargs);
-    platform.bindings.Py_DecRef(pArgs);
-
-    // check for errors
-    platform.ensureNoPythonError();
-
-    return result;
-  }
-}
-
-class PythonModuleMacos
-    extends PythonModulePlatform<PythonFfiMacOS, Pointer<PyObject>>
-    with PythonObjectMacosMixin {
-  PythonModuleMacos(super.platform, super.reference);
-
-  final Map<String, PythonFunctionMacos> _functions =
-      <String, PythonFunctionMacos>{};
-
-  @override
-  PythonFunctionMacos getFunction(String functionName) {
-    final PythonFunctionMacos? cachedFunction = _functions[functionName];
-    if (cachedFunction != null) {
-      return cachedFunction;
-    }
-
-    final PythonObjectMacos functionAttribute = getAttribute(functionName);
-    final PythonFunctionMacos function =
-        PythonFunctionMacos(platform, functionAttribute.reference);
-
-    _functions[functionName] = function;
-
-    return function;
-  }
-
-  @override
-  void dispose() {
-    for (final PythonFunctionMacos function in _functions.values) {
-      function.dispose();
-    }
-    _functions.clear();
-    platform._disposeModule(this);
-    super.dispose();
-  }
-}
-
-abstract class PythonClassMacos
-    extends PythonClassPlatform<PythonFfiMacOS, Pointer<PyObject>>
-    with PythonObjectMacosMixin {
-  PythonClassMacos(PythonFfiMacOS platform, Pointer<PyObject> reference)
-      : super(platform, reference);
-}
-
-class PythonObjectMacos
-    extends PythonObjectPlatform<PythonFfiMacOS, Pointer<PyObject>>
-    with PythonObjectMacosMixin {
-  PythonObjectMacos(super.platform, super.reference);
-}
-
-class PythonExceptionMacos
-    extends PythonExceptionPlatform<PythonFfiMacOS, Pointer<PyObject>>
-    with PythonObjectMacosMixin {
-  PythonExceptionMacos(
-    super.platform,
-    super.reference,
-    this.pValue,
-    this.pTraceback,
-  );
-
-  factory PythonExceptionMacos.fetch(PythonFfiMacOS platform) {
-    final Pointer<Pointer<PyObject>> pTypePtr = malloc<Pointer<PyObject>>();
-    final Pointer<Pointer<PyObject>> pValuePtr = malloc<Pointer<PyObject>>();
-    final Pointer<Pointer<PyObject>> pTracebackPtr =
-        malloc<Pointer<PyObject>>();
-
-    platform.bindings.PyErr_Fetch(pTypePtr, pValuePtr, pTracebackPtr);
-
-    final PythonExceptionMacos pythonException = PythonExceptionMacos(
-      platform,
-      pTypePtr.value,
-      pValuePtr.value,
-      pTracebackPtr.value,
-    );
-
-    malloc
-      ..free(pTypePtr)
-      ..free(pValuePtr)
-      ..free(pTracebackPtr);
-
-    return pythonException;
-  }
-
-  Pointer<PyObject> get pType => reference;
-  final Pointer<PyObject> pValue;
-  final Pointer<PyObject> pTraceback;
-
-  @override
-  String toString() {
-    final String typeRepr =
-        platform.bindings.PyObject_Repr(pType).asUnicodeString(platform);
-    final String valueRepr =
-        platform.bindings.PyObject_Repr(pValue).asUnicodeString(platform);
-    final String tracebackRepr =
-        platform.bindings.PyObject_Repr(pTraceback).asUnicodeString(platform);
-    return "PythonExceptionMacos($typeRepr): $valueRepr\n$tracebackRepr";
-  }
-}
-
-mixin PythonObjectMacosMixin
-    on PythonObjectPlatform<PythonFfiMacOS, Pointer<PyObject>> {
-  @override
-  PythonObjectMacos getAttribute(String attributeName) {
-    final Pointer<PyObject> attribute = attributeName.toNativeUtf8().useAndFree(
-          (Pointer<Utf8> pointer) => platform.bindings.PyObject_GetAttrString(
-            reference,
-            pointer.cast<Char>(),
-          ),
-        );
-
-    if (attribute == nullptr) {
-      throw PythonFfiException("Failed to get attribute $attributeName");
-    }
-
-    return PythonObjectMacos(platform, attribute);
-  }
-
-  @override
-  void dispose() {
-    platform.bindings.Py_DecRef(reference);
-  }
-
-  @override
-  Object? toDartObject() => reference.toDartObject(platform);
 }

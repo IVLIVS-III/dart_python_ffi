@@ -4,6 +4,7 @@ import "package:ffi/ffi.dart";
 import "package:python_ffi_macos/python_ffi_macos.dart";
 import "package:python_ffi_macos/src/extensions/malloc_extension.dart";
 import "package:python_ffi_macos/src/ffi/generated_bindings.g.dart";
+import "package:python_ffi_macos/src/object.dart";
 import "package:python_ffi_platform_interface/python_ffi_platform_interface.dart";
 
 extension ConvertToPythonExtension on Object? {

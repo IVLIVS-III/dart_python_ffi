@@ -48,8 +48,17 @@ class PythonModule
 
   @override
   PythonFunctionPlatform<PythonFfiPlatform<Object?>, Object?> getFunction(
-          String functionName) =>
+    String functionName,
+  ) =>
       _pythonModule.getFunction(functionName);
+
+  @override
+  PythonClassPlatform<PythonFfiPlatform<Object?>, Object?> getClass(
+    String className,
+    List<Object?> args, [
+    Map<String, Object?>? kwargs,
+  ]) =>
+      _pythonModule.getClass(className, args, kwargs);
 
   @override
   Object? toDartObject() => _pythonModule.toDartObject();
@@ -74,9 +83,17 @@ abstract class PythonClass
       _pythonClass.getAttribute(attributeName);
 
   @override
-  PythonFunctionPlatform<PythonFfiPlatform<Object?>, Object?> getFunction(
-          String functionName) =>
-      _pythonClass.getFunction(functionName);
+  PythonFunctionPlatform<PythonFfiPlatform<Object?>, Object?> getMethod(
+    String functionName,
+  ) =>
+      _pythonClass.getMethod(functionName);
+
+  @override
+  PythonClassPlatform<PythonFfiPlatform<Object?>, Object?> newInstance(
+    List<Object?> args, [
+    Map<String, Object?>? kwargs,
+  ]) =>
+      _pythonClass.newInstance(args, kwargs);
 
   @override
   Object? toDartObject() => _pythonClass.toDartObject();

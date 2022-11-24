@@ -9,9 +9,14 @@ abstract class PythonClassPlatform<P extends PythonFfiPlatform<R>,
 
   PythonModulePlatform<P, R> get module;
 
-  PythonFunctionPlatform<P, R> getFunction(String functionName);
+  PythonClassPlatform<P, R> newInstance(
+    List<Object?> args, [
+    Map<String, Object?>? kwargs,
+  ]);
+
+  PythonFunctionPlatform<P, R> getMethod(String functionName);
 
   void init(List<Object?> args, [Map<String, Object?>? kwargs]) {
-    getFunction("__init__").call(args, kwargs: kwargs);
+    getMethod("__init__").call(args, kwargs: kwargs);
   }
 }
