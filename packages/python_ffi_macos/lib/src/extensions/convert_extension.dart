@@ -2,7 +2,9 @@ import "dart:ffi";
 
 import "package:ffi/ffi.dart";
 import "package:python_ffi_macos/python_ffi_macos.dart";
+import "package:python_ffi_macos/src/class.dart";
 import "package:python_ffi_macos/src/extensions/malloc_extension.dart";
+import "package:python_ffi_macos/src/extensions/object_extension.dart";
 import "package:python_ffi_macos/src/ffi/generated_bindings.g.dart";
 import "package:python_ffi_macos/src/object.dart";
 import "package:python_ffi_platform_interface/python_ffi_platform_interface.dart";
@@ -61,9 +63,17 @@ extension ConvertToDartExtension on Pointer<PyObject> {
     switch (nameString) {
       case "int":
         return asInt(platform);
+      case "str":
+        return asUnicodeString(platform);
+      case "bytes":
+        return asString(platform);
     }
 
-    throw Exception("Unsupported type: $nameString($runtimeType)");
+    if (object.isClass) {
+      return PythonClassMacos(platform, object);
+    }
+
+    throw PythonFfiException("Unsupported type: $nameString($runtimeType)");
   }
 
   int asInt(PythonFfiMacOS platform) {

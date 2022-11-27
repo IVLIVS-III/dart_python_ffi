@@ -15,6 +15,7 @@ class PythonFunctionMacos
   T call<T extends Object?>(
     List<Object?> args, {
     Map<String, Object?>? kwargs,
+    T Function(PythonObjectMacos)? converter,
   }) {
     final List<Pointer<PyObject>> mappedArgs = args
         .map((Object? arg) => arg.toPythonObject(platform).reference)
@@ -31,8 +32,15 @@ class PythonFunctionMacos
         rawCall(args: mappedArgs, kwargs: mappedKwargs);
 
     final PythonObjectMacos result = PythonObjectMacos(platform, rawResult);
+
+    if (converter != null) {
+      return converter(result);
+    }
+
     final Object? mappedResult = result.toDartObject();
-    result.dispose();
+    if (mappedResult is! PythonObjectPlatform) {
+      result.dispose();
+    }
 
     return mappedResult as T;
   }

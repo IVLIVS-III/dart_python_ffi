@@ -28,7 +28,7 @@ class PythonModuleMacos
 
     final PythonObjectMacos classAttribute = getAttribute(className);
     final PythonClassMacos class_ =
-        PythonClassMacos(platform, classAttribute.reference, this);
+        PythonClassMacos(platform, classAttribute.reference);
 
     _classes[className] = class_;
     return class_;

@@ -17,7 +17,7 @@ class PythonObjectMacos
 mixin PythonObjectMacosMixin
     on PythonObjectPlatform<PythonFfiMacOS, Pointer<PyObject>> {
   @override
-  PythonObjectMacos getAttribute(String attributeName) {
+  T getAttribute<T extends Object?>(String attributeName) {
     final Pointer<PyObject> attribute = attributeName.toNativeUtf8().useAndFree(
           (Pointer<Utf8> pointer) => platform.bindings.PyObject_GetAttrString(
             reference,
@@ -29,7 +29,7 @@ mixin PythonObjectMacosMixin
       throw PythonFfiException("Failed to get attribute $attributeName");
     }
 
-    return PythonObjectMacos(platform, attribute);
+    return attribute.toDartObject(platform) as T;
   }
 
   @override
@@ -49,7 +49,8 @@ mixin PythonObjectMacosMixin
       return cachedFunction;
     }
 
-    final PythonObjectMacos functionAttribute = getAttribute(functionName);
+    final PythonObjectPlatform<PythonFfiMacOS, Pointer<PyObject>>
+        functionAttribute = getAttribute(functionName);
     final PythonFunctionMacos function =
         PythonFunctionMacos(platform, functionAttribute.reference);
 

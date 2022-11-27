@@ -16,9 +16,12 @@ class Coordinate extends PythonClass {
   @override
   StructsModule get module => StructsModule.import();
 
-  double get latitude => getAttribute("latitude")! as double;
+  double get latitude => (getAttribute("latitude")! as num).toDouble();
 
-  double get longitude => getAttribute("longitude")! as double;
+  double get longitude => (getAttribute("longitude")! as num).toDouble();
+
+  @override
+  String toString() => "Coordinate(latitude: $latitude, longitude: $longitude)";
 }
 
 class StructsModule extends PythonModule {
@@ -31,8 +34,12 @@ class StructsModule extends PythonModule {
 
   String hello_world() => getFunction("hello_world").call(<Object?>[]);
 
-  String reverse(String str) => getFunction("reverse").call(<Object?>[str]);
+  String reverse(String str, int length) =>
+      getFunction("reverse").call(<Object?>[str, length]);
 
-  int create_coordinate(int a, int b) =>
-      getFunction("subtract").call(<Object?>[a, b]);
+  Coordinate create_coordinate(int a, int b) => Coordinate.from(
+        getFunction("create_coordinate").call(
+          <Object?>[a, b],
+        ),
+      );
 }

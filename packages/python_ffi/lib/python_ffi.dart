@@ -43,7 +43,7 @@ class PythonModule
   }
 
   @override
-  Object? getAttribute(String attributeName) =>
+  T getAttribute<T extends Object?>(String attributeName) =>
       _pythonModule.getAttribute(attributeName);
 
   @override
@@ -79,7 +79,7 @@ abstract class PythonClass
   }
 
   @override
-  Object? getAttribute(String attributeName) =>
+  T getAttribute<T extends Object?>(String attributeName) =>
       _pythonClass.getAttribute(attributeName);
 
   @override

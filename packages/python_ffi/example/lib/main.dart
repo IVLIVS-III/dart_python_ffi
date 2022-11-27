@@ -59,11 +59,22 @@ class _MyAppState extends State<MyApp> {
   void structsReverse() {
     final StructsModule structsModule = StructsModule.import();
 
-    final String reversed = structsModule.reverse("Hello World");
+    const String str = "Hello World";
+    final String reversed = structsModule.reverse(str, str.length);
 
     structsModule.dispose();
 
     print("Reversed: $reversed");
+  }
+
+  void structsCreateCoordinate() {
+    final StructsModule structsModule = StructsModule.import();
+
+    final Coordinate coordinate = structsModule.create_coordinate(1, 2);
+
+    structsModule.dispose();
+
+    print("Coordinate: $coordinate");
   }
 
   @override
@@ -91,9 +102,14 @@ class _MyAppState extends State<MyApp> {
                 child: const Text("Run Python 'structs.hello_world()'"),
               ),
               ElevatedButton(
-                onPressed: structsHelloWorld,
+                onPressed: structsReverse,
                 child:
                     const Text("Run Python 'structs.reverse(\"Hello World\")'"),
+              ),
+              ElevatedButton(
+                onPressed: structsCreateCoordinate,
+                child:
+                    const Text("Run Python 'structs.create_coordinate(1, 2)'"),
               ),
             ],
           ),

@@ -4,19 +4,16 @@ import "package:python_ffi_macos/python_ffi_macos.dart";
 import "package:python_ffi_macos/src/extensions/convert_extension.dart";
 import "package:python_ffi_macos/src/ffi/generated_bindings.g.dart";
 import "package:python_ffi_macos/src/function.dart";
-import "package:python_ffi_macos/src/module.dart";
 import "package:python_ffi_macos/src/object.dart";
 import "package:python_ffi_platform_interface/python_ffi_platform_interface.dart";
 
 class PythonClassMacos
     extends PythonClassPlatform<PythonFfiMacOS, Pointer<PyObject>>
     with PythonObjectMacosMixin {
-  PythonClassMacos(PythonFfiMacOS platform, Pointer<PyObject> reference,
-      PythonModuleMacos module)
-      : _module = module,
-        super(platform, reference);
-
-  final PythonModuleMacos _module;
+  PythonClassMacos(
+    PythonFfiMacOS platform,
+    Pointer<PyObject> reference,
+  ) : super(platform, reference);
 
   final Map<String, PythonFunctionMacos> _functions =
       <String, PythonFunctionMacos>{};
@@ -58,7 +55,7 @@ class PythonClassMacos
       pyKwarg.dispose();
     }
 
-    return PythonClassMacos(platform, instance, _module);
+    return PythonClassMacos(platform, instance);
   }
 
   @override
@@ -66,15 +63,11 @@ class PythonClassMacos
       getFunction_(functionName, _functions);
 
   @override
-  PythonModuleMacos get module => _module;
-
-  @override
   void dispose() {
     for (final PythonFunctionMacos function in _functions.values) {
       function.dispose();
     }
     _functions.clear();
-    module.dispose();
     super.dispose();
   }
 }
