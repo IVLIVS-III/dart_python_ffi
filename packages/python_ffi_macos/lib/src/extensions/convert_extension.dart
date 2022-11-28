@@ -4,6 +4,7 @@ import "package:ffi/ffi.dart";
 import "package:python_ffi_macos/python_ffi_macos.dart";
 import "package:python_ffi_macos/src/class.dart";
 import "package:python_ffi_macos/src/extensions/malloc_extension.dart";
+import "package:python_ffi_macos/src/extensions/object_extension.dart";
 import "package:python_ffi_macos/src/ffi/generated_bindings.g.dart";
 import "package:python_ffi_macos/src/object.dart";
 import "package:python_ffi_platform_interface/python_ffi_platform_interface.dart";
@@ -65,15 +66,7 @@ extension ConvertToDartExtension on Pointer<PyObject> {
       return false;
     }
 
-    final Pointer<PyObject> typeName =
-        platform.bindings.PyType_GetName(object.ref.ob_type);
-
-    final a = object.ref;
-    final b = a.ob_type;
-    final c = b.ref;
-    final d = c.tp_name;
-    final e = d.cast<Utf8>();
-    final String nameString = e.toDartString();
+    final String nameString = typeName;
 
     switch (nameString) {
       case "int":
@@ -110,9 +103,11 @@ extension ConvertToDartExtension on Pointer<PyObject> {
   }
 
   String asString(PythonFfiMacOS platform) {
+    /*
     print(
-      "trying to convert detected string from type name: ${ref.ob_type.ref.tp_name.cast<Utf8>().toDartString()}",
+      "trying to convert detected string @$hexAddress from type name: $typeName",
     );
+    */
     final Pointer<Char> res = platform.bindings.PyBytes_AsString(this);
 
     // check for errors
@@ -130,7 +125,10 @@ extension ConvertToDartExtension on Pointer<PyObject> {
   String asUnicodeString(PythonFfiMacOS platform) {
     final String result =
         platform.bindings.PyUnicode_AsUTF8String(this).asString(platform);
-    platform.bindings.Py_DecRef(this);
+    // TODO: correctly handle refcount
+    //       disabling this prevents random crashes converting constant strings,
+    //       but probably leaks memory
+    // platform.bindings.Py_DecRef(this);
     return result;
   }
 }

@@ -22,10 +22,10 @@ mixin PythonObjectMacosMixin
     List<Object?> args, {
     Map<String, Object?>? kwargs,
   }) {
-    final List<Pointer<PyObject>> mappedArgs = [];
-    for (Object? arg in args) {
-      final a = arg.toPythonObject(platform);
-      final b = a.reference;
+    final List<Pointer<PyObject>> mappedArgs = <Pointer<PyObject>>[];
+    for (final Object? arg in args) {
+      final PythonObjectMacos a = arg.toPythonObject(platform);
+      final Pointer<PyObject> b = a.reference;
       mappedArgs.add(b);
     }
 
@@ -116,8 +116,9 @@ mixin PythonObjectMacosMixin
 
   @override
   T getAttributeRaw<
-          T extends PythonObjectPlatform<PythonFfiMacOS, Pointer<PyObject>>>(
-      String attributeName) {
+      T extends PythonObjectPlatform<PythonFfiMacOS, Pointer<PyObject>>>(
+    String attributeName,
+  ) {
     final Pointer<PyObject> attribute = attributeName.toNativeUtf8().useAndFree(
           (Pointer<Utf8> pointer) => platform.bindings.PyObject_GetAttrString(
             reference,
@@ -146,6 +147,7 @@ mixin PythonObjectMacosMixin
   ) {
     final PythonFunctionMacos? cachedFunction = functions[functionName];
     if (cachedFunction != null) {
+      platform.bindings.Py_IncRef(cachedFunction.reference);
       return cachedFunction;
     }
 

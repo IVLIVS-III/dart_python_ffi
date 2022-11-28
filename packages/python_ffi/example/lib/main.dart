@@ -101,6 +101,12 @@ class _MyAppState extends State<MyApp> {
     print("Distance: $distance");
   }
 
+  void structsCreateCoordinateDart() {
+    final Coordinate coordinate = Coordinate(1, 2);
+
+    print("Coordinate: $coordinate");
+  }
+
   void structsDistanceDart() {
     final StructsModule structsModule = StructsModule.import();
 
@@ -157,6 +163,12 @@ class _MyAppState extends State<MyApp> {
                 onPressed: structsDistance,
                 child: const Text(
                   "Run Python 'structs.distance(structs.create_coordinate(2, 2), structs.create_coordinate(5, 6))'",
+                ),
+              ),
+              ElevatedButton(
+                onPressed: structsCreateCoordinateDart,
+                child: const Text(
+                  "Run Dart 'Coordinate(1, 2)'",
                 ),
               ),
               ElevatedButton(
