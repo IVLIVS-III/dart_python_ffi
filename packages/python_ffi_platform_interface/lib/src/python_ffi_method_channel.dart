@@ -16,4 +16,14 @@ class MethodChannelPythonFfi extends PythonFfiPlatform<Object?> {
   Future<void> initialize() async {
     await methodChannel.invokeMethod<void>("initialize");
   }
+
+  @override
+  void addClassName(String className) {
+    throw UnimplementedError("addClassName() has not been implemented.");
+  }
+
+  @override
+  void removeClassName(String className) {
+    throw UnimplementedError("addClassName() has not been implemented.");
+  }
 }

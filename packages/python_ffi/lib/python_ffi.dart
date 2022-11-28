@@ -47,6 +47,12 @@ class PythonModule
       _pythonModule.getAttribute(attributeName);
 
   @override
+  T getAttributeRaw<
+          T extends PythonObjectPlatform<PythonFfiPlatform<Object?>,
+              Object?>>(String attributeName) =>
+      _pythonModule.getAttributeRaw(attributeName);
+
+  @override
   PythonFunctionPlatform<PythonFfiPlatform<Object?>, Object?> getFunction(
     String functionName,
   ) =>
@@ -79,8 +85,25 @@ abstract class PythonClass
   }
 
   @override
+  T call<T extends Object?>(
+    List<Object?> args, {
+    Map<String, Object?>? kwargs,
+  }) =>
+      _pythonClass.call(args, kwargs: kwargs);
+
+  @override
+  Object? rawCall({List<Object?>? args, Map<String, Object?>? kwargs}) =>
+      _pythonClass.rawCall(args: args, kwargs: kwargs);
+
+  @override
   T getAttribute<T extends Object?>(String attributeName) =>
       _pythonClass.getAttribute(attributeName);
+
+  @override
+  T getAttributeRaw<
+          T extends PythonObjectPlatform<PythonFfiPlatform<Object?>,
+              Object?>>(String attributeName) =>
+      _pythonClass.getAttributeRaw(attributeName);
 
   @override
   PythonFunctionPlatform<PythonFfiPlatform<Object?>, Object?> getMethod(
@@ -111,6 +134,12 @@ class PythonFfi {
 
   FutureOr<void> initialize() async =>
       await PythonFfiPlatform.instance.initialize();
+
+  void addClassName(String className) =>
+      PythonFfiPlatform.instance.addClassName(className);
+
+  void removeClassName(String className) =>
+      PythonFfiPlatform.instance.removeClassName(className);
 
   void _ensureInitialized() {
     if (!PythonFfiPlatform.instance.isInitialized) {

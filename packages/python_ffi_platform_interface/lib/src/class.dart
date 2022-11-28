@@ -11,6 +11,10 @@ abstract class PythonClassPlatform<P extends PythonFfiPlatform<R>,
     Map<String, Object?>? kwargs,
   ]);
 
+  T call<T extends Object?>(List<Object?> args, {Map<String, Object?>? kwargs});
+
+  R rawCall({List<R>? args, Map<String, R>? kwargs});
+
   PythonFunctionPlatform<P, R> getMethod(String functionName);
 
   void init(List<Object?> args, [Map<String, Object?>? kwargs]) {

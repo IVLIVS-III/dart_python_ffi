@@ -1,4 +1,5 @@
 import "dart:async";
+import 'dart:collection';
 import "dart:ffi";
 import "dart:io";
 
@@ -50,6 +51,11 @@ class PythonFfiMacOS extends PythonFfiPlatform<Pointer<PyObject>> {
       );
 
   final Map<String, PythonModuleMacos> _modules = <String, PythonModuleMacos>{};
+
+  final Set<String> _classNames = <String>{};
+
+  UnmodifiableSetView<String> get classNames =>
+      UnmodifiableSetView<String>(_classNames);
 
   /// Checks whether the Python C-bindings are available
   bool get areBindingsInitialized => _bindings != null;
@@ -115,6 +121,16 @@ class PythonFfiMacOS extends PythonFfiPlatform<Pointer<PyObject>> {
   }
 
   @override
+  void addClassName(String className) {
+    _classNames.add(className);
+  }
+
+  @override
+  void removeClassName(String className) {
+    _classNames.remove(className);
+  }
+
+  @override
   bool pythonErrorOccurred() => bindings.PyErr_Occurred() != nullptr;
 
   @override
@@ -131,6 +147,7 @@ class PythonFfiMacOS extends PythonFfiPlatform<Pointer<PyObject>> {
   PythonModuleMacos importModule(String moduleName) {
     final PythonModuleMacos? cachedModule = _modules[moduleName];
     if (cachedModule != null) {
+      bindings.Py_IncRef(cachedModule.reference);
       return cachedModule;
     }
 
@@ -142,6 +159,10 @@ class PythonFfiMacOS extends PythonFfiPlatform<Pointer<PyObject>> {
           bindings.PyUnicode_DecodeFSDefault(charPointer);
       return result;
     });
+    if (pythonModuleName == nullptr) {
+      throw PythonFfiException("Failed to convert module name $moduleName");
+    }
+
     // import the module
     final Pointer<PyObject> pyImport =
         bindings.PyImport_Import(pythonModuleName);
@@ -185,7 +206,7 @@ class PythonFfiMacOS extends PythonFfiPlatform<Pointer<PyObject>> {
   @override
   void appendToPath(String path) {
     final PythonModuleMacos sys = importModule("sys");
-    final PythonObjectMacos sysPath = sys.getAttribute("path");
+    final PythonObjectMacos sysPath = sys.getAttributeRaw("path");
 
     final PythonObjectMacos pathObject = path.toPythonObject(this);
 

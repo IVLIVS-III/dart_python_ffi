@@ -23,8 +23,6 @@ class PythonClassMacos
     List<Object?> args, [
     Map<String, Object?>? kwargs,
   ]) {
-    final PythonFunctionMacos initFunction = getMethod("__init__");
-
     final List<PythonObjectMacos> pyArgs =
         args.map((Object? e) => e.toPythonObject(platform)).toList();
     final Map<String, PythonObjectMacos> pyKwargs =
@@ -40,7 +38,7 @@ class PythonClassMacos
           .toList(),
     );
 
-    final Pointer<PyObject> instance = initFunction.rawCall(
+    final Pointer<PyObject> instance = rawCall(
       args: pyArgs.map((PythonObjectMacos e) => e.reference).toList(),
       kwargs: pyKwargs.map(
         (String key, PythonObjectMacos value) =>
@@ -57,6 +55,30 @@ class PythonClassMacos
 
     return PythonClassMacos(platform, instance);
   }
+
+  @override
+  T call<T extends Object?>(
+    List<Object?> args, {
+    Map<String, Object?>? kwargs,
+  }) =>
+      PythonObjectMacosMixin.staticCall<T>(
+        platform,
+        reference,
+        args,
+        kwargs: kwargs,
+      );
+
+  @override
+  Pointer<PyObject> rawCall({
+    List<Pointer<PyObject>>? args,
+    Map<String, Pointer<PyObject>>? kwargs,
+  }) =>
+      PythonObjectMacosMixin.staticRawCall(
+        platform,
+        reference,
+        args: args,
+        kwargs: kwargs,
+      );
 
   @override
   PythonFunctionMacos getMethod(String functionName) =>

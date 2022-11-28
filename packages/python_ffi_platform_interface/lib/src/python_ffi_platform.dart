@@ -33,6 +33,10 @@ abstract class PythonFfiPlatform<R extends Object?> extends PlatformInterface {
     throw UnimplementedError("initialize() has not been implemented.");
   }
 
+  void addClassName(String className);
+
+  void removeClassName(String className);
+
   /// Checks whether an exception occurred in python
   // TODO: return a proper python exception object
   bool pythonErrorOccurred() {

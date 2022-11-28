@@ -8,6 +8,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await PythonFfi.instance.initialize();
+  PythonFfi.instance.addClassName("Coordinate");
+  PythonFfi.instance.addClassName("Place");
 
   runApp(const MyApp());
 }
@@ -77,6 +79,40 @@ class _MyAppState extends State<MyApp> {
     print("Coordinate: $coordinate");
   }
 
+  void structsCreatePlace() {
+    final StructsModule structsModule = StructsModule.import();
+
+    final Place place = structsModule.create_place("Home", 5, -8.3);
+
+    structsModule.dispose();
+
+    print("Place: $place");
+  }
+
+  void structsDistance() {
+    final StructsModule structsModule = StructsModule.import();
+
+    final Coordinate c1 = structsModule.create_coordinate(2, 2);
+    final Coordinate c2 = structsModule.create_coordinate(5, 6);
+    final double distance = structsModule.distance(c1, c2);
+
+    structsModule.dispose();
+
+    print("Distance: $distance");
+  }
+
+  void structsDistanceDart() {
+    final StructsModule structsModule = StructsModule.import();
+
+    final Coordinate c1 = Coordinate(2, 2);
+    final Coordinate c2 = Coordinate(5, 6);
+    final double distance = structsModule.distance(c1, c2);
+
+    structsModule.dispose();
+
+    print("Distance: $distance");
+  }
+
   @override
   Widget build(BuildContext context) => MaterialApp(
         home: Scaffold(
@@ -110,6 +146,24 @@ class _MyAppState extends State<MyApp> {
                 onPressed: structsCreateCoordinate,
                 child:
                     const Text("Run Python 'structs.create_coordinate(1, 2)'"),
+              ),
+              ElevatedButton(
+                onPressed: structsCreatePlace,
+                child: const Text(
+                  "Run Python 'structs.create_place(\"Home\", 5, -8.3)'",
+                ),
+              ),
+              ElevatedButton(
+                onPressed: structsDistance,
+                child: const Text(
+                  "Run Python 'structs.distance(structs.create_coordinate(2, 2), structs.create_coordinate(5, 6))'",
+                ),
+              ),
+              ElevatedButton(
+                onPressed: structsDistanceDart,
+                child: const Text(
+                  "Run Python 'structs.distance(Coordinate(2, 2), Coordinate(5, 6))'",
+                ),
               ),
             ],
           ),

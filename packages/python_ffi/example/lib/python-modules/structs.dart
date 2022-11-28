@@ -13,15 +13,33 @@ class Coordinate extends PythonClass {
 
   Coordinate.from(super.pythonClass) : super.from();
 
-  @override
-  StructsModule get module => StructsModule.import();
+  double get latitude => getAttribute("latitude")! as double;
 
-  double get latitude => (getAttribute("latitude")! as num).toDouble();
-
-  double get longitude => (getAttribute("longitude")! as num).toDouble();
+  double get longitude => getAttribute("longitude")! as double;
 
   @override
   String toString() => "Coordinate(latitude: $latitude, longitude: $longitude)";
+}
+
+class Place extends PythonClass {
+  factory Place(String name, Coordinate coordinate) {
+    final Place place = PythonFfi.instance.importClass(
+      "structs",
+      "Place",
+      Place.from,
+      <Object?>[name, coordinate],
+    );
+    return place;
+  }
+
+  Place.from(super.pythonClass) : super.from();
+
+  String get name => getAttribute("name")! as String;
+
+  Coordinate get coordinate => Coordinate.from(getAttribute("coordinate")!);
+
+  @override
+  String toString() => "Place(name: $name, coordinate: $coordinate)";
 }
 
 class StructsModule extends PythonModule {
@@ -37,9 +55,20 @@ class StructsModule extends PythonModule {
   String reverse(String str, int length) =>
       getFunction("reverse").call(<Object?>[str, length]);
 
-  Coordinate create_coordinate(int a, int b) => Coordinate.from(
+  Coordinate create_coordinate(double latitude, double longitude) =>
+      Coordinate.from(
         getFunction("create_coordinate").call(
-          <Object?>[a, b],
+          <Object?>[latitude, longitude],
         ),
       );
+
+  Place create_place(String name, double latitude, double longitude) =>
+      Place.from(
+        getFunction("create_place").call(
+          <Object?>[name, latitude, longitude],
+        ),
+      );
+
+  double distance(Coordinate c1, Coordinate c2) =>
+      getFunction("distance").call(<Object?>[c1, c2]);
 }

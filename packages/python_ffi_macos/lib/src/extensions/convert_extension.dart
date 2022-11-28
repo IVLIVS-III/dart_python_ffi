@@ -4,7 +4,6 @@ import "package:ffi/ffi.dart";
 import "package:python_ffi_macos/python_ffi_macos.dart";
 import "package:python_ffi_macos/src/class.dart";
 import "package:python_ffi_macos/src/extensions/malloc_extension.dart";
-import "package:python_ffi_macos/src/extensions/object_extension.dart";
 import "package:python_ffi_macos/src/ffi/generated_bindings.g.dart";
 import "package:python_ffi_macos/src/object.dart";
 import "package:python_ffi_platform_interface/python_ffi_platform_interface.dart";
@@ -23,11 +22,19 @@ extension ConvertToPythonExtension on Object? {
     if (value is int) {
       object = platform.bindings.PyLong_FromLong(value);
     }
+    if (value is double) {
+      object = platform.bindings.PyFloat_FromDouble(value);
+    }
     if (value is String) {
       object = value.toNativeUtf8().useAndFree(
             (Pointer<Utf8> pointer) =>
                 platform.bindings.PyUnicode_FromString(pointer.cast<Char>()),
           );
+    }
+    if (value is PythonObjectPlatform) {
+      final Pointer<PyObject> rawObject = value.reference! as Pointer<PyObject>;
+      platform.bindings.Py_IncRef(rawObject);
+      object = rawObject;
     }
 
     if (object != null) {
@@ -57,19 +64,29 @@ extension ConvertToDartExtension on Pointer<PyObject> {
       platform.bindings.Py_DecRef(object);
       return false;
     }
-    final String nameString =
-        object.ref.ob_type.ref.tp_name.cast<Utf8>().toDartString();
+
+    final Pointer<PyObject> typeName =
+        platform.bindings.PyType_GetName(object.ref.ob_type);
+
+    final a = object.ref;
+    final b = a.ob_type;
+    final c = b.ref;
+    final d = c.tp_name;
+    final e = d.cast<Utf8>();
+    final String nameString = e.toDartString();
 
     switch (nameString) {
       case "int":
         return asInt(platform);
+      case "float":
+        return asDouble(platform);
       case "str":
         return asUnicodeString(platform);
       case "bytes":
         return asString(platform);
     }
 
-    if (object.isClass) {
+    if (platform.classNames.contains(nameString)) {
       return PythonClassMacos(platform, object);
     }
 
@@ -80,6 +97,14 @@ extension ConvertToDartExtension on Pointer<PyObject> {
     final int result = platform.bindings.PyLong_AsLong(this);
     if (result == -1 && platform.bindings.PyErr_Occurred() != nullptr) {
       throw PythonFfiException("Failed to convert to int");
+    }
+    return result;
+  }
+
+  double asDouble(PythonFfiMacOS platform) {
+    final double result = platform.bindings.PyFloat_AsDouble(this);
+    if (result == -1.0 && platform.bindings.PyErr_Occurred() != nullptr) {
+      throw PythonFfiException("Failed to convert to double");
     }
     return result;
   }
