@@ -7,16 +7,10 @@ import "package:python_ffi_macos/src/function.dart";
 import "package:python_ffi_macos/src/object.dart";
 import "package:python_ffi_platform_interface/python_ffi_platform_interface.dart";
 
-class PythonClassMacos
-    extends PythonClassPlatform<PythonFfiMacOS, Pointer<PyObject>>
+class PythonClassDefinitionMacos
+    extends PythonClassDefinitionPlatform<PythonFfiMacOS, Pointer<PyObject>>
     with PythonObjectMacosMixin {
-  PythonClassMacos(
-    PythonFfiMacOS platform,
-    Pointer<PyObject> reference,
-  ) : super(platform, reference);
-
-  final Map<String, PythonFunctionMacos> _functions =
-      <String, PythonFunctionMacos>{};
+  PythonClassDefinitionMacos(super.platform, super.reference);
 
   @override
   PythonClassMacos newInstance(
@@ -79,6 +73,15 @@ class PythonClassMacos
         args: args,
         kwargs: kwargs,
       );
+}
+
+class PythonClassMacos
+    extends PythonClassPlatform<PythonFfiMacOS, Pointer<PyObject>>
+    with PythonObjectMacosMixin {
+  PythonClassMacos(super.platform, super.reference);
+
+  final Map<String, PythonFunctionMacos> _functions =
+      <String, PythonFunctionMacos>{};
 
   @override
   PythonFunctionMacos getMethod(String functionName) =>

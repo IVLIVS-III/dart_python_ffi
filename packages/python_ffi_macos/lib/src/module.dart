@@ -14,24 +14,25 @@ class PythonModuleMacos
 
   final Map<String, PythonFunctionMacos> _functions =
       <String, PythonFunctionMacos>{};
-  final Map<String, PythonClassMacos> _classes = <String, PythonClassMacos>{};
+  final Map<String, PythonClassDefinitionMacos> _classes =
+      <String, PythonClassDefinitionMacos>{};
 
   @override
   PythonFunctionMacos getFunction(String functionName) =>
       getFunction_(functionName, _functions);
 
-  PythonClassMacos _getClassObject(String className) {
-    final PythonClassMacos? cachedClass = _classes[className];
+  PythonClassDefinitionMacos _getClassDefinition(String className) {
+    final PythonClassDefinitionMacos? cachedClass = _classes[className];
     if (cachedClass != null) {
       return cachedClass;
     }
 
     final PythonObjectMacos classAttribute = getAttributeRaw(className);
-    final PythonClassMacos class_ =
-        PythonClassMacos(platform, classAttribute.reference);
+    final PythonClassDefinitionMacos classDefinition =
+        PythonClassDefinitionMacos(platform, classAttribute.reference);
 
-    _classes[className] = class_;
-    return class_;
+    _classes[className] = classDefinition;
+    return classDefinition;
   }
 
   @override
@@ -40,8 +41,10 @@ class PythonModuleMacos
     List<Object?> args, [
     Map<String, Object?>? kwargs,
   ]) {
-    final PythonClassMacos class_ = _getClassObject(className);
-    final PythonClassMacos classInstance = class_.newInstance(args, kwargs);
+    final PythonClassDefinitionMacos classDefinition =
+        _getClassDefinition(className);
+    final PythonClassMacos classInstance =
+        classDefinition.newInstance(args, kwargs);
     return classInstance;
   }
 
@@ -51,8 +54,8 @@ class PythonModuleMacos
       function.dispose();
     }
     _functions.clear();
-    for (final PythonClassMacos class_ in _classes.values) {
-      class_.dispose();
+    for (final PythonClassDefinitionMacos classDefinition in _classes.values) {
+      classDefinition.dispose();
     }
     _classes.clear();
     platform.disposeModule(this);

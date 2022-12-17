@@ -114,6 +114,7 @@ class PythonFfiMacOS extends PythonFfiPlatform<Pointer<PyObject>> {
     await _copySingleFileModule("hello_world");
     await _copySingleFileModule("primitives");
     await _copySingleFileModule("structs");
+    await _copySingleFileModule("data_class");
 
     bindings.Py_Initialize();
 
@@ -199,8 +200,9 @@ class PythonFfiMacOS extends PythonFfiPlatform<Pointer<PyObject>> {
     Map<String, Object?>? kwargs,
   ]) {
     final PythonModuleMacos module = importModule(moduleName);
-    final PythonClassMacos class_ = module.getClass(className, args, kwargs);
-    return class_;
+    final PythonClassMacos classInstance =
+        module.getClass(className, args, kwargs);
+    return classInstance;
   }
 
   @override

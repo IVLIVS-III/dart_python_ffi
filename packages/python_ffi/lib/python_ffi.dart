@@ -70,6 +70,36 @@ class PythonModule
   Object? toDartObject() => _pythonModule.toDartObject();
 }
 
+abstract class PythonClassDefinition
+    extends PythonClassDefinitionPlatform<PythonFfiPlatform<Object?>, Object?> {
+  PythonClassDefinition.from(
+    PythonClassDefinitionPlatform<PythonFfiPlatform<Object?>, Object?>
+        pythonClassDefinition,
+  )   : _pythonClassDefinition = pythonClassDefinition,
+        super(pythonClassDefinition.platform, pythonClassDefinition.reference);
+
+  final PythonClassDefinitionPlatform<PythonFfiPlatform<Object?>, Object?>
+      _pythonClassDefinition;
+
+  @override
+  PythonClassPlatform<PythonFfiPlatform<Object?>, Object?> newInstance(
+    List<Object?> args, [
+    Map<String, Object?>? kwargs,
+  ]) =>
+      _pythonClassDefinition.newInstance(args, kwargs);
+
+  @override
+  T call<T extends Object?>(
+    List<Object?> args, {
+    Map<String, Object?>? kwargs,
+  }) =>
+      _pythonClassDefinition.call(args, kwargs: kwargs);
+
+  @override
+  Object? rawCall({List<Object?>? args, Map<String, Object?>? kwargs}) =>
+      _pythonClassDefinition.rawCall(args: args, kwargs: kwargs);
+}
+
 abstract class PythonClass
     extends PythonClassPlatform<PythonFfiPlatform<Object?>, Object?> {
   PythonClass.from(
@@ -83,17 +113,6 @@ abstract class PythonClass
   void dispose() {
     _pythonClass.dispose();
   }
-
-  @override
-  T call<T extends Object?>(
-    List<Object?> args, {
-    Map<String, Object?>? kwargs,
-  }) =>
-      _pythonClass.call(args, kwargs: kwargs);
-
-  @override
-  Object? rawCall({List<Object?>? args, Map<String, Object?>? kwargs}) =>
-      _pythonClass.rawCall(args: args, kwargs: kwargs);
 
   @override
   T getAttribute<T extends Object?>(String attributeName) =>
@@ -110,13 +129,6 @@ abstract class PythonClass
     String functionName,
   ) =>
       _pythonClass.getMethod(functionName);
-
-  @override
-  PythonClassPlatform<PythonFfiPlatform<Object?>, Object?> newInstance(
-    List<Object?> args, [
-    Map<String, Object?>? kwargs,
-  ]) =>
-      _pythonClass.newInstance(args, kwargs);
 
   @override
   Object? toDartObject() => _pythonClass.toDartObject();

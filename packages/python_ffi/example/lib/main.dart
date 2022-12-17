@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:python_ffi/python_ffi.dart";
+import "package:python_ffi_example/python-modules/data_class.dart";
 import "package:python_ffi_example/python-modules/hello_world.dart";
 import "package:python_ffi_example/python-modules/primitives.dart";
 import "package:python_ffi_example/python-modules/structs.dart";
@@ -119,6 +120,12 @@ class _MyAppState extends State<MyApp> {
     print("Distance: $distance");
   }
 
+  void dataClass() {
+    final DataClass dataClass = DataClass(1, "Hello World");
+
+    print("DataClass: $dataClass");
+  }
+
   @override
   Widget build(BuildContext context) => MaterialApp(
         home: Scaffold(
@@ -131,6 +138,7 @@ class _MyAppState extends State<MyApp> {
                 onPressed: helloWorld,
                 child: const Text("Run Python 'hello_world.hello_world()'"),
               ),
+              const Divider(),
               ElevatedButton(
                 onPressed: primitivesSum,
                 child: const Text("Run Python 'primitives.sum(2, 3)'"),
@@ -139,6 +147,7 @@ class _MyAppState extends State<MyApp> {
                 onPressed: primitivesSqrt,
                 child: const Text("Run Python 'primitives.sqrt(3)'"),
               ),
+              const Divider(),
               ElevatedButton(
                 onPressed: structsHelloWorld,
                 child: const Text("Run Python 'structs.hello_world()'"),
@@ -175,6 +184,13 @@ class _MyAppState extends State<MyApp> {
                 onPressed: structsDistanceDart,
                 child: const Text(
                   "Run Python 'structs.distance(Coordinate(2, 2), Coordinate(5, 6))'",
+                ),
+              ),
+              const Divider(),
+              ElevatedButton(
+                onPressed: dataClass,
+                child: const Text(
+                  "Run Dart 'DataClass(1, \"Hello World\")'",
                 ),
               ),
             ],

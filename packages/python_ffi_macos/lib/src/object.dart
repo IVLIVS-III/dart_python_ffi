@@ -2,8 +2,10 @@ import "dart:ffi";
 
 import "package:ffi/ffi.dart";
 import "package:python_ffi_macos/python_ffi_macos.dart";
+import "package:python_ffi_macos/src/exception.dart";
 import "package:python_ffi_macos/src/extensions/convert_extension.dart";
 import "package:python_ffi_macos/src/extensions/malloc_extension.dart";
+import "package:python_ffi_macos/src/extensions/object_extension.dart";
 import "package:python_ffi_macos/src/ffi/generated_bindings.g.dart";
 import "package:python_ffi_macos/src/function.dart";
 import "package:python_ffi_platform_interface/python_ffi_platform_interface.dart";
@@ -159,5 +161,59 @@ mixin PythonObjectMacosMixin
     functions[functionName] = function;
 
     return function;
+  }
+
+  void debugDump() {
+    print("========================================");
+    print("PythonObjectMacos: @0x${reference.hexAddress}");
+    try {
+      try {
+        print("converted: ${reference.toDartObject(platform)}");
+      } on PythonFfiException catch (e) {
+        print("converted: @0x${reference.hexAddress} w/ error: $e");
+      }
+
+      final PythonObjectPlatform<PythonFfiMacOS, Pointer<PyObject>> dict =
+          getAttributeRaw("__dict__");
+      print("dict: @0x${dict.reference.hexAddress}");
+      platform.ensureNoPythonError();
+
+      final Pointer<PyObject> keys =
+          platform.bindings.PyDict_Keys(dict.reference);
+      platform.bindings.Py_IncRef(keys);
+      print("dict-keys: @0x${keys.hexAddress}");
+      platform.ensureNoPythonError();
+
+      if (keys == nullptr) {
+        print("dict-keys is null");
+      } else {
+        final int len = platform.bindings.PyList_Size(keys);
+        print("dict-keys-len: $len");
+        platform.ensureNoPythonError();
+
+        for (int i = 0; i < len; i++) {
+          final Pointer<PyObject> key =
+              platform.bindings.PyList_GetItem(keys, i);
+          platform.bindings.Py_IncRef(key);
+
+          final Pointer<PyObject> value =
+              platform.bindings.PyDict_GetItem(dict.reference, key);
+          platform.bindings.Py_IncRef(value);
+
+          final String keyString = key.toDartObject(platform)! as String;
+          Object? valueObject;
+          try {
+            valueObject = value.toDartObject(platform);
+          } on PythonFfiException catch (e) {
+            valueObject = "@0x${value.hexAddress} w/ error: $e";
+          }
+          print("$keyString: $valueObject");
+        }
+      }
+    } on PythonExceptionMacos catch (e) {
+      print("Error: $e");
+    } finally {
+      print("========================================");
+    }
   }
 }

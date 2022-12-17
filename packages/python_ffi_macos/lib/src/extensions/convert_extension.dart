@@ -22,15 +22,18 @@ extension ConvertToPythonExtension on Object? {
     }
     if (value is int) {
       object = platform.bindings.PyLong_FromLong(value);
+      platform.bindings.Py_IncRef(object);
     }
     if (value is double) {
       object = platform.bindings.PyFloat_FromDouble(value);
+      platform.bindings.Py_IncRef(object);
     }
     if (value is String) {
-      object = value.toNativeUtf8().useAndFree(
+      object = value.toNativeUtf8().useAndFree<Pointer<PyObject>>(
             (Pointer<Utf8> pointer) =>
                 platform.bindings.PyUnicode_FromString(pointer.cast<Char>()),
           );
+      platform.bindings.Py_IncRef(object);
     }
     if (value is PythonObjectPlatform) {
       final Pointer<PyObject> rawObject = value.reference! as Pointer<PyObject>;
