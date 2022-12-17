@@ -36,7 +36,7 @@ class _MyAppState extends State<MyApp> {
 
     primitivesModule.dispose();
 
-    print("Sum: $sum");
+    debugPrint("Sum: $sum");
   }
 
   void primitivesSqrt() {
@@ -46,7 +46,7 @@ class _MyAppState extends State<MyApp> {
 
     primitivesModule.dispose();
 
-    print("Sqrt: $sqrt");
+    debugPrint("Sqrt: $sqrt");
   }
 
   void structsHelloWorld() {
@@ -56,7 +56,7 @@ class _MyAppState extends State<MyApp> {
 
     structsModule.dispose();
 
-    print("Hello World: $helloWorld");
+    debugPrint("Hello World: $helloWorld");
   }
 
   void structsReverse() {
@@ -67,7 +67,7 @@ class _MyAppState extends State<MyApp> {
 
     structsModule.dispose();
 
-    print("Reversed: $reversed");
+    debugPrint("Reversed: $reversed");
   }
 
   void structsCreateCoordinate() {
@@ -77,7 +77,7 @@ class _MyAppState extends State<MyApp> {
 
     structsModule.dispose();
 
-    print("Coordinate: $coordinate");
+    debugPrint("Coordinate: $coordinate");
   }
 
   void structsCreatePlace() {
@@ -87,7 +87,7 @@ class _MyAppState extends State<MyApp> {
 
     structsModule.dispose();
 
-    print("Place: $place");
+    debugPrint("Place: $place");
   }
 
   void structsDistance() {
@@ -99,13 +99,13 @@ class _MyAppState extends State<MyApp> {
 
     structsModule.dispose();
 
-    print("Distance: $distance");
+    debugPrint("Distance: $distance");
   }
 
   void structsCreateCoordinateDart() {
     final Coordinate coordinate = Coordinate(1, 2);
 
-    print("Coordinate: $coordinate");
+    debugPrint("Coordinate: $coordinate");
   }
 
   void structsDistanceDart() {
@@ -117,13 +117,13 @@ class _MyAppState extends State<MyApp> {
 
     structsModule.dispose();
 
-    print("Distance: $distance");
+    debugPrint("Distance: $distance");
   }
 
   void dataClass() {
     final DataClass dataClass = DataClass(1, "Hello World");
 
-    print("DataClass: $dataClass");
+    debugPrint("DataClass: $dataClass");
   }
 
   @override

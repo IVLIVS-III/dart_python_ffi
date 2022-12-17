@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import "package:python_ffi/python_ffi.dart";
 
 class Coordinate extends PythonClass {

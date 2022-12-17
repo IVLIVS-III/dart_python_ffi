@@ -1,6 +1,7 @@
 import "dart:ffi";
 
 import "package:ffi/ffi.dart";
+import "package:flutter/foundation.dart";
 import "package:python_ffi_macos/python_ffi_macos.dart";
 import "package:python_ffi_macos/src/exception.dart";
 import "package:python_ffi_macos/src/extensions/convert_extension.dart";
@@ -164,31 +165,31 @@ mixin PythonObjectMacosMixin
   }
 
   void debugDump() {
-    print("========================================");
-    print("PythonObjectMacos: @0x${reference.hexAddress}");
+    debugPrint("========================================");
+    debugPrint("PythonObjectMacos: @0x${reference.hexAddress}");
     try {
       try {
-        print("converted: ${reference.toDartObject(platform)}");
+        debugPrint("converted: ${reference.toDartObject(platform)}");
       } on PythonFfiException catch (e) {
-        print("converted: @0x${reference.hexAddress} w/ error: $e");
+        debugPrint("converted: @0x${reference.hexAddress} w/ error: $e");
       }
 
       final PythonObjectPlatform<PythonFfiMacOS, Pointer<PyObject>> dict =
           getAttributeRaw("__dict__");
-      print("dict: @0x${dict.reference.hexAddress}");
+      debugPrint("dict: @0x${dict.reference.hexAddress}");
       platform.ensureNoPythonError();
 
       final Pointer<PyObject> keys =
           platform.bindings.PyDict_Keys(dict.reference);
       platform.bindings.Py_IncRef(keys);
-      print("dict-keys: @0x${keys.hexAddress}");
+      debugPrint("dict-keys: @0x${keys.hexAddress}");
       platform.ensureNoPythonError();
 
       if (keys == nullptr) {
-        print("dict-keys is null");
+        debugPrint("dict-keys is null");
       } else {
         final int len = platform.bindings.PyList_Size(keys);
-        print("dict-keys-len: $len");
+        debugPrint("dict-keys-len: $len");
         platform.ensureNoPythonError();
 
         for (int i = 0; i < len; i++) {
@@ -207,13 +208,13 @@ mixin PythonObjectMacosMixin
           } on PythonFfiException catch (e) {
             valueObject = "@0x${value.hexAddress} w/ error: $e";
           }
-          print("$keyString: $valueObject");
+          debugPrint("$keyString: $valueObject");
         }
       }
     } on PythonExceptionMacos catch (e) {
-      print("Error: $e");
+      debugPrint("Error: $e");
     } finally {
-      print("========================================");
+      debugPrint("========================================");
     }
   }
 }

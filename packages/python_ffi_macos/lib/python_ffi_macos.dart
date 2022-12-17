@@ -1,9 +1,10 @@
 import "dart:async";
-import 'dart:collection';
+import "dart:collection";
 import "dart:ffi";
 import "dart:io";
 
 import "package:ffi/ffi.dart";
+import "package:flutter/foundation.dart";
 import "package:flutter/services.dart";
 import "package:path_provider/path_provider.dart";
 import "package:python_ffi_macos/src/class.dart";
@@ -101,7 +102,7 @@ class PythonFfiMacOS extends PythonFfiPlatform<Pointer<PyObject>> {
         await PlatformAssetBundle().load("python-modules/$moduleName.py");
     await moduleFile.writeAsBytes(moduleAsset.buffer.asUint8List());
 
-    print("Copied module $moduleName to ${moduleFile.path}");
+    debugPrint("Copied module $moduleName to ${moduleFile.path}");
   }
 
   @override
