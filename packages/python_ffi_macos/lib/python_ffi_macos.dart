@@ -68,26 +68,25 @@ class PythonFfiMacOS extends PythonFfiPlatform<Pointer<PyObject>> {
 
   // Attempt to bundle the python library with the app via flutter assets.
   /*
-  Future<void> _copyDylib() async {
-    const String dylibAssetPath =
-        "packages/python_ffi_macos/assets/$_libName.dylib";
-    final ByteData dylibAsset =
-        await PlatformAssetBundle().load(dylibAssetPath);
-
-    final Directory supportDir = await getApplicationSupportDirectory();
-    final File dylibFile = File("${supportDir.path}/python/$_libName.dylib");
+  Future<String> _copyDylib() async {
+    final File dylibFile =
+        File("${(await supportDir).path}/python_ffi/$_libName.dylib");
     if (!dylibFile.existsSync()) {
       dylibFile.createSync(recursive: true);
     }
 
+    final ByteData dylibAsset = await PlatformAssetBundle()
+        .load("packages/python_ffi_macos/assets/$_libName.dylib");
     await dylibFile.writeAsBytes(dylibAsset.buffer.asUint8List());
 
-    final DynamicLibrary dylib = DynamicLibrary.open(dylibFile.path);
-    _bindings = DartPythonCBindings(dylib);
+    debugPrint("Copied dylib $_libName to ${dylibFile.path}");
+
+    return dylibFile.path;
   }
   */
 
-  void _openDylib() {
+  Future<void> _openDylib() async {
+    // final String dylibPath = await _copyDylib();
     final DynamicLibrary dylib = DynamicLibrary.open(_libPath);
     _bindings = DartPythonCBindings(dylib);
   }
@@ -108,7 +107,7 @@ class PythonFfiMacOS extends PythonFfiPlatform<Pointer<PyObject>> {
   @override
   Future<void> initialize() async {
     if (!areBindingsInitialized) {
-      _openDylib();
+      await _openDylib();
     }
 
     // TODO: move this into the client package

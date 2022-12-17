@@ -27,5 +27,5 @@ A new Flutter FFI plugin project.
      # here on LDFLAG, I had to set -l and then the library name (without lib prefix although the file name has it).
      # 'OTHER_LDFLAGS' => '-llibpython3.11',
   }
-  # s.vendored_libraries = 'python/libpython3.11'
+  # s.vendored_xcframeworks = 'python/libpython3.11.xcframework'
 end
