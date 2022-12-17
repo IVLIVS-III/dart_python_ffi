@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:python_ffi_macos/python_ffi_macos.dart' as python_ffi_macos;
+import 'package:flutter/material.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,8 +20,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    sumResult = python_ffi_macos.sum(1, 2);
-    sumAsyncResult = python_ffi_macos.sumAsync(3, 4);
   }
 
   @override

@@ -1,3 +1,4 @@
+/*
 import 'package:flutter_test/flutter_test.dart';
 import 'package:python_ffi/python_ffi.dart';
 import 'package:python_ffi/python_ffi_platform_interface.dart';
@@ -27,3 +28,4 @@ void main() {
     expect(await pythonFfiPlugin.getPlatformVersion(), '42');
   });
 }
+*/
