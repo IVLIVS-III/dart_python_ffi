@@ -80,6 +80,8 @@ extension ConvertToDartExtension on Pointer<PyObject> {
         return asUnicodeString(platform);
       case "bytes":
         return asString(platform);
+      case "dict":
+        return asMap(platform);
     }
 
     if (platform.classNames.contains(nameString)) {
@@ -132,6 +134,37 @@ extension ConvertToDartExtension on Pointer<PyObject> {
     //       disabling this prevents random crashes converting constant strings,
     //       but probably leaks memory
     // platform.bindings.Py_DecRef(this);
+    return result;
+  }
+
+  Map<Object?, Object?> asMap(PythonFfiMacOS platform) {
+    final Pointer<PyObject> keys = platform.bindings.PyDict_Keys(this);
+    platform.bindings.Py_IncRef(keys);
+    platform.ensureNoPythonError();
+
+    if (keys == nullptr) {
+      throw PythonFfiException("Failed to convert to Map");
+    }
+
+    final Map<Object?, Object?> result = <Object?, Object?>{};
+
+    final int len = platform.bindings.PyList_Size(keys);
+    platform.ensureNoPythonError();
+
+    for (int i = 0; i < len; i++) {
+      final Pointer<PyObject> key = platform.bindings.PyList_GetItem(keys, i);
+      platform.bindings.Py_IncRef(key);
+
+      final Pointer<PyObject> value =
+          platform.bindings.PyDict_GetItem(this, key);
+      platform.bindings.Py_IncRef(value);
+
+      final Object? keyObject = key.toDartObject(platform);
+      final Object? valueObject = value.toDartObject(platform);
+
+      result[keyObject] = valueObject;
+    }
+
     return result;
   }
 }
