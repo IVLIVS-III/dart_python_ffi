@@ -78,4 +78,7 @@ class StructsModule extends PythonModule {
         name: "structs",
         root: SourceFile("structs.py"),
       );
+
+  static Iterable<String> get classNames =>
+      const <String>["Coordinate", "Place"];
 }

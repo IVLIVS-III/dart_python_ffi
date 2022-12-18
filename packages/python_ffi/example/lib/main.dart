@@ -3,6 +3,7 @@ import "package:python_ffi/python_ffi.dart";
 import "package:python_ffi_example/python-modules/data_class.dart";
 import "package:python_ffi_example/python-modules/hello_world.dart";
 import "package:python_ffi_example/python-modules/json_parser.dart";
+import "package:python_ffi_example/python-modules/module_registry.dart";
 import "package:python_ffi_example/python-modules/primitives.dart";
 import "package:python_ffi_example/python-modules/structs.dart";
 
@@ -10,13 +11,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await PythonFfi.instance.initialize();
-  PythonFfi.instance.prepareModule(HelloWorldModule.definition);
-  PythonFfi.instance.prepareModule(PrimitivesModule.definition);
-  PythonFfi.instance.prepareModule(StructsModule.definition);
-  PythonFfi.instance.prepareModule(DataClassModule.definition);
-  PythonFfi.instance.prepareModule(JsonParserModule.definition);
-  PythonFfi.instance.addClassName("Coordinate");
-  PythonFfi.instance.addClassName("Place");
+  await registerPythonModules();
 
   runApp(const MyApp());
 }

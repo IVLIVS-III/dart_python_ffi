@@ -16,4 +16,6 @@ class HelloWorldModule extends PythonModule {
         name: "hello_world",
         root: SourceFile("hello_world.py"),
       );
+
+  static Iterable<String> get classNames => const <String>[];
 }

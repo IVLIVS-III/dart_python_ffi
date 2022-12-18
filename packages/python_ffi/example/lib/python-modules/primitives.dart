@@ -20,4 +20,6 @@ class PrimitivesModule extends PythonModule {
         name: "primitives",
         root: SourceFile("primitives.py"),
       );
+
+  static Iterable<String> get classNames => const <String>[];
 }

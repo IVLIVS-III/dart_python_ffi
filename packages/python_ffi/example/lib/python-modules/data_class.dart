@@ -33,4 +33,6 @@ class DataClassModule extends PythonModule {
         name: "data_class",
         root: SourceFile("data_class.py"),
       );
+
+  static Iterable<String> get classNames => const <String>["DataClass"];
 }
