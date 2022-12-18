@@ -9,6 +9,9 @@ import "dart:async";
 
 import "package:python_ffi_platform_interface/python_ffi_platform_interface.dart";
 
+export "package:python_ffi_platform_interface/python_ffi_platform_interface.dart"
+    show PythonModuleDefinition, SourceFile, SourceDirectory;
+
 /*
 typedef PythonModule
     = PythonModulePlatform<PythonFfiPlatform<Object?>, Object?>;
@@ -22,7 +25,7 @@ typedef PythonClassFrom<T extends PythonClass> = T Function(
   PythonClassPlatform<PythonFfiPlatform<Object?>, Object?> pythonClass,
 );
 
-class PythonModule
+abstract class PythonModule
     extends PythonModulePlatform<PythonFfiPlatform<Object?>, Object?> {
   PythonModule.from(
     PythonModulePlatform<PythonFfiPlatform<Object?>, Object?> pythonModule,
@@ -147,6 +150,9 @@ class PythonFfi {
 
   FutureOr<void> initialize() async =>
       await PythonFfiPlatform.instance.initialize();
+
+  FutureOr<void> prepareModule(PythonModuleDefinition moduleDefinition) async =>
+      await PythonFfiPlatform.instance.prepareModule(moduleDefinition);
 
   void addClassName(String className) =>
       PythonFfiPlatform.instance.addClassName(className);

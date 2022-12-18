@@ -11,4 +11,9 @@ class HelloWorldModule extends PythonModule {
       );
 
   void hello_world() => getFunction("hello_world").call(<Object?>[]);
+
+  static PythonModuleDefinition get definition => PythonModuleDefinition(
+        name: "hello_world",
+        root: SourceFile("hello_world.py"),
+      );
 }

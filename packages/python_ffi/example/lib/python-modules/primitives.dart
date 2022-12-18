@@ -15,4 +15,9 @@ class PrimitivesModule extends PythonModule {
   int subtract(int a, int b) => getFunction("subtract").call(<Object?>[a, b]);
 
   int sqrt(int a) => getFunction("sqrt").call(<Object?>[a]);
+
+  static PythonModuleDefinition get definition => PythonModuleDefinition(
+        name: "primitives",
+        root: SourceFile("primitives.py"),
+      );
 }

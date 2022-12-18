@@ -3,6 +3,7 @@ import "dart:async";
 import "package:plugin_platform_interface/plugin_platform_interface.dart";
 import "package:python_ffi_platform_interface/python_ffi_platform_interface.dart";
 import "package:python_ffi_platform_interface/src/python_ffi_method_channel.dart";
+import 'package:python_ffi_platform_interface/src/python_module_definition.dart';
 
 abstract class PythonFfiPlatform<R extends Object?> extends PlatformInterface {
   /// Constructs a PythonFfiPlatform.
@@ -33,6 +34,11 @@ abstract class PythonFfiPlatform<R extends Object?> extends PlatformInterface {
     throw UnimplementedError("initialize() has not been implemented.");
   }
 
+  FutureOr<void> prepareModule(PythonModuleDefinition moduleDefinition) async {
+    throw UnimplementedError("prepareModule() has not been implemented.");
+  }
+
+  /// Register a Python class name for type marshalling.
   void addClassName(String className);
 
   void removeClassName(String className);

@@ -91,34 +91,41 @@ class PythonFfiMacOS extends PythonFfiPlatform<Pointer<PyObject>> {
     _bindings = DartPythonCBindings(dylib);
   }
 
-  Future<void> _copySingleFileModule(String moduleName) async {
-    final File moduleFile = File("${(await packagesDir).path}/$moduleName.py");
-    if (!moduleFile.existsSync()) {
-      moduleFile.createSync(recursive: true);
-    }
-
-    final ByteData moduleAsset =
-        await PlatformAssetBundle().load("python-modules/$moduleName.py");
-    await moduleFile.writeAsBytes(moduleAsset.buffer.asUint8List());
-
-    debugPrint("Copied module $moduleName to ${moduleFile.path}");
-  }
-
   @override
   Future<void> initialize() async {
     if (!areBindingsInitialized) {
       await _openDylib();
     }
 
-    // TODO: move this into the client package
-    await _copySingleFileModule("hello_world");
-    await _copySingleFileModule("primitives");
-    await _copySingleFileModule("structs");
-    await _copySingleFileModule("data_class");
-
     bindings.Py_Initialize();
 
     appendToPath((await packagesDir).path);
+  }
+
+  Future<void> _copyModuleFile(String filePath) async {
+    final File moduleFile = File("${(await packagesDir).path}/$filePath");
+    if (!moduleFile.existsSync()) {
+      moduleFile.createSync(recursive: true);
+    }
+
+    final ByteData moduleAsset =
+        await PlatformAssetBundle().load("python-modules/$filePath");
+    await moduleFile.writeAsBytes(moduleAsset.buffer.asUint8List());
+
+    debugPrint("Copied module file $filePath to ${moduleFile.path}");
+  }
+
+  @override
+  FutureOr<void> prepareModule(PythonModuleDefinition moduleDefinition) async {
+    final List<Future<void>> copyTasks = <Future<void>>[];
+
+    for (final String sourceFile in moduleDefinition.sourceFiles) {
+      copyTasks.add(_copyModuleFile(sourceFile));
+    }
+
+    await Future.wait(copyTasks);
+
+    debugPrint("==> Copied module ${moduleDefinition.name}");
   }
 
   @override

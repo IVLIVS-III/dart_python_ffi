@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:python_ffi/python_ffi.dart";
 import "package:python_ffi_example/python-modules/data_class.dart";
 import "package:python_ffi_example/python-modules/hello_world.dart";
+import "package:python_ffi_example/python-modules/json_parser.dart";
 import "package:python_ffi_example/python-modules/primitives.dart";
 import "package:python_ffi_example/python-modules/structs.dart";
 
@@ -9,6 +10,11 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await PythonFfi.instance.initialize();
+  PythonFfi.instance.prepareModule(HelloWorldModule.definition);
+  PythonFfi.instance.prepareModule(PrimitivesModule.definition);
+  PythonFfi.instance.prepareModule(StructsModule.definition);
+  PythonFfi.instance.prepareModule(DataClassModule.definition);
+  PythonFfi.instance.prepareModule(JsonParserModule.definition);
   PythonFfi.instance.addClassName("Coordinate");
   PythonFfi.instance.addClassName("Place");
 
@@ -126,6 +132,17 @@ class _MyAppState extends State<MyApp> {
     debugPrint("DataClass: $dataClass");
   }
 
+  void jsonParserParse() {
+    final JsonParserModule jsonParserModule = JsonParserModule.import();
+
+    const String json = '{"name": "John", "age": 30, "city": "New York"}';
+    final Object? parsed = jsonParserModule.parse(json);
+
+    jsonParserModule.dispose();
+
+    debugPrint("Parsed json: $parsed");
+  }
+
   @override
   Widget build(BuildContext context) => MaterialApp(
         home: Scaffold(
@@ -191,6 +208,13 @@ class _MyAppState extends State<MyApp> {
                 onPressed: dataClass,
                 child: const Text(
                   "Run Dart 'DataClass(1, \"Hello World\")'",
+                ),
+              ),
+              const Divider(),
+              ElevatedButton(
+                onPressed: jsonParserParse,
+                child: const Text(
+                  "Run Python 'json_parser.parse(\"{\\\"name\\\": \\\"John\\\", \\\"age\\\": 30, \\\"city\\\": \\\"New York\\\"}\")'",
                 ),
               ),
             ],

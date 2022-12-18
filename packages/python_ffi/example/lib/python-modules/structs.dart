@@ -73,4 +73,9 @@ class StructsModule extends PythonModule {
 
   double distance(Coordinate c1, Coordinate c2) =>
       getFunction("distance").call(<Object?>[c1, c2]);
+
+  static PythonModuleDefinition get definition => PythonModuleDefinition(
+        name: "structs",
+        root: SourceFile("structs.py"),
+      );
 }
