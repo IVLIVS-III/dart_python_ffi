@@ -1,6 +1,7 @@
 import "dart:ffi";
 
 import "package:ffi/ffi.dart";
+import 'package:flutter/foundation.dart';
 import "package:python_ffi_macos/src/ffi/generated_bindings.g.dart";
 import "package:python_ffi_platform_interface/python_ffi_platform_interface.dart";
 
@@ -29,6 +30,7 @@ extension ObjectExtension on Pointer<PyObject> {
   }
 
   bool get isClass {
+    debugPrint("isClass: $typeName");
     // TODO: this does not seem right, it matches function-types as well
     final String baseType = ref.ob_type.ref.ob_base.ob_base.ob_type.ref.tp_name
         .cast<Utf8>()
