@@ -10,8 +10,11 @@ abstract class PythonObjectPlatform<P extends PythonFfiPlatform<R>,
 
   Object? toDartObject();
 
-  T getAttribute<T extends Object?>(String attributeName);
   T getAttributeRaw<T extends PythonObjectPlatform<P, R>>(String attributeName);
+  T getAttribute<T extends Object?>(String attributeName);
+
+  void setAttributeRaw<T extends PythonObjectPlatform<P, R>>(String attributeName, T value);
+  void setAttribute<T extends Object?>(String attributeName, T value);
 
   /// Disposes the python object
   @mustCallSuper

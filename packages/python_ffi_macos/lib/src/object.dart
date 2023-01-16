@@ -111,6 +111,25 @@ mixin PythonObjectMacosMixin
   }
 
   @override
+  T getAttributeRaw<
+  T extends PythonObjectPlatform<PythonFfiMacOS, Pointer<PyObject>>>(
+      String attributeName,
+      ) {
+    final Pointer<PyObject> attribute = attributeName.toNativeUtf8().useAndFree(
+          (Pointer<Utf8> pointer) => platform.bindings.PyObject_GetAttrString(
+        reference,
+        pointer.cast<Char>(),
+      ),
+    );
+
+    if (attribute == nullptr) {
+      throw PythonFfiException("Failed to get attribute $attributeName");
+    }
+
+    return PythonObjectMacos(platform, attribute) as T;
+  }
+
+  @override
   T getAttribute<T extends Object?>(String attributeName) {
     final PythonObjectMacos attribute = getAttributeRaw(attributeName);
 
@@ -118,22 +137,31 @@ mixin PythonObjectMacosMixin
   }
 
   @override
-  T getAttributeRaw<
-      T extends PythonObjectPlatform<PythonFfiMacOS, Pointer<PyObject>>>(
-    String attributeName,
-  ) {
-    final Pointer<PyObject> attribute = attributeName.toNativeUtf8().useAndFree(
-          (Pointer<Utf8> pointer) => platform.bindings.PyObject_GetAttrString(
-            reference,
-            pointer.cast<Char>(),
-          ),
-        );
+  void setAttributeRaw<
+  T extends PythonObjectPlatform<PythonFfiMacOS, Pointer<PyObject>>>(
+      String attributeName,
+      T value,
+      ) {
+    final int result = attributeName.toNativeUtf8().useAndFree(
+          (Pointer<Utf8> pointer) => platform.bindings.PyObject_SetAttrString(
+        reference,
+        pointer.cast<Char>(),
+        value.reference,
+      ),
+    );
 
-    if (attribute == nullptr) {
-      throw PythonFfiException("Failed to get attribute $attributeName");
+    // this call should not be necessary
+    // result is -1 on failure, 0 on success
+    platform.ensureNoPythonError();
+
+    if (result == -1) {
+      throw PythonFfiException("Failed to set attribute $attributeName");
     }
+  }
 
-    return PythonObjectMacos(platform, attribute) as T;
+  @override
+  void setAttribute<T extends Object?>(String attributeName, T value) {
+    setAttributeRaw(attributeName, value.toPythonObject(platform));
   }
 
   @override

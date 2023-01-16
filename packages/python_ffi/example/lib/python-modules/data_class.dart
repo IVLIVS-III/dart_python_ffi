@@ -14,8 +14,10 @@ class DataClass extends PythonClass {
   DataClass.from(super.pythonClass) : super.from();
 
   int get a => getAttribute("a")! as int;
+  set a(int value) => setAttribute("a", value);
 
   String get b => getAttribute("b")! as String;
+  set b(String value) => setAttribute("b", value);
 
   @override
   String toString() => "DataClass(a: $a, b: $b)";
