@@ -82,6 +82,8 @@ extension ConvertToDartExtension on Pointer<PyObject> {
         return asString(platform);
       case "dict":
         return asMap(platform);
+      case "list":
+        return asList(platform);
     }
 
     if (platform.classNames.contains(nameString)) {
@@ -163,6 +165,23 @@ extension ConvertToDartExtension on Pointer<PyObject> {
       final Object? valueObject = value.toDartObject(platform);
 
       result[keyObject] = valueObject;
+    }
+
+    return result;
+  }
+
+  List<Object?> asList(PythonFfiMacOS platform) {
+    final List<Object?> result = <Object?>[];
+
+    final int len = platform.bindings.PyList_Size(this);
+    platform.ensureNoPythonError();
+
+    for (int i = 0; i < len; i++) {
+      final Pointer<PyObject> value = platform.bindings.PyList_GetItem(this, i);
+      platform.bindings.Py_IncRef(value);
+      final Object? valueObject = value.toDartObject(platform);
+      result.add(valueObject);
+      platform.ensureNoPythonError();
     }
 
     return result;
