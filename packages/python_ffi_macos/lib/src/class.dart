@@ -95,4 +95,7 @@ class PythonClassMacos
     _functions.clear();
     super.dispose();
   }
+
+  @override
+  String toString() => getMethod("__str__").call<String>(<Object?>[]);
 }

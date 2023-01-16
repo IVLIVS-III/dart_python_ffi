@@ -4,6 +4,7 @@ import "package:python_ffi/python_ffi.dart";
 import "package:python_ffi_example/python-modules/data_class.dart";
 import "package:python_ffi_example/python-modules/hello_world.dart";
 import "package:python_ffi_example/python-modules/json_parser.dart";
+import "package:python_ffi_example/python-modules/liblax.dart";
 import "package:python_ffi_example/python-modules/primitives.dart";
 import "package:python_ffi_example/python-modules/structs.dart";
 
@@ -21,6 +22,7 @@ void registerPythonClassNames() {
   StructsModule.classNames.registerClassNames();
   DataClassModule.classNames.registerClassNames();
   JsonParserModule.classNames.registerClassNames();
+  LiblaxModule.classNames.registerClassNames();
 }
 
 FutureOr<void> registerPythonModules() async {
@@ -29,6 +31,7 @@ FutureOr<void> registerPythonModules() async {
   PythonFfi.instance.prepareModule(StructsModule.definition);
   PythonFfi.instance.prepareModule(DataClassModule.definition);
   PythonFfi.instance.prepareModule(JsonParserModule.definition);
+  PythonFfi.instance.prepareModule(LiblaxModule.definition);
 
   registerPythonClassNames();
 }
