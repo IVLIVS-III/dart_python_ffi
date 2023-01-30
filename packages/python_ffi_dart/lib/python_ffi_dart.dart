@@ -7,7 +7,7 @@ import "dart:async";
 
 import "dart:io";
 
-import "package:python_ffi_macos/python_ffi_macos.dart";
+import "package:python_ffi_macos_dart/python_ffi_macos_dart.dart";
 import "package:python_ffi_platform_interface/python_ffi_platform_interface.dart";
 
 part "src/python_ffi_dart_base.dart";

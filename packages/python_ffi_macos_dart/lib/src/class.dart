@@ -1,8 +1,7 @@
-part of python_ffi_macos;
-
+part of python_ffi_macos_dart;
 
 class PythonClassDefinitionMacos
-    extends PythonClassDefinitionPlatform<PythonFfiMacOS, Pointer<PyObject>>
+    extends PythonClassDefinitionPlatform<PythonFfiMacOSBase, Pointer<PyObject>>
     with _PythonObjectMacosMixin {
   PythonClassDefinitionMacos(super.platform, super.reference);
 
@@ -70,7 +69,7 @@ class PythonClassDefinitionMacos
 }
 
 class PythonClassMacos
-    extends PythonClassPlatform<PythonFfiMacOS, Pointer<PyObject>>
+    extends PythonClassPlatform<PythonFfiMacOSBase, Pointer<PyObject>>
     with _PythonObjectMacosMixin {
   PythonClassMacos(super.platform, super.reference);
 

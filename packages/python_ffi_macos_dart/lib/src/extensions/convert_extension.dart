@@ -1,8 +1,7 @@
-part of python_ffi_macos;
-
+part of python_ffi_macos_dart;
 
 extension ConvertToPythonExtension on Object? {
-  _PythonObjectMacos _toPythonObject(PythonFfiMacOS platform) {
+  _PythonObjectMacos _toPythonObject(PythonFfiMacOSBase platform) {
     final Object? value = this;
     Pointer<PyObject>? object;
 
@@ -33,10 +32,12 @@ extension ConvertToPythonExtension on Object? {
       for (final Object? key in value.keys) {
         final Object? val = value[key];
 
-        final Pointer<PyObject> keyObject = key._toPythonObject(platform).reference;
+        final Pointer<PyObject> keyObject =
+            key._toPythonObject(platform).reference;
         platform.bindings.Py_IncRef(keyObject);
 
-        final Pointer<PyObject> valueObject = val._toPythonObject(platform).reference;
+        final Pointer<PyObject> valueObject =
+            val._toPythonObject(platform).reference;
         platform.bindings.Py_IncRef(valueObject);
 
         platform.bindings.PyDict_SetItem(object, keyObject, valueObject);
@@ -59,7 +60,7 @@ extension ConvertToPythonExtension on Object? {
 }
 
 extension ConvertToDartExtension on Pointer<PyObject> {
-  Object? toDartObject(PythonFfiMacOS platform) {
+  Object? toDartObject(PythonFfiMacOSBase platform) {
     final Pointer<PyObject> object = this;
 
     if (object == nullptr) {
@@ -102,7 +103,7 @@ extension ConvertToDartExtension on Pointer<PyObject> {
     throw PythonFfiException("Unsupported type: $nameString($runtimeType)");
   }
 
-  int asInt(PythonFfiMacOS platform) {
+  int asInt(PythonFfiMacOSBase platform) {
     final int result = platform.bindings.PyLong_AsLong(this);
     if (result == -1 && platform.bindings.PyErr_Occurred() != nullptr) {
       throw PythonFfiException("Failed to convert to int");
@@ -110,7 +111,7 @@ extension ConvertToDartExtension on Pointer<PyObject> {
     return result;
   }
 
-  double asDouble(PythonFfiMacOS platform) {
+  double asDouble(PythonFfiMacOSBase platform) {
     final double result = platform.bindings.PyFloat_AsDouble(this);
     if (result == -1.0 && platform.bindings.PyErr_Occurred() != nullptr) {
       throw PythonFfiException("Failed to convert to double");
@@ -118,7 +119,7 @@ extension ConvertToDartExtension on Pointer<PyObject> {
     return result;
   }
 
-  String asString(PythonFfiMacOS platform) {
+  String asString(PythonFfiMacOSBase platform) {
     /*
     print(
       "trying to convert detected string @$hexAddress from type name: $typeName",
@@ -138,7 +139,7 @@ extension ConvertToDartExtension on Pointer<PyObject> {
     }
   }
 
-  String asUnicodeString(PythonFfiMacOS platform) {
+  String asUnicodeString(PythonFfiMacOSBase platform) {
     final String result =
         platform.bindings.PyUnicode_AsUTF8String(this).asString(platform);
     // TODO: correctly handle refcount
@@ -148,7 +149,7 @@ extension ConvertToDartExtension on Pointer<PyObject> {
     return result;
   }
 
-  Map<Object?, Object?> asMap(PythonFfiMacOS platform) {
+  Map<Object?, Object?> asMap(PythonFfiMacOSBase platform) {
     final Pointer<PyObject> keys = platform.bindings.PyDict_Keys(this);
     platform.bindings.Py_IncRef(keys);
     platform.ensureNoPythonError();
@@ -179,7 +180,7 @@ extension ConvertToDartExtension on Pointer<PyObject> {
     return result;
   }
 
-  List<Object?> asList(PythonFfiMacOS platform) {
+  List<Object?> asList(PythonFfiMacOSBase platform) {
     final List<Object?> result = <Object?>[];
 
     final int len = platform.bindings.PyList_Size(this);

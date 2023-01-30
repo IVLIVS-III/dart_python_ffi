@@ -1,4 +1,4 @@
-part of python_ffi_macos;
+part of python_ffi_macos_dart;
 
 
 extension AddressExtension<T extends NativeType> on Pointer<T> {
@@ -26,7 +26,7 @@ extension ObjectExtension on Pointer<PyObject> {
   }
 
   bool get isClass {
-    debugPrint("isClass: $typeName");
+    print("isClass: $typeName");
     // TODO: this does not seem right, it matches function-types as well
     final String baseType = ref.ob_type.ref.ob_base.ob_base.ob_type.ref.tp_name
         .cast<Utf8>()

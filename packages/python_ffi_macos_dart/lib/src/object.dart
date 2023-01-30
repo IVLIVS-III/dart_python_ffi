@@ -1,4 +1,4 @@
-part of python_ffi_macos;
+part of python_ffi_macos_dart;
 
 extension SymbolToNameExtension on Symbol {
   String get name =>
@@ -7,15 +7,15 @@ extension SymbolToNameExtension on Symbol {
 }
 
 class _PythonObjectMacos
-    extends PythonObjectPlatform<PythonFfiMacOS, Pointer<PyObject>>
+    extends PythonObjectPlatform<PythonFfiMacOSBase, Pointer<PyObject>>
     with _PythonObjectMacosMixin {
   _PythonObjectMacos(super.platform, super.reference);
 }
 
 mixin _PythonObjectMacosMixin
-    on PythonObjectPlatform<PythonFfiMacOS, Pointer<PyObject>> {
+    on PythonObjectPlatform<PythonFfiMacOSBase, Pointer<PyObject>> {
   static T staticCall<T extends Object?>(
-    PythonFfiMacOS platform,
+    PythonFfiMacOSBase platform,
     Pointer<PyObject> reference,
     List<Object?> args, {
     Map<String, Object?>? kwargs,
@@ -53,7 +53,7 @@ mixin _PythonObjectMacosMixin
 
   /// Calls the python function with raw pyObject args and kwargs
   static Pointer<PyObject> staticRawCall(
-    PythonFfiMacOS platform,
+    PythonFfiMacOSBase platform,
     Pointer<PyObject> reference, {
     List<Pointer<PyObject>>? args,
     Map<String, Pointer<PyObject>>? kwargs,
@@ -107,7 +107,7 @@ mixin _PythonObjectMacosMixin
 
   @override
   T getAttributeRaw<
-      T extends PythonObjectPlatform<PythonFfiMacOS, Pointer<PyObject>>>(
+      T extends PythonObjectPlatform<PythonFfiMacOSBase, Pointer<PyObject>>>(
     String attributeName,
   ) {
     final Pointer<PyObject> attribute = attributeName.toNativeUtf8().useAndFree(
@@ -133,7 +133,7 @@ mixin _PythonObjectMacosMixin
 
   @override
   void setAttributeRaw<
-      T extends PythonObjectPlatform<PythonFfiMacOS, Pointer<PyObject>>>(
+      T extends PythonObjectPlatform<PythonFfiMacOSBase, Pointer<PyObject>>>(
     String attributeName,
     T value,
   ) {
@@ -168,7 +168,6 @@ mixin _PythonObjectMacosMixin
   Object? toDartObject() => reference.toDartObject(platform);
 
   @override
-  @mustCallSuper
   Object? noSuchMethod(Invocation invocation) {
     if (invocation.isMethod) {
       final String methodName = invocation.memberName.name;
@@ -205,7 +204,7 @@ mixin _PythonObjectMacosMixin
       return cachedFunction;
     }
 
-    final PythonObjectPlatform<PythonFfiMacOS, Pointer<PyObject>>
+    final PythonObjectPlatform<PythonFfiMacOSBase, Pointer<PyObject>>
         functionAttribute = getAttributeRaw(functionName);
     final PythonFunctionMacos function =
         PythonFunctionMacos(platform, functionAttribute.reference);
@@ -216,31 +215,31 @@ mixin _PythonObjectMacosMixin
   }
 
   void debugDump() {
-    debugPrint("========================================");
-    debugPrint("PythonObjectMacos: @0x${reference.hexAddress}");
+    print("========================================");
+    print("PythonObjectMacos: @0x${reference.hexAddress}");
     try {
       try {
-        debugPrint("converted: ${reference.toDartObject(platform)}");
+        print("converted: ${reference.toDartObject(platform)}");
       } on PythonFfiException catch (e) {
-        debugPrint("converted: @0x${reference.hexAddress} w/ error: $e");
+        print("converted: @0x${reference.hexAddress} w/ error: $e");
       }
 
-      final PythonObjectPlatform<PythonFfiMacOS, Pointer<PyObject>> dict =
+      final PythonObjectPlatform<PythonFfiMacOSBase, Pointer<PyObject>> dict =
           getAttributeRaw("__dict__");
-      debugPrint("dict: @0x${dict.reference.hexAddress}");
+      print("dict: @0x${dict.reference.hexAddress}");
       platform.ensureNoPythonError();
 
       final Pointer<PyObject> keys =
           platform.bindings.PyDict_Keys(dict.reference);
       platform.bindings.Py_IncRef(keys);
-      debugPrint("dict-keys: @0x${keys.hexAddress}");
+      print("dict-keys: @0x${keys.hexAddress}");
       platform.ensureNoPythonError();
 
       if (keys == nullptr) {
-        debugPrint("dict-keys is null");
+        print("dict-keys is null");
       } else {
         final int len = platform.bindings.PyList_Size(keys);
-        debugPrint("dict-keys-len: $len");
+        print("dict-keys-len: $len");
         platform.ensureNoPythonError();
 
         for (int i = 0; i < len; i++) {
@@ -259,13 +258,13 @@ mixin _PythonObjectMacosMixin
           } on PythonFfiException catch (e) {
             valueObject = "@0x${value.hexAddress} w/ error: $e";
           }
-          debugPrint("$keyString: $valueObject");
+          print("$keyString: $valueObject");
         }
       }
     } on PythonExceptionMacos catch (e) {
-      debugPrint("Error: $e");
+      print("Error: $e");
     } finally {
-      debugPrint("========================================");
+      print("========================================");
     }
   }
 }

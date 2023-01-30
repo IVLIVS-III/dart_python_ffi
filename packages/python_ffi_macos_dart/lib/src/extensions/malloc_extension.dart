@@ -1,4 +1,4 @@
-part of python_ffi_macos;
+part of python_ffi_macos_dart;
 
 
 extension MallocExtension<T extends NativeType> on Pointer<T> {

@@ -21,7 +21,7 @@ class PythonFfiDart extends PythonFfiBase with PythonFfiMixin {
 
   FutureOr<void> initialize() {
     if (Platform.isMacOS) {
-      PythonFfiPlatform.instance = PythonFfiMacOS();
+      PythonFfiPlatform.instance = PythonFfiMacOSDart();
       return PythonFfiPlatform.instance.initialize();
     }
 

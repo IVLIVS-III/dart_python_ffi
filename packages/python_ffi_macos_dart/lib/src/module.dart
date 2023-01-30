@@ -1,8 +1,7 @@
-part of python_ffi_macos;
-
+part of python_ffi_macos_dart;
 
 class PythonModuleMacos
-    extends PythonModulePlatform<PythonFfiMacOS, Pointer<PyObject>>
+    extends PythonModulePlatform<PythonFfiMacOSBase, Pointer<PyObject>>
     with _PythonObjectMacosMixin {
   PythonModuleMacos(super.platform, super.reference);
 
