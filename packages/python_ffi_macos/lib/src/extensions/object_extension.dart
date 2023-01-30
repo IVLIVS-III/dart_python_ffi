@@ -1,9 +1,5 @@
-import "dart:ffi";
+part of python_ffi_macos;
 
-import "package:ffi/ffi.dart";
-import 'package:flutter/foundation.dart';
-import "package:python_ffi_macos/src/ffi/generated_bindings.g.dart";
-import "package:python_ffi_platform_interface/python_ffi_platform_interface.dart";
 
 extension AddressExtension<T extends NativeType> on Pointer<T> {
   String get hexAddress => address.toRadixString(16);

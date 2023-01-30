@@ -1,23 +1,18 @@
-import "dart:ffi";
+part of python_ffi_macos;
 
-import "package:ffi/ffi.dart";
-import "package:flutter/foundation.dart";
-import "package:python_ffi_macos/python_ffi_macos.dart";
-import "package:python_ffi_macos/src/exception.dart";
-import "package:python_ffi_macos/src/extensions/convert_extension.dart";
-import "package:python_ffi_macos/src/extensions/malloc_extension.dart";
-import "package:python_ffi_macos/src/extensions/object_extension.dart";
-import "package:python_ffi_macos/src/ffi/generated_bindings.g.dart";
-import "package:python_ffi_macos/src/function.dart";
-import "package:python_ffi_platform_interface/python_ffi_platform_interface.dart";
-
-class PythonObjectMacos
-    extends PythonObjectPlatform<PythonFfiMacOS, Pointer<PyObject>>
-    with PythonObjectMacosMixin {
-  PythonObjectMacos(super.platform, super.reference);
+extension SymbolToNameExtension on Symbol {
+  String get name =>
+      RegExp(r'^Symbol\("(.*)"\)$').firstMatch(toString())?.group(1) ??
+      toString();
 }
 
-mixin PythonObjectMacosMixin
+class _PythonObjectMacos
+    extends PythonObjectPlatform<PythonFfiMacOS, Pointer<PyObject>>
+    with _PythonObjectMacosMixin {
+  _PythonObjectMacos(super.platform, super.reference);
+}
+
+mixin _PythonObjectMacosMixin
     on PythonObjectPlatform<PythonFfiMacOS, Pointer<PyObject>> {
   static T staticCall<T extends Object?>(
     PythonFfiMacOS platform,
@@ -27,7 +22,7 @@ mixin PythonObjectMacosMixin
   }) {
     final List<Pointer<PyObject>> mappedArgs = <Pointer<PyObject>>[];
     for (final Object? arg in args) {
-      final PythonObjectMacos a = arg.toPythonObject(platform);
+      final _PythonObjectMacos a = arg._toPythonObject(platform);
       final Pointer<PyObject> b = a.reference;
       mappedArgs.add(b);
     }
@@ -35,7 +30,7 @@ mixin PythonObjectMacosMixin
     final Map<String, Pointer<PyObject>>? mappedKwargs = kwargs?.map(
       (String key, Object? value) => MapEntry<String, Pointer<PyObject>>(
         key,
-        value.toPythonObject(platform).reference,
+        value._toPythonObject(platform).reference,
       ),
     );
 
@@ -46,7 +41,7 @@ mixin PythonObjectMacosMixin
       kwargs: mappedKwargs,
     );
 
-    final PythonObjectMacos result = PythonObjectMacos(platform, rawResult);
+    final _PythonObjectMacos result = _PythonObjectMacos(platform, rawResult);
 
     final Object? mappedResult = result.toDartObject();
     if (mappedResult is! PythonObjectPlatform) {
@@ -75,7 +70,7 @@ mixin PythonObjectMacosMixin
 
     // prepare kwargs
     late final Pointer<PyObject> pKwargs;
-    final List<PythonObjectMacos> kwargsKeys = <PythonObjectMacos>[];
+    final List<_PythonObjectMacos> kwargsKeys = <_PythonObjectMacos>[];
     if (kwargs == null) {
       pKwargs = nullptr;
     } else {
@@ -84,7 +79,7 @@ mixin PythonObjectMacosMixin
         throw PythonFfiException("Creating keyword argument dict failed");
       }
       for (final MapEntry<String, Pointer<PyObject>> kwarg in kwargs.entries) {
-        final PythonObjectMacos kwargKey = kwarg.key.toPythonObject(platform);
+        final _PythonObjectMacos kwargKey = kwarg.key._toPythonObject(platform);
         kwargsKeys.add(kwargKey);
         platform.bindings
             .PyDict_SetItem(pKwargs, kwargKey.reference, kwarg.value);
@@ -97,7 +92,7 @@ mixin PythonObjectMacosMixin
 
     // deallocate arguments
     platform.bindings.Py_DecRef(pArgs);
-    for (final PythonObjectMacos kwargKey in kwargsKeys) {
+    for (final _PythonObjectMacos kwargKey in kwargsKeys) {
       kwargKey.dispose();
     }
     if (pKwargs != nullptr) {
@@ -112,43 +107,43 @@ mixin PythonObjectMacosMixin
 
   @override
   T getAttributeRaw<
-  T extends PythonObjectPlatform<PythonFfiMacOS, Pointer<PyObject>>>(
-      String attributeName,
-      ) {
+      T extends PythonObjectPlatform<PythonFfiMacOS, Pointer<PyObject>>>(
+    String attributeName,
+  ) {
     final Pointer<PyObject> attribute = attributeName.toNativeUtf8().useAndFree(
           (Pointer<Utf8> pointer) => platform.bindings.PyObject_GetAttrString(
-        reference,
-        pointer.cast<Char>(),
-      ),
-    );
+            reference,
+            pointer.cast<Char>(),
+          ),
+        );
 
     if (attribute == nullptr) {
       throw PythonFfiException("Failed to get attribute $attributeName");
     }
 
-    return PythonObjectMacos(platform, attribute) as T;
+    return _PythonObjectMacos(platform, attribute) as T;
   }
 
   @override
   T getAttribute<T extends Object?>(String attributeName) {
-    final PythonObjectMacos attribute = getAttributeRaw(attributeName);
+    final _PythonObjectMacos attribute = getAttributeRaw(attributeName);
 
     return attribute.reference.toDartObject(platform) as T;
   }
 
   @override
   void setAttributeRaw<
-  T extends PythonObjectPlatform<PythonFfiMacOS, Pointer<PyObject>>>(
-      String attributeName,
-      T value,
-      ) {
+      T extends PythonObjectPlatform<PythonFfiMacOS, Pointer<PyObject>>>(
+    String attributeName,
+    T value,
+  ) {
     final int result = attributeName.toNativeUtf8().useAndFree(
           (Pointer<Utf8> pointer) => platform.bindings.PyObject_SetAttrString(
-        reference,
-        pointer.cast<Char>(),
-        value.reference,
-      ),
-    );
+            reference,
+            pointer.cast<Char>(),
+            value.reference,
+          ),
+        );
 
     // this call should not be necessary
     // result is -1 on failure, 0 on success
@@ -161,7 +156,7 @@ mixin PythonObjectMacosMixin
 
   @override
   void setAttribute<T extends Object?>(String attributeName, T value) {
-    setAttributeRaw(attributeName, value.toPythonObject(platform));
+    setAttributeRaw(attributeName, value._toPythonObject(platform));
   }
 
   @override
@@ -171,6 +166,34 @@ mixin PythonObjectMacosMixin
 
   @override
   Object? toDartObject() => reference.toDartObject(platform);
+
+  @override
+  @mustCallSuper
+  Object? noSuchMethod(Invocation invocation) {
+    if (invocation.isMethod) {
+      final String methodName = invocation.memberName.name;
+      final PythonFunctionMacos function = getFunction_(
+        methodName,
+        <String, PythonFunctionMacos>{},
+      );
+      return function.call(
+        invocation.positionalArguments,
+        kwargs: invocation.namedArguments.map(
+          (Symbol key, dynamic value) =>
+              MapEntry<String, dynamic>(key.name, value),
+        ),
+      );
+    } else if (invocation.isGetter) {
+      final String attributeName = invocation.memberName.name;
+      return getAttribute(attributeName);
+    } else if (invocation.isSetter) {
+      final String attributeName = invocation.memberName.name;
+      setAttribute<dynamic>(attributeName, invocation.positionalArguments[0]);
+      return null;
+    }
+
+    return super.noSuchMethod(invocation);
+  }
 
   PythonFunctionMacos getFunction_(
     String functionName,

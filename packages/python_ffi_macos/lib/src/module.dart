@@ -1,15 +1,9 @@
-import "dart:ffi";
+part of python_ffi_macos;
 
-import "package:python_ffi_macos/python_ffi_macos.dart";
-import "package:python_ffi_macos/src/class.dart";
-import "package:python_ffi_macos/src/ffi/generated_bindings.g.dart";
-import "package:python_ffi_macos/src/function.dart";
-import "package:python_ffi_macos/src/object.dart";
-import "package:python_ffi_platform_interface/python_ffi_platform_interface.dart";
 
 class PythonModuleMacos
     extends PythonModulePlatform<PythonFfiMacOS, Pointer<PyObject>>
-    with PythonObjectMacosMixin {
+    with _PythonObjectMacosMixin {
   PythonModuleMacos(super.platform, super.reference);
 
   final Map<String, PythonFunctionMacos> _functions =
@@ -27,7 +21,7 @@ class PythonModuleMacos
       return cachedClass;
     }
 
-    final PythonObjectMacos classAttribute = getAttributeRaw(className);
+    final _PythonObjectMacos classAttribute = getAttributeRaw(className);
     final PythonClassDefinitionMacos classDefinition =
         PythonClassDefinitionMacos(platform, classAttribute.reference);
 

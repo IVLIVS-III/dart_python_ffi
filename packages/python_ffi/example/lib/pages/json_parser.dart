@@ -12,9 +12,9 @@ class JsonParserPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => BaseInputParserPage<Object?>(
-      title: "JSON Parser",
-      parse: _jsonParserModule.parse,
-      printer: jsonEncode,
-      builder: (_, data) => JsonView.string(jsonEncode(data)),
-    );
+        title: "JSON Parser",
+        parse: _jsonParserModule.parse,
+        printer: jsonEncode,
+        builder: (_, Object? data) => JsonView.string(jsonEncode(data)),
+      );
 }

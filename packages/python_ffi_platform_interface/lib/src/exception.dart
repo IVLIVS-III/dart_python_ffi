@@ -1,5 +1,4 @@
-import "package:python_ffi_platform_interface/src/object.dart";
-import "package:python_ffi_platform_interface/src/python_ffi_platform.dart";
+part of python_ffi_platform_interface;
 
 class PythonFfiException implements Exception {
   PythonFfiException(this.message);

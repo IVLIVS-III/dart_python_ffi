@@ -1,3 +1,4 @@
+import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 
 class BaseInputParserPage<T extends Object?> extends StatefulWidget {
@@ -16,6 +17,27 @@ class BaseInputParserPage<T extends Object?> extends StatefulWidget {
 
   @override
   State<BaseInputParserPage<T>> createState() => _BaseInputParserPageState<T>();
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(StringProperty("title", title))
+      ..add(ObjectFlagProperty<T Function(String input)>.has("parse", parse))
+      ..add(
+        ObjectFlagProperty<String Function(T parsed)>.has(
+          "printer",
+          printer,
+        ),
+      )
+      ..add(
+        ObjectFlagProperty<
+            Widget Function(
+          BuildContext context,
+          T parsedData,
+        )>.has("builder", builder),
+      );
+  }
 }
 
 class _BaseInputParserPageState<T extends Object?>

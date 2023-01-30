@@ -1,9 +1,4 @@
-import "dart:async";
-
-import "package:plugin_platform_interface/plugin_platform_interface.dart";
-import "package:python_ffi_platform_interface/python_ffi_platform_interface.dart";
-import "package:python_ffi_platform_interface/src/python_ffi_method_channel.dart";
-import 'package:python_ffi_platform_interface/src/python_module_definition.dart';
+part of python_ffi_platform_interface;
 
 abstract class PythonFfiPlatform<R extends Object?> extends PlatformInterface {
   /// Constructs a PythonFfiPlatform.
@@ -22,7 +17,7 @@ abstract class PythonFfiPlatform<R extends Object?> extends PlatformInterface {
   /// platform-specific class that extends [PythonFfiPlatform] when
   /// they register themselves.
   static set instance(PythonFfiPlatform<Object?> instance) {
-    PlatformInterface.verifyToken(instance, _token);
+    PlatformInterface.verify(instance, _token);
     _instance = instance;
   }
 

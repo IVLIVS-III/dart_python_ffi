@@ -1,15 +1,9 @@
-import "dart:ffi";
+part of python_ffi_macos;
 
-import "package:python_ffi_macos/python_ffi_macos.dart";
-import "package:python_ffi_macos/src/extensions/convert_extension.dart";
-import "package:python_ffi_macos/src/ffi/generated_bindings.g.dart";
-import "package:python_ffi_macos/src/function.dart";
-import "package:python_ffi_macos/src/object.dart";
-import "package:python_ffi_platform_interface/python_ffi_platform_interface.dart";
 
 class PythonClassDefinitionMacos
     extends PythonClassDefinitionPlatform<PythonFfiMacOS, Pointer<PyObject>>
-    with PythonObjectMacosMixin {
+    with _PythonObjectMacosMixin {
   PythonClassDefinitionMacos(super.platform, super.reference);
 
   @override
@@ -17,33 +11,33 @@ class PythonClassDefinitionMacos
     List<Object?> args, [
     Map<String, Object?>? kwargs,
   ]) {
-    final List<PythonObjectMacos> pyArgs =
-        args.map((Object? e) => e.toPythonObject(platform)).toList();
-    final Map<String, PythonObjectMacos> pyKwargs =
-        Map<String, PythonObjectMacos>.fromEntries(
+    final List<_PythonObjectMacos> pyArgs =
+        args.map((Object? e) => e._toPythonObject(platform)).toList();
+    final Map<String, _PythonObjectMacos> pyKwargs =
+        Map<String, _PythonObjectMacos>.fromEntries(
       (kwargs?.entries ?? <MapEntry<String, Object?>>[])
           .map(
             (MapEntry<String, Object?> e) =>
-                MapEntry<String, PythonObjectMacos>(
+                MapEntry<String, _PythonObjectMacos>(
               e.key,
-              e.value.toPythonObject(platform),
+              e.value._toPythonObject(platform),
             ),
           )
           .toList(),
     );
 
     final Pointer<PyObject> instance = rawCall(
-      args: pyArgs.map((PythonObjectMacos e) => e.reference).toList(),
+      args: pyArgs.map((_PythonObjectMacos e) => e.reference).toList(),
       kwargs: pyKwargs.map(
-        (String key, PythonObjectMacos value) =>
+        (String key, _PythonObjectMacos value) =>
             MapEntry<String, Pointer<PyObject>>(key, value.reference),
       ),
     );
 
-    for (final PythonObjectMacos pyArg in pyArgs) {
+    for (final _PythonObjectMacos pyArg in pyArgs) {
       pyArg.dispose();
     }
-    for (final PythonObjectMacos pyKwarg in pyKwargs.values) {
+    for (final _PythonObjectMacos pyKwarg in pyKwargs.values) {
       pyKwarg.dispose();
     }
 
@@ -55,7 +49,7 @@ class PythonClassDefinitionMacos
     List<Object?> args, {
     Map<String, Object?>? kwargs,
   }) =>
-      PythonObjectMacosMixin.staticCall<T>(
+      _PythonObjectMacosMixin.staticCall<T>(
         platform,
         reference,
         args,
@@ -67,7 +61,7 @@ class PythonClassDefinitionMacos
     List<Pointer<PyObject>>? args,
     Map<String, Pointer<PyObject>>? kwargs,
   }) =>
-      PythonObjectMacosMixin.staticRawCall(
+      _PythonObjectMacosMixin.staticRawCall(
         platform,
         reference,
         args: args,
@@ -77,7 +71,7 @@ class PythonClassDefinitionMacos
 
 class PythonClassMacos
     extends PythonClassPlatform<PythonFfiMacOS, Pointer<PyObject>>
-    with PythonObjectMacosMixin {
+    with _PythonObjectMacosMixin {
   PythonClassMacos(super.platform, super.reference);
 
   final Map<String, PythonFunctionMacos> _functions =

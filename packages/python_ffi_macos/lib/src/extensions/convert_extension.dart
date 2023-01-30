@@ -1,16 +1,8 @@
-import "dart:ffi";
+part of python_ffi_macos;
 
-import "package:ffi/ffi.dart";
-import "package:python_ffi_macos/python_ffi_macos.dart";
-import "package:python_ffi_macos/src/class.dart";
-import "package:python_ffi_macos/src/extensions/malloc_extension.dart";
-import "package:python_ffi_macos/src/extensions/object_extension.dart";
-import "package:python_ffi_macos/src/ffi/generated_bindings.g.dart";
-import "package:python_ffi_macos/src/object.dart";
-import "package:python_ffi_platform_interface/python_ffi_platform_interface.dart";
 
 extension ConvertToPythonExtension on Object? {
-  PythonObjectMacos toPythonObject(PythonFfiMacOS platform) {
+  _PythonObjectMacos _toPythonObject(PythonFfiMacOS platform) {
     final Object? value = this;
     Pointer<PyObject>? object;
 
@@ -35,14 +27,31 @@ extension ConvertToPythonExtension on Object? {
           );
       platform.bindings.Py_IncRef(object);
     }
+    if (value is Map) {
+      object = platform.bindings.PyDict_New();
+      platform.bindings.Py_IncRef(object);
+      for (final Object? key in value.keys) {
+        final Object? val = value[key];
+
+        final Pointer<PyObject> keyObject = key._toPythonObject(platform).reference;
+        platform.bindings.Py_IncRef(keyObject);
+
+        final Pointer<PyObject> valueObject = val._toPythonObject(platform).reference;
+        platform.bindings.Py_IncRef(valueObject);
+
+        platform.bindings.PyDict_SetItem(object, keyObject, valueObject);
+      }
+    }
     if (value is PythonObjectPlatform) {
-      final Pointer<PyObject> rawObject = value.reference! as Pointer<PyObject>;
-      platform.bindings.Py_IncRef(rawObject);
-      object = rawObject;
+      final Object? reference = value.reference;
+      if (reference is Pointer<PyObject>) {
+        platform.bindings.Py_IncRef(reference);
+        object = reference;
+      }
     }
 
     if (object != null) {
-      return PythonObjectMacos(platform, object);
+      return _PythonObjectMacos(platform, object);
     }
 
     throw Exception("Unsupported type: $runtimeType");

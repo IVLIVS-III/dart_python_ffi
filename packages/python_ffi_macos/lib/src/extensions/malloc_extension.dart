@@ -1,6 +1,5 @@
-import "dart:ffi";
+part of python_ffi_macos;
 
-import "package:ffi/ffi.dart";
 
 extension MallocExtension<T extends NativeType> on Pointer<T> {
   /// Automatically free the memory after using this pointer

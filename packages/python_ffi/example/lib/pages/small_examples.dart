@@ -117,6 +117,38 @@ class SmallExamplesPage extends StatelessWidget {
     debugPrint("DataClass: $dataClass");
   }
 
+  void dataClassUndefinedMethod() {
+    final dynamic dataclass = DataClass(1, "Hello World");
+    // ignore: avoid_dynamic_calls
+    final Object? result = dataclass.__repr__();
+
+    debugPrint("DataClass.__repr__(): $result");
+  }
+
+  void dataClassUndefinedGetter() {
+    final dynamic dataclass = DataClass(1, "Hello World");
+    // ignore: avoid_dynamic_calls
+    final Object? result = dataclass.__dict__;
+
+    debugPrint("DataClass.__dict__: $result");
+  }
+
+  void dataClassUndefinedSetter() {
+    final dynamic dataclass = DataClass(1, "Hello World");
+    // ignore: avoid_dynamic_calls
+    final Object? result1 = dataclass.__dict__;
+    debugPrint("before DataClass.__dict__: $result1");
+
+    // ignore: avoid_dynamic_calls
+    dataclass.__dict__ = <String, dynamic>{};
+
+    debugPrint("executed DataClass.__dict__ = {}");
+
+    // ignore: avoid_dynamic_calls
+    final Object? result2 = dataclass.__dict__;
+    debugPrint("after DataClass.__dict__: $result2");
+  }
+
   void jsonParserParse() {
     final JsonParserModule jsonParserModule = JsonParserModule.import();
 
@@ -197,6 +229,25 @@ class SmallExamplesPage extends StatelessWidget {
               onPressed: dataClassGetSet,
               child: const Text(
                 "Run Dart 'DataClass(1, \"Hello World\")..a = 2'",
+              ),
+            ),
+            const Divider(),
+            ElevatedButton(
+              onPressed: dataClassUndefinedMethod,
+              child: const Text(
+                "Run Dart 'DataClass(1, \"Hello World\").__repr__()'",
+              ),
+            ),
+            ElevatedButton(
+              onPressed: dataClassUndefinedGetter,
+              child: const Text(
+                "Run Dart 'DataClass(1, \"Hello World\").__dict__'",
+              ),
+            ),
+            ElevatedButton(
+              onPressed: dataClassUndefinedSetter,
+              child: const Text(
+                "Run Dart 'DataClass(1, \"Hello World\").__dict__ = {}'",
               ),
             ),
             const Divider(),

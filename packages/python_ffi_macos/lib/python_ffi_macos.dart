@@ -1,3 +1,5 @@
+library python_ffi_macos;
+
 import "dart:async";
 import "dart:collection";
 import "dart:ffi";
@@ -7,14 +9,18 @@ import "package:ffi/ffi.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/services.dart";
 import "package:path_provider/path_provider.dart";
-import "package:python_ffi_macos/src/class.dart";
-import "package:python_ffi_macos/src/exception.dart";
-import "package:python_ffi_macos/src/extensions/convert_extension.dart";
-import "package:python_ffi_macos/src/extensions/malloc_extension.dart";
 import "package:python_ffi_macos/src/ffi/generated_bindings.g.dart";
-import "package:python_ffi_macos/src/module.dart";
-import "package:python_ffi_macos/src/object.dart";
 import "package:python_ffi_platform_interface/python_ffi_platform_interface.dart";
+
+part "src/class.dart";
+part "src/exception.dart";
+part "src/extensions/convert_extension.dart";
+part "src/extensions/malloc_extension.dart";
+part "src/extensions/object_extension.dart";
+part "src/function.dart";
+part "src/module.dart";
+part "src/object.dart";
+// part "src/ffi/generated_bindings.g.dart";
 
 // const String _libName = "libpython3.11";
 const String _libPath =
@@ -215,9 +221,9 @@ class PythonFfiMacOS extends PythonFfiPlatform<Pointer<PyObject>> {
   @override
   void appendToPath(String path) {
     final PythonModuleMacos sys = importModule("sys");
-    final PythonObjectMacos sysPath = sys.getAttributeRaw("path");
+    final _PythonObjectMacos sysPath = sys.getAttributeRaw("path");
 
-    final PythonObjectMacos pathObject = path.toPythonObject(this);
+    final _PythonObjectMacos pathObject = path._toPythonObject(this);
 
     final int result =
         bindings.PyList_Append(sysPath.reference, pathObject.reference);
