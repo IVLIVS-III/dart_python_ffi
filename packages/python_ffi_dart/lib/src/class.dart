@@ -1,4 +1,4 @@
-part of python_ffi;
+part of python_ffi_dart;
 
 typedef PythonClassFrom<T extends PythonClass> = T Function(
   PythonClassPlatform<PythonFfiPlatform<Object?>, Object?> pythonClass,

@@ -9,16 +9,11 @@ library python_ffi;
 
 import "dart:async";
 
-import "package:flutter/widgets.dart";
+import "package:python_ffi_dart/python_ffi_dart.dart";
 import "package:python_ffi_platform_interface/python_ffi_platform_interface.dart";
 
+export "package:python_ffi_dart/python_ffi_dart.dart" hide PythonFfiDart;
 export "package:python_ffi_platform_interface/python_ffi_platform_interface.dart"
     show PythonModuleDefinition, SourceFile, SourceDirectory;
 
-part "src/python_ffi.dart";
-
-part "src/object.dart";
-
-part "src/module.dart";
-
-part "src/class.dart";
+part "src/python_ffi_base.dart";

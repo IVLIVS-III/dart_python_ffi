@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:python_ffi_example/pages/base_input_parser.dart";
-import "package:python_ffi_example/python-modules/liblax.dart";
+import "package:python_ffi_example/python_modules/liblax.dart";
 import "package:tex_text/tex_text.dart";
 
 class LiblaxPage extends StatelessWidget {

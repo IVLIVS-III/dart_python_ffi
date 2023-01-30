@@ -3,7 +3,7 @@ import "dart:convert";
 import "package:flutter/material.dart";
 import "package:flutter_json_view/flutter_json_view.dart";
 import "package:python_ffi_example/pages/base_input_parser.dart";
-import "package:python_ffi_example/python-modules/json_parser.dart";
+import "package:python_ffi_example/python_modules/json_parser.dart";
 
 class JsonParserPage extends StatelessWidget {
   const JsonParserPage({Key? key}) : super(key: key);

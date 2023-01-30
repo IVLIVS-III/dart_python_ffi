@@ -4,7 +4,7 @@ import "package:python_ffi_example/pages/dashboard.dart";
 import "package:python_ffi_example/pages/json_parser.dart";
 import "package:python_ffi_example/pages/liblax.dart";
 import "package:python_ffi_example/pages/small_examples.dart";
-import "package:python_ffi_example/python-modules/module_registry.dart";
+import "package:python_ffi_example/python_modules/module_registry.dart";
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

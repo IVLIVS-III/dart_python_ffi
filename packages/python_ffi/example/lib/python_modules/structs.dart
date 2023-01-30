@@ -77,6 +77,7 @@ class StructsModule extends PythonModule {
   static PythonModuleDefinition get definition => PythonModuleDefinition(
         name: "structs",
         root: SourceFile("structs.py"),
+        classNames: classNames,
       );
 
   static Iterable<String> get classNames =>

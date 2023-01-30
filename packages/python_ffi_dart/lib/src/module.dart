@@ -1,4 +1,4 @@
-part of python_ffi;
+part of python_ffi_dart;
 
 typedef PythonModuleFrom<T extends PythonModule> = T Function(
   PythonModulePlatform<PythonFfiPlatform<Object?>, Object?> pythonModule,
@@ -11,7 +11,7 @@ abstract class PythonModule extends PythonObject {
     String moduleName,
     PythonModuleFrom<T> from,
   ) =>
-      PythonFfi.instance.importModule(moduleName, from);
+      PythonFfiDart.instance.importModule(moduleName, from);
 
   final PythonModulePlatform<PythonFfiPlatform<Object?>, Object?>
       _moduleDelegate;

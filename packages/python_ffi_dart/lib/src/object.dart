@@ -1,4 +1,4 @@
-part of python_ffi;
+part of python_ffi_dart;
 
 abstract class PythonObject
     extends PythonObjectPlatform<PythonFfiPlatform<Object?>, Object?> {
@@ -41,9 +41,7 @@ abstract class PythonObject
   Object? noSuchMethod(Invocation invocation) {
     try {
       return _delegate.noSuchMethod(invocation);
-    } on Exception catch (e) {
-      debugPrint(e.toString());
-    }
+    } on Exception catch (_) {}
     return super.noSuchMethod(invocation);
   }
 }

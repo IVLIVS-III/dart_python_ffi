@@ -14,9 +14,11 @@ class DataClass extends PythonClass {
   DataClass.from(super.pythonClass) : super.from();
 
   int get a => getAttribute("a")! as int;
+
   set a(int value) => setAttribute("a", value);
 
   String get b => getAttribute("b")! as String;
+
   set b(String value) => setAttribute("b", value);
 
   @override
@@ -34,6 +36,7 @@ class DataClassModule extends PythonModule {
   static PythonModuleDefinition get definition => PythonModuleDefinition(
         name: "data_class",
         root: SourceFile("data_class.py"),
+        classNames: classNames,
       );
 
   static Iterable<String> get classNames => const <String>["DataClass"];

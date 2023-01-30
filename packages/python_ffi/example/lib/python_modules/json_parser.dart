@@ -17,6 +17,7 @@ class JsonParserModule extends PythonModule {
           ..add(SourceFile("__init__.py"))
           ..add(SourceFile("lexer.py"))
           ..add(SourceFile("parser.py")),
+        classNames: classNames,
       );
 
   static Iterable<String> get classNames => const <String>[];

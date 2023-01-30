@@ -15,6 +15,7 @@ class HelloWorldModule extends PythonModule {
   static PythonModuleDefinition get definition => PythonModuleDefinition(
         name: "hello_world",
         root: SourceFile("hello_world.py"),
+        classNames: classNames,
       );
 
   static Iterable<String> get classNames => const <String>[];

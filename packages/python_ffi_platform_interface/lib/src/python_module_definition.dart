@@ -35,10 +35,15 @@ class SourceDirectory extends PythonSourceEntity {
 }
 
 class PythonModuleDefinition {
-  PythonModuleDefinition({required this.name, required this.root});
+  PythonModuleDefinition({
+    required this.name,
+    required this.root,
+    required this.classNames,
+  });
 
   final String name;
   final PythonSourceEntity root;
+  final Iterable<String> classNames;
 
   Iterable<String> get sourceFiles => root.sourceFiles;
 }

@@ -1,7 +1,8 @@
-import 'package:python_ffi_dart/python_ffi_dart.dart';
-import 'package:test/test.dart';
+// import 'package:python_ffi_dart/python_ffi_dart.dart';
+// import 'package:test/test.dart';
 
 void main() {
+  /*
   group('A group of tests', () {
     final awesome = Awesome();
 
@@ -13,4 +14,5 @@ void main() {
       expect(awesome.isAwesome, isTrue);
     });
   });
+  */
 }

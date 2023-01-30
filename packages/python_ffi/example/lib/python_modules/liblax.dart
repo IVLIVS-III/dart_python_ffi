@@ -14,6 +14,7 @@ class LiblaxParserModule extends PythonModule {
   static PythonModuleDefinition get definition => PythonModuleDefinition(
         name: "parser",
         root: SourceDirectory("liblax")..add(SourceFile("parser.py")),
+        classNames: classNames,
       );
 
   static Iterable<String> get classNames => const <String>[];
@@ -35,6 +36,7 @@ class LiblaxModule extends PythonModule {
           ..add(SourceFile("__init__.py"))
           ..add(SourceFile("core.py"))
           ..add(SourceFile("parser.py")),
+        classNames: classNames,
       );
 
   static Iterable<String> get classNames => const <String>[
