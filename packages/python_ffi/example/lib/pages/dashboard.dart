@@ -17,6 +17,12 @@ class DashboardPage extends StatelessWidget {
               },
             ),
             ListTile(
+              title: const Text("Type Mappings"),
+              onTap: () {
+                Navigator.of(context).pushNamed("/type_mappings");
+              },
+            ),
+            ListTile(
               title: const Text("Json Parser"),
               onTap: () {
                 Navigator.of(context).pushNamed("/json_parser");
