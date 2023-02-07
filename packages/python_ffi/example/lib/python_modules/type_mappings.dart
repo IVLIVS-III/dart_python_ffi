@@ -62,6 +62,12 @@ class TypeMappingsModule extends PythonModule {
   List<int> request_list() =>
       List<int>.from(getFunction("request_list").call(<Object?>[]));
 
+  void receive_set(Set<int> value) =>
+      getFunction("receive_set").call(<Object?>[value]);
+
+  Set<int> request_set() =>
+      Set<int>.from(getFunction("request_set").call(<Object?>[]));
+
   static PythonModuleDefinition get definition => PythonModuleDefinition(
         name: "type_mappings",
         root: SourceFile("type_mappings.py"),

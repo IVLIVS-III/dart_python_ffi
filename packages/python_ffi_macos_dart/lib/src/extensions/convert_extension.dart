@@ -43,6 +43,28 @@ extension ConvertToPythonExtension on Object? {
         platform.bindings.PyDict_SetItem(object, keyObject, valueObject);
       }
     }
+    if (value is List) {
+      object = platform.bindings.PyList_New(value.length);
+      platform.bindings.Py_IncRef(object);
+      for (int i = 0; i < value.length; i++) {
+        final Object? val = value[i];
+
+        final Pointer<PyObject> valueObject =
+            val._toPythonObject(platform).reference;
+        platform.bindings.Py_IncRef(valueObject);
+
+        platform.bindings.PyList_SetItem(object, i, valueObject);
+      }
+    }
+    if (value is Set) {
+      final List<Object?> elements = value.toList();
+      final _PythonObjectMacos elementsObject =
+          elements._toPythonObject(platform);
+      platform.bindings.Py_IncRef(elementsObject.reference);
+
+      object = platform.bindings.PySet_New(elementsObject.reference);
+      platform.bindings.Py_IncRef(object);
+    }
     if (value is PythonObjectPlatform) {
       final Object? reference = value.reference;
       if (reference is Pointer<PyObject>) {
@@ -94,6 +116,8 @@ extension ConvertToDartExtension on Pointer<PyObject> {
         return asMap(platform);
       case "list":
         return asList(platform);
+      case "set":
+        return asSet(platform);
     }
 
     if (platform.classNames.contains(nameString)) {
@@ -192,6 +216,22 @@ extension ConvertToDartExtension on Pointer<PyObject> {
       final Object? valueObject = value.toDartObject(platform);
       result.add(valueObject);
       platform.ensureNoPythonError();
+    }
+
+    return result;
+  }
+
+  Set<Object?> asSet(PythonFfiMacOSBase platform) {
+    final Set<Object?> result = <Object?>{};
+
+    while (platform.bindings.PySet_Size(this) > 0) {
+      platform.ensureNoPythonError();
+
+      final Pointer<PyObject> element = platform.bindings.PySet_Pop(this);
+      platform.bindings.Py_IncRef(element);
+      platform.ensureNoPythonError();
+
+      result.add(element.toDartObject(platform));
     }
 
     return result;

@@ -125,7 +125,7 @@ class _BaseInputParserPageState<T extends Object?>
               padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
               child: Text(
                 "Parsed output:",
-                style: Theme.of(context).textTheme.caption,
+                style: Theme.of(context).textTheme.bodySmall,
               ),
             ),
             Padding(

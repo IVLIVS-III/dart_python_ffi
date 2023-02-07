@@ -21,7 +21,6 @@ linter:
     - cancel_subscriptions
     - close_sinks
     - diagnostic_describe_all_properties
-    - invariant_booleans
     - no_adjacent_strings_in_list
     - test_types_in_equals
     - unnecessary_statements

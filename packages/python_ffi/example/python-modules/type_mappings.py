@@ -4,6 +4,7 @@ kStr: str = "Hello World"
 kBytes: bytes = b"Hello World"
 kDict: dict[str, int] = {"one": 1, "two": 2, "three": 3}
 kList: list[int] = [1, 2, 3]
+kSet: set[int] = set([1, 2, 3])
 
 
 def receive_none(value: None):
@@ -86,3 +87,12 @@ def receive_list(value: list[int]):
 
 def request_list() -> list[int]:
     return kList
+
+
+def receive_set(value: set[int]):
+    assert isinstance(value, set)
+    assert value == kSet
+
+
+def request_set() -> set[int]:
+    return kSet

@@ -17,8 +17,7 @@ A Python-FFI for Dart
 | `String`    | `bytes`     | 🚫 not applicable | ✅ complete        |
 | `Uint8List` | `bytes`     | ❌ missing         | 🚫 not applicable |
 | `Map`       | `dict`      | ✅ complete        | ✅ complete        |
-| `List`      | `list`      | ✅ complete        | ❌ missing         |
-| `Set`       | `set`       | ❌ missing         | ❌ missing         |
-| `DateTime`  | `datetime`  | ❌ missing         | ❌ missing         |
+| `List`      | `list`      | ✅ complete        | ✅ complete        |
+| `Set`       | `set`       | ✅ complete        | ✅ complete        |
 | `Iterable`  | `Iterable`  | ❌ missing         | ❌ missing         |
 | `Function`  | `Callable`  | ❌ missing         | ❌ missing         |

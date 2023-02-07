@@ -76,6 +76,14 @@ class TypeMappingsPage extends StatelessWidget {
               receiveFromPython: _module.request_list,
               equals: const ListEquality<int>().equals,
             ),
+            const Divider(),
+            TypeMappingEntry<Set<int>>(
+              pythonType: "set[int]",
+              value: const <int>{1, 2, 3},
+              sendToPython: _module.receive_set,
+              receiveFromPython: _module.request_set,
+              equals: const SetEquality<int>().equals,
+            ),
           ],
         ),
       );
