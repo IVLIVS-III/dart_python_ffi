@@ -22,4 +22,7 @@ abstract class PythonObjectPlatform<P extends PythonFfiPlatform<R>,
   static void verify(PythonObjectPlatform<Object?, Object?> instance) {
     PlatformInterface.verify(instance, _token);
   }
+
+  @override
+  PythonFunctionPlatform<P, R> getFunction(String name);
 }

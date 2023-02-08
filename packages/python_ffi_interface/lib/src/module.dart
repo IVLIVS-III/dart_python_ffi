@@ -1,14 +1,14 @@
 part of python_ffi_interface;
 
 abstract class PythonModuleInterface<P extends PythonFfiDelegate<R>,
-R extends Object?> extends PythonObjectInterface<P, R> {
+    R extends Object?> extends PythonObjectInterface<P, R> {
   PythonModuleInterface(super.delegate, super.reference);
 
   PythonClassInterface<P, R> getClass(
-      String name,
-      List<Object?> args, [
-        Map<String, Object?>? kwargs,
-      ]);
+    String name,
+    List<Object?> args, [
+    Map<String, Object?>? kwargs,
+  ]);
 
   PythonModuleInterface<P, R> getModule(String name);
 }

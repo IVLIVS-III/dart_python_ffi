@@ -21,8 +21,8 @@ class PythonFfiDart extends PythonFfiBase with PythonFfiMixin {
 
   FutureOr<void> initialize() {
     if (Platform.isMacOS) {
-      PythonFfiPlatform.instance = PythonFfiMacOSDart();
-      return PythonFfiPlatform.instance.initialize();
+      PythonFfiDelegate.instance = PythonFfiMacOSDart();
+      return PythonFfiDelegate.instance.initialize();
     }
 
     // TODO: implement for other platforms
@@ -34,18 +34,18 @@ class PythonFfiDart extends PythonFfiBase with PythonFfiMixin {
 
 mixin PythonFfiMixin on PythonFfiBase {
   FutureOr<void> prepareModule(PythonModuleDefinition moduleDefinition) async {
-    await PythonFfiPlatform.instance.prepareModule(moduleDefinition);
+    await PythonFfiDelegate.instance.prepareModule(moduleDefinition);
     moduleDefinition.classNames.registerClassNames();
   }
 
   void addClassName(String className) =>
-      PythonFfiPlatform.instance.addClassName(className);
+      PythonFfiDelegate.instance.addClassName(className);
 
   void removeClassName(String className) =>
-      PythonFfiPlatform.instance.removeClassName(className);
+      PythonFfiDelegate.instance.removeClassName(className);
 
   void _ensureInitialized() {
-    if (!PythonFfiPlatform.instance.isInitialized) {
+    if (!PythonFfiDelegate.instance.isInitialized) {
       throw PythonFfiException(
         "$name is not initialized. Call `$name.instance.initialize()` before using it.",
       );
@@ -57,7 +57,7 @@ mixin PythonFfiMixin on PythonFfiBase {
     PythonModuleFrom<T> from,
   ) {
     _ensureInitialized();
-    return from(PythonFfiPlatform.instance.importModule(name));
+    return from(PythonFfiDelegate.instance.importModule(name));
   }
 
   T importClass<T extends PythonClass>(
@@ -70,13 +70,13 @@ mixin PythonFfiMixin on PythonFfiBase {
     _ensureInitialized();
     // TODO: integrate pythonClassType properly
     return from(
-      PythonFfiPlatform.instance
+      PythonFfiDelegate.instance
           .importClass(moduleName, className, args, kwargs),
     );
   }
 
   Future<void> appendToPath(String path) async {
     _ensureInitialized();
-    await PythonFfiPlatform.instance.appendToPath(path);
+    await PythonFfiDelegate.instance.appendToPath(path);
   }
 }

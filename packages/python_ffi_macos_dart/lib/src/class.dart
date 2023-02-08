@@ -1,12 +1,11 @@
 part of python_ffi_macos_dart;
 
-class _PythonClassDefinitionMacos
-    extends PythonClassDefinitionInterface<PythonFfiMacOSBase, Pointer<PyObject>>
-    with _PythonObjectMacosMixin {
+class _PythonClassDefinitionMacos extends PythonClassDefinitionInterface<
+    PythonFfiMacOSBase, Pointer<PyObject>> with _PythonObjectMacosMixin {
   _PythonClassDefinitionMacos(super.platform, super.reference);
 
   @override
-  _PythonClassMacos newInstance(
+  PythonClassMacos newInstance(
     List<Object?> args, [
     Map<String, Object?>? kwargs,
   ]) {
@@ -40,7 +39,7 @@ class _PythonClassDefinitionMacos
       pyKwarg.dispose();
     }
 
-    return _PythonClassMacos(platform, instance);
+    return PythonClassMacos(platform, instance);
   }
 
   @override
@@ -68,17 +67,17 @@ class _PythonClassDefinitionMacos
       );
 }
 
-class _PythonClassMacos
+class PythonClassMacos
     extends PythonClassInterface<PythonFfiMacOSBase, Pointer<PyObject>>
     with _PythonObjectMacosMixin {
-  _PythonClassMacos(super.platform, super.reference);
+  PythonClassMacos(super.platform, super.reference);
 
-  final Map<String, _PythonFunctionMacos> _functions =
-      <String, _PythonFunctionMacos>{};
+  final Map<String, PythonFunctionMacos> _functions =
+      <String, PythonFunctionMacos>{};
 
   @override
   void dispose() {
-    for (final _PythonFunctionMacos function in _functions.values) {
+    for (final PythonFunctionMacos function in _functions.values) {
       function.dispose();
     }
     _functions.clear();

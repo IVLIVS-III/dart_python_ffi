@@ -1,29 +1,29 @@
 part of python_ffi_macos_dart;
 
-class _PythonModuleMacos
+class PythonModuleMacos
     extends PythonModuleInterface<PythonFfiMacOSBase, Pointer<PyObject>>
     with _PythonObjectMacosMixin {
-  _PythonModuleMacos(super.platform, super.reference);
+  PythonModuleMacos(super.platform, super.reference);
 
-  final Map<String, _PythonFunctionMacos> _functions =
-      <String, _PythonFunctionMacos>{};
+  final Map<String, PythonFunctionMacos> _functions =
+      <String, PythonFunctionMacos>{};
   final Map<String, _PythonClassDefinitionMacos> _classes =
       <String, _PythonClassDefinitionMacos>{};
 
   @override
-  _PythonFunctionMacos getFunction(String functionName) {
-    final _PythonFunctionMacos? cachedFunction = _functions[functionName];
+  PythonFunctionMacos getFunction(String name) {
+    final PythonFunctionMacos? cachedFunction = _functions[name];
     if (cachedFunction != null) {
       platform.bindings.Py_IncRef(cachedFunction.reference);
       return cachedFunction;
     }
 
     final PythonObjectInterface<PythonFfiMacOSBase, Pointer<PyObject>>
-    functionAttribute = getAttributeRaw(functionName);
-    final _PythonFunctionMacos function =
-    _PythonFunctionMacos(platform, functionAttribute.reference);
+        functionAttribute = getAttributeRaw(name);
+    final PythonFunctionMacos function =
+        PythonFunctionMacos(platform, functionAttribute.reference);
 
-    _functions[functionName] = function;
+    _functions[name] = function;
 
     return function;
   }
@@ -43,21 +43,21 @@ class _PythonModuleMacos
   }
 
   @override
-  _PythonClassMacos getClass(
-    String className,
+  PythonClassMacos getClass(
+    String name,
     List<Object?> args, [
     Map<String, Object?>? kwargs,
   ]) {
     final _PythonClassDefinitionMacos classDefinition =
-        _getClassDefinition(className);
-    final _PythonClassMacos classInstance =
+        _getClassDefinition(name);
+    final PythonClassMacos classInstance =
         classDefinition.newInstance(args, kwargs);
     return classInstance;
   }
 
   @override
   void dispose() {
-    for (final _PythonFunctionMacos function in _functions.values) {
+    for (final PythonFunctionMacos function in _functions.values) {
       function.dispose();
     }
     _functions.clear();

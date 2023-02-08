@@ -1,7 +1,7 @@
 part of python_ffi_dart;
 
 typedef PythonModuleFrom<T extends PythonModule> = T Function(
-  PythonModulePlatform<PythonFfiPlatform<Object?>, Object?> pythonModule,
+  PythonModuleInterface<PythonFfiDelegate<Object?>, Object?> pythonModule,
 );
 
 abstract class PythonModule extends PythonObject {
@@ -13,15 +13,16 @@ abstract class PythonModule extends PythonObject {
   ) =>
       PythonFfiDart.instance.importModule(moduleName, from);
 
-  final PythonModulePlatform<PythonFfiPlatform<Object?>, Object?>
+  final PythonModuleInterface<PythonFfiDelegate<Object?>, Object?>
       _moduleDelegate;
 
-  PythonFunctionPlatform<PythonFfiPlatform<Object?>, Object?> getFunction(
-    String functionName,
+  @override
+  PythonFunctionInterface<PythonFfiDelegate<Object?>, Object?> getFunction(
+    String name,
   ) =>
-      _moduleDelegate.getFunction(functionName);
+      _moduleDelegate.getFunction(name);
 
-  PythonClassPlatform<PythonFfiPlatform<Object?>, Object?> getClass(
+  PythonClassInterface<PythonFfiDelegate<Object?>, Object?> getClass(
     String className,
     List<Object?> args, [
     Map<String, Object?>? kwargs,

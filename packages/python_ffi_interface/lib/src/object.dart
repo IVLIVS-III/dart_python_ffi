@@ -1,8 +1,16 @@
 part of python_ffi_interface;
 
 abstract class PythonObjectInterface<P extends PythonFfiDelegate<R>,
-    R extends Object?> {
-  PythonObjectInterface(this._platform, this._reference);
+    R extends Object?> extends BaseInterface {
+  PythonObjectInterface(this._platform, this._reference) : super(token: _token);
+
+  static final Object _token = Object();
+
+  static void verify(
+    PythonObjectInterface<PythonFfiDelegate<Object?>, Object?> instance,
+  ) {
+    BaseInterface.verify(instance, _token);
+  }
 
   final P _platform;
   final R _reference;

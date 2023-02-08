@@ -13,11 +13,11 @@ abstract class PythonFfiMacOSBase extends PythonFfiDelegate<Pointer<PyObject>> {
     return bindings;
   }
 
-  final Map<String, _PythonModuleMacos> _modules = <String, _PythonModuleMacos>{};
+  final Map<String, PythonModuleMacos> _modules = <String, PythonModuleMacos>{};
 
   UnmodifiableSetView<String> get classNames;
 
-  void disposeModule(_PythonModuleMacos module);
+  void disposeModule(PythonModuleMacos module);
 
   Future<Directory> getApplicationSupportDirectory();
 
@@ -133,8 +133,8 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
   }
 
   @override
-  void disposeModule(_PythonModuleMacos module) {
-    _modules.removeWhere((_, _PythonModuleMacos value) => value == module);
+  void disposeModule(PythonModuleMacos module) {
+    _modules.removeWhere((_, PythonModuleMacos value) => value == module);
   }
 
   @override
@@ -161,8 +161,8 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
   }
 
   @override
-  _PythonModuleMacos importModule(String moduleName) {
-    final _PythonModuleMacos? cachedModule = _modules[moduleName];
+  PythonModuleMacos importModule(String moduleName) {
+    final PythonModuleMacos? cachedModule = _modules[moduleName];
     if (cachedModule != null) {
       bindings.Py_IncRef(cachedModule.reference);
       return cachedModule;
@@ -192,7 +192,7 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
       throw PythonFfiException("Failed to import module $moduleName");
     }
 
-    final _PythonModuleMacos module = _PythonModuleMacos(_instance, pyImport);
+    final PythonModuleMacos module = PythonModuleMacos(_instance, pyImport);
     _modules[moduleName] = module;
 
     if (pythonErrorOccurred()) {
@@ -211,15 +211,15 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
     List<Object?> args, [
     Map<String, Object?>? kwargs,
   ]) {
-    final _PythonModuleMacos module = importModule(moduleName);
-    final _PythonClassMacos classInstance =
+    final PythonModuleMacos module = importModule(moduleName);
+    final PythonClassMacos classInstance =
         module.getClass(className, args, kwargs);
     return classInstance;
   }
 
   @override
   void appendToPath(String path) {
-    final _PythonModuleMacos sys = importModule("sys");
+    final PythonModuleMacos sys = importModule("sys");
     final _PythonObjectMacos sysPath = sys.getAttributeRaw("path");
 
     final _PythonObjectMacos pathObject = path._toPythonObject(_instance);

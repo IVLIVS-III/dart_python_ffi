@@ -2,7 +2,6 @@ import "dart:async";
 
 import "package:flutter/foundation.dart";
 import "package:flutter/services.dart";
-import "package:python_ffi_interface/python_ffi_interface.dart";
 import "package:python_ffi_platform_interface/python_ffi_platform_interface.dart";
 
 /// An implementation of [PythonFfiPlatformInterfacePlatform] that uses method channels.

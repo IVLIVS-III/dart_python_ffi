@@ -1,20 +1,20 @@
 part of python_ffi_dart;
 
 abstract class PythonObject
-    extends PythonObjectPlatform<PythonFfiPlatform<Object?>, Object?> {
+    extends PythonObjectInterface<PythonFfiDelegate<Object?>, Object?> {
   PythonObject.from(this._delegate)
       : super(_delegate.platform, _delegate.reference) {
-    PythonObjectPlatform.verify(_delegate);
+    PythonObjectInterface.verify(_delegate);
   }
 
-  final PythonObjectPlatform<PythonFfiPlatform<Object?>, Object?> _delegate;
+  final PythonObjectInterface<PythonFfiDelegate<Object?>, Object?> _delegate;
 
   @override
   Object? toDartObject() => _delegate.toDartObject();
 
   @override
   T getAttributeRaw<
-          T extends PythonObjectPlatform<PythonFfiPlatform<Object?>,
+          T extends PythonObjectInterface<PythonFfiDelegate<Object?>,
               Object?>>(String attributeName) =>
       _delegate.getAttributeRaw(attributeName);
 
@@ -24,7 +24,7 @@ abstract class PythonObject
 
   @override
   void setAttributeRaw<
-          T extends PythonObjectPlatform<PythonFfiPlatform<Object?>,
+          T extends PythonObjectInterface<PythonFfiDelegate<Object?>,
               Object?>>(String attributeName, T value) =>
       _delegate.setAttributeRaw(attributeName, value);
 

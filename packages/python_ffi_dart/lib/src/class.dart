@@ -1,17 +1,17 @@
 part of python_ffi_dart;
 
 typedef PythonClassFrom<T extends PythonClass> = T Function(
-  PythonClassPlatform<PythonFfiPlatform<Object?>, Object?> pythonClass,
+  PythonClassInterface<PythonFfiDelegate<Object?>, Object?> pythonClass,
 );
 
 abstract class PythonClassDefinition extends PythonObject {
   PythonClassDefinition.from(this._classDefinitionDelegate)
       : super.from(_classDefinitionDelegate);
 
-  final PythonClassDefinitionPlatform<PythonFfiPlatform<Object?>, Object?>
+  final PythonClassDefinitionInterface<PythonFfiDelegate<Object?>, Object?>
       _classDefinitionDelegate;
 
-  PythonClassPlatform<PythonFfiPlatform<Object?>, Object?> newInstance(
+  PythonClassInterface<PythonFfiDelegate<Object?>, Object?> newInstance(
     List<Object?> args, [
     Map<String, Object?>? kwargs,
   ]) =>
@@ -30,9 +30,10 @@ abstract class PythonClassDefinition extends PythonObject {
 abstract class PythonClass extends PythonObject {
   PythonClass.from(this._classDelegate) : super.from(_classDelegate);
 
-  final PythonClassPlatform<PythonFfiPlatform<Object?>, Object?> _classDelegate;
+  final PythonClassInterface<PythonFfiDelegate<Object?>, Object?>
+      _classDelegate;
 
-  PythonFunctionPlatform<PythonFfiPlatform<Object?>, Object?> getMethod(
+  PythonFunctionInterface<PythonFfiDelegate<Object?>, Object?> getMethod(
     String functionName,
   ) =>
       _classDelegate.getMethod(functionName);

@@ -4,6 +4,8 @@ import "package:plugin_platform_interface/plugin_platform_interface.dart";
 import "package:python_ffi_interface/python_ffi_interface.dart";
 import "package:python_ffi_platform_interface/src/python_ffi_method_channel.dart";
 
+export "package:python_ffi_interface/python_ffi_interface.dart";
+
 part "src/class.dart";
 
 part "src/exception.dart";

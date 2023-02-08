@@ -1,9 +1,9 @@
 part of python_ffi_macos_dart;
 
-class _PythonFunctionMacos
+class PythonFunctionMacos
     extends PythonFunctionInterface<PythonFfiMacOSBase, Pointer<PyObject>>
     with _PythonObjectMacosMixin {
-  _PythonFunctionMacos(super.platform, super.reference);
+  PythonFunctionMacos(super.platform, super.reference);
 
   @override
   T call<T extends Object?>(

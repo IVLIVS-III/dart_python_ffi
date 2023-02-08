@@ -121,7 +121,7 @@ extension ConvertToDartExtension on Pointer<PyObject> {
     }
 
     if (platform.classNames.contains(nameString)) {
-      return _PythonClassMacos(platform, object);
+      return PythonClassMacos(platform, object);
     }
 
     throw PythonFfiException("Unsupported type: $nameString($runtimeType)");

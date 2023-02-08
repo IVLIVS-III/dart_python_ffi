@@ -13,7 +13,9 @@ const String _libPath =
     "/Library/Frameworks/Python.framework/Versions/3.11/Python";
 
 /// The macOS implementation of [PythonFfiPlatform].
-class PythonFfiMacOS extends PythonFfiMacOSBase with PythonFfiMacOSMixin {
+class PythonFfiMacOS extends PythonFfiMacOSBase
+    with PythonFfiMacOSMixin
+    implements PythonFfiPlatform<Pointer<PyObject>> {
   /// Registers this class as the default instance of [PythonFfiPlatform].
   static void registerWith() {
     PythonFfiPlatform.instance = PythonFfiMacOS();
