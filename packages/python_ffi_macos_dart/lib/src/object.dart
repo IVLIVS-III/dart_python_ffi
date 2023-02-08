@@ -169,30 +169,38 @@ mixin _PythonObjectMacosMixin
 
   @override
   void debugDump() {
+    // ignore: avoid_print
     print("========================================");
+    // ignore: avoid_print
     print("PythonObjectMacos: @0x${reference.hexAddress}");
     try {
       try {
+        // ignore: avoid_print
         print("converted: ${reference.toDartObject(platform)}");
       } on PythonFfiException catch (e) {
+        // ignore: avoid_print
         print("converted: @0x${reference.hexAddress} w/ error: $e");
       }
 
       final PythonObjectInterface<PythonFfiMacOSBase, Pointer<PyObject>> dict =
           getAttributeRaw("__dict__");
+      // ignore: avoid_print
       print("dict: @0x${dict.reference.hexAddress}");
       platform.ensureNoPythonError();
 
       final Pointer<PyObject> keys =
           platform.bindings.PyDict_Keys(dict.reference);
       platform.bindings.Py_IncRef(keys);
+      // ignore: avoid_print
       print("dict-keys: @0x${keys.hexAddress}");
       platform.ensureNoPythonError();
 
       if (keys == nullptr) {
+        // ignore: avoid_print
         print("dict-keys is null");
       } else {
         final int len = platform.bindings.PyList_Size(keys);
+        // ignore: avoid_print
         print("dict-keys-len: $len");
         platform.ensureNoPythonError();
 
@@ -212,12 +220,15 @@ mixin _PythonObjectMacosMixin
           } on PythonFfiException catch (e) {
             valueObject = "@0x${value.hexAddress} w/ error: $e";
           }
+          // ignore: avoid_print
           print("$keyString: $valueObject");
         }
       }
     } on _PythonExceptionMacos catch (e) {
+      // ignore: avoid_print
       print("Error: $e");
     } finally {
+      // ignore: avoid_print
       print("========================================");
     }
   }

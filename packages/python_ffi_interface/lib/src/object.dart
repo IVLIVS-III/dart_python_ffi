@@ -82,6 +82,7 @@ abstract class PythonObjectInterface<P extends PythonFfiDelegate<R>,
   }
 
   void debugDump() {
+    // ignore: avoid_print
     print("PythonObject(reference: $_reference, delegate: $_platform)");
   }
 }
