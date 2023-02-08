@@ -1,8 +1,22 @@
 // TODO: Put public facing types in this file.
 part of python_ffi_dart;
 
+PythonFfiBase get pythonInstance => PythonFfiDart.instance;
+
 abstract class PythonFfiBase {
   String get name;
+
+  PythonFfiDelegate<Object?> get delegate;
+
+  set delegate(PythonFfiDelegate<Object?> delegate);
+
+  void registerClassNames(Iterable<String> classNames) {
+    for (final String className in classNames) {
+      addClassName(className);
+    }
+  }
+
+  void addClassName(String className);
 }
 
 class PythonFfiDart extends PythonFfiBase with PythonFfiMixin {
@@ -17,12 +31,20 @@ class PythonFfiDart extends PythonFfiBase with PythonFfiMixin {
   }
 
   @override
+  PythonFfiDelegate<Object?> get delegate => PythonFfiDelegate.instance;
+
+  @override
+  set delegate(PythonFfiDelegate<Object?> delegate) {
+    PythonFfiDelegate.instance = delegate;
+  }
+
+  @override
   String get name => "PythonFfiDart";
 
   FutureOr<void> initialize() {
     if (Platform.isMacOS) {
-      PythonFfiDelegate.instance = PythonFfiMacOSDart();
-      return PythonFfiDelegate.instance.initialize();
+      delegate = PythonFfiMacOSDart();
+      return delegate.initialize();
     }
 
     // TODO: implement for other platforms
@@ -34,49 +56,44 @@ class PythonFfiDart extends PythonFfiBase with PythonFfiMixin {
 
 mixin PythonFfiMixin on PythonFfiBase {
   FutureOr<void> prepareModule(PythonModuleDefinition moduleDefinition) async {
-    await PythonFfiDelegate.instance.prepareModule(moduleDefinition);
-    moduleDefinition.classNames.registerClassNames();
+    await delegate.prepareModule(moduleDefinition);
+    registerClassNames(moduleDefinition.classNames);
   }
 
-  void addClassName(String className) =>
-      PythonFfiDelegate.instance.addClassName(className);
+  @override
+  void addClassName(String className) => delegate.addClassName(className);
 
-  void removeClassName(String className) =>
-      PythonFfiDelegate.instance.removeClassName(className);
+  void removeClassName(String className) => delegate.removeClassName(className);
 
   void _ensureInitialized() {
-    if (!PythonFfiDelegate.instance.isInitialized) {
+    if (!delegate.isInitialized) {
       throw PythonFfiException(
         "$name is not initialized. Call `$name.instance.initialize()` before using it.",
       );
     }
   }
 
-  T importModule<T extends PythonModule>(
-    String name,
-    PythonModuleFrom<T> from,
-  ) {
+  T importModule<T extends PythonModule>(String name,
+      PythonModuleFrom<T> from,) {
     _ensureInitialized();
-    return from(PythonFfiDelegate.instance.importModule(name));
+    return from(delegate.importModule(name));
   }
 
-  T importClass<T extends PythonClass>(
-    String moduleName,
-    String className,
-    PythonClassFrom<T> from,
-    List<Object?> args, [
-    Map<String, Object?>? kwargs,
-  ]) {
+  T importClass<T extends PythonClass>(String moduleName,
+      String className,
+      PythonClassFrom<T> from,
+      List<Object?> args, [
+        Map<String, Object?>? kwargs,
+      ]) {
     _ensureInitialized();
     // TODO: integrate pythonClassType properly
     return from(
-      PythonFfiDelegate.instance
-          .importClass(moduleName, className, args, kwargs),
+      delegate.importClass(moduleName, className, args, kwargs),
     );
   }
 
   Future<void> appendToPath(String path) async {
     _ensureInitialized();
-    await PythonFfiDelegate.instance.appendToPath(path);
+    await delegate.appendToPath(path);
   }
 }

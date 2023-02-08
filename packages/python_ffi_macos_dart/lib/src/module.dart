@@ -5,40 +5,21 @@ class PythonModuleMacos
     with _PythonObjectMacosMixin {
   PythonModuleMacos(super.platform, super.reference);
 
-  final Map<String, PythonFunctionMacos> _functions =
-      <String, PythonFunctionMacos>{};
   final Map<String, _PythonClassDefinitionMacos> _classes =
       <String, _PythonClassDefinitionMacos>{};
+  final Map<String, PythonModuleMacos> _modules = <String, PythonModuleMacos>{};
 
-  @override
-  PythonFunctionMacos getFunction(String name) {
-    final PythonFunctionMacos? cachedFunction = _functions[name];
-    if (cachedFunction != null) {
-      platform.bindings.Py_IncRef(cachedFunction.reference);
-      return cachedFunction;
-    }
-
-    final PythonObjectInterface<PythonFfiMacOSBase, Pointer<PyObject>>
-        functionAttribute = getAttributeRaw(name);
-    final PythonFunctionMacos function =
-        PythonFunctionMacos(platform, functionAttribute.reference);
-
-    _functions[name] = function;
-
-    return function;
-  }
-
-  _PythonClassDefinitionMacos _getClassDefinition(String className) {
-    final _PythonClassDefinitionMacos? cachedClass = _classes[className];
+  _PythonClassDefinitionMacos _getClassDefinition(String name) {
+    final _PythonClassDefinitionMacos? cachedClass = _classes[name];
     if (cachedClass != null) {
       return cachedClass;
     }
 
-    final _PythonObjectMacos classAttribute = getAttributeRaw(className);
+    final _PythonObjectMacos classAttribute = getAttributeRaw(name);
     final _PythonClassDefinitionMacos classDefinition =
         _PythonClassDefinitionMacos(platform, classAttribute.reference);
 
-    _classes[className] = classDefinition;
+    _classes[name] = classDefinition;
     return classDefinition;
   }
 
@@ -53,6 +34,21 @@ class PythonModuleMacos
     final PythonClassMacos classInstance =
         classDefinition.newInstance(args, kwargs);
     return classInstance;
+  }
+
+  @override
+  PythonModuleMacos getModule(String name) {
+    final PythonModuleMacos? cachedModule = _modules[name];
+    if (cachedModule != null) {
+      return cachedModule;
+    }
+
+    final _PythonObjectMacos moduleAttribute = getAttributeRaw(name);
+    final PythonModuleMacos module =
+        PythonModuleMacos(platform, moduleAttribute.reference);
+
+    _modules[name] = module;
+    return module;
   }
 
   @override

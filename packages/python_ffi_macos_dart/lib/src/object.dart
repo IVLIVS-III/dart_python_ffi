@@ -14,6 +14,9 @@ class _PythonObjectMacos
 
 mixin _PythonObjectMacosMixin
     on PythonObjectInterface<PythonFfiMacOSBase, Pointer<PyObject>> {
+  final Map<String, PythonFunctionMacos> _functions =
+      <String, PythonFunctionMacos>{};
+
   static T staticCall<T extends Object?>(
     PythonFfiMacOSBase platform,
     Pointer<PyObject> reference,
@@ -157,6 +160,24 @@ mixin _PythonObjectMacosMixin
   @override
   void setAttribute<T extends Object?>(String attributeName, T value) {
     setAttributeRaw(attributeName, value._toPythonObject(platform));
+  }
+
+  @override
+  PythonFunctionMacos getFunction(String name) {
+    final PythonFunctionMacos? cachedFunction = _functions[name];
+    if (cachedFunction != null) {
+      platform.bindings.Py_IncRef(cachedFunction.reference);
+      return cachedFunction;
+    }
+
+    final PythonObjectInterface<PythonFfiMacOSBase, Pointer<PyObject>>
+        functionAttribute = getAttributeRaw(name);
+    final PythonFunctionMacos function =
+        PythonFunctionMacos(platform, functionAttribute.reference);
+
+    _functions[name] = function;
+
+    return function;
   }
 
   @override

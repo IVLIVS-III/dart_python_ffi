@@ -2,18 +2,7 @@
 part of python_ffi_macos_dart;
 
 abstract class PythonFfiMacOSBase extends PythonFfiDelegate<Pointer<PyObject>> {
-  /// A handle to the Python C-bindings.
-  DartPythonCBindings? _bindings;
-
-  DartPythonCBindings get bindings {
-    final DartPythonCBindings? bindings = _bindings;
-    if (bindings == null) {
-      throw Exception("PythonFfiMacOS not initialized");
-    }
-    return bindings;
-  }
-
-  final Map<String, PythonModuleMacos> _modules = <String, PythonModuleMacos>{};
+  DartPythonCBindings get bindings;
 
   UnmodifiableSetView<String> get classNames;
 
@@ -22,8 +11,6 @@ abstract class PythonFfiMacOSBase extends PythonFfiDelegate<Pointer<PyObject>> {
   Future<Directory> getApplicationSupportDirectory();
 
   Future<ByteData> loadPythonFile(String path);
-
-  PythonFfiMacOSBase get _instance => this;
 }
 
 /// The macOS implementation of [PythonFfiPlatform].
@@ -42,6 +29,20 @@ class PythonFfiMacOSDart extends PythonFfiMacOSBase with PythonFfiMacOSMixin {
 }
 
 mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
+  /// A handle to the Python C-bindings.
+  DartPythonCBindings? _bindings;
+
+  @override
+  DartPythonCBindings get bindings {
+    final DartPythonCBindings? bindings = _bindings;
+    if (bindings == null) {
+      throw Exception("PythonFfiMacOS not initialized");
+    }
+    return bindings;
+  }
+
+  final Map<String, PythonModuleMacos> _modules = <String, PythonModuleMacos>{};
+
   Directory? _supportDir;
 
   /// Directory for application support files
@@ -156,7 +157,7 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
   @override
   void ensureNoPythonError() {
     if (pythonErrorOccurred()) {
-      throw _PythonExceptionMacos.fetch(_instance);
+      throw _PythonExceptionMacos.fetch(this);
     }
   }
 
@@ -192,7 +193,7 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
       throw PythonFfiException("Failed to import module $moduleName");
     }
 
-    final PythonModuleMacos module = PythonModuleMacos(_instance, pyImport);
+    final PythonModuleMacos module = PythonModuleMacos(this, pyImport);
     _modules[moduleName] = module;
 
     if (pythonErrorOccurred()) {
@@ -222,7 +223,7 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
     final PythonModuleMacos sys = importModule("sys");
     final _PythonObjectMacos sysPath = sys.getAttributeRaw("path");
 
-    final _PythonObjectMacos pathObject = path._toPythonObject(_instance);
+    final _PythonObjectMacos pathObject = path._toPythonObject(this);
 
     final int result =
         bindings.PyList_Append(sysPath.reference, pathObject.reference);

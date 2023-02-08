@@ -10,10 +10,14 @@ library python_ffi;
 import "dart:async";
 
 import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:python_ffi_dart/python_ffi_dart.dart" as python_ffi_dart
+    show PythonModule;
 import "package:python_ffi_platform_interface/python_ffi_platform_interface.dart";
 
-export "package:python_ffi_dart/python_ffi_dart.dart" hide PythonFfiDart;
+export "package:python_ffi_dart/python_ffi_dart.dart"
+    hide PythonFfiDart, PythonModule;
 export "package:python_ffi_platform_interface/python_ffi_platform_interface.dart"
     show PythonModuleDefinition, SourceFile, SourceDirectory;
 
+part "src/module.dart";
 part "src/python_ffi_base.dart";

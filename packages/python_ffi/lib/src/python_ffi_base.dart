@@ -12,6 +12,16 @@ class PythonFfi extends PythonFfiBase with PythonFfiMixin {
   }
 
   @override
+  PythonFfiDelegate<Object?> get delegate => PythonFfiPlatform.instance;
+
+  @override
+  set delegate(PythonFfiDelegate<Object?> delegate) {
+    if (delegate is PythonFfiPlatform) {
+      PythonFfiPlatform.instance = delegate;
+    }
+  }
+
+  @override
   String get name => "PythonFfi";
 
   FutureOr<void> initialize() async =>

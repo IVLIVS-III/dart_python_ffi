@@ -72,9 +72,6 @@ class PythonClassMacos
     with _PythonObjectMacosMixin {
   PythonClassMacos(super.platform, super.reference);
 
-  final Map<String, PythonFunctionMacos> _functions =
-      <String, PythonFunctionMacos>{};
-
   @override
   void dispose() {
     for (final PythonFunctionMacos function in _functions.values) {

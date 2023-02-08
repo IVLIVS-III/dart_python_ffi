@@ -12,15 +12,8 @@ import "package:python_ffi_platform_interface/python_ffi_platform_interface.dart
 const String _libPath =
     "/Library/Frameworks/Python.framework/Versions/3.11/Python";
 
-/// The macOS implementation of [PythonFfiPlatform].
-class PythonFfiMacOS extends PythonFfiMacOSBase
-    with PythonFfiMacOSMixin
-    implements PythonFfiPlatform<Pointer<PyObject>> {
-  /// Registers this class as the default instance of [PythonFfiPlatform].
-  static void registerWith() {
-    PythonFfiPlatform.instance = PythonFfiMacOS();
-  }
-
+abstract class _PythonFfiMacOS extends PythonFfiPlatform<Pointer<PyObject>>
+    implements PythonFfiMacOSBase {
   @override
   Future<Directory> getApplicationSupportDirectory() async =>
       path_provider.getApplicationSupportDirectory();
@@ -28,4 +21,12 @@ class PythonFfiMacOS extends PythonFfiMacOSBase
   @override
   Future<ByteData> loadPythonFile(String path) async =>
       PlatformAssetBundle().load(path);
+}
+
+/// The macOS implementation of [PythonFfiPlatform].
+class PythonFfiMacOS extends _PythonFfiMacOS with PythonFfiMacOSMixin {
+  /// Registers this class as the default instance of [PythonFfiPlatform].
+  static void registerWith() {
+    PythonFfiPlatform.instance = PythonFfiMacOS();
+  }
 }
