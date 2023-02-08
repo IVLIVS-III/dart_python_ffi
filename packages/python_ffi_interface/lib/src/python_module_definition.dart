@@ -3,18 +3,28 @@ part of python_ffi_interface;
 abstract class PythonSourceEntity {
   PythonSourceEntity(this.name);
 
-  Iterable<String> get sourceFiles;
+  Iterable<PythonSourceFileEntity> get sourceFiles;
 
   final String name;
 }
 
-class SourceFile extends PythonSourceEntity {
-  SourceFile(super.name);
+abstract class PythonSourceFileEntity extends PythonSourceEntity {
+  PythonSourceFileEntity(super.name);
 
   @override
-  Iterable<String> get sourceFiles sync* {
-    yield name;
+  Iterable<PythonSourceFileEntity> get sourceFiles sync* {
+    yield this;
   }
+}
+
+class SourceFile extends PythonSourceFileEntity {
+  SourceFile(super.name);
+}
+
+class SourceBytes extends PythonSourceFileEntity {
+  SourceBytes(super.name, this.bytes);
+
+  final Uint8List bytes;
 }
 
 class SourceDirectory extends PythonSourceEntity {
@@ -23,9 +33,16 @@ class SourceDirectory extends PythonSourceEntity {
   final Set<PythonSourceEntity> _children = <PythonSourceEntity>{};
 
   @override
-  Iterable<String> get sourceFiles sync* {
+  Iterable<PythonSourceFileEntity> get sourceFiles sync* {
     for (final PythonSourceEntity child in _children) {
-      yield* child.sourceFiles.map((String e) => "$name/$e");
+      yield* child.sourceFiles.map((PythonSourceFileEntity e) {
+        if (e is SourceFile) {
+          return SourceFile("$name/${e.name}");
+        } else if (e is SourceBytes) {
+          return SourceBytes("$name/${e.name}", e.bytes);
+        }
+        return SourceFile("$name/${e.name}");
+      });
     }
   }
 
@@ -45,7 +62,7 @@ class PythonModuleDefinition {
   final String name;
   final PythonSourceEntity root;
   final Iterable<String> classNames;
-  final String? license;
+  final PythonSourceFileEntity? license;
 
-  Iterable<String> get sourceFiles => root.sourceFiles;
+  Iterable<PythonSourceFileEntity> get sourceFiles => root.sourceFiles;
 }

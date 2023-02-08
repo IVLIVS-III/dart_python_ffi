@@ -21,8 +21,14 @@ abstract class _PythonFfiMacOS extends PythonFfiPlatform<Pointer<PyObject>>
       path_provider.getApplicationSupportDirectory();
 
   @override
-  Future<ByteData> loadPythonFile(String path) async =>
-      PlatformAssetBundle().load(path);
+  FutureOr<ByteData> loadPythonFile(PythonSourceFileEntity sourceFile) {
+    if (sourceFile is SourceFile) {
+      return PlatformAssetBundle().load("python-modules/${sourceFile.name}");
+    } else if (sourceFile is SourceBytes) {
+      return ByteData.view(sourceFile.bytes.buffer);
+    }
+    throw Exception("Unsupported source file type: $sourceFile");
+  }
 }
 
 /// The macOS implementation of [PythonFfiPlatform].
@@ -34,7 +40,7 @@ class PythonFfiMacOS extends _PythonFfiMacOS with PythonFfiMacOSMixin {
 
   @override
   FutureOr<void> prepareModule(PythonModuleDefinition moduleDefinition) {
-    final String? license = moduleDefinition.license;
+    final PythonSourceFileEntity? license = moduleDefinition.license;
     if (license != null) {
       LicenseRegistry.addLicense(() async* {
         final ByteData licenseBytes = await loadPythonFile(license);

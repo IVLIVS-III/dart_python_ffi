@@ -8,23 +8,23 @@ abstract class PythonFfiMacOSBase extends PythonFfiDelegate<Pointer<PyObject>> {
 
   void disposeModule(PythonModuleMacos module);
 
-  Future<Directory> getApplicationSupportDirectory();
+  FutureOr<Directory> getApplicationSupportDirectory();
 
-  Future<ByteData> loadPythonFile(String path);
+  FutureOr<ByteData> loadPythonFile(PythonSourceFileEntity sourceFile);
 }
 
 /// The macOS implementation of [PythonFfiPlatform].
 class PythonFfiMacOSDart extends PythonFfiMacOSBase with PythonFfiMacOSMixin {
   @override
-  Future<Directory> getApplicationSupportDirectory() async {
-    // TODO: implement getApplicationSupportDirectory
-    throw UnimplementedError();
-  }
+  Directory getApplicationSupportDirectory() => Directory.systemTemp;
 
   @override
-  Future<ByteData> loadPythonFile(String path) async {
-    // TODO: implement loadPythonFile
-    throw UnimplementedError();
+  ByteData loadPythonFile(PythonSourceFileEntity sourceFile) {
+    if (sourceFile is SourceFile) {
+    } else if (sourceFile is SourceBytes) {
+      return ByteData.view(sourceFile.bytes.buffer);
+    }
+    throw Exception("Unsupported source file type: $sourceFile");
   }
 }
 
@@ -107,14 +107,14 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
     appendToPath((await packagesDir).path);
   }
 
-  Future<void> _copyModuleFile(String filePath) async {
+  Future<void> _copyModuleFile(PythonSourceFileEntity sourceFile) async {
+    final String filePath = sourceFile.name;
     final File moduleFile = File("${(await packagesDir).path}/$filePath");
     if (!moduleFile.existsSync()) {
       moduleFile.createSync(recursive: true);
     }
 
-    final ByteData moduleAsset =
-        await loadPythonFile("python-modules/$filePath");
+    final ByteData moduleAsset = await loadPythonFile(sourceFile);
     await moduleFile.writeAsBytes(moduleAsset.buffer.asUint8List());
 
     print("Copied module file $filePath to ${moduleFile.path}");
@@ -124,7 +124,8 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
   FutureOr<void> prepareModule(PythonModuleDefinition moduleDefinition) async {
     final List<Future<void>> copyTasks = <Future<void>>[];
 
-    for (final String sourceFile in moduleDefinition.sourceFiles) {
+    for (final PythonSourceFileEntity sourceFile
+        in moduleDefinition.sourceFiles) {
       copyTasks.add(_copyModuleFile(sourceFile));
     }
 

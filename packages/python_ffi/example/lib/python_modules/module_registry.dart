@@ -10,11 +10,13 @@ import "package:python_ffi_example/python_modules/structs.dart";
 import "package:python_ffi_example/python_modules/type_mappings.dart";
 
 FutureOr<void> registerPythonModules() async {
-  PythonFfi.instance.prepareModule(HelloWorldModule.definition);
-  PythonFfi.instance.prepareModule(PrimitivesModule.definition);
-  PythonFfi.instance.prepareModule(StructsModule.definition);
-  PythonFfi.instance.prepareModule(DataClassModule.definition);
-  PythonFfi.instance.prepareModule(JsonParserModule.definition);
-  PythonFfi.instance.prepareModule(LiblaxModule.definition);
-  PythonFfi.instance.prepareModule(TypeMappingsModule.definition);
+  await Future.wait<void>(<Future<void>>[
+    PythonFfi.instance.prepareModule(HelloWorldModule.definition).asFuture,
+    PythonFfi.instance.prepareModule(PrimitivesModule.definition).asFuture,
+    PythonFfi.instance.prepareModule(StructsModule.definition).asFuture,
+    PythonFfi.instance.prepareModule(DataClassModule.definition).asFuture,
+    PythonFfi.instance.prepareModule(JsonParserModule.definition).asFuture,
+    PythonFfi.instance.prepareModule(LiblaxModule.definition).asFuture,
+    PythonFfi.instance.prepareModule(TypeMappingsModule.definition).asFuture,
+  ]);
 }
