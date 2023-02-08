@@ -1,7 +1,7 @@
 // TODO: Put public facing types in this file.
 part of python_ffi_macos_dart;
 
-abstract class PythonFfiMacOSBase extends PythonFfiPlatform<Pointer<PyObject>> {
+abstract class PythonFfiMacOSBase extends PythonFfiDelegate<Pointer<PyObject>> {
   /// A handle to the Python C-bindings.
   DartPythonCBindings? _bindings;
 
@@ -13,11 +13,11 @@ abstract class PythonFfiMacOSBase extends PythonFfiPlatform<Pointer<PyObject>> {
     return bindings;
   }
 
-  final Map<String, PythonModuleMacos> _modules = <String, PythonModuleMacos>{};
+  final Map<String, _PythonModuleMacos> _modules = <String, _PythonModuleMacos>{};
 
   UnmodifiableSetView<String> get classNames;
 
-  void disposeModule(PythonModuleMacos module);
+  void disposeModule(_PythonModuleMacos module);
 
   Future<Directory> getApplicationSupportDirectory();
 
@@ -133,8 +133,8 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
   }
 
   @override
-  void disposeModule(PythonModuleMacos module) {
-    _modules.removeWhere((_, PythonModuleMacos value) => value == module);
+  void disposeModule(_PythonModuleMacos module) {
+    _modules.removeWhere((_, _PythonModuleMacos value) => value == module);
   }
 
   @override
@@ -156,13 +156,13 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
   @override
   void ensureNoPythonError() {
     if (pythonErrorOccurred()) {
-      throw PythonExceptionMacos.fetch(_instance);
+      throw _PythonExceptionMacos.fetch(_instance);
     }
   }
 
   @override
-  PythonModuleMacos importModule(String moduleName) {
-    final PythonModuleMacos? cachedModule = _modules[moduleName];
+  _PythonModuleMacos importModule(String moduleName) {
+    final _PythonModuleMacos? cachedModule = _modules[moduleName];
     if (cachedModule != null) {
       bindings.Py_IncRef(cachedModule.reference);
       return cachedModule;
@@ -192,7 +192,7 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
       throw PythonFfiException("Failed to import module $moduleName");
     }
 
-    final PythonModuleMacos module = PythonModuleMacos(_instance, pyImport);
+    final _PythonModuleMacos module = _PythonModuleMacos(_instance, pyImport);
     _modules[moduleName] = module;
 
     if (pythonErrorOccurred()) {
@@ -204,22 +204,22 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
   }
 
   @override
-  PythonClassPlatform<PythonFfiPlatform<Pointer<PyObject>>, Pointer<PyObject>>
+  PythonClassInterface<PythonFfiDelegate<Pointer<PyObject>>, Pointer<PyObject>>
       importClass(
     String moduleName,
     String className,
     List<Object?> args, [
     Map<String, Object?>? kwargs,
   ]) {
-    final PythonModuleMacos module = importModule(moduleName);
-    final PythonClassMacos classInstance =
+    final _PythonModuleMacos module = importModule(moduleName);
+    final _PythonClassMacos classInstance =
         module.getClass(className, args, kwargs);
     return classInstance;
   }
 
   @override
   void appendToPath(String path) {
-    final PythonModuleMacos sys = importModule("sys");
+    final _PythonModuleMacos sys = importModule("sys");
     final _PythonObjectMacos sysPath = sys.getAttributeRaw("path");
 
     final _PythonObjectMacos pathObject = path._toPythonObject(_instance);

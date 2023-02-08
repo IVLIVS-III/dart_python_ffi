@@ -65,7 +65,7 @@ extension ConvertToPythonExtension on Object? {
       object = platform.bindings.PySet_New(elementsObject.reference);
       platform.bindings.Py_IncRef(object);
     }
-    if (value is PythonObjectPlatform) {
+    if (value is PythonObjectInterface) {
       final Object? reference = value.reference;
       if (reference is Pointer<PyObject>) {
         platform.bindings.Py_IncRef(reference);
@@ -121,7 +121,7 @@ extension ConvertToDartExtension on Pointer<PyObject> {
     }
 
     if (platform.classNames.contains(nameString)) {
-      return PythonClassMacos(platform, object);
+      return _PythonClassMacos(platform, object);
     }
 
     throw PythonFfiException("Unsupported type: $nameString($runtimeType)");

@@ -7,13 +7,13 @@ extension SymbolToNameExtension on Symbol {
 }
 
 class _PythonObjectMacos
-    extends PythonObjectPlatform<PythonFfiMacOSBase, Pointer<PyObject>>
+    extends PythonObjectInterface<PythonFfiMacOSBase, Pointer<PyObject>>
     with _PythonObjectMacosMixin {
   _PythonObjectMacos(super.platform, super.reference);
 }
 
 mixin _PythonObjectMacosMixin
-    on PythonObjectPlatform<PythonFfiMacOSBase, Pointer<PyObject>> {
+    on PythonObjectInterface<PythonFfiMacOSBase, Pointer<PyObject>> {
   static T staticCall<T extends Object?>(
     PythonFfiMacOSBase platform,
     Pointer<PyObject> reference,
@@ -44,7 +44,7 @@ mixin _PythonObjectMacosMixin
     final _PythonObjectMacos result = _PythonObjectMacos(platform, rawResult);
 
     final Object? mappedResult = result.toDartObject();
-    if (mappedResult is! PythonObjectPlatform) {
+    if (mappedResult is! PythonObjectInterface) {
       result.dispose();
     }
 
@@ -107,7 +107,7 @@ mixin _PythonObjectMacosMixin
 
   @override
   T getAttributeRaw<
-      T extends PythonObjectPlatform<PythonFfiMacOSBase, Pointer<PyObject>>>(
+      T extends PythonObjectInterface<PythonFfiMacOSBase, Pointer<PyObject>>>(
     String attributeName,
   ) {
     final Pointer<PyObject> attribute = attributeName.toNativeUtf8().useAndFree(
@@ -133,7 +133,7 @@ mixin _PythonObjectMacosMixin
 
   @override
   void setAttributeRaw<
-      T extends PythonObjectPlatform<PythonFfiMacOSBase, Pointer<PyObject>>>(
+      T extends PythonObjectInterface<PythonFfiMacOSBase, Pointer<PyObject>>>(
     String attributeName,
     T value,
   ) {
@@ -168,52 +168,6 @@ mixin _PythonObjectMacosMixin
   Object? toDartObject() => reference.toDartObject(platform);
 
   @override
-  Object? noSuchMethod(Invocation invocation) {
-    if (invocation.isMethod) {
-      final String methodName = invocation.memberName.name;
-      final PythonFunctionMacos function = getFunction_(
-        methodName,
-        <String, PythonFunctionMacos>{},
-      );
-      return function.call(
-        invocation.positionalArguments,
-        kwargs: invocation.namedArguments.map(
-          (Symbol key, dynamic value) =>
-              MapEntry<String, dynamic>(key.name, value),
-        ),
-      );
-    } else if (invocation.isGetter) {
-      final String attributeName = invocation.memberName.name;
-      return getAttribute(attributeName);
-    } else if (invocation.isSetter) {
-      final String attributeName = invocation.memberName.name;
-      setAttribute<dynamic>(attributeName, invocation.positionalArguments[0]);
-      return null;
-    }
-
-    return super.noSuchMethod(invocation);
-  }
-
-  PythonFunctionMacos getFunction_(
-    String functionName,
-    Map<String, PythonFunctionMacos> functions,
-  ) {
-    final PythonFunctionMacos? cachedFunction = functions[functionName];
-    if (cachedFunction != null) {
-      platform.bindings.Py_IncRef(cachedFunction.reference);
-      return cachedFunction;
-    }
-
-    final PythonObjectPlatform<PythonFfiMacOSBase, Pointer<PyObject>>
-        functionAttribute = getAttributeRaw(functionName);
-    final PythonFunctionMacos function =
-        PythonFunctionMacos(platform, functionAttribute.reference);
-
-    functions[functionName] = function;
-
-    return function;
-  }
-
   void debugDump() {
     print("========================================");
     print("PythonObjectMacos: @0x${reference.hexAddress}");
@@ -224,7 +178,7 @@ mixin _PythonObjectMacosMixin
         print("converted: @0x${reference.hexAddress} w/ error: $e");
       }
 
-      final PythonObjectPlatform<PythonFfiMacOSBase, Pointer<PyObject>> dict =
+      final PythonObjectInterface<PythonFfiMacOSBase, Pointer<PyObject>> dict =
           getAttributeRaw("__dict__");
       print("dict: @0x${dict.reference.hexAddress}");
       platform.ensureNoPythonError();
@@ -261,7 +215,7 @@ mixin _PythonObjectMacosMixin
           print("$keyString: $valueObject");
         }
       }
-    } on PythonExceptionMacos catch (e) {
+    } on _PythonExceptionMacos catch (e) {
       print("Error: $e");
     } finally {
       print("========================================");

@@ -1,16 +1,16 @@
 part of python_ffi_macos_dart;
 
-class PythonExceptionMacos
-    extends PythonExceptionPlatform<PythonFfiMacOSBase, Pointer<PyObject>>
+class _PythonExceptionMacos
+    extends PythonExceptionInterface<PythonFfiMacOSBase, Pointer<PyObject>>
     with _PythonObjectMacosMixin {
-  PythonExceptionMacos(
+  _PythonExceptionMacos(
     super.platform,
     super.reference,
     this.pValue,
     this.pTraceback,
   );
 
-  factory PythonExceptionMacos.fetch(PythonFfiMacOSBase platform) {
+  factory _PythonExceptionMacos.fetch(PythonFfiMacOSBase platform) {
     final Pointer<Pointer<PyObject>> pTypePtr = malloc<Pointer<PyObject>>();
     final Pointer<Pointer<PyObject>> pValuePtr = malloc<Pointer<PyObject>>();
     final Pointer<Pointer<PyObject>> pTracebackPtr =
@@ -18,7 +18,7 @@ class PythonExceptionMacos
 
     platform.bindings.PyErr_Fetch(pTypePtr, pValuePtr, pTracebackPtr);
 
-    final PythonExceptionMacos pythonException = PythonExceptionMacos(
+    final _PythonExceptionMacos pythonException = _PythonExceptionMacos(
       platform,
       pTypePtr.value,
       pValuePtr.value,
