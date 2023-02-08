@@ -1,5 +1,5 @@
 name: python_ffi_macos
-description: A Python-FFI for Dart
+description: The macOS implementation of python_ffi, a Python-FFI for Dart.
 version: 0.0.1
 homepage: https://github.com/IVLIVS-III/dart_python_ffi
 
@@ -57,24 +57,24 @@ ffigen:
       - 'python/Headers/Python.h'
     include-directives:
       - 'python/Headers/*'
-#  functions:
-#    rename:
-#      "_(.*)": "$1"
-#      "__(.*)": "$1"
-#  structs:
-#    rename:
-#      "_(.*)": "$1"
-#      "__(.*)": "_$1"
-#    member-rename:
-#      "_(.*)":
-#        "_(.*)": "$1"
-#  unnions:
-#    rename:
-#      "_(.*)": "$1"
-#      "__(.*)": "$1"
-#    member-rename:
-#      "_(.*)":
-#        "_(.*)": "$1"
+  #  functions:
+  #    rename:
+  #      "_(.*)": "$1"
+  #      "__(.*)": "$1"
+  #  structs:
+  #    rename:
+  #      "_(.*)": "$1"
+  #      "__(.*)": "_$1"
+  #    member-rename:
+  #      "_(.*)":
+  #        "_(.*)": "$1"
+  #  unnions:
+  #    rename:
+  #      "_(.*)": "$1"
+  #      "__(.*)": "$1"
+  #    member-rename:
+  #      "_(.*)":
+  #        "_(.*)": "$1"
   globals:
     rename:
       "_(.*)": "$1"

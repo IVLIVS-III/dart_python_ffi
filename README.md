@@ -23,7 +23,7 @@ A Python-FFI for Dart
 | `Iterable`  | `Iterable`  | ❌ missing         | ❌ missing         |
 | `Function`  | `Callable`  | ❌ missing         | ❌ missing         |
 
-## Package graph
+## Package status
 
 | status indicator | description                                                    |
 |------------------|----------------------------------------------------------------|
@@ -31,20 +31,33 @@ A Python-FFI for Dart
 | ⚠️               | package requires a flutter environment                         |
 | 🚫               | package is intended as internal package only                   |
 
-```
-python_ffi(❇️⚠️)                  python_ffi_dart(❇️)
-│   │                                  │       │
-│   python_ffi_macos(⚠️🚫)              │       │
-│   │              │                   │       │
-│   │              python_ffi_macos_dart(🚫)    │
-│   │                                  │       │
-python_ffi_platform_interface(⚠️🚫)     │       │
-                            │          │       │
-                            python_ffi_interface(🚫)
+| package name                  | status | description                                                                              |
+|-------------------------------|--------|------------------------------------------------------------------------------------------|
+| python_ffi                    | ❇️⚠️   | A Python-FFI for Dart, intended for use in a Flutter project.                            |
+| python_ffi_dart               | ❇️     | A Python-FFI for Dart, intended for dart-only applications outside of a Flutter project. |
+| python_ffi_macos              | ⚠️🚫   | The macOS implementation of python_ffi, a Python-FFI for Dart.                           |
+| python_ffi_macos_dart         | 🚫     | The macOS implementation of python_ffi_dart, a Python-FFI for Dart.                      |
+| python_ffi_platform_interface | 🚫     | The platform interface for python_ffi, a Python-FFI for Dart.                            |
+| python_ffi_interface          | 🚫     | A base interface for python_ffi_dart, a Python-FFI for Dart.                             |
+| python_ffi_lint               |        | Analysis options used across the Python-FFI for Dart project.                            |
 
-python_ffi_lint(🚫)
+## Package graph
+
+```
+python_ffi            python_ffi_dart
+│   │                           │   │
+│   python_ffi_macos            │   │
+│   │          │                │   │
+│   │       python_ffi_macos_dart   │
+│   │                           │   │
+python_ffi_platform_interface   │   │
+                     │          │   │
+                 python_ffi_interface
+
+python_ffi_lint
 ```
 
 ## Limitations
 
 - Python `print` is not supported when used in a Flutter environment.
+- Requires Python 3.11 to be installed on the host system.

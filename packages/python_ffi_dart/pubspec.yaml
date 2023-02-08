@@ -1,5 +1,5 @@
 name: python_ffi_dart
-description: A starting point for Dart libraries or applications.
+description: A Python-FFI for Dart, intended for dart-only applications outside of a Flutter project.
 version: 0.0.1
 # homepage: https://www.example.com
 

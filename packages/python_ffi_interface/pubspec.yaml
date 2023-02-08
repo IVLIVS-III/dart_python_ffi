@@ -1,5 +1,5 @@
 name: python_ffi_interface
-description: A starting point for Dart libraries or applications.
+description: A base interface for python_ffi_dart, a Python-FFI for Dart.
 version: 0.0.1
 # repository: https://github.com/my_org/my_repo
 
