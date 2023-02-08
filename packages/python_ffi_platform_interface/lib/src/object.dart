@@ -1,8 +1,15 @@
 part of python_ffi_platform_interface;
 
 abstract class PythonObjectPlatform<P extends PythonFfiPlatform<R>,
-    R extends Object?> extends PlatformInterface {
+        R extends Object?> extends PlatformInterface
+    implements PythonObjectInterface<P, R> {
   PythonObjectPlatform(this.platform, this.reference) : super(token: _token);
+
+  @override
+  final P platform;
+
+  @override
+  final R reference;
 
   static final Object _token = Object();
 
@@ -15,28 +22,4 @@ abstract class PythonObjectPlatform<P extends PythonFfiPlatform<R>,
   static void verify(PythonObjectPlatform<Object?, Object?> instance) {
     PlatformInterface.verify(instance, _token);
   }
-
-  final P platform;
-  final R reference;
-
-  Object? toDartObject();
-
-  T getAttributeRaw<T extends PythonObjectPlatform<P, R>>(String attributeName);
-
-  T getAttribute<T extends Object?>(String attributeName);
-
-  void setAttributeRaw<T extends PythonObjectPlatform<P, R>>(
-    String attributeName,
-    T value,
-  );
-
-  void setAttribute<T extends Object?>(String attributeName, T value);
-
-  /// Disposes the python object
-  @mustCallSuper
-  void dispose();
-
-  @override
-  @mustCallSuper
-  dynamic noSuchMethod(Invocation invocation);
 }

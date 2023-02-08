@@ -21,3 +21,26 @@ A Python-FFI for Dart
 | `Set`       | `set`       | ✅ complete        | ✅ complete        |
 | `Iterable`  | `Iterable`  | ❌ missing         | ❌ missing         |
 | `Function`  | `Callable`  | ❌ missing         | ❌ missing         |
+
+## Package graph
+
+| status indicator | description                                                    |
+|------------------|----------------------------------------------------------------|
+| ❇️               | package is intended to be consumed directly by package clients |
+| ⚠️               | package requires a flutter environment                         |
+| 🚫               | package is intended as internal package only                   |
+
+```
+python_ffi ❇️⚠️
+│   │                       python_ffi_dart ❇️
+│   │                               │     │
+│   python_ffi_macos ⚠️             │     │
+│   │           │                   │     │
+│   │           python_ffi_macos_dart     │
+│   │                               │     │
+python_ffi_platform_interface ⚠️    │     │
+                       │            │     │
+                       python_ffi_interface
+
+python_ffi_lint
+```

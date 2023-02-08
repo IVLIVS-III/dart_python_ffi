@@ -1,4 +1,4 @@
-part of python_ffi_platform_interface;
+part of python_ffi_interface;
 
 abstract class PythonSourceEntity {
   PythonSourceEntity(this.name);

@@ -1,0 +1,21 @@
+/// Support for doing something awesome.
+///
+/// More dartdocs go here.
+library python_ffi_interface;
+
+import "dart:async";
+
+import "package:collection/collection.dart";
+
+export "src/python_ffi_interface_base.dart";
+
+// TODO: Export any libraries intended for clients of this package.
+
+part "src/class.dart";
+part "src/delegate.dart";
+part "src/exception.dart";
+part "src/function.dart";
+part "src/module.dart";
+part "src/object.dart";
+part "src/python_module_definition.dart";
+part "src/extensions/symbol.dart";

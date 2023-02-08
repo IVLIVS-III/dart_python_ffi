@@ -1,6 +1,7 @@
 part of python_ffi_platform_interface;
 
-abstract class PythonFfiPlatform<R extends Object?> extends PlatformInterface {
+abstract class PythonFfiPlatform<R extends Object?> extends PlatformInterface
+    implements PythonFfiDelegate<R> {
   /// Constructs a PythonFfiPlatform.
   PythonFfiPlatform() : super(token: _token);
 
@@ -19,61 +20,5 @@ abstract class PythonFfiPlatform<R extends Object?> extends PlatformInterface {
   static set instance(PythonFfiPlatform<Object?> instance) {
     PlatformInterface.verify(instance, _token);
     _instance = instance;
-  }
-
-  /// Checks whether the Python runtime was initialized
-  bool get isInitialized;
-
-  /// Initializes the native platform Python runtime
-  FutureOr<void> initialize() async {
-    throw UnimplementedError("initialize() has not been implemented.");
-  }
-
-  FutureOr<void> prepareModule(PythonModuleDefinition moduleDefinition) async {
-    throw UnimplementedError("prepareModule() has not been implemented.");
-  }
-
-  /// Register a Python class name for type marshalling.
-  void addClassName(String className);
-
-  void removeClassName(String className);
-
-  /// Checks whether an exception occurred in python
-  // TODO: return a proper python exception object
-  bool pythonErrorOccurred() {
-    throw UnimplementedError("pythonErrorOccurred() has not been implemented.");
-  }
-
-  /// Prints the current python exception
-  void pythonErrorPrint() {
-    throw UnimplementedError("pythonErrorPrint() has not been implemented.");
-  }
-
-  /// Throws a dart exception if an exception occurred in python
-  void ensureNoPythonError() {
-    throw UnimplementedError("ensureNoPythonError() has not been implemented.");
-  }
-
-  /// Imports a Python module.
-  /// The module must be builtin or bundled with the app via flutter assets.
-  PythonModulePlatform<PythonFfiPlatform<R>, R> importModule(
-    String moduleName,
-  ) {
-    throw UnimplementedError("importModule() has not been implemented.");
-  }
-
-  /// Imports a Python class from the specified module.
-  PythonClassPlatform<PythonFfiPlatform<R>, R> importClass(
-    String moduleName,
-    String className,
-    List<Object?> args, [
-    Map<String, Object?>? kwargs,
-  ]) {
-    throw UnimplementedError("importClass() has not been implemented.");
-  }
-
-  /// Appends a path to the Python sys.path
-  FutureOr<void> appendToPath(String path) async {
-    throw UnimplementedError("appendToPath() has not been implemented.");
   }
 }
