@@ -41,6 +41,7 @@ A Python-FFI for Dart
 | python_ffi_interface          | 🚫     | A base interface for python_ffi_dart, a Python-FFI for Dart.                                        |
 | python_ffi_lint               |        | Analysis options used across the Python-FFI for Dart project.                                       |
 | python_ffi_dart_example       |        | The example command line application showcasing the python_ffi_dart package, a Python-FFI for Dart. |
+| python_ffi_bundler            |        |                                                                                                     |
 
 ## Package graph
 

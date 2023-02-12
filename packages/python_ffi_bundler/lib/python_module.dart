@@ -14,6 +14,12 @@ abstract class PythonModule<T extends Object> {
       return SingleFilePythonModule(path);
     }
 
+    final String maybeFilePath = "$path.py";
+    final File file = File(maybeFilePath);
+    if (file.existsSync()) {
+      return SingleFilePythonModule(maybeFilePath);
+    }
+
     return MultiFilePythonModule(path);
   }
 

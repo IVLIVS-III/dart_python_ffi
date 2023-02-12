@@ -1,7 +1,8 @@
+import "dart:async";
 import "dart:io";
 import "dart:typed_data";
 
-import "package:python_ffi_bundler/python_module.dart";
+import "package:python_ffi_bundler/python_ffi_bundler.dart";
 
 extension ValueMappingExtension<K, V> on Map<K, V> {
   Map<K, T> mapValues<T>(
@@ -50,7 +51,7 @@ abstract class ModuleBundle<T extends PythonModule<Object>> {
     }
   }
 
-  Future<void> _postExport(List<List<String>> filePaths) async {}
+  FutureOr<void> _postExport(List<List<String>> filePaths) {}
 
   Future<void> export() async {
     final T pythonModule = this.pythonModule;
@@ -73,6 +74,96 @@ abstract class ModuleBundle<T extends PythonModule<Object>> {
   }
 }
 
+class AssetsInsertionConfig {
+  AssetsInsertionConfig._({
+    required this.pubspecString,
+    required this.assets,
+    required this.insertFlutterKey,
+    required this.insertAssetsKey,
+    required this.indentation,
+    required this.insertionPoint,
+  });
+
+  factory AssetsInsertionConfig.fromPubspec(String pubspecString) {
+    final Map<dynamic, dynamic> pubspecYaml = parsePubspec("", pubspecString);
+    final int indentation = detectIndentation(pubspecString);
+
+    final bool insertFlutterKey = !pubspecYaml.containsKey("flutter");
+
+    final List<String> assets = <String>[];
+
+    bool insertAssetsKey = false;
+    if (!insertFlutterKey) {
+      final dynamic flutter = pubspecYaml["flutter"];
+      if (flutter is! Map) {
+        throw StateError("Invalid pubspec.yaml: flutter is not a map.");
+      }
+      insertAssetsKey = !flutter.containsKey("assets");
+
+      if (!insertAssetsKey) {
+        final dynamic assetsValue = flutter["assets"];
+        if (assetsValue is! List) {
+          throw StateError("Invalid pubspec.yaml: assets is not a list.");
+        }
+        assets.addAll(assetsValue.cast<String>());
+      }
+    }
+
+    late int insertionPoint;
+    if (insertFlutterKey) {
+      insertionPoint = pubspecString.length;
+    } else if (insertAssetsKey) {
+      final int flutterIndex = pubspecString.indexOf("\nflutter:");
+      insertionPoint = pubspecString.indexOf("\n", flutterIndex + 1);
+    } else {
+      final int flutterIndex = pubspecString.indexOf("\nflutter:");
+      final int assetsIndex =
+          pubspecString.indexOf("\n${" " * indentation}assets:", flutterIndex);
+      insertionPoint = pubspecString.indexOf("\n", assetsIndex + 1);
+    }
+
+    return AssetsInsertionConfig._(
+      pubspecString: pubspecString,
+      assets: assets,
+      insertFlutterKey: insertFlutterKey,
+      insertAssetsKey: insertAssetsKey,
+      indentation: indentation,
+      insertionPoint: insertionPoint,
+    );
+  }
+
+  final String pubspecString;
+  final List<String> assets;
+  final bool insertFlutterKey;
+  final bool insertAssetsKey;
+  final int indentation;
+  final int insertionPoint;
+
+  String _filePathsToYaml(List<List<String>> filePaths, int indent) {
+    final String prefix = " " * indent;
+    return filePaths
+        .map((List<String> filePath) => "$prefix$prefix- ${filePath.join("/")}")
+        .join("\n");
+  }
+
+  String insertIntoPubspec(List<List<String>> filePaths) {
+    final StringBuffer buffer = StringBuffer();
+    if (insertFlutterKey) {
+      buffer.write("\nflutter:");
+    }
+    if (insertAssetsKey) {
+      buffer.write("\n${" " * indentation}assets:");
+    }
+    buffer.write("\n${_filePathsToYaml(filePaths, indentation)}");
+    final String insertString = buffer.toString();
+    return pubspecString.replaceRange(
+      insertionPoint,
+      insertionPoint,
+      insertString,
+    );
+  }
+}
+
 class FlutterModuleBundle<T extends Object>
     extends ModuleBundle<PythonModule<T>> {
   FlutterModuleBundle({
@@ -82,15 +173,29 @@ class FlutterModuleBundle<T extends Object>
 
   @override
   Directory get _pythonModuleDestinationDirectory => Directory(
-        <String>[_appRootDirectory.path, "lib", "python-modules"]
+        <String>[_appRootDirectory.path, "python-modules"]
             .join(Platform.pathSeparator),
       );
 
   @override
-  Future<void> _postExport(List<List<String>> filePaths) {
-    // TODO: implement _postExport
-    //       - Add an asset entry to pubspec.yaml
-    return super._postExport(filePaths);
+  void _postExport(List<List<String>> filePaths) {
+    final String pubspecString = readPubspec(_appRootDirectory.path);
+
+    final AssetsInsertionConfig config =
+        AssetsInsertionConfig.fromPubspec(pubspecString);
+
+    final File pubspecFile = File(
+      <String>[_appRootDirectory.path, "pubspec.yaml"]
+          .join(Platform.pathSeparator),
+    );
+    final String newPubspecString = config.insertIntoPubspec(
+      filePaths
+          .map((List<String> e) => <String>["python-modules", ...e])
+          .toList(),
+    );
+    pubspecFile.writeAsStringSync(newPubspecString);
+
+    super._postExport(filePaths);
   }
 }
 

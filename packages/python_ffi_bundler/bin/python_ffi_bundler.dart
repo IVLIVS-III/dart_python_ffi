@@ -1,21 +1,13 @@
-import "package:args/args.dart";
+import "package:args/command_runner.dart";
 import "package:python_ffi_bundler/python_ffi_bundler.dart";
 
 Future<void> main(List<String> arguments) async {
-  final ArgParser parser = ArgParser()
-    ..addOption("app-root", abbr: "r", mandatory: true)
-    ..addOption(
-      "python-module",
-      abbr: "m",
-      mandatory: true,
-    )
-    ..addOption(
-      "app-type",
-      abbr: "t",
-      allowed: <String>[kAppTypeFlutter, kAppTypeConsole],
-      defaultsTo: kAppTypeFlutter,
-    );
+  final CommandRunner<void> runner = CommandRunner<void>(
+    "python_ffi_bundler",
+    "The command line application for bundling Python modules into Dart applications.",
+  )
+    ..addCommand(BundleModuleCommand())
+    ..addCommand(BundleCommand());
 
-  final ArgResults results = parser.parse(arguments);
-  await bundle(results);
+  await runner.run(arguments);
 }
