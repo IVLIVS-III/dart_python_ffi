@@ -1,12 +1,9 @@
 // ignore_for_file: non_constant_identifier_names
 import "dart:typed_data";
 
-// TODO: export this from python_ffi_dart
 import "package:python_ffi_dart/python_ffi_dart.dart";
 import "package:python_ffi_dart_example/python_modules/src/type_mappings.py.dart"
-as tm_py;
-
-import "package:python_ffi_interface/python_ffi_interface.dart";
+    as type_mappings_py;
 
 class TypeMappingsModule extends PythonModule {
   TypeMappingsModule.from(super.pythonModule) : super.from();
@@ -75,7 +72,7 @@ class TypeMappingsModule extends PythonModule {
 
   static PythonModuleDefinition get definition => PythonModuleDefinition(
         name: "type_mappings",
-        root: SourceBytes("type_mappings.py", tm_py.kBytes),
+        root: SourceBytes("type_mappings.py", type_mappings_py.kBytes),
         classNames: classNames,
       );
 

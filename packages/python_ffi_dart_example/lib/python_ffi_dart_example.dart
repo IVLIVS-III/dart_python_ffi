@@ -24,17 +24,17 @@ class TypeMappingEntry<T extends Object?> {
 
   void run() {
     try {
-      print("testing $_dartType ←→ $pythonType");
+      print("\ntesting $_dartType ←→ $pythonType");
       sendToPython(value);
-      print("dart –> python successful");
+      print("├── dart –> python successful");
       final T receivedValue = receiveFromPython();
       assert(
         _equals(receivedValue, value),
         "Python returned $receivedValue, but expected $value",
       );
-      print("python –> dart successful");
+      print("└── python –> dart successful");
     } on Exception catch (e) {
-      print("error: $e");
+      print("└── error: $e");
     }
   }
 }

@@ -14,3 +14,7 @@ dependencies:
 dev_dependencies:
   python_ffi_lint: ^0.0.1
   test: ^1.21.0
+
+python_ffi:
+  modules:
+    type_mappings: any
