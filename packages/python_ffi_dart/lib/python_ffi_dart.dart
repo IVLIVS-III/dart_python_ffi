@@ -10,7 +10,7 @@ import "package:python_ffi_interface/python_ffi_interface.dart";
 import "package:python_ffi_macos_dart/python_ffi_macos_dart.dart";
 
 export "package:python_ffi_interface/python_ffi_interface.dart"
-    show PythonModuleDefinition, SourceFile, SourceDirectory;
+    show PythonModuleDefinition, SourceFile, SourceBytes, SourceDirectory;
 
 part "src/class.dart";
 part "src/extensions/future.dart";

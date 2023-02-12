@@ -20,9 +20,7 @@ class PythonFfiMacOSDart extends PythonFfiMacOSBase with PythonFfiMacOSMixin {
 
   @override
   ByteData loadPythonFile(PythonSourceFileEntity sourceFile) {
-    if (sourceFile is SourceFile) {
-      // TODO: implement
-    } else if (sourceFile is SourceBytes) {
+    if (sourceFile is SourceBytes) {
       return ByteData.view(sourceFile.bytes.buffer);
     }
     throw Exception("Unsupported source file type: $sourceFile");
@@ -171,7 +169,7 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
       return cachedModule;
     }
 
-// convert the module name to a Python string
+    // convert the module name to a Python string
     final Pointer<PyObject> pythonModuleName =
         moduleName.toNativeUtf8().useAndFree((Pointer<Utf8> pointer) {
       final Pointer<Char> charPointer = pointer.cast<Char>();
@@ -183,12 +181,12 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
       throw PythonFfiException("Failed to convert module name $moduleName");
     }
 
-// import the module
+    // import the module
     final Pointer<PyObject> pyImport =
         bindings.PyImport_Import(pythonModuleName);
 
-// decrease the reference count of the module name,
-// since we no longer need access to this string
+    // decrease the reference count of the module name,
+    // since we no longer need access to this string
     bindings.Py_DecRef(pythonModuleName);
 
     if (pyImport == nullptr) {
@@ -230,11 +228,11 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
     final int result =
         bindings.PyList_Append(sysPath.reference, pathObject.reference);
 
-// decrease the reference count of sys.path,
-// since we no longer need access to this attribute
+    // decrease the reference count of sys.path,
+    // since we no longer need access to this attribute
     sysPath.dispose();
 
-// unload the sys module again
+    // unload the sys module again
     sys.dispose();
 
     if (result != 0) {
