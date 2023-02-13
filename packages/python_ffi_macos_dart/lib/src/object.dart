@@ -121,7 +121,7 @@ mixin _PythonObjectMacosMixin
         );
 
     if (attribute == nullptr) {
-      throw PythonFfiException("Failed to get attribute $attributeName");
+      throw UnknownAttributeException(attributeName);
     }
 
     return _PythonObjectMacos(platform, attribute) as T;
