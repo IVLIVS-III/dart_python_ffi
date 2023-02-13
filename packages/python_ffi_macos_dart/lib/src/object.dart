@@ -9,7 +9,9 @@ extension SymbolToNameExtension on Symbol {
 class _PythonObjectMacos
     extends PythonObjectInterface<PythonFfiMacOSBase, Pointer<PyObject>>
     with _PythonObjectMacosMixin {
-  _PythonObjectMacos(super.platform, super.reference);
+  _PythonObjectMacos(super.platform, super.reference) {
+    reference.incRef(platform);
+  }
 }
 
 mixin _PythonObjectMacosMixin
