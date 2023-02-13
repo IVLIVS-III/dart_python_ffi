@@ -19,6 +19,13 @@ extension ConvertToPythonExtension on Object? {
       object = fromMap(platform, value);
     } else if (value is Uint8List) {
       object = fromUint8List(platform, value);
+    } else if (value is PythonTuple) {
+      object = fromTuple(
+        platform,
+        PythonTuple<Object?, PythonFfiMacOSBase, Pointer<PyObject>>.from(
+          value.toList(growable: false),
+        ),
+      );
     } else if (value is List) {
       object = fromList(platform, value);
     } else if (value is Set) {
@@ -35,11 +42,12 @@ extension ConvertToPythonExtension on Object? {
       }
     }
 
+    platform.ensureNoPythonError();
     if (object != null) {
       return _PythonObjectMacos(platform, object);
     }
 
-    throw Exception("Unsupported type: $runtimeType");
+    throw Exception("Unsupported type converting dart -> python: $runtimeType");
   }
 
   // ignore: avoid_positional_boolean_parameters
@@ -93,6 +101,13 @@ extension ConvertToPythonExtension on Object? {
         elements._toPythonObject(platform); // list[int]
     return platform.bindings.PyBytes_FromObject(elementsObject.reference)
       ..incRef(platform);
+  }
+
+  static Pointer<PyObject> fromTuple(
+    PythonFfiMacOSBase platform,
+    PythonTuple<Object?, PythonFfiMacOSBase, Pointer<PyObject>> value,
+  ) {
+    throw UnimplementedError();
   }
 
   static Pointer<PyObject> fromList(

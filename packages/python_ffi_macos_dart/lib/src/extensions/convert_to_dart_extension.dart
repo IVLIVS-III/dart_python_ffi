@@ -35,8 +35,7 @@ extension ConvertToDartExtension on Pointer<PyObject> {
       return asList(platform);
     }
     if (isTuple(platform)) {
-      // TODO: mark list as not growable
-      return asList(platform);
+      return asTuple(platform);
     }
     if (isDict(platform)) {
       return asMap(platform);
@@ -69,6 +68,8 @@ extension ConvertToDartExtension on Pointer<PyObject> {
         return asMap(platform);
       case "list":
         return asList(platform);
+      case "tuple":
+        return List<Object?>.from(asList(platform), growable: false);
       case "set":
         return asSet(platform);
       case "generator":
@@ -169,6 +170,23 @@ extension ConvertToDartExtension on Pointer<PyObject> {
     return result;
   }
 
+  List<Object?> asTuple(PythonFfiMacOSBase platform) {
+    final List<Object?> result = <Object?>[];
+
+    final int len = platform.bindings.PyTuple_Size(this);
+    platform.ensureNoPythonError();
+
+    for (int i = 0; i < len; i++) {
+      final Pointer<PyObject> value = platform.bindings.PyTuple_GetItem(this, i)
+        ..incRef(platform);
+      final Object? valueObject = value.toDartObject(platform);
+      result.add(valueObject);
+      platform.ensureNoPythonError();
+    }
+
+    return List<Object?>.from(result, growable: false);
+  }
+
   List<Object?> asList(PythonFfiMacOSBase platform) {
     final List<Object?> result = <Object?>[];
 
@@ -176,8 +194,8 @@ extension ConvertToDartExtension on Pointer<PyObject> {
     platform.ensureNoPythonError();
 
     for (int i = 0; i < len; i++) {
-      final Pointer<PyObject> value = platform.bindings.PyList_GetItem(this, i);
-      platform.bindings.Py_IncRef(value);
+      final Pointer<PyObject> value = platform.bindings.PyList_GetItem(this, i)
+        ..incRef(platform);
       final Object? valueObject = value.toDartObject(platform);
       result.add(valueObject);
       platform.ensureNoPythonError();

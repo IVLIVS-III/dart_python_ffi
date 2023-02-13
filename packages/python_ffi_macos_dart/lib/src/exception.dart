@@ -50,6 +50,21 @@ class _PythonExceptionMacos
   @override
   Object? get traceback => pTraceback._toPythonObject(platform);
 
+  String? _nativelyFormattedTraceback() {
+    try {
+      final Object? formattedTraceback =
+          platform.importModule("traceback").getFunction("format_tb").rawCall(
+        args: <Pointer<PyObject>>[pTraceback],
+      ).toDartObject(platform);
+      if (formattedTraceback is List) {
+        return formattedTraceback.join();
+      }
+      return formattedTraceback?.toString();
+    } on Exception {
+      return null;
+    }
+  }
+
   String? _nativelyFormattedException() {
     try {
       final Object? formattedException = platform
@@ -67,12 +82,12 @@ class _PythonExceptionMacos
     }
   }
 
-  String _fallbackFormattedException() {
+  String _fallbackFormattedException([String? nativeTraceback]) {
     final String typeRepr =
         platform.bindings.PyObject_Repr(pType).asUnicodeString(platform);
     final String valueRepr =
         platform.bindings.PyObject_Repr(pValue).asUnicodeString(platform);
-    final String tracebackRepr =
+    final String tracebackRepr = nativeTraceback ??
         platform.bindings.PyObject_Repr(pTraceback).asUnicodeString(platform);
 
     return "PythonExceptionMacos($typeRepr): $valueRepr\n$tracebackRepr";
@@ -85,6 +100,7 @@ class _PythonExceptionMacos
       return "PythonExceptionMacos: $nativeException";
     }
 
-    return _fallbackFormattedException();
+    final String? nativeTraceback = _nativelyFormattedTraceback();
+    return _fallbackFormattedException(nativeTraceback);
   }
 }

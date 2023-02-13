@@ -30,6 +30,7 @@ kStr: str = "Hello World"
 kBytes: bytes = b"Hello World"
 kDict: dict[str, int] = {"one": 1, "two": 2, "three": 3}
 kList: list[int] = [1, 2, 3]
+kTuple: tuple[int, ...] = (1, 2, 3)
 kSet: set[int] = set([1, 2, 3])
 kIteratorElements: list[int] = [1, 2, 3]
 kIterableElements: list[int] = [1, 2, 3]
@@ -117,6 +118,15 @@ def receive_list(value: list[int]):
 
 def request_list() -> list[int]:
     return kList
+
+
+def receive_tuple(value: tuple[int, ...]):
+    __assert_type(value, tuple)
+    assert value == kTuple
+
+
+def request_tuple() -> tuple[int, ...]:
+    return kTuple
 
 
 def receive_set(value: set[int]):

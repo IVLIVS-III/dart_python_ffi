@@ -124,7 +124,18 @@ Future<void> typeMappings() async {
     value: const <int>[1, 2, 3],
     sendToPython: module.receive_list,
     receiveFromPython: module.request_list,
-    equals: const ListEquality<int>().equals,
+    equals: (List<int> a, List<int> b) =>
+        const ListEquality<int>().equals(a, b),
+  ).run();
+
+  TypeMappingEntry<List<int>>(
+    pythonType: "tuple[int]",
+    value: const <int>[1, 2, 3],
+    // TODO: implement
+    // sendToPython: module.receive_tuple,
+    receiveFromPython: module.request_tuple,
+    equals: (List<int> a, List<int> b) =>
+        const ListEquality<int>().equals(a, b),
   ).run();
 
   TypeMappingEntry<Set<int>>(

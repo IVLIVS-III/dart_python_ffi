@@ -4,6 +4,7 @@
 library python_ffi_interface;
 
 import "dart:async";
+import "dart:collection";
 import "dart:typed_data";
 
 import "package:collection/collection.dart";
@@ -23,3 +24,4 @@ part "src/object.dart";
 part "src/python_module_definition.dart";
 part "src/types/iterable.dart";
 part "src/types/iterator.dart";
+part "src/types/tuple.dart";
