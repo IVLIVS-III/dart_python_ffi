@@ -8,20 +8,21 @@ A Python-FFI for Dart
 
 *Stand: 2023-02-03-15-03-GMT+1*
 
-| Dart type   | Python type | dart ➞ python     | python ➞ dart     |
-|-------------|-------------|-------------------|-------------------|
-| `null`      | `None`      | ✅ complete        | ✅ complete        |
-| `bool`      | `bool`      | ✅ complete        | ✅ complete        |
-| `int`       | `int`       | ✅ complete        | ✅ complete        |
-| `double`    | `float`     | ✅ complete        | ✅ complete        |
-| `String`    | `str`       | ✅ complete        | ✅ complete        |
-| `String`    | `bytes`     | 🚫 not applicable | ✅ complete        |
-| `Uint8List` | `bytes`     | ✅ complete        | 🚫 not applicable |
-| `Map`       | `dict`      | ✅ complete        | ✅ complete        |
-| `List`      | `list`      | ✅ complete        | ✅ complete        |
-| `Set`       | `set`       | ✅ complete        | ✅ complete        |
-| `Iterable`  | `Iterable`  | ❌ missing         | ❌ missing         |
-| `Function`  | `Callable`  | ❌ missing         | ❌ missing         |
+| Dart type   | Python type | dart ➞ python     | python ➞ dart |
+|-------------|-------------|-------------------|---------------|
+| `null`      | `None`      | ✅ complete        | ✅ complete    |
+| `bool`      | `bool`      | ✅ complete        | ✅ complete    |
+| `int`       | `int`       | ✅ complete        | ✅ complete    |
+| `double`    | `float`     | ✅ complete        | ✅ complete    |
+| `String`    | `str`       | ✅ complete        | ✅ complete    |
+| `Uint8List` | `bytes`     | ✅ complete        | ✅ complete    |
+| `Map`       | `dict`      | ✅ complete        | ✅ complete    |
+| `List`      | `list`      | ✅ complete        | ✅ complete    |
+| `Set`       | `set`       | ✅ complete        | ✅ complete    |
+| `Iterator`  | `Iterator`  | ❌ missing         | ✅ complete    |
+| `Iterator`  | `Generator` | 🚫 not applicable | ✅ complete    |
+| `Iterable`  | `Iterable`  | ❌ missing         | ✅ complete    |
+| `Function`  | `Callable`  | ❌ missing         | ❌ missing     |
 
 ## Package status
 

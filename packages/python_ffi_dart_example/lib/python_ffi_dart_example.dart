@@ -32,7 +32,7 @@ class TypeMappingEntry<T extends Object?> {
       print("\ntesting $_dartType ←→ $pythonType");
       final SendTyPythonCallback<T>? sendToPython = this.sendToPython;
       if (sendToPython == null) {
-        print("├── dart –> python not implemented");
+        print("├── dart –> python skipped");
       } else {
         sendToPython(value);
         print("├── dart –> python successful");
@@ -41,7 +41,7 @@ class TypeMappingEntry<T extends Object?> {
       final ReceiveFromPythonCallback<T>? receiveFromPython =
           this.receiveFromPython;
       if (receiveFromPython == null) {
-        print("└── python –> dart not implemented");
+        print("└── python –> dart skipped");
       } else {
         final T receivedValue = receiveFromPython();
         assert(
@@ -104,16 +104,11 @@ Future<void> typeMappings() async {
     receiveFromPython: module.request_str,
   ).run();
 
-  TypeMappingEntry<String>(
-    pythonType: "bytes",
-    value: "Hello World",
-    receiveFromPython: module.request_bytes,
-  ).run();
-
   TypeMappingEntry<Uint8List>(
     pythonType: "bytes",
     value: Uint8List.fromList("Hello World".codeUnits),
     sendToPython: module.receive_bytes,
+    receiveFromPython: module.request_bytes,
   ).run();
 
   TypeMappingEntry<Map<String, int>>(
@@ -138,5 +133,56 @@ Future<void> typeMappings() async {
     sendToPython: module.receive_set,
     receiveFromPython: module.request_set,
     equals: const SetEquality<int>().equals,
+  ).run();
+
+  Iterable<int> iterable() sync* {
+    yield 1;
+    yield 2;
+    yield 3;
+  }
+
+  TypeMappingEntry<Iterable<int>>(
+    pythonType: "iterable[int]",
+    value: iterable(),
+    // TODO: implement
+    // sendToPython: module.receive_iterable,
+    receiveFromPython: module.request_iterable,
+    equals: const IterableEquality<int>().equals,
+  ).run();
+
+  TypeMappingEntry<Iterator<int>>(
+    pythonType: "iterator[int]",
+    value: iterable().iterator,
+    // TODO: implement
+    // sendToPython: module.receive_iterator,
+    receiveFromPython: module.request_iterator,
+    equals: (Iterator<int> a, Iterator<int> b) {
+      while (a.moveNext()) {
+        if (!b.moveNext()) {
+          return false;
+        }
+        if (a.current != b.current) {
+          return false;
+        }
+      }
+      return !b.moveNext();
+    },
+  ).run();
+
+  TypeMappingEntry<Iterator<int>>(
+    pythonType: "generator[int]",
+    value: iterable().iterator,
+    receiveFromPython: module.request_generator,
+    equals: (Iterator<int> a, Iterator<int> b) {
+      while (a.moveNext()) {
+        if (!b.moveNext()) {
+          return false;
+        }
+        if (a.current != b.current) {
+          return false;
+        }
+      }
+      return !b.moveNext();
+    },
   ).run();
 }

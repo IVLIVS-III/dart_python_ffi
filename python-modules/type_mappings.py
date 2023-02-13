@@ -1,3 +1,29 @@
+from dataclasses import dataclass
+from typing import Any, Generator, Iterable, Iterator, Self, TypeVar, Generic
+
+
+T = TypeVar("T")
+
+
+@dataclass
+class CustomIterator(Generic[T]):
+    __iterator: Iterator[T]
+
+    def __iter__(self: Self) -> Self:
+        return self
+
+    def __next__(self: Self) -> T:
+        return next(self.__iterator)
+
+
+@dataclass
+class CustomIterable(Generic[T]):
+    __iterable: Iterable[T]
+
+    def __iter__(self: Self) -> CustomIterator[T]:
+        return CustomIterator(iter(self.__iterable))
+
+
 kInt: int = 42
 kFloat: float = 3.14
 kStr: str = "Hello World"
@@ -5,9 +31,11 @@ kBytes: bytes = b"Hello World"
 kDict: dict[str, int] = {"one": 1, "two": 2, "three": 3}
 kList: list[int] = [1, 2, 3]
 kSet: set[int] = set([1, 2, 3])
+kIteratorElements: list[int] = [1, 2, 3]
+kIterableElements: list[int] = [1, 2, 3]
 
 
-def __assert_type(value, t: type):
+def __assert_type(value: Any, t: type):
     assert isinstance(value, t), f"expected {t}, but got {type(value)}"
 
 
@@ -98,3 +126,25 @@ def receive_set(value: set[int]):
 
 def request_set() -> set[int]:
     return kSet
+
+
+def receive_iterator(value: Iterator[int]):
+    __assert_type(value, Iterator)
+    assert list(value) == kIteratorElements
+
+
+def request_iterator() -> Iterator[int]:
+    return CustomIterator(kIterableElements)
+
+
+def request_generator() -> Generator[int, None, None]:
+    yield from kIteratorElements
+
+
+def receive_iterable(value: Iterable[int]):
+    __assert_type(value, Iterable)
+    assert list(iter(value)) == kIterableElements
+
+
+def request_iterable() -> Iterable[int]:
+    return CustomIterable(kIterableElements)

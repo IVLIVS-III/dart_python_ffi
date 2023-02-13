@@ -1,85 +1,5 @@
 part of python_ffi_macos_dart;
 
-extension ConvertToPythonExtension on Object? {
-  _PythonObjectMacos _toPythonObject(PythonFfiMacOSBase platform) {
-    final Object? value = this;
-    Pointer<PyObject>? object;
-
-    if (value == null) {
-      object = platform.bindings.Py_None;
-    } else if (value is bool) {
-      object = value ? platform.bindings.Py_True : platform.bindings.Py_False;
-    } else if (value is int) {
-      object = platform.bindings.PyLong_FromLong(value);
-      platform.bindings.Py_IncRef(object);
-    } else if (value is double) {
-      object = platform.bindings.PyFloat_FromDouble(value);
-      platform.bindings.Py_IncRef(object);
-    } else if (value is String) {
-      object = value.toNativeUtf8().useAndFree<Pointer<PyObject>>(
-            (Pointer<Utf8> pointer) =>
-                platform.bindings.PyUnicode_FromString(pointer.cast<Char>()),
-          );
-      platform.bindings.Py_IncRef(object);
-    } else if (value is Map) {
-      object = platform.bindings.PyDict_New();
-      platform.bindings.Py_IncRef(object);
-      for (final Object? key in value.keys) {
-        final Object? val = value[key];
-
-        final Pointer<PyObject> keyObject =
-            key._toPythonObject(platform).reference;
-        platform.bindings.Py_IncRef(keyObject);
-
-        final Pointer<PyObject> valueObject =
-            val._toPythonObject(platform).reference;
-        platform.bindings.Py_IncRef(valueObject);
-
-        platform.bindings.PyDict_SetItem(object, keyObject, valueObject);
-      }
-    } else if (value is Uint8List) {
-      final List<int> elements = List<int>.from(value);
-      final _PythonObjectMacos elementsObject =
-          elements._toPythonObject(platform); // list[int]
-      platform.bindings.Py_IncRef(elementsObject.reference);
-      object = platform.bindings.PyBytes_FromObject(elementsObject.reference);
-      platform.bindings.Py_IncRef(object);
-    } else if (value is List) {
-      object = platform.bindings.PyList_New(value.length);
-      platform.bindings.Py_IncRef(object);
-      for (int i = 0; i < value.length; i++) {
-        final Object? val = value[i];
-
-        final Pointer<PyObject> valueObject =
-            val._toPythonObject(platform).reference;
-        platform.bindings.Py_IncRef(valueObject);
-
-        platform.bindings.PyList_SetItem(object, i, valueObject);
-      }
-    } else if (value is Set) {
-      final List<Object?> elements = value.toList();
-      final _PythonObjectMacos elementsObject =
-          elements._toPythonObject(platform);
-      platform.bindings.Py_IncRef(elementsObject.reference);
-
-      object = platform.bindings.PySet_New(elementsObject.reference);
-      platform.bindings.Py_IncRef(object);
-    } else if (value is PythonObjectInterface) {
-      final Object? reference = value.reference;
-      if (reference is Pointer<PyObject>) {
-        platform.bindings.Py_IncRef(reference);
-        object = reference;
-      }
-    }
-
-    if (object != null) {
-      return _PythonObjectMacos(platform, object);
-    }
-
-    throw Exception("Unsupported type: $runtimeType");
-  }
-}
-
 extension ConvertToDartExtension on Pointer<PyObject> {
   Object? toDartObject(PythonFfiMacOSBase platform) {
     final Pointer<PyObject> object = this;
@@ -87,21 +7,55 @@ extension ConvertToDartExtension on Pointer<PyObject> {
     if (object == nullptr) {
       return null;
     }
-    if (platform.bindings.Py_IsNone(object) == 1) {
-      platform.bindings.Py_DecRef(object);
+    if (isNone(platform)) {
+      object.decRef(platform);
       return null;
     }
-    if (object == platform.bindings.Py_True) {
-      platform.bindings.Py_DecRef(object);
+    if (isTrue(platform)) {
+      object.decRef(platform);
       return true;
     }
-    if (object == platform.bindings.Py_False) {
-      platform.bindings.Py_DecRef(object);
+    if (isFalse(platform)) {
+      object.decRef(platform);
       return false;
     }
+    if (isInt(platform)) {
+      return asInt(platform);
+    }
+    if (isFloat(platform)) {
+      return asDouble(platform);
+    }
+    if (isString(platform)) {
+      return asUnicodeString(platform);
+    }
+    if (isBytes(platform)) {
+      return asBytes(platform);
+    }
+    if (isList(platform)) {
+      return asList(platform);
+    }
+    if (isTuple(platform)) {
+      // TODO: mark list as not growable
+      return asList(platform);
+    }
+    if (isDict(platform)) {
+      return asMap(platform);
+    }
+    if (isSet(platform)) {
+      return asSet(platform);
+    }
+    if (isIterator(platform)) {
+      return asIterator(platform);
+    }
+    if (isIterable(platform)) {
+      return asIterable(platform);
+    }
 
+    // backup conversions matching the name as string
     final String nameString = typeName;
-
+    print(
+      "Warning: falling back to conversion via name as string for '$nameString'",
+    );
     switch (nameString) {
       case "int":
         return asInt(platform);
@@ -110,13 +64,15 @@ extension ConvertToDartExtension on Pointer<PyObject> {
       case "str":
         return asUnicodeString(platform);
       case "bytes":
-        return asString(platform);
+        return asBytes(platform);
       case "dict":
         return asMap(platform);
       case "list":
         return asList(platform);
       case "set":
         return asSet(platform);
+      case "generator":
+        return asIterator(platform);
     }
 
     if (platform.classNames.contains(nameString)) {
@@ -142,12 +98,22 @@ extension ConvertToDartExtension on Pointer<PyObject> {
     return result;
   }
 
-  String asString(PythonFfiMacOSBase platform) {
-    /*
-    print(
-      "trying to convert detected string @$hexAddress from type name: $typeName",
-    );
-    */
+  Uint8List asBytes(PythonFfiMacOSBase platform) {
+    final Pointer<PyObject> bytes = platform.bindings.PyBytes_FromObject(this);
+    if (bytes == nullptr) {
+      throw PythonFfiException("Failed to convert to bytes");
+    }
+    final int size = platform.bindings.PyBytes_Size(bytes);
+    final Uint8List result = Uint8List(size);
+    for (int i = 0; i < size; i++) {
+      result[i] =
+          platform.bindings.PySequence_GetItem(bytes, i).asInt(platform);
+    }
+    bytes.decRef(platform);
+    return result;
+  }
+
+  String _bytesAsString(PythonFfiMacOSBase platform) {
     final Pointer<Char> res = platform.bindings.PyBytes_AsString(this);
 
     // check for errors
@@ -164,7 +130,7 @@ extension ConvertToDartExtension on Pointer<PyObject> {
 
   String asUnicodeString(PythonFfiMacOSBase platform) {
     final String result =
-        platform.bindings.PyUnicode_AsUTF8String(this).asString(platform);
+        platform.bindings.PyUnicode_AsUTF8String(this)._bytesAsString(platform);
     // TODO: correctly handle refcount
     //       disabling this prevents random crashes converting constant strings,
     //       but probably leaks memory
@@ -235,4 +201,14 @@ extension ConvertToDartExtension on Pointer<PyObject> {
 
     return result;
   }
+
+  Iterable<Object?> asIterable(PythonFfiMacOSBase platform) =>
+      PythonIterable<Object?, PythonFfiMacOSBase, Pointer<PyObject>>(
+        _PythonObjectMacos(platform, this),
+      );
+
+  Iterator<Object?> asIterator(PythonFfiMacOSBase platform) =>
+      PythonIterator<Object?, PythonFfiMacOSBase, Pointer<PyObject>>(
+        _PythonObjectMacos(platform, this),
+      );
 }

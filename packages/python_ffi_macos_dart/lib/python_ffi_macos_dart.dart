@@ -23,9 +23,12 @@ export "package:python_ffi_macos_dart/src/ffi/generated_bindings.g.dart"
 
 part "src/class.dart";
 part "src/exception.dart";
-part "src/extensions/convert_extension.dart";
+part "src/extensions/convert_to_dart_extension.dart";
+part "src/extensions/convert_to_python_extension.dart";
 part "src/extensions/malloc_extension.dart";
 part "src/extensions/object_extension.dart";
+part "src/extensions/refcount_extension.dart";
+part "src/extensions/type_extension.dart";
 part "src/function.dart";
 part "src/module.dart";
 part "src/object.dart";

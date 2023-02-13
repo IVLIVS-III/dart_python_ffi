@@ -50,7 +50,7 @@ class TypeMappingsModule extends PythonModule {
   void receive_bytes(Uint8List value) =>
       getFunction("receive_bytes").call(<Object?>[value]);
 
-  String request_bytes() => getFunction("request_bytes").call(<Object?>[]);
+  Uint8List request_bytes() => getFunction("request_bytes").call(<Object?>[]);
 
   void receive_dict(Map<String, int> value) =>
       getFunction("receive_dict").call(<Object?>[value]);
@@ -69,6 +69,24 @@ class TypeMappingsModule extends PythonModule {
 
   Set<int> request_set() =>
       Set<int>.from(getFunction("request_set").call(<Object?>[]));
+
+  void receive_iterator(Iterator<int> value) =>
+      getFunction("receive_iterator").call(<Object?>[value]);
+
+  Iterator<int> request_iterator() => TypedIterator<int>.from(
+        getFunction("request_iterator").call(<Object?>[]),
+      );
+
+  Iterator<int> request_generator() => TypedIterator<int>.from(
+        getFunction("request_generator").call(<Object?>[]),
+      );
+
+  void receive_iterable(Iterable<int> value) =>
+      getFunction("receive_iterable").call(<Object?>[value]);
+
+  Iterable<int> request_iterable() => TypedIterable<int>.from(
+        getFunction("request_iterable").call(<Object?>[]),
+      );
 
   static PythonModuleDefinition get definition => PythonModuleDefinition(
         name: "type_mappings",

@@ -21,3 +21,5 @@ part "src/function.dart";
 part "src/module.dart";
 part "src/object.dart";
 part "src/python_module_definition.dart";
+part "src/types/iterable.dart";
+part "src/types/iterator.dart";

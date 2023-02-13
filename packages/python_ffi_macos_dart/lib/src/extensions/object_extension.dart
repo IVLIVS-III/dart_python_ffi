@@ -1,28 +1,18 @@
 part of python_ffi_macos_dart;
 
-
 extension AddressExtension<T extends NativeType> on Pointer<T> {
   String get hexAddress => address.toRadixString(16);
 }
 
 extension ObjectExtension on Pointer<PyObject> {
-  String get typeName {
+  String get typeName => typeObject.name;
+
+  Pointer<PyTypeObject> get typeObject {
     final Pointer<PyTypeObject> typeObject = ref.ob_type;
     if (typeObject == nullptr) {
       throw PythonFfiException("Failed to get type object");
     }
-    // print("getting typeName from typeObject @${typeObject.hexAddress}");
-
-    final Pointer<Char> typeName = typeObject.ref.tp_name;
-    if (typeName == nullptr) {
-      throw PythonFfiException("Failed to get type name");
-    }
-    // print("getting typeName @${typeObject.hexAddress}");
-
-    final String typeNameString = typeName.cast<Utf8>().toDartString();
-    // print("got typeNameString $typeNameString");
-
-    return typeNameString;
+    return typeObject;
   }
 
   bool get isClass {
@@ -32,5 +22,17 @@ extension ObjectExtension on Pointer<PyObject> {
         .cast<Utf8>()
         .toDartString();
     return baseType == "type";
+  }
+}
+
+extension TypeObjectExtension on Pointer<PyTypeObject> {
+  int get flags => ref.tp_flags;
+
+  String get name {
+    final Pointer<Char> typeName = ref.tp_name;
+    if (typeName == nullptr) {
+      throw PythonFfiException("Failed to get type name");
+    }
+    return typeName.cast<Utf8>().toDartString();
   }
 }

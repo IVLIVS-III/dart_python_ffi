@@ -184,7 +184,7 @@ mixin _PythonObjectMacosMixin
 
   @override
   void dispose() {
-    platform.bindings.Py_DecRef(reference);
+    reference.decRef(platform);
   }
 
   @override

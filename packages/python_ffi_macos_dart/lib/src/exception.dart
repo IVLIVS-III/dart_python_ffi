@@ -37,6 +37,19 @@ class _PythonExceptionMacos
   final Pointer<PyObject> pValue;
   final Pointer<PyObject> pTraceback;
 
+  @override
+  String get type => platform.bindings
+      .PyObject_Repr(pType)
+      .asUnicodeString(platform)
+      .split("(")
+      .first;
+
+  @override
+  Object? get value => pValue._toPythonObject(platform);
+
+  @override
+  Object? get traceback => pTraceback._toPythonObject(platform);
+
   String? _nativelyFormattedException() {
     try {
       final Object? formattedException = platform
