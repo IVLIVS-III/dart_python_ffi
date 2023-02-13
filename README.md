@@ -43,6 +43,20 @@ A Python-FFI for Dart
 | python_ffi_dart_example       |        | The example command line application showcasing the python_ffi_dart package, a Python-FFI for Dart. |
 | python_ffi_bundler            |        |                                                                                                     |
 
+## Usage
+
+### `python_ffi_bundler`
+
+```shell
+dart run packages/python_ffi_bundler/bin/python_ffi_bundler.dart --help
+```
+
+### `python_ffi_dart_example`
+
+```shell
+dart run packages/python_ffi_dart_example/bin/python_ffi_dart_example.dart --help
+```
+
 ## Package graph
 
 ```

@@ -26,6 +26,8 @@ abstract class _PythonFfiMacOS extends PythonFfiPlatform<Pointer<PyObject>>
       return PlatformAssetBundle().load("python-modules/${sourceFile.name}");
     } else if (sourceFile is SourceBytes) {
       return ByteData.view(sourceFile.bytes.buffer);
+    } else if (sourceFile is SourceBase64) {
+      return ByteData.view(base64Decode(sourceFile.base64).buffer);
     }
     throw Exception("Unsupported source file type: $sourceFile");
   }

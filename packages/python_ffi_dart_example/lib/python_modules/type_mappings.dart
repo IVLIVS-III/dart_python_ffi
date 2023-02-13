@@ -72,7 +72,7 @@ class TypeMappingsModule extends PythonModule {
 
   static PythonModuleDefinition get definition => PythonModuleDefinition(
         name: "type_mappings",
-        root: SourceBytes("type_mappings.py", type_mappings_py.kBytes),
+        root: SourceBase64("type_mappings.py", type_mappings_py.kBase64),
         classNames: classNames,
       );
 

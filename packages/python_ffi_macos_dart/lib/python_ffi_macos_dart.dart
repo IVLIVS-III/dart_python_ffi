@@ -7,6 +7,7 @@ library python_ffi_macos_dart;
 
 import "dart:async";
 import "dart:collection";
+import "dart:convert";
 import "dart:ffi";
 import "dart:io";
 import "dart:typed_data";
@@ -21,21 +22,13 @@ export "package:python_ffi_macos_dart/src/ffi/generated_bindings.g.dart"
     show PyObject;
 
 part "src/class.dart";
-
 part "src/exception.dart";
-
 part "src/extensions/convert_extension.dart";
-
 part "src/extensions/malloc_extension.dart";
-
 part "src/extensions/object_extension.dart";
-
 part "src/function.dart";
-
 part "src/module.dart";
-
 part "src/object.dart";
-
 part "src/python_ffi_macos_dart_base.dart";
 
 // const String _libName = "libpython3.11";

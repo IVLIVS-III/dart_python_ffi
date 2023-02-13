@@ -1,4 +1,5 @@
 import "dart:async";
+import "dart:convert";
 import "dart:io";
 import "dart:typed_data";
 
@@ -215,13 +216,22 @@ class ConsoleModuleBundle<T extends Object>
 
   @override
   ByteData _transformSourceData(ByteData data) {
-    const String prefix = """
+    const String bytesPrefix = """
 import "dart:typed_data";
 
 final Uint8List kBytes = Uint8List.fromList(<int>[""";
-    const String suffix = """
+    const String bytesSuffix = """
 ]);
 """;
+
+    const String base64Prefix = """
+const String kBase64 = \"""";
+    const String base64Suffix = """
+";
+""";
+
+    final String base64 =
+        base64Encode(super._transformSourceData(data).buffer.asUint8List());
 
     final String bytes = super
         ._transformSourceData(data)
@@ -230,10 +240,11 @@ final Uint8List kBytes = Uint8List.fromList(<int>[""";
         .map((int byte) => "$byte")
         .join(", ");
 
-    final String content = prefix + bytes + suffix;
-    return ByteData.view(
-      Uint8List.fromList(content.codeUnits).buffer,
-    );
+    final String bytesContent = bytesPrefix + bytes + bytesSuffix;
+    final String base64Content = base64Prefix + base64 + base64Suffix;
+
+    final String content = "$bytesContent\n$base64Content";
+    return ByteData.view(Uint8List.fromList(content.codeUnits).buffer);
   }
 
   @override

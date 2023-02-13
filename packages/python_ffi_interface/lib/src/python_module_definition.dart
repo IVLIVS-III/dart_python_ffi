@@ -27,6 +27,12 @@ class SourceBytes extends PythonSourceFileEntity {
   final Uint8List bytes;
 }
 
+class SourceBase64 extends PythonSourceFileEntity {
+  SourceBase64(super.name, this.base64);
+
+  final String base64;
+}
+
 class SourceDirectory extends PythonSourceEntity {
   SourceDirectory(super.name);
 
