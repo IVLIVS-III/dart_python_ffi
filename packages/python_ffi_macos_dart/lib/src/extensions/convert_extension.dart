@@ -7,26 +7,21 @@ extension ConvertToPythonExtension on Object? {
 
     if (value == null) {
       object = platform.bindings.Py_None;
-    }
-    if (value is bool) {
+    } else if (value is bool) {
       object = value ? platform.bindings.Py_True : platform.bindings.Py_False;
-    }
-    if (value is int) {
+    } else if (value is int) {
       object = platform.bindings.PyLong_FromLong(value);
       platform.bindings.Py_IncRef(object);
-    }
-    if (value is double) {
+    } else if (value is double) {
       object = platform.bindings.PyFloat_FromDouble(value);
       platform.bindings.Py_IncRef(object);
-    }
-    if (value is String) {
+    } else if (value is String) {
       object = value.toNativeUtf8().useAndFree<Pointer<PyObject>>(
             (Pointer<Utf8> pointer) =>
                 platform.bindings.PyUnicode_FromString(pointer.cast<Char>()),
           );
       platform.bindings.Py_IncRef(object);
-    }
-    if (value is Map) {
+    } else if (value is Map) {
       object = platform.bindings.PyDict_New();
       platform.bindings.Py_IncRef(object);
       for (final Object? key in value.keys) {
@@ -42,8 +37,14 @@ extension ConvertToPythonExtension on Object? {
 
         platform.bindings.PyDict_SetItem(object, keyObject, valueObject);
       }
-    }
-    if (value is List) {
+    } else if (value is Uint8List) {
+      final List<int> elements = List<int>.from(value);
+      final _PythonObjectMacos elementsObject =
+          elements._toPythonObject(platform); // list[int]
+      platform.bindings.Py_IncRef(elementsObject.reference);
+      object = platform.bindings.PyBytes_FromObject(elementsObject.reference);
+      platform.bindings.Py_IncRef(object);
+    } else if (value is List) {
       object = platform.bindings.PyList_New(value.length);
       platform.bindings.Py_IncRef(object);
       for (int i = 0; i < value.length; i++) {
@@ -55,8 +56,7 @@ extension ConvertToPythonExtension on Object? {
 
         platform.bindings.PyList_SetItem(object, i, valueObject);
       }
-    }
-    if (value is Set) {
+    } else if (value is Set) {
       final List<Object?> elements = value.toList();
       final _PythonObjectMacos elementsObject =
           elements._toPythonObject(platform);
@@ -64,8 +64,7 @@ extension ConvertToPythonExtension on Object? {
 
       object = platform.bindings.PySet_New(elementsObject.reference);
       platform.bindings.Py_IncRef(object);
-    }
-    if (value is PythonObjectInterface) {
+    } else if (value is PythonObjectInterface) {
       final Object? reference = value.reference;
       if (reference is Pointer<PyObject>) {
         platform.bindings.Py_IncRef(reference);

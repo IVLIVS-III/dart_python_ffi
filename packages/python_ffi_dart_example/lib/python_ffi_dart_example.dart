@@ -1,21 +1,26 @@
+import "dart:typed_data";
+
 import "package:collection/collection.dart";
 import "package:python_ffi_dart_example/python_modules/type_mappings.dart";
+
+typedef SendTyPythonCallback<T> = void Function(T value);
+typedef ReceiveFromPythonCallback<T> = T Function();
 
 class TypeMappingEntry<T extends Object?> {
   const TypeMappingEntry({
     this.dartType,
     required this.pythonType,
     required this.value,
-    required this.sendToPython,
-    required this.receiveFromPython,
+    this.sendToPython,
+    this.receiveFromPython,
     this.equals,
   });
 
   final String? dartType;
   final String pythonType;
   final T value;
-  final Function(T) sendToPython;
-  final T Function() receiveFromPython;
+  final SendTyPythonCallback<T>? sendToPython;
+  final ReceiveFromPythonCallback<T>? receiveFromPython;
   final bool Function(T, T)? equals;
 
   String get _dartType => dartType ?? T.toString();
@@ -25,14 +30,26 @@ class TypeMappingEntry<T extends Object?> {
   void run() {
     try {
       print("\ntesting $_dartType ←→ $pythonType");
-      sendToPython(value);
-      print("├── dart –> python successful");
-      final T receivedValue = receiveFromPython();
-      assert(
-        _equals(receivedValue, value),
-        "Python returned $receivedValue, but expected $value",
-      );
-      print("└── python –> dart successful");
+      final SendTyPythonCallback<T>? sendToPython = this.sendToPython;
+      if (sendToPython == null) {
+        print("├── dart –> python not implemented");
+      } else {
+        sendToPython(value);
+        print("├── dart –> python successful");
+      }
+
+      final ReceiveFromPythonCallback<T>? receiveFromPython =
+          this.receiveFromPython;
+      if (receiveFromPython == null) {
+        print("└── python –> dart not implemented");
+      } else {
+        final T receivedValue = receiveFromPython();
+        assert(
+          _equals(receivedValue, value),
+          "Python returned $receivedValue, but expected $value",
+        );
+        print("└── python –> dart successful");
+      }
     } on Exception catch (e) {
       print("└── error: $e");
     }
@@ -87,7 +104,17 @@ Future<void> typeMappings() async {
     receiveFromPython: module.request_str,
   ).run();
 
-  // TODO: implement bytes / Uint8List / String
+  TypeMappingEntry<String>(
+    pythonType: "bytes",
+    value: "Hello World",
+    receiveFromPython: module.request_bytes,
+  ).run();
+
+  TypeMappingEntry<Uint8List>(
+    pythonType: "bytes",
+    value: Uint8List.fromList("Hello World".codeUnits),
+    sendToPython: module.receive_bytes,
+  ).run();
 
   TypeMappingEntry<Map<String, int>>(
     pythonType: "dict[str, int]",

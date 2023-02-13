@@ -7,6 +7,10 @@ kList: list[int] = [1, 2, 3]
 kSet: set[int] = set([1, 2, 3])
 
 
+def __assert_type(value, t: type):
+    assert isinstance(value, t), f"expected {t}, but got {type(value)}"
+
+
 def receive_none(value: None):
     assert value is None
 
@@ -16,7 +20,7 @@ def request_none() -> None:
 
 
 def receive_bool_true(value: bool):
-    assert isinstance(value, bool)
+    __assert_type(value, bool)
     assert value is True
 
 
@@ -25,7 +29,7 @@ def request_bool_true() -> bool:
 
 
 def receive_bool_false(value: bool):
-    assert isinstance(value, bool)
+    __assert_type(value, bool)
     assert value is False
 
 
@@ -33,9 +37,8 @@ def request_bool_false() -> bool:
     return False
 
 
-
 def receive_int(value: int):
-    assert isinstance(value, int)
+    __assert_type(value, int)
     assert value == kInt
 
 
@@ -44,7 +47,7 @@ def request_int() -> int:
 
 
 def receive_float(value: float):
-    assert isinstance(value, float)
+    __assert_type(value, float)
     assert value == kFloat
 
 
@@ -53,7 +56,7 @@ def request_float() -> float:
 
 
 def receive_str(value: str):
-    assert isinstance(value, str)
+    __assert_type(value, str)
     assert value == kStr
 
 
@@ -61,9 +64,8 @@ def request_str() -> str:
     return kStr
 
 
-# TODO: implement on Dart side
 def receive_bytes(value: bytes):
-    assert isinstance(value, bytes)
+    __assert_type(value, bytes)
     assert value == kBytes
 
 
@@ -72,7 +74,7 @@ def request_bytes() -> bytes:
 
 
 def receive_dict(value: dict[str, int]):
-    assert isinstance(value, dict)
+    __assert_type(value, dict)
     assert value == kDict
 
 
@@ -81,7 +83,7 @@ def request_dict() -> dict[str, int]:
 
 
 def receive_list(value: list[int]):
-    assert isinstance(value, list)
+    __assert_type(value, list)
     assert value == kList
 
 
@@ -90,7 +92,7 @@ def request_list() -> list[int]:
 
 
 def receive_set(value: set[int]):
-    assert isinstance(value, set)
+    __assert_type(value, set)
     assert value == kSet
 
 

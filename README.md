@@ -16,7 +16,7 @@ A Python-FFI for Dart
 | `double`    | `float`     | ✅ complete        | ✅ complete        |
 | `String`    | `str`       | ✅ complete        | ✅ complete        |
 | `String`    | `bytes`     | 🚫 not applicable | ✅ complete        |
-| `Uint8List` | `bytes`     | ❌ missing         | 🚫 not applicable |
+| `Uint8List` | `bytes`     | ✅ complete        | 🚫 not applicable |
 | `Map`       | `dict`      | ✅ complete        | ✅ complete        |
 | `List`      | `list`      | ✅ complete        | ✅ complete        |
 | `Set`       | `set`       | ✅ complete        | ✅ complete        |
