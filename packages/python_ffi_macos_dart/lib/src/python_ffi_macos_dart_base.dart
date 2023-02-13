@@ -157,6 +157,9 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
   void pythonErrorPrint() => bindings.PyErr_Print();
 
   @override
+  void pythonErrorClear() => bindings.PyErr_Clear();
+
+  @override
   void ensureNoPythonError() {
     if (pythonErrorOccurred()) {
       throw _PythonExceptionMacos.fetch(this);

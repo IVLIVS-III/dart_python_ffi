@@ -40,6 +40,9 @@ abstract class PythonFfiDelegate<R extends Object?> extends BaseInterface {
   /// Prints the current python exception
   void pythonErrorPrint();
 
+  /// Clears the current python exception
+  void pythonErrorClear();
+
   /// Throws a dart exception if an exception occurred in python
   void ensureNoPythonError();
 
@@ -122,6 +125,11 @@ class _DummyDelegate extends PythonFfiDelegate<Object?> {
   @override
   void pythonErrorPrint() {
     // TODO: implement pythonErrorPrint
+  }
+
+  @override
+  void pythonErrorClear() {
+    // TODO: implement pythonErrorClear
   }
 
   @override
