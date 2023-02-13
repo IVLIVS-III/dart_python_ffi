@@ -13,6 +13,7 @@ export "package:python_ffi_interface/python_ffi_interface.dart";
 
 part "src/class.dart";
 part "src/extensions/future.dart";
+part "src/function.dart";
 part "src/module.dart";
 part "src/object.dart";
 part "src/python_ffi_dart_base.dart";
