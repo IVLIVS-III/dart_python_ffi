@@ -196,4 +196,18 @@ Future<void> typeMappings() async {
       return !b.moveNext();
     },
   ).run();
+
+  /*
+  TypeMappingEntry<int Function(int)>(
+    pythonType: "Callable[[int], int]",
+    value: (int x) {
+      assert(x == 1, "Expected 1, but got $x");
+      return 2;
+    },
+    // TODO: implement
+    // sendToPython: module.receive_callable,
+    receiveFromPython: module.request_callable,
+    equals: (int Function(int) a, int Function(int) b) => a(1) == b(1),
+  ).run();
+  */
 }

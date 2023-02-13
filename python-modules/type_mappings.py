@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, Generator, Iterable, Iterator, Self, TypeVar, Generic
+from typing import Any, Callable, Generator, Iterable, Iterator, Self, TypeVar, Generic
 
 
 T = TypeVar("T")
@@ -34,6 +34,8 @@ kTuple: tuple[int, ...] = (1, 2, 3)
 kSet: set[int] = set([1, 2, 3])
 kIteratorElements: list[int] = [1, 2, 3]
 kIterableElements: list[int] = [1, 2, 3]
+kCallableArg: int = 1
+kCallableResult: int = 2
 
 
 def __assert_type(value: Any, t: type):
@@ -158,3 +160,15 @@ def receive_iterable(value: Iterable[int]):
 
 def request_iterable() -> Iterable[int]:
     return CustomIterable(kIterableElements)
+
+
+def receive_callable(value: Callable[[int], int]):
+    __assert_type(value, Callable)
+    assert value(kCallableArg) == kCallableResult
+
+
+def request_callable() -> Callable[[int], int]:
+    def inner(x: int) -> int:
+        assert x == kCallableArg
+        return kCallableResult
+    return inner

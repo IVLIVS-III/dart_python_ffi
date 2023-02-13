@@ -96,6 +96,12 @@ class TypeMappingsModule extends PythonModule {
         getFunction("request_iterable").call(<Object?>[]),
       );
 
+  void receive_callable(int Function(int) value) =>
+      getFunction("receive_callable").call(<Object?>[value]);
+
+  PythonFunction request_callable() =>
+      getFunction("request_callable").call(<Object?>[]);
+
   static PythonModuleDefinition get definition => PythonModuleDefinition(
         name: "type_mappings",
         root: SourceBase64("type_mappings.py", type_mappings_py.kBase64),

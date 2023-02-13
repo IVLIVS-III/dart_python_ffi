@@ -74,6 +74,8 @@ extension ConvertToDartExtension on Pointer<PyObject> {
         return asSet(platform);
       case "generator":
         return asIterator(platform);
+      case "function":
+        return asFunction(platform);
     }
 
     if (platform.classNames.contains(nameString)) {
@@ -131,7 +133,7 @@ extension ConvertToDartExtension on Pointer<PyObject> {
 
   String asUnicodeString(PythonFfiMacOSBase platform) {
     final String result =
-        platform.bindings.PyUnicode_AsUTF8String(this)._bytesAsString(platform);
+    platform.bindings.PyUnicode_AsUTF8String(this)._bytesAsString(platform);
     // TODO: correctly handle refcount
     //       disabling this prevents random crashes converting constant strings,
     //       but probably leaks memory
@@ -158,7 +160,7 @@ extension ConvertToDartExtension on Pointer<PyObject> {
       platform.bindings.Py_IncRef(key);
 
       final Pointer<PyObject> value =
-          platform.bindings.PyDict_GetItem(this, key);
+      platform.bindings.PyDict_GetItem(this, key);
       platform.bindings.Py_IncRef(value);
 
       final Object? keyObject = key.toDartObject(platform);
@@ -229,4 +231,7 @@ extension ConvertToDartExtension on Pointer<PyObject> {
       PythonIterator<Object?, PythonFfiMacOSBase, Pointer<PyObject>>(
         _PythonObjectMacos(platform, this),
       );
+
+  PythonFunctionMacos asFunction(PythonFfiMacOSBase platform) =>
+      PythonFunctionMacos(platform, this);
 }
