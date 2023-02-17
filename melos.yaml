@@ -11,6 +11,14 @@ command:
 scripts:
   analyze:
     exec: dart analyze . --fatal-infos
+  compile-bundler:
+    exec: dart compile exe bin/python_ffi_bundler.dart -o ../../bin/bundler
+    select-package:
+      scope: python_ffi_bundler
+  compile-example:
+    exec: dart compile exe bin/python_ffi_dart_example.dart -o ../../bin/example
+    select-package:
+      scope: python_ffi_dart_example
   ffigen:
     exec: |
       dart run ffigen

@@ -50,11 +50,29 @@ A Python-FFI for Dart
 
 ### `python_ffi_bundler`
 
+#### Compile & run AOT
+
+```shell
+melos compile-bundler
+bin/bundler --help
+```
+
+#### Run JIT
+
 ```shell
 dart run packages/python_ffi_bundler/bin/python_ffi_bundler.dart --help
 ```
 
 ### `python_ffi_dart_example`
+
+#### Compile & run AOT
+
+```shell
+melos compile-example
+bin/example --help
+```
+
+#### Run JIT
 
 ```shell
 dart run packages/python_ffi_dart_example/bin/python_ffi_dart_example.dart --help
