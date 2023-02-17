@@ -75,4 +75,9 @@ class MethodChannelPythonFfi extends PythonFfiPlatform<Object?> {
   void pythonErrorPrint() {
     // TODO: implement pythonErrorPrint
   }
+
+  @override
+  void pythonErrorClear() {
+    // TODO: implement pythonErrorClear
+  }
 }
