@@ -74,5 +74,15 @@ class PythonClassMacos
         );
 
   @override
-  String toString() => getMethod("__str__").call<String>(<Object?>[]);
+  String toString() {
+    try {
+      return getMethod("__str__").call<String>(<Object?>[]);
+    } on UnknownAttributeException {
+      try {
+        return getMethod("__repr__").call<String>(<Object?>[]);
+      } on UnknownAttributeException {
+        return super.toString();
+      }
+    }
+  }
 }
