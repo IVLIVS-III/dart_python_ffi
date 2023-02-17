@@ -14,15 +14,6 @@ extension ObjectExtension on Pointer<PyObject> {
     }
     return typeObject;
   }
-
-  bool get isClass {
-    print("isClass: $typeName");
-    // TODO: this does not seem right, it matches function-types as well
-    final String baseType = ref.ob_type.ref.ob_base.ob_base.ob_type.ref.tp_name
-        .cast<Utf8>()
-        .toDartString();
-    return baseType == "type";
-  }
 }
 
 extension TypeObjectExtension on Pointer<PyTypeObject> {

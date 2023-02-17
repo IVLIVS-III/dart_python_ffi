@@ -43,9 +43,12 @@ extension ConvertToDartExtension on Pointer<PyObject> {
     if (isSet(platform)) {
       return asSet(platform);
     }
-    // TODO: check for custom class first
+
     final String nameString = typeName;
-    if (platform.classNames.contains(nameString)) {
+    // we only need to check the className, so that Iterator and Iterable are
+    // not treated as classes
+    // TODO: solve the problem above and we can remove the check for class name
+    if (isClass(platform) && platform.classNames.contains(nameString)) {
       return PythonClassMacos(platform, object);
     }
 
@@ -58,7 +61,7 @@ extension ConvertToDartExtension on Pointer<PyObject> {
 
     // backup conversions matching the name as string
     print(
-      "Warning: falling back to conversion via name as string for '$nameString'",
+      "ℹ️   Info: falling back to conversion via name as string for '$nameString'",
     );
     switch (nameString) {
       case "int":
@@ -81,6 +84,8 @@ extension ConvertToDartExtension on Pointer<PyObject> {
         return asIterator(platform);
       case "function":
         return asFunction(platform);
+      case "module":
+        return asModule(platform);
     }
 
     throw PythonFfiException("Unsupported type: $nameString($runtimeType)");

@@ -272,7 +272,7 @@ extension TypeExtension on Pointer<PyObject> {
       typeObject.flags & Py_TPFLAGS_LONG_SUBCLASS != 0;
 
   bool isFloat(PythonFfiMacOSBase platform) =>
-      isOfType(platform, platform.bindings.PyFloat_Type);
+      isOfType(platform.bindings.PyFloat_Type);
 
   bool isList(PythonFfiMacOSBase platform) =>
       typeObject.flags & Py_TPFLAGS_LIST_SUBCLASS != 0;
@@ -296,7 +296,7 @@ extension TypeExtension on Pointer<PyObject> {
       typeObject.flags & Py_TPFLAGS_TYPE_SUBCLASS != 0;
 
   bool isSet(PythonFfiMacOSBase platform) =>
-      isOfType(platform, platform.bindings.PySet_Type);
+      isOfType(platform.bindings.PySet_Type);
 
   bool isIterator(PythonFfiMacOSBase platform) =>
       platform.bindings.PyIter_Check(this) != 0;
@@ -320,6 +320,47 @@ extension TypeExtension on Pointer<PyObject> {
     }
   }
 
-  bool isOfType(PythonFfiMacOSBase platform, PyTypeObject type) =>
-      typeObject.ref.valueEquals(type);
+  bool isFunction(PythonFfiMacOSBase platform) {
+    // necessary condition: type(this) == type
+    if (isType(platform) ||
+        !typeObject.typeObject.isOfType(platform.bindings.PyType_Type)) {
+      return false;
+    }
+
+    // TODO: determine function without checking the type name
+    return typeName == "function";
+  }
+
+  bool isModule(PythonFfiMacOSBase platform) {
+    // necessary condition: type(this) == type
+    if (isType(platform) ||
+        !typeObject.typeObject.isOfType(platform.bindings.PyType_Type)) {
+      return false;
+    }
+
+    // TODO: determine module without checking the type name
+    return typeName == "module";
+  }
+
+  bool isClass(PythonFfiMacOSBase platform) {
+    // type(type(this)) == type
+    final bool couldBeType = !isType(platform) &&
+        typeObject.typeObject.isOfType(platform.bindings.PyType_Type);
+    // exclude functions and modules
+    return couldBeType && !isFunction(platform) && !isModule(platform);
+  }
+
+  bool isOfType(PyTypeObject type) => typeObject.isOfType(type);
+}
+
+extension TypeTypeExtension on Pointer<PyTypeObject> {
+  bool isOfType(PyTypeObject type) => ref.valueEquals(type);
+
+  Pointer<PyTypeObject> get typeObject {
+    final Pointer<PyTypeObject> typeObject = ref.ob_base.ob_base.ob_type;
+    if (typeObject == nullptr) {
+      throw PythonFfiException("Failed to get type object");
+    }
+    return typeObject;
+  }
 }
