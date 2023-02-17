@@ -75,6 +75,8 @@ class SingleFilePythonModule extends PythonModule<ByteData> {
 class MultiFilePythonModule extends PythonModule<Map<List<String>, ByteData>> {
   MultiFilePythonModule(super.path) : super._();
 
+  String get moduleName => Directory(path).name;
+
   Future<Map<List<String>, ByteData>?> _loadDirectory(
     Directory directory,
   ) async {

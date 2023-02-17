@@ -5,6 +5,13 @@ import "dart:typed_data";
 
 import "package:python_ffi_bundler/python_ffi_bundler.dart";
 
+extension KeyMappingExtension<K, V> on Map<K, V> {
+  Map<T, V> mapKeys<T>(
+    T Function(K key) f,
+  ) =>
+      map((K key, V value) => MapEntry<T, V>(f(key), value));
+}
+
 extension ValueMappingExtension<K, V> on Map<K, V> {
   Map<K, T> mapValues<T>(
     T Function(V value) f,
@@ -69,8 +76,18 @@ abstract class ModuleBundle<T extends PythonModule<Object>> {
         <String>[pythonModule.fileName]
       ]);
     } else if (pythonModule is MultiFilePythonModule) {
-      await _exportMultiFile(pythonModule.data.mapValues(_transformSourceData));
-      await _postExport(pythonModule.data.keys.toList());
+      await _exportMultiFile(
+        pythonModule.data
+            .mapKeys(
+              (List<String> key) => <String>[pythonModule.moduleName, ...key],
+            )
+            .mapValues(_transformSourceData),
+      );
+      await _postExport(
+        pythonModule.data.keys
+            .map((List<String> e) => <String>[pythonModule.moduleName, ...e])
+            .toList(),
+      );
     }
   }
 }
@@ -93,7 +110,7 @@ class AssetsInsertionConfig {
 
     final List<String> assets = <String>[];
 
-    bool insertAssetsKey = false;
+    bool insertAssetsKey = insertFlutterKey;
     if (!insertFlutterKey) {
       final dynamic flutter = pubspecYaml["flutter"];
       if (flutter is! Map) {
@@ -140,14 +157,28 @@ class AssetsInsertionConfig {
   final int indentation;
   final int insertionPoint;
 
-  String _filePathsToYaml(List<List<String>> filePaths, int indent) {
-    final String prefix = " " * indent;
-    return filePaths
-        .map((List<String> filePath) => "$prefix$prefix- ${filePath.join("/")}")
+  String _filePathsToYaml(
+    List<List<String>> filePaths,
+    int indent, {
+    String prefix = "",
+  }) {
+    final String linePrefix = " " * indent;
+    final String yaml = filePaths
+        .map((List<String> filePath) => filePath.join("/"))
+        .where((String filePath) => !assets.contains(filePath))
+        .map((String filePath) => "$linePrefix$linePrefix- $filePath")
         .join("\n");
+    if (yaml.isEmpty) {
+      return "";
+    }
+    return "$prefix$yaml";
   }
 
   String insertIntoPubspec(List<List<String>> filePaths) {
+    if (filePaths.isEmpty) {
+      return pubspecString;
+    }
+
     final StringBuffer buffer = StringBuffer();
     if (insertFlutterKey) {
       buffer.write("\nflutter:");
@@ -155,7 +186,7 @@ class AssetsInsertionConfig {
     if (insertAssetsKey) {
       buffer.write("\n${" " * indentation}assets:");
     }
-    buffer.write("\n${_filePathsToYaml(filePaths, indentation)}");
+    buffer.write(_filePathsToYaml(filePaths, indentation, prefix: "\n"));
     final String insertString = buffer.toString();
     return pubspecString.replaceRange(
       insertionPoint,

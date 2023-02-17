@@ -32,8 +32,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  python_ffi_lint:
-    path: ../../python_ffi_lint
+  python_ffi_lint: ^0.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -48,10 +47,19 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - python-modules/liblax/__init__.py
+    - python-modules/liblax/core.py
+    - python-modules/liblax/parser.py
+    - python-modules/liblax/LICENSE.txt
+    - python-modules/json_parser/__init__.py
+    - python-modules/json_parser/parser.py
+    - python-modules/json_parser/lexer.py
+    - python-modules/json_parser/LICENSE.txt
     - python-modules/type_mappings.py
-    - python-modules/
-    - python-modules/json_parser/
-    - python-modules/liblax/
+    - python-modules/structs.py
+    - python-modules/primitives.py
+    - python-modules/hello_world.py
+    - python-modules/data_class.py
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -82,4 +90,10 @@ flutter:
 
 python_ffi:
   modules:
+    data_class: any
+    json_parser: any
+    hello_world: any
+    liblax: any
+    primitives: any
+    structs: any
     type_mappings: any
