@@ -32,26 +32,26 @@ class TypeMappingEntry<T extends Object?> {
       print("\ntesting $_dartType ←→ $pythonType");
       final SendTyPythonCallback<T>? sendToPython = this.sendToPython;
       if (sendToPython == null) {
-        print("├── dart –> python skipped");
+        print("├── dart –> python skipped ⚠️");
       } else {
         sendToPython(value);
-        print("├── dart –> python successful");
+        print("├── dart –> python successful ✅");
       }
 
       final ReceiveFromPythonCallback<T>? receiveFromPython =
           this.receiveFromPython;
       if (receiveFromPython == null) {
-        print("└── python –> dart skipped");
+        print("└── python –> dart skipped ⚠️");
       } else {
         final T receivedValue = receiveFromPython();
         assert(
           _equals(receivedValue, value),
           "Python returned $receivedValue, but expected $value",
         );
-        print("└── python –> dart successful");
+        print("└── python –> dart successful ✅");
       }
     } on Exception catch (e) {
-      print("└── error: $e");
+      print("└── ❌ error: $e");
     }
   }
 }
