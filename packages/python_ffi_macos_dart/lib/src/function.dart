@@ -32,4 +32,8 @@ class PythonFunctionMacos
         args: args,
         kwargs: kwargs,
       );
+
+  @override
+  T asFunction<T extends Function>(TypedFunctionConverter<T> converter) =>
+      converter(this);
 }

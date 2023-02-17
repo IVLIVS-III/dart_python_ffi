@@ -1,6 +1,6 @@
 part of python_ffi_dart;
 
-abstract class PythonFunction extends PythonObject implements Function {
+class PythonFunction extends PythonObject implements Function {
   PythonFunction.from(this._functionDelegate) : super.from(_functionDelegate);
 
   final PythonFunctionInterface<PythonFfiDelegate<Object?>, Object?>
@@ -11,4 +11,7 @@ abstract class PythonFunction extends PythonObject implements Function {
     Map<String, Object?>? kwargs,
   }) =>
       _functionDelegate.call<T>(args, kwargs: kwargs);
+
+  T asFunction<T extends Function>(TypedFunctionConverter<T> converter) =>
+      _functionDelegate.asFunction<T>(converter);
 }

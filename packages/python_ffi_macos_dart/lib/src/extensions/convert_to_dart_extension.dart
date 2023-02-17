@@ -241,6 +241,31 @@ extension ConvertToDartExtension on Pointer<PyObject> {
         _PythonObjectMacos(platform, this),
       );
 
-  PythonFunctionMacos asFunction(PythonFfiMacOSBase platform) =>
-      PythonFunctionMacos(platform, this);
+  PythonFunctionMacos asFunction(PythonFfiMacOSBase platform) {
+    // Note: We need to access the __code__.__str__ attribute to ensure that the
+    //       code object is not garbage collected before the function object.
+    //       If __code__.__str__ is not available, we use __code__.__repr__.
+    final PythonFunctionMacos result = PythonFunctionMacos(platform, this);
+    const String kCodeAttributeName = "__code__";
+    if (result.hasAttribute(kCodeAttributeName)) {
+      final Object? codeAttribute = result.getAttribute(kCodeAttributeName);
+      const String kStrAttributeName = "__str__";
+      const String kReprAttributeName = "__repr__";
+      if (codeAttribute is _PythonObjectMacos) {
+        if (codeAttribute.hasAttribute(kStrAttributeName)) {
+          codeAttribute
+              .getFunction(kStrAttributeName)
+              .call<String>(<Object?>[]);
+        } else if (codeAttribute.hasAttribute(kReprAttributeName)) {
+          codeAttribute
+              .getFunction(kReprAttributeName)
+              .call<String>(<Object?>[]);
+        }
+      }
+    }
+    return result;
+  }
+
+  PythonModuleMacos asModule(PythonFfiMacOSBase platform) =>
+      PythonModuleMacos(platform, this);
 }

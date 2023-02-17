@@ -24,7 +24,7 @@ A Python-FFI for Dart
 | `Iterator`    | `Iterator`  | ❌ missing         | ✅ complete        |
 | `Iterator`    | `Generator` | 🚫 not applicable | ✅ complete        |
 | `Iterable`    | `Iterable`  | ❌ missing         | ✅ complete        |
-| `Function`    | `Callable`  | ❌ missing         | ❌ missing         |
+| `Function`    | `Callable`  | ❌ missing         | ✅ complete        |
 
 ## Package status
 

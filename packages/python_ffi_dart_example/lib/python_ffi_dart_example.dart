@@ -197,7 +197,6 @@ Future<void> typeMappings() async {
     },
   ).run();
 
-  /*
   TypeMappingEntry<int Function(int)>(
     pythonType: "Callable[[int], int]",
     value: (int x) {
@@ -209,5 +208,4 @@ Future<void> typeMappings() async {
     receiveFromPython: module.request_callable,
     equals: (int Function(int) a, int Function(int) b) => a(1) == b(1),
   ).run();
-  */
 }

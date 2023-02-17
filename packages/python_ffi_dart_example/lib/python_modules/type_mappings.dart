@@ -99,8 +99,12 @@ class TypeMappingsModule extends PythonModule {
   void receive_callable(int Function(int) value) =>
       getFunction("receive_callable").call(<Object?>[value]);
 
-  PythonFunction request_callable() =>
-      getFunction("request_callable").call(<Object?>[]);
+  int Function(int) request_callable() =>
+      PythonFunction.from(getFunction("request_callable").call(<Object?>[]))
+          .asFunction(
+        (PythonFunctionInterface<PythonFfiDelegate<Object?>, Object?> f) =>
+            (int x) => f.call<int>(<Object?>[x]),
+      );
 
   static PythonModuleDefinition get definition => PythonModuleDefinition(
         name: "type_mappings",
