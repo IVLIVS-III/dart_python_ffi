@@ -17,9 +17,14 @@ class UnknownAttributeException extends PythonFfiException {
 }
 
 abstract class PythonExceptionInterface<P extends PythonFfiDelegate<R>,
-R extends Object?> extends PythonObjectInterface<P, R>
+        R extends Object?> extends PythonObjectInterface<P, R>
     implements Exception {
-  PythonExceptionInterface(super.delegate, super.reference);
+  PythonExceptionInterface(
+    super.delegate,
+    super.reference, {
+    required super.initializer,
+    required super.finalizer,
+  });
 
   String get type;
 

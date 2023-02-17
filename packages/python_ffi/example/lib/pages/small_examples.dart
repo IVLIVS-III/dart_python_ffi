@@ -9,17 +9,13 @@ class SmallExamplesPage extends StatelessWidget {
   const SmallExamplesPage({Key? key}) : super(key: key);
 
   void helloWorld() {
-    HelloWorldModule.import()
-      ..hello_world()
-      ..dispose();
+    HelloWorldModule.import().hello_world();
   }
 
   void primitivesSum() {
     final PrimitivesModule primitivesModule = PrimitivesModule.import();
 
     final int sum = primitivesModule.sum(2, 3);
-
-    primitivesModule.dispose();
 
     debugPrint("Sum: $sum");
   }
@@ -29,8 +25,6 @@ class SmallExamplesPage extends StatelessWidget {
 
     final int sqrt = primitivesModule.sqrt(9);
 
-    primitivesModule.dispose();
-
     debugPrint("Sqrt: $sqrt");
   }
 
@@ -38,8 +32,6 @@ class SmallExamplesPage extends StatelessWidget {
     final StructsModule structsModule = StructsModule.import();
 
     final String helloWorld = structsModule.hello_world();
-
-    structsModule.dispose();
 
     debugPrint("Hello World: $helloWorld");
   }
@@ -50,8 +42,6 @@ class SmallExamplesPage extends StatelessWidget {
     const String str = "Hello World";
     final String reversed = structsModule.reverse(str, str.length);
 
-    structsModule.dispose();
-
     debugPrint("Reversed: $reversed");
   }
 
@@ -60,8 +50,6 @@ class SmallExamplesPage extends StatelessWidget {
 
     final Coordinate coordinate = structsModule.create_coordinate(1, 2);
 
-    structsModule.dispose();
-
     debugPrint("Coordinate: $coordinate");
   }
 
@@ -69,8 +57,6 @@ class SmallExamplesPage extends StatelessWidget {
     final StructsModule structsModule = StructsModule.import();
 
     final Place place = structsModule.create_place("Home", 5, -8.3);
-
-    structsModule.dispose();
 
     debugPrint("Place: $place");
   }
@@ -81,8 +67,6 @@ class SmallExamplesPage extends StatelessWidget {
     final Coordinate c1 = structsModule.create_coordinate(2, 2);
     final Coordinate c2 = structsModule.create_coordinate(5, 6);
     final double distance = structsModule.distance(c1, c2);
-
-    structsModule.dispose();
 
     debugPrint("Distance: $distance");
   }
@@ -99,8 +83,6 @@ class SmallExamplesPage extends StatelessWidget {
     final Coordinate c1 = Coordinate(2, 2);
     final Coordinate c2 = Coordinate(5, 6);
     final double distance = structsModule.distance(c1, c2);
-
-    structsModule.dispose();
 
     debugPrint("Distance: $distance");
   }
@@ -154,8 +136,6 @@ class SmallExamplesPage extends StatelessWidget {
 
     const String json = '{"name": "John", "age": 30, "city": "New York"}';
     final Object? parsed = jsonParserModule.parse(json);
-
-    jsonParserModule.dispose();
 
     debugPrint("Parsed json: $parsed");
   }

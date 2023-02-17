@@ -2,7 +2,11 @@ part of python_ffi_macos_dart;
 
 class _PythonClassDefinitionMacos extends PythonClassDefinitionInterface<
     PythonFfiMacOSBase, Pointer<PyObject>> with _PythonObjectMacosMixin {
-  _PythonClassDefinitionMacos(super.platform, super.reference);
+  _PythonClassDefinitionMacos(super.platform, super.reference)
+      : super(
+          initializer: _PythonObjectMacosRefcountUtil.initializer,
+          finalizer: _PythonObjectMacosRefcountUtil.finalizer,
+        );
 
   @override
   PythonClassMacos newInstance(
@@ -31,13 +35,6 @@ class _PythonClassDefinitionMacos extends PythonClassDefinitionInterface<
             MapEntry<String, Pointer<PyObject>>(key, value.reference),
       ),
     );
-
-    for (final _PythonObjectMacos pyArg in pyArgs) {
-      pyArg.dispose();
-    }
-    for (final _PythonObjectMacos pyKwarg in pyKwargs.values) {
-      pyKwarg.dispose();
-    }
 
     return PythonClassMacos(platform, instance);
   }
@@ -70,16 +67,11 @@ class _PythonClassDefinitionMacos extends PythonClassDefinitionInterface<
 class PythonClassMacos
     extends PythonClassInterface<PythonFfiMacOSBase, Pointer<PyObject>>
     with _PythonObjectMacosMixin {
-  PythonClassMacos(super.platform, super.reference);
-
-  @override
-  void dispose() {
-    for (final PythonFunctionMacos function in _functions.values) {
-      function.dispose();
-    }
-    _functions.clear();
-    super.dispose();
-  }
+  PythonClassMacos(super.platform, super.reference)
+      : super(
+          initializer: _PythonObjectMacosRefcountUtil.initializer,
+          finalizer: _PythonObjectMacosRefcountUtil.finalizer,
+        );
 
   @override
   String toString() => getMethod("__str__").call<String>(<Object?>[]);

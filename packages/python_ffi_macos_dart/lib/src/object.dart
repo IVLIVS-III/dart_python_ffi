@@ -6,19 +6,44 @@ extension SymbolToNameExtension on Symbol {
       toString();
 }
 
+class _PythonObjectMacosRefcountUtil {
+  static void _initializerCallback(
+    Pair<PythonFfiMacOSBase, Pointer<PyObject>> value,
+  ) {
+    value.second.incRef(value.first);
+  }
+
+  static const Initializer<PythonFfiMacOSBase, Pointer<PyObject>> initializer =
+      Initializer<PythonFfiMacOSBase, Pointer<PyObject>>(_initializerCallback);
+
+  static void _finalizerCallback(
+    Pair<PythonFfiDelegate<Object?>, Object?> value,
+  ) {
+    final PythonFfiDelegate<Object?> platform = value.first;
+    final Object? reference = value.second;
+    if (platform is PythonFfiMacOSBase && reference is Pointer<PyObject>) {
+      reference.decRef(platform);
+    }
+  }
+
+  static final Finalizer<Pair<PythonFfiDelegate<Object?>, Object?>> finalizer =
+      Finalizer<Pair<PythonFfiDelegate<Object?>, Object?>>(
+    _finalizerCallback,
+  );
+}
+
 class _PythonObjectMacos
     extends PythonObjectInterface<PythonFfiMacOSBase, Pointer<PyObject>>
     with _PythonObjectMacosMixin {
-  _PythonObjectMacos(super.platform, super.reference) {
-    reference.incRef(platform);
-  }
+  _PythonObjectMacos(super.platform, super.reference)
+      : super(
+          initializer: _PythonObjectMacosRefcountUtil.initializer,
+          finalizer: _PythonObjectMacosRefcountUtil.finalizer,
+        );
 }
 
 mixin _PythonObjectMacosMixin
     on PythonObjectInterface<PythonFfiMacOSBase, Pointer<PyObject>> {
-  final Map<String, PythonFunctionMacos> _functions =
-      <String, PythonFunctionMacos>{};
-
   static T staticCall<T extends Object?>(
     PythonFfiMacOSBase platform,
     Pointer<PyObject> reference,
@@ -49,9 +74,6 @@ mixin _PythonObjectMacosMixin
     final _PythonObjectMacos result = _PythonObjectMacos(platform, rawResult);
 
     final Object? mappedResult = result.toDartObject();
-    if (mappedResult is! PythonObjectInterface) {
-      result.dispose();
-    }
 
     return mappedResult as T;
   }
@@ -97,9 +119,6 @@ mixin _PythonObjectMacosMixin
 
     // deallocate arguments
     platform.bindings.Py_DecRef(pArgs);
-    for (final _PythonObjectMacos kwargKey in kwargsKeys) {
-      kwargKey.dispose();
-    }
     if (pKwargs != nullptr) {
       platform.bindings.Py_DecRef(pKwargs);
     }
@@ -166,25 +185,9 @@ mixin _PythonObjectMacosMixin
 
   @override
   PythonFunctionMacos getFunction(String name) {
-    final PythonFunctionMacos? cachedFunction = _functions[name];
-    if (cachedFunction != null) {
-      platform.bindings.Py_IncRef(cachedFunction.reference);
-      return cachedFunction;
-    }
-
     final PythonObjectInterface<PythonFfiMacOSBase, Pointer<PyObject>>
         functionAttribute = getAttributeRaw(name);
-    final PythonFunctionMacos function =
-        PythonFunctionMacos(platform, functionAttribute.reference);
-
-    _functions[name] = function;
-
-    return function;
-  }
-
-  @override
-  void dispose() {
-    reference.decRef(platform);
+    return PythonFunctionMacos(platform, functionAttribute.reference);
   }
 
   @override

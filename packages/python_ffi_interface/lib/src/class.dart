@@ -2,7 +2,12 @@ part of python_ffi_interface;
 
 abstract class PythonClassDefinitionInterface<P extends PythonFfiDelegate<R>,
     R extends Object?> extends PythonObjectInterface<P, R> {
-  PythonClassDefinitionInterface(super.delegate, super.reference);
+  PythonClassDefinitionInterface(
+    super.delegate,
+    super.reference, {
+    required super.initializer,
+    required super.finalizer,
+  });
 
   PythonClassInterface<P, R> newInstance(
     List<Object?> args, [
@@ -16,7 +21,12 @@ abstract class PythonClassDefinitionInterface<P extends PythonFfiDelegate<R>,
 
 abstract class PythonClassInterface<P extends PythonFfiDelegate<R>,
     R extends Object?> extends PythonObjectInterface<P, R> {
-  PythonClassInterface(super.delegate, super.reference);
+  PythonClassInterface(
+    super.delegate,
+    super.reference, {
+    required super.initializer,
+    required super.finalizer,
+  });
 
   PythonFunctionInterface<P, R> getMethod(String name) => getFunction(name);
 }

@@ -7,7 +7,5 @@ void main() async {
   await PythonFfiDart.instance.initialize();
   await registerPythonModules();
 
-  HelloWorldModule.import()
-    ..hello_world()
-    ..dispose();
+  HelloWorldModule.import().hello_world();
 }

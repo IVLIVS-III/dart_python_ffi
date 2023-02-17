@@ -3,7 +3,12 @@ part of python_ffi_dart;
 abstract class PythonObject
     extends PythonObjectInterface<PythonFfiDelegate<Object?>, Object?> {
   PythonObject.from(this._delegate)
-      : super(_delegate.platform, _delegate.reference) {
+      : super(
+          _delegate.platform,
+          _delegate.reference,
+          initializer: _delegate.initializer,
+          finalizer: _delegate.finalizer,
+        ) {
     PythonObjectInterface.verify(_delegate);
   }
 
@@ -31,11 +36,6 @@ abstract class PythonObject
   @override
   void setAttribute<T extends Object?>(String attributeName, T value) =>
       _delegate.setAttribute(attributeName, value);
-
-  @override
-  void dispose() {
-    _delegate.dispose();
-  }
 
   @override
   Object? noSuchMethod(Invocation invocation) {

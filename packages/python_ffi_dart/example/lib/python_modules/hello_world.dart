@@ -1,7 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
 import "package:python_ffi_dart/python_ffi_dart.dart";
-import "package:python_ffi_interface/python_ffi_interface.dart";
 
 import "./src/hello_world.py.dart" as hello_world_py;
 

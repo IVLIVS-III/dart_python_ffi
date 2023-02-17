@@ -3,24 +3,17 @@ part of python_ffi_macos_dart;
 class PythonModuleMacos
     extends PythonModuleInterface<PythonFfiMacOSBase, Pointer<PyObject>>
     with _PythonObjectMacosMixin {
-  PythonModuleMacos(super.platform, super.reference);
+  PythonModuleMacos(super.platform, super.reference)
+      : super(
+          initializer: _PythonObjectMacosRefcountUtil.initializer,
+          finalizer: _PythonObjectMacosRefcountUtil.finalizer,
+        );
 
-  final Map<String, _PythonClassDefinitionMacos> _classes =
-      <String, _PythonClassDefinitionMacos>{};
   final Map<String, PythonModuleMacos> _modules = <String, PythonModuleMacos>{};
 
   _PythonClassDefinitionMacos _getClassDefinition(String name) {
-    final _PythonClassDefinitionMacos? cachedClass = _classes[name];
-    if (cachedClass != null) {
-      return cachedClass;
-    }
-
     final _PythonObjectMacos classAttribute = getAttributeRaw(name);
-    final _PythonClassDefinitionMacos classDefinition =
-        _PythonClassDefinitionMacos(platform, classAttribute.reference);
-
-    _classes[name] = classDefinition;
-    return classDefinition;
+    return _PythonClassDefinitionMacos(platform, classAttribute.reference);
   }
 
   @override
@@ -49,19 +42,5 @@ class PythonModuleMacos
 
     _modules[name] = module;
     return module;
-  }
-
-  @override
-  void dispose() {
-    for (final PythonFunctionMacos function in _functions.values) {
-      function.dispose();
-    }
-    _functions.clear();
-    for (final _PythonClassDefinitionMacos classDefinition in _classes.values) {
-      classDefinition.dispose();
-    }
-    _classes.clear();
-    platform.disposeModule(this);
-    super.dispose();
   }
 }

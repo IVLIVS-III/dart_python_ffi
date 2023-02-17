@@ -3,7 +3,12 @@ part of python_ffi_platform_interface;
 abstract class PythonClassDefinitionPlatform<P extends PythonFfiPlatform<R>,
         R extends Object?> extends PythonClassDefinitionInterface<P, R>
     implements PythonObjectPlatform<P, R> {
-  PythonClassDefinitionPlatform(super.platform, super.reference);
+  PythonClassDefinitionPlatform(
+    super.platform,
+    super.reference, {
+    required super.initializer,
+    required super.finalizer,
+  });
 
   @override
   PythonClassPlatform<P, R> newInstance(
@@ -15,7 +20,12 @@ abstract class PythonClassDefinitionPlatform<P extends PythonFfiPlatform<R>,
 abstract class PythonClassPlatform<P extends PythonFfiPlatform<R>,
         R extends Object?> extends PythonClassInterface<P, R>
     implements PythonObjectPlatform<P, R> {
-  PythonClassPlatform(super.platform, super.reference);
+  PythonClassPlatform(
+    super.platform,
+    super.reference, {
+    required super.initializer,
+    required super.finalizer,
+  });
 
   @override
   PythonFunctionPlatform<P, R> getMethod(String name) => getFunction(name);

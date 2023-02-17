@@ -6,8 +6,6 @@ abstract class PythonFfiMacOSBase extends PythonFfiDelegate<Pointer<PyObject>> {
 
   UnmodifiableSetView<String> get classNames;
 
-  void disposeModule(PythonModuleMacos module);
-
   FutureOr<Directory> getApplicationSupportDirectory();
 
   FutureOr<ByteData> loadPythonFile(PythonSourceFileEntity sourceFile);
@@ -41,8 +39,6 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
     }
     return bindings;
   }
-
-  final Map<String, PythonModuleMacos> _modules = <String, PythonModuleMacos>{};
 
   Directory? _supportDir;
 
@@ -136,11 +132,6 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
   }
 
   @override
-  void disposeModule(PythonModuleMacos module) {
-    _modules.removeWhere((_, PythonModuleMacos value) => value == module);
-  }
-
-  @override
   void addClassName(String className) {
     _classNames.add(className);
   }
@@ -168,12 +159,6 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
 
   @override
   PythonModuleMacos importModule(String moduleName) {
-    final PythonModuleMacos? cachedModule = _modules[moduleName];
-    if (cachedModule != null) {
-      bindings.Py_IncRef(cachedModule.reference);
-      return cachedModule;
-    }
-
     // convert the module name to a Python string
     final Pointer<PyObject> pythonModuleName =
         moduleName.toNativeUtf8().useAndFree((Pointer<Utf8> pointer) {
@@ -199,7 +184,6 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
     }
 
     final PythonModuleMacos module = PythonModuleMacos(this, pyImport);
-    _modules[moduleName] = module;
 
     if (pythonErrorOccurred()) {
       pythonErrorPrint();
@@ -233,16 +217,7 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
     final int result =
         bindings.PyList_Append(sysPath.reference, pathObject.reference);
 
-    // decrease the reference count of sys.path,
-    // since we no longer need access to this attribute
-    sysPath.dispose();
-
-    // unload the sys module again
-    sys.dispose();
-
     if (result != 0) {
-      pathObject.dispose();
-
       if (pythonErrorOccurred()) {
         pythonErrorPrint();
       }

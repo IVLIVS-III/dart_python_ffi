@@ -8,7 +8,10 @@ class _PythonExceptionMacos
     super.reference,
     this.pValue,
     this.pTraceback,
-  );
+  ) : super(
+          initializer: _PythonObjectMacosRefcountUtil.initializer,
+          finalizer: _PythonObjectMacosRefcountUtil.finalizer,
+        );
 
   factory _PythonExceptionMacos.fetch(PythonFfiMacOSBase platform) {
     final Pointer<Pointer<PyObject>> pTypePtr = malloc<Pointer<PyObject>>();

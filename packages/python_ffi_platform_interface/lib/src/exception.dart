@@ -4,5 +4,10 @@ part of python_ffi_platform_interface;
 abstract class PythonExceptionPlatform<P extends PythonFfiPlatform<R>,
         R extends Object?> extends PythonExceptionInterface<P, R>
     implements Exception, PythonObjectPlatform<P, R> {
-  PythonExceptionPlatform(super.platform, super.reference);
+  PythonExceptionPlatform(
+    super.platform,
+    super.reference, {
+    required super.initializer,
+    required super.finalizer,
+  });
 }
