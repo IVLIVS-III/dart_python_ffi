@@ -130,6 +130,17 @@ mixin _PythonObjectMacosMixin
   }
 
   @override
+  bool hasAttribute(String attributeName) {
+    final int result = attributeName.toNativeUtf8().useAndFree(
+          (Pointer<Utf8> pointer) => platform.bindings.PyObject_HasAttrString(
+            reference,
+            pointer.cast<Char>(),
+          ),
+        );
+    return result == 1;
+  }
+
+  @override
   T getAttributeRaw<
       T extends PythonObjectInterface<PythonFfiMacOSBase, Pointer<PyObject>>>(
     String attributeName,

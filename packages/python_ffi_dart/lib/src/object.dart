@@ -18,6 +18,10 @@ abstract class PythonObject
   Object? toDartObject() => _delegate.toDartObject();
 
   @override
+  bool hasAttribute(String attributeName) =>
+      _delegate.hasAttribute(attributeName);
+
+  @override
   T getAttributeRaw<
           T extends PythonObjectInterface<PythonFfiDelegate<Object?>,
               Object?>>(String attributeName) =>

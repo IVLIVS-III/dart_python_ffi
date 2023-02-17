@@ -49,6 +49,8 @@ abstract class PythonObjectInterface<P extends PythonFfiDelegate<R>,
 
   Object? toDartObject();
 
+  bool hasAttribute(String attributeName);
+
   T getAttributeRaw<T extends PythonObjectInterface<P, R>>(
     String attributeName,
   );
