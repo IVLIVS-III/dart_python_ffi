@@ -6,7 +6,7 @@ A Python-FFI for Dart
 
 ## Type mappings
 
-*Stand: 2023-02-03-15-03-GMT+1*
+*Stand: 2023-02-17-21-14-GMT+1*
 
 | Dart type     | Python type | dart ➞ python     | python ➞ dart     |
 |---------------|-------------|-------------------|-------------------|
