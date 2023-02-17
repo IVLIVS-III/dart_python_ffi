@@ -202,6 +202,19 @@ mixin _PythonObjectMacosMixin
   }
 
   @override
+  String toString() {
+    const String kStrAttributeName = "__str__";
+    const String kReprAttributeName = "__repr__";
+    if (hasAttribute(kStrAttributeName)) {
+      return getFunction(kStrAttributeName).call<String>(<Object?>[]);
+    } else if (hasAttribute(kReprAttributeName)) {
+      return getFunction(kReprAttributeName).call<String>(<Object?>[]);
+    } else {
+      return super.toString();
+    }
+  }
+
+  @override
   Object? toDartObject() => reference.toDartObject(platform);
 
   @override

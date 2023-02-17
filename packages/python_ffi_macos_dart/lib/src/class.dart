@@ -72,17 +72,4 @@ class PythonClassMacos
           initializer: _PythonObjectMacosRefcountUtil.initializer,
           finalizer: _PythonObjectMacosRefcountUtil.finalizer,
         );
-
-  @override
-  String toString() {
-    try {
-      return getMethod("__str__").call<String>(<Object?>[]);
-    } on UnknownAttributeException {
-      try {
-        return getMethod("__repr__").call<String>(<Object?>[]);
-      } on UnknownAttributeException {
-        return super.toString();
-      }
-    }
-  }
 }
