@@ -88,7 +88,10 @@ extension ConvertToDartExtension on Pointer<PyObject> {
         return asModule(platform);
     }
 
-    throw PythonFfiException("Unsupported type: $nameString($runtimeType)");
+    print(
+      "⚠️   Warning: falling back to conversion to generic python object for '$nameString'",
+    );
+    return _PythonObjectMacos(platform, object);
   }
 
   int asInt(PythonFfiMacOSBase platform) {
