@@ -106,6 +106,13 @@ class TypeMappingsModule extends PythonModule {
             (int x) => f.call<int>(<Object?>[x]),
       );
 
+  void receive_awaitable(Future<int> value) =>
+      getFunction("receive_awaitable").call(<Object?>[value]);
+
+  Future<int> request_awaitable() => PythonFuture<Object?>.from(
+        getFunction("request_awaitable").call(<Object?>[]),
+      ).cast<int>();
+
   static PythonModuleDefinition get definition => PythonModuleDefinition(
         name: "type_mappings",
         root: SourceBase64("type_mappings.py", type_mappings_py.kBase64),

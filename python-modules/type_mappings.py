@@ -1,5 +1,8 @@
 from dataclasses import dataclass
-from typing import Any, Callable, Generator, Iterable, Iterator, Self, TypeVar, Generic
+from math import isclose
+import time
+from typing import Any, Awaitable, Callable, Generator, Iterable, Iterator, Self, TypeVar, Generic
+import asyncio
 
 
 T = TypeVar("T")
@@ -7,21 +10,21 @@ T = TypeVar("T")
 
 @dataclass
 class CustomIterator(Generic[T]):
-    __iterator: Iterator[T]
+    iterator: Iterator[T]
 
     def __iter__(self: Self) -> Self:
         return self
 
     def __next__(self: Self) -> T:
-        return next(self.__iterator)
+        return next(self.iterator)
 
 
 @dataclass
 class CustomIterable(Generic[T]):
-    __iterable: Iterable[T]
+    iterable: Iterable[T]
 
     def __iter__(self: Self) -> CustomIterator[T]:
-        return CustomIterator(iter(self.__iterable))
+        return CustomIterator(iter(self.iterable))
 
 
 kInt: int = 42
@@ -36,6 +39,8 @@ kIteratorElements: list[int] = [1, 2, 3]
 kIterableElements: list[int] = [1, 2, 3]
 kCallableArg: int = 1
 kCallableResult: int = 2
+kAwaitableSleep: int = 1
+kAwaitableResult: int = 1
 
 
 def __assert_type(value: Any, t: type):
@@ -172,3 +177,22 @@ def request_callable() -> Callable[[int], int]:
         assert x == kCallableArg
         return kCallableResult
     return inner
+
+
+def receive_awaitable(value: Awaitable[int]):
+    __assert_type(value, Awaitable)
+
+    async def wrapper():
+        tstart = time.perf_counter()
+        result = await value
+        tstop = time.perf_counter()
+        assert result == kAwaitableResult
+        assert isclose(tstop - tstart, kAwaitableSleep)
+    asyncio.run(wrapper)
+
+
+def request_awaitable() -> Awaitable[int]:
+    async def inner() -> int:
+        await asyncio.sleep(kAwaitableSleep)
+        return kAwaitableResult
+    return inner()

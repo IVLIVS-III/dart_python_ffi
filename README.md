@@ -25,6 +25,7 @@ A Python-FFI for Dart
 | `Iterator`    | `Generator` | 🚫 not applicable | ✅ complete        |
 | `Iterable`    | `Iterable`  | ❌ missing         | ✅ complete        |
 | `Function`    | `Callable`  | ✅ complete        | ✅ complete        |
+| `Future`      | `Awaitable` | ❌ missing         | ❌ missing         |
 
 ## Package status
 

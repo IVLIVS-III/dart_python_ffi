@@ -18,6 +18,7 @@ part "src/delegate.dart";
 part "src/exception.dart";
 part "src/extensions/symbol.dart";
 part "src/function.dart";
+part "src/future.dart";
 part "src/module.dart";
 part "src/object.dart";
 part "src/python_module_definition.dart";

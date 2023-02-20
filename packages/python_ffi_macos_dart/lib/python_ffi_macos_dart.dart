@@ -31,6 +31,7 @@ part "src/extensions/object_extension.dart";
 part "src/extensions/refcount_extension.dart";
 part "src/extensions/type_extension.dart";
 part "src/function.dart";
+part "src/future.dart";
 part "src/module.dart";
 part "src/object.dart";
 part "src/python_ffi_macos_dart_base.dart";

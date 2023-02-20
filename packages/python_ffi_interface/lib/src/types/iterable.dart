@@ -7,9 +7,17 @@ class PythonIterable<T extends Object?, P extends PythonFfiDelegate<R>,
   final PythonObjectInterface<P, R> _iterable;
 
   @override
-  Iterator<T> get iterator => PythonIterator<T, P, R>(
-        _iterable.getFunction("__iter__").call(<Object?>[]),
-      );
+  Iterator<T> get iterator {
+    final Object? result = _iterable.getFunction("__iter__").call(<Object?>[]);
+    if (result is PythonIterator) {
+      return TypedIterator<T>.from(result);
+    }
+    if (result is PythonObjectInterface<P, R>) {
+      return PythonIterator<T, P, R>(result);
+    }
+
+    throw PythonFfiException("Unable to get iterator from $result");
+  }
 }
 
 class TypedIterable<T> extends Iterable<T> {
