@@ -16,12 +16,6 @@ abstract class PythonModule extends PythonObject {
   final PythonModuleInterface<PythonFfiDelegate<Object?>, Object?>
       _moduleDelegate;
 
-  @override
-  PythonFunctionInterface<PythonFfiDelegate<Object?>, Object?> getFunction(
-    String name,
-  ) =>
-      _moduleDelegate.getFunction(name);
-
   PythonClassInterface<PythonFfiDelegate<Object?>, Object?> getClass(
     String className,
     List<Object?> args, [

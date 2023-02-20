@@ -15,6 +15,12 @@ abstract class PythonObject
   final PythonObjectInterface<PythonFfiDelegate<Object?>, Object?> _delegate;
 
   @override
+  PythonFunctionInterface<PythonFfiDelegate<Object?>, Object?> getFunction(
+    String name,
+  ) =>
+      _delegate.getFunction(name);
+
+  @override
   Object? toDartObject() => _delegate.toDartObject();
 
   @override
