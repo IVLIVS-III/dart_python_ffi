@@ -1,6 +1,6 @@
 part of python_ffi_dart;
 
-class PythonFunction extends PythonObject implements Function {
+class PythonFunction extends PythonObject {
   PythonFunction.from(this._functionDelegate) : super.from(_functionDelegate);
 
   final PythonFunctionInterface<PythonFfiDelegate<Object?>, Object?>
