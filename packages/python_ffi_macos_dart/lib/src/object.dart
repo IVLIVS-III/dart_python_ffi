@@ -153,6 +153,9 @@ mixin _PythonObjectMacosMixin
         );
 
     if (attribute == nullptr) {
+      if (platform.pythonErrorOccurred()) {
+        platform.pythonErrorClear();
+      }
       throw UnknownAttributeException(attributeName);
     }
 
