@@ -103,4 +103,11 @@ class TypeMappingsModule extends PythonModule {
         (PythonFunctionInterface<PythonFfiDelegate<Object?>, Object?> f) =>
             (int x) => f.call<int>(<Object?>[x]),
       );
+
+  void receive_awaitable(Future<int> value) =>
+      getFunction("receive_awaitable").call(<Object?>[value]);
+
+  Future<int> request_awaitable() => PythonFuture<Object?>.from(
+    getFunction("request_awaitable").call(<Object?>[]),
+  ).cast<int>();
 }

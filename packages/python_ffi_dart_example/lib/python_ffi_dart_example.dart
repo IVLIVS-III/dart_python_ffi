@@ -1,3 +1,4 @@
+import "dart:async";
 import "dart:typed_data";
 
 import "package:collection/collection.dart";
@@ -22,13 +23,13 @@ class TypeMappingEntry<T extends Object?> {
   final T value;
   final SendTyPythonCallback<T>? sendToPython;
   final ReceiveFromPythonCallback<T>? receiveFromPython;
-  final bool Function(T, T)? equals;
+  final FutureOr<bool> Function(T, T)? equals;
 
   String get _dartType => dartType ?? T.toString();
 
-  bool Function(T, T) get _equals => equals ?? (T a, T b) => a == b;
+  FutureOr<bool> Function(T, T) get _equals => equals ?? (T a, T b) => a == b;
 
-  void run() {
+  Future<void> run() async {
     try {
       print("\ntesting $_dartType ←→ $pythonType");
       final SendTyPythonCallback<T>? sendToPython = this.sendToPython;
@@ -45,10 +46,8 @@ class TypeMappingEntry<T extends Object?> {
         print("└── python –> dart skipped ⚠️");
       } else {
         final T receivedValue = receiveFromPython();
-        assert(
-          _equals(receivedValue, value),
-          "Python returned $receivedValue, but expected $value",
-        );
+        final bool equals = await _equals(receivedValue, value);
+        assert(equals, "Python returned $receivedValue, but expected $value");
         print("└── python –> dart successful ✅");
       }
     } on Exception catch (e) {
@@ -60,7 +59,7 @@ class TypeMappingEntry<T extends Object?> {
 Future<void> typeMappings() async {
   final TypeMappingsModule module = TypeMappingsModule.import();
 
-  TypeMappingEntry<Object?>(
+  await TypeMappingEntry<Object?>(
     dartType: "null",
     pythonType: "None",
     value: null,
@@ -68,7 +67,7 @@ Future<void> typeMappings() async {
     receiveFromPython: module.request_none,
   ).run();
 
-  TypeMappingEntry<bool>(
+  await TypeMappingEntry<bool>(
     dartType: "true",
     pythonType: "True",
     value: true,
@@ -76,7 +75,7 @@ Future<void> typeMappings() async {
     receiveFromPython: module.request_bool_true,
   ).run();
 
-  TypeMappingEntry<bool>(
+  await TypeMappingEntry<bool>(
     dartType: "false",
     pythonType: "False",
     value: false,
@@ -84,35 +83,35 @@ Future<void> typeMappings() async {
     receiveFromPython: module.request_bool_false,
   ).run();
 
-  TypeMappingEntry<int>(
+  await TypeMappingEntry<int>(
     pythonType: "int",
     value: 42,
     sendToPython: module.receive_int,
     receiveFromPython: module.request_int,
   ).run();
 
-  TypeMappingEntry<double>(
+  await TypeMappingEntry<double>(
     pythonType: "float",
     value: 3.14,
     sendToPython: module.receive_float,
     receiveFromPython: module.request_float,
   ).run();
 
-  TypeMappingEntry<String>(
+  await TypeMappingEntry<String>(
     pythonType: "str",
     value: "Hello World",
     sendToPython: module.receive_str,
     receiveFromPython: module.request_str,
   ).run();
 
-  TypeMappingEntry<Uint8List>(
+  await TypeMappingEntry<Uint8List>(
     pythonType: "bytes",
     value: Uint8List.fromList("Hello World".codeUnits),
     sendToPython: module.receive_bytes,
     receiveFromPython: module.request_bytes,
   ).run();
 
-  TypeMappingEntry<Map<String, int>>(
+  await TypeMappingEntry<Map<String, int>>(
     pythonType: "dict[str, int]",
     value: const <String, int>{"one": 1, "two": 2, "three": 3},
     sendToPython: module.receive_dict,
@@ -120,7 +119,7 @@ Future<void> typeMappings() async {
     equals: const MapEquality<String, int>().equals,
   ).run();
 
-  TypeMappingEntry<List<int>>(
+  await TypeMappingEntry<List<int>>(
     pythonType: "list[int]",
     value: const <int>[1, 2, 3],
     sendToPython: module.receive_list,
@@ -129,7 +128,7 @@ Future<void> typeMappings() async {
         const ListEquality<int>().equals(a, b),
   ).run();
 
-  TypeMappingEntry<List<int>>(
+  await TypeMappingEntry<List<int>>(
     pythonType: "tuple[int]",
     value: const <int>[1, 2, 3],
     receiveFromPython: module.request_tuple,
@@ -137,7 +136,7 @@ Future<void> typeMappings() async {
         const ListEquality<int>().equals(a, b),
   ).run();
 
-  TypeMappingEntry<PythonTuple<int>>(
+  await TypeMappingEntry<PythonTuple<int>>(
     pythonType: "tuple[int]",
     value: PythonTuple<int>.from(
       <int>[1, 2, 3],
@@ -147,7 +146,7 @@ Future<void> typeMappings() async {
         const ListEquality<int>().equals(a, b),
   ).run();
 
-  TypeMappingEntry<Set<int>>(
+  await TypeMappingEntry<Set<int>>(
     pythonType: "set[int]",
     value: const <int>{1, 2, 3},
     sendToPython: module.receive_set,
@@ -161,7 +160,7 @@ Future<void> typeMappings() async {
     yield 3;
   }
 
-  TypeMappingEntry<Iterable<int>>(
+  await TypeMappingEntry<Iterable<int>>(
     pythonType: "iterable[int]",
     value: iterable(),
     sendToPython: module.receive_iterable,
@@ -169,7 +168,7 @@ Future<void> typeMappings() async {
     equals: const IterableEquality<int>().equals,
   ).run();
 
-  TypeMappingEntry<Iterator<int>>(
+  await TypeMappingEntry<Iterator<int>>(
     pythonType: "iterator[int]",
     value: iterable().iterator,
     sendToPython: module.receive_iterator,
@@ -187,7 +186,7 @@ Future<void> typeMappings() async {
     },
   ).run();
 
-  TypeMappingEntry<Iterator<int>>(
+  await TypeMappingEntry<Iterator<int>>(
     pythonType: "generator[int]",
     value: iterable().iterator,
     receiveFromPython: module.request_generator,
@@ -204,7 +203,7 @@ Future<void> typeMappings() async {
     },
   ).run();
 
-  TypeMappingEntry<int Function(int)>(
+  await TypeMappingEntry<int Function(int)>(
     pythonType: "Callable[[int], int]",
     value: (int x) {
       assert(x == 1, "Expected 1, but got $x");
@@ -214,5 +213,35 @@ Future<void> typeMappings() async {
     sendToPython: module.receive_callable,
     receiveFromPython: module.request_callable,
     equals: (int Function(int) a, int Function(int) b) => a(1) == b(1),
+  ).run();
+
+  Future<int> future() async {
+    await Future<void>.delayed(const Duration(seconds: 1));
+    return 1;
+  }
+
+  await TypeMappingEntry<Future<int>>(
+    pythonType: "Awaitable[int]",
+    value: future(),
+    // TODO: implement
+    // sendToPython: module.receive_awaitable,
+    receiveFromPython: module.request_awaitable,
+    equals: (Future<int> a, Future<int> b) async {
+      final DateTime t0 = DateTime.now();
+      final int aRes = await a;
+      final DateTime t1 = DateTime.now();
+      final int bRes = await b;
+      final DateTime t2 = DateTime.now();
+      if (aRes != bRes) {
+        return false;
+      }
+      final Duration da = t1.difference(t0);
+      final Duration db = t2.difference(t1);
+      final Duration diff = (da - db).abs();
+      if (diff.inMilliseconds > 100) {
+        return false;
+      }
+      return true;
+    },
   ).run();
 }

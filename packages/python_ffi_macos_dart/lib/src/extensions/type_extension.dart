@@ -320,6 +320,19 @@ extension TypeExtension on Pointer<PyObject> {
     }
   }
 
+  bool isAwaitable(PythonFfiMacOSBase platform) {
+    const String kAwaitAttributeName = "__await__";
+    try {
+      _PythonObjectMacos(platform, this).getFunction(kAwaitAttributeName);
+      return true;
+    } on UnknownAttributeException catch (e) {
+      if (e.attributeName == kAwaitAttributeName) {
+        return false;
+      }
+      rethrow;
+    }
+  }
+
   bool isFunction(PythonFfiMacOSBase platform) {
     // necessary condition: type(this) == type
     if (isType(platform) ||

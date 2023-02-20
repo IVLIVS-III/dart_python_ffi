@@ -43,6 +43,9 @@ extension ConvertToDartExtension on Pointer<PyObject> {
     if (isSet(platform)) {
       return asSet(platform);
     }
+    if (isAwaitable(platform)) {
+      return asFuture(platform);
+    }
     if (isIterator(platform)) {
       return asIterator(platform);
     }
@@ -230,6 +233,9 @@ extension ConvertToDartExtension on Pointer<PyObject> {
       PythonIterable<Object?, PythonFfiMacOSBase, Pointer<PyObject>>(
         _PythonObjectMacos(platform, this),
       );
+
+  Future<Object?> asFuture(PythonFfiMacOSBase platform) =>
+      PythonFutureMacos<Object?>(platform, this);
 
   Iterator<Object?> asIterator(PythonFfiMacOSBase platform) =>
       PythonIterator<Object?, PythonFfiMacOSBase, Pointer<PyObject>>(

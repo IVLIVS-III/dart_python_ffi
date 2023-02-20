@@ -15,6 +15,7 @@ export "package:python_ffi_macos_dart/python_ffi_macos_dart.dart"
 
 part "src/class.dart";
 part "src/function.dart";
+part "src/future.dart";
 part "src/module.dart";
 part "src/object.dart";
 part "src/python_ffi_dart_base.dart";

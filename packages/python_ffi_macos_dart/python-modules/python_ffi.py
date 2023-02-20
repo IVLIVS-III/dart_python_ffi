@@ -1,4 +1,4 @@
-from typing import Self, TypeVar, Generic
+from typing import Iterator, Self, TypeVar, Generic
 
 
 T = TypeVar("T")
@@ -14,6 +14,12 @@ class PythonFfiIterator(Generic[T]):
 
 
 class PythonFfiIterable(Generic[T]):
-    def __iter__(self: Self):
-        pass
+    def __iter__(self: Self) -> Iterator[T]:
+        # TODO: implement
+        ...
 
+
+class PythonFfiAwaitable(Generic[T]):
+    def __await__(self: Self) -> Iterator[T]:
+        # TODO: implement
+        ...
