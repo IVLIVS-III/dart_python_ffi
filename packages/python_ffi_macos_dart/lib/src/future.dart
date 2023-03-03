@@ -9,43 +9,67 @@ class PythonFutureMacos<T>
           finalizer: _PythonObjectMacosRefcountUtil.finalizer,
         );
 
-  @override
-  Stream<T> asStream() {
-    // TODO: implement asStream
-    throw UnimplementedError("asStream() is not implemented yet");
+  Future<T> _consume(Iterable<Object?> iterable) async {
+    // TODO: implement _consume. This should mirror somewhat python Task.__step
+    //       set the add_done_callback on the first future we get
+    try {
+      for (final Object? element in iterable) {
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+        print("├── $element");
+        if (element is Future<Object?>) {
+          print("├── ⏳ waiting for future");
+          await element;
+        }
+      }
+    } on Exception catch (e) {
+      print("└── ❌ error: $e");
+    }
+    final T result = getFunction("result").call(<Object?>[]);
+    return result;
+  }
+
+  void _startEventLoop() {
+    final PythonModuleInterface<PythonFfiDelegate<Pointer<PyObject>>,
+        Pointer<PyObject>> asyncio = platform.importModule("asyncio.events");
+    final Object? loop = asyncio.getFunction("new_event_loop").call(
+      <Object?>[],
+    );
+    asyncio.getFunction("set_event_loop").call(<Object?>[loop]);
+    asyncio.getFunction("_set_running_loop").call(<Object?>[loop]);
+  }
+
+  Future<T> _future() {
+    final Completer<T> completer = Completer<T>();
+    _startEventLoop();
+    final Iterable<Object?> iterable =
+        getFunction("__await__").call(<Object?>[]);
+    _consume(iterable).then(completer.complete);
+    return completer.future;
   }
 
   @override
-  Future<T> catchError(Function onError, {bool Function(Object error)? test}) {
-    // TODO: implement catchError
-    throw UnimplementedError("catchError() is not implemented yet");
-  }
+  Stream<T> asStream() => _future().asStream();
+
+  @override
+  Future<T> catchError(Function onError, {bool Function(Object error)? test}) =>
+      _future().catchError(onError, test: test);
 
   @override
   Future<R> then<R>(
     FutureOr<R> Function(T value) onValue, {
     Function? onError,
-  }) {
-    // TODO: implement then
-    throw UnimplementedError("then() is not implemented yet");
-  }
+  }) =>
+      _future().then(onValue, onError: onError);
 
   @override
-  Future<T> timeout(Duration timeLimit, {FutureOr<T> Function()? onTimeout}) {
-    // TODO: implement timeout
-    throw UnimplementedError("timeout() is not implemented yet");
-  }
+  Future<T> timeout(Duration timeLimit, {FutureOr<T> Function()? onTimeout}) =>
+      _future().timeout(timeLimit, onTimeout: onTimeout);
 
   @override
-  Future<T> whenComplete(FutureOr<void> Function() action) {
-    // TODO: implement whenComplete
-    throw UnimplementedError("whenComplete() is not implemented yet");
-  }
+  Future<T> whenComplete(FutureOr<void> Function() action) =>
+      _future().whenComplete(action);
 
   @override
   PythonFutureInterface<S, PythonFfiMacOSBase, Pointer<PyObject>>
-      cast<S extends Object?>() {
-    // TODO: implement cast
-    throw UnimplementedError("cast() is not implemented yet");
-  }
+      cast<S extends Object?>() => PythonFutureMacos<S>(platform, reference);
 }

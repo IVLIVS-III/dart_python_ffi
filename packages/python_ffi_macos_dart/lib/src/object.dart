@@ -113,6 +113,9 @@ mixin _PythonObjectMacosMixin
       }
     }
 
+    // TODO: this is for debugging related crashes
+    _PythonObjectMacos(platform, reference)._ensureCodeObject();
+
     // call function
     final Pointer<PyObject> result =
         platform.bindings.PyObject_Call(reference, pArgs, pKwargs);
@@ -202,6 +205,28 @@ mixin _PythonObjectMacosMixin
     final PythonObjectInterface<PythonFfiMacOSBase, Pointer<PyObject>>
         functionAttribute = getAttributeRaw(name);
     return PythonFunctionMacos(platform, functionAttribute.reference);
+  }
+
+  void _ensureCodeObject() {
+    const String kCodeAttributeName = "__code__";
+    if (hasAttribute(kCodeAttributeName)) {
+      final Object? codeAttribute = getAttribute(kCodeAttributeName);
+      const String kStrAttributeName = "__str__";
+      const String kReprAttributeName = "__repr__";
+      if (codeAttribute is _PythonObjectMacos) {
+        if (codeAttribute.hasAttribute(kStrAttributeName)) {
+          codeAttribute
+              .getFunction(kStrAttributeName)
+              .call<String>(<Object?>[]);
+        } else if (codeAttribute.hasAttribute(kReprAttributeName)) {
+          codeAttribute
+              .getFunction(kReprAttributeName)
+              .call<String>(<Object?>[]);
+        }
+        codeAttribute.reference.incRef(platform);
+        // print("ensured code object $codeAttribute");
+      }
+    }
   }
 
   @override

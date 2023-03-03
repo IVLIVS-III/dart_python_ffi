@@ -45,7 +45,8 @@ class _PythonExceptionMacos
       .PyObject_Repr(pType)
       .asUnicodeString(platform)
       .split("(")
-      .first;
+      .first
+      .split("'")[1];
 
   @override
   Object? get value => pValue._toPythonObject(platform);
@@ -97,7 +98,9 @@ class _PythonExceptionMacos
   }
 
   @override
-  String toString([bool verbose = true]) {
+  String toString() {
+    // TODO: prevent crashing when formatting the StopIteration exception raised by an Iterator
+    return _fallbackFormattedException();
     final String? nativeException = _nativelyFormattedException();
     if (nativeException != null) {
       return "PythonExceptionMacos: $nativeException";

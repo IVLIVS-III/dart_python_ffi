@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from math import isclose
 import time
 from typing import Any, Awaitable, Callable, Generator, Iterable, Iterator, Self, TypeVar, Generic
@@ -11,11 +11,16 @@ T = TypeVar("T")
 @dataclass
 class CustomIterator(Generic[T]):
     iterator: Iterator[T]
+    __did_call___iter__: bool = field(init=False, default=False)
 
     def __iter__(self: Self) -> Self:
+        self.iterator = iter(self.iterator)
+        self.__did_call___iter__ = True
         return self
 
     def __next__(self: Self) -> T:
+        if not self.__did_call___iter__:
+            self = self.__iter__()
         return next(self.iterator)
 
 

@@ -1,6 +1,7 @@
 import asyncio
 from dataclasses import dataclass, field
 from datetime import datetime
+import types
 from typing import Any, Awaitable, Generator, Generic, Optional, Self, TypeVar
 import time
 
@@ -20,6 +21,21 @@ class FutureWrapper(asyncio.Future):
 
     def __del__(self: Self):
         self.future.__del__()
+
+    @property
+    def _asyncio_future_blocking(self) -> Any:
+        result = self.future._asyncio_future_blocking
+        print(
+            f"├── reading @{now()} _asyncio_future_blocking on {self}[@{id(self)}]")
+        print(f"│   └── returns {result}")
+        return result
+
+    @_asyncio_future_blocking.setter
+    def _asyncio_future_blocking(self, val):
+        print(
+            f"├── setting @{now()} _asyncio_future_blocking on {self}[@{id(self)}]")
+        print(f"│   └── to {val}")
+        self.future._asyncio_future_blocking = val
 
     @property
     def _log_traceback(self):
@@ -162,6 +178,9 @@ class FutureWrapper(asyncio.Future):
             result = GeneratorWrapper(result)
             print(f"│   └── returns {result}")
             return result
+        except RuntimeError as exc:
+            if len(exc.args) > 0 and exc.args[0] == "await wasn't used with future":
+                raise Exception("bogus 1")
         except BaseException as e:
             print(f"│   └── raised Exception: {e}")
             raise
@@ -185,11 +204,19 @@ class GeneratorWrapper(Generic[T, T_Send, T_Return], Generator[T, T_Send, T_Retu
         init=False, default_factory=list)
 
     def __simulate_yield_from_next(self: Self) -> tuple[bool, T]:
+        print(
+            f"│   ├── trying to simulate yield from, with a backlog of length {len(self.__simulated_yield_froms)}")
         while len(self.__simulated_yield_froms) > 0:
             try:
-                return True, self.__simulated_yield_froms[-1].__next__()
+                result = (True, self.__simulated_yield_froms[-1].__next__())
+                print(
+                    f"│   │   └── simulating yield from by returning {result}")
+                return result
             except StopIteration:
+                print(
+                    f"│   │   └── simulating yield from raised StopIteration")
                 self.__simulated_yield_froms = self.__simulated_yield_froms[:-1]
+        print(f"│   │   └── nothing to yield, stopping simulation")
         return False, None
 
     def __next__(self: Self) -> T:
@@ -216,6 +243,9 @@ class GeneratorWrapper(Generic[T, T_Send, T_Return], Generator[T, T_Send, T_Retu
             print(f"│   └── returns {result}")
             # print(f"│   └── with dir() = {dir(result)}")
             return result
+        except RuntimeError as exc:
+            if len(exc.args) > 0 and exc.args[0] == "await wasn't used with future":
+                raise Exception("bogus 2")
         except BaseException as e:
             print(f"│   └── raised Exception: {e}")
             raise
@@ -293,6 +323,8 @@ class MySleep:
     __start: float = field(init=False, default=time.time())
     __count: int = field(init=False, default=0)
 
+    _asyncio_future_blocking = True
+
     def __await__(self: Self) -> Generator[float, None, None]:
         print(f"called __await__ {self.__count} times already @{now()}")
         self.__count += 1
@@ -300,6 +332,102 @@ class MySleep:
         if diff < self.seconds:
             yield self
         return diff
+
+
+@dataclass
+class MySleepAgain:
+    seconds: float
+    __start: float = field(init=False, default=time.time())
+    __count: int = field(init=False, default=0)
+
+    def __await__(self: Self) -> Generator[Any, None, None]:
+        coro = asyncio.sleep(self.seconds)
+        coro_it = coro.__await__()
+        print(
+            f"got coro.__await__() of type {type(coro_it)} w/ value: {coro_it}")
+        try:
+            while True:
+                e = next(coro_it)
+                print(
+                    f"called next on __await__-result, yielding {e}[{id(e)}] @{now()}")
+                print(dir(e))
+                e__await__ = e.__await__()
+                print(
+                    f"calling __await__ on yielding value returns {e__await__}[{id(e__await__)}] @{now()}")
+                e__await__it = iter(e__await__)
+                print(
+                    f"got e__await__it.__iter__() of type {type(e__await__it)} w/ value: {e__await__it}[{id(e__await__it)}] @{now()}")
+                print(dir(e__await__it))
+                print(f"send @{id(e__await__it.send)}")
+                print(f"__next__ @{id(e__await__it.__next__)}")
+                # e.set_result(None)
+                e_prime = e__await__it.send(None)
+                print(f"could yield instead {e_prime}[{id(e_prime)}] @{now()}")
+                yield e
+        except StopIteration:
+            pass
+        except Exception as exc:
+            print(f"got exception({type(exc)}): {exc}")
+
+
+@dataclass
+class MySleepAgain2:
+    seconds: float
+    __start: float = field(init=False, default=time.time())
+    __count: int = field(init=False, default=0)
+
+    def __await__(self: Self) -> Generator[Any, None, None]:
+        async def inner():
+            await asyncio.sleep(1)
+        # Phase 1
+        # typical: pass-through
+        # return inner().__await__()
+
+        # Phase 2
+        # old-style: yield from
+        # yield from inner().__await__()
+
+        # Phase 3
+        # low-level: loop yield
+        """
+        it = inner().__await__()
+        try:
+            while True:
+                e = next(it)
+                yield e
+        except StopIteration:
+            pass
+        """
+
+        # Phase 4
+        # using __next__
+        """
+        it = inner().__await__()
+        try:
+            while True:
+                e = it.__next__()
+                yield e
+        except StopIteration:
+            pass
+        """
+
+        # Phase 5
+        # adding counters
+        it = inner().__await__()
+        try:
+            c = 0
+            while True:
+                e = it.__next__()
+                c += 1
+                is_future = isinstance(e, asyncio.Future)
+                print(
+                    f"called __next__() {c} times, yielding {type(e)} which is a future? {is_future}")
+                if is_future:
+                    print("wrapping future")
+                    e = FutureWrapper(e)
+                yield e
+        except StopIteration:
+            pass
 
 
 def main1():
@@ -341,8 +469,32 @@ def main3():
     print(dir(ma5))
 
 
+async def amain4(awaitable: Awaitable[float]):
+    result = await awaitable
+    print(f"Awaited result: {result}")
+
+
+def main4():
+    print("Starting asyncio.run on main4")
+    asyncio.run(amain4(MySleepAgain(1)))
+    print("└── completed asyncion.run")
+
+
+async def amain5(awaitable: Awaitable[float]):
+    result = await awaitable
+    print(f"Awaited result: {result}")
+
+
+def main5():
+    print("Starting asyncio.run on main5")
+    asyncio.run(amain5(MySleepAgain2(1)))
+    print("└── completed asyncion.run")
+
+
 if __name__ == "__main__":
-    main1()
-    # main2()
+    # main1()
+    main2()
     # main3()
+    # main4()
+    # main5()
     pass
