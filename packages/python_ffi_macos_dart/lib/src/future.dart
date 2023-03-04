@@ -21,8 +21,17 @@ class PythonFutureMacos<T>
           await element;
         }
       }
+    } on _PythonExceptionMacos catch (e) {
+      switch (e.type) {
+        case "StopIteration":
+          print("└── ⏹️ stop iteration");
+          return e.value as T;
+        default:
+          rethrow;
+      }
     } on Exception catch (e) {
       print("└── ❌ error: $e");
+      rethrow;
     }
     final T result = getFunction("result").call(<Object?>[]);
     return result;
