@@ -41,12 +41,12 @@ class _PythonExceptionMacos
   final Pointer<PyObject> pTraceback;
 
   @override
-  String get type => platform.bindings
-      .PyObject_Repr(pType)
-      .asUnicodeString(platform)
-      .split("(")
-      .first
-      .split("'")[1];
+  String get type {
+    if (reference is Pointer<PyTypeObject>) {
+      return (reference as Pointer<PyTypeObject>).name;
+    }
+    return reference.typeName;
+  }
 
   @override
   Object? get value => pValue._toPythonObject(platform);
