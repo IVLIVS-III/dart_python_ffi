@@ -204,7 +204,7 @@ Future<void> typeMappings() async {
       return 2;
     },
     // TODO: implement
-    // sendToPython: module.receive_callable,
+    sendToPython: module.receive_callable,
     receiveFromPython: module.request_callable,
     equals: (int Function(int) a, int Function(int) b) => a(1) == b(1),
   ).run();
