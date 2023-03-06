@@ -193,11 +193,13 @@ def receive_awaitable(value: Awaitable[int]):
         tstop = time.perf_counter()
         assert result == kAwaitableResult
         assert isclose(tstop - tstart, kAwaitableSleep)
-    asyncio.run(wrapper)
+    asyncio.run(wrapper())
 
 
 def request_awaitable() -> Awaitable[int]:
     async def inner() -> int:
+        print("starting sleep")
         await asyncio.sleep(kAwaitableSleep)
+        print("ended sleep")
         return kAwaitableResult
     return inner()

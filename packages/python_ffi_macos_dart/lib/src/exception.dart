@@ -100,7 +100,7 @@ class _PythonExceptionMacos
   @override
   String toString() {
     // TODO: prevent crashing when formatting the StopIteration exception raised by an Iterator
-    return _fallbackFormattedException();
+    // return _fallbackFormattedException();
     final String? nativeException = _nativelyFormattedException();
     if (nativeException != null) {
       return "PythonExceptionMacos: $nativeException";

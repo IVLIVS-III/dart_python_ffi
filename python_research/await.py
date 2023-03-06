@@ -491,9 +491,14 @@ def main5():
     print("└── completed asyncion.run")
 
 
+def main6():
+    loop = asyncio.get_event_loop()
+    future = loop.create_future()
+
+
 if __name__ == "__main__":
     # main1()
-    main2()
+    # main2()
     # main3()
     # main4()
     # main5()

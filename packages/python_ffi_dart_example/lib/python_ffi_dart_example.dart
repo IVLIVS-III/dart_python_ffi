@@ -217,14 +217,20 @@ Future<void> typeMappings() async {
     pythonType: "Awaitable[int]",
     value: future(),
     // TODO: implement
-    // sendToPython: module.receive_awaitable,
+    sendToPython: module.receive_awaitable,
     receiveFromPython: module.request_awaitable,
     equals: (Future<int> a, Future<int> b) async {
+      print("HI 0");
       final DateTime t0 = DateTime.now();
+      print("HI 1, a: $a, b: $b");
       final int aRes = await a;
+      print("HI 2");
       final DateTime t1 = DateTime.now();
+      print("HI 3");
       final int bRes = await b;
+      print("HI 4");
       final DateTime t2 = DateTime.now();
+      print("aRes: $aRes, bRes: $bRes, t0: $t0, t1: $t1, t2: $t2");
       if (aRes != bRes) {
         return false;
       }

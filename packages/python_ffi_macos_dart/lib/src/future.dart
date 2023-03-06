@@ -9,16 +9,34 @@ class PythonFutureMacos<T>
           finalizer: _PythonObjectMacosRefcountUtil.finalizer,
         );
 
+  // TODO: remove debug prints
   Future<T> _consume(Iterable<Object?> iterable) async {
-    // TODO: implement _consume. This should mirror somewhat python Task.__step
-    //       set the add_done_callback on the first future we get
     try {
       for (final Object? element in iterable) {
         await Future<void>.delayed(const Duration(milliseconds: 10));
         print("├── $element");
         if (element is Future<Object?>) {
           print("├── ⏳ waiting for future");
-          await element;
+
+          if (element is PythonFutureMacos<Object?>) {
+            print("├── ⏳ future is a python future");
+            final PythonFutureMacos<Object?> pythonFuture = element;
+            final Completer<T> completer = Completer<T>();
+            void doneCallback(Object? result) {
+              print("├── ⏳ future resolved: $result");
+              completer.complete(result as T);
+            }
+
+            final PythonFunctionMacos addDoneCallbackFunc =
+                pythonFuture.getFunction("add_done_callback");
+            print("├── ⏳ adding done callback: $addDoneCallbackFunc");
+            addDoneCallbackFunc.call(<Object?>[doneCallback.generic1]);
+            print("├── ⏳ done callback added");
+            return completer.future;
+          } else {
+            print("├── ⏳ future is not a python future");
+            return element as Future<T>;
+          }
         }
       }
     } on _PythonExceptionMacos catch (e) {

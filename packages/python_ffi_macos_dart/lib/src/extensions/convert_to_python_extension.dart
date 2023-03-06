@@ -34,6 +34,8 @@ extension ConvertToPythonExtension on Object? {
       object = fromIterable(platform, value);
     } else if (value is Iterator) {
       object = fromIterator(platform, value);
+    } else if (value is Future) {
+      object = fromFuture(platform, value);
     } else if (value is DartCFunctionSignature) {
       object = fromFunction(platform, value);
     } else if (value is Function) {
@@ -159,6 +161,32 @@ extension ConvertToPythonExtension on Object? {
   ) {
     // TODO: implement
     throw UnimplementedError();
+  }
+
+  static Pointer<PyObject> fromFuture(
+    PythonFfiMacOSBase platform,
+    Future<Object?> value,
+  ) {
+    final PythonModuleInterface<PythonFfiDelegate<Pointer<PyObject>>,
+        Pointer<PyObject>> asyncio = platform.importModule("asyncio");
+    final Object? eventLoop =
+        asyncio.getFunction("get_event_loop").call(<Object?>[]);
+    if (eventLoop is _PythonObjectMacos) {
+      final Object? future =
+          eventLoop.getFunction("create_future").call(<Object?>[]);
+
+      if (future is PythonFutureMacos) {
+        value.then((Object? result) {
+          future.getFunction("set_result").call(<Object?>[result]);
+        }).catchError((dynamic err) {
+          future.getFunction("set_exception").call(<Object?>[err]);
+        });
+        return future.reference;
+      }
+
+      throw PythonFfiException("Unable to create asyncio future");
+    }
+    throw PythonFfiException("Unable to fetch asyncio event loop");
   }
 
   static Pointer<PyObject> fromFunction(
