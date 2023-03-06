@@ -97,7 +97,7 @@ class TypeMappingsModule extends PythonModule {
       );
 
   void receive_callable(int Function(int) value) =>
-      getFunction("receive_callable").call(<Object?>[value]);
+      getFunction("receive_callable").call(<Object?>[value.generic1]);
 
   int Function(int) request_callable() =>
       PythonFunction.from(getFunction("request_callable").call(<Object?>[]))

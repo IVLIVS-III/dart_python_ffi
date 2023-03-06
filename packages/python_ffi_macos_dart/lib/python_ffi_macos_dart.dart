@@ -25,6 +25,7 @@ part "src/class.dart";
 part "src/exception.dart";
 part "src/extensions/convert_to_dart_extension.dart";
 part "src/extensions/convert_to_python_extension.dart";
+part "src/extensions/function_extension.dart";
 part "src/extensions/malloc_extension.dart";
 part "src/extensions/object_extension.dart";
 part "src/extensions/refcount_extension.dart";

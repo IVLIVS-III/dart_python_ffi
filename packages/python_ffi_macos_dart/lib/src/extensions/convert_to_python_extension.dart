@@ -34,8 +34,12 @@ extension ConvertToPythonExtension on Object? {
       object = fromIterable(platform, value);
     } else if (value is Iterator) {
       object = fromIterator(platform, value);
+    } else if (value is DartCFunctionSignature) {
+      object = fromFunction(platform, value);
     } else if (value is Function) {
-      object = fromFunction(platform, value.generic);
+      throw Exception(
+        "Unsupported type converting dart -> python: $runtimeType, did you mean to use `DartCFunctionSignature`? If so, convert your function with the `genericX` extension getter.",
+      );
     } else if (value is PythonObjectInterface) {
       final Object? reference = value.reference;
       if (reference is Pointer<PyObject>) {
@@ -157,145 +161,15 @@ extension ConvertToPythonExtension on Object? {
     throw UnimplementedError();
   }
 
-  static PythonFfiMacOSBase? _staticPlatform;
-  static DartCFunctionSignature? _staticFunction;
-
-  static PythonFfiMacOSBase get staticPlatform {
-    final PythonFfiMacOSBase? platform = _staticPlatform;
-    if (platform == null) {
-      throw Exception("staticPlatform not set");
-    }
-    return platform;
-  }
-
-  static DartCFunctionSignature get staticFunction {
-    final DartCFunctionSignature? function = _staticFunction;
-    if (function == null) {
-      throw Exception("staticFunction not set");
-    }
-    return function;
-  }
-
-  static Pointer<PyObject> _pythonFunction(
-    Pointer<PyObject> self,
-    Pointer<PyObject> args,
-  ) {
-    final List<Object?> dartArgs = args.asList(staticPlatform);
-    final Object? result =
-        staticFunction(self.toDartObject(staticPlatform), dartArgs);
-    return result._toPythonObject(staticPlatform).reference;
-  }
-
   static Pointer<PyObject> fromFunction(
     PythonFfiMacOSBase platform,
     DartCFunctionSignature value,
   ) {
-    // TODO: implement
-    _staticPlatform = platform;
-    _staticFunction = value;
+    final Object? key =
+        _FunctionConversionUtils._addStaticEntry(platform, value);
     final Pointer<NativeFunction<PyCFunctionSignature>> p =
-        Pointer.fromFunction<PyCFunctionSignature>(_pythonFunction);
-    // TODO: get function name
-    return _toPyCFunction(platform, "someFunc", p);
-  }
-
-  static Pointer<PyMethodDef> _createPyMethodDef(
-    String callableName,
-    PyCFunction callable,
-    String docString, {
-    Allocator allocator = malloc,
-  }) {
-    // 64b <= sizeof(Pointer<Int8>)
-    // 64b <= sizeof(Pointer<NativeFunction<PyCFunction>>)
-    // 32b <= sizeof(Int32)
-    // 64b <= sizeof(Pointer<Int8>)
-    // ==> 224b = 28B
-    // const int size = 28;
-    // ==> allocator takes care of allocation size, thankfully ;)
-    final Pointer<PyMethodDef> pyMethodDef = allocator<PyMethodDef>();
-    pyMethodDef.ref.ml_name = callableName.toNativeUtf8().cast<Char>();
-    pyMethodDef.ref.ml_meth = callable;
-    pyMethodDef.ref.ml_flags = METH_VARARGS | METH_KEYWORDS;
-    pyMethodDef.ref.ml_doc =
-        docString.isEmpty ? nullptr : docString.toNativeUtf8().cast<Char>();
-
-    print(
-        "[_createPyMethodDef] pyMethodDef@${pyMethodDef.address.toRadixString(16)}");
-    print(
-      "[_createPyMethodDef] ml_name@${pyMethodDef.ref.ml_name.address.toRadixString(16)}: ${pyMethodDef.ref.ml_name.cast<Utf8>().toDartString()}",
-    );
-    print(
-      "[_createPyMethodDef] ml_meth@${pyMethodDef.ref.ml_meth.address.toRadixString(16)}: ${pyMethodDef.ref.ml_meth.runtimeType}::${pyMethodDef.ref.ml_meth.toString()}",
-    );
-    print(
-      "[_createPyMethodDef] ml_flags: ${pyMethodDef.ref.ml_flags}",
-    );
-    print(
-      "[_createPyMethodDef] ml_doc@${pyMethodDef.ref.ml_doc.address.toRadixString(16)}: ${pyMethodDef.ref.ml_doc != nullptr ? pyMethodDef.ref.ml_doc.cast<Utf8>().toDartString() : "null"}",
-    );
-
-    // TODO: look into the PyMethodDef struct. What values does it have?
-    // A misconfiguration here might also be the root cause of the segfault.
-
-    return pyMethodDef;
-  }
-
-  static Pointer<PyObject> _toPyCFunction<T extends PyCFunctionSignature>(
-    PythonFfiMacOSBase platform,
-    String dartFunctionName,
-    Pointer<NativeFunction<T>> dartFunction, {
-    String docString = "",
-  }) {
-    print("[_toPyCFunction] calling _createPyMethodDef");
-    final Pointer<PyMethodDef> pyMethodDef =
-        _createPyMethodDef(dartFunctionName, dartFunction, docString);
-    print("[_toPyCFunction] called _createPyMethodDef");
-
-    // TODO: we might not need this name
-    print("[_toPyCFunction] creating module name");
-    final Pointer<PyObject> name =
-        "audible"._toPythonObject(platform).reference;
-    print("[_toPyCFunction] created module name");
-
-    print("[_toPyCFunction] constructing PyCFunction via PyCFunction_NewEx");
-
-    /// [PyCFunction_NewEx] is undocumented, but can be used.
-    /// - [arg0] is a [PyMethodDef], the callable to be called
-    /// - [arg1] probably is a class object, to which the method will be bound, may be NULL
-    /// - [arg2] probably is a string object containing the module name, may be NULL
-    final Pointer<PyObject> function =
-        platform.bindings.PyCFunction_NewEx(pyMethodDef, nullptr, nullptr);
-    print("[_toPyCFunction] constructed PyCFunction via PyCFunction_NewEx");
-
-    return function;
-  }
-}
-
-typedef DartCFunctionSignature = Object? Function(
-  Object? self,
-  List<Object?> args,
-);
-
-/// https://docs.python.org/3/c-api/structures.html#c.PyMethodDef
-typedef PyCFunctionSignature = Pointer<PyObject> Function(
-  Pointer<PyObject> self,
-  Pointer<PyObject> args,
-);
-
-extension GenericExtension on Function {
-  DartCFunctionSignature get generic {
-    if (this is DartCFunctionSignature) {
-      return this as DartCFunctionSignature;
-    }
-    if (this is int Function(int)) {
-      return (Object? self, List<Object?> args) {
-        final int arg = args[0] as int;
-        print("calling int Function(int) with $arg");
-        final int result = this(arg) as int;
-        print("called int Function(int) with $arg, result: $result");
-        return result;
-      };
-    }
-    throw UnimplementedError();
+        Pointer.fromFunction<PyCFunctionSignature>(
+            _FunctionConversionUtils._pythonFunction);
+    return _FunctionConversionUtils._toPyCFunction(platform, p, self: key);
   }
 }
