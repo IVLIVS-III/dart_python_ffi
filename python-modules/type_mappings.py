@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from datetime import datetime
 from math import isclose
 import time
 from typing import Any, Awaitable, Callable, Generator, Iterable, Iterator, Self, TypeVar, Generic
@@ -196,10 +197,14 @@ def receive_awaitable(value: Awaitable[int]):
     asyncio.run(wrapper())
 
 
+def now() -> str:
+    return datetime.utcfromtimestamp(time.time()).strftime('%H:%M:%S.%f')
+
+
 def request_awaitable() -> Awaitable[int]:
     async def inner() -> int:
-        print("starting sleep")
+        print(f"[{now()}] starting sleep")
         await asyncio.sleep(kAwaitableSleep)
-        print("ended sleep")
+        print(f"[{now()}] ended sleep")
         return kAwaitableResult
     return inner()

@@ -223,7 +223,15 @@ Future<void> typeMappings() async {
       print("HI 0");
       final DateTime t0 = DateTime.now();
       print("HI 1, a: $a, b: $b");
+      final Timer t =
+          Timer.periodic(const Duration(milliseconds: 100), (Timer t) {
+        if (t.tick > 20) {
+          t.cancel();
+        }
+        print("[${DateTime.now()}] HI 1.5");
+      });
       final int aRes = await a;
+      t.cancel();
       print("HI 2");
       final DateTime t1 = DateTime.now();
       print("HI 3");

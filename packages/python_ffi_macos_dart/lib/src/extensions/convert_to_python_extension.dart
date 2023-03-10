@@ -167,26 +167,34 @@ extension ConvertToPythonExtension on Object? {
     PythonFfiMacOSBase platform,
     Future<Object?> value,
   ) {
-    final PythonModuleInterface<PythonFfiDelegate<Pointer<PyObject>>,
-        Pointer<PyObject>> asyncio = platform.importModule("asyncio");
-    final Object? eventLoop =
-        asyncio.getFunction("get_event_loop").call(<Object?>[]);
-    if (eventLoop is _PythonObjectMacos) {
-      final Object? future =
-          eventLoop.getFunction("create_future").call(<Object?>[]);
+    Object? dunderAwait() {
+      final PythonModuleInterface<PythonFfiDelegate<Pointer<PyObject>>,
+          Pointer<PyObject>> asyncio = platform.importModule("asyncio");
+      final Object? eventLoop =
+          asyncio.getFunction("get_event_loop").call(<Object?>[]);
+      if (eventLoop is _PythonObjectMacos) {
+        final Object? future =
+            eventLoop.getFunction("create_future").call(<Object?>[]);
 
-      if (future is PythonFutureMacos) {
-        value.then((Object? result) {
-          future.getFunction("set_result").call(<Object?>[result]);
-        }).catchError((dynamic err) {
-          future.getFunction("set_exception").call(<Object?>[err]);
-        });
-        return future.reference;
+        if (future is PythonFutureMacos) {
+          value.then((Object? result) {
+            future.getFunction("set_result").call(<Object?>[result]);
+          }).catchError((dynamic err) {
+            future.getFunction("set_exception").call(<Object?>[err]);
+          });
+          return future.reference;
+        }
+
+        throw PythonFfiException("Unable to create asyncio future");
       }
-
-      throw PythonFfiException("Unable to create asyncio future");
+      throw PythonFfiException("Unable to fetch asyncio event loop");
     }
-    throw PythonFfiException("Unable to fetch asyncio event loop");
+
+    /// PyEval_EvalCode(PyObject* source, PyObject* globals, PyObject* locals)
+    // final coro = platform.bindings.PyEval_EvalCode(arg0, arg1, arg2);
+    // Idea: create a python object with `__await__` = `dunderAwait`
+    // var foo = _PythonObjectMacos(platform, dunderAwait());
+    return dunderAwait() as Pointer<PyObject>;
   }
 
   static Pointer<PyObject> fromFunction(
