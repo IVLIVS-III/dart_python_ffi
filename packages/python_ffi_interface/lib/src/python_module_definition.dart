@@ -65,6 +65,22 @@ class PythonModuleDefinition {
     this.license,
   });
 
+  factory PythonModuleDefinition.fromJson(
+      {required String name, required Map<String, dynamic> json}) {
+    final PythonSourceEntity root = _parseSourceEntity(json["root"]);
+    final Iterable<String> classNames =
+        (json["classNames"] as List<dynamic>).cast<String>();
+    final PythonSourceFileEntity? license = json["license"] == null
+        ? null
+        : _parseSourceFileEntity(json["license"]);
+    return PythonModuleDefinition(
+      name: name,
+      root: root,
+      classNames: classNames,
+      license: license,
+    );
+  }
+
   final String name;
   final PythonSourceEntity root;
   final Iterable<String> classNames;

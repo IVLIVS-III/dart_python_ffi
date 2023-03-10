@@ -23,8 +23,11 @@ abstract class PythonFfiDelegate<R extends Object?> extends BaseInterface {
   /// Checks whether the Python runtime was initialized
   bool get isInitialized;
 
-  /// Initializes the native platform Python runtime
+  /// Initializes the native platform Python runtime.
+  /// Must call [prepareModules] after this.
   FutureOr<void> initialize();
+
+  FutureOr<void> prepareModules();
 
   FutureOr<void> prepareModule(PythonModuleDefinition moduleDefinition);
 
@@ -109,6 +112,12 @@ class _DummyDelegate extends PythonFfiDelegate<Object?> {
   @override
   // TODO: implement isInitialized
   bool get isInitialized => throw UnimplementedError();
+
+  @override
+  FutureOr<void> prepareModules() {
+    // TODO: implement prepareModules
+    throw UnimplementedError();
+  }
 
   @override
   FutureOr<void> prepareModule(PythonModuleDefinition moduleDefinition) {

@@ -85,6 +85,7 @@ abstract class PythonObjectInterface<P extends PythonFfiDelegate<R>,
     setAttribute<dynamic>(attributeName, value);
   }
 
+  /*
   @override
   dynamic noSuchMethod(Invocation invocation) {
     if (invocation.isMethod) {
@@ -107,6 +108,7 @@ abstract class PythonObjectInterface<P extends PythonFfiDelegate<R>,
 
     return super.noSuchMethod(invocation);
   }
+  */
 
   void debugDump() {
     // ignore: avoid_print

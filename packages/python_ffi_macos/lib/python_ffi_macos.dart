@@ -47,7 +47,7 @@ class PythonFfiMacOS extends _PythonFfiMacOS with PythonFfiMacOSMixin {
       LicenseRegistry.addLicense(() async* {
         final ByteData licenseBytes = await loadPythonFile(license);
         final String licenseText =
-            utf8.decode(licenseBytes.buffer.asUint8List());
+        utf8.decode(licenseBytes.buffer.asUint8List());
         yield LicenseEntryWithLineBreaks(
           <String>[moduleDefinition.name],
           licenseText,
@@ -55,5 +55,19 @@ class PythonFfiMacOS extends _PythonFfiMacOS with PythonFfiMacOSMixin {
       });
     }
     return super.prepareModule(moduleDefinition);
+  }
+
+  File get _modulesJsonFile =>
+      File(
+        <String>["python-modules", "modules.json"].join(Platform.pathSeparator),
+      );
+
+  @override
+  String get modulesJson {
+    final File modulesJsonFile = _modulesJsonFile;
+    if (!modulesJsonFile.existsSync()) {
+      return "{}";
+    }
+    return modulesJsonFile.readAsStringSync();
   }
 }

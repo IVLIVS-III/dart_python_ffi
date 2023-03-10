@@ -32,6 +32,8 @@ abstract class ModuleBundle<T extends PythonModule<Object>> {
 
   Directory get _pythonModuleDestinationDirectory;
 
+  File get _modulesJsonFile;
+
   ByteData _transformSourceData(ByteData data) => data;
 
   String _transformSourceFileName(String fileName) => fileName;
@@ -61,6 +63,37 @@ abstract class ModuleBundle<T extends PythonModule<Object>> {
 
   FutureOr<void> _postExport(List<List<String>> filePaths) {}
 
+  String? _getModulesJsonSync();
+
+  void _setModulesJsonSync(String data) {
+    final ByteData transformedJson = _transformSourceData(
+      ByteData.view(Uint8List.fromList(data.codeUnits).buffer),
+    );
+    final File modulesJsonFile = _modulesJsonFile;
+    if (!modulesJsonFile.existsSync()) {
+      _modulesJsonFile.createSync(recursive: true);
+    }
+    modulesJsonFile.writeAsBytesSync(
+      transformedJson.buffer.asUint8List(),
+    );
+  }
+
+  void _updateModulesJson(MapEntry<String, dynamic> entry) {
+    final String? rawJson = _getModulesJsonSync();
+    final dynamic decodedJson = rawJson == null ? null : jsonDecode(rawJson);
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (decodedJson is Map) {
+      for (final MapEntry<dynamic, dynamic> e in decodedJson.entries) {
+        final dynamic key = e.key;
+        if (key is String) {
+          data[key] = e.value;
+        }
+      }
+    }
+    data[entry.key] = entry.value;
+    _setModulesJsonSync(jsonEncode(data));
+  }
+
   Future<void> export() async {
     final T pythonModule = this.pythonModule;
     if (!(await pythonModule.load())) {
@@ -89,6 +122,8 @@ abstract class ModuleBundle<T extends PythonModule<Object>> {
             .toList(),
       );
     }
+
+    _updateModulesJson(pythonModule.toJson());
   }
 }
 
@@ -223,11 +258,27 @@ class FlutterModuleBundle<T extends Object>
     final String newPubspecString = config.insertIntoPubspec(
       filePaths
           .map((List<String> e) => <String>["python-modules", ...e])
-          .toList(),
+          .toList()
+        ..add(<String>["python-modules", "modules.json"]),
     );
     pubspecFile.writeAsStringSync(newPubspecString);
 
     super._postExport(filePaths);
+  }
+
+  @override
+  File get _modulesJsonFile => File(
+        <String>[_appRootDirectory.path, "python-modules", "modules.json"]
+            .join(Platform.pathSeparator),
+      );
+
+  @override
+  String? _getModulesJsonSync() {
+    final File modulesJsonFile = _modulesJsonFile;
+    if (!modulesJsonFile.existsSync()) {
+      return null;
+    }
+    return modulesJsonFile.readAsStringSync();
   }
 }
 
@@ -281,4 +332,38 @@ const String kBase64 = \"""";
   @override
   String _transformSourceFileName(String fileName) =>
       "${super._transformSourceFileName(fileName)}.dart";
+
+  @override
+  File get _modulesJsonFile => File(
+        <String>[
+          _appRootDirectory.path,
+          "lib",
+          "python_modules",
+          "modules.json.dart"
+        ].join(Platform.pathSeparator),
+      );
+
+  @override
+  String? _getModulesJsonSync() {
+    final File modulesJsonFile = _modulesJsonFile;
+    if (!modulesJsonFile.existsSync()) {
+      return null;
+    }
+    final String dartString = modulesJsonFile.readAsStringSync();
+    const String startMarker = "const String kBase64 = \"";
+    const String endMarker = "\";";
+    final int start = dartString.indexOf(startMarker) + startMarker.length;
+    if (start == -1) {
+      return null;
+    }
+    final int end = dartString.indexOf(endMarker, start);
+    if (end == -1) {
+      return null;
+    }
+    if (end < start) {
+      return null;
+    }
+    final String base64 = dartString.substring(start, end);
+    return utf8.decode(base64Decode(base64));
+  }
 }

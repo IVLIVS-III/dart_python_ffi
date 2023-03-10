@@ -20,6 +20,12 @@ class MethodChannelPythonFfi extends PythonFfiPlatform<Object?> {
   }
 
   @override
+  FutureOr<void> prepareModules() {
+    // TODO: implement prepareModules
+    throw UnimplementedError();
+  }
+
+  @override
   void addClassName(String className) {
     throw UnimplementedError("addClassName() has not been implemented.");
   }

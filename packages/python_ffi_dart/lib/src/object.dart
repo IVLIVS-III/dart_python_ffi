@@ -47,6 +47,7 @@ abstract class PythonObject
   void setAttribute<T extends Object?>(String attributeName, T value) =>
       _delegate.setAttribute(attributeName, value);
 
+/*
   @override
   Object? noSuchMethod(Invocation invocation) {
     try {
@@ -54,4 +55,5 @@ abstract class PythonObject
     } on Exception catch (_) {}
     return super.noSuchMethod(invocation);
   }
+  */
 }

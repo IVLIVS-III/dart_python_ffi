@@ -1,6 +1,29 @@
 // TODO: Put public facing types in this file.
 part of python_ffi_macos_dart;
 
+extension FutureOrExtension<T> on FutureOr<T> {
+  static FutureOr<List<T>> wait<T>(Iterable<FutureOr<T>> futures) async {
+    final List<T> results = <T>[];
+    final List<Future<T>> futuresToWait = <Future<T>>[];
+    for (final FutureOr<T> future in futures) {
+      if (future is Future<T>) {
+        futuresToWait.add(future);
+      } else {
+        results.add(future);
+      }
+    }
+    results.addAll(await Future.wait<T>(futuresToWait));
+    return results;
+  }
+
+  FutureOr<R> then<R>(FutureOr<R> Function(T value) onValue) async {
+    if (this is Future<T>) {
+      return (await this as Future<T>).then(onValue);
+    }
+    return onValue(this as T);
+  }
+}
+
 abstract class PythonFfiMacOSBase extends PythonFfiDelegate<Pointer<PyObject>> {
   DartPythonCBindings get bindings;
 
@@ -9,6 +32,8 @@ abstract class PythonFfiMacOSBase extends PythonFfiDelegate<Pointer<PyObject>> {
   FutureOr<Directory> getApplicationSupportDirectory();
 
   FutureOr<ByteData> loadPythonFile(PythonSourceFileEntity sourceFile);
+
+  String get modulesJson;
 }
 
 /// The macOS implementation of [PythonFfiPlatform].
@@ -24,6 +49,21 @@ class PythonFfiMacOSDart extends PythonFfiMacOSBase with PythonFfiMacOSMixin {
       return ByteData.view(base64Decode(sourceFile.base64).buffer);
     }
     throw Exception("Unsupported source file type: $sourceFile");
+  }
+
+  String? _modulesJsonBase64;
+
+  set modulesJson(String base64) {
+    _modulesJsonBase64 = base64;
+  }
+
+  @override
+  String get modulesJson {
+    final String? modulesJsonBase64 = _modulesJsonBase64;
+    if (modulesJsonBase64 == null) {
+      return "{}";
+    }
+    return utf8.decode(base64Decode(modulesJsonBase64));
   }
 }
 
@@ -102,6 +142,44 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
     bindings.Py_Initialize();
 
     appendToPath((await packagesDir).path);
+
+    await prepareModules();
+  }
+
+  @override
+  FutureOr<void> prepareModules() {
+    final dynamic modulesJson = jsonDecode(this.modulesJson);
+    if (modulesJson is! Map) {
+      return (() {})();
+    }
+
+    final List<FutureOr<void>> copyTasks = <FutureOr<void>>[];
+    for (final MapEntry<dynamic, dynamic> entry in modulesJson.entries) {
+      final dynamic key = entry.key;
+      final dynamic value = entry.value;
+      if (key is! String || value is! Map) {
+        continue;
+      }
+      copyTasks.add(
+        prepareModule(
+          PythonModuleDefinition.fromJson(
+            name: key,
+            json: Map<String, dynamic>.fromEntries(
+              value.entries
+                  .where(
+                    (MapEntry<dynamic, dynamic> element) =>
+                        element.key is String,
+                  )
+                  .map(
+                    (MapEntry<dynamic, dynamic> e) =>
+                        MapEntry<String, dynamic>(e.key as String, e.value),
+                  ),
+            ),
+          ),
+        ),
+      );
+    }
+    return FutureOrExtension.wait<void>(copyTasks).then((_) {});
   }
 
   Future<void> _copyModuleFile(PythonSourceFileEntity sourceFile) async {

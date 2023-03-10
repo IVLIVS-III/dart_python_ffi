@@ -1,0 +1,1 @@
+{"liblax":{"root":["__init__.py","core.py","parser.py","LICENSE.txt"]},"json_parser":{"root":["__init__.py","parser.py","lexer.py","LICENSE.txt"]},"type_mappings":{"root":"type_mappings.py"},"data_class":{"root":"data_class.py"},"hello_world":{"root":"hello_world.py"},"primitives":{"root":"primitives.py"},"structs":{"root":"structs.py"}}

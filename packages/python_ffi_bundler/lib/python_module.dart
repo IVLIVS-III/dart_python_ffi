@@ -26,6 +26,8 @@ abstract class PythonModule<T extends Object> {
   final String path;
   T? _data;
 
+  String get moduleName;
+
   bool get isLoaded => _data != null;
 
   T get data {
@@ -36,6 +38,8 @@ abstract class PythonModule<T extends Object> {
 
     return data;
   }
+
+  FileSystemEntity get source;
 
   Future<ByteData?> _loadFile(String filePath) async {
     final File file = File(filePath);
@@ -61,12 +65,27 @@ abstract class PythonModule<T extends Object> {
     _data = await _load();
     return _data != null;
   }
+
+  MapEntry<String, dynamic> toJson() => MapEntry<String, dynamic>(
+        moduleName,
+        <String, dynamic>{
+          "root": source.structure,
+        },
+      );
 }
 
 class SingleFilePythonModule extends PythonModule<ByteData> {
   SingleFilePythonModule(super.path) : super._();
 
-  String get fileName => File(path).name;
+  @override
+  FileSystemEntity get source => File(path);
+
+  String get fileName => source.name;
+
+  @override
+  String get moduleName => fileName.endsWith(".py")
+      ? fileName.substring(0, fileName.length - 3)
+      : fileName;
 
   @override
   Future<ByteData?> _load() => _loadFile(path);
@@ -75,7 +94,11 @@ class SingleFilePythonModule extends PythonModule<ByteData> {
 class MultiFilePythonModule extends PythonModule<Map<List<String>, ByteData>> {
   MultiFilePythonModule(super.path) : super._();
 
-  String get moduleName => Directory(path).name;
+  @override
+  FileSystemEntity get source => Directory(path);
+
+  @override
+  String get moduleName => source.name;
 
   Future<Map<List<String>, ByteData>?> _loadDirectory(
     Directory directory,
@@ -109,5 +132,21 @@ class MultiFilePythonModule extends PythonModule<Map<List<String>, ByteData>> {
       return null;
     }
     return _loadDirectory(directory);
+  }
+}
+
+extension FileSystemEntityExtension on FileSystemEntity {
+  Object get structure {
+    if (this is File) {
+      return name;
+    } else if (this is Directory) {
+      final List<Object> result = <Object>[];
+      for (final FileSystemEntity child in (this as Directory).listSync()) {
+        result.add(child.structure);
+      }
+      return result;
+    } else {
+      throw StateError("Unknown FileSystemEntity type.");
+    }
   }
 }
