@@ -430,6 +430,33 @@ class MySleepAgain2:
             pass
 
 
+@dataclass
+class MyAwaitable:
+    def __await__(self: Self):
+        result = yield None
+        print(f"first yield: {result} @{now()}")
+        result = yield None
+        print(f"second yield: {result} @{now()}")
+        result = yield None
+        print(f"third yield: {result} @{now()}")
+        return 0
+
+
+@dataclass
+class MySleepAgain3:
+    seconds: int
+
+    def __await__(self: Self):
+        start = time.time()
+        i = 0
+        end = time.time()
+        while end - start < self.seconds:
+            result = yield None
+            print(f"yield #0: {result} @{now()}")
+            end = time.time()
+        return end - start
+
+
 def main1():
     print("starting asyncio.run on main1")
     asyncio.run(my_coroutine(my_awaitable()))
@@ -496,10 +523,66 @@ def main6():
     future = loop.create_future()
 
 
+async def amain7():
+    result = await MyAwaitable()
+    print(f"my awaitable returned: {result} @{now()}")
+
+
+def main7():
+    print("starting asyncio.run on main7")
+    asyncio.run(amain7())
+    print("└── completed asyncion.run")
+
+
+async def amain8():
+    result = await MySleepAgain3(1)
+    print(f"my sleep again 3 returned: {result} @{now()}")
+
+
+def main8():
+    print("starting asyncio.run on main8")
+    asyncio.run(amain8())
+    print("└── completed asyncion.run")
+
+
+async def my_await(awaitable: Awaitable):
+    print(f"awaitable: {awaitable} @{id(awaitable)} [{dir(awaitable)}]")
+    iterable = awaitable.__await__()
+    print(f"iterable: {iterable} @{id(iterable)} [{dir(iterable)}]")
+    iterator = iter(iterable)
+    print(f"iterator: {iterator} @{id(iterator)} [{dir(iterator)}]")
+    while True:
+        try:
+            x = next(iterator)
+            print(f"x: {x} @{id(x)} [{dir(x)}]")
+            if hasattr(x, "__await__"):
+                await x
+            await asyncio.sleep(0.1)
+        except StopIteration as e:
+            return e.value
+
+
+async def amain9():
+    awaitable = asyncio.sleep(1)
+    result = await my_await(awaitable)
+    print(f"my awaitable returned: {result} @{now()}")
+    return result
+
+
+def main9():
+    print("starting asyncio.run on main9")
+    asyncio.run(amain9())
+    print("└── completed asyncion.run")
+
+
 if __name__ == "__main__":
     # main1()
     # main2()
     # main3()
     # main4()
     # main5()
+    # main6()
+    # main7()
+    # main8()
+    main9()
     pass

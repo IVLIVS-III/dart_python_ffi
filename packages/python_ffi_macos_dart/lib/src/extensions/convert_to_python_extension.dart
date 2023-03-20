@@ -63,118 +63,129 @@ extension ConvertToPythonExtension on Object? {
       value ? platform.bindings.Py_True : platform.bindings.Py_False;
 
   static Pointer<PyObject> fromInt(PythonFfiMacOSBase platform, int value) =>
-      platform.bindings.PyLong_FromLong(value)..incRef(platform);
+      platform.bindings.PyLong_FromLong(value)
+        ..incRef(platform);
 
-  static Pointer<PyObject> fromFloat(
-    PythonFfiMacOSBase platform,
-    double value,
-  ) =>
-      platform.bindings.PyFloat_FromDouble(value)..incRef(platform);
+  static Pointer<PyObject> fromFloat(PythonFfiMacOSBase platform,
+      double value,) =>
+      platform.bindings.PyFloat_FromDouble(value)
+        ..incRef(platform);
 
-  static Pointer<PyObject> fromString(
-    PythonFfiMacOSBase platform,
-    String value,
-  ) =>
+  static Pointer<PyObject> fromString(PythonFfiMacOSBase platform,
+      String value,) =>
       value.toNativeUtf8().useAndFree<Pointer<PyObject>>(
             (Pointer<Utf8> pointer) =>
-                platform.bindings.PyUnicode_FromString(pointer.cast<Char>()),
-          )..incRef(platform);
+            platform.bindings.PyUnicode_FromString(pointer.cast<Char>()),
+      )
+        ..incRef(platform);
 
-  static Pointer<PyObject> fromMap(
-    PythonFfiMacOSBase platform,
-    Map<dynamic, dynamic> value,
-  ) {
+  static Pointer<PyObject> fromMap(PythonFfiMacOSBase platform,
+      Map<dynamic, dynamic> value,) {
     final Pointer<PyObject> object = platform.bindings.PyDict_New()
       ..incRef(platform);
     for (final Object? key in value.keys) {
       final Object? val = value[key];
 
       final Pointer<PyObject> keyObject =
-          key._toPythonObject(platform).reference..incRef(platform);
+      key
+          ._toPythonObject(platform)
+          .reference
+        ..incRef(platform);
 
       final Pointer<PyObject> valueObject =
-          val._toPythonObject(platform).reference..incRef(platform);
+      val
+          ._toPythonObject(platform)
+          .reference
+        ..incRef(platform);
 
       platform.bindings.PyDict_SetItem(object, keyObject, valueObject);
     }
     return object;
   }
 
-  static Pointer<PyObject> fromUint8List(
-    PythonFfiMacOSBase platform,
-    Uint8List value,
-  ) {
+  static Pointer<PyObject> fromUint8List(PythonFfiMacOSBase platform,
+      Uint8List value,) {
     final List<int> elements = List<int>.from(value);
     final _PythonObjectMacos elementsObject =
-        elements._toPythonObject(platform); // list[int]
+    elements._toPythonObject(platform); // list[int]
     return platform.bindings.PyBytes_FromObject(elementsObject.reference)
       ..incRef(platform);
   }
 
-  static Pointer<PyObject> fromTuple(
-    PythonFfiMacOSBase platform,
-    PythonTuple<Object?, PythonFfiMacOSBase, Pointer<PyObject>> value,
-  ) {
+  static Pointer<PyObject> fromTuple(PythonFfiMacOSBase platform,
+      PythonTuple<Object?, PythonFfiMacOSBase, Pointer<PyObject>> value,) {
     throw UnimplementedError();
   }
 
-  static Pointer<PyObject> fromList(
-    PythonFfiMacOSBase platform,
-    List<Object?> value,
-  ) {
+  static Pointer<PyObject> fromList(PythonFfiMacOSBase platform,
+      List<Object?> value,) {
     final Pointer<PyObject> object = platform.bindings.PyList_New(value.length)
       ..incRef(platform);
     for (int i = 0; i < value.length; i++) {
       final Object? val = value[i];
 
       final Pointer<PyObject> valueObject =
-          val._toPythonObject(platform).reference..incRef(platform);
+      val
+          ._toPythonObject(platform)
+          .reference
+        ..incRef(platform);
 
       platform.bindings.PyList_SetItem(object, i, valueObject);
     }
     return object;
   }
 
-  static Pointer<PyObject> fromSet(
-    PythonFfiMacOSBase platform,
-    Set<Object?> value,
-  ) {
+  static Pointer<PyObject> fromSet(PythonFfiMacOSBase platform,
+      Set<Object?> value,) {
     final List<Object?> elements = value.toList();
     final _PythonObjectMacos elementsObject =
-        elements._toPythonObject(platform);
+    elements._toPythonObject(platform);
 
     return platform.bindings.PySet_New(elementsObject.reference)
       ..incRef(platform);
   }
 
-  static Pointer<PyObject> fromIterable(
-    PythonFfiMacOSBase platform,
-    Iterable<Object?> value,
-  ) {
+  static Pointer<PyObject> fromIterable(PythonFfiMacOSBase platform,
+      Iterable<Object?> value,) {
     // TODO: implement
     throw UnimplementedError();
   }
 
-  static Pointer<PyObject> fromIterator(
-    PythonFfiMacOSBase platform,
-    Iterator<Object?> value,
-  ) {
+  static Pointer<PyObject> fromIterator(PythonFfiMacOSBase platform,
+      Iterator<Object?> value,) {
     // TODO: implement
     throw UnimplementedError();
   }
 
-  static Pointer<PyObject> fromFuture(
-    PythonFfiMacOSBase platform,
-    Future<Object?> value,
-  ) {
+  static Pointer<PyObject> fromFuture(PythonFfiMacOSBase platform,
+      Future<Object?> value,) {
+    bool isDone = false;
+    Object? result;
+    value.then((Object? r) {
+      isDone = true;
+      result = r;
+    });
+    final PythonFfiAwaitableMacOS<Object?> awaitable =
+    PythonFfiAwaitableMacOS<Object?>(
+      isDone: () => isDone,
+      result: () => result,
+    );
+
+    // TODO: convert awaitable to an instance on class PythonFfiAwaitable
+
+    return fromFuture_deprecated(platform, value);
+  }
+
+  static Pointer<PyObject> fromFuture_deprecated(PythonFfiMacOSBase platform,
+      Future<Object?> value,) {
     Object? dunderAwait() {
       final PythonModuleInterface<PythonFfiDelegate<Pointer<PyObject>>,
           Pointer<PyObject>> asyncio = platform.importModule("asyncio");
       final Object? eventLoop =
-          asyncio.getFunction("get_event_loop").call(<Object?>[]);
+      asyncio.getFunction("get_event_loop").call(<Object?>[]);
       if (eventLoop is _PythonObjectMacos) {
         final Object? future =
-            eventLoop.getFunction("create_future").call(<Object?>[]);
+        eventLoop.getFunction("create_future").call(<Object?>[]);
 
         if (future is PythonFutureMacos) {
           value.then((Object? result) {
@@ -197,15 +208,13 @@ extension ConvertToPythonExtension on Object? {
     return dunderAwait() as Pointer<PyObject>;
   }
 
-  static Pointer<PyObject> fromFunction(
-    PythonFfiMacOSBase platform,
-    DartCFunctionSignature value,
-  ) {
+  static Pointer<PyObject> fromFunction(PythonFfiMacOSBase platform,
+      DartCFunctionSignature value,) {
     final Object? key =
-        _FunctionConversionUtils._addStaticEntry(platform, value);
+    _FunctionConversionUtils._addStaticEntry(platform, value);
     final Pointer<NativeFunction<PyCFunctionSignature>> p =
-        Pointer.fromFunction<PyCFunctionSignature>(
-            _FunctionConversionUtils._pythonFunction);
+    Pointer.fromFunction<PyCFunctionSignature>(
+        _FunctionConversionUtils._pythonFunction);
     return _FunctionConversionUtils._toPyCFunction(platform, p, self: key);
   }
 }

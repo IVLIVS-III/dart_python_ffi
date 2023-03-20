@@ -10,6 +10,10 @@ dependencies:
   python_ffi_interface: ^0.0.1
   python_ffi_macos_dart: ^0.0.1
 
+python_ffi:
+  modules:
+    python_ffi: any
+
 dev_dependencies:
   python_ffi_lint: ^0.0.1
   test: ^1.16.0

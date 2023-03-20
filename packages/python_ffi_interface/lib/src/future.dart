@@ -12,3 +12,10 @@ abstract class PythonFutureInterface<T extends Object?,
 
   PythonFutureInterface<S, P, R> cast<S extends Object?>();
 }
+
+abstract class PythonFfiAwaitableInterface<T extends Object?,
+    P extends PythonFfiDelegate<R>, R extends Object?> {
+  bool Function() get isDone;
+
+  T Function() get result;
+}

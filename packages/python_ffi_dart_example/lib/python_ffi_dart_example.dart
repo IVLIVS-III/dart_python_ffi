@@ -217,7 +217,7 @@ Future<void> typeMappings() async {
     pythonType: "Awaitable[int]",
     value: future(),
     // TODO: implement
-    sendToPython: module.receive_awaitable,
+    // sendToPython: module.receive_awaitable,
     receiveFromPython: module.request_awaitable,
     equals: (Future<int> a, Future<int> b) async {
       print("HI 0");

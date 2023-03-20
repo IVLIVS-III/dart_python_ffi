@@ -1,4 +1,4 @@
-from typing import Iterator, Self, TypeVar, Generic
+from typing import Callable, Generator, Iterator, Self, TypeVar, Generic
 
 
 T = TypeVar("T")
@@ -20,6 +20,10 @@ class PythonFfiIterable(Generic[T]):
 
 
 class PythonFfiAwaitable(Generic[T]):
-    def __await__(self: Self) -> Iterator[T]:
-        # TODO: implement
-        ...
+    __isDone: Callable[[], bool]
+    __result: Callable[[], T]
+
+    def __await__(self: Self) -> Generator[T, None, None]:
+        while not self.__isDone():
+            yield None
+        return self.__result()

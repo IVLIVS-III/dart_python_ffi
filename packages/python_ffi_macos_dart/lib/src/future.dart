@@ -127,6 +127,11 @@ class PythonFutureMacos<T>
 
   Future<T> _future() {
     final Completer<T> completer = Completer<T>();
+    return _future_deprecated();
+  }
+
+  Future<T> _future_deprecated() {
+    final Completer<T> completer = Completer<T>();
     _startEventLoop();
     final Iterable<Object?> iterable =
         getFunction("__await__").call(<Object?>[]);
@@ -179,4 +184,16 @@ class PythonFutureMacos<T>
   @override
   PythonFutureInterface<S, PythonFfiMacOSBase, Pointer<PyObject>>
       cast<S extends Object?>() => PythonFutureMacos<S>(platform, reference);
+}
+
+class PythonFfiAwaitableMacOS<T extends Object?>
+    extends PythonFfiAwaitableInterface<T, PythonFfiMacOSDart,
+        Pointer<PyObject>> {
+  PythonFfiAwaitableMacOS({required this.isDone, required this.result});
+
+  @override
+  bool Function() isDone;
+
+  @override
+  T Function() result;
 }
