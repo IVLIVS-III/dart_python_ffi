@@ -25,7 +25,7 @@ abstract class PythonFfiDelegate<R extends Object?> extends BaseInterface {
 
   /// Initializes the native platform Python runtime.
   /// Must call [prepareModules] after this.
-  FutureOr<void> initialize();
+  FutureOr<void> initialize([String? modulesJsonBase64]);
 
   FutureOr<void> prepareModules();
 
@@ -104,7 +104,7 @@ class _DummyDelegate extends PythonFfiDelegate<Object?> {
   }
 
   @override
-  FutureOr<void> initialize() {
+  FutureOr<void> initialize([String? modulesJsonBase64]) {
     // TODO: implement initialize
     throw UnimplementedError();
   }

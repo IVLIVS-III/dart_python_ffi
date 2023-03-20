@@ -23,8 +23,8 @@ Future<void> main(List<String> arguments) async {
     "The example command line application showcasing the python_ffi_dart package, a Python-FFI for Dart.",
   )..addCommand(TypeMappingsCommand());
 
-  await PythonFfiDart.instance.initialize();
-  await registerPythonModules();
+  await PythonFfiDart.instance.initialize(modulesJsonBase64);
+  // await registerPythonModules();
 
   await runner.run(arguments);
 }

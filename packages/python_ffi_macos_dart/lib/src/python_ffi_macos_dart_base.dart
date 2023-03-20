@@ -18,7 +18,7 @@ extension FutureOrExtension<T> on FutureOr<T> {
 
   FutureOr<R> then<R>(FutureOr<R> Function(T value) onValue) async {
     if (this is Future<T>) {
-      return (await this as Future<T>).then(onValue);
+      return (await (this as Future<T>)).then(onValue);
     }
     return onValue(this as T);
   }
@@ -34,6 +34,8 @@ abstract class PythonFfiMacOSBase extends PythonFfiDelegate<Pointer<PyObject>> {
   FutureOr<ByteData> loadPythonFile(PythonSourceFileEntity sourceFile);
 
   String get modulesJson;
+
+  set modulesJson(String? base64);
 }
 
 /// The macOS implementation of [PythonFfiPlatform].
@@ -53,7 +55,8 @@ class PythonFfiMacOSDart extends PythonFfiMacOSBase with PythonFfiMacOSMixin {
 
   String? _modulesJsonBase64;
 
-  set modulesJson(String base64) {
+  @override
+  set modulesJson(String? base64) {
     _modulesJsonBase64 = base64;
   }
 
@@ -61,6 +64,7 @@ class PythonFfiMacOSDart extends PythonFfiMacOSBase with PythonFfiMacOSMixin {
   String get modulesJson {
     final String? modulesJsonBase64 = _modulesJsonBase64;
     if (modulesJsonBase64 == null) {
+      print("WARNING: modulesJsonBase64 is null");
       return "{}";
     }
     return utf8.decode(base64Decode(modulesJsonBase64));
@@ -134,7 +138,7 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
   }
 
   @override
-  Future<void> initialize() async {
+  Future<void> initialize([String? modulesJsonBase64]) async {
     if (!areBindingsInitialized) {
       await _openDylib();
     }
@@ -143,12 +147,14 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
 
     appendToPath((await packagesDir).path);
 
+    modulesJson = modulesJsonBase64;
     await prepareModules();
   }
 
   @override
   FutureOr<void> prepareModules() {
     final dynamic modulesJson = jsonDecode(this.modulesJson);
+    print("modulesJson: $modulesJson");
     if (modulesJson is! Map) {
       return (() {})();
     }

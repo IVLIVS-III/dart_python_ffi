@@ -41,10 +41,10 @@ class PythonFfiDart extends PythonFfiBase with PythonFfiMixin {
   @override
   String get name => "PythonFfiDart";
 
-  FutureOr<void> initialize() {
+  FutureOr<void> initialize([String? modulesJsonBase64]) {
     if (Platform.isMacOS) {
       delegate = PythonFfiMacOSDart();
-      return delegate.initialize();
+      return delegate.initialize(modulesJsonBase64);
     }
 
     // TODO: implement for other platforms
@@ -73,18 +73,21 @@ mixin PythonFfiMixin on PythonFfiBase {
     }
   }
 
-  T importModule<T extends PythonModule>(String name,
-      PythonModuleFrom<T> from,) {
+  T importModule<T extends PythonModule>(
+    String name,
+    PythonModuleFrom<T> from,
+  ) {
     _ensureInitialized();
     return from(delegate.importModule(name));
   }
 
-  T importClass<T extends PythonClass>(String moduleName,
-      String className,
-      PythonClassFrom<T> from,
-      List<Object?> args, [
-        Map<String, Object?>? kwargs,
-      ]) {
+  T importClass<T extends PythonClass>(
+    String moduleName,
+    String className,
+    PythonClassFrom<T> from,
+    List<Object?> args, [
+    Map<String, Object?>? kwargs,
+  ]) {
     _ensureInitialized();
     // TODO: integrate pythonClassType properly
     return from(

@@ -1,5 +1,13 @@
-# melos_managed_dependency_overrides: python_ffi_lint,python_ffi_interface
+# melos_managed_dependency_overrides: python_ffi_lint,python_ffi_interface,gunnison,gunnison_assets
 dependency_overrides:
+  gunnison:
+    git:
+      url: https://github.com/IVLIVS-III/gunnison.git
+      path: gunnison
+  gunnison_assets:
+    git:
+      url: https://github.com/IVLIVS-III/gunnison.git
+      path: gunnison_assets
   python_ffi_interface:
     path: ../python_ffi_interface
   python_ffi_lint:

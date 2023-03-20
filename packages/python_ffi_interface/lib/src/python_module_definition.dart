@@ -65,20 +65,54 @@ class PythonModuleDefinition {
     this.license,
   });
 
-  factory PythonModuleDefinition.fromJson(
-      {required String name, required Map<String, dynamic> json}) {
+  factory PythonModuleDefinition.fromJson({
+    required String name,
+    required Map<String, dynamic> json,
+  }) {
     final PythonSourceEntity root = _parseSourceEntity(json["root"]);
+    /*
     final Iterable<String> classNames =
         (json["classNames"] as List<dynamic>).cast<String>();
+    */
     final PythonSourceFileEntity? license = json["license"] == null
         ? null
         : _parseSourceFileEntity(json["license"]);
     return PythonModuleDefinition(
       name: name,
       root: root,
-      classNames: classNames,
+      // classNames: classNames,
+      classNames: <String>[],
       license: license,
     );
+  }
+
+  static PythonSourceFileEntity _parseSourceFileEntity(dynamic value) {
+    if (value is String) {
+      return SourceFile(value);
+    }
+    throw Exception("Invalid source file entity: $value");
+  }
+
+  static PythonSourceEntity _parseSourceEntity(dynamic value) {
+    if (value is String) {
+      return _parseSourceFileEntity(value);
+    } else if (value is Map) {
+      final dynamic directoryName = value["name"];
+      if (directoryName is! String) {
+        throw Exception("Invalid source entity: $value");
+      }
+      final SourceDirectory result = SourceDirectory(directoryName);
+      final dynamic children = value["children"];
+      if (children is! List) {
+        throw Exception("Invalid source entity: $value");
+      }
+      for (final dynamic item in children) {
+        final PythonSourceEntity child = _parseSourceEntity(item);
+        result.add(child);
+      }
+      return result;
+    }
+    throw Exception("Invalid source entity: $value");
   }
 
   final String name;

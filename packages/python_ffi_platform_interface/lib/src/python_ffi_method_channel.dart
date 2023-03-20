@@ -15,7 +15,7 @@ class MethodChannelPythonFfi extends PythonFfiPlatform<Object?> {
   bool get isInitialized => false;
 
   @override
-  Future<void> initialize() async {
+  Future<void> initialize([String? modulesJsonBase64]) async {
     await methodChannel.invokeMethod<void>("initialize");
   }
 

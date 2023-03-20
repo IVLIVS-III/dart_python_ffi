@@ -49,10 +49,13 @@ abstract class PythonModule<T extends Object> {
     }
 
     return file.readAsBytes().then(
-          (List<int> bytes) => ByteData.view(
-            Uint8List.fromList(bytes).buffer,
+          (List<int> bytes) =>
+          ByteData.view(
+            Uint8List
+                .fromList(bytes)
+                .buffer,
           ),
-        );
+    );
   }
 
   Future<T?> _load();
@@ -66,7 +69,8 @@ abstract class PythonModule<T extends Object> {
     return _data != null;
   }
 
-  MapEntry<String, dynamic> toJson() => MapEntry<String, dynamic>(
+  MapEntry<String, dynamic> toJson() =>
+      MapEntry<String, dynamic>(
         moduleName,
         <String, dynamic>{
           "root": source.structure,
@@ -83,9 +87,10 @@ class SingleFilePythonModule extends PythonModule<ByteData> {
   String get fileName => source.name;
 
   @override
-  String get moduleName => fileName.endsWith(".py")
-      ? fileName.substring(0, fileName.length - 3)
-      : fileName;
+  String get moduleName =>
+      fileName.endsWith(".py")
+          ? fileName.substring(0, fileName.length - 3)
+          : fileName;
 
   @override
   Future<ByteData?> _load() => _loadFile(path);
@@ -101,8 +106,7 @@ class MultiFilePythonModule extends PythonModule<Map<List<String>, ByteData>> {
   String get moduleName => source.name;
 
   Future<Map<List<String>, ByteData>?> _loadDirectory(
-    Directory directory,
-  ) async {
+      Directory directory,) async {
     final Map<List<String>, ByteData> result = <List<String>, ByteData>{};
     await for (final FileSystemEntity entity in directory.list()) {
       if (entity is File) {
@@ -112,12 +116,12 @@ class MultiFilePythonModule extends PythonModule<Map<List<String>, ByteData>> {
         }
       } else if (entity is Directory) {
         final Map<List<String>, ByteData>? subResult =
-            await _loadDirectory(directory);
+        await _loadDirectory(directory);
         if (subResult == null) {
           continue;
         }
         for (final MapEntry<List<String>, ByteData> entry
-            in subResult.entries) {
+        in subResult.entries) {
           result[<String>[directory.name, ...entry.key]] = entry.value;
         }
       }
@@ -140,11 +144,14 @@ extension FileSystemEntityExtension on FileSystemEntity {
     if (this is File) {
       return name;
     } else if (this is Directory) {
-      final List<Object> result = <Object>[];
+      final List<Object> children = <Object>[];
       for (final FileSystemEntity child in (this as Directory).listSync()) {
-        result.add(child.structure);
+        children.add(child.structure);
       }
-      return result;
+      return <String, dynamic>{
+        "name": name,
+        "children": children,
+      };
     } else {
       throw StateError("Unknown FileSystemEntity type.");
     }

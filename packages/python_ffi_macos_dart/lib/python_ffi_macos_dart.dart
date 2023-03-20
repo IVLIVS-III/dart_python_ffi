@@ -14,6 +14,7 @@ import "dart:typed_data";
 
 import "package:ffi/ffi.dart";
 import "package:python_ffi_interface/python_ffi_interface.dart";
+// import "package:python_ffi_macos_dart/src/assets.dart";
 import "package:python_ffi_macos_dart/src/ffi/generated_bindings.g.dart";
 
 export "dart:ffi" show Pointer;
