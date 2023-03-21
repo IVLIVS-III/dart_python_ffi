@@ -2,7 +2,7 @@ import "dart:io";
 
 import "package:args/args.dart";
 import "package:args/command_runner.dart";
-import "package:python_ffi_bundler/python_ffi_bundler.dart";
+import "package:dartpip/dartpip.dart";
 
 class BundleCommand extends Command<void> {
   BundleCommand() {

@@ -1,5 +1,5 @@
 import "package:args/command_runner.dart";
-import "package:python_ffi_bundler/python_ffi_bundler.dart";
+import 'package:dartpip/dartpip.dart';
 
 Future<void> main(List<String> arguments) async {
   final CommandRunner<void> runner = CommandRunner<void>(

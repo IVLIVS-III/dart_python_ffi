@@ -3,7 +3,7 @@ import "dart:convert";
 import "dart:io";
 import "dart:typed_data";
 
-import "package:python_ffi_bundler/python_ffi_bundler.dart";
+import "package:dartpip/dartpip.dart";
 
 extension KeyMappingExtension<K, V> on Map<K, V> {
   Map<T, V> mapKeys<T>(

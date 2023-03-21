@@ -1,6 +1,6 @@
 import "dart:io";
 
-import "package:python_ffi_bundler/python_ffi_bundler.dart";
+import "package:dartpip/dartpip.dart";
 import "package:yaml/yaml.dart";
 
 String readPubspec(String appRoot) {
