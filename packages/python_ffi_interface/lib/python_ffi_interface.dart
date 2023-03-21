@@ -7,6 +7,7 @@ import "dart:async";
 import "dart:collection";
 import "dart:typed_data";
 
+import "package:collection/collection.dart";
 import "package:python_ffi_interface/src/base_interface.dart";
 
 export "src/python_ffi_interface_base.dart";
