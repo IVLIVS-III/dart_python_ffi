@@ -13,6 +13,8 @@ abstract class PythonFfiMacOSBase extends PythonFfiDelegate<Pointer<PyObject>> {
 
 /// The macOS implementation of [PythonFfiPlatform].
 class PythonFfiMacOSDart extends PythonFfiMacOSBase with PythonFfiMacOSMixin {
+  PythonFfiMacOSDart(String pythonModulesBase64);
+
   @override
   Directory getApplicationSupportDirectory() => Directory.systemTemp;
 

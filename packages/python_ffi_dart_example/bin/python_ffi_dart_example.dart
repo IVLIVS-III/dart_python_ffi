@@ -2,7 +2,7 @@ import "package:args/command_runner.dart";
 import "package:python_ffi_dart/python_ffi_dart.dart";
 import "package:python_ffi_dart_example/python_ffi_dart_example.dart"
     as python_ffi_dart_example;
-import "package:python_ffi_dart_example/python_modules/module_registry.dart";
+import "package:python_ffi_dart_example/python_modules/src/python_modules.g.dart";
 
 class TypeMappingsCommand extends Command<void> {
   @override
@@ -23,8 +23,7 @@ Future<void> main(List<String> arguments) async {
     "The example command line application showcasing the python_ffi_dart package, a Python-FFI for Dart.",
   )..addCommand(TypeMappingsCommand());
 
-  await PythonFfiDart.instance.initialize();
-  await registerPythonModules();
+  await PythonFfiDart.instance.initialize(kPythonModules);
 
   await runner.run(arguments);
 }

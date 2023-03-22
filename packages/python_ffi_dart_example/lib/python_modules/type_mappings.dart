@@ -2,8 +2,6 @@
 import "dart:typed_data";
 
 import "package:python_ffi_dart/python_ffi_dart.dart";
-import "package:python_ffi_dart_example/python_modules/src/type_mappings.py.dart"
-    as type_mappings_py;
 
 class TypeMappingsModule extends PythonModule {
   TypeMappingsModule.from(super.pythonModule) : super.from();
@@ -105,12 +103,4 @@ class TypeMappingsModule extends PythonModule {
         (PythonFunctionInterface<PythonFfiDelegate<Object?>, Object?> f) =>
             (int x) => f.call<int>(<Object?>[x]),
       );
-
-  static PythonModuleDefinition get definition => PythonModuleDefinition(
-        name: "type_mappings",
-        root: SourceBase64("type_mappings.py", type_mappings_py.kBase64),
-        classNames: classNames,
-      );
-
-  static Iterable<String> get classNames => const <String>[];
 }
