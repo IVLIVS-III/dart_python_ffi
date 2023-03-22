@@ -57,7 +57,7 @@ Bundles all Python modules specified in `pubspec.yaml` for a Dart / Flutter appl
 4. For Flutter projects, all added Python modules will be registered to a `modules.json` file within
    the `python-modules` directory, and added to the `assets` section of the `pubspec.yaml` file.
    This allows for seamless integration with the `python_ffi` package. For Dart projects, all added
-   Python modules will be registered to the `python_modules.dart` file within the `lib` directory.
+   Python modules will be registered to the `python_modules.g.dart` file within the `lib` directory.
    This file includes a `Map` of all Python modules and their paths encoded in a Dart constant to be
    used seamlessly by the `python_ffi_dart` package.
 

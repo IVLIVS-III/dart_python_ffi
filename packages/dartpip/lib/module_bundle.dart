@@ -19,6 +19,22 @@ extension ValueMappingExtension<K, V> on Map<K, V> {
       map((K key, V value) => MapEntry<K, T>(key, f(value)));
 }
 
+extension CamelCaseExtension on String {
+  String get camelCase {
+    final List<String> parts = split("_");
+    final String firstPart = parts.first;
+    final List<String> restParts = parts.sublist(1);
+
+    return <String>[
+      firstPart,
+      ...restParts.map((String part) => part.capitalize()),
+    ].join();
+  }
+
+  String capitalize() =>
+      isEmpty ? this : "${this[0].toUpperCase()}${substring(1)}";
+}
+
 abstract class ModuleBundle<T extends PythonModule<Object>> {
   ModuleBundle({
     required this.pythonModule,
@@ -36,19 +52,14 @@ abstract class ModuleBundle<T extends PythonModule<Object>> {
 
   String _transformSourceFileName(String fileName) => fileName;
 
-  Future<void> _exportSingleFile(String fileName, ByteData data) async {
-    final File file = File(
-      <String>[
-        _pythonModuleDestinationDirectory.path,
-        _transformSourceFileName(fileName)
-      ].join(Platform.pathSeparator),
-    );
+  SourceFile _sourceFile(String fileName) => SourceFile(
+        <String>[
+          _pythonModuleDestinationDirectory.path,
+          _transformSourceFileName(fileName)
+        ].join(Platform.pathSeparator),
+      );
 
-    if (!file.existsSync()) {
-      file.createSync(recursive: true);
-    }
-    file.writeAsBytesSync(data.buffer.asUint8List());
-  }
+  Future<void> _exportSingleFile(String fileName, ByteData data);
 
   Future<void> _exportMultiFile(Map<List<String>, ByteData> data) async {
     for (final MapEntry<List<String>, ByteData> entry in data.entries) {
@@ -59,7 +70,21 @@ abstract class ModuleBundle<T extends PythonModule<Object>> {
     }
   }
 
-  FutureOr<void> _postExport(List<List<String>> filePaths) {}
+  FutureOr<void> _postExport(List<List<String>> filePaths) {
+    moduleInfo = _updateModuleInfo(moduleInfo);
+  }
+
+  Map<String, dynamic> get moduleInfo;
+
+  set moduleInfo(Map<String, dynamic> moduleInfo);
+
+  Map<String, dynamic> _updateModuleInfo(Map<String, dynamic> moduleInfo) =>
+      moduleInfo
+        ..update(
+          pythonModule.moduleName,
+          (dynamic _) => pythonModule.moduleInfo,
+          ifAbsent: () => pythonModule.moduleInfo,
+        );
 
   Future<void> export() async {
     final T pythonModule = this.pythonModule;
@@ -209,6 +234,37 @@ class FlutterModuleBundle<T extends Object>
             .join(Platform.pathSeparator),
       );
 
+  File get _modulesJsonFile => File(
+        <String>[_pythonModuleDestinationDirectory.path, "modules.json"]
+            .join(Platform.pathSeparator),
+      );
+
+  @override
+  Map<String, dynamic> get moduleInfo {
+    if (!_modulesJsonFile.existsSync()) {
+      return <String, dynamic>{};
+    }
+    final String content = _modulesJsonFile.readAsStringSync();
+    if (content.trim().isEmpty) {
+      return <String, dynamic>{};
+    }
+    return jsonDecode(content) as Map<String, dynamic>;
+  }
+
+  @override
+  set moduleInfo(Map<String, dynamic> moduleInfo) {
+    if (!_modulesJsonFile.existsSync()) {
+      _modulesJsonFile.createSync(recursive: true);
+    }
+    final String newContent = jsonEncode(moduleInfo);
+    _modulesJsonFile.writeAsStringSync(newContent);
+  }
+
+  @override
+  Future<void> _exportSingleFile(String fileName, ByteData data) async {
+    _sourceFile(fileName).writeBytes(data);
+  }
+
   @override
   void _postExport(List<List<String>> filePaths) {
     final String pubspecString = readPubspec(_appRootDirectory.path);
@@ -245,40 +301,87 @@ class ConsoleModuleBundle<T extends Object>
         ),
       );
 
+  static const String _pythonModulesDartFileName = "python_modules.g.dart";
+
+  SourceFile get _pythonModulesDartFile => SourceFile(
+        <String>[
+          _pythonModuleDestinationDirectory.path,
+          _pythonModulesDartFileName
+        ].join(Platform.pathSeparator),
+      );
+
   @override
   ByteData _transformSourceData(ByteData data) {
-    const String bytesPrefix = """
-import "dart:typed_data";
-
-final Uint8List kBytes = Uint8List.fromList(<int>[""";
-    const String bytesSuffix = """
-]);
-""";
-
-    const String base64Prefix = """
-const String kBase64 = \"""";
-    const String base64Suffix = """
-";
-""";
-
     final String base64 =
         base64Encode(super._transformSourceData(data).buffer.asUint8List());
-
-    final String bytes = super
-        ._transformSourceData(data)
-        .buffer
-        .asUint8List()
-        .map((int byte) => "$byte")
-        .join(", ");
-
-    final String bytesContent = bytesPrefix + bytes + bytesSuffix;
-    final String base64Content = base64Prefix + base64 + base64Suffix;
-
-    final String content = "$bytesContent\n$base64Content";
-    return ByteData.view(Uint8List.fromList(content.codeUnits).buffer);
+    return ByteData.view(Uint8List.fromList(base64.codeUnits).buffer);
   }
 
   @override
   String _transformSourceFileName(String fileName) =>
-      "${super._transformSourceFileName(fileName)}.dart";
+      _pythonModulesDartFileName;
+
+  String _varName(String fileName) {
+    const String prefix = "k";
+    const String suffix = "Base64";
+    final String fileModuleName = fileName.endsWith(".py")
+        ? fileName.substring(0, fileName.length - 3)
+        : fileName;
+    if (fileModuleName == pythonModule.moduleName) {
+      return "$prefix${pythonModule.moduleName.camelCase.capitalize()}$suffix";
+    }
+    return "$prefix${pythonModule.moduleName.camelCase.capitalize()}${fileModuleName.camelCase.capitalize()}$suffix";
+  }
+
+  @override
+  Future<void> _exportSingleFile(String fileName, ByteData data) async {
+    final String replacement = String.fromCharCodes(data.buffer.asUint8List());
+    final String varName = _varName(fileName);
+    final String base64Prefix = """
+const String $varName = \"""";
+    const String base64Suffix = """
+";
+""";
+    _sourceFile(fileName)
+      ..replace(
+        RegExp(
+          "^${base64Prefix.replaceAll(RegExp(r"\s+"), r"\s+")}$kBase64RegexSource$base64Suffix",
+          multiLine: true,
+        ),
+        base64Prefix + replacement + base64Suffix,
+      )
+      ..ensureHeader(kPythonModulesGeneratedHeader)
+      ..ensureFooter("\n");
+  }
+
+  @override
+  Map<String, dynamic> get moduleInfo {
+    if (!_pythonModulesDartFile.existsSync()) {
+      return <String, dynamic>{};
+    }
+    final String content = _pythonModulesDartFile.readAsStringSync();
+    final RegExpMatch? match = kPythonModulesDartRegex.firstMatch(content);
+    if (match == null) {
+      return <String, dynamic>{};
+    }
+    final String? rawBase64 = match.group(1);
+    if (rawBase64 == null) {
+      return <String, dynamic>{};
+    }
+    final String rawJson = utf8.decode(base64Decode(rawBase64));
+    return jsonDecode(rawJson) as Map<String, dynamic>;
+  }
+
+  @override
+  set moduleInfo(Map<String, dynamic> moduleInfo) {
+    final String newJson = jsonEncode(moduleInfo);
+    final String base64 = base64Encode(utf8.encode(newJson));
+    _pythonModulesDartFile
+      ..replace(
+        kPythonModulesDartRegex,
+        "$kPythonModulesPrefix$base64$kPythonModulesSuffix",
+      )
+      ..ensureHeader(kPythonModulesGeneratedHeader)
+      ..ensureFooter("\n");
+  }
 }

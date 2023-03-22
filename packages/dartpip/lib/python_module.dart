@@ -1,6 +1,8 @@
 import "dart:io";
 import "dart:typed_data";
 
+import "package:collection/collection.dart";
+
 extension FileSystemEntityNameExtension on FileSystemEntity {
   String get name =>
       path.substring(path.lastIndexOf(Platform.pathSeparator) + 1);
@@ -61,6 +63,10 @@ abstract class PythonModule<T extends Object> {
     _data = await _load();
     return _data != null;
   }
+
+  String get moduleName;
+
+  Map<String, dynamic> get moduleInfo;
 }
 
 class SingleFilePythonModule extends PythonModule<ByteData> {
@@ -70,12 +76,53 @@ class SingleFilePythonModule extends PythonModule<ByteData> {
 
   @override
   Future<ByteData?> _load() => _loadFile(path);
+
+  @override
+  String get moduleName => fileName.endsWith(".py")
+      ? fileName.substring(0, fileName.length - 3)
+      : fileName;
+
+  @override
+  Map<String, dynamic> get moduleInfo => <String, dynamic>{
+        "root": <String>[fileName]
+      };
+}
+
+class FileNode {
+  FileNode({required this.name}) : children = <FileNode>[];
+
+  final String name;
+  final List<FileNode> children;
+
+  void insert(List<String> pathElements) {
+    if (pathElements.isEmpty) {
+      return;
+    }
+    final String name = pathElements.first;
+    FileNode? child =
+        children.firstWhereOrNull((FileNode node) => node.name == name);
+    if (child == null) {
+      child = FileNode(name: name);
+      children.add(child);
+    }
+    child.insert(pathElements.sublist(1));
+  }
+
+  Object? get info => children.isEmpty
+      ? name
+      : <String, Object>{
+          "name": name,
+          "children": children.map((FileNode node) => node.info).toList(),
+        };
 }
 
 class MultiFilePythonModule extends PythonModule<Map<List<String>, ByteData>> {
   MultiFilePythonModule(super.path) : super._();
 
+  @override
   String get moduleName => Directory(path).name;
+
+  late final FileNode _fileTree = FileNode(name: moduleName);
 
   Future<Map<List<String>, ByteData>?> _loadDirectory(
     Directory directory,
@@ -95,9 +142,12 @@ class MultiFilePythonModule extends PythonModule<Map<List<String>, ByteData>> {
         }
         for (final MapEntry<List<String>, ByteData> entry
             in subResult.entries) {
-          result[<String>[directory.name, ...entry.key]] = entry.value;
+          result[<String>[entity.name, ...entry.key]] = entry.value;
         }
       }
+    }
+    for (final List<String> key in result.keys) {
+      _fileTree.insert(key);
     }
     return result;
   }
@@ -110,4 +160,8 @@ class MultiFilePythonModule extends PythonModule<Map<List<String>, ByteData>> {
     }
     return _loadDirectory(directory);
   }
+
+  @override
+  Map<String, dynamic> get moduleInfo =>
+      <String, dynamic>{"root": _fileTree.info};
 }
