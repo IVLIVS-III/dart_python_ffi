@@ -1,28 +1,18 @@
 {
   "data_class": {
-    "root": [
-      "data_class.py"
-    ]
+    "root": "data_class.py"
   },
   "hello_world": {
-    "root": [
-      "hello_world.py"
-    ]
+    "root": "hello_world.py"
   },
   "primitives": {
-    "root": [
-      "primitives.py"
-    ]
+    "root": "primitives.py"
   },
   "structs": {
-    "root": [
-      "structs.py"
-    ]
+    "root": "structs.py"
   },
   "type_mappings": {
-    "root": [
-      "type_mappings.py"
-    ]
+    "root": "type_mappings.py"
   },
   "json_parser": {
     "root": {

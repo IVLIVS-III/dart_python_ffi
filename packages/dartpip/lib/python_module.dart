@@ -83,9 +83,7 @@ class SingleFilePythonModule extends PythonModule<ByteData> {
       : fileName;
 
   @override
-  Map<String, dynamic> get moduleInfo => <String, dynamic>{
-        "root": <String>[fileName]
-      };
+  Map<String, dynamic> get moduleInfo => <String, dynamic>{"root": fileName};
 }
 
 class FileNode {
