@@ -14,7 +14,6 @@ export "package:python_ffi_macos_dart/python_ffi_macos_dart.dart"
     show GenericExtension;
 
 part "src/class.dart";
-part "src/extensions/future.dart";
 part "src/function.dart";
 part "src/module.dart";
 part "src/object.dart";

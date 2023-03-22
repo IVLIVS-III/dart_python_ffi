@@ -67,12 +67,4 @@ class TypeMappingsModule extends PythonModule {
 
   Set<int> request_set() =>
       Set<int>.from(getFunction("request_set").call(<Object?>[]));
-
-  static PythonModuleDefinition get definition => PythonModuleDefinition(
-        name: "type_mappings",
-        root: SourceFile("type_mappings.py"),
-        classNames: classNames,
-      );
-
-  static Iterable<String> get classNames => const <String>[];
 }

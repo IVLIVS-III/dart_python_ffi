@@ -9,14 +9,6 @@ abstract class PythonFfiBase {
   PythonFfiDelegate<Object?> get delegate;
 
   set delegate(PythonFfiDelegate<Object?> delegate);
-
-  void registerClassNames(Iterable<String> classNames) {
-    for (final String className in classNames) {
-      addClassName(className);
-    }
-  }
-
-  void addClassName(String className);
 }
 
 class PythonFfiDart extends PythonFfiBase with PythonFfiMixin {
@@ -57,13 +49,7 @@ class PythonFfiDart extends PythonFfiBase with PythonFfiMixin {
 mixin PythonFfiMixin on PythonFfiBase {
   FutureOr<void> prepareModule(PythonModuleDefinition moduleDefinition) async {
     await delegate.prepareModule(moduleDefinition);
-    registerClassNames(moduleDefinition.classNames);
   }
-
-  @override
-  void addClassName(String className) => delegate.addClassName(className);
-
-  void removeClassName(String className) => delegate.removeClassName(className);
 
   void _ensureInitialized() {
     if (!delegate.isInitialized) {

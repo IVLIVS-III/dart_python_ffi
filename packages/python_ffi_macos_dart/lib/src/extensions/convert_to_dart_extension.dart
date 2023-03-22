@@ -48,7 +48,8 @@ extension ConvertToDartExtension on Pointer<PyObject> {
     // we only need to check the className, so that Iterator and Iterable are
     // not treated as classes
     // TODO: solve the problem above and we can remove the check for class name
-    if (isClass(platform) && platform.classNames.contains(nameString)) {
+    // if (isClass(platform) && platform.classNames.contains(nameString)) {
+    if (isClass(platform)) {
       return PythonClassMacos(platform, object);
     }
 

@@ -17,6 +17,7 @@ export "src/python_ffi_interface_base.dart";
 part "src/class.dart";
 part "src/delegate.dart";
 part "src/exception.dart";
+part "src/extensions/future.dart";
 part "src/extensions/symbol.dart";
 part "src/function.dart";
 part "src/module.dart";

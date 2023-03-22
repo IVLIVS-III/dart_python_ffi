@@ -56,4 +56,70 @@ class PythonFfiMacOS extends _PythonFfiMacOS with PythonFfiMacOSMixin {
     }
     return super.prepareModule(moduleDefinition);
   }
+
+  static Pair<PythonSourceEntity, PythonSourceFileEntity?>
+      _decodePythonSourceEntity(
+    Object data,
+  ) {
+    if (data is String) {
+      return Pair<PythonSourceEntity, PythonSourceFileEntity?>(
+        SourceFile(data),
+        null,
+      );
+    }
+    data = data as Map<String, dynamic>;
+    if (data.keys.contains("children")) {
+      final SourceDirectory entity = SourceDirectory(data["name"] as String);
+      PythonSourceFileEntity? licenseFile;
+      for (final Object child in data["children"] as List<Object>) {
+        if (child == "LICENSE.txt") {
+          licenseFile = SourceFile(child as String);
+          continue;
+        }
+        final Pair<PythonSourceEntity, PythonSourceFileEntity?> result =
+            _decodePythonSourceEntity(child);
+        licenseFile ??= result.second;
+        entity.add(result.first);
+      }
+      return Pair<PythonSourceEntity, PythonSourceFileEntity?>(
+        entity,
+        licenseFile,
+      );
+    } else {
+      return Pair<PythonSourceEntity, PythonSourceFileEntity?>(
+        SourceBase64(data["name"] as String, data["base64"] as String),
+        null,
+      );
+    }
+  }
+
+  static Iterable<PythonModuleDefinition> _decodePythonModules(
+    String pythonModules,
+  ) sync* {
+    final Map<String, dynamic> pythonModulesJson =
+        jsonDecode(pythonModules) as Map<String, dynamic>;
+    for (final MapEntry<String, dynamic> entry in pythonModulesJson.entries) {
+      final String moduleName = entry.key;
+      final Map<String, dynamic> moduleJson =
+          entry.value as Map<String, dynamic>;
+      final Map<String, dynamic> root =
+          moduleJson["root"] as Map<String, dynamic>;
+      final Pair<PythonSourceEntity, PythonSourceFileEntity?> result =
+          _decodePythonSourceEntity(root);
+      yield PythonModuleDefinition(
+        name: moduleName,
+        root: result.first,
+        license: result.second,
+      );
+    }
+  }
+
+  @override
+  Future<Set<PythonModuleDefinition>> discoverPythonModules() async {
+    final ByteData modulesJsonRaw =
+        await PlatformAssetBundle().load("python-modules/modules.json");
+    return _decodePythonModules(
+      utf8.decode(modulesJsonRaw.buffer.asUint8List()),
+    ).toSet();
+  }
 }

@@ -2,9 +2,9 @@
 part of python_ffi_macos_dart;
 
 abstract class PythonFfiMacOSBase extends PythonFfiDelegate<Pointer<PyObject>> {
-  DartPythonCBindings get bindings;
+  final Set<PythonModuleDefinition> _pythonModules = <PythonModuleDefinition>{};
 
-  UnmodifiableSetView<String> get classNames;
+  DartPythonCBindings get bindings;
 
   FutureOr<Directory> getApplicationSupportDirectory();
 
@@ -13,7 +13,63 @@ abstract class PythonFfiMacOSBase extends PythonFfiDelegate<Pointer<PyObject>> {
 
 /// The macOS implementation of [PythonFfiPlatform].
 class PythonFfiMacOSDart extends PythonFfiMacOSBase with PythonFfiMacOSMixin {
-  PythonFfiMacOSDart(String pythonModulesBase64);
+  PythonFfiMacOSDart(String pythonModulesBase64) {
+    _pythonModules.addAll(_decodePythonModules(pythonModulesBase64));
+  }
+
+  static Pair<PythonSourceEntity, PythonSourceFileEntity?>
+      _decodePythonSourceEntity(
+    Map<String, dynamic> data,
+  ) {
+    if (data.keys.contains("children")) {
+      final SourceDirectory entity = SourceDirectory(data["name"] as String);
+      PythonSourceFileEntity? licenseFile;
+      for (final Map<String, dynamic> child
+          in data["children"] as List<Map<String, dynamic>>) {
+        if (child["name"] == "LICENSE.txt") {
+          licenseFile =
+              SourceBase64(child["name"] as String, child["base64"] as String);
+          continue;
+        }
+        final Pair<PythonSourceEntity, PythonSourceFileEntity?> result =
+            _decodePythonSourceEntity(child);
+        licenseFile ??= result.second;
+        entity.add(result.first);
+      }
+      return Pair<PythonSourceEntity, PythonSourceFileEntity?>(
+        entity,
+        licenseFile,
+      );
+    } else {
+      return Pair<PythonSourceEntity, PythonSourceFileEntity?>(
+        SourceBase64(data["name"] as String, data["base64"] as String),
+        null,
+      );
+    }
+  }
+
+  static Iterable<PythonModuleDefinition> _decodePythonModules(
+    String pythonModulesBase64,
+  ) sync* {
+    final String pythonModulesRaw =
+        utf8.decode(base64Decode(pythonModulesBase64));
+    final Map<String, dynamic> pythonModulesJson =
+        jsonDecode(pythonModulesRaw) as Map<String, dynamic>;
+    for (final MapEntry<String, dynamic> entry in pythonModulesJson.entries) {
+      final String moduleName = entry.key;
+      final Map<String, dynamic> moduleJson =
+          entry.value as Map<String, dynamic>;
+      final Map<String, dynamic> root =
+          moduleJson["root"] as Map<String, dynamic>;
+      final Pair<PythonSourceEntity, PythonSourceFileEntity?> result =
+          _decodePythonSourceEntity(root);
+      yield PythonModuleDefinition(
+        name: moduleName,
+        root: result.first,
+        license: result.second,
+      );
+    }
+  }
 
   @override
   Directory getApplicationSupportDirectory() => Directory.systemTemp;
@@ -27,6 +83,9 @@ class PythonFfiMacOSDart extends PythonFfiMacOSBase with PythonFfiMacOSMixin {
     }
     throw Exception("Unsupported source file type: $sourceFile");
   }
+
+  @override
+  Set<PythonModuleDefinition> discoverPythonModules() => _pythonModules;
 }
 
 mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
@@ -54,12 +113,6 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
   FutureOr<Directory> get packagesDir async => _packagesDir ??= Directory(
         "${(await supportDir).path}/python_ffi/packages",
       );
-
-  final Set<String> _classNames = <String>{};
-
-  @override
-  UnmodifiableSetView<String> get classNames =>
-      UnmodifiableSetView<String>(_classNames);
 
   /// Checks whether the Python C-bindings are available
   bool get areBindingsInitialized => _bindings != null;
@@ -104,6 +157,9 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
     bindings.Py_Initialize();
 
     appendToPath((await packagesDir).path);
+
+    final Set<PythonModuleDefinition> modules = await discoverPythonModules();
+    await FutureOrExtension.wait<void>(modules.map(prepareModule));
   }
 
   Future<void> _copyModuleFile(PythonSourceFileEntity sourceFile) async {
@@ -131,16 +187,6 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
     await Future.wait(copyTasks);
 
     print("==> Copied module ${moduleDefinition.name}");
-  }
-
-  @override
-  void addClassName(String className) {
-    _classNames.add(className);
-  }
-
-  @override
-  void removeClassName(String className) {
-    _classNames.remove(className);
   }
 
   @override

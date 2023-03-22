@@ -61,13 +61,11 @@ class PythonModuleDefinition {
   PythonModuleDefinition({
     required this.name,
     required this.root,
-    required this.classNames,
     this.license,
   });
 
   final String name;
   final PythonSourceEntity root;
-  final Iterable<String> classNames;
   final PythonSourceFileEntity? license;
 
   Iterable<PythonSourceFileEntity> get sourceFiles => root.sourceFiles;

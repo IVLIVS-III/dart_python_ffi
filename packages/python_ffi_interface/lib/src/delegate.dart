@@ -24,14 +24,15 @@ abstract class PythonFfiDelegate<R extends Object?> extends BaseInterface {
   bool get isInitialized;
 
   /// Initializes the native platform Python runtime
-  FutureOr<void> initialize();
+  FutureOr<void> initialize() async {
+    final Set<PythonModuleDefinition> modules = await discoverPythonModules();
+    await FutureOrExtension.wait<void>(modules.map(prepareModule));
+  }
+
+  /// Discovers all Python modules bundled with the app by dartpip
+  FutureOr<Set<PythonModuleDefinition>> discoverPythonModules();
 
   FutureOr<void> prepareModule(PythonModuleDefinition moduleDefinition);
-
-  /// Register a Python class name for type marshalling.
-  void addClassName(String className);
-
-  void removeClassName(String className);
 
   /// Checks whether an exception occurred in python
   // TODO: return a proper python exception object
@@ -65,11 +66,6 @@ abstract class PythonFfiDelegate<R extends Object?> extends BaseInterface {
 }
 
 class _DummyDelegate extends PythonFfiDelegate<Object?> {
-  @override
-  void addClassName(String className) {
-    // TODO: implement addClassName
-  }
-
   @override
   FutureOr<void> appendToPath(String path) {
     // TODO: implement appendToPath
@@ -111,6 +107,12 @@ class _DummyDelegate extends PythonFfiDelegate<Object?> {
   bool get isInitialized => throw UnimplementedError();
 
   @override
+  FutureOr<Set<PythonModuleDefinition>> discoverPythonModules() {
+    // TODO: implement discoverPythonModules
+    throw UnimplementedError();
+  }
+
+  @override
   FutureOr<void> prepareModule(PythonModuleDefinition moduleDefinition) {
     // TODO: implement prepareModule
     throw UnimplementedError();
@@ -130,10 +132,5 @@ class _DummyDelegate extends PythonFfiDelegate<Object?> {
   @override
   void pythonErrorClear() {
     // TODO: implement pythonErrorClear
-  }
-
-  @override
-  void removeClassName(String className) {
-    // TODO: implement removeClassName
   }
 }

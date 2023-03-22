@@ -32,12 +32,4 @@ class DataClassModule extends PythonModule {
         "data_class",
         DataClassModule.from,
       );
-
-  static PythonModuleDefinition get definition => PythonModuleDefinition(
-        name: "data_class",
-        root: SourceFile("data_class.py"),
-        classNames: classNames,
-      );
-
-  static Iterable<String> get classNames => const <String>["DataClass"];
 }
