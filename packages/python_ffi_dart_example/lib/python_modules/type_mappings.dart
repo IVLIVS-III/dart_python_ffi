@@ -62,7 +62,7 @@ class TypeMappingsModule extends PythonModule {
   List<int> request_list() =>
       List<int>.from(getFunction("request_list").call(<Object?>[]));
 
-  void receive_tuple(List<int> value) =>
+  void receive_tuple(PythonTuple<int> value) =>
       getFunction("receive_tuple").call(<Object?>[value]);
 
   List<int> request_tuple() => List<int>.from(

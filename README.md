@@ -19,7 +19,7 @@ A Python-FFI for Dart
 | `Map`         | `dict`      | ✅ complete        | ✅ complete        |
 | `List`        | `list`      | ✅ complete        | ✅ complete        |
 | `List`        | `tuple`     | 🚫 not applicable | ✅ complete        |
-| `PythonTuple` | `tuple`     | ❌ missing         | 🚫 not applicable |
+| `PythonTuple` | `tuple`     | ✅ complete        | 🚫 not applicable |
 | `Set`         | `set`       | ✅ complete        | ✅ complete        |
 | `Iterator`    | `Iterator`  | ❌ missing         | ✅ complete        |
 | `Iterator`    | `Generator` | 🚫 not applicable | ✅ complete        |

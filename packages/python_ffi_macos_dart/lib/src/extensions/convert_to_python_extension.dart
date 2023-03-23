@@ -20,12 +20,7 @@ extension ConvertToPythonExtension on Object? {
     } else if (value is Uint8List) {
       object = fromUint8List(platform, value);
     } else if (value is PythonTuple) {
-      object = fromTuple(
-        platform,
-        PythonTuple<Object?, PythonFfiMacOSBase, Pointer<PyObject>>.from(
-          value.toList(growable: false),
-        ),
-      );
+      object = fromTuple(platform, value);
     } else if (value is List) {
       object = fromList(platform, value);
     } else if (value is Set) {
@@ -111,9 +106,26 @@ extension ConvertToPythonExtension on Object? {
 
   static Pointer<PyObject> fromTuple(
     PythonFfiMacOSBase platform,
-    PythonTuple<Object?, PythonFfiMacOSBase, Pointer<PyObject>> value,
+    PythonTuple<Object?> value,
   ) {
-    throw UnimplementedError();
+    final Pointer<PyObject> pythonTuple =
+        platform.bindings.PyTuple_New(value.length);
+    if (pythonTuple == nullptr) {
+      throw PythonFfiException(
+        "Failed to create python tuple during type conversion.",
+      );
+    }
+
+    for (int i = 0; i < value.length; i++) {
+      final Object? element = value[i];
+
+      final Pointer<PyObject> elementObject =
+          element._toPythonObject(platform).reference;
+
+      platform.bindings.PyTuple_SetItem(pythonTuple, i, elementObject);
+    }
+
+    return pythonTuple;
   }
 
   static Pointer<PyObject> fromList(
@@ -169,7 +181,8 @@ extension ConvertToPythonExtension on Object? {
         _FunctionConversionUtils._addStaticEntry(platform, value);
     final Pointer<NativeFunction<PyCFunctionSignature>> p =
         Pointer.fromFunction<PyCFunctionSignature>(
-            _FunctionConversionUtils._pythonFunction);
+      _FunctionConversionUtils._pythonFunction,
+    );
     return _FunctionConversionUtils._toPyCFunction(platform, p, self: key);
   }
 }

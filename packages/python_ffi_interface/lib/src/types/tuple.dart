@@ -1,7 +1,6 @@
 part of python_ffi_interface;
 
-class PythonTuple<T extends Object?, P extends PythonFfiDelegate<R>,
-    R extends Object?> with ListMixin<T> implements List<T> {
+class PythonTuple<T extends Object?> with ListMixin<T> implements List<T> {
   PythonTuple.from(Iterable<T> elements)
       : _list = List<T>.from(elements, growable: false);
 

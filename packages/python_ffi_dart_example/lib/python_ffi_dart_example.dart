@@ -1,6 +1,7 @@
 import "dart:typed_data";
 
 import "package:collection/collection.dart";
+import "package:python_ffi_dart/python_ffi_dart.dart";
 import "package:python_ffi_dart_example/python_modules/type_mappings.dart";
 
 typedef SendTyPythonCallback<T> = void Function(T value);
@@ -131,10 +132,18 @@ Future<void> typeMappings() async {
   TypeMappingEntry<List<int>>(
     pythonType: "tuple[int]",
     value: const <int>[1, 2, 3],
-    // TODO: implement
-    // sendToPython: module.receive_tuple,
     receiveFromPython: module.request_tuple,
     equals: (List<int> a, List<int> b) =>
+        const ListEquality<int>().equals(a, b),
+  ).run();
+
+  TypeMappingEntry<PythonTuple<int>>(
+    pythonType: "tuple[int]",
+    value: PythonTuple<int>.from(
+      <int>[1, 2, 3],
+    ),
+    sendToPython: module.receive_tuple,
+    equals: (PythonTuple<int> a, PythonTuple<int> b) =>
         const ListEquality<int>().equals(a, b),
   ).run();
 
