@@ -150,6 +150,8 @@ class FlutterModuleBundle<T extends Object>
 
   @override
   void _postExport(List<List<String>> filePaths) {
+    filePaths.add(<String>["modules.json"]);
+
     final String pubspecString = readPubspec(_appRootDirectory.path);
 
     final AssetsInsertionConfig config =
