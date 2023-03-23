@@ -1,3 +1,4 @@
+import asyncio
 from dataclasses import dataclass
 from typing import Callable, Generator, Iterator, Self, TypeVar, Generic
 
@@ -33,6 +34,8 @@ class PythonFfiAwaitable(Generic[T]):
     dart_result: Callable[[], T]
 
     def __await__(self: Self) -> Generator[T, None, None]:
-        while not self.dart_is_done():
-            yield None
-        return self.dart_result()
+        async def inner():
+            while not self.dart_is_done():
+                await asyncio.sleep(0.01)
+            return self.dart_result()
+        return inner().__await__()

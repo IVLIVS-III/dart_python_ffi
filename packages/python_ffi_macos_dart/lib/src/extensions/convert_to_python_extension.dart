@@ -29,6 +29,8 @@ extension ConvertToPythonExtension on Object? {
       object = fromIterable(platform, value);
     } else if (value is Iterator) {
       object = fromIterator(platform, value);
+    } else if (value is Future) {
+      object = fromFuture(platform, value);
     } else if (value is DartCFunctionSignature) {
       object = fromFunction(platform, value);
     } else if (value is Function) {
@@ -180,6 +182,21 @@ extension ConvertToPythonExtension on Object? {
         ],
       ).reference;
 
+  static Pointer<PyObject> fromFuture(
+    PythonFfiMacOSBase platform,
+    Future<Object?> value,
+  ) {
+    final FutureAdapter<Object?> adapter = FutureAdapter<Object?>(value);
+    return platform.importClass(
+      "python_ffi",
+      "PythonFfiAwaitable",
+      <Object?>[
+        adapter.isDone.generic0,
+        (() => adapter.result).generic0,
+      ],
+    ).reference;
+  }
+
   static Pointer<PyObject> fromFunction(
     PythonFfiMacOSBase platform,
     DartCFunctionSignature value,
@@ -192,4 +209,46 @@ extension ConvertToPythonExtension on Object? {
     );
     return _FunctionConversionUtils._toPyCFunction(platform, p, self: key);
   }
+}
+
+class FutureAdapter<T> implements Future<T> {
+  FutureAdapter(this._future) {
+    _future.then((T result) {
+      _result = result;
+    });
+  }
+
+  final Future<T> _future;
+
+  T? _result;
+
+  bool isDone() => _result != null;
+
+  T get result {
+    final T? result = _result;
+    if (result == null) {
+      throw StateError("Future is not done");
+    }
+    return result;
+  }
+
+  @override
+  Stream<T> asStream() => _future.asStream();
+
+  @override
+  Future<T> catchError(Function onError, {bool Function(Object error)? test}) =>
+      _future.catchError(onError, test: test);
+
+  @override
+  Future<R> then<R>(FutureOr<R> Function(T value) onValue,
+          {Function? onError}) =>
+      _future.then(onValue, onError: onError);
+
+  @override
+  Future<T> timeout(Duration timeLimit, {FutureOr<T> Function()? onTimeout}) =>
+      _future.timeout(timeLimit, onTimeout: onTimeout);
+
+  @override
+  Future<T> whenComplete(FutureOr<void> Function() action) =>
+      _future.whenComplete(action);
 }

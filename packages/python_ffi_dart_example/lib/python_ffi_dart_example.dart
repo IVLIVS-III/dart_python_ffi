@@ -223,9 +223,9 @@ Future<void> typeMappings() async {
   await TypeMappingEntry<Future<int>>(
     pythonType: "Awaitable[int]",
     value: future(),
+    sendToPython: module.receive_awaitable,
     // TODO: implement
-    // sendToPython: module.receive_awaitable,
-    receiveFromPython: module.request_awaitable,
+    // receiveFromPython: module.request_awaitable,
     equals: (Future<int> a, Future<int> b) async {
       final DateTime t0 = DateTime.now();
       final int aRes = await a;
