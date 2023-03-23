@@ -80,7 +80,10 @@ class BundleCommand extends Command<void> {
     }
 
     final List<Future<void>> futures = <Future<void>>[];
-    for (final String pythonModuleName in pythonModuleNames) {
+    for (final String pythonModuleName in <String>[
+      "python_ffi",
+      ...pythonModuleNames
+    ]) {
       print("Bundling Python module '$pythonModuleName'...");
       futures.add(
         bundleModule(
