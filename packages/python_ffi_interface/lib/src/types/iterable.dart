@@ -1,8 +1,16 @@
 part of python_ffi_interface;
 
 class PythonIterable<T extends Object?, P extends PythonFfiDelegate<R>,
-    R extends Object?> extends Iterable<T> {
-  PythonIterable(this._iterable);
+        R extends Object?> extends PythonClassInterface<P, R>
+    with IterableMixin<T>
+    implements Iterable<T> {
+  PythonIterable(this._iterable)
+      : super(
+          _iterable.platform,
+          _iterable.reference,
+          initializer: _iterable.initializer,
+          finalizer: _iterable.finalizer,
+        );
 
   final PythonObjectInterface<P, R> _iterable;
 
@@ -12,7 +20,7 @@ class PythonIterable<T extends Object?, P extends PythonFfiDelegate<R>,
       );
 }
 
-class TypedIterable<T> extends Iterable<T> {
+class TypedIterable<T> with IterableMixin<T> implements Iterable<T> {
   TypedIterable.from(this._iterable);
 
   final Iterable<Object?> _iterable;

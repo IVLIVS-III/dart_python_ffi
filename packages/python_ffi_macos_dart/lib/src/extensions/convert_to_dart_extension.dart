@@ -43,23 +43,17 @@ extension ConvertToDartExtension on Pointer<PyObject> {
     if (isSet(platform)) {
       return asSet(platform);
     }
-
-    final String nameString = typeName;
-    // we only need to check the className, so that Iterator and Iterable are
-    // not treated as classes
-    // TODO: solve the problem above and we can remove the check for class name
-    // if (isClass(platform) && platform.classNames.contains(nameString)) {
-    if (isClass(platform)) {
-      return PythonClassMacos(platform, object);
-    }
-
     if (isIterator(platform)) {
       return asIterator(platform);
     }
     if (isIterable(platform)) {
       return asIterable(platform);
     }
+    if (isClass(platform)) {
+      return PythonClassMacos(platform, object);
+    }
 
+    final String nameString = typeName;
     // backup conversions matching the name as string
     print(
       "ℹ️   Info: falling back to conversion via name as string for '$nameString'",

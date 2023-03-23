@@ -1,8 +1,15 @@
 part of python_ffi_interface;
 
 class PythonIterator<T extends Object?, P extends PythonFfiDelegate<R>,
-    R extends Object?> extends Iterator<T> {
-  PythonIterator(this._iterator);
+        R extends Object?> extends PythonClassInterface<P, R>
+    implements Iterator<T> {
+  PythonIterator(this._iterator)
+      : super(
+          _iterator.platform,
+          _iterator.reference,
+          initializer: _iterator.initializer,
+          finalizer: _iterator.finalizer,
+        );
 
   final PythonObjectInterface<P, R> _iterator;
 
@@ -32,7 +39,7 @@ class PythonIterator<T extends Object?, P extends PythonFfiDelegate<R>,
   }
 }
 
-class TypedIterator<T> extends Iterator<T> {
+class TypedIterator<T> implements Iterator<T> {
   TypedIterator.from(this._iterator);
 
   final Iterator<Object?> _iterator;
