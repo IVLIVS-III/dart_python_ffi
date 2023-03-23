@@ -164,8 +164,7 @@ Future<void> typeMappings() async {
   TypeMappingEntry<Iterable<int>>(
     pythonType: "iterable[int]",
     value: iterable(),
-    // TODO: implement
-    // sendToPython: module.receive_iterable,
+    sendToPython: module.receive_iterable,
     receiveFromPython: module.request_iterable,
     equals: const IterableEquality<int>().equals,
   ).run();
@@ -173,7 +172,6 @@ Future<void> typeMappings() async {
   TypeMappingEntry<Iterator<int>>(
     pythonType: "iterator[int]",
     value: iterable().iterator,
-    // TODO: implement
     sendToPython: module.receive_iterator,
     receiveFromPython: module.request_iterator,
     equals: (Iterator<int> a, Iterator<int> b) {

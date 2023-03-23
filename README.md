@@ -23,7 +23,7 @@ A Python-FFI for Dart
 | `Set`         | `set`       | ✅ complete        | ✅ complete        |
 | `Iterator`    | `Iterator`  | ✅ complete        | ✅ complete        |
 | `Iterator`    | `Generator` | 🚫 not applicable | ✅ complete        |
-| `Iterable`    | `Iterable`  | ❌ missing         | ✅ complete        |
+| `Iterable`    | `Iterable`  | ✅ complete        | ✅ complete        |
 | `Function`    | `Callable`  | ✅ complete        | ✅ complete        |
 
 ## Package status

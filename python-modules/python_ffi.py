@@ -19,10 +19,12 @@ class PythonFfiIterator(Generic[T]):
         raise StopIteration
 
 
+@dataclass
 class PythonFfiIterable(Generic[T]):
+    dart_iter: Callable[[], Iterator[T]]
+
     def __iter__(self: Self) -> Iterator[T]:
-        # TODO: implement
-        ...
+        return self.dart_iter()
 
 
 class PythonFfiAwaitable(Generic[T]):
