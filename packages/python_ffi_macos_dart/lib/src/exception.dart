@@ -98,7 +98,7 @@ class _PythonExceptionMacos
   }
 
   @override
-  String toString([bool verbose = true]) {
+  String toString() {
     final String? nativeException = _nativelyFormattedException();
     if (nativeException != null) {
       return "PythonExceptionMacos: $nativeException";
