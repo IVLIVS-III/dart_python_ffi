@@ -27,11 +27,12 @@ class PythonFfiIterable(Generic[T]):
         return self.dart_iter()
 
 
+@dataclass()
 class PythonFfiAwaitable(Generic[T]):
-    __isDone: Callable[[], bool]
-    __result: Callable[[], T]
+    dart_is_done: Callable[[], bool]
+    dart_result: Callable[[], T]
 
     def __await__(self: Self) -> Generator[T, None, None]:
-        while not self.__isDone():
+        while not self.dart_is_done():
             yield None
-        return self.__result()
+        return self.dart_result()
