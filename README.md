@@ -37,6 +37,7 @@ A Python-FFI for Dart
 
 | package name                  | status | description                                                                                         |
 |-------------------------------|--------|-----------------------------------------------------------------------------------------------------|
+| dartpip                       | ❇️     | Add Python modules (packages) to your Dart or Flutter project.                                      |
 | python_ffi                    | ❇️⚠️   | A Python-FFI for Dart, intended for use in a Flutter project.                                       |
 | python_ffi_dart               | ❇️     | A Python-FFI for Dart, intended for dart-only applications outside of a Flutter project.            |
 | python_ffi_macos              | ⚠️🚫   | The macOS implementation of python_ffi, a Python-FFI for Dart.                                      |
@@ -45,23 +46,24 @@ A Python-FFI for Dart
 | python_ffi_interface          | 🚫     | A base interface for python_ffi_dart, a Python-FFI for Dart.                                        |
 | python_ffi_lint               |        | Analysis options used across the Python-FFI for Dart project.                                       |
 | python_ffi_dart_example       |        | The example command line application showcasing the python_ffi_dart package, a Python-FFI for Dart. |
-| python_ffi_bundler            |        |                                                                                                     |
 
 ## Usage
 
-### `python_ffi_bundler`
+### `dartpip`
+
+See [dartpip](/packages/dartpip/README.md) for more details.
 
 #### Compile & run AOT
 
 ```shell
-melos compile-bundler
-bin/bundler --help
+melos compile-dartpip
+bin/dartpip --help
 ```
 
 #### Run JIT
 
 ```shell
-dart run packages/python_ffi_bundler/bin/python_ffi_bundler.dart --help
+dart run packages/dartpip/bin/dartpip.dart --help
 ```
 
 ### `python_ffi_dart_example`
