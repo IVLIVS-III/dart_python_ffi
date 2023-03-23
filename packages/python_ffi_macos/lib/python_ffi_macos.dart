@@ -71,7 +71,10 @@ class PythonFfiMacOS extends _PythonFfiMacOS with PythonFfiMacOSMixin {
     if (data.keys.contains("children")) {
       final SourceDirectory entity = SourceDirectory(data["name"] as String);
       PythonSourceFileEntity? licenseFile;
-      for (final Object child in data["children"] as List<Object>) {
+      for (final Object? child in data["children"] as List<Object?>) {
+        if (child == null) {
+          continue;
+        }
         if (child == "LICENSE.txt") {
           licenseFile = SourceFile(child as String);
           continue;
@@ -102,8 +105,10 @@ class PythonFfiMacOS extends _PythonFfiMacOS with PythonFfiMacOSMixin {
       final String moduleName = entry.key;
       final Map<String, dynamic> moduleJson =
           entry.value as Map<String, dynamic>;
-      final Map<String, dynamic> root =
-          moduleJson["root"] as Map<String, dynamic>;
+      final Object? root = moduleJson["root"];
+      if (root == null) {
+        continue;
+      }
       final Pair<PythonSourceEntity, PythonSourceFileEntity?> result =
           _decodePythonSourceEntity(root);
       yield PythonModuleDefinition(
