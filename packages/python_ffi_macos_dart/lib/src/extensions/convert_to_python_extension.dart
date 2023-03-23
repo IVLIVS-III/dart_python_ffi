@@ -168,10 +168,15 @@ extension ConvertToPythonExtension on Object? {
   static Pointer<PyObject> fromIterator(
     PythonFfiMacOSBase platform,
     Iterator<Object?> value,
-  ) {
-    // TODO: implement
-    throw UnimplementedError();
-  }
+  ) =>
+      platform.importClass(
+        "python_ffi",
+        "PythonFfiIterator",
+        <Object?>[
+          value.moveNext.generic0,
+          (() => value.current).generic0,
+        ],
+      ).reference;
 
   static Pointer<PyObject> fromFunction(
     PythonFfiMacOSBase platform,

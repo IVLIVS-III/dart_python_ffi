@@ -21,7 +21,7 @@ A Python-FFI for Dart
 | `List`        | `tuple`     | 🚫 not applicable | ✅ complete        |
 | `PythonTuple` | `tuple`     | ✅ complete        | 🚫 not applicable |
 | `Set`         | `set`       | ✅ complete        | ✅ complete        |
-| `Iterator`    | `Iterator`  | ❌ missing         | ✅ complete        |
+| `Iterator`    | `Iterator`  | ✅ complete        | ✅ complete        |
 | `Iterator`    | `Generator` | 🚫 not applicable | ✅ complete        |
 | `Iterable`    | `Iterable`  | ❌ missing         | ✅ complete        |
 | `Function`    | `Callable`  | ✅ complete        | ✅ complete        |

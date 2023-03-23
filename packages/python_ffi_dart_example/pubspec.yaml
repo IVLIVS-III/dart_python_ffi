@@ -18,3 +18,5 @@ dev_dependencies:
 python_ffi:
   modules:
     type_mappings: any
+    # TODO: include this with dartpip automatically
+    python_ffi: any

@@ -174,7 +174,7 @@ Future<void> typeMappings() async {
     pythonType: "iterator[int]",
     value: iterable().iterator,
     // TODO: implement
-    // sendToPython: module.receive_iterator,
+    sendToPython: module.receive_iterator,
     receiveFromPython: module.request_iterator,
     equals: (Iterator<int> a, Iterator<int> b) {
       while (a.moveNext()) {
