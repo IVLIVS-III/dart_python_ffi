@@ -2,11 +2,11 @@
 
 # dart_python_ffi
 
-A Python-FFI for Dart
+A Python-FFI for Dart.
+
+Easily import any pure Python module into your Dart or Flutter project.
 
 ## Type mappings
-
-*Stand: 2023-02-17-21-14-GMT+1*
 
 | Dart type     | Python type | dart ➞ python     | python ➞ dart     |
 |---------------|-------------|-------------------|-------------------|
