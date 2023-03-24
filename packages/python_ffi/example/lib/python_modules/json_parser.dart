@@ -8,6 +8,10 @@ class JsonParserModule extends PythonModule {
         JsonParserModule.from,
       );
 
-  Object? parse(String json_string) =>
-      getFunction("parse").call(<Object?>[json_string]);
+  Object? parse(String jsonString) =>
+      getFunction("parse").call(<Object?>[jsonString]);
+
+  List<Object?> get all__ => List<Object?>.from(getAttribute("__all__"));
+
+  set all__(List<Object?> value) => setAttribute("__all__", value);
 }

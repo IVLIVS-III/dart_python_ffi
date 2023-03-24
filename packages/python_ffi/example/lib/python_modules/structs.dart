@@ -15,9 +15,9 @@ class Coordinate extends PythonClass {
 
   Coordinate.from(super.pythonClass) : super.from();
 
-  double get latitude => getAttribute("latitude")! as double;
+  double get latitude => getAttribute("latitude");
 
-  double get longitude => getAttribute("longitude")! as double;
+  double get longitude => getAttribute("longitude");
 
   @override
   String toString() => "Coordinate(latitude: $latitude, longitude: $longitude)";
@@ -36,7 +36,7 @@ class Place extends PythonClass {
 
   Place.from(super.pythonClass) : super.from();
 
-  String get name => getAttribute("name")! as String;
+  String get name => getAttribute("name");
 
   Coordinate get coordinate => Coordinate.from(getAttribute("coordinate")!);
 

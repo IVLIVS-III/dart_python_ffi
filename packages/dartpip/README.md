@@ -78,4 +78,6 @@ Bundles all Python modules specified in `pubspec.yaml` for a Dart / Flutter appl
 Aliases: `add`
 
 Adds a Python module to the current Dart / Flutter project.
+
+*Note: This command will replace the `bundle` command in the future.*
 </details>
