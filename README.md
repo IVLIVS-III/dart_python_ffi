@@ -46,14 +46,14 @@ you can always write a native Dart implementation of the Python module.
 
 There are three packages intended to be consumed by Dart or Flutter project developers:
 
-- [`dartpip`](./packages/dartpip/): A CLI to add Python modules to your Dart / Flutter project, like
-  pip for Python.
+- [`dartpip`](./packages/dartpip/README.md): A CLI to add Python modules to your Dart / Flutter
+  project, like pip for Python.
     - Can be installed globally on your system or as dev-dependency in your Dart / Flutter project.
-- [`python_ffi`](./packages/python_ffi/): A Python-FFI for Dart, intended for use in a Flutter
-  project.
+- [`python_ffi`](./packages/python_ffi/README.md): A Python-FFI for Dart, intended for use in a
+  Flutter project.
     - Must be installed as an ordinary dependency in your Flutter project.
-- [`python_ffi_dart`](./packages/python_ffi_dart/): A Python-FFI for Dart, intended for dart-only
-  applications outside of a Flutter project.
+- [`python_ffi_dart`](./packages/python_ffi_dart/README.md): A Python-FFI for Dart, intended for
+  dart-only applications outside of a Flutter project.
     - Must be installed as an ordinary dependency in your Dart project.
 
 ### Adding Python modules
@@ -170,7 +170,7 @@ You are free to rename the methods, getters, setters, and method-arguments to pr
 being private in Dart or to match your Dart case-style.
 
 You can also override the `toString` method to provide a custom value. If you choose not to, the
-python method `__str__` will invoked, if available.
+python method `__str__` will be invoked, if available.
 
 ```dart
 import "package:python_ffi/python_ffi.dart";
@@ -215,13 +215,38 @@ void main() async {
 }
 ```
 
+Make sure to call `WidgetsFlutterBinding.ensureInitialized()` before initializing the Python
+runtime.
+
 #### Using the Dart package (`python_ffi_dart`)
 
-**TODO**
+```dart
+import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:<package_name>/python_modules/src/python_modules.g.dart";
+
+void main() async {
+  await PythonFfiDart.instance.initialize(kPythonModules);
+  // ...
+}
+```
+
+You need to provide the `kPythonModules` constant from the generated file. This constant contains
+all necessary data for loading the bundled Python modules. In flutter apps, this data is loaded from
+assets in well-known locations. In Dart apps, there is no equivalent concept of assets.
 
 ### Using the Python module
 
-**TODO**
+After initializing the Python runtime, you can import your Python module and use it in your Dart
+code:
+
+```dart
+import "package:<package_name>/python_modules/json_parser.dart";
+
+final JsonParserModule jsonParser = JsonParserModule.import();
+final Object? parsedJson = jsonParser.parse('{"Hello": "World"}');
+
+print(parsedJson);
+```
 
 ## Type mappings
 
@@ -246,6 +271,13 @@ Types will be converted automatically according to the following table:
 | `Function`    | `Callable`  | ✅ complete        | ✅ complete        |
 | `Future`      | `Awaitable` | ❌ missing         | ❌ missing         |
 
+Anything else will be converted from Python to a `PythonObject` in Dart. It is supported to cast
+this value to `dynamic` and invoke any method or property on it. It will work, as long as the method
+or property is available in Python.
+
+At the moment it is not possible to convert arbitrary Dart classes (not backed by a subtype
+of `PythonClass`) to Python objects. Trying to do so will result in a runtime exception.
+
 ## Package status
 
 | status indicator | description                                                    |
@@ -261,7 +293,7 @@ Types will be converted automatically according to the following table:
 | python_ffi_dart               | ❇️     | A Python-FFI for Dart, intended for dart-only applications outside of a Flutter project.            |
 | python_ffi_macos              | ⚠️🚫   | The macOS implementation of python_ffi, a Python-FFI for Dart.                                      |
 | python_ffi_macos_dart         | 🚫     | The macOS implementation of python_ffi_dart, a Python-FFI for Dart.                                 |
-| python_ffi_platform_interface | 🚫     | The platform interface for python_ffi, a Python-FFI for Dart.                                       |
+| python_ffi_platform_interface | ⚠️🚫   | The platform interface for python_ffi, a Python-FFI for Dart.                                       |
 | python_ffi_interface          | 🚫     | A base interface for python_ffi_dart, a Python-FFI for Dart.                                        |
 | python_ffi_lint               |        | Analysis options used across the Python-FFI for Dart project.                                       |
 | python_ffi_dart_example       |        | The example command line application showcasing the python_ffi_dart package, a Python-FFI for Dart. |
