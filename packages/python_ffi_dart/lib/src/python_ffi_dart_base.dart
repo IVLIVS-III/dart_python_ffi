@@ -33,9 +33,9 @@ class PythonFfiDart extends PythonFfiBase with PythonFfiMixin {
   @override
   String get name => "PythonFfiDart";
 
-  FutureOr<void> initialize(String pythonModules) {
+  FutureOr<void> initialize(String pythonModules, {String? libPath}) {
     if (Platform.isMacOS) {
-      delegate = PythonFfiMacOSDart(pythonModules);
+      delegate = PythonFfiMacOSDart(pythonModules, libPath: libPath);
       return delegate.initialize();
     }
 

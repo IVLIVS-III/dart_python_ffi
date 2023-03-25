@@ -33,7 +33,3 @@ part "src/function.dart";
 part "src/module.dart";
 part "src/object.dart";
 part "src/python_ffi_macos_dart_base.dart";
-
-// const String _libName = "libpython3.11";
-const String _libPath =
-    "/Library/Frameworks/Python.framework/Versions/3.11/Python";

@@ -234,6 +234,22 @@ You need to provide the `kPythonModules` constant from the generated file. This 
 all necessary data for loading the bundled Python modules. In flutter apps, this data is loaded from
 assets in well-known locations. In Dart apps, there is no equivalent concept of assets.
 
+You can optionally provide a `libPath` if you want to load the Python library from a custom
+location:
+
+```dart
+import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:<package_name>/python_modules/src/python_modules.g.dart";
+
+void main() async {
+  await PythonFfiDart.instance.initialize(
+    kPythonModules,
+    libPath: "path/to/libpython3.9.dylib",
+  );
+  // ...
+}
+```
+
 ### Using the Python module
 
 After initializing the Python runtime, you can import your Python module and use it in your Dart

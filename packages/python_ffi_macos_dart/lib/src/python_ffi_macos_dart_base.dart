@@ -9,12 +9,26 @@ abstract class PythonFfiMacOSBase extends PythonFfiDelegate<Pointer<PyObject>> {
   FutureOr<Directory> getApplicationSupportDirectory();
 
   FutureOr<ByteData> loadPythonFile(PythonSourceFileEntity sourceFile);
+
+  Future<void> openDylib();
 }
 
 /// The macOS implementation of [PythonFfiPlatform].
 class PythonFfiMacOSDart extends PythonFfiMacOSBase with PythonFfiMacOSMixin {
-  PythonFfiMacOSDart(String pythonModulesBase64) {
+  PythonFfiMacOSDart(
+    String pythonModulesBase64, {
+    String? libPath,
+  }) : _libPath = libPath ??
+            "/Library/Frameworks/Python.framework/Versions/3.11/Python" {
     _pythonModules.addAll(_decodePythonModules(pythonModulesBase64));
+  }
+
+  final String _libPath;
+
+  @override
+  Future<void> openDylib() async {
+    final DynamicLibrary dylib = DynamicLibrary.open(_libPath);
+    _bindings = DartPythonCBindings(dylib);
   }
 
   static Pair<PythonSourceEntity, PythonSourceFileEntity?>
@@ -142,16 +156,10 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
   }
   */
 
-  Future<void> _openDylib() async {
-// final String dylibPath = await _copyDylib();
-    final DynamicLibrary dylib = DynamicLibrary.open(_libPath);
-    _bindings = DartPythonCBindings(dylib);
-  }
-
   @override
   Future<void> initialize() async {
     if (!areBindingsInitialized) {
-      await _openDylib();
+      await openDylib();
     }
 
     bindings.Py_Initialize();
