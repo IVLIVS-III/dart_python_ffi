@@ -5,11 +5,11 @@
 Pod::Spec.new do |s|
   s.name             = 'python_ffi_macos'
   s.version          = '0.0.1'
-  s.summary          = 'A new Flutter FFI plugin project.'
+  s.summary          = 'The macOS implementation of python_ffi, a Python-FFI for Dart.'
   s.description      = <<-DESC
-A new Flutter FFI plugin project.
+The macOS implementation of python_ffi, a Python-FFI for Dart.
                        DESC
-  s.homepage         = 'http://example.com'
+  s.homepage         = 'https://github.com/IVLIVS-III/dart_python_ffi'
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Your Company' => 'email@example.com' }
 
@@ -20,8 +20,17 @@ A new Flutter FFI plugin project.
   s.source           = { :path => '.' }
   s.source_files     = 'Classes/**/*'
 
-  s.platform = :osx, '10.11'
+  s.platform = :osx, '10.13'
   # s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
+
+  s.default_subspecs = 'all'
+
+  s.subspec 'all' do |ss|
+    ss.header_mappings_dir = 'python/dylib/3.11/include/python3.11'
+    # ss.source_files = 'python/dylib/3.11/include/python3.11/**/*.h'
+    ss.public_header_files = 'python/dylib/3.11/include/python3.11/**/*.h'
+    ss.vendored_libraries = 'python/dylib/lib*.dylib'
+  end
 
   s.xcconfig = {
      # here on LDFLAG, I had to set -l and then the library name (without lib prefix although the file name has it).

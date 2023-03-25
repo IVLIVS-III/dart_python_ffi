@@ -6,6 +6,8 @@ abstract class PythonFfiMacOSBase extends PythonFfiDelegate<Pointer<PyObject>> {
 
   DartPythonCBindings get bindings;
 
+  set bindings(DartPythonCBindings bindings);
+
   FutureOr<Directory> getApplicationSupportDirectory();
 
   FutureOr<ByteData> loadPythonFile(PythonSourceFileEntity sourceFile);
@@ -28,7 +30,7 @@ class PythonFfiMacOSDart extends PythonFfiMacOSBase with PythonFfiMacOSMixin {
   @override
   Future<void> openDylib() async {
     final DynamicLibrary dylib = DynamicLibrary.open(_libPath);
-    _bindings = DartPythonCBindings(dylib);
+    bindings = DartPythonCBindings(dylib);
   }
 
   static Pair<PythonSourceEntity, PythonSourceFileEntity?>
@@ -114,6 +116,9 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
     }
     return bindings;
   }
+
+  @override
+  set bindings(DartPythonCBindings bindings) => _bindings = bindings;
 
   Directory? _supportDir;
 

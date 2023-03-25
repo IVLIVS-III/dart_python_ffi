@@ -19,6 +19,8 @@ export "dart:ffi" show Pointer;
 
 export "package:python_ffi_macos_dart/src/ffi/generated_bindings.g.dart"
     show PyObject;
+export "package:python_ffi_macos_dart/src/ffi/generated_bindings.g.dart"
+    show DartPythonCBindings;
 
 part "src/class.dart";
 part "src/exception.dart";
