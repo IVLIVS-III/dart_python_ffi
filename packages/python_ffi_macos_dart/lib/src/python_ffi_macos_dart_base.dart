@@ -184,8 +184,6 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
 
     final ByteData moduleAsset = await loadPythonFile(sourceFile);
     await moduleFile.writeAsBytes(moduleAsset.buffer.asUint8List());
-
-    print("Copied module file $filePath to ${moduleFile.path}");
   }
 
   @override
@@ -198,8 +196,6 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
     }
 
     await Future.wait(copyTasks);
-
-    print("==> Copied module ${moduleDefinition.name}");
   }
 
   @override
