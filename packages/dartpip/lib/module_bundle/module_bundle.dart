@@ -1,17 +1,7 @@
-library module_bundle;
+part of dartpip;
 
-import "dart:async";
-import "dart:convert";
-import "dart:io";
-import "dart:typed_data";
-
-import "package:dartpip/dartpip.dart";
-
-part "src/console_module_bundle.dart";
-part "src/flutter_module_bundle.dart";
-
-abstract class ModuleBundle<T extends PythonModule<Object>> {
-  ModuleBundle({
+abstract class _ModuleBundle<T extends _PythonModule<Object>> {
+  _ModuleBundle({
     required this.pythonModule,
     required this.appRoot,
   });
@@ -27,7 +17,7 @@ abstract class ModuleBundle<T extends PythonModule<Object>> {
 
   String _transformSourceFileName(String fileName) => fileName;
 
-  SourceFile _sourceFile(String fileName) => SourceFile(
+  _SourceFile _sourceFile(String fileName) => _SourceFile(
         <String>[
           _pythonModuleDestinationDirectory.path,
           _transformSourceFileName(fileName)
@@ -67,7 +57,7 @@ abstract class ModuleBundle<T extends PythonModule<Object>> {
       throw StateError("Failed to load Python module.");
     }
 
-    if (pythonModule is SingleFilePythonModule) {
+    if (pythonModule is _SingleFilePythonModule) {
       await _exportSingleFile(
         pythonModule.fileName,
         _transformSourceData(pythonModule.data),
@@ -75,7 +65,7 @@ abstract class ModuleBundle<T extends PythonModule<Object>> {
       await _postExport(<List<String>>[
         <String>[pythonModule.fileName]
       ]);
-    } else if (pythonModule is MultiFilePythonModule) {
+    } else if (pythonModule is _MultiFilePythonModule) {
       await _exportMultiFile(
         pythonModule.data
             .mapKeys(

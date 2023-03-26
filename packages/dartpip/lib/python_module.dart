@@ -1,28 +1,25 @@
-import "dart:io";
-import "dart:typed_data";
+part of dartpip;
 
-import "package:collection/collection.dart";
-
-extension FileSystemEntityNameExtension on FileSystemEntity {
+extension _FileSystemEntityNameExtension on FileSystemEntity {
   String get name =>
       path.substring(path.lastIndexOf(Platform.pathSeparator) + 1);
 }
 
-abstract class PythonModule<T extends Object> {
-  PythonModule._(this.path);
+abstract class _PythonModule<T extends Object> {
+  _PythonModule._(this.path);
 
-  static PythonModule<Object> fromPath(String path) {
+  static _PythonModule<Object> fromPath(String path) {
     if (path.endsWith(".py")) {
-      return SingleFilePythonModule(path);
+      return _SingleFilePythonModule(path);
     }
 
     final String maybeFilePath = "$path.py";
     final File file = File(maybeFilePath);
     if (file.existsSync()) {
-      return SingleFilePythonModule(maybeFilePath);
+      return _SingleFilePythonModule(maybeFilePath);
     }
 
-    return MultiFilePythonModule(path);
+    return _MultiFilePythonModule(path);
   }
 
   final String path;
@@ -69,8 +66,8 @@ abstract class PythonModule<T extends Object> {
   Map<String, dynamic> get moduleInfo;
 }
 
-class SingleFilePythonModule extends PythonModule<ByteData> {
-  SingleFilePythonModule(super.path) : super._();
+class _SingleFilePythonModule extends _PythonModule<ByteData> {
+  _SingleFilePythonModule(super.path) : super._();
 
   String get fileName => File(path).name;
 
@@ -86,21 +83,21 @@ class SingleFilePythonModule extends PythonModule<ByteData> {
   Map<String, dynamic> get moduleInfo => <String, dynamic>{"root": fileName};
 }
 
-class FileNode {
-  FileNode({required this.name}) : children = <FileNode>[];
+class _FileNode {
+  _FileNode({required this.name}) : children = <_FileNode>[];
 
   final String name;
-  final List<FileNode> children;
+  final List<_FileNode> children;
 
   void insert(List<String> pathElements) {
     if (pathElements.isEmpty) {
       return;
     }
     final String name = pathElements.first;
-    FileNode? child =
-        children.firstWhereOrNull((FileNode node) => node.name == name);
+    _FileNode? child =
+        children.firstWhereOrNull((_FileNode node) => node.name == name);
     if (child == null) {
-      child = FileNode(name: name);
+      child = _FileNode(name: name);
       children.add(child);
     }
     child.insert(pathElements.sublist(1));
@@ -110,17 +107,18 @@ class FileNode {
       ? name
       : <String, Object>{
           "name": name,
-          "children": children.map((FileNode node) => node.info).toList(),
+          "children": children.map((_FileNode node) => node.info).toList(),
         };
 }
 
-class MultiFilePythonModule extends PythonModule<Map<List<String>, ByteData>> {
-  MultiFilePythonModule(super.path) : super._();
+class _MultiFilePythonModule
+    extends _PythonModule<Map<List<String>, ByteData>> {
+  _MultiFilePythonModule(super.path) : super._();
 
   @override
   String get moduleName => Directory(path).name;
 
-  late final FileNode _fileTree = FileNode(name: moduleName);
+  late final _FileNode _fileTree = _FileNode(name: moduleName);
 
   Future<Map<List<String>, ByteData>?> _loadDirectory(
     Directory directory,

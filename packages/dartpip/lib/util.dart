@@ -1,9 +1,6 @@
-import "dart:io";
+part of dartpip;
 
-import "package:dartpip/dartpip.dart";
-import "package:yaml/yaml.dart";
-
-String readPubspec(String appRoot) {
+String _readPubspec(String appRoot) {
   final Directory appRootDir = Directory(appRoot);
   final File pubspecFile =
       File("${appRootDir.path}${Platform.pathSeparator}pubspec.yaml");
@@ -12,8 +9,8 @@ String readPubspec(String appRoot) {
   return pubspecString;
 }
 
-Map<dynamic, dynamic> parsePubspec(String appRoot, [String? pubspecString]) {
-  pubspecString ??= readPubspec(appRoot);
+Map<dynamic, dynamic> _parsePubspec(String appRoot, [String? pubspecString]) {
+  pubspecString ??= _readPubspec(appRoot);
   final dynamic pubspecYaml = loadYaml(pubspecString);
 
   if (pubspecYaml is! Map) {
@@ -23,7 +20,7 @@ Map<dynamic, dynamic> parsePubspec(String appRoot, [String? pubspecString]) {
   return pubspecYaml;
 }
 
-int detectIndentation(String pubspecString) {
+int _detectIndentation(String pubspecString) {
   final int environmentKeyIndex = pubspecString.indexOf("environment:");
   final int sdkKeyIndex = pubspecString.indexOf("sdk:", environmentKeyIndex);
   final String relevantSubstring = pubspecString.substring(
@@ -34,24 +31,24 @@ int detectIndentation(String pubspecString) {
   return relevantSubstring.length - lastNewlineIndex - 1;
 }
 
-Future<void> bundleModule({
+Future<void> _bundleModule({
   required String appRoot,
   required String pythonModulePath,
   required String appType,
 }) async {
-  final PythonModule<Object> pythonModule =
-      PythonModule.fromPath(pythonModulePath);
-  late final ModuleBundle<PythonModule<Object>> moduleBundle;
+  final _PythonModule<Object> pythonModule =
+      _PythonModule.fromPath(pythonModulePath);
+  late final _ModuleBundle<_PythonModule<Object>> moduleBundle;
 
   switch (appType) {
-    case kAppTypeFlutter:
-      moduleBundle = FlutterModuleBundle<Object>(
+    case _kAppTypeFlutter:
+      moduleBundle = _FlutterModuleBundle<Object>(
         pythonModule: pythonModule,
         appRoot: appRoot,
       );
       break;
-    case kAppTypeConsole:
-      moduleBundle = ConsoleModuleBundle<Object>(
+    case _kAppTypeConsole:
+      moduleBundle = _ConsoleModuleBundle<Object>(
         pythonModule: pythonModule,
         appRoot: appRoot,
       );

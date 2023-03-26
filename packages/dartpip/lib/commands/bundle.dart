@@ -1,15 +1,13 @@
-import "dart:io";
+part of dartpip;
 
-import "package:args/args.dart";
-import "package:args/command_runner.dart";
-import "package:dartpip/dartpip.dart";
-
+/// Implements the `bundle` command.
 class BundleCommand extends Command<void> {
+  /// Creates a new instance of the [BundleCommand] class.
   BundleCommand() {
     argParser
-      ..addOption(kAppRootOption, abbr: "r", mandatory: true)
+      ..addOption(_kAppRootOption, abbr: "r", mandatory: true)
       ..addOption(
-        kPythonModulesRootOption,
+        _kPythonModulesRootOption,
         abbr: "m",
         mandatory: true,
       );
@@ -32,9 +30,9 @@ class BundleCommand extends Command<void> {
     }
 
     if (dependencies.containsKey("flutter")) {
-      return kAppTypeFlutter;
+      return _kAppTypeFlutter;
     } else {
-      return kAppTypeConsole;
+      return _kAppTypeConsole;
     }
   }
 
@@ -65,11 +63,11 @@ class BundleCommand extends Command<void> {
       throw StateError("Options must be provided.");
     }
 
-    final String appRoot = argResults[kAppRootOption] as String;
+    final String appRoot = argResults[_kAppRootOption] as String;
     final String pythonModuleRoot =
-        argResults[kPythonModulesRootOption] as String;
+        argResults[_kPythonModulesRootOption] as String;
 
-    final Map<dynamic, dynamic> pubspecYaml = parsePubspec(appRoot);
+    final Map<dynamic, dynamic> pubspecYaml = _parsePubspec(appRoot);
     final String appType = _getAppType(pubspecYaml);
     final Iterable<String> pythonModuleNames =
         _getPythonModuleNames(_getPythonFfiMap(pubspecYaml));
@@ -86,7 +84,7 @@ class BundleCommand extends Command<void> {
     ]) {
       print("Bundling Python module '$pythonModuleName'...");
       futures.add(
-        bundleModule(
+        _bundleModule(
           appRoot: appRoot,
           pythonModulePath: <String>[pythonModuleRoot, pythonModuleName]
               .join(Platform.pathSeparator),

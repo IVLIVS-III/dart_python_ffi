@@ -1,7 +1,7 @@
-part of module_bundle;
+part of dartpip;
 
-class AssetsInsertionConfig {
-  AssetsInsertionConfig._({
+class _AssetsInsertionConfig {
+  _AssetsInsertionConfig._({
     required this.pubspecString,
     required this.assets,
     required this.insertFlutterKey,
@@ -10,9 +10,9 @@ class AssetsInsertionConfig {
     required this.insertionPoint,
   });
 
-  factory AssetsInsertionConfig.fromPubspec(String pubspecString) {
-    final Map<dynamic, dynamic> pubspecYaml = parsePubspec("", pubspecString);
-    final int indentation = detectIndentation(pubspecString);
+  factory _AssetsInsertionConfig.fromPubspec(String pubspecString) {
+    final Map<dynamic, dynamic> pubspecYaml = _parsePubspec("", pubspecString);
+    final int indentation = _detectIndentation(pubspecString);
 
     final bool insertFlutterKey = !pubspecYaml.containsKey("flutter");
 
@@ -48,7 +48,7 @@ class AssetsInsertionConfig {
       insertionPoint = pubspecString.indexOf("\n", assetsIndex + 1);
     }
 
-    return AssetsInsertionConfig._(
+    return _AssetsInsertionConfig._(
       pubspecString: pubspecString,
       assets: assets,
       insertFlutterKey: insertFlutterKey,
@@ -104,9 +104,9 @@ class AssetsInsertionConfig {
   }
 }
 
-class FlutterModuleBundle<T extends Object>
-    extends ModuleBundle<PythonModule<T>> {
-  FlutterModuleBundle({
+class _FlutterModuleBundle<T extends Object>
+    extends _ModuleBundle<_PythonModule<T>> {
+  _FlutterModuleBundle({
     required super.pythonModule,
     required super.appRoot,
   });
@@ -152,10 +152,10 @@ class FlutterModuleBundle<T extends Object>
   FutureOr<void> _postExport(List<List<String>> filePaths) {
     filePaths.add(<String>["modules.json"]);
 
-    final String pubspecString = readPubspec(_appRootDirectory.path);
+    final String pubspecString = _readPubspec(_appRootDirectory.path);
 
-    final AssetsInsertionConfig config =
-        AssetsInsertionConfig.fromPubspec(pubspecString);
+    final _AssetsInsertionConfig config =
+        _AssetsInsertionConfig.fromPubspec(pubspecString);
 
     final File pubspecFile = File(
       <String>[_appRootDirectory.path, "pubspec.yaml"]

@@ -1,21 +1,23 @@
-import "package:args/args.dart";
-import "package:args/command_runner.dart";
-import "package:dartpip/dartpip.dart";
+part of dartpip;
 
+/// Implements the `bundle-module` command.
+///
+/// This command is legacy and may be removed in a future version.
 class BundleModuleCommand extends Command<void> {
+  /// Creates a new instance of the [BundleModuleCommand] class.
   BundleModuleCommand() {
     argParser
-      ..addOption(kAppRootOption, abbr: "r", mandatory: true)
+      ..addOption(_kAppRootOption, abbr: "r", mandatory: true)
       ..addOption(
-        kPythonModuleOption,
+        _kPythonModuleOption,
         abbr: "m",
         mandatory: true,
       )
       ..addOption(
-        kAppTypeOption,
+        _kAppTypeOption,
         abbr: "t",
-        allowed: <String>[kAppTypeFlutter, kAppTypeConsole],
-        defaultsTo: kAppTypeFlutter,
+        allowed: <String>[_kAppTypeFlutter, _kAppTypeConsole],
+        defaultsTo: _kAppTypeFlutter,
       );
   }
 
@@ -32,11 +34,11 @@ class BundleModuleCommand extends Command<void> {
       throw StateError("Options must be provided.");
     }
 
-    final String appRoot = argResults[kAppRootOption] as String;
-    final String pythonModulePath = argResults[kPythonModuleOption] as String;
-    final String appType = argResults[kAppTypeOption] as String;
+    final String appRoot = argResults[_kAppRootOption] as String;
+    final String pythonModulePath = argResults[_kPythonModuleOption] as String;
+    final String appType = argResults[_kAppTypeOption] as String;
 
-    await bundleModule(
+    await _bundleModule(
       appRoot: appRoot,
       pythonModulePath: pythonModulePath,
       appType: appType,

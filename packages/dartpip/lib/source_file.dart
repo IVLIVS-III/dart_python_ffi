@@ -1,9 +1,7 @@
-import "dart:convert";
-import "dart:io";
-import "dart:typed_data";
+part of dartpip;
 
-class SourceFile extends FileSystemEntity implements File {
-  SourceFile(String filePath) : _file = File(filePath);
+class _SourceFile extends FileSystemEntity implements File {
+  _SourceFile(String filePath) : _file = File(filePath);
 
   final File _file;
 

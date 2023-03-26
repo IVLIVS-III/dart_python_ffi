@@ -87,8 +87,7 @@ linter:
     - prefer_int_literals
     - prefer_mixin
     - prefer_null_aware_method_calls
-    # TODO: re-enable soon
-    # - public_member_api_docs
+    - public_member_api_docs
     - require_trailing_commas
     - sized_box_shrink_expand
     - sort_constructors_first

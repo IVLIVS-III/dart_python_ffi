@@ -13,6 +13,10 @@
 
 include: package:python_ffi_lint_dart/analysis.yaml
 
+analyzer:
+  errors:
+    public_member_api_docs: ignore
+
 # Uncomment the following section to specify additional rules.
 
 # linter:

@@ -1,8 +1,8 @@
-part of module_bundle;
+part of dartpip;
 
-class ConsoleModuleBundle<T extends Object>
-    extends ModuleBundle<PythonModule<T>> {
-  ConsoleModuleBundle({
+class _ConsoleModuleBundle<T extends Object>
+    extends _ModuleBundle<_PythonModule<T>> {
+  _ConsoleModuleBundle({
     required super.pythonModule,
     required super.appRoot,
   });
@@ -16,7 +16,7 @@ class ConsoleModuleBundle<T extends Object>
 
   static const String _pythonModulesDartFileName = "python_modules.g.dart";
 
-  SourceFile get _pythonModulesDartFile => SourceFile(
+  _SourceFile get _pythonModulesDartFile => _SourceFile(
         <String>[
           _pythonModuleDestinationDirectory.path,
           _pythonModulesDartFileName
@@ -93,7 +93,7 @@ class ConsoleModuleBundle<T extends Object>
       return <String, dynamic>{};
     }
     final String content = _pythonModulesDartFile.readAsStringSync();
-    final RegExpMatch? match = kPythonModulesDartRegex.firstMatch(content);
+    final RegExpMatch? match = _kPythonModulesDartRegex.firstMatch(content);
     if (match == null) {
       return <String, dynamic>{};
     }
@@ -111,10 +111,10 @@ class ConsoleModuleBundle<T extends Object>
     final String base64 = base64Encode(utf8.encode(newJson));
     _pythonModulesDartFile
       ..replace(
-        kPythonModulesDartRegex,
-        "$kPythonModulesPrefix$base64$kPythonModulesSuffix",
+        _kPythonModulesDartRegex,
+        "$_kPythonModulesPrefix$base64$_kPythonModulesSuffix",
       )
-      ..ensureHeader(kPythonModulesGeneratedHeader)
+      ..ensureHeader(_kPythonModulesGeneratedHeader)
       ..ensureFooter("\n");
   }
 }
