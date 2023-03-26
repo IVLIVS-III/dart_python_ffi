@@ -244,7 +244,7 @@ import "package:<package_name>/python_modules/src/python_modules.g.dart";
 void main() async {
   await PythonFfiDart.instance.initialize(
     kPythonModules,
-    libPath: "path/to/libpython3.9.dylib",
+    libPath: "path/to/libpython3.11.dylib",
   );
   // ...
 }
@@ -386,7 +386,6 @@ used for developing, testing and showcasing the Python FFI.
 ## Limitations
 
 - Python `print` is not supported when used in a Flutter environment.
-- Requires Python 3.11 to be installed on the host system.
 
 ## Roadmap
 
