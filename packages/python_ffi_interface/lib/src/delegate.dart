@@ -5,15 +5,18 @@ abstract class PythonFfiDelegate<R extends Object?> extends BaseInterface {
 
   static final Object _token = Object();
 
-  static PythonFfiDelegate<Object?> _instance = _DummyDelegate();
+  static late PythonFfiDelegate<Object?> _instance;
 
-  /// The default instance of [PythonFfiPlatform] to use.
+  /// The default instance of [PythonFfiDelegate] to use.
   ///
-  /// Defaults to [MethodChannelPythonFfi].
+  /// No default exists, so this must be set before using the plugin.
+  /// This is set by the Flutter engine when it's available.
+  /// In Dart-only apps, this is set by the app-facing `python_ffi_dart`
+  /// package.
   static PythonFfiDelegate<Object?> get instance => _instance;
 
   /// Platform-specific implementations should set this with their own
-  /// platform-specific class that extends [PythonFfiPlatform] when
+  /// platform-specific class that extends [PythonFfiDelegate] when
   /// they register themselves.
   static set instance(PythonFfiDelegate<Object?> instance) {
     BaseInterface.verify(instance, _token);
@@ -63,74 +66,4 @@ abstract class PythonFfiDelegate<R extends Object?> extends BaseInterface {
 
   /// Appends a path to the Python sys.path
   FutureOr<void> appendToPath(String path);
-}
-
-class _DummyDelegate extends PythonFfiDelegate<Object?> {
-  @override
-  FutureOr<void> appendToPath(String path) {
-    // TODO: implement appendToPath
-    throw UnimplementedError();
-  }
-
-  @override
-  void ensureNoPythonError() {
-    // TODO: implement ensureNoPythonError
-  }
-
-  @override
-  PythonClassInterface<PythonFfiDelegate<Object?>, Object?> importClass(
-    String moduleName,
-    String className,
-    List<Object?> args, [
-    Map<String, Object?>? kwargs,
-  ]) {
-    // TODO: implement importClass
-    throw UnimplementedError();
-  }
-
-  @override
-  PythonModuleInterface<PythonFfiDelegate<Object?>, Object?> importModule(
-    String moduleName,
-  ) {
-    // TODO: implement importModule
-    throw UnimplementedError();
-  }
-
-  @override
-  FutureOr<void> initialize() {
-    // TODO: implement initialize
-    throw UnimplementedError();
-  }
-
-  @override
-  // TODO: implement isInitialized
-  bool get isInitialized => throw UnimplementedError();
-
-  @override
-  FutureOr<Set<PythonModuleDefinition>> discoverPythonModules() {
-    // TODO: implement discoverPythonModules
-    throw UnimplementedError();
-  }
-
-  @override
-  FutureOr<void> prepareModule(PythonModuleDefinition moduleDefinition) {
-    // TODO: implement prepareModule
-    throw UnimplementedError();
-  }
-
-  @override
-  bool pythonErrorOccurred() {
-    // TODO: implement pythonErrorOccurred
-    throw UnimplementedError();
-  }
-
-  @override
-  void pythonErrorPrint() {
-    // TODO: implement pythonErrorPrint
-  }
-
-  @override
-  void pythonErrorClear() {
-    // TODO: implement pythonErrorClear
-  }
 }

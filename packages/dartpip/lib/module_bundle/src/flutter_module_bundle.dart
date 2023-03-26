@@ -149,7 +149,7 @@ class FlutterModuleBundle<T extends Object>
   }
 
   @override
-  void _postExport(List<List<String>> filePaths) {
+  FutureOr<void> _postExport(List<List<String>> filePaths) {
     filePaths.add(<String>["modules.json"]);
 
     final String pubspecString = readPubspec(_appRootDirectory.path);
@@ -168,6 +168,6 @@ class FlutterModuleBundle<T extends Object>
     );
     pubspecFile.writeAsStringSync(newPubspecString);
 
-    super._postExport(filePaths);
+    return super._postExport(filePaths);
   }
 }

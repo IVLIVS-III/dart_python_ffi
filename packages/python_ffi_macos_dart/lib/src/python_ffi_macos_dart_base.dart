@@ -15,7 +15,8 @@ abstract class PythonFfiMacOSBase extends PythonFfiDelegate<Pointer<PyObject>> {
   Future<void> openDylib();
 }
 
-/// The macOS implementation of [PythonFfiPlatform].
+// ignore: comment_references
+/// The macOS implementation of [PythonFfiDelegate].
 class PythonFfiMacOSDart extends PythonFfiMacOSBase with PythonFfiMacOSMixin {
   PythonFfiMacOSDart(
     String pythonModulesBase64, {

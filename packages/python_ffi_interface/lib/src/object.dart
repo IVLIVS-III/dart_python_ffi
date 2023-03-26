@@ -92,8 +92,8 @@ abstract class PythonObjectInterface<P extends PythonFfiDelegate<R>,
         invocation.memberName.name,
         invocation.positionalArguments,
         invocation.namedArguments.map(
-          (Symbol key, dynamic value) =>
-              MapEntry<String, dynamic>(key.name, value),
+          (Symbol key, Object? value) =>
+              MapEntry<String, Object?>(key.name, value),
         ),
       );
     } else if (invocation.isGetter) {

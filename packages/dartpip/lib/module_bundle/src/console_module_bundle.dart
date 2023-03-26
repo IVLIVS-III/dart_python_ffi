@@ -82,7 +82,7 @@ class ConsoleModuleBundle<T extends Object>
     moduleInfo = moduleInfo
       ..update(
         pythonModule.moduleName,
-        (dynamic _) => moduleEntry,
+        (Object? _) => moduleEntry,
         ifAbsent: () => moduleEntry,
       );
   }

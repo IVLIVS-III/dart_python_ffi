@@ -9,9 +9,9 @@ typedef ReceiveFromPythonCallback<T> = T Function();
 
 class TypeMappingEntry<T extends Object?> {
   const TypeMappingEntry({
-    this.dartType,
     required this.pythonType,
     required this.value,
+    this.dartType,
     this.sendToPython,
     this.receiveFromPython,
     this.equals,

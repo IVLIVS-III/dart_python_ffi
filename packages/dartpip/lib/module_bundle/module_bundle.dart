@@ -57,7 +57,7 @@ abstract class ModuleBundle<T extends PythonModule<Object>> {
       moduleInfo
         ..update(
           pythonModule.moduleName,
-          (dynamic _) => pythonModule.moduleInfo,
+          (Object? _) => pythonModule.moduleInfo,
           ifAbsent: () => pythonModule.moduleInfo,
         );
 

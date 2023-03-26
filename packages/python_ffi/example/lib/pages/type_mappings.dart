@@ -59,7 +59,6 @@ class TypeMappingsPage extends StatelessWidget {
               sendToPython: _module.receive_str,
               receiveFromPython: _module.request_str,
             ),
-            // TODO: implement bytes / Uint8List / String
             const Divider(),
             TypeMappingEntry<Map<String, int>>(
               pythonType: "dict[str, int]",
@@ -103,11 +102,12 @@ class TypeMappingEntry<T extends Object?> extends StatelessWidget {
   final String? dartType;
   final String pythonType;
   final T value;
-  final Function(T) sendToPython;
+  final void Function(T) sendToPython;
   final T Function() receiveFromPython;
   final bool Function(T, T)? equals;
 
   String get _dartType => dartType ?? T.toString();
+
   bool Function(T, T) get _equals => equals ?? (T a, T b) => a == b;
 
   @override
@@ -150,7 +150,10 @@ class TypeMappingEntry<T extends Object?> extends StatelessWidget {
       ..add(StringProperty("pythonType", pythonType))
       ..add(DiagnosticsProperty<T>("value", value))
       ..add(
-        ObjectFlagProperty<Function(T p1)>.has("sendToPython", sendToPython),
+        ObjectFlagProperty<void Function(T p1)>.has(
+          "sendToPython",
+          sendToPython,
+        ),
       )
       ..add(
         ObjectFlagProperty<T Function()>.has(

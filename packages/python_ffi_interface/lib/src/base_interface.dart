@@ -12,9 +12,9 @@ abstract class BaseInterface {
   /// as of the implementation of field promotion in Dart
   /// (https://github.com/dart-lang/language/issues/2020), it is a runtime error
   /// to invoke a private member that is mocked in another library.  The expando
-  /// approach prevents [_verify] from triggering this runtime exception when
+  /// approach prevents [verify] from triggering this runtime exception when
   /// encountering an implementation that uses `implements` rather than
-  /// `extends`.  This in turn allows [_verify] to throw an [AssertionError] (as
+  /// `extends`.  This in turn allows [verify] to throw an [AssertionError] (as
   /// documented).
   static final Expando<Object> _instanceTokens = Expando<Object>();
 

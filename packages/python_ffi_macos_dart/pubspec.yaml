@@ -11,16 +11,14 @@ dependencies:
   python_ffi_interface: ^0.0.1
 
 dev_dependencies:
-  ffigen: ^7.2.0
-  python_ffi_lint: ^0.0.1
-  test: ^1.16.0
+  ffigen: ^7.2.9
+  python_ffi_lint_dart: ^0.0.1
+  test: ^1.24.0
 
 ffigen:
   name: "DartPythonCBindings"
   output: 'lib/src/ffi/generated_bindings.g.dart'
   description: "Bindings to Python C interface"
-  preamble: |
-    // ignore_for_file: unused_field, unused_element
   headers:
     entry-points:
       - 'python/Headers/Python.h'

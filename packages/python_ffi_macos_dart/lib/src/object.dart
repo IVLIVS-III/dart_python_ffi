@@ -6,6 +6,7 @@ extension SymbolToNameExtension on Symbol {
       toString();
 }
 
+// ignore: avoid_classes_with_only_static_members
 class _PythonObjectMacosRefcountUtil {
   static void _initializerCallback(
     Pair<PythonFfiMacOSBase, Pointer<PyObject>> value,

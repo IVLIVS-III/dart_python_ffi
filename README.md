@@ -312,6 +312,7 @@ of `PythonClass`) to Python objects. Trying to do so will result in a runtime ex
 | python_ffi_platform_interface | ⚠️🚫   | The platform interface for python_ffi, a Python-FFI for Dart.                                       |
 | python_ffi_interface          | 🚫     | A base interface for python_ffi_dart, a Python-FFI for Dart.                                        |
 | python_ffi_lint               |        | Analysis options used across the Python-FFI for Dart project.                                       |
+| python_ffi_lint_dart          |        | Analysis options used across the Python-FFI for Dart project.                                       |
 | python_ffi_dart_example       |        | The example command line application showcasing the python_ffi_dart package, a Python-FFI for Dart. |
 
 ## Usage
@@ -381,6 +382,8 @@ used for developing, testing and showcasing the Python FFI.
 └─────────────────────────────────────────┘       dartpip
                                        │             │
                                        python_ffi_lint
+                                              │
+                                  python_ffi_lint_dart
 ```
 
 ## Limitations

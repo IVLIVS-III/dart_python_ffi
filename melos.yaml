@@ -26,7 +26,7 @@ scripts:
     select-package:
       scope: python_ffi_macos_dart
   post_ffigen:
-    exec: perl -0777 -pi -e "s/import 'dart:ffi' as ffi;/import 'dart:ffi' as ffi;\\npart '..\/extensions\/bindings_extension.dart';/igs" lib/src/ffi/generated_bindings.g.dart
+    exec: perl -0777 -pi -e "s/import 'dart:ffi' as ffi;/import 'dart:ffi' as ffi;\\n\\npart '..\/extensions\/bindings_extension.dart';/igs" lib/src/ffi/generated_bindings.g.dart
     select-package:
       scope: python_ffi_macos_dart
   format:
