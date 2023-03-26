@@ -11,13 +11,12 @@ dependencies:
   ffi: ^2.0.1
   flutter:
     sdk: flutter
-  path_provider: ^2.0.11
-  plugin_platform_interface: ^2.1.3
+  path_provider: ^2.0.14
+  plugin_platform_interface: ^2.1.4
   python_ffi_macos_dart: ^0.0.1
   python_ffi_platform_interface: ^0.0.1
 
 dev_dependencies:
-  ffigen: ^7.2.0
   flutter_test:
     sdk: flutter
   python_ffi_lint: ^0.0.1
@@ -44,50 +43,3 @@ flutter:
   #
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
-
-ffigen:
-  name: "DartPythonCBindings"
-  output: 'lib/src/ffi/generated_bindings.g.dart'
-  description: "Bindings to Python C interface"
-  preamble: |
-    // ignore_for_file: unused_field, unused_element
-  headers:
-    entry-points:
-      - 'python/Headers/Python.h'
-    include-directives:
-      - 'python/Headers/*'
-  #  functions:
-  #    rename:
-  #      "_(.*)": "$1"
-  #      "__(.*)": "$1"
-  #  structs:
-  #    rename:
-  #      "_(.*)": "$1"
-  #      "__(.*)": "_$1"
-  #    member-rename:
-  #      "_(.*)":
-  #        "_(.*)": "$1"
-  #  unnions:
-  #    rename:
-  #      "_(.*)": "$1"
-  #      "__(.*)": "$1"
-  #    member-rename:
-  #      "_(.*)":
-  #        "_(.*)": "$1"
-  globals:
-    rename:
-      "_(.*)": "$1"
-      "__(.*)": "$1"
-#    member-rename:
-#      "_(.*)":
-#        "_(.*)": "$1"
-#  enums:
-#    rename:
-#      "_(.*)": "$1"
-#    member-rename:
-#      "_(.*)":
-#        "_(.*)": "$1"
-#  typedefs:
-#    rename:
-#      "_(.*)": "$1"
-#      "__(.*)": "$1"

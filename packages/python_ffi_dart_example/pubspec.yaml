@@ -1,7 +1,7 @@
 name: python_ffi_dart_example
 description: The example command line application showcasing the python_ffi_dart package, a Python-FFI for Dart.
 version: 0.0.1
-# repository: https://github.com/my_org/my_repo
+repository: https://github.com/IVLIVS-III/dart_python_ffi
 
 environment:
   sdk: '>=2.19.2 <3.0.0'
