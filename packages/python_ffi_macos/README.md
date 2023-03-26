@@ -2,6 +2,15 @@
 
 A Python-FFI for Dart
 
+## Development
+
+### Preparing the dylib for bundled distribution
+
+1. Put it somewhere in the `macos` folder, and add the path to `s.vendored_libraries`
+   in `macos/python_ffi_macos.podspec`.
+2. Rename the dylib to `libpython3.11.dylib` (or whatever version you're using).
+3. Run `install_name_tool -id @rpath/libpython3.11.dylib libpython3.11.dylib`
+
 ## Getting Started
 
 This project is a starting point for a Flutter
@@ -60,13 +69,13 @@ A plugin can have both FFI and method channels:
 The native build systems that are invoked by FFI (and method channel) plugins are:
 
 * For Android: Gradle, which invokes the Android NDK for native builds.
-  * See the documentation in android/build.gradle.
+    * See the documentation in android/build.gradle.
 * For iOS and MacOS: Xcode, via CocoaPods.
-  * See the documentation in ios/python_ffi_macos.podspec.
-  * See the documentation in macos/python_ffi_macos.podspec.
+    * See the documentation in ios/python_ffi_macos.podspec.
+    * See the documentation in macos/python_ffi_macos.podspec.
 * For Linux and Windows: CMake.
-  * See the documentation in linux/CMakeLists.txt.
-  * See the documentation in windows/CMakeLists.txt.
+    * See the documentation in linux/CMakeLists.txt.
+    * See the documentation in windows/CMakeLists.txt.
 
 ## Binding to native code
 
@@ -89,4 +98,3 @@ For example, see `sumAsync` in `lib/python_ffi_macos.dart`.
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
-

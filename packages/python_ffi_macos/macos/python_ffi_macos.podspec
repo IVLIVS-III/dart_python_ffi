@@ -20,21 +20,7 @@ The macOS implementation of python_ffi, a Python-FFI for Dart.
   s.source           = { :path => '.' }
   s.source_files     = 'Classes/**/*'
 
+  s.vendored_libraries = 'python/dylib/libpython3.11.dylib'
+
   s.platform = :osx, '10.13'
-  # s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
-
-  s.default_subspecs = 'all'
-
-  s.subspec 'all' do |ss|
-    ss.header_mappings_dir = 'python/dylib/3.11/include/python3.11'
-    # ss.source_files = 'python/dylib/3.11/include/python3.11/**/*.h'
-    ss.public_header_files = 'python/dylib/3.11/include/python3.11/**/*.h'
-    ss.vendored_libraries = 'python/dylib/lib*.dylib'
-  end
-
-  s.xcconfig = {
-     # here on LDFLAG, I had to set -l and then the library name (without lib prefix although the file name has it).
-     # 'OTHER_LDFLAGS' => '-llibpython3.11',
-  }
-  # s.vendored_xcframeworks = 'python/libpython3.11.xcframework'
 end
