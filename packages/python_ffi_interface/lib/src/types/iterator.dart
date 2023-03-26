@@ -1,8 +1,10 @@
 part of python_ffi_interface;
 
+/// Represents a Python iterator.
 class PythonIterator<T extends Object?, P extends PythonFfiDelegate<R>,
         R extends Object?> extends PythonClassInterface<P, R>
     implements Iterator<T> {
+  /// Creates a new Python iterator.
   PythonIterator(this._iterator)
       : super(
           _iterator.platform,
@@ -37,9 +39,43 @@ class PythonIterator<T extends Object?, P extends PythonFfiDelegate<R>,
       }
     }
   }
+
+  @override
+  T_out getAttribute<T_out extends Object?>(String attributeName) =>
+      _iterator.getAttribute<T_out>(attributeName);
+
+  @override
+  T_out getAttributeRaw<T_out extends PythonObjectInterface<P, R>>(
+    String attributeName,
+  ) =>
+      _iterator.getAttributeRaw<T_out>(attributeName);
+
+  @override
+  PythonFunctionInterface<P, R> getFunction(String name) =>
+      _iterator.getFunction(name);
+
+  @override
+  bool hasAttribute(String attributeName) =>
+      _iterator.hasAttribute(attributeName);
+
+  @override
+  void setAttribute<T_in extends Object?>(String attributeName, T_in value) =>
+      _iterator.setAttribute(attributeName, value);
+
+  @override
+  void setAttributeRaw<T_in extends PythonObjectInterface<P, R>>(
+    String attributeName,
+    T_in value,
+  ) =>
+      _iterator.setAttributeRaw(attributeName, value);
+
+  @override
+  Object? toDartObject() => this;
 }
 
+/// Adds type information to the untyped [PythonIterator].
 class TypedIterator<T> implements Iterator<T> {
+  /// Creates a new typed iterator from the given untyped iterator.
   TypedIterator.from(this._iterator);
 
   final Iterator<Object?> _iterator;

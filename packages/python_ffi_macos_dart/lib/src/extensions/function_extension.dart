@@ -137,43 +137,8 @@ class _FunctionConversionUtils {
   }
 }
 
-typedef DartCFunctionSignature = Object? Function(
-  Object? self,
-  List<Object?> args,
-);
-
 /// https://docs.python.org/3/c-api/structures.html#c.PyMethodDef
 typedef PyCFunctionSignature = Pointer<PyObject> Function(
   Pointer<PyObject> self,
   Pointer<PyObject> args,
 );
-
-extension GenericExtension on Function {
-  DartCFunctionSignature get generic0 =>
-      // ignore: avoid_dynamic_calls
-      (Object? self, List<Object?> args) => this();
-
-  DartCFunctionSignature get generic1 =>
-      // ignore: avoid_dynamic_calls
-      (Object? self, List<Object?> args) => this(args[0]);
-
-  DartCFunctionSignature get generic2 =>
-      // ignore: avoid_dynamic_calls
-      (Object? self, List<Object?> args) => this(args[0], args[1]);
-
-  DartCFunctionSignature get generic3 =>
-      // ignore: avoid_dynamic_calls
-      (Object? self, List<Object?> args) => this(args[0], args[1], args[2]);
-
-  DartCFunctionSignature get generic4 => (Object? self, List<Object?> args) =>
-      // ignore: avoid_dynamic_calls
-      this(args[0], args[1], args[2], args[3]);
-
-  DartCFunctionSignature get generic5 => (Object? self, List<Object?> args) =>
-      // ignore: avoid_dynamic_calls
-      this(args[0], args[1], args[2], args[3], args[4]);
-
-  DartCFunctionSignature get generic6 => (Object? self, List<Object?> args) =>
-      // ignore: avoid_dynamic_calls
-      this(args[0], args[1], args[2], args[3], args[4], args[5]);
-}

@@ -1,9 +1,9 @@
 part of python_ffi_macos_dart;
 
-class PythonModuleMacos
+class _PythonModuleMacos
     extends PythonModuleInterface<PythonFfiMacOSBase, Pointer<PyObject>>
     with _PythonObjectMacosMixin {
-  PythonModuleMacos(super.platform, super.reference)
+  _PythonModuleMacos(super.platform, super.reference)
       : super(
           initializer: _PythonObjectMacosRefcountUtil.initializer,
           finalizer: _PythonObjectMacosRefcountUtil.finalizer,
@@ -15,21 +15,21 @@ class PythonModuleMacos
   }
 
   @override
-  PythonClassMacos getClass(
+  _PythonClassMacos getClass(
     String name,
     List<Object?> args, [
     Map<String, Object?>? kwargs,
   ]) {
     final _PythonClassDefinitionMacos classDefinition =
         _getClassDefinition(name);
-    final PythonClassMacos classInstance =
+    final _PythonClassMacos classInstance =
         classDefinition.newInstance(args, kwargs);
     return classInstance;
   }
 
   @override
-  PythonModuleMacos getModule(String name) {
+  _PythonModuleMacos getModule(String name) {
     final _PythonObjectMacos moduleAttribute = getAttributeRaw(name);
-    return PythonModuleMacos(platform, moduleAttribute.reference);
+    return _PythonModuleMacos(platform, moduleAttribute.reference);
   }
 }

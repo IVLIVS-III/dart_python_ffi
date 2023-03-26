@@ -1,10 +1,10 @@
 part of python_ffi_macos_dart;
 
-extension AddressExtension<T extends NativeType> on Pointer<T> {
+extension _AddressExtension<T extends NativeType> on Pointer<T> {
   String get hexAddress => address.toRadixString(16);
 }
 
-extension ObjectExtension on Pointer<PyObject> {
+extension _ObjectExtension on Pointer<PyObject> {
   String get typeName => typeObject.name;
 
   Pointer<PyTypeObject> get typeObject {
@@ -16,7 +16,7 @@ extension ObjectExtension on Pointer<PyObject> {
   }
 }
 
-extension TypeObjectExtension on Pointer<PyTypeObject> {
+extension _TypeObjectExtension on Pointer<PyTypeObject> {
   int get flags => ref.tp_flags;
 
   String get name {

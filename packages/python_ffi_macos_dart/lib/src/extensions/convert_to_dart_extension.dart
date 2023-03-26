@@ -1,6 +1,6 @@
 part of python_ffi_macos_dart;
 
-extension ConvertToDartExtension on Pointer<PyObject> {
+extension _ConvertToDartExtension on Pointer<PyObject> {
   Object? toDartObject(PythonFfiMacOSBase platform) {
     final Pointer<PyObject> object = this;
 
@@ -49,8 +49,11 @@ extension ConvertToDartExtension on Pointer<PyObject> {
     if (isIterable(platform)) {
       return asIterable(platform);
     }
+    if (isException(platform)) {
+      return asException(platform);
+    }
     if (isClass(platform)) {
-      return PythonClassMacos(platform, object);
+      return _PythonClassMacos(platform, object);
     }
 
     final String nameString = typeName;
@@ -236,11 +239,14 @@ extension ConvertToDartExtension on Pointer<PyObject> {
         _PythonObjectMacos(platform, this),
       );
 
-  PythonFunctionMacos asFunction(PythonFfiMacOSBase platform) {
+  _PythonExceptionMacos asException(PythonFfiMacOSBase platform) =>
+      _PythonExceptionMacos(platform, this, nullptr, nullptr);
+
+  _PythonFunctionMacos asFunction(PythonFfiMacOSBase platform) {
     // Note: We need to access the __code__.__str__ attribute to ensure that the
     //       code object is not garbage collected before the function object.
     //       If __code__.__str__ is not available, we use __code__.__repr__.
-    final PythonFunctionMacos result = PythonFunctionMacos(platform, this);
+    final _PythonFunctionMacos result = _PythonFunctionMacos(platform, this);
     const String kCodeAttributeName = "__code__";
     if (result.hasAttribute(kCodeAttributeName)) {
       final Object? codeAttribute = result.getAttribute(kCodeAttributeName);
@@ -261,6 +267,6 @@ extension ConvertToDartExtension on Pointer<PyObject> {
     return result;
   }
 
-  PythonModuleMacos asModule(PythonFfiMacOSBase platform) =>
-      PythonModuleMacos(platform, this);
+  _PythonModuleMacos asModule(PythonFfiMacOSBase platform) =>
+      _PythonModuleMacos(platform, this);
 }

@@ -286,6 +286,7 @@ Types will be converted automatically according to the following table:
 | `Iterable`    | `Iterable`  | ✅ complete        | ✅ complete        |
 | `Function`    | `Callable`  | ✅ complete        | ✅ complete        |
 | `Future`      | `Awaitable` | ❌ missing         | ❌ missing         |
+| `Exception`   | `Exception` | ❌ missing         | ✅ complete        |
 
 Anything else will be converted from Python to a `PythonObject` in Dart. It is supported to cast
 this value to `dynamic` and invoke any method or property on it. It will work, as long as the method

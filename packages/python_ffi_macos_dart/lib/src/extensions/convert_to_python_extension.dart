@@ -1,6 +1,6 @@
 part of python_ffi_macos_dart;
 
-extension ConvertToPythonExtension on Object? {
+extension _ConvertToPythonExtension on Object? {
   _PythonObjectMacos _toPythonObject(PythonFfiMacOSBase platform) {
     final Object? value = this;
     Pointer<PyObject>? object;

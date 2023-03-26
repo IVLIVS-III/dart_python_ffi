@@ -1,6 +1,6 @@
 part of python_ffi_macos_dart;
 
-extension RefCountExtension on Pointer<PyObject> {
+extension _RefCountExtension on Pointer<PyObject> {
   void incRef(PythonFfiMacOSBase platform) {
     if (this == nullptr) {
       return;

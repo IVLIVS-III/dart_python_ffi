@@ -1,127 +1,169 @@
 part of python_ffi_macos_dart;
 
-// reference: object.h:328 ff.
-/*
-Type flags (tp_flags)
+/// reference: object.h:328 ff.
+///
+/// Type flags (tp_flags)
+///
+/// These flags are used to change expected features and behavior for a
+/// particular type.
+///
+/// Arbitration of the flag bit positions will need to be coordinated among
+/// all extension writers who publicly release their extensions (this will
+/// be fewer than you might expect!).
+///
+/// Most flags were removed as of Python 3.0 to make room for new flags.  (Some
+/// flags are not for backwards compatibility but to indicate the presence of an
+/// optional feature; these flags remain of course.)
+///
+/// Type definitions should use Py_TPFLAGS_DEFAULT for their tp_flags value.
+///
+/// Code can use PyType_HasFeature(type_ob, flag_value) to test whether the
+/// given type object has a specified feature.
 
-These flags are used to change expected features and behavior for a
-particular type.
-
-Arbitration of the flag bit positions will need to be coordinated among
-all extension writers who publicly release their extensions (this will
-be fewer than you might expect!).
-
-Most flags were removed as of Python 3.0 to make room for new flags.  (Some
-flags are not for backwards compatibility but to indicate the presence of an
-optional feature; these flags remain of course.)
-
-Type definitions should use Py_TPFLAGS_DEFAULT for their tp_flags value.
-
-Code can use PyType_HasFeature(type_ob, flag_value) to test whether the
-given type object has a specified feature.
-*/
-
-// reference: object.h:422
+/// reference: object.h:422
 // ignore: constant_identifier_names
 const int Py_TPFLAGS_DEFAULT = 0;
 
-/* Placement of dict (and values) pointers are managed by the VM, not by the type.
- * The VM will automatically set tp_dictoffset. Should not be used for variable sized
- * classes, such as classes that extend tuple.
- */
-// reference: object.h:354
+/// Placement of dict (and values) pointers are managed by the VM, not by the type.
+/// The VM will automatically set tp_dictoffset. Should not be used for variable sized
+/// classes, such as classes that extend tuple.
+///
+/// reference: object.h:354
 // ignore: constant_identifier_names
 const int Py_TPFLAGS_MANAGED_DICT = 1 << 4;
 
-/* Set if instances of the type object are treated as sequences for pattern matching */
-// reference: object.h:357
+/// Set if instances of the type object are treated as sequences for pattern matching
+///
+/// reference: object.h:357
 // ignore: constant_identifier_names
 const int Py_TPFLAGS_SEQUENCE = 1 << 5;
 
-/* Set if instances of the type object are treated as mappings for pattern matching */
-// reference: object.h:359
+/// Set if instances of the type object are treated as mappings for pattern matching
+///
+/// reference: object.h:359
 // ignore: constant_identifier_names
 const int Py_TPFLAGS_MAPPING = 1 << 6;
 
-/* Disallow creating instances of the type: set tp_new to NULL and don't create
- * the "__new__" key in the type dictionary. */
-// reference: object.h:364
+/// Disallow creating instances of the type: set tp_new to NULL and don't create
+/// the "__new__" key in the type dictionary.
+///
+/// reference: object.h:364
 // ignore: constant_identifier_names
 const int Py_TPFLAGS_DISALLOW_INSTANTIATION = 1 << 7;
 
-/* Set if the type object is immutable: type attributes cannot be set nor deleted */
-// reference: object.h:367
+/// Set if the type object is immutable: type attributes cannot be set nor deleted
+///
+/// reference: object.h:367
 // ignore: constant_identifier_names
 const int Py_TPFLAGS_IMMUTABLETYPE = 1 << 8;
 
-/* Set if the type object is dynamically allocated */
-// reference: object.h:370
+/// Set if the type object is dynamically allocated
+///
+/// reference: object.h:370
 // ignore: constant_identifier_names
 const int Py_TPFLAGS_HEAPTYPE = 1 << 9;
 
-/* Set if the type allows subclassing */
-// reference: object.h:373
+/// Set if the type allows subclassing
+///
+/// reference: object.h:373
 // ignore: constant_identifier_names
 const int Py_TPFLAGS_BASETYPE = 1 << 10;
 
-/* Set if the type implements the vectorcall protocol (PEP 590) */
-// reference: object.h:377
+/// Set if the type implements the vectorcall protocol (PEP 590)
+///
+/// reference: object.h:377
 // ignore: constant_identifier_names
 const int Py_TPFLAGS_HAVE_VECTORCALL = 1 << 11;
 
-/* Set if the type is 'ready' -- fully initialized */
-// reference: object.h:383
+/// Set if the type is 'ready' -- fully initialized
+///
+/// reference: object.h:383
 // ignore: constant_identifier_names
 const int Py_TPFLAGS_READY = 1 << 12;
 
-/* Set while the type is being 'readied', to prevent recursive ready calls */
-// reference: object.h:386
+/// Set while the type is being 'readied', to prevent recursive ready calls
+///
+/// reference: object.h:386
 // ignore: constant_identifier_names
 const int Py_TPFLAGS_READYING = 1 << 13;
 
-/* Objects support garbage collection (see objimpl.h) */
-// reference: object.h:389
+/// Objects support garbage collection (see objimpl.h)
+///
+/// reference: object.h:389
 // ignore: constant_identifier_names
 const int Py_TPFLAGS_HAVE_GC = 1 << 14;
 
-/* Objects behave like an unbound method */
-// reference: object.h:399
+/// Objects behave like an unbound method
+///
+/// reference: object.h:399
 // ignore: constant_identifier_names
 const int Py_TPFLAGS_METHOD_DESCRIPTOR = 1 << 17;
 
-/* Object has up-to-date type attribute cache */
-// reference: object.h:402
+/// Object has up-to-date type attribute cache
+///
+/// reference: object.h:402
 // ignore: constant_identifier_names
 const int Py_TPFLAGS_VALID_VERSION_TAG = 1 << 19;
 
-/* Type is abstract and cannot be instantiated */
-// reference: object.h:405
+/// Type is abstract and cannot be instantiated
+///
+/// reference: object.h:405
 // ignore: constant_identifier_names
 const int Py_TPFLAGS_IS_ABSTRACT = 1 << 20;
 
-// This undocumented flag gives certain built-ins their unique pattern-matching
-// behavior, which allows a single positional subpattern to match against the
-// subject itself (rather than a mapped attribute on it):
-// reference: object.h:410
+/// This undocumented flag gives certain built-ins their unique pattern-matching
+/// behavior, which allows a single positional subpattern to match against the
+/// subject itself (rather than a mapped attribute on it):
+///
+/// reference: object.h:410
 // ignore: constant_identifier_names
-const int _Py_TPFLAGS_MATCH_SELF = 1 << 22;
+const int Py_TPFLAGS_MATCH_SELF = 1 << 22;
 
-/* These flags are used to determine if a type is a subclass. */
-// reference: object.h:413 ff.
+/// These flags are used to determine if a type is a subclass.
+///
+/// reference: object.h:413 ff.
 // ignore: constant_identifier_names
 const int Py_TPFLAGS_LONG_SUBCLASS = 1 << 24;
+
+/// These flags are used to determine if a type is a subclass.
+///
+/// reference: object.h:413 ff.
 // ignore: constant_identifier_names
 const int Py_TPFLAGS_LIST_SUBCLASS = 1 << 25;
+
+/// These flags are used to determine if a type is a subclass.
+///
+/// reference: object.h:413 ff.
 // ignore: constant_identifier_names
 const int Py_TPFLAGS_TUPLE_SUBCLASS = 1 << 26;
+
+/// These flags are used to determine if a type is a subclass.
+///
+/// reference: object.h:413 ff.
 // ignore: constant_identifier_names
 const int Py_TPFLAGS_BYTES_SUBCLASS = 1 << 27;
+
+/// These flags are used to determine if a type is a subclass.
+///
+/// reference: object.h:413 ff.
 // ignore: constant_identifier_names
 const int Py_TPFLAGS_UNICODE_SUBCLASS = 1 << 28;
+
+/// These flags are used to determine if a type is a subclass.
+///
+/// reference: object.h:413 ff.
 // ignore: constant_identifier_names
 const int Py_TPFLAGS_DICT_SUBCLASS = 1 << 29;
+
+/// These flags are used to determine if a type is a subclass.
+///
+/// reference: object.h:413 ff.
 // ignore: constant_identifier_names
 const int Py_TPFLAGS_BASE_EXC_SUBCLASS = 1 << 30;
+
+/// These flags are used to determine if a type is a subclass.
+///
+/// reference: object.h:413 ff.
 // ignore: constant_identifier_names
 const int Py_TPFLAGS_TYPE_SUBCLASS = 1 << 31;
 
@@ -192,18 +234,18 @@ extension _TypeDebugExtension on PyTypeObject {
       };
 }
 
-extension ObjectEqualityExtension on PyObject {
+extension _ObjectEqualityExtension on PyObject {
   bool valueEquals(PyObject other) =>
       ob_type.address == other.ob_type.address && ob_refcnt == other.ob_refcnt;
 }
 
-extension VarEqualityExtension on PyVarObject {
+extension _VarEqualityExtension on PyVarObject {
   bool valueEquals(PyVarObject other) =>
       this == other ||
       (ob_base.valueEquals(other.ob_base) && ob_size == other.ob_size);
 }
 
-extension TypeEqualityExtension on PyTypeObject {
+extension _TypeEqualityExtension on PyTypeObject {
   bool valueEquals(PyTypeObject other) =>
       this == other ||
       (ob_base.valueEquals(other.ob_base) &&
@@ -256,7 +298,7 @@ extension TypeEqualityExtension on PyTypeObject {
           tp_vectorcall == other.tp_vectorcall);
 }
 
-extension TypeExtension on Pointer<PyObject> {
+extension _TypeExtension on Pointer<PyObject> {
   bool isNone(PythonFfiMacOSBase platform) =>
       platform.bindings.Py_IsNone(this) == 1;
 
@@ -353,7 +395,7 @@ extension TypeExtension on Pointer<PyObject> {
   bool isOfType(PyTypeObject type) => typeObject.isOfType(type);
 }
 
-extension TypeTypeExtension on Pointer<PyTypeObject> {
+extension _TypeTypeExtension on Pointer<PyTypeObject> {
   bool isOfType(PyTypeObject type) => ref.valueEquals(type);
 
   Pointer<PyTypeObject> get typeObject {

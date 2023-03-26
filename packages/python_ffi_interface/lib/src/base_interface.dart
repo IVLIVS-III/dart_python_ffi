@@ -1,3 +1,4 @@
+/// Base class for platform interface classes.
 abstract class BaseInterface {
   /// Constructs a PlatformInterface, for use only in constructors of abstract
   /// derived classes.

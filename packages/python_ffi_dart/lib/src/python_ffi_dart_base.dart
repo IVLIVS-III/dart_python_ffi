@@ -1,21 +1,25 @@
-// TODO: Put public facing types in this file.
 part of python_ffi_dart;
 
-PythonFfiBase get pythonInstance => PythonFfiDart.instance;
-
+/// A base class for all python ffi implementations.
 abstract class PythonFfiBase {
+  /// Gets the name of the implementation.
+  ///
+  /// This is used for error messages.
   String get name;
 
+  /// Gets the delegate that is used to interact with the python ffi.
   PythonFfiDelegate<Object?> get delegate;
 
   set delegate(PythonFfiDelegate<Object?> delegate);
 }
 
+/// An implementation of the python ffi for dart apps.
 class PythonFfiDart extends PythonFfiBase with PythonFfiMixin {
   PythonFfiDart._();
 
   static PythonFfiDart? _instance;
 
+  /// Gets the singleton instance of the python ffi.
   // ignore: prefer_constructors_over_static_methods
   static PythonFfiDart get instance {
     _instance ??= PythonFfiDart._();
@@ -33,6 +37,7 @@ class PythonFfiDart extends PythonFfiBase with PythonFfiMixin {
   @override
   String get name => "PythonFfiDart";
 
+  /// Initializes the native platform Python runtime.
   FutureOr<void> initialize(String pythonModules, {String? libPath}) {
     if (Platform.isMacOS) {
       delegate = PythonFfiMacOSDart(pythonModules, libPath: libPath);
@@ -46,7 +51,9 @@ class PythonFfiDart extends PythonFfiBase with PythonFfiMixin {
   }
 }
 
+/// A shared implementation of the python ffi.
 mixin PythonFfiMixin on PythonFfiBase {
+  /// Prepares a Python module for use.
   FutureOr<void> prepareModule(PythonModuleDefinition moduleDefinition) async {
     await delegate.prepareModule(moduleDefinition);
   }
@@ -59,6 +66,10 @@ mixin PythonFfiMixin on PythonFfiBase {
     }
   }
 
+  /// Imports a Python module.
+  ///
+  /// The module must be builtin or bundled with the app via Flutter assets or
+  /// embedded in Dart.
   T importModule<T extends PythonModule>(
     String name,
     PythonModuleFrom<T> from,
@@ -67,6 +78,7 @@ mixin PythonFfiMixin on PythonFfiBase {
     return from(delegate.importModule(name));
   }
 
+  /// Imports a Python class from the specified module.
   T importClass<T extends PythonClass>(
     String moduleName,
     String className,
@@ -81,6 +93,7 @@ mixin PythonFfiMixin on PythonFfiBase {
     );
   }
 
+  /// Appends a path to the Python sys.path.
   Future<void> appendToPath(String path) async {
     _ensureInitialized();
     await delegate.appendToPath(path);

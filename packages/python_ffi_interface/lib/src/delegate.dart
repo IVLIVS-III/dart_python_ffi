@@ -1,6 +1,8 @@
 part of python_ffi_interface;
 
+/// Abstract base class for all platform implementations of the Python FFI.
 abstract class PythonFfiDelegate<R extends Object?> extends BaseInterface {
+  /// Creates a new Python FFI delegate.
   PythonFfiDelegate() : super(token: _token);
 
   static final Object _token = Object();
@@ -23,35 +25,38 @@ abstract class PythonFfiDelegate<R extends Object?> extends BaseInterface {
     _instance = instance;
   }
 
-  /// Checks whether the Python runtime was initialized
+  /// Checks whether the Python runtime was initialized.
   bool get isInitialized;
 
-  /// Initializes the native platform Python runtime
+  /// Initializes the native platform Python runtime.
   FutureOr<void> initialize() async {
     final Set<PythonModuleDefinition> modules = await discoverPythonModules();
     await FutureOrExtension.wait<void>(modules.map(prepareModule));
   }
 
-  /// Discovers all Python modules bundled with the app by dartpip
+  /// Discovers all Python modules bundled with the app by dartpip.
   FutureOr<Set<PythonModuleDefinition>> discoverPythonModules();
 
+  /// Prepares a Python module for use.
   FutureOr<void> prepareModule(PythonModuleDefinition moduleDefinition);
 
-  /// Checks whether an exception occurred in python
+  /// Checks whether an exception occurred in python.
   // TODO: return a proper python exception object
   bool pythonErrorOccurred();
 
-  /// Prints the current python exception
+  /// Prints the current python exception.
   void pythonErrorPrint();
 
-  /// Clears the current python exception
+  /// Clears the current python exception.
   void pythonErrorClear();
 
-  /// Throws a dart exception if an exception occurred in python
+  /// Throws a dart exception if an exception occurred in python.
   void ensureNoPythonError();
 
   /// Imports a Python module.
-  /// The module must be builtin or bundled with the app via flutter assets.
+  ///
+  /// The module must be builtin or bundled with the app via Flutter assets or
+  /// embedded in Dart.
   PythonModuleInterface<PythonFfiDelegate<R>, R> importModule(
     String moduleName,
   );
@@ -64,6 +69,6 @@ abstract class PythonFfiDelegate<R extends Object?> extends BaseInterface {
     Map<String, Object?>? kwargs,
   ]);
 
-  /// Appends a path to the Python sys.path
+  /// Appends a path to the Python sys.path.
   FutureOr<void> appendToPath(String path);
 }

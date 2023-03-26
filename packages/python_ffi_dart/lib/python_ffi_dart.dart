@@ -10,8 +10,6 @@ import "package:python_ffi_interface/python_ffi_interface.dart";
 import "package:python_ffi_macos_dart/python_ffi_macos_dart.dart";
 
 export "package:python_ffi_interface/python_ffi_interface.dart";
-export "package:python_ffi_macos_dart/python_ffi_macos_dart.dart"
-    show GenericExtension;
 
 part "src/class.dart";
 part "src/function.dart";

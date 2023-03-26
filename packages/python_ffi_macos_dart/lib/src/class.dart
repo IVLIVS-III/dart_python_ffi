@@ -9,7 +9,7 @@ class _PythonClassDefinitionMacos extends PythonClassDefinitionInterface<
         );
 
   @override
-  PythonClassMacos newInstance(
+  _PythonClassMacos newInstance(
     List<Object?> args, [
     Map<String, Object?>? kwargs,
   ]) {
@@ -36,7 +36,7 @@ class _PythonClassDefinitionMacos extends PythonClassDefinitionInterface<
       ),
     );
 
-    return PythonClassMacos(platform, instance);
+    return _PythonClassMacos(platform, instance);
   }
 
   @override
@@ -64,10 +64,10 @@ class _PythonClassDefinitionMacos extends PythonClassDefinitionInterface<
       );
 }
 
-class PythonClassMacos
+class _PythonClassMacos
     extends PythonClassInterface<PythonFfiMacOSBase, Pointer<PyObject>>
     with _PythonObjectMacosMixin {
-  PythonClassMacos(super.platform, super.reference)
+  _PythonClassMacos(super.platform, super.reference)
       : super(
           initializer: _PythonObjectMacosRefcountUtil.initializer,
           finalizer: _PythonObjectMacosRefcountUtil.finalizer,

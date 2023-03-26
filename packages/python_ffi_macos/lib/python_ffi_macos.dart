@@ -21,8 +21,6 @@ abstract class _PythonFfiMacOS extends PythonFfiPlatform<Pointer<PyObject>>
   FutureOr<ByteData> loadPythonFile(PythonSourceFileEntity sourceFile) {
     if (sourceFile is SourceFile) {
       return PlatformAssetBundle().load("python-modules/${sourceFile.name}");
-    } else if (sourceFile is SourceBytes) {
-      return ByteData.view(sourceFile.bytes.buffer);
     } else if (sourceFile is SourceBase64) {
       return ByteData.view(base64Decode(sourceFile.base64).buffer);
     }

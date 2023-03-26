@@ -1,11 +1,5 @@
 part of python_ffi_macos_dart;
 
-extension SymbolToNameExtension on Symbol {
-  String get name =>
-      RegExp(r'^Symbol\("(.*)"\)$').firstMatch(toString())?.group(1) ??
-      toString();
-}
-
 // ignore: avoid_classes_with_only_static_members
 class _PythonObjectMacosRefcountUtil {
   static void _initializerCallback(
@@ -199,10 +193,10 @@ mixin _PythonObjectMacosMixin
   }
 
   @override
-  PythonFunctionMacos getFunction(String name) {
+  _PythonFunctionMacos getFunction(String name) {
     final PythonObjectInterface<PythonFfiMacOSBase, Pointer<PyObject>>
         functionAttribute = getAttributeRaw(name);
-    return PythonFunctionMacos(platform, functionAttribute.reference);
+    return _PythonFunctionMacos(platform, functionAttribute.reference);
   }
 
   @override

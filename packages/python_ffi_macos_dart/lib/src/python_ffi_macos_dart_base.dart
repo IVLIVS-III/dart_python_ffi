@@ -1,23 +1,33 @@
-// TODO: Put public facing types in this file.
 part of python_ffi_macos_dart;
 
+/// Base class for the macOS implementation of [PythonFfiDelegate].
+///
+/// This is shared between the pure Dart and Flutter implementations.
 abstract class PythonFfiMacOSBase extends PythonFfiDelegate<Pointer<PyObject>> {
   final Set<PythonModuleDefinition> _pythonModules = <PythonModuleDefinition>{};
 
+  /// The [DartPythonCBindings] used to call into the Python C API.
   DartPythonCBindings get bindings;
 
   set bindings(DartPythonCBindings bindings);
 
+  /// Used to find a suitable location for the Python source files.
   FutureOr<Directory> getApplicationSupportDirectory();
 
+  /// Loads a Python module from either the embedded Python source files (in
+  /// pure Dart apps) or from Flutter assets.
   FutureOr<ByteData> loadPythonFile(PythonSourceFileEntity sourceFile);
 
+  /// Opens the Python dylib.
+  ///
+  /// This is called by [PythonFfiDelegate.initialize].
   Future<void> openDylib();
 }
 
 // ignore: comment_references
 /// The macOS implementation of [PythonFfiDelegate].
 class PythonFfiMacOSDart extends PythonFfiMacOSBase with PythonFfiMacOSMixin {
+  /// Creates a new [PythonFfiMacOSDart] instance.
   PythonFfiMacOSDart(
     String pythonModulesBase64, {
     String? libPath,
@@ -93,9 +103,7 @@ class PythonFfiMacOSDart extends PythonFfiMacOSBase with PythonFfiMacOSMixin {
 
   @override
   ByteData loadPythonFile(PythonSourceFileEntity sourceFile) {
-    if (sourceFile is SourceBytes) {
-      return ByteData.view(sourceFile.bytes.buffer);
-    } else if (sourceFile is SourceBase64) {
+    if (sourceFile is SourceBase64) {
       return ByteData.view(base64Decode(sourceFile.base64).buffer);
     }
     throw Exception("Unsupported source file type: $sourceFile");
@@ -105,6 +113,9 @@ class PythonFfiMacOSDart extends PythonFfiMacOSBase with PythonFfiMacOSMixin {
   Set<PythonModuleDefinition> discoverPythonModules() => _pythonModules;
 }
 
+/// Mixin for the macOS implementation of [PythonFfiDelegate].
+///
+/// This is shared between the pure Dart and Flutter implementations.
 mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
   /// A handle to the Python C-bindings.
   DartPythonCBindings? _bindings;
@@ -141,26 +152,6 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
   @override
   bool get isInitialized =>
       areBindingsInitialized && bindings.Py_IsInitialized() != 0;
-
-  // TODO: resolve this
-  // Attempt to bundle the python library with the app via flutter assets.
-/*
-  Future<String> _copyDylib() async {
-    final File dylibFile =
-        File("${(await supportDir).path}/python_ffi/$_libName.dylib");
-    if (!dylibFile.existsSync()) {
-      dylibFile.createSync(recursive: true);
-    }
-
-    final ByteData dylibAsset = await PlatformAssetBundle()
-        .load("packages/python_ffi_macos/assets/$_libName.dylib");
-    await dylibFile.writeAsBytes(dylibAsset.buffer.asUint8List());
-
-    debugPrint("Copied dylib $_libName to ${dylibFile.path}");
-
-    return dylibFile.path;
-  }
-  */
 
   @override
   Future<void> initialize() async {
@@ -216,7 +207,8 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
   }
 
   @override
-  PythonModuleMacos importModule(String moduleName) {
+  PythonModuleInterface<PythonFfiDelegate<Pointer<PyObject>>, Pointer<PyObject>>
+      importModule(String moduleName) {
     // convert the module name to a Python string
     final Pointer<PyObject> pythonModuleName =
         moduleName.toNativeUtf8().useAndFree((Pointer<Utf8> pointer) {
@@ -241,7 +233,7 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
       throw PythonFfiException("Failed to import module $moduleName");
     }
 
-    final PythonModuleMacos module = PythonModuleMacos(this, pyImport);
+    final _PythonModuleMacos module = _PythonModuleMacos(this, pyImport);
 
     if (pythonErrorOccurred()) {
       pythonErrorPrint();
@@ -258,17 +250,13 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
     String className,
     List<Object?> args, [
     Map<String, Object?>? kwargs,
-  ]) {
-    final PythonModuleMacos module = importModule(moduleName);
-    final PythonClassMacos classInstance =
-        module.getClass(className, args, kwargs);
-    return classInstance;
-  }
+  ]) =>
+          importModule(moduleName).getClass(className, args, kwargs);
 
   @override
   void appendToPath(String path) {
-    final PythonModuleMacos sys = importModule("sys");
-    final _PythonObjectMacos sysPath = sys.getAttributeRaw("path");
+    final _PythonObjectMacos sysPath =
+        importModule("sys").getAttributeRaw("path");
 
     final _PythonObjectMacos pathObject = path._toPythonObject(this);
 
