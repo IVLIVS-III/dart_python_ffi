@@ -18,7 +18,7 @@ scripts:
   compile-example:
     exec: dart compile exe bin/python_ffi_dart_example.dart -o ../../bin/example
     select-package:
-      scope: python_ffi_dart_example
+      scope: python_ffi_dart/example
   ffigen:
     exec: |
       dart run ffigen
