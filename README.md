@@ -61,7 +61,7 @@ There are three packages intended to be consumed by Dart or Flutter project deve
   Flutter project.
     - Must be installed as an ordinary dependency in your Flutter project.
 - [`python_ffi_dart`](./packages/python_ffi_dart/README.md): A Python-FFI for Dart, intended for
-  dart-only applications outside of a Flutter project.
+  Dart-only applications outside of a Flutter project.
     - Must be installed as an ordinary dependency in your Dart project.
 
 ### Adding Python modules
