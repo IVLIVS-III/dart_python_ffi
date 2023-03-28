@@ -6,6 +6,10 @@ A Python-FFI for Dart.
 
 Easily import any pure Python module into your Dart or Flutter project.
 
+| Platform | Status    |
+|----------|-----------|
+| macOS    | supported |
+
 ## Table of Contents
 
 1. [Motivation](#motivation)
