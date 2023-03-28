@@ -31,4 +31,6 @@ scripts:
       scope: python_ffi_macos_dart
   format:
     exec: dart format .
+  doc:
+    exec: dart doc .
   postbootstrap: melos run ffigen
