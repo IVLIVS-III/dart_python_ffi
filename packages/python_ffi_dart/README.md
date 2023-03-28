@@ -11,29 +11,18 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages). 
 -->
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+# python_ffi_dart
 
-## Features
+A Python-FFI for Dart.
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+Easily import any pure Python module into your Dart or Flutter project.
 
-## Getting started
+## Getting Started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+This package is intended to be used in a Dart console project, for Flutter apps
+see [`python_ffi`](https://pub.dev/packages/python_ffi).
 
-## Usage
+Detailed instructions on how to use this package can be
+found [here](https://github.com/IVLIVS-III/dart_python_ffi/#readme).
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
-
-```dart
-const like = 'sample';
-```
-
-## Additional information
-
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+See also the [example project](./example) for a working example.

@@ -14,6 +14,10 @@ Easily import any pure Python module into your Dart or Flutter project.
     2. [Adding Python modules](#adding-python-modules)
     3. [Creating a Module-definition in Dart](#creating-a-module-definition-in-dart)
     4. [Creating a Class-definition in Dart](#creating-a-class-definition-in-dart)
+    5. [Initializing the Python runtime](#initializing-the-python-runtime)
+        1. [Using the Flutter package (`python_ffi`)](#using-the-flutter-package-python_ffi)
+        2. [Using the Dart package (`python_ffi_dart`)](#using-the-dart-package-python_ffi_dart)
+    6. [Using the Python module](#using-the-python-module)
 3. [Type mappings](#type-mappings)
 4. [Package status](#package-status)
 5. [Usage](#usage)
@@ -61,8 +65,8 @@ There are three packages intended to be consumed by Dart or Flutter project deve
 You can use `dartpip` to add any pure Python module to your Dart or Flutter project. It is like pip
 for Python projects or like pub for Dart / Flutter packages.
 
-See [`dartpip`/Readme.md](./packages/dartpip/README.md) for detailed instructions on how to install
-and use this package. Basic usage is as follows:
+See [`dartpip`/Readme.md](./packages/dartpip/README.md#usage) for detailed instructions on how to
+install and use this package. Basic usage will be as follows:
 
 ```shell
 $ dart pub global activate dartpip
@@ -194,6 +198,26 @@ class Coordinate extends PythonClass {
 
   @override
   String toString() => "Coordinate(latitude: $latitude, longitude: $longitude)";
+}
+```
+
+If some Python function returns an instance of your Python class, you can use the `from` constructor
+to create a new Dart instance from the Python instance:
+
+```dart
+import "package:python_ffi/python_ffi.dart";
+
+class GeocodingModule extends PythonModule {
+  GeocodingModule.from(super.pythonModule) : super.from();
+
+  static GeocodingModule import() =>
+      PythonModule.import(
+        "geocoding",
+        GeocodingModule.from,
+      );
+
+  Coordinate geocode(String address) =>
+      Coordinate.from(getFunction("geocode").call(<Object?>[address]));
 }
 ```
 

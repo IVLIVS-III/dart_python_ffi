@@ -6,6 +6,19 @@ Add Python modules (packages) to your Dart or Flutter project.
 Then use them in your Dart code via [`python_ffi`](https://pub.dev/packages/python_ffi)
 and [`python_ffi_dart`](https://pub.dev/packages/python_ffi_dart).
 
+## Table of Contents
+
+1. [Getting Started](#getting-started)
+    1. [Installation](#installation)
+    2. [Usage](#usage)
+        1. [Declare Python dependencies](#declare-python-dependencies)
+        2. [Add sources for all Python dependencies](#add-sources-for-all-python-dependencies)
+        3. [Bundle Python dependencies](#bundle-python-dependencies)
+2. [Commands](#commands)
+    1. [`bundle`](#bundle)
+        1. [Options](#options)
+    2. [`install`](#install)
+
 ## Getting Started
 
 ### Installation
@@ -27,6 +40,70 @@ $ flutter pub add --dev dartpip
 
 ### Usage
 
+#### Declare Python dependencies
+
+Add any pure Python module as a dependency to your `pubspec.yaml`. To do this, create a new
+top-level key `'python_ffi'` with subkey `'modules'`:
+
+```yaml
+python_ffi:
+  modules:
+    json_parser: any
+```
+
+You do not need to specify submodules separately. `dartpip` will automatically detect them.
+
+*Note: The specified version has no effect at the moment. You can specify `'any'` or any other
+value. Using `'any'` is recommended, since it will work with future versions of `dartpip`.*
+
+#### Add sources for all Python dependencies
+
+Put the source files for all Python modules you specified in `pubspec.yaml` in a single directory.
+You may create subdirectories for Python modules with more than one source file. The directory
+structure will be mostly preserved when bundling the Python modules.
+
+Be sure to also add the source files for all submodules of the Python modules you specified in
+`pubspec.yaml`. `dartpip` will automatically detect them, if they are in this directory.
+
+For example such a source directory could look like this:
+
+```
+python-modules/
+├── json_parser/
+│   ├── __init__.py
+│   ├── json_parser.py
+│   ├── json_parser_test.py
+│   └── LICENSE.TXT
+├── liblax/
+│   ├── __init__.py
+│   ├── lexer.py
+│   ├── LICENSE.TXT
+│   └── parser/
+│       ├── __init__.py
+│       └── src.py
+└── structs.py
+```
+
+Here `liblax.parser` is a submodule that will be automatically included.
+
+#### Bundle Python dependencies
+
+Run the `bundle` command to bundle all Python dependencies for the current Dart / Flutter project:
+
+```shell
+$ dartpip bundle -r <app-root> -m <python-modules-root>
+```
+
+`<app-root>` is the root directory of the Dart / Flutter application, i.e. the directory containing
+the `pubspec.yaml` file. `<python-modules-root>` is the root directory for the Python module
+sources. Specify the directory of the previous step.
+
+*Note: The `bundle` command and steps above will be replaced by the `install` command in the
+future.*
+
+<details>
+<summary>Future usage</summary>
+
 ```shell
 $ dartpip install <package>
 ```
@@ -37,6 +114,8 @@ If you installed `dartpip` as a dev-dependency, you can run it via `dart run` / 
 $ dart run dartpip install <package>
 $ flutter run dartpip install <package>
 ```
+
+</details>
 
 ## Commands
 

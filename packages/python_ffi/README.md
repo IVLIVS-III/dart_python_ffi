@@ -1,18 +1,15 @@
 # python_ffi
 
-A Python-FFI for Dart
+A Python-FFI for Dart.
+
+Easily import any pure Python module into your Dart or Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+This package is intended to be used in a Flutter project, for Dart-only (console) apps
+see [`python_ffi_dart`](https://pub.dev/packages/python_ffi_dart).
 
-For help getting started with Flutter development, view the
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Detailed instructions on how to use this package can be
+found [here](https://github.com/IVLIVS-III/dart_python_ffi/#readme).
 
-The plugin project was generated without specifying the `--platforms` flag, no platforms are currently supported.
-To add platforms, run `flutter create -t plugin --platforms <platforms> .` in this directory.
-You can also find a detailed instruction on how to add platforms in the `pubspec.yaml` at https://flutter.dev/docs/development/packages-and-plugins/developing-packages#plugin-platforms.
+See also the [example project](./example) for a working example.
