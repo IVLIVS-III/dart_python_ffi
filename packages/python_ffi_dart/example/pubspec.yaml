@@ -1,6 +1,6 @@
 name: python_ffi_dart_example
 description: The example command line application showcasing the python_ffi_dart package, a Python-FFI for Dart.
-version: 0.0.1
+version: 0.0.1+1
 repository: https://github.com/IVLIVS-III/dart_python_ffi
 
 environment:
@@ -9,7 +9,7 @@ environment:
 dependencies:
   args: ^2.4.0
   collection: ^1.17.0
-  python_ffi_dart: ^0.0.1
+  python_ffi_dart: ^0.0.1+1
 
 dev_dependencies:
   python_ffi_lint_dart: ^0.0.1
