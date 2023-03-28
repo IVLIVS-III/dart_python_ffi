@@ -392,13 +392,11 @@ All other packages in the graph below implement the necessary runtime functional
 Python FFI work. They follow
 the [federated plugins](https://docs.flutter.dev/development/packages-and-plugins/developing-packages#federated-plugins)
 architecture `python_ffi` and `python_ffi_dart` are intended to be consumed directly by package
-clients as a dependency. `python_ffi_dart_example` and `python_ffi/example` are example projects
+clients as a dependency. `python_ffi_dart/example` and `python_ffi/example` are example projects
 used for developing, testing and showcasing the Python FFI.
 
 ```
 ┌─────────────────────────────────────────┐
-│                python_ffi_dart_example  │
-│                                      │  │
 │  python_ffi            python_ffi_dart  │
 │  │   │                           │   │  │
 │  │   python_ffi_macos            │   │  │
