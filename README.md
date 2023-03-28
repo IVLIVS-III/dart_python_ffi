@@ -178,7 +178,7 @@ You are free to rename the methods, getters, setters, and method-arguments to pr
 being private in Dart or to match your Dart case-style.
 
 You can also override the `toString` method to provide a custom value. If you choose not to, the
-python method `__str__` will be invoked, if available.
+Python method `__str__` will be invoked, if available.
 
 ```dart
 import "package:python_ffi/python_ffi.dart";
@@ -259,7 +259,7 @@ void main() async {
 ```
 
 You need to provide the `kPythonModules` constant from the generated file. This constant contains
-all necessary data for loading the bundled Python modules. In flutter apps, this data is loaded from
+all necessary data for loading the bundled Python modules. In Flutter apps, this data is loaded from
 assets in well-known locations. In Dart apps, there is no equivalent concept of assets.
 
 You can optionally provide a `libPath` if you want to load the Python library from a custom
