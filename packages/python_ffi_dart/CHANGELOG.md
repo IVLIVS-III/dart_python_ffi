@@ -1,3 +1,7 @@
+## 0.0.1+2
+
+- Fixed capitalization in description.
+
 ## 0.0.1+1
 
 - Included the source of python module `type_mappings` in the example.
