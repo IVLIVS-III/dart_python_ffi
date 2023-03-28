@@ -1,8 +1,11 @@
 # python_ffi_macos
 
-A Python-FFI for Dart
+[![pub package](https://img.shields.io/pub/v/python_ffi_macos.svg)](https://pub.dev/packages/python_ffi_macos)
 
-## Development
+Macos implementation of the [`python_ffi`](https://pub.dev/packages/python_ffi) plugin. As such,
+this package is compatible with Flutter apps.
+
+## Development of this package
 
 ### Preparing the dylib for bundled distribution
 
@@ -10,91 +13,3 @@ A Python-FFI for Dart
    in `macos/python_ffi_macos.podspec`.
 2. Rename the dylib to `libpython3.11.dylib` (or whatever version you're using).
 3. Run `install_name_tool -id @rpath/libpython3.11.dylib libpython3.11.dylib`
-
-## Getting Started
-
-This project is a starting point for a Flutter
-[FFI plugin](https://docs.flutter.dev/development/platform-integration/c-interop),
-a specialized package that includes native code directly invoked with Dart FFI.
-
-## Project stucture
-
-This template uses the following structure:
-
-* `src`: Contains the native source code, and a CmakeFile.txt file for building
-  that source code into a dynamic library.
-
-* `lib`: Contains the Dart code that defines the API of the plugin, and which
-  calls into the native code using `dart:ffi`.
-
-* platform folders (`android`, `ios`, `windows`, etc.): Contains the build files
-  for building and bundling the native code library with the platform application.
-
-## Buidling and bundling native code
-
-The `pubspec.yaml` specifies FFI plugins as follows:
-
-```yaml
-  plugin:
-    platforms:
-      some_platform:
-        ffiPlugin: true
-```
-
-This configuration invokes the native build for the various target platforms
-and bundles the binaries in Flutter applications using these FFI plugins.
-
-This can be combined with dartPluginClass, such as when FFI is used for the
-implementation of one platform in a federated plugin:
-
-```yaml
-  plugin:
-    implements: some_other_plugin
-    platforms:
-      some_platform:
-        dartPluginClass: SomeClass
-        ffiPlugin: true
-```
-
-A plugin can have both FFI and method channels:
-
-```yaml
-  plugin:
-    platforms:
-      some_platform:
-        pluginClass: SomeName
-        ffiPlugin: true
-```
-
-The native build systems that are invoked by FFI (and method channel) plugins are:
-
-* For Android: Gradle, which invokes the Android NDK for native builds.
-    * See the documentation in android/build.gradle.
-* For iOS and MacOS: Xcode, via CocoaPods.
-    * See the documentation in ios/python_ffi_macos.podspec.
-    * See the documentation in macos/python_ffi_macos.podspec.
-* For Linux and Windows: CMake.
-    * See the documentation in linux/CMakeLists.txt.
-    * See the documentation in windows/CMakeLists.txt.
-
-## Binding to native code
-
-To use the native code, bindings in Dart are needed.
-To avoid writing these by hand, they are generated from the header file
-(`src/python_ffi_macos.h`) by `package:ffigen`.
-Regenerate the bindings by running `flutter pub run ffigen --config ffigen.yaml`.
-
-## Invoking native code
-
-Very short-running native functions can be directly invoked from any isolate.
-For example, see `sum` in `lib/python_ffi_macos.dart`.
-
-Longer-running functions should be invoked on a helper isolate to avoid
-dropping frames in Flutter applications.
-For example, see `sumAsync` in `lib/python_ffi_macos.dart`.
-
-## Flutter help
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.

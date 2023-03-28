@@ -1,5 +1,7 @@
 # dartpip
 
+[![pub package](https://img.shields.io/pub/v/dartpip.svg)](https://pub.dev/packages/dartpip)
+
 Like `pip`, but for Dart, heavily inspired by the `pub` command.
 
 Add Python modules (packages) to your Dart or Flutter project.

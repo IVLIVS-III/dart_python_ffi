@@ -1,5 +1,7 @@
 # python_ffi
 
+[![pub package](https://img.shields.io/pub/v/python_ffi.svg)](https://pub.dev/packages/python_ffi)
+
 A Python-FFI for Dart.
 
 Easily import any pure Python module into your Dart or Flutter project.
