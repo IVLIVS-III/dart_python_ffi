@@ -61,14 +61,47 @@ class _ConsoleModuleBundle<T extends Object>
     }
     final String key = pathSegments.first;
     final List<String> remainingPathSegments = pathSegments.sublist(1);
+    final String childKey = remainingPathSegments.first;
     if (value is Map<String, dynamic>) {
-      value[key] = _drillDown(remainingPathSegments, base64, value[key]);
-      return value;
+      assert(
+        value["name"] == key,
+        "value['name'] must be $key but is ${value["name"]}",
+      );
+      final Object? children = value["children"];
+      if (children is List<Object?>) {
+        final Object? child = children.firstWhereOrNull(
+          (Object? child) {
+            if (child is Map<String, dynamic>) {
+              return child["name"] == childKey;
+            } else if (child is String) {
+              return child == childKey;
+            } else {
+              return false;
+            }
+          },
+        );
+        if (child != null) {
+          children[children.indexOf(child)] = _drillDown(
+            remainingPathSegments,
+            base64,
+            child,
+          );
+          value["children"] = children;
+          return value;
+        }
+        return value;
+      } else {
+        throw ArgumentError.value(
+          value,
+          "value",
+          "value must be a Map<String, dynamic> with a 'children' key of type List<Object?> but is",
+        );
+      }
     } else {
       throw ArgumentError.value(
         value,
         "value",
-        "value must be either a Map<String, dynamic>",
+        "value must be a Map<String, dynamic> but is",
       );
     }
   }

@@ -120,7 +120,7 @@ class _MultiFilePythonModule
 
   late final _FileNode _fileTree = _FileNode(name: moduleName);
 
-  Future<Map<List<String>, ByteData>?> _loadDirectory(
+  Future<Map<List<String>, ByteData>> _loadDirectory(
     Directory directory,
   ) async {
     final Map<List<String>, ByteData> result = <List<String>, ByteData>{};
@@ -131,19 +131,13 @@ class _MultiFilePythonModule
           result[<String>[entity.name]] = fileData;
         }
       } else if (entity is Directory) {
-        final Map<List<String>, ByteData>? subResult =
-            await _loadDirectory(directory);
-        if (subResult == null) {
-          continue;
-        }
+        final Map<List<String>, ByteData> subResult =
+            await _loadDirectory(entity);
         for (final MapEntry<List<String>, ByteData> entry
             in subResult.entries) {
           result[<String>[entity.name, ...entry.key]] = entry.value;
         }
       }
-    }
-    for (final List<String> key in result.keys) {
-      _fileTree.insert(key);
     }
     return result;
   }
@@ -154,7 +148,11 @@ class _MultiFilePythonModule
     if (!directory.existsSync()) {
       return null;
     }
-    return _loadDirectory(directory);
+    final Map<List<String>, ByteData> result = await _loadDirectory(directory);
+    for (final List<String> key in result.keys) {
+      _fileTree.insert(key);
+    }
+    return result;
   }
 
   @override

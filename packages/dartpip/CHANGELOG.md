@@ -1,3 +1,12 @@
+## 0.0.2
+
+- Fixed bundling of multi-file modules containing multi-file submodules.
+
+## 0.0.1+2
+
+- Specified the executable `dartpip` in the `pubspec.yaml` file.
+    - This should allow the `dartpip` command to be run from anywhere on the system.
+
 ## 0.0.1+1
 
 - Added an example directory to increase pub score.

@@ -54,7 +54,10 @@ abstract class _ModuleBundle<T extends _PythonModule<Object>> {
   Future<void> export() async {
     final T pythonModule = this.pythonModule;
     if (!(await pythonModule.load())) {
-      throw StateError("Failed to load Python module.");
+      print("Failed to load Python module ${pythonModule.moduleName}.");
+      throw StateError(
+        "Failed to load Python module ${pythonModule.moduleName}.",
+      );
     }
 
     if (pythonModule is _SingleFilePythonModule) {
