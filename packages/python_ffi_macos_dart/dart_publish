@@ -1,0 +1,10 @@
+#! /bin/sh
+
+# remove directory symlink
+rm -f python
+
+# publish to pub.dev
+dart pub publish
+
+# create directory symlink
+ln -s /Library/Frameworks/Python.framework/Versions/3.11 python
