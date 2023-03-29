@@ -1,0 +1,21 @@
+name: dartpip_example
+description: The example command line application showcasing the dartpip package.
+version: 0.0.1
+repository: https://github.com/IVLIVS-III/dart_python_ffi
+
+environment:
+  sdk: '>=2.19.2 <3.0.0'
+
+dependencies:
+  args: ^2.4.0
+  dartpip:
+    # When depending on this package from a real application you should use:
+    #   dartpip: ^x.y.z
+    # See https://dart.dev/tools/pub/dependencies#version-constraints
+    # The example app is bundled with the package so we use a path dependency on
+    # the parent directory to use the current package's version.
+    path: ../
+
+dev_dependencies:
+  python_ffi_lint_dart: ^0.0.1
+  test: ^1.24.0
