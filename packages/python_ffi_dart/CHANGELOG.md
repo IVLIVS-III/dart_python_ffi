@@ -1,3 +1,7 @@
+## 0.0.1+3
+
+- Updated Readme.
+
 ## 0.0.1+2
 
 - Fixed capitalization in description.

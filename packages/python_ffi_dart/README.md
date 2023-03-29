@@ -11,8 +11,8 @@ Easily import any pure Python module into your Dart or Flutter project.
 This package is intended to be used in a Dart console project, for Flutter apps
 see [`python_ffi`](https://pub.dev/packages/python_ffi).
 
-Detailed instructions on how to use this package can be
-found [here](https://github.com/IVLIVS-III/dart_python_ffi/#readme).
+**Detailed instructions on how to use this package can be
+found in the [documentation](https://github.com/IVLIVS-III/dart_python_ffi/#readme).**
 
 See also the [example project](./example) for a working example.
 

@@ -9,7 +9,13 @@ environment:
 dependencies:
   args: ^2.4.0
   collection: ^1.17.0
-  python_ffi_dart: ^0.0.1+1
+  python_ffi_dart:
+    # When depending on this package from a real application you should use:
+    #   python_ffi_dart: ^x.y.z
+    # See https://dart.dev/tools/pub/dependencies#version-constraints
+    # The example app is bundled with the package so we use a path dependency on
+    # the parent directory to use the current package's version.
+    path: ../
 
 dev_dependencies:
   python_ffi_lint_dart: ^0.0.1

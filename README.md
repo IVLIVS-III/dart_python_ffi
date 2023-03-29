@@ -323,25 +323,30 @@ or property is available in Python.
 At the moment it is not possible to convert arbitrary Dart classes (not backed by a subtype
 of `PythonClass`) to Python objects. Trying to do so will result in a runtime exception.
 
+*Note: Only exceptions throw in Python are converted to a Dart `Exception` and not vice-versa. The
+only possible way in which you would want Python code to catch an exception thrown in Dart would be
+when passing a Dart callback to Python, that throws said exception. This seems to be an uncommon
+case.*
+
 ## Package status
+
+| package name                                                                            | version                                                                                                                                  | status | description                                                                              |
+|-----------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|--------|------------------------------------------------------------------------------------------|
+| [dartpip](https://pub.dev/packages/dartpip)                                             | [![pub package](https://img.shields.io/pub/v/dartpip.svg)](https://pub.dev/packages/dartpip)                                             | 🟩     | Add Python modules (packages) to your Dart or Flutter project.                           |
+| [python_ffi](https://pub.dev/packages/python_ffi)                                       | [![pub package](https://img.shields.io/pub/v/python_ffi.svg)](https://pub.dev/packages/python_ffi)                                       | 🟩🟦   | A Python-FFI for Dart, intended for use in a Flutter project.                            |
+| [python_ffi_dart](https://pub.dev/packages/python_ffi_dart)                             | [![pub package](https://img.shields.io/pub/v/python_ffi_dart.svg)](https://pub.dev/packages/python_ffi_dart)                             | 🟩     | A Python-FFI for Dart, intended for Dart-only applications outside of a Flutter project. |
+| [python_ffi_macos](https://pub.dev/packages/python_ffi_macos)                           | [![pub package](https://img.shields.io/pub/v/python_ffi_macos.svg)](https://pub.dev/packages/python_ffi_macos)                           | 🟥🟦   | The macOS implementation of `python_ffi`, a Python-FFI for Dart.                         |
+| [python_ffi_macos_dart](https://pub.dev/packages/python_ffi_macos_dart)                 | [![pub package](https://img.shields.io/pub/v/python_ffi_macos_dart.svg)](https://pub.dev/packages/python_ffi_macos_dart)                 | 🟥     | The macOS implementation of `python_ffi_dart`, a Python-FFI for Dart.                    |
+| [python_ffi_platform_interface](https://pub.dev/packages/python_ffi_platform_interface) | [![pub package](https://img.shields.io/pub/v/python_ffi_platform_interface.svg)](https://pub.dev/packages/python_ffi_platform_interface) | 🟥🟦   | The platform interface for `python_ffi`, a Python-FFI for Dart.                          |
+| [python_ffi_interface](https://pub.dev/packages/python_ffi_interface)                   | [![pub package](https://img.shields.io/pub/v/python_ffi_interface.svg)](https://pub.dev/packages/python_ffi_interface)                   | 🟥     | A base interface for `python_ffi_dart`, a Python-FFI for Dart.                           |
+| [python_ffi_lint](https://pub.dev/packages/python_ffi_lint)                             | [![pub package](https://img.shields.io/pub/v/python_ffi_lint.svg)](https://pub.dev/packages/python_ffi_lint)                             | 🟥     | Analysis options used across the Python-FFI for Dart project.                            |
+| [python_ffi_lint_dart](https://pub.dev/packages/python_ffi_lint_dart)                   | [![pub package](https://img.shields.io/pub/v/python_ffi_lint_dart.svg)](https://pub.dev/packages/python_ffi_lint_dart)                   | 🟥     | Analysis options used across the Python-FFI for Dart project.                            |
 
 | status indicator | description                                                    |
 |------------------|----------------------------------------------------------------|
-| ❇️               | package is intended to be consumed directly by package clients |
-| ⚠️               | package requires a flutter environment                         |
-| 🚫               | package is intended as internal package only                   |
-
-| package name                  | version                                                                                                                                  | status | description                                                                              |
-|-------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|--------|------------------------------------------------------------------------------------------|
-| dartpip                       | [![pub package](https://img.shields.io/pub/v/dartpip.svg)](https://pub.dev/packages/dartpip)                                             | ❇️     | Add Python modules (packages) to your Dart or Flutter project.                           |
-| python_ffi                    | [![pub package](https://img.shields.io/pub/v/python_ffi.svg)](https://pub.dev/packages/python_ffi)                                       | ❇️⚠️   | A Python-FFI for Dart, intended for use in a Flutter project.                            |
-| python_ffi_dart               | [![pub package](https://img.shields.io/pub/v/python_ffi_dart.svg)](https://pub.dev/packages/python_ffi_dart)                             | ❇️     | A Python-FFI for Dart, intended for Dart-only applications outside of a Flutter project. |
-| python_ffi_macos              | [![pub package](https://img.shields.io/pub/v/python_ffi_macos.svg)](https://pub.dev/packages/python_ffi_macos)                           | ⚠️🚫   | The macOS implementation of python_ffi, a Python-FFI for Dart.                           |
-| python_ffi_macos_dart         | [![pub package](https://img.shields.io/pub/v/python_ffi_macos_dart.svg)](https://pub.dev/packages/python_ffi_macos_dart)                 | 🚫     | The macOS implementation of python_ffi_dart, a Python-FFI for Dart.                      |
-| python_ffi_platform_interface | [![pub package](https://img.shields.io/pub/v/python_ffi_platform_interface.svg)](https://pub.dev/packages/python_ffi_platform_interface) | ⚠️🚫   | The platform interface for python_ffi, a Python-FFI for Dart.                            |
-| python_ffi_interface          | [![pub package](https://img.shields.io/pub/v/python_ffi_interface.svg)](https://pub.dev/packages/python_ffi_interface)                   | 🚫     | A base interface for python_ffi_dart, a Python-FFI for Dart.                             |
-| python_ffi_lint               | [![pub package](https://img.shields.io/pub/v/python_ffi_lint.svg)](https://pub.dev/packages/python_ffi_lint)                             |        | Analysis options used across the Python-FFI for Dart project.                            |
-| python_ffi_lint_dart          | [![pub package](https://img.shields.io/pub/v/python_ffi_lint_dart.svg)](https://pub.dev/packages/python_ffi_lint_dart)                   |        | Analysis options used across the Python-FFI for Dart project.                            |
+| 🟩               | package is intended to be consumed directly by package clients |
+| 🟦               | package requires a flutter environment                         |
+| 🟥               | package is intended as internal package only                   |
 
 ## Usage
 
