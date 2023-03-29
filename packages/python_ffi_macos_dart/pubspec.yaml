@@ -1,6 +1,6 @@
 name: python_ffi_macos_dart
 description: The macOS implementation of python_ffi_dart, a Python-FFI for Dart.
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/IVLIVS-III/dart_python_ffi
 
 environment:

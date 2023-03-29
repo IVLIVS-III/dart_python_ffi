@@ -108,7 +108,9 @@ class _ConsoleModuleBundle<T extends Object>
 
   @override
   Future<void> _exportSingleFile(String fileName, ByteData data) async {
-    final Map<String, dynamic> moduleEntry = pythonModule.moduleInfo;
+    final Map<String, dynamic> moduleEntry =
+        (moduleInfo[pythonModule.moduleName] as Map<String, dynamic>?) ??
+            pythonModule.moduleInfo;
     final List<String> pathSegments = fileName.split(Platform.pathSeparator);
     final String base64 = String.fromCharCodes(data.buffer.asUint8List());
     moduleEntry["root"] = _drillDown(pathSegments, base64, moduleEntry["root"]);

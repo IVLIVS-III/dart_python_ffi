@@ -1,3 +1,8 @@
+## 0.0.3
+
+- Fixed an issue with bundling of multi-file modules containing multi-file submodules for Dart
+  console projects.
+
 ## 0.0.2
 
 - Fixed bundling of multi-file modules containing multi-file submodules.

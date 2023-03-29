@@ -51,8 +51,11 @@ class PythonFfiMacOSDart extends PythonFfiMacOSBase with PythonFfiMacOSMixin {
     if (data.keys.contains("children")) {
       final SourceDirectory entity = SourceDirectory(data["name"] as String);
       PythonSourceFileEntity? licenseFile;
-      for (final Map<String, dynamic> child
-          in data["children"] as List<Map<String, dynamic>>) {
+      for (final Object? child in data["children"] as List<Object?>) {
+        if (child is! Map<String, dynamic>) {
+          print("Unexpected child type: $child");
+          continue;
+        }
         if (child["name"] == "LICENSE.txt") {
           licenseFile =
               SourceBase64(child["name"] as String, child["base64"] as String);
