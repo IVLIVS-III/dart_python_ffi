@@ -9,6 +9,11 @@ abstract class _PythonModule<T extends Object> {
   _PythonModule._(this.path);
 
   static _PythonModule<Object> fromPath(String path) {
+    switch (path) {
+      case _kBuiltinPythonFfiModuleName:
+        return _BuiltinPythonModule(path);
+    }
+
     if (path.endsWith(".py")) {
       return _SingleFilePythonModule(path);
     }
@@ -64,6 +69,35 @@ abstract class _PythonModule<T extends Object> {
   String get moduleName;
 
   Map<String, dynamic> get moduleInfo;
+}
+
+class _BuiltinPythonModule extends _PythonModule<ByteData> {
+  _BuiltinPythonModule(super.path) : super._();
+
+  @override
+  Future<ByteData> _load() {
+    switch (path) {
+      case _kBuiltinPythonFfiModuleName:
+        return Future<ByteData>.value(
+          ByteData.view(base64Decode(_kPythonFfiBase64).buffer),
+        );
+      default:
+        throw ArgumentError.value(path, "path", "Unknown builtin module.");
+    }
+  }
+
+  @override
+  String get moduleName => path;
+
+  @override
+  Map<String, dynamic> get moduleInfo {
+    switch (path) {
+      case _kBuiltinPythonFfiModuleName:
+        return Map<String, dynamic>.from(_kPythonFfiModuleInfo);
+      default:
+        throw ArgumentError.value(path, "path", "Unknown builtin module.");
+    }
+  }
 }
 
 class _SingleFilePythonModule extends _PythonModule<ByteData> {

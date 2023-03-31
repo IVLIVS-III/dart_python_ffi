@@ -1,3 +1,8 @@
+## 0.0.4
+
+- Included the Python module `python_ffi` source. This module is required for using the Python FFI.
+  It is now bundled with the `dartpip` package.
+
 ## 0.0.3
 
 - Fixed an issue with bundling of multi-file modules containing multi-file submodules for Dart

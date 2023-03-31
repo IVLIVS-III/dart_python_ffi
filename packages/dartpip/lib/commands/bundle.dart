@@ -77,11 +77,14 @@ class BundleCommand extends Command<void> {
       return;
     }
 
-    final List<Future<void>> futures = <Future<void>>[];
-    for (final String pythonModuleName in <String>[
-      "python_ffi",
-      ...pythonModuleNames
-    ]) {
+    final List<Future<void>> futures = <Future<void>>[
+      _bundleModule(
+        appRoot: appRoot,
+        pythonModulePath: _kBuiltinPythonFfiModuleName,
+        appType: appType,
+      ),
+    ];
+    for (final String pythonModuleName in pythonModuleNames) {
       print("Bundling Python module '$pythonModuleName'...");
       futures.add(
         _bundleModule(

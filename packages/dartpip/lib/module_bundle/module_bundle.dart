@@ -60,7 +60,15 @@ abstract class _ModuleBundle<T extends _PythonModule<Object>> {
       );
     }
 
-    if (pythonModule is _SingleFilePythonModule) {
+    if (pythonModule is _BuiltinPythonModule) {
+      await _exportSingleFile(
+        "${pythonModule.moduleName}.py",
+        _transformSourceData(pythonModule.data),
+      );
+      await _postExport(<List<String>>[
+        <String>[pythonModule.moduleName]
+      ]);
+    } else if (pythonModule is _SingleFilePythonModule) {
       await _exportSingleFile(
         pythonModule.fileName,
         _transformSourceData(pythonModule.data),

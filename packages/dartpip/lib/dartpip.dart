@@ -10,6 +10,7 @@ import "package:args/command_runner.dart";
 import "package:collection/collection.dart";
 import "package:yaml/yaml.dart";
 
+part "builtin_modules/python_ffi.py.dart";
 part "commands/bundle.dart";
 part "commands/bundle_module.dart";
 part "constants.dart";
