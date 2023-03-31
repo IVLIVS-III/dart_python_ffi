@@ -20,7 +20,7 @@ applications.
 
 ## Usage (the final product)
 
-```bash
+```shell
 $ dart bin/basic_cli_adder.dart 1 2
 1 + 2 = 3
 ```
@@ -62,7 +62,7 @@ python_ffi:
 The following command should be run from the root of your Dart project. It will bundle the Python
 module source into the Dart project.
 
-```bash
+```shell
 $ dartpip bundle -r . -m python-modules
 ```
 
@@ -120,8 +120,7 @@ void main(List<String> arguments) async {
 ## Testing the Python module
 
 We can write Dart tests to test our Python module. Again we need to make sure to initialize the
-Python
-runtime once first. Then we can import the Python module and test its function:
+Python runtime once first. Then we can import the Python module and test its function:
 
 ```dart
 // test/basic_cli_adder_test.dart

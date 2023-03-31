@@ -25,6 +25,7 @@ Easily import any pure Python module into your Dart or Flutter project.
 3. [Examples](#examples)
     1. [Basic CLI adder](#importing-your-first-python-module)
     2. [Basic dataclass](#importing-a-python-module-with-a-custom-python-class)
+    3. [Importing a Python module from pypi](#importing-a-python-module-from-pypi)
 4. [Type mappings](#type-mappings)
 5. [Package status](#package-status)
 6. [Usage](#usage)
@@ -304,6 +305,10 @@ See [`basic_cli_adder`](packages/examples/basic_cli_adder/README.md).
 ### Importing a Python module with a custom Python class
 
 See [`basic_dataclass`](packages/examples/basic_dataclass/README.md).
+
+### Importing a Python module from pypi
+
+See [`pytimeparse_dart](packages/examples/pytimeparse_dart/README.md).
 
 ## Type mappings
 
