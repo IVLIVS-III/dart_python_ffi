@@ -15,10 +15,6 @@ scripts:
     exec: dart compile exe bin/dartpip.dart -o ../../bin/dartpip
     select-package:
       scope: dartpip
-  compile-example:
-    exec: dart compile exe bin/python_ffi_dart_example.dart -o ../../../bin/example
-    select-package:
-      scope: python_ffi_dart_example
   ffigen:
     exec: |
       dart run ffigen
@@ -33,4 +29,6 @@ scripts:
     exec: dart format .
   doc:
     exec: dart doc .
+  outdated:
+    exec: dart pub get && dart pub outdated
   postbootstrap: melos run ffigen

@@ -8,11 +8,14 @@ Easily import any pure Python module into your Dart or Flutter project.
 
 ## Getting Started
 
-This package is intended to be used in a Dart console project, for Flutter apps
-see [`python_ffi`](https://pub.dev/packages/python_ffi).
+*Note: This package is intended to be used in a Dart console project, for Flutter apps
+see [`python_ffi`](https://pub.dev/packages/python_ffi).*
 
 **Detailed instructions on how to use this package can be
 found in the [documentation](https://github.com/IVLIVS-III/dart_python_ffi/#readme).**
+
+See also the [`dartpip`](https://pub.dev/packages/dartpip) package for an easy way to add Python
+modules to your project.
 
 See also the [example project](./example) for a working example.
 
