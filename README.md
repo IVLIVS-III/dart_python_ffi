@@ -22,16 +22,19 @@ Easily import any pure Python module into your Dart or Flutter project.
         1. [Using the Flutter package (`python_ffi`)](#using-the-flutter-package-python_ffi)
         2. [Using the Dart package (`python_ffi_dart`)](#using-the-dart-package-python_ffi_dart)
     6. [Using the Python module](#using-the-python-module)
-3. [Type mappings](#type-mappings)
-4. [Package status](#package-status)
-5. [Usage](#usage)
+3. [Examples](#examples)
+    1. [Basic CLI adder](#importing-your-first-python-module)
+    2. [Basic dataclass](#importing-a-python-module-with-a-custom-python-class)
+4. [Type mappings](#type-mappings)
+5. [Package status](#package-status)
+6. [Usage](#usage)
     1. [`dartpip`](#dartpip)
     2. [`python_ffi_dart_example`](#python_ffi_dart_example)
-6. [Package graph](#package-graph)
-7. [Limitations](#limitations)
-8. [Roadmap](#roadmap)
-9. [About this project](#about-this-project)
-10. [Contributing](#contributing)
+7. [Package graph](#package-graph)
+8. [Limitations](#limitations)
+9. [Roadmap](#roadmap)
+10. [About this project](#about-this-project)
+11. [Contributing](#contributing)
 
 ## Motivation
 
@@ -291,6 +294,16 @@ final Object? parsedJson = jsonParser.parse('{"Hello": "World"}');
 
 print(parsedJson);
 ```
+
+## Examples
+
+### Importing your first Python module
+
+See [`basic_cli_adder`](packages/examples/basic_cli_adder/README.md).
+
+### Importing a Python module with a custom Python class
+
+See [`basic_dataclass`](packages/examples/basic_dataclass/README.md).
 
 ## Type mappings
 
