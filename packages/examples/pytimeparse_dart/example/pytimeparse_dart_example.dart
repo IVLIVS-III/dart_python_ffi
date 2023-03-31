@@ -9,11 +9,11 @@ void main() async {
   stdout.write("Enter a duration: ");
   final String? input = stdin.readLineSync();
   final PyTimeParse pyTimeParse = PyTimeParse.import();
-  final int? seconds = pyTimeParse.parse(input ?? "");
+  final num? seconds = pyTimeParse.parse(input ?? "");
   if (seconds == null) {
     stdout.writeln("unable to normalize duration: $input");
     return;
   }
-  final Duration duration = Duration(seconds: seconds);
+  final Duration duration = seconds.asDuration;
   stdout.writeln("normalized duration: $duration");
 }

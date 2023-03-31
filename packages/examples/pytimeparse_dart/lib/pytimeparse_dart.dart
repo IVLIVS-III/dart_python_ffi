@@ -2,4 +2,5 @@
 /// Python library for parsing human-readable time strings.
 library pytimeparse_dart;
 
+export "extensions.dart";
 export "python_modules/pytimeparse.dart";

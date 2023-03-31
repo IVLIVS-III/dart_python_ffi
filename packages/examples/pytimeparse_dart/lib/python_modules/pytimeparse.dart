@@ -6,5 +6,5 @@ class PyTimeParse extends PythonModule {
   static PyTimeParse import() =>
       PythonFfiDart.instance.importModule("pytimeparse", PyTimeParse.from);
 
-  int? parse(String timeStr) => getFunction("parse").call(<Object?>[timeStr]);
+  num? parse(String timeStr) => getFunction("parse").call(<Object?>[timeStr]);
 }
