@@ -26,6 +26,8 @@ Easily import any pure Python module into your Dart or Flutter project.
     1. [Basic CLI adder](#importing-your-first-python-module)
     2. [Basic dataclass](#importing-a-python-module-with-a-custom-python-class)
     3. [Importing a Python module from pypi](#importing-a-python-module-from-pypi)
+    4. [Converting all supported types between Dart and Python](#converting-all-supported-types-between-dart-and-python)
+    5. [Importing multiple Python modules in a Flutter app](#importing-multiple-python-modules-in-a-flutter-app)
 4. [Type mappings](#type-mappings)
 5. [Package status](#package-status)
 6. [Usage](#usage)
@@ -298,6 +300,9 @@ print(parsedJson);
 
 ## Examples
 
+This list of examples covers progressively more complex use-cases. If you want to get an idea of how
+to use the Python-FFI, start with the first example and work your way through the list.
+
 ### Importing your first Python module
 
 See [`basic_cli_adder`](packages/examples/basic_cli_adder/README.md).
@@ -309,6 +314,14 @@ See [`basic_dataclass`](packages/examples/basic_dataclass/README.md).
 ### Importing a Python module from pypi
 
 See [`pytimeparse_dart](packages/examples/pytimeparse_dart/README.md).
+
+### Converting all supported types between Dart and Python
+
+See the [python_ffi_dart example](packages/python_ffi_dart/example/README.md).
+
+### Importing multiple Python modules in a Flutter app
+
+See the [python_ffi example](packages/python_ffi/example/README.md).
 
 ## Type mappings
 
