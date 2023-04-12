@@ -122,10 +122,16 @@ class PythonFfiMacOS extends _PythonFfiMacOS with PythonFfiMacOSMixin {
 
   @override
   Future<Set<PythonModuleDefinition>> discoverPythonModules() async {
-    final ByteData modulesJsonRaw =
-        await PlatformAssetBundle().load("python-modules/modules.json");
-    return _decodePythonModules(
-      utf8.decode(modulesJsonRaw.buffer.asUint8List()),
-    ).toSet();
+    try {
+      final ByteData modulesJsonRaw =
+          await PlatformAssetBundle().load("python-modules/modules.json");
+      return _decodePythonModules(
+        utf8.decode(modulesJsonRaw.buffer.asUint8List()),
+      ).toSet();
+      // ignore: avoid_catching_errors
+    } on FlutterError catch (e) {
+      debugPrint("Failed to load python modules: $e");
+      return <PythonModuleDefinition>{};
+    }
   }
 }
