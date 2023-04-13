@@ -314,19 +314,19 @@ See [`basic_dataclass`](packages/examples/basic_dataclass/README.md).
 
 ### Importing a Python module from pypi
 
-See [`pytimeparse_dart](packages/examples/pytimeparse_dart/README.md).
+See [`pytimeparse_dart`](packages/examples/pytimeparse_dart/README.md).
 
 ### Converting all supported types between Dart and Python
 
-See the [python_ffi_dart example](packages/python_ffi_dart/example/README.md).
+See the [`python_ffi_dart` example](packages/python_ffi_dart/example/README.md).
 
 ### Importing multiple Python modules in a Flutter app
 
-See the [python_ffi example](packages/python_ffi/example/README.md).
+See the [`python_ffi` example](packages/python_ffi/example/README.md).
 
 ### Importing incomplete Python modules in a Flutter app (creating an incomplete Class-definition)
 
-See the [fj_playground](packages/examples/fj_playground/README.md).
+See [`fj_playground`](packages/examples/fj_playground/README.md).
 
 ## Type mappings
 
