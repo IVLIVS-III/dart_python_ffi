@@ -5,7 +5,7 @@ This is a demo app for the [python_ffi](https://pub.dev/packages/python_ffi) pac
 Python project.
 
 ## Demo
-[![showcase](./resources/showcase.png)](https://github.com/IVLIVS-III/dart_python_ffi/raw/main/packages/examples/fj_playground/resources/showcase.mp4 "showcase")
+[![showcase](./resources/showcase.png)](https://user-images.githubusercontent.com/48645716/231783262-1c851119-b9ef-4cfb-bd2d-9177c34142fd.mp4 "showcase")
 
 ## Importing incomplete Python modules
 
