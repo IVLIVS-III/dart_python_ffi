@@ -28,6 +28,7 @@ Easily import any pure Python module into your Dart or Flutter project.
     3. [Importing a Python module from pypi](#importing-a-python-module-from-pypi)
     4. [Converting all supported types between Dart and Python](#converting-all-supported-types-between-dart-and-python)
     5. [Importing multiple Python modules in a Flutter app](#importing-multiple-python-modules-in-a-flutter-app)
+    6. [Importing incomplete Python modules in a Flutter app (creating an incomplete Class-definition)](#importing-incomplete-python-modules-in-a-flutter-app-creating-an-incomplete-class-definition)
 4. [Type mappings](#type-mappings)
 5. [Package status](#package-status)
 6. [Usage](#usage)
@@ -322,6 +323,10 @@ See the [python_ffi_dart example](packages/python_ffi_dart/example/README.md).
 ### Importing multiple Python modules in a Flutter app
 
 See the [python_ffi example](packages/python_ffi/example/README.md).
+
+### Importing incomplete Python modules in a Flutter app (creating an incomplete Class-definition)
+
+See the [fj_playground](packages/examples/fj_playground/README.md).
 
 ## Type mappings
 
