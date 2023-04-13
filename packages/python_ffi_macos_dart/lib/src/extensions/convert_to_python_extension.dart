@@ -5,7 +5,7 @@ extension _ConvertToPythonExtension on Object? {
     final Object? value = this;
     Pointer<PyObject>? object;
 
-    if (value == null) {
+    if (value == null || value is Pointer<Never>) {
       object = platform.bindings.Py_None;
     } else if (value is bool) {
       object = fromBool(platform, value);

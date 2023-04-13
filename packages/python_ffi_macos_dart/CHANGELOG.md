@@ -1,3 +1,8 @@
+## 0.0.3
+
+- Added a Type conversion from Dart `ffi.Pointer<Never>` (`nullptr`) to Python `None`.
+- Updated dependencies.
+
 ## 0.0.2
 
 - Fixed an issue with loading multi-file modules containing multi-file submodules.
