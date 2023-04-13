@@ -31,3 +31,5 @@ melos*.iml
 **/.DS_Store
 **/Podfile.lock
 **/*.xcframework
+
+/fj
