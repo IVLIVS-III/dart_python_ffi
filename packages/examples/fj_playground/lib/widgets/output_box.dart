@@ -32,7 +32,7 @@ class _OutputBoxState extends State<OutputBox> {
     try {
       final String output = await runFJInterpreter(widget.controller.text);
       _outputController.add(output);
-    } on PythonExceptionInterface catch (e) {
+    } on PythonExceptionInterface<PythonFfiDelegate<Object>, Object> catch (e) {
       final Set<String> commonErrorTypes = <String>{
         "Exception",
         "UnexpectedEOF",
@@ -127,6 +127,12 @@ class ErrorOutput extends StatelessWidget {
           ),
         ),
       );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<Object?>("error", error));
+  }
 }
 
 class ComputationOutput extends StatelessWidget {
