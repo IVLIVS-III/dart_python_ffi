@@ -5,8 +5,7 @@ This is a demo app for the [python_ffi](https://pub.dev/packages/python_ffi) pac
 Python project.
 
 ## Demo
-
-![showcase](./resources/showcase.mp4)
+[![showcase](./resources/showcase.png)](./resources/showcase.mp4 "showcase")
 
 ## Importing incomplete Python modules
 
