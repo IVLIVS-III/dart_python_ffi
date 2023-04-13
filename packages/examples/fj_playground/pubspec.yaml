@@ -1,5 +1,7 @@
 name: fj_playground
-description: A new Flutter project.
+description: |
+  A lightweight Flutter code editor for Featherweight Java programs with builtin interpreter.
+  This is a demo app for the python_ffi package using the fj Python project.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -38,11 +40,70 @@ dev_dependencies:
     sdk: flutter
   python_ffi_lint: ^0.0.1
 
+python_ffi:
+  modules:
+    lark: any
+    FJ_AST: any
+    FJ_auxiliary_typing: any
+    FJ_computation: any
+    FJ_interpreter: any
+    FJ_parser: any
+    FJ_typing: any
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
 flutter:
+  assets:
+    - python-modules/lark/parser_frontends.py
+    - python-modules/lark/tree_templates.py
+    - python-modules/lark/tree.py
+    - python-modules/lark/load_grammar.py
+    - python-modules/lark/parsers/earley_forest.py
+    - python-modules/lark/parsers/lalr_parser.py
+    - python-modules/lark/parsers/earley_common.py
+    - python-modules/lark/parsers/cyk.py
+    - python-modules/lark/parsers/__init__.py
+    - python-modules/lark/parsers/xearley.py
+    - python-modules/lark/parsers/lalr_analysis.py
+    - python-modules/lark/parsers/lalr_interactive_parser.py
+    - python-modules/lark/parsers/grammar_analysis.py
+    - python-modules/lark/parsers/earley.py
+    - python-modules/lark/tools/serialize.py
+    - python-modules/lark/tools/standalone.py
+    - python-modules/lark/tools/__init__.py
+    - python-modules/lark/tools/nearley.py
+    - python-modules/lark/LICENSE
+    - python-modules/lark/__pyinstaller/__init__.py
+    - python-modules/lark/__pyinstaller/hook-lark.py
+    - python-modules/lark/visitors.py
+    - python-modules/lark/lark.py
+    - python-modules/lark/__init__.py
+    - python-modules/lark/grammar.py
+    - python-modules/lark/indenter.py
+    - python-modules/lark/grammars/lark.lark
+    - python-modules/lark/grammars/python.lark
+    - python-modules/lark/grammars/__init__.py
+    - python-modules/lark/grammars/common.lark
+    - python-modules/lark/grammars/unicode.lark
+    - python-modules/lark/common.py
+    - python-modules/lark/utils.py
+    - python-modules/lark/ast_utils.py
+    - python-modules/lark/lexer.py
+    - python-modules/lark/py.typed
+    - python-modules/lark/exceptions.py
+    - python-modules/lark/tree_matcher.py
+    - python-modules/lark/reconstruct.py
+    - python-modules/lark/parse_tree_builder.py
+    - python-modules/FJ_typing.py
+    - python-modules/FJ_parser.py
+    - python-modules/FJ_interpreter.py
+    - python-modules/FJ_computation.py
+    - python-modules/FJ_auxiliary_typing.py
+    - python-modules/FJ_AST.py
+    - python-modules/python_ffi.py
+    - python-modules/modules.json
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

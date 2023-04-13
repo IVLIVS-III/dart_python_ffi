@@ -12,14 +12,6 @@ class EditorPage extends StatefulWidget {
 class _EditorPageState extends State<EditorPage> {
   final TextEditingController _inputController = TextEditingController();
 
-  String get _outputText => _inputController.text;
-
-  @override
-  void initState() {
-    _inputController.addListener(() => setState(() {}));
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) => Scaffold(
         body: Row(
@@ -33,8 +25,7 @@ class _EditorPageState extends State<EditorPage> {
             Flexible(
               flex: 4,
               child: OutputBox(
-                key: ValueKey<int>(_outputText.hashCode),
-                text: _outputText,
+                controller: _inputController,
               ),
             ),
           ],
