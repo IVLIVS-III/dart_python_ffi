@@ -1,3 +1,10 @@
+## 0.0.5
+
+- `dartpip bundle` now replaces the old `modules.json` file to delete dependencies that are no
+  longer used.
+- `dartpip bundle` now specifies the builtin `python_ffi` module correctly in `pubspec.yaml` assets.
+- Updated dependencies.
+
 ## 0.0.4
 
 - Included the Python module `python_ffi` source. This module is required for using the Python FFI.

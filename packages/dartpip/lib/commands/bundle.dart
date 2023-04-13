@@ -77,6 +77,17 @@ class BundleCommand extends Command<void> {
       return;
     }
 
+    // Remove modules.json file if it exists.
+    // This is necessary because the file is not overwritten. Otherwise old and
+    // no longer used modules would still be listed in the file.
+    final File modulesJsonFile = File(
+      <String>[appRoot, "python-modules", "modules.json"]
+          .join(Platform.pathSeparator),
+    );
+    if (modulesJsonFile.existsSync()) {
+      modulesJsonFile.deleteSync();
+    }
+
     final List<Future<void>> futures = <Future<void>>[
       _bundleModule(
         appRoot: appRoot,

@@ -66,7 +66,7 @@ abstract class _ModuleBundle<T extends _PythonModule<Object>> {
         _transformSourceData(pythonModule.data),
       );
       await _postExport(<List<String>>[
-        <String>[pythonModule.moduleName]
+        <String>["${pythonModule.moduleName}.py"]
       ]);
     } else if (pythonModule is _SingleFilePythonModule) {
       await _exportSingleFile(
