@@ -4,6 +4,10 @@ A lightweight Flutter code editor for Featherweight Java programs with builtin i
 This is a demo app for the [python_ffi](https://pub.dev/packages/python_ffi) package using the fj
 Python project.
 
+## Demo
+
+![showcase](./resources/showcase.mp4)
+
 ## Importing incomplete Python modules
 
 Since we only need a small set of functions provided in the fj Python project, we can import the
