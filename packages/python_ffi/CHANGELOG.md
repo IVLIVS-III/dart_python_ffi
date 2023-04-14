@@ -1,3 +1,8 @@
+## 0.0.4
+
+- Updated dependencies.
+- Updated dependencies in example.
+
 ## 0.0.3+1
 
 - Updated dependencies in example.
