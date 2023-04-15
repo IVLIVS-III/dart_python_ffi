@@ -37,7 +37,15 @@ class PythonFfiMacOS extends _PythonFfiMacOS with PythonFfiMacOSMixin {
 
   @override
   Future<void> openDylib() async {
-    final DynamicLibrary dylib = DynamicLibrary.open("libpython3.11.dylib");
+    final String dylibPath;
+    if (Platform.isMacOS) {
+      dylibPath = "libpython3.11.dylib";
+    } else if (Platform.isWindows) {
+      dylibPath = "python311.dll";
+    } else {
+      throw Exception("Unsupported platform: ${Platform.operatingSystem}");
+    }
+    final DynamicLibrary dylib = DynamicLibrary.open(dylibPath);
     bindings = DartPythonCBindings(dylib);
   }
 

@@ -75,7 +75,7 @@ extension _ConvertToDartExtension on Pointer<PyObject> {
       case "list":
         return asList(platform);
       case "tuple":
-        return List<Object?>.from(asList(platform), growable: false);
+        return asTuple(platform);
       case "set":
         return asSet(platform);
       case "generator":

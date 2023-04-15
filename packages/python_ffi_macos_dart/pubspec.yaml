@@ -17,6 +17,7 @@ dev_dependencies:
 
 platforms:
   macos:
+  windows:
 
 ffigen:
   name: "DartPythonCBindings"

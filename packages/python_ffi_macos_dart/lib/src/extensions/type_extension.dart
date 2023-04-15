@@ -311,31 +311,38 @@ extension _TypeExtension on Pointer<PyObject> {
       isTrue(platform) || isFalse(platform);
 
   bool isInt(PythonFfiMacOSBase platform) =>
-      typeObject.flags & Py_TPFLAGS_LONG_SUBCLASS != 0;
+      (Platform.isWindows && typeName == "int") ||
+      (Platform.isMacOS && typeObject.flags & Py_TPFLAGS_LONG_SUBCLASS != 0);
 
   bool isFloat(PythonFfiMacOSBase platform) =>
       isOfType(platform.bindings.PyFloat_Type);
 
   bool isList(PythonFfiMacOSBase platform) =>
-      typeObject.flags & Py_TPFLAGS_LIST_SUBCLASS != 0;
+      (Platform.isWindows && typeName == "list") ||
+      (Platform.isMacOS && typeObject.flags & Py_TPFLAGS_LIST_SUBCLASS != 0);
 
   bool isTuple(PythonFfiMacOSBase platform) =>
-      typeObject.flags & Py_TPFLAGS_TUPLE_SUBCLASS != 0;
+      (Platform.isWindows && typeName == "tuple") ||
+      (Platform.isMacOS && typeObject.flags & Py_TPFLAGS_TUPLE_SUBCLASS != 0);
 
   bool isDict(PythonFfiMacOSBase platform) =>
-      typeObject.flags & Py_TPFLAGS_DICT_SUBCLASS != 0;
+      (Platform.isWindows && typeName == "dict") ||
+      (Platform.isMacOS && typeObject.flags & Py_TPFLAGS_DICT_SUBCLASS != 0);
 
   bool isString(PythonFfiMacOSBase platform) =>
-      typeObject.flags & Py_TPFLAGS_UNICODE_SUBCLASS != 0;
+      (Platform.isWindows && typeName == "str") ||
+      (Platform.isMacOS && typeObject.flags & Py_TPFLAGS_UNICODE_SUBCLASS != 0);
 
   bool isBytes(PythonFfiMacOSBase platform) =>
-      typeObject.flags & Py_TPFLAGS_BYTES_SUBCLASS != 0;
+      (Platform.isWindows && typeName == "bytes") ||
+      (Platform.isMacOS && typeObject.flags & Py_TPFLAGS_BYTES_SUBCLASS != 0);
 
   bool isException(PythonFfiMacOSBase platform) =>
-      typeObject.flags & Py_TPFLAGS_BASE_EXC_SUBCLASS != 0;
+      Platform.isMacOS && typeObject.flags & Py_TPFLAGS_BASE_EXC_SUBCLASS != 0;
 
   bool isType(PythonFfiMacOSBase platform) =>
-      typeObject.flags & Py_TPFLAGS_TYPE_SUBCLASS != 0;
+      (Platform.isWindows && typeName == "type") ||
+      (Platform.isMacOS && typeObject.flags & Py_TPFLAGS_TYPE_SUBCLASS != 0);
 
   bool isSet(PythonFfiMacOSBase platform) =>
       isOfType(platform.bindings.PySet_Type);

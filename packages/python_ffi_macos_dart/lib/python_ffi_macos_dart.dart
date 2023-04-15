@@ -20,6 +20,7 @@ export "package:python_ffi_macos_dart/src/ffi/generated_bindings.g.dart"
 export "package:python_ffi_macos_dart/src/ffi/generated_bindings.g.dart"
     show DartPythonCBindings;
 
+part "src/assets/python311.dll.dart";
 part "src/class.dart";
 part "src/exception.dart";
 part "src/extensions/convert_to_dart_extension.dart";

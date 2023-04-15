@@ -33,6 +33,10 @@ flutter:
         ffiPlugin: true
         fileName: python_ffi_macos.dart
         dartPluginClass: PythonFfiMacOS
+      windows:
+        ffiPlugin: true
+        fileName: python_ffi_macos.dart
+        dartPluginClass: PythonFfiMacOS
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

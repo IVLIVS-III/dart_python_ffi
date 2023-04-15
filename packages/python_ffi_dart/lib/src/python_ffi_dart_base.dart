@@ -39,7 +39,7 @@ class PythonFfiDart extends PythonFfiBase with PythonFfiMixin {
 
   /// Initializes the native platform Python runtime.
   FutureOr<void> initialize(String pythonModules, {String? libPath}) {
-    if (Platform.isMacOS) {
+    if (Platform.isMacOS || Platform.isWindows) {
       delegate = PythonFfiMacOSDart(pythonModules, libPath: libPath);
       return delegate.initialize();
     }

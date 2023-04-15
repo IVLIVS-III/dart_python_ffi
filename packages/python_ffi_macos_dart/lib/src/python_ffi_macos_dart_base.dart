@@ -31,16 +31,36 @@ class PythonFfiMacOSDart extends PythonFfiMacOSBase with PythonFfiMacOSMixin {
   PythonFfiMacOSDart(
     String pythonModulesBase64, {
     String? libPath,
-  }) : _libPath = libPath ??
-            "/Library/Frameworks/Python.framework/Versions/3.11/Python" {
+  }) : _libPath = libPath ?? _defaultLibPath {
     _pythonModules.addAll(_decodePythonModules(pythonModulesBase64));
+  }
+
+  static String get _defaultLibPath {
+    final String version = "3.11";
+    if (Platform.isMacOS) {
+      return "/Library/Frameworks/Python.framework/Versions/$version/Python";
+    }
+    if (Platform.isWindows) {
+      return "python311.dll";
+    }
+    throw Exception("Unsupported platform: ${Platform.operatingSystem}");
   }
 
   final String _libPath;
 
   @override
   Future<void> openDylib() async {
-    final DynamicLibrary dylib = DynamicLibrary.open(_libPath);
+    String effectiveLibPath = _libPath;
+    if (Platform.isWindows && _libPath == _defaultLibPath) {
+      final Directory supportDir = getApplicationSupportDirectory();
+      final File dllFile = File("${supportDir.path}/$_defaultLibPath");
+      if (!dllFile.existsSync()) {
+        final Uint8List dllBytes = base64Decode(_kPython311Dll);
+        await dllFile.writeAsBytes(dllBytes, flush: true);
+      }
+      effectiveLibPath = dllFile.path;
+    }
+    final DynamicLibrary dylib = DynamicLibrary.open(effectiveLibPath);
     bindings = DartPythonCBindings(dylib);
   }
 

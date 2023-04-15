@@ -39,6 +39,8 @@ flutter:
     platforms:
       macos:
         default_package: python_ffi_macos
+      windows:
+        default_package: python_ffi_macos
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
