@@ -1,5 +1,6 @@
 dart_publish
 python
+python_files
 
 # files ignored by .gitignore
 
