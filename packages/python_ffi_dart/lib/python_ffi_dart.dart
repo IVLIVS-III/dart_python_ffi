@@ -6,8 +6,8 @@ library python_ffi_dart;
 import "dart:async";
 import "dart:io";
 
-import "package:python_ffi_interface/python_ffi_interface.dart";
 import "package:python_ffi_cpython_dart/python_ffi_cpython_dart.dart";
+import "package:python_ffi_interface/python_ffi_interface.dart";
 
 export "package:python_ffi_interface/python_ffi_interface.dart";
 
