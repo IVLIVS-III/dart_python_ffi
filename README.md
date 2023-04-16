@@ -9,6 +9,7 @@ Easily import any pure Python module into your Dart or Flutter project.
 | Platform | Status    |
 |----------|-----------|
 | macOS    | supported |
+| Windows  | supported |
 
 ## Table of Contents
 
@@ -371,8 +372,8 @@ case.*
 | [dartpip](https://pub.dev/packages/dartpip)                                             | [![pub package](https://img.shields.io/pub/v/dartpip.svg)](https://pub.dev/packages/dartpip)                                             | 🟩     | Add Python modules (packages) to your Dart or Flutter project.                           |
 | [python_ffi](https://pub.dev/packages/python_ffi)                                       | [![pub package](https://img.shields.io/pub/v/python_ffi.svg)](https://pub.dev/packages/python_ffi)                                       | 🟩🟦   | A Python-FFI for Dart, intended for use in a Flutter project.                            |
 | [python_ffi_dart](https://pub.dev/packages/python_ffi_dart)                             | [![pub package](https://img.shields.io/pub/v/python_ffi_dart.svg)](https://pub.dev/packages/python_ffi_dart)                             | 🟩     | A Python-FFI for Dart, intended for Dart-only applications outside of a Flutter project. |
-| [python_ffi_macos](https://pub.dev/packages/python_ffi_macos)                           | [![pub package](https://img.shields.io/pub/v/python_ffi_macos.svg)](https://pub.dev/packages/python_ffi_macos)                           | 🟥🟦   | The macOS implementation of `python_ffi`, a Python-FFI for Dart.                         |
-| [python_ffi_macos_dart](https://pub.dev/packages/python_ffi_macos_dart)                 | [![pub package](https://img.shields.io/pub/v/python_ffi_macos_dart.svg)](https://pub.dev/packages/python_ffi_macos_dart)                 | 🟥     | The macOS implementation of `python_ffi_dart`, a Python-FFI for Dart.                    |
+| [python_ffi_cpython](https://pub.dev/packages/python_ffi_cpython)                       | [![pub package](https://img.shields.io/pub/v/python_ffi_cpython.svg)](https://pub.dev/packages/python_ffi_cpython)                       | 🟥🟦   | The macOS and Windows implementation of `python_ffi`, a Python-FFI for Dart.             |
+| [python_ffi_cpython_dart](https://pub.dev/packages/python_ffi_cpython_dart)             | [![pub package](https://img.shields.io/pub/v/python_ffi_cpython_dart.svg)](https://pub.dev/packages/python_ffi_cpython_dart)             | 🟥     | The macOS and Windows implementation of `python_ffi_dart`, a Python-FFI for Dart.        |
 | [python_ffi_platform_interface](https://pub.dev/packages/python_ffi_platform_interface) | [![pub package](https://img.shields.io/pub/v/python_ffi_platform_interface.svg)](https://pub.dev/packages/python_ffi_platform_interface) | 🟥🟦   | The platform interface for `python_ffi`, a Python-FFI for Dart.                          |
 | [python_ffi_interface](https://pub.dev/packages/python_ffi_interface)                   | [![pub package](https://img.shields.io/pub/v/python_ffi_interface.svg)](https://pub.dev/packages/python_ffi_interface)                   | 🟥     | A base interface for `python_ffi_dart`, a Python-FFI for Dart.                           |
 | [python_ffi_lint](https://pub.dev/packages/python_ffi_lint)                             | [![pub package](https://img.shields.io/pub/v/python_ffi_lint.svg)](https://pub.dev/packages/python_ffi_lint)                             | 🟥     | Analysis options used across the Python-FFI for Dart project.                            |
@@ -439,9 +440,9 @@ used for developing, testing and showcasing the Python FFI.
 ┌─────────────────────────────────────────┐
 │  python_ffi            python_ffi_dart  │
 │  │   │                           │   │  │
-│  │   python_ffi_macos            │   │  │
+│  │   python_ffi_cpython          │   │  │
 │  │   │          │                │   │  │
-│  │   │       python_ffi_macos_dart   │  │
+│  │   │     python_ffi_cpython_dart   │  │
 │  │   │                           │   │  │
 │  python_ffi_platform_interface   │   │  │
 │                       │          │   │  │

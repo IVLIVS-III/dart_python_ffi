@@ -1,10 +1,10 @@
-# melos_managed_dependency_overrides: python_ffi_dart,python_ffi_interface,python_ffi_lint_dart,python_ffi_macos_dart
+# melos_managed_dependency_overrides: python_ffi_cpython_dart,python_ffi_dart,python_ffi_interface,python_ffi_lint_dart
 dependency_overrides:
+  python_ffi_cpython_dart:
+    path: ../../python_ffi_cpython_dart
   python_ffi_dart:
     path: ../../python_ffi_dart
   python_ffi_interface:
     path: ../../python_ffi_interface
   python_ffi_lint_dart:
     path: ../../python_ffi_lint_dart
-  python_ffi_macos_dart:
-    path: ../../python_ffi_macos_dart

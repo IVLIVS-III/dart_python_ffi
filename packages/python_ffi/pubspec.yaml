@@ -12,7 +12,7 @@ dependencies:
     sdk: flutter
   plugin_platform_interface: ^2.1.4
   python_ffi_dart: ^0.0.3
-  python_ffi_macos: ^0.0.2
+  python_ffi_cpython: ^0.0.3
   python_ffi_platform_interface: ^0.0.1
 
 dev_dependencies:
@@ -38,9 +38,9 @@ flutter:
   plugin:
     platforms:
       macos:
-        default_package: python_ffi_macos
+        default_package: python_ffi_cpython
       windows:
-        default_package: python_ffi_macos
+        default_package: python_ffi_cpython
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

@@ -6,7 +6,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST
-  python_ffi_macos
+  python_ffi_cpython
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)
