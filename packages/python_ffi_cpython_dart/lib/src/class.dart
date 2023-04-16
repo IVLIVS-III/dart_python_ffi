@@ -1,26 +1,26 @@
 part of python_ffi_cpython_dart;
 
-class _PythonClassDefinitionMacos extends PythonClassDefinitionInterface<
-    PythonFfiMacOSBase, Pointer<PyObject>> with _PythonObjectMacosMixin {
-  _PythonClassDefinitionMacos(super.platform, super.reference)
+class _PythonClassDefinitionCPython extends PythonClassDefinitionInterface<
+    PythonFfiCPythonBase, Pointer<PyObject>> with _PythonObjectCPythonMixin {
+  _PythonClassDefinitionCPython(super.platform, super.reference)
       : super(
-          initializer: _PythonObjectMacosRefcountUtil.initializer,
-          finalizer: _PythonObjectMacosRefcountUtil.finalizer,
+          initializer: _PythonObjectCPythonRefcountUtil.initializer,
+          finalizer: _PythonObjectCPythonRefcountUtil.finalizer,
         );
 
   @override
-  _PythonClassMacos newInstance(
+  _PythonClassCPython newInstance(
     List<Object?> args, [
     Map<String, Object?>? kwargs,
   ]) {
-    final List<_PythonObjectMacos> pyArgs =
+    final List<_PythonObjectCPython> pyArgs =
         args.map((Object? e) => e._toPythonObject(platform)).toList();
-    final Map<String, _PythonObjectMacos> pyKwargs =
-        Map<String, _PythonObjectMacos>.fromEntries(
+    final Map<String, _PythonObjectCPython> pyKwargs =
+        Map<String, _PythonObjectCPython>.fromEntries(
       (kwargs?.entries ?? <MapEntry<String, Object?>>[])
           .map(
             (MapEntry<String, Object?> e) =>
-                MapEntry<String, _PythonObjectMacos>(
+                MapEntry<String, _PythonObjectCPython>(
               e.key,
               e.value._toPythonObject(platform),
             ),
@@ -29,14 +29,14 @@ class _PythonClassDefinitionMacos extends PythonClassDefinitionInterface<
     );
 
     final Pointer<PyObject> instance = rawCall(
-      args: pyArgs.map((_PythonObjectMacos e) => e.reference).toList(),
+      args: pyArgs.map((_PythonObjectCPython e) => e.reference).toList(),
       kwargs: pyKwargs.map(
-        (String key, _PythonObjectMacos value) =>
+        (String key, _PythonObjectCPython value) =>
             MapEntry<String, Pointer<PyObject>>(key, value.reference),
       ),
     );
 
-    return _PythonClassMacos(platform, instance);
+    return _PythonClassCPython(platform, instance);
   }
 
   @override
@@ -44,7 +44,7 @@ class _PythonClassDefinitionMacos extends PythonClassDefinitionInterface<
     List<Object?> args, {
     Map<String, Object?>? kwargs,
   }) =>
-      _PythonObjectMacosMixin.staticCall<T>(
+      _PythonObjectCPythonMixin.staticCall<T>(
         platform,
         reference,
         args,
@@ -56,7 +56,7 @@ class _PythonClassDefinitionMacos extends PythonClassDefinitionInterface<
     List<Pointer<PyObject>>? args,
     Map<String, Pointer<PyObject>>? kwargs,
   }) =>
-      _PythonObjectMacosMixin.staticRawCall(
+      _PythonObjectCPythonMixin.staticRawCall(
         platform,
         reference,
         args: args,
@@ -64,12 +64,12 @@ class _PythonClassDefinitionMacos extends PythonClassDefinitionInterface<
       );
 }
 
-class _PythonClassMacos
-    extends PythonClassInterface<PythonFfiMacOSBase, Pointer<PyObject>>
-    with _PythonObjectMacosMixin {
-  _PythonClassMacos(super.platform, super.reference)
+class _PythonClassCPython
+    extends PythonClassInterface<PythonFfiCPythonBase, Pointer<PyObject>>
+    with _PythonObjectCPythonMixin {
+  _PythonClassCPython(super.platform, super.reference)
       : super(
-          initializer: _PythonObjectMacosRefcountUtil.initializer,
-          finalizer: _PythonObjectMacosRefcountUtil.finalizer,
+          initializer: _PythonObjectCPythonRefcountUtil.initializer,
+          finalizer: _PythonObjectCPythonRefcountUtil.finalizer,
         );
 }

@@ -1,7 +1,7 @@
 part of python_ffi_cpython_dart;
 
 extension _ConvertToPythonExtension on Object? {
-  _PythonObjectMacos _toPythonObject(PythonFfiMacOSBase platform) {
+  _PythonObjectCPython _toPythonObject(PythonFfiCPythonBase platform) {
     final Object? value = this;
     Pointer<PyObject>? object;
 
@@ -45,27 +45,27 @@ extension _ConvertToPythonExtension on Object? {
 
     platform.ensureNoPythonError();
     if (object != null) {
-      return _PythonObjectMacos(platform, object);
+      return _PythonObjectCPython(platform, object);
     }
 
     throw Exception("Unsupported type converting dart -> python: $runtimeType");
   }
 
   // ignore: avoid_positional_boolean_parameters
-  static Pointer<PyObject> fromBool(PythonFfiMacOSBase platform, bool value) =>
+  static Pointer<PyObject> fromBool(PythonFfiCPythonBase platform, bool value) =>
       value ? platform.bindings.Py_True : platform.bindings.Py_False;
 
-  static Pointer<PyObject> fromInt(PythonFfiMacOSBase platform, int value) =>
+  static Pointer<PyObject> fromInt(PythonFfiCPythonBase platform, int value) =>
       platform.bindings.PyLong_FromLong(value)..incRef(platform);
 
   static Pointer<PyObject> fromFloat(
-    PythonFfiMacOSBase platform,
+    PythonFfiCPythonBase platform,
     double value,
   ) =>
       platform.bindings.PyFloat_FromDouble(value)..incRef(platform);
 
   static Pointer<PyObject> fromString(
-    PythonFfiMacOSBase platform,
+    PythonFfiCPythonBase platform,
     String value,
   ) =>
       value.toNativeUtf8().useAndFree<Pointer<PyObject>>(
@@ -74,7 +74,7 @@ extension _ConvertToPythonExtension on Object? {
           )..incRef(platform);
 
   static Pointer<PyObject> fromMap(
-    PythonFfiMacOSBase platform,
+    PythonFfiCPythonBase platform,
     Map<dynamic, dynamic> value,
   ) {
     final Pointer<PyObject> object = platform.bindings.PyDict_New()
@@ -94,18 +94,18 @@ extension _ConvertToPythonExtension on Object? {
   }
 
   static Pointer<PyObject> fromUint8List(
-    PythonFfiMacOSBase platform,
+    PythonFfiCPythonBase platform,
     Uint8List value,
   ) {
     final List<int> elements = List<int>.from(value);
-    final _PythonObjectMacos elementsObject =
+    final _PythonObjectCPython elementsObject =
         elements._toPythonObject(platform); // list[int]
     return platform.bindings.PyBytes_FromObject(elementsObject.reference)
       ..incRef(platform);
   }
 
   static Pointer<PyObject> fromTuple(
-    PythonFfiMacOSBase platform,
+    PythonFfiCPythonBase platform,
     PythonTuple<Object?> value,
   ) {
     final Pointer<PyObject> pythonTuple =
@@ -129,7 +129,7 @@ extension _ConvertToPythonExtension on Object? {
   }
 
   static Pointer<PyObject> fromList(
-    PythonFfiMacOSBase platform,
+    PythonFfiCPythonBase platform,
     List<Object?> value,
   ) {
     final Pointer<PyObject> object = platform.bindings.PyList_New(value.length)
@@ -146,11 +146,11 @@ extension _ConvertToPythonExtension on Object? {
   }
 
   static Pointer<PyObject> fromSet(
-    PythonFfiMacOSBase platform,
+    PythonFfiCPythonBase platform,
     Set<Object?> value,
   ) {
     final List<Object?> elements = value.toList();
-    final _PythonObjectMacos elementsObject =
+    final _PythonObjectCPython elementsObject =
         elements._toPythonObject(platform);
 
     return platform.bindings.PySet_New(elementsObject.reference)
@@ -158,7 +158,7 @@ extension _ConvertToPythonExtension on Object? {
   }
 
   static Pointer<PyObject> fromIterable(
-    PythonFfiMacOSBase platform,
+    PythonFfiCPythonBase platform,
     Iterable<Object?> value,
   ) =>
       platform.importClass(
@@ -168,7 +168,7 @@ extension _ConvertToPythonExtension on Object? {
       ).reference;
 
   static Pointer<PyObject> fromIterator(
-    PythonFfiMacOSBase platform,
+    PythonFfiCPythonBase platform,
     Iterator<Object?> value,
   ) =>
       platform.importClass(
@@ -181,7 +181,7 @@ extension _ConvertToPythonExtension on Object? {
       ).reference;
 
   static Pointer<PyObject> fromFunction(
-    PythonFfiMacOSBase platform,
+    PythonFfiCPythonBase platform,
     DartCFunctionSignature value,
   ) {
     final Object? key =

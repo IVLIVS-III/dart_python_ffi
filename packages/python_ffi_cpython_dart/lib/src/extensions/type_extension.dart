@@ -299,67 +299,67 @@ extension _TypeEqualityExtension on PyTypeObject {
 }
 
 extension _TypeExtension on Pointer<PyObject> {
-  bool isNone(PythonFfiMacOSBase platform) =>
+  bool isNone(PythonFfiCPythonBase platform) =>
       platform.bindings.Py_IsNone(this) == 1;
 
-  bool isTrue(PythonFfiMacOSBase platform) => this == platform.bindings.Py_True;
+  bool isTrue(PythonFfiCPythonBase platform) => this == platform.bindings.Py_True;
 
-  bool isFalse(PythonFfiMacOSBase platform) =>
+  bool isFalse(PythonFfiCPythonBase platform) =>
       this == platform.bindings.Py_False;
 
-  bool isBool(PythonFfiMacOSBase platform) =>
+  bool isBool(PythonFfiCPythonBase platform) =>
       isTrue(platform) || isFalse(platform);
 
-  bool isInt(PythonFfiMacOSBase platform) =>
+  bool isInt(PythonFfiCPythonBase platform) =>
       (Platform.isWindows && typeName == "int") ||
       (Platform.isMacOS && typeObject.flags & Py_TPFLAGS_LONG_SUBCLASS != 0);
 
-  bool isFloat(PythonFfiMacOSBase platform) =>
+  bool isFloat(PythonFfiCPythonBase platform) =>
       isOfType(platform.bindings.PyFloat_Type);
 
-  bool isList(PythonFfiMacOSBase platform) =>
+  bool isList(PythonFfiCPythonBase platform) =>
       (Platform.isWindows && typeName == "list") ||
       (Platform.isMacOS && typeObject.flags & Py_TPFLAGS_LIST_SUBCLASS != 0);
 
-  bool isTuple(PythonFfiMacOSBase platform) =>
+  bool isTuple(PythonFfiCPythonBase platform) =>
       (Platform.isWindows && typeName == "tuple") ||
       (Platform.isMacOS && typeObject.flags & Py_TPFLAGS_TUPLE_SUBCLASS != 0);
 
-  bool isDict(PythonFfiMacOSBase platform) =>
+  bool isDict(PythonFfiCPythonBase platform) =>
       (Platform.isWindows && typeName == "dict") ||
       (Platform.isMacOS && typeObject.flags & Py_TPFLAGS_DICT_SUBCLASS != 0);
 
-  bool isString(PythonFfiMacOSBase platform) =>
+  bool isString(PythonFfiCPythonBase platform) =>
       (Platform.isWindows && typeName == "str") ||
       (Platform.isMacOS && typeObject.flags & Py_TPFLAGS_UNICODE_SUBCLASS != 0);
 
-  bool isBytes(PythonFfiMacOSBase platform) =>
+  bool isBytes(PythonFfiCPythonBase platform) =>
       (Platform.isWindows && typeName == "bytes") ||
       (Platform.isMacOS && typeObject.flags & Py_TPFLAGS_BYTES_SUBCLASS != 0);
 
-  bool isException(PythonFfiMacOSBase platform) =>
+  bool isException(PythonFfiCPythonBase platform) =>
       Platform.isMacOS && typeObject.flags & Py_TPFLAGS_BASE_EXC_SUBCLASS != 0;
 
-  bool isType(PythonFfiMacOSBase platform) =>
+  bool isType(PythonFfiCPythonBase platform) =>
       (Platform.isWindows && typeName == "type") ||
       (Platform.isMacOS && typeObject.flags & Py_TPFLAGS_TYPE_SUBCLASS != 0);
 
-  bool isSet(PythonFfiMacOSBase platform) =>
+  bool isSet(PythonFfiCPythonBase platform) =>
       isOfType(platform.bindings.PySet_Type);
 
-  bool isIterator(PythonFfiMacOSBase platform) =>
+  bool isIterator(PythonFfiCPythonBase platform) =>
       platform.bindings.PyIter_Check(this) != 0;
 
-  bool isSequence(PythonFfiMacOSBase platform) =>
+  bool isSequence(PythonFfiCPythonBase platform) =>
       platform.bindings.PySequence_Check(this) == 1;
 
-  bool isIterable(PythonFfiMacOSBase platform) {
+  bool isIterable(PythonFfiCPythonBase platform) {
     if (isSequence(platform)) {
       return true;
     }
     const String kIterAttributeName = "__iter__";
     try {
-      _PythonObjectMacos(platform, this).getFunction(kIterAttributeName);
+      _PythonObjectCPython(platform, this).getFunction(kIterAttributeName);
       return true;
     } on UnknownAttributeException catch (e) {
       if (e.attributeName == kIterAttributeName) {
@@ -369,7 +369,7 @@ extension _TypeExtension on Pointer<PyObject> {
     }
   }
 
-  bool isFunction(PythonFfiMacOSBase platform) {
+  bool isFunction(PythonFfiCPythonBase platform) {
     // necessary condition: type(this) == type
     if (isType(platform) ||
         !typeObject.typeObject.isOfType(platform.bindings.PyType_Type)) {
@@ -380,7 +380,7 @@ extension _TypeExtension on Pointer<PyObject> {
     return typeName == "function";
   }
 
-  bool isModule(PythonFfiMacOSBase platform) {
+  bool isModule(PythonFfiCPythonBase platform) {
     // necessary condition: type(this) == type
     if (isType(platform) ||
         !typeObject.typeObject.isOfType(platform.bindings.PyType_Type)) {
@@ -391,7 +391,7 @@ extension _TypeExtension on Pointer<PyObject> {
     return typeName == "module";
   }
 
-  bool isClass(PythonFfiMacOSBase platform) {
+  bool isClass(PythonFfiCPythonBase platform) {
     // type(type(this)) == type
     final bool couldBeType = !isType(platform) &&
         typeObject.typeObject.isOfType(platform.bindings.PyType_Type);

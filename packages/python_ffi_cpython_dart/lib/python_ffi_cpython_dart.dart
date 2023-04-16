@@ -1,6 +1,4 @@
-/// Support for doing something awesome.
-///
-/// More dartdocs go here.
+/// MacOS and Windows implementation of python_ffi_dart.
 library python_ffi_cpython_dart;
 
 import "dart:async";

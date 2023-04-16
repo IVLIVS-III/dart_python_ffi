@@ -1,19 +1,19 @@
 part of python_ffi_cpython_dart;
 
-class _PythonExceptionMacos
-    extends PythonExceptionInterface<PythonFfiMacOSBase, Pointer<PyObject>>
-    with _PythonObjectMacosMixin {
-  _PythonExceptionMacos(
+class _PythonExceptionCPython
+    extends PythonExceptionInterface<PythonFfiCPythonBase, Pointer<PyObject>>
+    with _PythonObjectCPythonMixin {
+  _PythonExceptionCPython(
     super.platform,
     super.reference,
     this.pValue,
     this.pTraceback,
   ) : super(
-          initializer: _PythonObjectMacosRefcountUtil.initializer,
-          finalizer: _PythonObjectMacosRefcountUtil.finalizer,
+          initializer: _PythonObjectCPythonRefcountUtil.initializer,
+          finalizer: _PythonObjectCPythonRefcountUtil.finalizer,
         );
 
-  factory _PythonExceptionMacos.fetch(PythonFfiMacOSBase platform) {
+  factory _PythonExceptionCPython.fetch(PythonFfiCPythonBase platform) {
     final Pointer<Pointer<PyObject>> pTypePtr = malloc<Pointer<PyObject>>();
     final Pointer<Pointer<PyObject>> pValuePtr = malloc<Pointer<PyObject>>();
     final Pointer<Pointer<PyObject>> pTracebackPtr =
@@ -21,7 +21,7 @@ class _PythonExceptionMacos
 
     platform.bindings.PyErr_Fetch(pTypePtr, pValuePtr, pTracebackPtr);
 
-    final _PythonExceptionMacos pythonException = _PythonExceptionMacos(
+    final _PythonExceptionCPython pythonException = _PythonExceptionCPython(
       platform,
       pTypePtr.value,
       pValuePtr.value,
@@ -94,14 +94,14 @@ class _PythonExceptionMacos
     final String tracebackRepr = nativeTraceback ??
         platform.bindings.PyObject_Repr(pTraceback).asUnicodeString(platform);
 
-    return "PythonExceptionMacos($typeRepr): $valueRepr\n$tracebackRepr";
+    return "PythonExceptionCPython($typeRepr): $valueRepr\n$tracebackRepr";
   }
 
   @override
   String toString() {
     final String? nativeException = _nativelyFormattedException();
     if (nativeException != null) {
-      return "PythonExceptionMacos: $nativeException";
+      return "PythonExceptionCPython: $nativeException";
     }
 
     final String? nativeTraceback = _nativelyFormattedTraceback();

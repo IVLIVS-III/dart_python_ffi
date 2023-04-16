@@ -1,9 +1,10 @@
 part of python_ffi_cpython_dart;
 
-/// Base class for the macOS implementation of [PythonFfiDelegate].
+/// Base class for the macOS and Windows implementation of [PythonFfiDelegate].
 ///
 /// This is shared between the pure Dart and Flutter implementations.
-abstract class PythonFfiMacOSBase extends PythonFfiDelegate<Pointer<PyObject>> {
+abstract class PythonFfiCPythonBase
+    extends PythonFfiDelegate<Pointer<PyObject>> {
   final Set<PythonModuleDefinition> _pythonModules = <PythonModuleDefinition>{};
 
   /// The [DartPythonCBindings] used to call into the Python C API.
@@ -25,10 +26,11 @@ abstract class PythonFfiMacOSBase extends PythonFfiDelegate<Pointer<PyObject>> {
 }
 
 // ignore: comment_references
-/// The macOS implementation of [PythonFfiDelegate].
-class PythonFfiMacOSDart extends PythonFfiMacOSBase with PythonFfiMacOSMixin {
-  /// Creates a new [PythonFfiMacOSDart] instance.
-  PythonFfiMacOSDart(
+/// The macOS and Windows implementation of [PythonFfiDelegate].
+class PythonFfiCPythonDart extends PythonFfiCPythonBase
+    with PythonFfiCPythonMixin {
+  /// Creates a new [PythonFfiCPythonDart] instance.
+  PythonFfiCPythonDart(
     String pythonModulesBase64, {
     String? libPath,
   }) : _libPath = libPath ?? _defaultLibPath {
@@ -136,10 +138,10 @@ class PythonFfiMacOSDart extends PythonFfiMacOSBase with PythonFfiMacOSMixin {
   Set<PythonModuleDefinition> discoverPythonModules() => _pythonModules;
 }
 
-/// Mixin for the macOS implementation of [PythonFfiDelegate].
+/// Mixin for the macOS and Windows implementation of [PythonFfiDelegate].
 ///
 /// This is shared between the pure Dart and Flutter implementations.
-mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
+mixin PythonFfiCPythonMixin on PythonFfiCPythonBase {
   /// A handle to the Python C-bindings.
   DartPythonCBindings? _bindings;
 
@@ -147,7 +149,7 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
   DartPythonCBindings get bindings {
     final DartPythonCBindings? bindings = _bindings;
     if (bindings == null) {
-      throw Exception("PythonFfiMacOS not initialized");
+      throw Exception("PythonFfiCPython not initialized");
     }
     return bindings;
   }
@@ -225,7 +227,7 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
   @override
   void ensureNoPythonError() {
     if (pythonErrorOccurred()) {
-      throw _PythonExceptionMacos.fetch(this);
+      throw _PythonExceptionCPython.fetch(this);
     }
   }
 
@@ -256,7 +258,7 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
       throw PythonFfiException("Failed to import module $moduleName");
     }
 
-    final _PythonModuleMacos module = _PythonModuleMacos(this, pyImport);
+    final _PythonModuleCPython module = _PythonModuleCPython(this, pyImport);
 
     if (pythonErrorOccurred()) {
       pythonErrorPrint();
@@ -278,10 +280,10 @@ mixin PythonFfiMacOSMixin on PythonFfiMacOSBase {
 
   @override
   void appendToPath(String path) {
-    final _PythonObjectMacos sysPath =
+    final _PythonObjectCPython sysPath =
         importModule("sys").getAttributeRaw("path");
 
-    final _PythonObjectMacos pathObject = path._toPythonObject(this);
+    final _PythonObjectCPython pathObject = path._toPythonObject(this);
 
     final int result =
         bindings.PyList_Append(sysPath.reference, pathObject.reference);

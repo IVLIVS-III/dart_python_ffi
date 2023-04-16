@@ -11,8 +11,8 @@ import "package:path_provider/path_provider.dart" as path_provider;
 import "package:python_ffi_cpython_dart/python_ffi_cpython_dart.dart";
 import "package:python_ffi_platform_interface/python_ffi_platform_interface.dart";
 
-abstract class _PythonFfiMacOS extends PythonFfiPlatform<Pointer<PyObject>>
-    implements PythonFfiMacOSBase {
+abstract class _PythonFfiCPython extends PythonFfiPlatform<Pointer<PyObject>>
+    implements PythonFfiCPythonBase {
   @override
   Future<Directory> getApplicationSupportDirectory() async =>
       path_provider.getApplicationSupportDirectory();
@@ -28,11 +28,11 @@ abstract class _PythonFfiMacOS extends PythonFfiPlatform<Pointer<PyObject>>
   }
 }
 
-/// The macOS implementation of [PythonFfiPlatform].
-class PythonFfiMacOS extends _PythonFfiMacOS with PythonFfiMacOSMixin {
+/// The macOS and Windows implementation of [PythonFfiPlatform].
+class PythonFfiCPython extends _PythonFfiCPython with PythonFfiCPythonMixin {
   /// Registers this class as the default instance of [PythonFfiPlatform].
   static void registerWith() {
-    PythonFfiPlatform.instance = PythonFfiMacOS();
+    PythonFfiPlatform.instance = PythonFfiCPython();
   }
 
   @override

@@ -1,35 +1,35 @@
 part of python_ffi_cpython_dart;
 
-class _PythonModuleMacos
-    extends PythonModuleInterface<PythonFfiMacOSBase, Pointer<PyObject>>
-    with _PythonObjectMacosMixin {
-  _PythonModuleMacos(super.platform, super.reference)
+class _PythonModuleCPython
+    extends PythonModuleInterface<PythonFfiCPythonBase, Pointer<PyObject>>
+    with _PythonObjectCPythonMixin {
+  _PythonModuleCPython(super.platform, super.reference)
       : super(
-          initializer: _PythonObjectMacosRefcountUtil.initializer,
-          finalizer: _PythonObjectMacosRefcountUtil.finalizer,
+          initializer: _PythonObjectCPythonRefcountUtil.initializer,
+          finalizer: _PythonObjectCPythonRefcountUtil.finalizer,
         );
 
-  _PythonClassDefinitionMacos _getClassDefinition(String name) {
-    final _PythonObjectMacos classAttribute = getAttributeRaw(name);
-    return _PythonClassDefinitionMacos(platform, classAttribute.reference);
+  _PythonClassDefinitionCPython _getClassDefinition(String name) {
+    final _PythonObjectCPython classAttribute = getAttributeRaw(name);
+    return _PythonClassDefinitionCPython(platform, classAttribute.reference);
   }
 
   @override
-  _PythonClassMacos getClass(
+  _PythonClassCPython getClass(
     String name,
     List<Object?> args, [
     Map<String, Object?>? kwargs,
   ]) {
-    final _PythonClassDefinitionMacos classDefinition =
+    final _PythonClassDefinitionCPython classDefinition =
         _getClassDefinition(name);
-    final _PythonClassMacos classInstance =
+    final _PythonClassCPython classInstance =
         classDefinition.newInstance(args, kwargs);
     return classInstance;
   }
 
   @override
-  _PythonModuleMacos getModule(String name) {
-    final _PythonObjectMacos moduleAttribute = getAttributeRaw(name);
-    return _PythonModuleMacos(platform, moduleAttribute.reference);
+  _PythonModuleCPython getModule(String name) {
+    final _PythonObjectCPython moduleAttribute = getAttributeRaw(name);
+    return _PythonModuleCPython(platform, moduleAttribute.reference);
   }
 }

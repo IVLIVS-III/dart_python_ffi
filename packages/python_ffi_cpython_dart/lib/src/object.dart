@@ -1,22 +1,22 @@
 part of python_ffi_cpython_dart;
 
 // ignore: avoid_classes_with_only_static_members
-class _PythonObjectMacosRefcountUtil {
+class _PythonObjectCPythonRefcountUtil {
   static void _initializerCallback(
-    Pair<PythonFfiMacOSBase, Pointer<PyObject>> value,
+    Pair<PythonFfiCPythonBase, Pointer<PyObject>> value,
   ) {
     value.second.incRef(value.first);
   }
 
-  static const Initializer<PythonFfiMacOSBase, Pointer<PyObject>> initializer =
-      Initializer<PythonFfiMacOSBase, Pointer<PyObject>>(_initializerCallback);
+  static const Initializer<PythonFfiCPythonBase, Pointer<PyObject>> initializer =
+      Initializer<PythonFfiCPythonBase, Pointer<PyObject>>(_initializerCallback);
 
   static void _finalizerCallback(
     Pair<PythonFfiDelegate<Object?>, Object?> value,
   ) {
     final PythonFfiDelegate<Object?> platform = value.first;
     final Object? reference = value.second;
-    if (platform is PythonFfiMacOSBase && reference is Pointer<PyObject>) {
+    if (platform is PythonFfiCPythonBase && reference is Pointer<PyObject>) {
       reference.decRef(platform);
     }
   }
@@ -27,27 +27,27 @@ class _PythonObjectMacosRefcountUtil {
   );
 }
 
-class _PythonObjectMacos
-    extends PythonObjectInterface<PythonFfiMacOSBase, Pointer<PyObject>>
-    with _PythonObjectMacosMixin {
-  _PythonObjectMacos(super.platform, super.reference)
+class _PythonObjectCPython
+    extends PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>>
+    with _PythonObjectCPythonMixin {
+  _PythonObjectCPython(super.platform, super.reference)
       : super(
-          initializer: _PythonObjectMacosRefcountUtil.initializer,
-          finalizer: _PythonObjectMacosRefcountUtil.finalizer,
+          initializer: _PythonObjectCPythonRefcountUtil.initializer,
+          finalizer: _PythonObjectCPythonRefcountUtil.finalizer,
         );
 }
 
-mixin _PythonObjectMacosMixin
-    on PythonObjectInterface<PythonFfiMacOSBase, Pointer<PyObject>> {
+mixin _PythonObjectCPythonMixin
+    on PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>> {
   static T staticCall<T extends Object?>(
-    PythonFfiMacOSBase platform,
+    PythonFfiCPythonBase platform,
     Pointer<PyObject> reference,
     List<Object?> args, {
     Map<String, Object?>? kwargs,
   }) {
     final List<Pointer<PyObject>> mappedArgs = <Pointer<PyObject>>[];
     for (final Object? arg in args) {
-      final _PythonObjectMacos a = arg._toPythonObject(platform);
+      final _PythonObjectCPython a = arg._toPythonObject(platform);
       final Pointer<PyObject> b = a.reference;
       mappedArgs.add(b);
     }
@@ -66,7 +66,7 @@ mixin _PythonObjectMacosMixin
       kwargs: mappedKwargs,
     );
 
-    final _PythonObjectMacos result = _PythonObjectMacos(platform, rawResult);
+    final _PythonObjectCPython result = _PythonObjectCPython(platform, rawResult);
 
     final Object? mappedResult = result.toDartObject();
 
@@ -75,7 +75,7 @@ mixin _PythonObjectMacosMixin
 
   /// Calls the python function with raw pyObject args and kwargs
   static Pointer<PyObject> staticRawCall(
-    PythonFfiMacOSBase platform,
+    PythonFfiCPythonBase platform,
     Pointer<PyObject> reference, {
     List<Pointer<PyObject>>? args,
     Map<String, Pointer<PyObject>>? kwargs,
@@ -92,7 +92,7 @@ mixin _PythonObjectMacosMixin
 
     // prepare kwargs
     late final Pointer<PyObject> pKwargs;
-    final List<_PythonObjectMacos> kwargsKeys = <_PythonObjectMacos>[];
+    final List<_PythonObjectCPython> kwargsKeys = <_PythonObjectCPython>[];
     if (kwargs == null) {
       pKwargs = nullptr;
     } else {
@@ -101,7 +101,7 @@ mixin _PythonObjectMacosMixin
         throw PythonFfiException("Creating keyword argument dict failed");
       }
       for (final MapEntry<String, Pointer<PyObject>> kwarg in kwargs.entries) {
-        final _PythonObjectMacos kwargKey = kwarg.key._toPythonObject(platform);
+        final _PythonObjectCPython kwargKey = kwarg.key._toPythonObject(platform);
         kwargsKeys.add(kwargKey);
         platform.bindings
             .PyDict_SetItem(pKwargs, kwargKey.reference, kwarg.value);
@@ -137,7 +137,7 @@ mixin _PythonObjectMacosMixin
 
   @override
   T getAttributeRaw<
-      T extends PythonObjectInterface<PythonFfiMacOSBase, Pointer<PyObject>>>(
+      T extends PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>>>(
     String attributeName,
   ) {
     final Pointer<PyObject> attribute = attributeName.toNativeUtf8().useAndFree(
@@ -154,19 +154,19 @@ mixin _PythonObjectMacosMixin
       throw UnknownAttributeException(attributeName);
     }
 
-    return _PythonObjectMacos(platform, attribute) as T;
+    return _PythonObjectCPython(platform, attribute) as T;
   }
 
   @override
   T getAttribute<T extends Object?>(String attributeName) {
-    final _PythonObjectMacos attribute = getAttributeRaw(attributeName);
+    final _PythonObjectCPython attribute = getAttributeRaw(attributeName);
 
     return attribute.reference.toDartObject(platform) as T;
   }
 
   @override
   void setAttributeRaw<
-      T extends PythonObjectInterface<PythonFfiMacOSBase, Pointer<PyObject>>>(
+      T extends PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>>>(
     String attributeName,
     T value,
   ) {
@@ -193,10 +193,10 @@ mixin _PythonObjectMacosMixin
   }
 
   @override
-  _PythonFunctionMacos getFunction(String name) {
-    final PythonObjectInterface<PythonFfiMacOSBase, Pointer<PyObject>>
+  _PythonFunctionCPython getFunction(String name) {
+    final PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>>
         functionAttribute = getAttributeRaw(name);
-    return _PythonFunctionMacos(platform, functionAttribute.reference);
+    return _PythonFunctionCPython(platform, functionAttribute.reference);
   }
 
   @override
@@ -220,7 +220,7 @@ mixin _PythonObjectMacosMixin
     // ignore: avoid_print
     print("========================================");
     // ignore: avoid_print
-    print("PythonObjectMacos: @0x${reference.hexAddress}");
+    print("PythonObjectCPython: @0x${reference.hexAddress}");
     try {
       try {
         // ignore: avoid_print
@@ -230,7 +230,7 @@ mixin _PythonObjectMacosMixin
         print("converted: @0x${reference.hexAddress} w/ error: $e");
       }
 
-      final PythonObjectInterface<PythonFfiMacOSBase, Pointer<PyObject>> dict =
+      final PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>> dict =
           getAttributeRaw("__dict__");
       // ignore: avoid_print
       print("dict: @0x${dict.reference.hexAddress}");
@@ -272,7 +272,7 @@ mixin _PythonObjectMacosMixin
           print("$keyString: $valueObject");
         }
       }
-    } on _PythonExceptionMacos catch (e) {
+    } on _PythonExceptionCPython catch (e) {
       // ignore: avoid_print
       print("Error: $e");
     } finally {

@@ -1,7 +1,7 @@
 part of python_ffi_cpython_dart;
 
 extension _RefCountExtension on Pointer<PyObject> {
-  void incRef(PythonFfiMacOSBase platform) {
+  void incRef(PythonFfiCPythonBase platform) {
     if (this == nullptr) {
       return;
     }
@@ -9,7 +9,7 @@ extension _RefCountExtension on Pointer<PyObject> {
     platform.bindings.Py_IncRef(this);
   }
 
-  void decRef(PythonFfiMacOSBase platform) {
+  void decRef(PythonFfiCPythonBase platform) {
     if (this == nullptr) {
       return;
     }

@@ -1,7 +1,7 @@
 part of python_ffi_cpython_dart;
 
 extension _ConvertToDartExtension on Pointer<PyObject> {
-  Object? toDartObject(PythonFfiMacOSBase platform) {
+  Object? toDartObject(PythonFfiCPythonBase platform) {
     final Pointer<PyObject> object = this;
 
     if (object == nullptr) {
@@ -53,7 +53,7 @@ extension _ConvertToDartExtension on Pointer<PyObject> {
       return asException(platform);
     }
     if (isClass(platform)) {
-      return _PythonClassMacos(platform, object);
+      return _PythonClassCPython(platform, object);
     }
 
     final String nameString = typeName;
@@ -89,10 +89,10 @@ extension _ConvertToDartExtension on Pointer<PyObject> {
     print(
       "⚠️   Warning: falling back to conversion to generic python object for '$nameString'",
     );
-    return _PythonObjectMacos(platform, object);
+    return _PythonObjectCPython(platform, object);
   }
 
-  int asInt(PythonFfiMacOSBase platform) {
+  int asInt(PythonFfiCPythonBase platform) {
     final int result = platform.bindings.PyLong_AsLong(this);
     if (result == -1 && platform.bindings.PyErr_Occurred() != nullptr) {
       throw PythonFfiException("Failed to convert to int");
@@ -100,7 +100,7 @@ extension _ConvertToDartExtension on Pointer<PyObject> {
     return result;
   }
 
-  double asDouble(PythonFfiMacOSBase platform) {
+  double asDouble(PythonFfiCPythonBase platform) {
     final double result = platform.bindings.PyFloat_AsDouble(this);
     if (result == -1.0 && platform.bindings.PyErr_Occurred() != nullptr) {
       throw PythonFfiException("Failed to convert to double");
@@ -108,7 +108,7 @@ extension _ConvertToDartExtension on Pointer<PyObject> {
     return result;
   }
 
-  Uint8List asBytes(PythonFfiMacOSBase platform) {
+  Uint8List asBytes(PythonFfiCPythonBase platform) {
     final Pointer<PyObject> bytes = platform.bindings.PyBytes_FromObject(this);
     if (bytes == nullptr) {
       throw PythonFfiException("Failed to convert to bytes");
@@ -123,7 +123,7 @@ extension _ConvertToDartExtension on Pointer<PyObject> {
     return result;
   }
 
-  String _bytesAsString(PythonFfiMacOSBase platform) {
+  String _bytesAsString(PythonFfiCPythonBase platform) {
     final Pointer<Char> res = platform.bindings.PyBytes_AsString(this);
 
     // check for errors
@@ -138,7 +138,7 @@ extension _ConvertToDartExtension on Pointer<PyObject> {
     }
   }
 
-  String asUnicodeString(PythonFfiMacOSBase platform) {
+  String asUnicodeString(PythonFfiCPythonBase platform) {
     final String result =
         platform.bindings.PyUnicode_AsUTF8String(this)._bytesAsString(platform);
     // TODO: correctly handle refcount
@@ -148,7 +148,7 @@ extension _ConvertToDartExtension on Pointer<PyObject> {
     return result;
   }
 
-  Map<Object?, Object?> asMap(PythonFfiMacOSBase platform) {
+  Map<Object?, Object?> asMap(PythonFfiCPythonBase platform) {
     final Pointer<PyObject> keys = platform.bindings.PyDict_Keys(this);
     platform.bindings.Py_IncRef(keys);
     platform.ensureNoPythonError();
@@ -179,7 +179,7 @@ extension _ConvertToDartExtension on Pointer<PyObject> {
     return result;
   }
 
-  List<Object?> asTuple(PythonFfiMacOSBase platform) {
+  List<Object?> asTuple(PythonFfiCPythonBase platform) {
     final List<Object?> result = <Object?>[];
 
     final int len = platform.bindings.PyTuple_Size(this);
@@ -196,7 +196,7 @@ extension _ConvertToDartExtension on Pointer<PyObject> {
     return List<Object?>.from(result, growable: false);
   }
 
-  List<Object?> asList(PythonFfiMacOSBase platform) {
+  List<Object?> asList(PythonFfiCPythonBase platform) {
     final List<Object?> result = <Object?>[];
 
     final int len = platform.bindings.PyList_Size(this);
@@ -213,7 +213,7 @@ extension _ConvertToDartExtension on Pointer<PyObject> {
     return result;
   }
 
-  Set<Object?> asSet(PythonFfiMacOSBase platform) {
+  Set<Object?> asSet(PythonFfiCPythonBase platform) {
     final Set<Object?> result = <Object?>{};
 
     while (platform.bindings.PySet_Size(this) > 0) {
@@ -229,30 +229,30 @@ extension _ConvertToDartExtension on Pointer<PyObject> {
     return result;
   }
 
-  Iterable<Object?> asIterable(PythonFfiMacOSBase platform) =>
-      PythonIterable<Object?, PythonFfiMacOSBase, Pointer<PyObject>>(
-        _PythonObjectMacos(platform, this),
+  Iterable<Object?> asIterable(PythonFfiCPythonBase platform) =>
+      PythonIterable<Object?, PythonFfiCPythonBase, Pointer<PyObject>>(
+        _PythonObjectCPython(platform, this),
       );
 
-  Iterator<Object?> asIterator(PythonFfiMacOSBase platform) =>
-      PythonIterator<Object?, PythonFfiMacOSBase, Pointer<PyObject>>(
-        _PythonObjectMacos(platform, this),
+  Iterator<Object?> asIterator(PythonFfiCPythonBase platform) =>
+      PythonIterator<Object?, PythonFfiCPythonBase, Pointer<PyObject>>(
+        _PythonObjectCPython(platform, this),
       );
 
-  _PythonExceptionMacos asException(PythonFfiMacOSBase platform) =>
-      _PythonExceptionMacos(platform, this, nullptr, nullptr);
+  _PythonExceptionCPython asException(PythonFfiCPythonBase platform) =>
+      _PythonExceptionCPython(platform, this, nullptr, nullptr);
 
-  _PythonFunctionMacos asFunction(PythonFfiMacOSBase platform) {
+  _PythonFunctionCPython asFunction(PythonFfiCPythonBase platform) {
     // Note: We need to access the __code__.__str__ attribute to ensure that the
     //       code object is not garbage collected before the function object.
     //       If __code__.__str__ is not available, we use __code__.__repr__.
-    final _PythonFunctionMacos result = _PythonFunctionMacos(platform, this);
+    final _PythonFunctionCPython result = _PythonFunctionCPython(platform, this);
     const String kCodeAttributeName = "__code__";
     if (result.hasAttribute(kCodeAttributeName)) {
       final Object? codeAttribute = result.getAttribute(kCodeAttributeName);
       const String kStrAttributeName = "__str__";
       const String kReprAttributeName = "__repr__";
-      if (codeAttribute is _PythonObjectMacos) {
+      if (codeAttribute is _PythonObjectCPython) {
         if (codeAttribute.hasAttribute(kStrAttributeName)) {
           codeAttribute
               .getFunction(kStrAttributeName)
@@ -267,6 +267,6 @@ extension _ConvertToDartExtension on Pointer<PyObject> {
     return result;
   }
 
-  _PythonModuleMacos asModule(PythonFfiMacOSBase platform) =>
-      _PythonModuleMacos(platform, this);
+  _PythonModuleCPython asModule(PythonFfiCPythonBase platform) =>
+      _PythonModuleCPython(platform, this);
 }

@@ -1,12 +1,12 @@
 part of python_ffi_cpython_dart;
 
-class _PythonFunctionMacos
-    extends PythonFunctionInterface<PythonFfiMacOSBase, Pointer<PyObject>>
-    with _PythonObjectMacosMixin {
-  _PythonFunctionMacos(super.platform, super.reference)
+class _PythonFunctionCPython
+    extends PythonFunctionInterface<PythonFfiCPythonBase, Pointer<PyObject>>
+    with _PythonObjectCPythonMixin {
+  _PythonFunctionCPython(super.platform, super.reference)
       : super(
-          initializer: _PythonObjectMacosRefcountUtil.initializer,
-          finalizer: _PythonObjectMacosRefcountUtil.finalizer,
+          initializer: _PythonObjectCPythonRefcountUtil.initializer,
+          finalizer: _PythonObjectCPythonRefcountUtil.finalizer,
         );
 
   @override
@@ -14,7 +14,7 @@ class _PythonFunctionMacos
     List<Object?> args, {
     Map<String, Object?>? kwargs,
   }) =>
-      _PythonObjectMacosMixin.staticCall<T>(
+      _PythonObjectCPythonMixin.staticCall<T>(
         platform,
         reference,
         args,
@@ -26,7 +26,7 @@ class _PythonFunctionMacos
     List<Pointer<PyObject>>? args,
     Map<String, Pointer<PyObject>>? kwargs,
   }) =>
-      _PythonObjectMacosMixin.staticRawCall(
+      _PythonObjectCPythonMixin.staticRawCall(
         platform,
         reference,
         args: args,

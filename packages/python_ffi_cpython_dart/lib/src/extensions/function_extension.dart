@@ -10,10 +10,10 @@ class _FunctionConversionUtils {
     return key;
   }
 
-  static PythonFfiMacOSBase? _staticPlatform;
+  static PythonFfiCPythonBase? _staticPlatform;
 
-  static PythonFfiMacOSBase get staticPlatform {
-    final PythonFfiMacOSBase? platform = _staticPlatform;
+  static PythonFfiCPythonBase get staticPlatform {
+    final PythonFfiCPythonBase? platform = _staticPlatform;
     if (platform == null) {
       throw Exception("staticPlatform not set");
     }
@@ -36,7 +36,7 @@ class _FunctionConversionUtils {
   }
 
   static Object? _addStaticEntry(
-    PythonFfiMacOSBase platform,
+    PythonFfiCPythonBase platform,
     DartCFunctionSignature function,
   ) {
     final Object key = nextKey;
@@ -49,7 +49,7 @@ class _FunctionConversionUtils {
     Pointer<PyObject> self,
     Pointer<PyObject> args,
   ) {
-    final PythonFfiMacOSBase platform = staticPlatform;
+    final PythonFfiCPythonBase platform = staticPlatform;
     try {
       final Object? dartArgsDynamic = args.toDartObject(platform);
       if (dartArgsDynamic is! List<Object?>) {
@@ -59,7 +59,7 @@ class _FunctionConversionUtils {
       final Object? dartSelf = self.toDartObject(platform);
       final DartCFunctionSignature dartFunction = _getStaticFunction(dartSelf);
       final Object? dartResult = dartFunction(dartSelf, dartArgs);
-      final _PythonObjectMacos pythonResult =
+      final _PythonObjectCPython pythonResult =
           dartResult._toPythonObject(platform);
       return pythonResult._toPythonObject(platform).reference;
     } on Exception catch (e) {
@@ -77,7 +77,7 @@ class _FunctionConversionUtils {
   /// We can abuse the `self` parameter to pass a key used to look up the actual
   /// Dart function in a map.
   static Pointer<PyObject> _toPyCFunction<T extends PyCFunctionSignature>(
-    PythonFfiMacOSBase platform,
+    PythonFfiCPythonBase platform,
     Pointer<NativeFunction<T>> dartFunction, {
     Object? self,
     String dartFunctionName = "",
