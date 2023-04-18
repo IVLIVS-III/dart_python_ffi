@@ -30,5 +30,18 @@ class _EditorPageState extends State<EditorPage> {
             ),
           ],
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButton: FloatingActionButton(
+          tooltip: "About FJ Playground",
+          onPressed: () {
+            showAboutDialog(
+              context: context,
+              applicationName: "FJ Playground",
+              applicationVersion: "0.0.1",
+              applicationLegalese: "© 2023 Julius Bredemeyer",
+            );
+          },
+          child: const Icon(Icons.info_outline),
+        ),
       );
 }
