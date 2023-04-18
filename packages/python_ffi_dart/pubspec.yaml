@@ -1,6 +1,6 @@
 name: python_ffi_dart
 description: A Python-FFI for Dart, intended for Dart-only applications outside of a Flutter project.
-version: 0.1.0
+version: 0.2.0
 homepage: https://github.com/IVLIVS-III/dart_python_ffi
 
 environment:

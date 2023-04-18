@@ -45,6 +45,9 @@ class PythonFfiCPythonDart extends PythonFfiCPythonBase
     if (Platform.isWindows) {
       return "python311.dll";
     }
+    if (Platform.isLinux) {
+      return "libpython$version.so";
+    }
     throw Exception("Unsupported platform: ${Platform.operatingSystem}");
   }
 
@@ -53,11 +56,17 @@ class PythonFfiCPythonDart extends PythonFfiCPythonBase
   @override
   Future<void> openDylib() async {
     String effectiveLibPath = _libPath;
-    if (Platform.isWindows && _libPath == _defaultLibPath) {
+    if ((Platform.isWindows || Platform.isLinux) && _libPath == _defaultLibPath) {
       final Directory supportDir = getApplicationSupportDirectory();
       final File dllFile = File("${supportDir.path}/$_defaultLibPath");
+      late final String dllSource;
+      if (Platform.isWindows) {
+        dllSource = _kPython311Dll;
+      } else if (Platform.isLinux) {
+        dllSource = _kLibPython311SO;
+      }
       if (!dllFile.existsSync()) {
-        final Uint8List dllBytes = base64Decode(_kPython311Dll);
+        final Uint8List dllBytes = base64Decode(dllSource);
         await dllFile.writeAsBytes(dllBytes, flush: true);
       }
       effectiveLibPath = dllFile.path;

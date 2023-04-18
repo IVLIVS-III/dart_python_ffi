@@ -18,6 +18,7 @@ export "package:python_ffi_cpython_dart/src/ffi/generated_bindings.g.dart"
 export "package:python_ffi_cpython_dart/src/ffi/generated_bindings.g.dart"
     show DartPythonCBindings;
 
+part "src/assets/libpython3.11.so.dart";
 part "src/assets/python311.dll.dart";
 part "src/class.dart";
 part "src/exception.dart";
