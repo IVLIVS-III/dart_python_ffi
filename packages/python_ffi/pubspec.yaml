@@ -1,6 +1,6 @@
 name: python_ffi
 description: A Python-FFI for Dart, intended for use in a Flutter project.
-version: 0.1.0
+version: 0.2.0
 homepage: https://github.com/IVLIVS-III/dart_python_ffi
 
 environment:
@@ -40,6 +40,8 @@ flutter:
       macos:
         default_package: python_ffi_cpython
       windows:
+        default_package: python_ffi_cpython
+      linux:
         default_package: python_ffi_cpython
 
   # To add assets to your plugin package, add an assets section, like this:

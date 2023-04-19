@@ -1,5 +1,5 @@
 name: python_ffi_cpython_dart
-description: The macOS and Windows implementation of python_ffi_dart, a Python-FFI for Dart.
+description: The macOS, Windows and Linux implementation of python_ffi_dart, a Python-FFI for Dart.
 version: 0.2.0
 homepage: https://github.com/IVLIVS-III/dart_python_ffi
 
@@ -18,6 +18,7 @@ dev_dependencies:
 platforms:
   macos:
   windows:
+  linux:
 
 ffigen:
   name: "DartPythonCBindings"
