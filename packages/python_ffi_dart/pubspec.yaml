@@ -7,8 +7,8 @@ environment:
   sdk: '>=2.18.6 <3.0.0'
 
 dependencies:
-  python_ffi_cpython_dart: ^0.1.0
-  python_ffi_interface: ^0.0.1
+  python_ffi_cpython_dart: ^0.2.0
+  python_ffi_interface: ^0.0.2
 
 dev_dependencies:
   python_ffi_lint_dart: ^0.0.1

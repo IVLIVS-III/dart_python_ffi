@@ -1,6 +1,6 @@
 name: python_ffi_platform_interface
 description: The platform interface for python_ffi, a Python-FFI for Dart.
-version: 0.0.2
+version: 0.0.2+1
 homepage: https://github.com/IVLIVS-III/dart_python_ffi
 
 environment:
@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.1.4
-  python_ffi_interface: ^0.0.1
+  python_ffi_interface: ^0.0.2
 
 dev_dependencies:
   flutter_test:

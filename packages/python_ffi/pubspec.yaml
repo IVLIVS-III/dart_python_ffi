@@ -11,9 +11,9 @@ dependencies:
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.1.4
-  python_ffi_cpython: ^0.1.0
-  python_ffi_dart: ^0.1.0
-  python_ffi_platform_interface: ^0.0.1
+  python_ffi_cpython: ^0.2.0
+  python_ffi_dart: ^0.2.0
+  python_ffi_platform_interface: ^0.0.2+1
 
 dev_dependencies:
   flutter_test:
