@@ -5,6 +5,7 @@ This is a demo app for the [python_ffi](https://pub.dev/packages/python_ffi) pac
 Python project.
 
 ## Demo
+
 [![showcase](./resources/showcase.png)](https://user-images.githubusercontent.com/48645716/231783262-1c851119-b9ef-4cfb-bd2d-9177c34142fd.mp4 "showcase")
 
 ## Importing incomplete Python modules
@@ -18,24 +19,30 @@ Module-definition that only contains the functions we need.
 
 import 'package:python_ffi/python_ffi.dart';
 
-class FJParserModule extends PythonModule {
-  FJParserModule.from(super.pythonModule) : super.from();
+class FJModule extends PythonModule {
+  FJModule.from(super.pythonModule) : super.from();
 
-  static FJParserModule import() =>
+  static FJModule import() =>
       PythonModule.import(
-        "FJ_parser",
-        FJParserModule.from,
+        "fj",
+        FJModule.from,
       );
 
   FJProgram fjParse(String sourceCodeTxt) =>
       FJProgram.from(
         getFunction("fj_parse").call(<Object?>[sourceCodeTxt]),
       );
+
+  PythonClassInterface<PythonFfiDelegate<Object?>, Object?> typecheckProgram(FJProgram program,) =>
+      getFunction("typecheck_program").call(<Object?>[program]);
+
+  PythonClassInterface<PythonFfiDelegate<Object?>, Object?> computeProgram(FJProgram program,) =>
+      getFunction("compute_program").call(<Object?>[program]);
 }
 ```
 
-As you can see, we only need the `fj_parse` function, so we only define that function in the
-`FJParserModule` class.
+As you can see, we only need the `fj_parse`, `typecheck_program` and `compute_program` functions, so
+we only define those functions in the `FJModule` class.
 
 ## Creating an incomplete Python Class-definition
 
