@@ -311,37 +311,37 @@ extension _TypeExtension on Pointer<PyObject> {
       isTrue(platform) || isFalse(platform);
 
   bool isInt(PythonFfiCPythonBase platform) =>
-      (Platform.isWindows && typeName == "int") ||
+      ((Platform.isWindows || Platform.isLinux) && typeName == "int") ||
       (Platform.isMacOS && typeObject.flags & Py_TPFLAGS_LONG_SUBCLASS != 0);
 
   bool isFloat(PythonFfiCPythonBase platform) =>
       isOfType(platform.bindings.PyFloat_Type);
 
   bool isList(PythonFfiCPythonBase platform) =>
-      (Platform.isWindows && typeName == "list") ||
+      ((Platform.isWindows || Platform.isLinux) && typeName == "list") ||
       (Platform.isMacOS && typeObject.flags & Py_TPFLAGS_LIST_SUBCLASS != 0);
 
   bool isTuple(PythonFfiCPythonBase platform) =>
-      (Platform.isWindows && typeName == "tuple") ||
+      ((Platform.isWindows || Platform.isLinux) && typeName == "tuple") ||
       (Platform.isMacOS && typeObject.flags & Py_TPFLAGS_TUPLE_SUBCLASS != 0);
 
   bool isDict(PythonFfiCPythonBase platform) =>
-      (Platform.isWindows && typeName == "dict") ||
+      ((Platform.isWindows || Platform.isLinux) && typeName == "dict") ||
       (Platform.isMacOS && typeObject.flags & Py_TPFLAGS_DICT_SUBCLASS != 0);
 
   bool isString(PythonFfiCPythonBase platform) =>
-      (Platform.isWindows && typeName == "str") ||
+      ((Platform.isWindows || Platform.isLinux) && typeName == "str") ||
       (Platform.isMacOS && typeObject.flags & Py_TPFLAGS_UNICODE_SUBCLASS != 0);
 
   bool isBytes(PythonFfiCPythonBase platform) =>
-      (Platform.isWindows && typeName == "bytes") ||
+      ((Platform.isWindows || Platform.isLinux) && typeName == "bytes") ||
       (Platform.isMacOS && typeObject.flags & Py_TPFLAGS_BYTES_SUBCLASS != 0);
 
   bool isException(PythonFfiCPythonBase platform) =>
       Platform.isMacOS && typeObject.flags & Py_TPFLAGS_BASE_EXC_SUBCLASS != 0;
 
   bool isType(PythonFfiCPythonBase platform) =>
-      (Platform.isWindows && typeName == "type") ||
+      ((Platform.isWindows || Platform.isLinux) && typeName == "type") ||
       (Platform.isMacOS && typeObject.flags & Py_TPFLAGS_TYPE_SUBCLASS != 0);
 
   bool isSet(PythonFfiCPythonBase platform) =>

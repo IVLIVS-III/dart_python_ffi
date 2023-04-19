@@ -15,6 +15,9 @@ migration:
     - platform: root
       create_revision: f72efea43c3013323d1b95cff571f3c1caa37583
       base_revision: f72efea43c3013323d1b95cff571f3c1caa37583
+    - platform: linux
+      create_revision: f72efea43c3013323d1b95cff571f3c1caa37583
+      base_revision: f72efea43c3013323d1b95cff571f3c1caa37583
     - platform: macos
       create_revision: f72efea43c3013323d1b95cff571f3c1caa37583
       base_revision: f72efea43c3013323d1b95cff571f3c1caa37583

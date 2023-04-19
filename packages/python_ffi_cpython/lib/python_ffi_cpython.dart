@@ -37,11 +37,14 @@ class PythonFfiCPython extends _PythonFfiCPython with PythonFfiCPythonMixin {
 
   @override
   Future<void> openDylib() async {
+    final String version = "3.11";
     final String dylibPath;
     if (Platform.isMacOS) {
-      dylibPath = "libpython3.11.dylib";
+      dylibPath = "libpython$version.dylib";
     } else if (Platform.isWindows) {
-      dylibPath = "python311.dll";
+      dylibPath = "python$version.dll";
+    } else if (Platform.isLinux) {
+      dylibPath = "libpython$version.so";
     } else {
       throw Exception("Unsupported platform: ${Platform.operatingSystem}");
     }
@@ -84,9 +87,11 @@ class PythonFfiCPython extends _PythonFfiCPython with PythonFfiCPythonMixin {
         if (child == null) {
           continue;
         }
-        if (child == "LICENSE.txt") {
-          licenseFile = SourceFile(child as String);
-          continue;
+        if (child is String) {
+          if (child.toLowerCase().contains("license")) {
+            licenseFile = SourceFile(child);
+            continue;
+          }
         }
         final Pair<PythonSourceEntity, PythonSourceFileEntity?> result =
             _decodePythonSourceEntity(child);

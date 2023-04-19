@@ -23,6 +23,7 @@ doc/api/
 
 # IDE configuration files
 .idea/
+.vscode/
 
 # melos configuration files
 melos*.iml
