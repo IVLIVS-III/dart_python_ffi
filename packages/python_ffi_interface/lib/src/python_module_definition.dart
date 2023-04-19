@@ -77,8 +77,8 @@ class PythonModuleDefinition {
   PythonModuleDefinition({
     required this.name,
     required this.root,
-    this.license,
-  });
+    PythonSourceFileEntity? license,
+  }) : _license = license;
 
   /// The name of the module.
   final String name;
@@ -86,8 +86,21 @@ class PythonModuleDefinition {
   /// The root of the module.
   final PythonSourceEntity root;
 
+  final PythonSourceFileEntity? _license;
+
   /// The license of the module.
-  final PythonSourceFileEntity? license;
+  PythonSourceFileEntity? get license {
+    final PythonSourceFileEntity? license = _license;
+    if (license == null) {
+      return null;
+    }
+    if (license is SourceFile) {
+      return SourceFile("$name/${license.name}");
+    } else if (license is SourceBase64) {
+      return SourceBase64("$name/${license.name}", license.base64);
+    }
+    return SourceFile("$name/${license.name}");
+  }
 
   /// Returns the source files in this module.
   Iterable<PythonSourceFileEntity> get sourceFiles => root.sourceFiles;

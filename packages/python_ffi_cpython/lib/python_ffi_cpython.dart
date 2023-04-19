@@ -37,7 +37,7 @@ class PythonFfiCPython extends _PythonFfiCPython with PythonFfiCPythonMixin {
 
   @override
   Future<void> openDylib() async {
-    final String version = "3.11";
+    const String version = "3.11";
     final String dylibPath;
     if (Platform.isMacOS) {
       dylibPath = "libpython$version.dylib";

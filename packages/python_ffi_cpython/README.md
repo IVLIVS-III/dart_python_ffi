@@ -2,8 +2,8 @@
 
 [![pub package](https://img.shields.io/pub/v/python_ffi_cpython.svg)](https://pub.dev/packages/python_ffi_cpython)
 
-MacOS, Windows and Linux implementation of the [`python_ffi`](https://pub.dev/packages/python_ffi) plugin.
-As such, this package is compatible with Flutter apps.
+MacOS, Windows and Linux implementation of the [`python_ffi`](https://pub.dev/packages/python_ffi)
+plugin. As such, this package is compatible with Flutter apps.
 
 ## Development of this package
 
