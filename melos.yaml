@@ -32,3 +32,10 @@ scripts:
   outdated:
     exec: dart pub get && dart pub outdated
   postbootstrap: melos run ffigen
+  test:
+    exec: dart test
+    select-package:
+      scope:
+        - basic_cli_adder
+        - basic_dataclass
+        - pytimeparse_dart
