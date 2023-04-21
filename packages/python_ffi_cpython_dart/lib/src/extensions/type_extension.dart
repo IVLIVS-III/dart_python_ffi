@@ -302,7 +302,8 @@ extension _TypeExtension on Pointer<PyObject> {
   bool isNone(PythonFfiCPythonBase platform) =>
       platform.bindings.Py_IsNone(this) == 1;
 
-  bool isTrue(PythonFfiCPythonBase platform) => this == platform.bindings.Py_True;
+  bool isTrue(PythonFfiCPythonBase platform) =>
+      this == platform.bindings.Py_True;
 
   bool isFalse(PythonFfiCPythonBase platform) =>
       this == platform.bindings.Py_False;

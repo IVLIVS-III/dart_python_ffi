@@ -246,7 +246,8 @@ extension _ConvertToDartExtension on Pointer<PyObject> {
     // Note: We need to access the __code__.__str__ attribute to ensure that the
     //       code object is not garbage collected before the function object.
     //       If __code__.__str__ is not available, we use __code__.__repr__.
-    final _PythonFunctionCPython result = _PythonFunctionCPython(platform, this);
+    final _PythonFunctionCPython result =
+        _PythonFunctionCPython(platform, this);
     const String kCodeAttributeName = "__code__";
     if (result.hasAttribute(kCodeAttributeName)) {
       final Object? codeAttribute = result.getAttribute(kCodeAttributeName);

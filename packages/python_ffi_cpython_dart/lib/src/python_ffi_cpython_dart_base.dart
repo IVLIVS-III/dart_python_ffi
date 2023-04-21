@@ -56,7 +56,8 @@ class PythonFfiCPythonDart extends PythonFfiCPythonBase
   @override
   Future<void> openDylib() async {
     String effectiveLibPath = _libPath;
-    if ((Platform.isWindows || Platform.isLinux) && _libPath == _defaultLibPath) {
+    if ((Platform.isWindows || Platform.isLinux) &&
+        _libPath == _defaultLibPath) {
       final Directory supportDir = getApplicationSupportDirectory();
       final File dllFile = File("${supportDir.path}/$_defaultLibPath");
       late final String dllSource;

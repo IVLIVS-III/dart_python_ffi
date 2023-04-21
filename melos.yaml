@@ -26,7 +26,7 @@ scripts:
     select-package:
       scope: python_ffi_cpython_dart
   format:
-    exec: dart format .
+    exec: dart format . && git restore **/*.g.dart
   doc:
     exec: dart doc .
   outdated:
