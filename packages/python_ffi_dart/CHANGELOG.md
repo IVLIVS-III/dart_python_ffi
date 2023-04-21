@@ -1,3 +1,7 @@
+## 0.2.0+1
+
+- Clarified limitations on Linux.
+
 ## 0.2.0
 
 - Added support for Linux.
