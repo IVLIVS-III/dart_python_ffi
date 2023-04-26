@@ -177,7 +177,7 @@ accessible for your Dart / Flutter application.
 It is a `class` extending `PythonClass`, which is exposed both by `python_ffi` and `python_ffi_dart`
 .
 
-The factory onstructor is necessary boilerplate to be able to create a new instance of the Python
+The factory constructor is necessary boilerplate to be able to create a new instance of the Python
 class from your Dart code.
 
 Every other method, getter, and setter should map to public methods and properties in the respective
