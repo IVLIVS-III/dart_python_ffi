@@ -1,3 +1,8 @@
+## 0.0.6
+
+- `dartpip bundle` now removes files from the assets section of `pubspec.yaml` that are no longer
+  used, but have been added by `dartpip bundle` before.
+
 ## 0.0.5
 
 - `dartpip bundle` now replaces the old `modules.json` file to delete dependencies that are no
