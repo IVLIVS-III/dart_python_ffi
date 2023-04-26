@@ -52,64 +52,67 @@ extension _ConvertToPythonExtension on Object? {
   }
 
   // ignore: avoid_positional_boolean_parameters
-  static Pointer<PyObject> fromBool(PythonFfiCPythonBase platform,
-      bool value,) =>
+  static Pointer<PyObject> fromBool(
+    PythonFfiCPythonBase platform,
+    bool value,
+  ) =>
       value ? platform.bindings.Py_True : platform.bindings.Py_False;
 
   static Pointer<PyObject> fromInt(PythonFfiCPythonBase platform, int value) =>
-      platform.bindings.PyLong_FromLong(value)
-        ..incRef(platform);
+      platform.bindings.PyLong_FromLong(value)..incRef(platform);
 
-  static Pointer<PyObject> fromFloat(PythonFfiCPythonBase platform,
-      double value,) =>
-      platform.bindings.PyFloat_FromDouble(value)
-        ..incRef(platform);
+  static Pointer<PyObject> fromFloat(
+    PythonFfiCPythonBase platform,
+    double value,
+  ) =>
+      platform.bindings.PyFloat_FromDouble(value)..incRef(platform);
 
-  static Pointer<PyObject> fromString(PythonFfiCPythonBase platform,
-      String value,) =>
+  static Pointer<PyObject> fromString(
+    PythonFfiCPythonBase platform,
+    String value,
+  ) =>
       value.toNativeUtf8().useAndFree<Pointer<PyObject>>(
             (Pointer<Utf8> pointer) =>
-            platform.bindings.PyUnicode_FromString(pointer.cast<Char>()),
-      )
-        ..incRef(platform);
+                platform.bindings.PyUnicode_FromString(pointer.cast<Char>()),
+          )..incRef(platform);
 
-  static Pointer<PyObject> fromMap(PythonFfiCPythonBase platform,
-      Map<dynamic, dynamic> value,) {
+  static Pointer<PyObject> fromMap(
+    PythonFfiCPythonBase platform,
+    Map<dynamic, dynamic> value,
+  ) {
     final Pointer<PyObject> object = platform.bindings.PyDict_New()
       ..incRef(platform);
     for (final Object? key in value.keys) {
       final Object? val = value[key];
 
       final Pointer<PyObject> keyObject =
-      key
-          ._toPythonObject(platform)
-          .reference
-        ..incRef(platform);
+          key._toPythonObject(platform).reference..incRef(platform);
 
       final Pointer<PyObject> valueObject =
-      val
-          ._toPythonObject(platform)
-          .reference
-        ..incRef(platform);
+          val._toPythonObject(platform).reference..incRef(platform);
 
       platform.bindings.PyDict_SetItem(object, keyObject, valueObject);
     }
     return object;
   }
 
-  static Pointer<PyObject> fromUint8List(PythonFfiCPythonBase platform,
-      Uint8List value,) {
+  static Pointer<PyObject> fromUint8List(
+    PythonFfiCPythonBase platform,
+    Uint8List value,
+  ) {
     final List<int> elements = List<int>.from(value);
     final _PythonObjectCPython elementsObject =
-    elements._toPythonObject(platform); // list[int]
+        elements._toPythonObject(platform); // list[int]
     return platform.bindings.PyBytes_FromObject(elementsObject.reference)
       ..incRef(platform);
   }
 
-  static Pointer<PyObject> fromTuple(PythonFfiCPythonBase platform,
-      PythonTuple<Object?> value,) {
+  static Pointer<PyObject> fromTuple(
+    PythonFfiCPythonBase platform,
+    PythonTuple<Object?> value,
+  ) {
     final Pointer<PyObject> pythonTuple =
-    platform.bindings.PyTuple_New(value.length);
+        platform.bindings.PyTuple_New(value.length);
     if (pythonTuple == nullptr) {
       throw PythonFfiException(
         "Failed to create python tuple during type conversion.",
@@ -120,9 +123,7 @@ extension _ConvertToPythonExtension on Object? {
       final Object? element = value[i];
 
       final Pointer<PyObject> elementObject =
-          element
-              ._toPythonObject(platform)
-              .reference;
+          element._toPythonObject(platform).reference;
 
       platform.bindings.PyTuple_SetItem(pythonTuple, i, elementObject);
     }
@@ -130,63 +131,66 @@ extension _ConvertToPythonExtension on Object? {
     return pythonTuple;
   }
 
-  static Pointer<PyObject> fromList(PythonFfiCPythonBase platform,
-      List<Object?> value,) {
+  static Pointer<PyObject> fromList(
+    PythonFfiCPythonBase platform,
+    List<Object?> value,
+  ) {
     final Pointer<PyObject> object = platform.bindings.PyList_New(value.length)
       ..incRef(platform);
     for (int i = 0; i < value.length; i++) {
       final Object? val = value[i];
 
       final Pointer<PyObject> valueObject =
-      val
-          ._toPythonObject(platform)
-          .reference
-        ..incRef(platform);
+          val._toPythonObject(platform).reference..incRef(platform);
 
       platform.bindings.PyList_SetItem(object, i, valueObject);
     }
     return object;
   }
 
-  static Pointer<PyObject> fromSet(PythonFfiCPythonBase platform,
-      Set<Object?> value,) {
+  static Pointer<PyObject> fromSet(
+    PythonFfiCPythonBase platform,
+    Set<Object?> value,
+  ) {
     final List<Object?> elements = value.toList();
     final _PythonObjectCPython elementsObject =
-    elements._toPythonObject(platform);
+        elements._toPythonObject(platform);
 
     return platform.bindings.PySet_New(elementsObject.reference)
       ..incRef(platform);
   }
 
-  static Pointer<PyObject> fromIterable(PythonFfiCPythonBase platform,
-      Iterable<Object?> value,) =>
-      platform
-          .importClass(
+  static Pointer<PyObject> fromIterable(
+    PythonFfiCPythonBase platform,
+    Iterable<Object?> value,
+  ) =>
+      platform.importClass(
         "python_ffi",
         "PythonFfiIterable",
         <Object?>[(() => value.iterator).generic0],
-      )
-          .reference;
+      ).reference;
 
-  static Pointer<PyObject> fromIterator(PythonFfiCPythonBase platform,
-      Iterator<Object?> value,) =>
-      platform
-          .importClass(
+  static Pointer<PyObject> fromIterator(
+    PythonFfiCPythonBase platform,
+    Iterator<Object?> value,
+  ) =>
+      platform.importClass(
         "python_ffi",
         "PythonFfiIterator",
         <Object?>[
           value.moveNext.generic0,
           (() => value.current).generic0,
         ],
-      )
-          .reference;
+      ).reference;
 
-  static Pointer<PyObject> fromFunction(PythonFfiCPythonBase platform,
-      DartCFunctionSignature value,) {
+  static Pointer<PyObject> fromFunction(
+    PythonFfiCPythonBase platform,
+    DartCFunctionSignature value,
+  ) {
     final Object? key =
-    _FunctionConversionUtils._addStaticEntry(platform, value);
+        _FunctionConversionUtils._addStaticEntry(platform, value);
     final Pointer<NativeFunction<PyCFunctionSignature>> p =
-    Pointer.fromFunction<PyCFunctionSignature>(
+        Pointer.fromFunction<PyCFunctionSignature>(
       _FunctionConversionUtils._pythonFunction,
     );
     return _FunctionConversionUtils._toPyCFunction(platform, p, self: key);

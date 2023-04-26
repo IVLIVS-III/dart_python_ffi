@@ -3,17 +3,19 @@ part of python_ffi_cpython_dart;
 // ignore: avoid_classes_with_only_static_members
 class _PythonObjectCPythonRefcountUtil {
   static void _initializerCallback(
-      Pair<PythonFfiCPythonBase, Pointer<PyObject>> value,) {
+    Pair<PythonFfiCPythonBase, Pointer<PyObject>> value,
+  ) {
     value.second.incRef(value.first);
   }
 
   static const Initializer<PythonFfiCPythonBase, Pointer<PyObject>>
-  initializer = Initializer<PythonFfiCPythonBase, Pointer<PyObject>>(
+      initializer = Initializer<PythonFfiCPythonBase, Pointer<PyObject>>(
     _initializerCallback,
   );
 
   static void _finalizerCallback(
-      Pair<PythonFfiDelegate<Object?>, Object?> value,) {
+    Pair<PythonFfiDelegate<Object?>, Object?> value,
+  ) {
     final PythonFfiDelegate<Object?> platform = value.first;
     final Object? reference = value.second;
     if (platform is PythonFfiCPythonBase && reference is Pointer<PyObject>) {
@@ -22,7 +24,7 @@ class _PythonObjectCPythonRefcountUtil {
   }
 
   static final Finalizer<Pair<PythonFfiDelegate<Object?>, Object?>> finalizer =
-  Finalizer<Pair<PythonFfiDelegate<Object?>, Object?>>(
+      Finalizer<Pair<PythonFfiDelegate<Object?>, Object?>>(
     _finalizerCallback,
   );
 }
@@ -32,18 +34,19 @@ class _PythonObjectCPython
     with _PythonObjectCPythonMixin {
   _PythonObjectCPython(super.platform, super.reference)
       : super(
-    initializer: _PythonObjectCPythonRefcountUtil.initializer,
-    finalizer: _PythonObjectCPythonRefcountUtil.finalizer,
-  );
+          initializer: _PythonObjectCPythonRefcountUtil.initializer,
+          finalizer: _PythonObjectCPythonRefcountUtil.finalizer,
+        );
 }
 
 mixin _PythonObjectCPythonMixin
-on PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>> {
-  static T staticCall<T extends Object?>(PythonFfiCPythonBase platform,
-      Pointer<PyObject> reference,
-      List<Object?> args, {
-        Map<String, Object?>? kwargs,
-      }) {
+    on PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>> {
+  static T staticCall<T extends Object?>(
+    PythonFfiCPythonBase platform,
+    Pointer<PyObject> reference,
+    List<Object?> args, {
+    Map<String, Object?>? kwargs,
+  }) {
     final List<Pointer<PyObject>> mappedArgs = <Pointer<PyObject>>[];
     for (final Object? arg in args) {
       final _PythonObjectCPython a = arg._toPythonObject(platform);
@@ -52,13 +55,10 @@ on PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>> {
     }
 
     final Map<String, Pointer<PyObject>>? mappedKwargs = kwargs?.map(
-          (String key, Object? value) =>
-          MapEntry<String, Pointer<PyObject>>(
-            key,
-            value
-                ._toPythonObject(platform)
-                .reference,
-          ),
+      (String key, Object? value) => MapEntry<String, Pointer<PyObject>>(
+        key,
+        value._toPythonObject(platform).reference,
+      ),
     );
 
     final Pointer<PyObject> rawResult = staticRawCall(
@@ -69,7 +69,7 @@ on PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>> {
     );
 
     final _PythonObjectCPython result =
-    _PythonObjectCPython(platform, rawResult);
+        _PythonObjectCPython(platform, rawResult);
 
     final Object? mappedResult = result.toDartObject();
 
@@ -77,11 +77,12 @@ on PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>> {
   }
 
   /// Calls the python function with raw pyObject args and kwargs
-  static Pointer<PyObject> staticRawCall(PythonFfiCPythonBase platform,
-      Pointer<PyObject> reference, {
-        List<Pointer<PyObject>>? args,
-        Map<String, Pointer<PyObject>>? kwargs,
-      }) {
+  static Pointer<PyObject> staticRawCall(
+    PythonFfiCPythonBase platform,
+    Pointer<PyObject> reference, {
+    List<Pointer<PyObject>>? args,
+    Map<String, Pointer<PyObject>>? kwargs,
+  }) {
     // prepare args
     final int argsLen = args?.length ?? 0;
     final Pointer<PyObject> pArgs = platform.bindings.PyTuple_New(argsLen);
@@ -104,7 +105,7 @@ on PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>> {
       }
       for (final MapEntry<String, Pointer<PyObject>> kwarg in kwargs.entries) {
         final _PythonObjectCPython kwargKey =
-        kwarg.key._toPythonObject(platform);
+            kwarg.key._toPythonObject(platform);
         kwargsKeys.add(kwargKey);
         platform.bindings
             .PyDict_SetItem(pKwargs, kwargKey.reference, kwarg.value);
@@ -113,7 +114,7 @@ on PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>> {
 
     // call function
     final Pointer<PyObject> result =
-    platform.bindings.PyObject_Call(reference, pArgs, pKwargs);
+        platform.bindings.PyObject_Call(reference, pArgs, pKwargs);
 
     // deallocate arguments
     platform.bindings.Py_DecRef(pArgs);
@@ -130,26 +131,25 @@ on PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>> {
   @override
   bool hasAttribute(String attributeName) {
     final int result = attributeName.toNativeUtf8().useAndFree(
-          (Pointer<Utf8> pointer) =>
-          platform.bindings.PyObject_HasAttrString(
+          (Pointer<Utf8> pointer) => platform.bindings.PyObject_HasAttrString(
             reference,
             pointer.cast<Char>(),
           ),
-    );
+        );
     return result == 1;
   }
 
   @override
   T getAttributeRaw<
-  T extends PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>>>(
-      String attributeName,) {
+      T extends PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>>>(
+    String attributeName,
+  ) {
     final Pointer<PyObject> attribute = attributeName.toNativeUtf8().useAndFree(
-          (Pointer<Utf8> pointer) =>
-          platform.bindings.PyObject_GetAttrString(
+          (Pointer<Utf8> pointer) => platform.bindings.PyObject_GetAttrString(
             reference,
             pointer.cast<Char>(),
           ),
-    );
+        );
 
     if (attribute == nullptr) {
       if (platform.pythonErrorOccurred()) {
@@ -170,17 +170,17 @@ on PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>> {
 
   @override
   void setAttributeRaw<
-  T extends PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>>>(
-      String attributeName,
-      T value,) {
+      T extends PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>>>(
+    String attributeName,
+    T value,
+  ) {
     final int result = attributeName.toNativeUtf8().useAndFree(
-          (Pointer<Utf8> pointer) =>
-          platform.bindings.PyObject_SetAttrString(
+          (Pointer<Utf8> pointer) => platform.bindings.PyObject_SetAttrString(
             reference,
             pointer.cast<Char>(),
             value.reference,
           ),
-    );
+        );
 
     // this call should not be necessary
     // result is -1 on failure, 0 on success
@@ -199,7 +199,7 @@ on PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>> {
   @override
   _PythonFunctionCPython getFunction(String name) {
     final PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>>
-    functionAttribute = getAttributeRaw(name);
+        functionAttribute = getAttributeRaw(name);
     return _PythonFunctionCPython(platform, functionAttribute.reference);
   }
 
@@ -235,13 +235,13 @@ on PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>> {
       }
 
       final PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>>
-      dict = getAttributeRaw("__dict__");
+          dict = getAttributeRaw("__dict__");
       // ignore: avoid_print
       print("dict: @0x${dict.reference.hexAddress}");
       platform.ensureNoPythonError();
 
       final Pointer<PyObject> keys =
-      platform.bindings.PyDict_Keys(dict.reference);
+          platform.bindings.PyDict_Keys(dict.reference);
       platform.bindings.Py_IncRef(keys);
       // ignore: avoid_print
       print("dict-keys: @0x${keys.hexAddress}");
@@ -258,11 +258,11 @@ on PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>> {
 
         for (int i = 0; i < len; i++) {
           final Pointer<PyObject> key =
-          platform.bindings.PyList_GetItem(keys, i);
+              platform.bindings.PyList_GetItem(keys, i);
           platform.bindings.Py_IncRef(key);
 
           final Pointer<PyObject> value =
-          platform.bindings.PyDict_GetItem(dict.reference, key);
+              platform.bindings.PyDict_GetItem(dict.reference, key);
           platform.bindings.Py_IncRef(value);
 
           final String keyString = key.toDartObject(platform)! as String;
