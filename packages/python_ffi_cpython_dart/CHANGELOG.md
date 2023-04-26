@@ -1,3 +1,7 @@
+## 0.2.1
+
+- Python modules cache is now cleared on initialization.
+
 ## 0.2.0
 
 - Added support for Linux.
