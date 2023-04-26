@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 0.0.2
+version: 0.0.3
 
 environment:
   sdk: '>=2.19.6 <3.0.0'
@@ -33,7 +33,7 @@ dependencies:
   cupertino_icons: ^1.0.5
   flutter:
     sdk: flutter
-  python_ffi: ^0.0.3+1
+  python_ffi: ^0.2.0
 
 dev_dependencies:
   flutter_test:
@@ -44,6 +44,13 @@ python_ffi:
   modules:
     lark: any
     fj: any
+    FJ_AST: any
+    FJ_auxiliary_typing: any
+    FJ_computation: any
+    FJ_interpreter: any
+    FJ_parser: any
+    FJ_typing: any
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -91,14 +98,14 @@ flutter:
     - python-modules/lark/tree_matcher.py
     - python-modules/lark/reconstruct.py
     - python-modules/lark/parse_tree_builder.py
-    - python-modules/fj/FJ_AST.py
     - python-modules/fj/LICENSE
-    - python-modules/fj/FJ_auxiliary_typing.py
     - python-modules/fj/__init__.py
-    - python-modules/fj/FJ_interpreter.py
-    - python-modules/fj/FJ_parser.py
-    - python-modules/fj/FJ_computation.py
-    - python-modules/fj/FJ_typing.py
+    - python-modules/FJ_computation.py
+    - python-modules/FJ_interpreter.py
+    - python-modules/FJ_typing.py
+    - python-modules/FJ_parser.py
+    - python-modules/FJ_auxiliary_typing.py
+    - python-modules/FJ_AST.py
     - python-modules/python_ffi.py
     - python-modules/modules.json
 
