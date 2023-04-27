@@ -28,3 +28,7 @@ override this by specifying `libpath` when calling `PythonFfiDart.instance.initi
 On Linux this package expects `python3.11` to be installed on the system and available in the PATH,
 e.g. by installing the `python3.11` package. The Python dynamic library is bundled with the package,
 you can use a local copy by specifying `libpath` when calling `PythonFfiDart.instance.initialize()`.
+
+On Windows this package expects `python3.11` to be installed on the system and available in the
+PATH. The Python dynamic library is bundled with the package, you can use a local copy by
+specifying `libpath` when calling `PythonFfiDart.instance.initialize()`.

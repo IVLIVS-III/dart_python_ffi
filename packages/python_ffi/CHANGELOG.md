@@ -1,3 +1,8 @@
+## 0.2.1
+
+- Updated dependencies.
+- Clarified limitations.
+
 ## 0.2.0
 
 - Added support for Linux.

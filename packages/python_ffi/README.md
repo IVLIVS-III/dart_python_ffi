@@ -18,3 +18,8 @@ See also the [`dartpip`](https://pub.dev/packages/dartpip) package for an easy w
 modules to your project.
 
 See also the [example project](./example) for a working example.
+
+## Limitations
+
+This package requires the Python 3.11 stdlib to be installed on your system and available in your
+`PATH` environment variable.

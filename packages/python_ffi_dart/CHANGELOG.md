@@ -1,3 +1,8 @@
+## 0.2.1
+
+- Updated dependencies.
+- Clarified limitations on Windows.
+
 ## 0.2.0+1
 
 - Clarified limitations on Linux.
