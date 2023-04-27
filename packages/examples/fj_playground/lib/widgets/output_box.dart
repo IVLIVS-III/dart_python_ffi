@@ -45,7 +45,7 @@ class _OutputBoxState extends State<OutputBox> {
           final int index = error.lastIndexOf("$errorType: ");
           if (index != -1) {
             _outputController
-                .addError(error.substring(index + errorType.length + 2));
+                .addError(error.substring(index + errorType.length + 2).trim());
             return;
           }
         }
