@@ -33,7 +33,7 @@ dependencies:
   cupertino_icons: ^1.0.5
   flutter:
     sdk: flutter
-  python_ffi: ^0.2.0
+  python_ffi: ^0.2.1
 
 dev_dependencies:
   flutter_test:

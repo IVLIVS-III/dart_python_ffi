@@ -7,11 +7,11 @@ environment:
   sdk: '>=2.19.5 <3.0.0'
 
 dependencies:
-  python_ffi_dart: ^0.0.2
+  python_ffi_dart: ^0.2.1
 
 dev_dependencies:
   python_ffi_lint_dart: ^0.0.1
-  test: ^1.24.0
+  test: ^1.24.2
 
 python_ffi:
   modules:

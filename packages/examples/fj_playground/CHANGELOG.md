@@ -1,3 +1,7 @@
+## NEXT
+
+- Updated dependencies.
+
 ## 0.0.3
 
 - Updated fj python project.
