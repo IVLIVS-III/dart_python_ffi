@@ -17,8 +17,7 @@ RUN apt-get update && \
     cmake \
     ninja-build \
     pkg-config \
-    libgtk-3-dev \
-    python3.11
+    libgtk-3-dev
 
 # Install Flutter.
 RUN git clone https://github.com/flutter/flutter.git /usr/local/flutter
@@ -31,8 +30,14 @@ RUN flutter doctor
 RUN dart pub global activate melos 2.9.0
 ENV PATH="$PATH:/root/.pub-cache/bin"
 
+# Install python 3.11
+RUN apt-get update && apt-get install -y --no-install-recommends python3.11
+
 # Clone the Dart Python FFI repository.
 RUN git clone https://github.com/IVLIVS-III/dart_python_ffi.git
+
+# Copy the local Dart Python FFI repository.
+# COPY . /dart_python_ffi/
 
 # Set the working directory.
 WORKDIR /dart_python_ffi

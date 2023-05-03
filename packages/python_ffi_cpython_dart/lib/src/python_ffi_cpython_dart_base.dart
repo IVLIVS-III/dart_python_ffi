@@ -196,7 +196,9 @@ mixin PythonFfiCPythonMixin on PythonFfiCPythonBase {
     appendToPath((await packagesDir).path);
 
     // clear modules cache
-    (await packagesDir).deleteSync(recursive: true);
+    if ((await packagesDir).existsSync()) {
+      (await packagesDir).deleteSync(recursive: true);
+    }
 
     // load modules
     final Set<PythonModuleDefinition> modules = await discoverPythonModules();
