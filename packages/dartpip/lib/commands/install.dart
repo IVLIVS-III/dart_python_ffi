@@ -1,38 +1,42 @@
 part of dartpip;
 
-/// Implements the `bundle` command.
-class BundleCommand extends _PubspecCommand<void> {
-  /// Creates a new instance of the [BundleCommand] class.
-  BundleCommand() {
-    argParser.addOption(_kPythonModulesRootOption, abbr: "m", mandatory: true);
-  }
-
+/// Implements the `install` command.
+class InstallCommand extends _PubspecCommand<void> {
   @override
-  final String name = "bundle";
+  final String name = "install";
 
   @override
   final String description =
-      "Bundles all Python modules specified in pubspec.yaml for a Dart application.";
+      "Installs and bundles all Python modules specified in pubspec.yaml for a Dart application.";
 
-  String get _pythonModuleRoot {
-    final ArgResults? argResults = this.argResults;
-    if (argResults == null) {
-      throw StateError("Options must be provided.");
-    }
-    return argResults[_kPythonModulesRootOption] as String;
+  Directory get _pythonModuleRoot {
+    final AppData appData = AppData.findOrCreate(".dartpip");
+    final Directory cacheDir =
+        Directory(<String>[appData.path, "cache"].join(Platform.pathSeparator));
+    return cacheDir;
   }
 
   @override
   Future<void>? run() async {
+    final ArgResults? argResults = this.argResults;
+    if (argResults == null) {
+      throw StateError("Options must be provided.");
+    }
+
     final Map<dynamic, dynamic> pubspecYaml = _parsePubspec(_appRoot);
-    final String appType = _getAppType(pubspecYaml);
-    final Iterable<String> pythonModuleNames =
-        _getPythonModuleNames(_getPythonFfiMap(pubspecYaml));
+    final Set<String> pythonModuleNames = argResults.rest.toSet()
+      ..addAll(_getPythonModuleNames(_getPythonFfiMap(pubspecYaml)));
 
     if (pythonModuleNames.isEmpty) {
-      print("No Python modules specified in pubspec.yaml.");
+      print(
+        "No Python modules specified. Add them to pubspec.yaml or via 'dartpip install <module>.",
+      );
       return;
     }
+
+    // TODO: download modules if they don't exist in the cache
+
+    return;
 
     // Remove modules.json file if it exists.
     // This is necessary because the file is not overwritten. Otherwise old and
@@ -45,6 +49,7 @@ class BundleCommand extends _PubspecCommand<void> {
       modulesJsonFile.deleteSync();
     }
 
+    final String appType = _getAppType(pubspecYaml);
     // resets the pubspec.yaml generated assets
     _removeGeneratedAssetDeclarations(appType, _appRoot);
 
@@ -60,7 +65,7 @@ class BundleCommand extends _PubspecCommand<void> {
       futures.add(
         _bundleModule(
           appRoot: _appRoot,
-          pythonModulePath: <String>[_pythonModuleRoot, pythonModuleName]
+          pythonModulePath: <String>[_pythonModuleRoot.path, pythonModuleName]
               .join(Platform.pathSeparator),
           appType: appType,
         ),

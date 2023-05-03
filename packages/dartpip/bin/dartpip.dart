@@ -7,7 +7,8 @@ Future<void> main(List<String> arguments) async {
     "The command line application for bundling Python modules into Dart applications.",
   )
     ..addCommand(BundleModuleCommand())
-    ..addCommand(BundleCommand());
+    ..addCommand(BundleCommand())
+    ..addCommand(InstallCommand());
 
   await runner.run(arguments);
 }
