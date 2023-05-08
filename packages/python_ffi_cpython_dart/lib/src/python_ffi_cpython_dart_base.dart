@@ -30,7 +30,8 @@ abstract class PythonFfiCPythonBase
 class PythonFfiCPythonDart extends PythonFfiCPythonBase
     with PythonFfiCPythonMixin {
   /// Creates a new [PythonFfiCPythonDart] instance.
-  PythonFfiCPythonDart(String pythonModulesBase64, {
+  PythonFfiCPythonDart(
+    String pythonModulesBase64, {
     String? libPath,
   }) : _libPath = libPath ?? _defaultLibPath {
     _pythonModules.addAll(_decodePythonModules(pythonModulesBase64));
@@ -76,7 +77,9 @@ class PythonFfiCPythonDart extends PythonFfiCPythonBase
   }
 
   static Pair<PythonSourceEntity, PythonSourceFileEntity?>
-  _decodePythonSourceEntity(Map<String, dynamic> data,) {
+      _decodePythonSourceEntity(
+    Map<String, dynamic> data,
+  ) {
     if (data.keys.contains("children")) {
       final SourceDirectory entity = SourceDirectory(data["name"] as String);
       PythonSourceFileEntity? licenseFile;
@@ -91,7 +94,7 @@ class PythonFfiCPythonDart extends PythonFfiCPythonBase
           continue;
         }
         final Pair<PythonSourceEntity, PythonSourceFileEntity?> result =
-        _decodePythonSourceEntity(child);
+            _decodePythonSourceEntity(child);
         licenseFile ??= result.second;
         entity.add(result.first);
       }
@@ -108,19 +111,20 @@ class PythonFfiCPythonDart extends PythonFfiCPythonBase
   }
 
   static Iterable<PythonModuleDefinition> _decodePythonModules(
-      String pythonModulesBase64,) sync* {
+    String pythonModulesBase64,
+  ) sync* {
     final String pythonModulesRaw =
-    utf8.decode(base64Decode(pythonModulesBase64));
+        utf8.decode(base64Decode(pythonModulesBase64));
     final Map<String, dynamic> pythonModulesJson =
-    jsonDecode(pythonModulesRaw) as Map<String, dynamic>;
+        jsonDecode(pythonModulesRaw) as Map<String, dynamic>;
     for (final MapEntry<String, dynamic> entry in pythonModulesJson.entries) {
       final String moduleName = entry.key;
       final Map<String, dynamic> moduleJson =
-      entry.value as Map<String, dynamic>;
+          entry.value as Map<String, dynamic>;
       final Map<String, dynamic> root =
-      moduleJson["root"] as Map<String, dynamic>;
+          moduleJson["root"] as Map<String, dynamic>;
       final Pair<PythonSourceEntity, PythonSourceFileEntity?> result =
-      _decodePythonSourceEntity(root);
+          _decodePythonSourceEntity(root);
       yield PythonModuleDefinition(
         name: moduleName,
         root: result.first,
@@ -172,8 +176,7 @@ mixin PythonFfiCPythonMixin on PythonFfiCPythonBase {
   Directory? _packagesDir;
 
   /// Directory for all bundled Python packages
-  FutureOr<Directory> get packagesDir async =>
-      _packagesDir ??= Directory(
+  FutureOr<Directory> get packagesDir async => _packagesDir ??= Directory(
         "${(await supportDir).path}/python_ffi/packages",
       );
 
@@ -221,7 +224,7 @@ mixin PythonFfiCPythonMixin on PythonFfiCPythonBase {
     final List<Future<void>> copyTasks = <Future<void>>[];
 
     for (final PythonSourceFileEntity sourceFile
-    in moduleDefinition.sourceFiles) {
+        in moduleDefinition.sourceFiles) {
       copyTasks.add(_copyModuleFile(sourceFile));
     }
 
@@ -246,13 +249,13 @@ mixin PythonFfiCPythonMixin on PythonFfiCPythonBase {
 
   @override
   PythonModuleInterface<PythonFfiDelegate<Pointer<PyObject>>, Pointer<PyObject>>
-  importModule(String moduleName) {
+      importModule(String moduleName) {
     // convert the module name to a Python string
     final Pointer<PyObject> pythonModuleName =
-    moduleName.toNativeUtf8().useAndFree((Pointer<Utf8> pointer) {
+        moduleName.toNativeUtf8().useAndFree((Pointer<Utf8> pointer) {
       final Pointer<Char> charPointer = pointer.cast<Char>();
       final Pointer<PyObject> result =
-      bindings.PyUnicode_DecodeFSDefault(charPointer);
+          bindings.PyUnicode_DecodeFSDefault(charPointer);
       return result;
     });
     if (pythonModuleName == nullptr) {
@@ -261,7 +264,7 @@ mixin PythonFfiCPythonMixin on PythonFfiCPythonBase {
 
     // import the module
     final Pointer<PyObject> pyImport =
-    bindings.PyImport_Import(pythonModuleName);
+        bindings.PyImport_Import(pythonModuleName);
 
     // decrease the reference count of the module name,
     // since we no longer need access to this string
@@ -283,22 +286,23 @@ mixin PythonFfiCPythonMixin on PythonFfiCPythonBase {
 
   @override
   PythonClassInterface<PythonFfiDelegate<Pointer<PyObject>>, Pointer<PyObject>>
-  importClass(String moduleName,
-      String className,
-      List<Object?> args, [
-        Map<String, Object?>? kwargs,
-      ]) =>
-      importModule(moduleName).getClass(className, args, kwargs);
+      importClass(
+    String moduleName,
+    String className,
+    List<Object?> args, [
+    Map<String, Object?>? kwargs,
+  ]) =>
+          importModule(moduleName).getClass(className, args, kwargs);
 
   @override
   void appendToPath(String path) {
     final _PythonObjectCPython sysPath =
-    importModule("sys").getAttributeRaw("path");
+        importModule("sys").getAttributeRaw("path");
 
     final _PythonObjectCPython pathObject = path._toPythonObject(this);
 
     final int result =
-    bindings.PyList_Append(sysPath.reference, pathObject.reference);
+        bindings.PyList_Append(sysPath.reference, pathObject.reference);
 
     if (result != 0) {
       if (pythonErrorOccurred()) {
