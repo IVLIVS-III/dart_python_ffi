@@ -1,3 +1,7 @@
+## NEXT
+
+- Updated dependencies.
+
 ## 0.2.2
 
 - Fixed an issue with clearing the Python modules cache on initialization if the cache was empty.
