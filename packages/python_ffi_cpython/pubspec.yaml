@@ -1,6 +1,6 @@
 name: python_ffi_cpython
 description: The macOS, Windows and Linux implementation of python_ffi, a Python-FFI for Dart.
-version: 0.2.1
+version: 0.2.2
 homepage: https://github.com/IVLIVS-III/dart_python_ffi
 
 environment:
@@ -11,9 +11,9 @@ dependencies:
   ffi: ^2.0.1
   flutter:
     sdk: flutter
-  path_provider: ^2.0.14
+  path_provider: ^2.0.15
   plugin_platform_interface: ^2.1.4
-  python_ffi_cpython_dart: ^0.2.1
+  python_ffi_cpython_dart: ^0.2.2
   python_ffi_platform_interface: ^0.0.2+1
 
 dev_dependencies:

@@ -1,3 +1,7 @@
+## 0.2.2
+
+- Fixed an issue with clearing the Python modules cache on initialization if the cache was empty.
+
 ## 0.2.1
 
 - Python modules cache is now cleared on initialization.
