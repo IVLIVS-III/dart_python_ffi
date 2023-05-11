@@ -24,7 +24,11 @@ Future<InterpreterResult> runFJInterpreter(
 }) async {
   final FJModule fjModule = FJModule.import();
 
-  final List<String> result = fjModule.fjRun(input);
+  final List<String> result = fjModule.fjRun(
+    input,
+    withConstructor: withConstructor,
+    onlyTypecheck: onlyTypecheck,
+  );
 
   if (result.length != 3) {
     throw Exception("Expected 3 results, got ${result.length}");
