@@ -9,6 +9,7 @@ import "package:args/args.dart";
 import "package:args/command_runner.dart";
 import "package:collection/collection.dart";
 import "package:dart_app_data/dart_app_data.dart";
+import "package:pub_semver/pub_semver.dart" as pub;
 import "package:yaml/yaml.dart";
 
 part "builtin_modules/python_ffi.py.dart";
