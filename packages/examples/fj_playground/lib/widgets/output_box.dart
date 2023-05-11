@@ -26,12 +26,20 @@ class OutputBox extends StatefulWidget {
 }
 
 class _OutputBoxState extends State<OutputBox> {
-  final StreamController<String> _outputController = StreamController<String>();
+  final StreamController<InterpreterResult> _outputController =
+      StreamController<InterpreterResult>();
+
+  bool _withContructor = false;
+  bool _onlyTypecheck = false;
 
   Future<void> _onControllerChanged() async {
     try {
-      final String output = await runFJInterpreter(widget.controller.text);
-      _outputController.add(output);
+      final InterpreterResult result = await runFJInterpreter(
+        widget.controller.text,
+        withConstructor: _withContructor,
+        onlyTypecheck: _onlyTypecheck,
+      );
+      _outputController.add(result);
     } on PythonExceptionInterface<PythonFfiDelegate<Object>, Object> catch (e) {
       final Set<String> commonErrorTypes = <String>{
         "Exception",
@@ -73,22 +81,59 @@ class _OutputBoxState extends State<OutputBox> {
             ),
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-          child: StreamBuilder<String>(
-            stream: _outputController.stream,
-            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-              if (snapshot.hasError) {
-                return ErrorOutput(error: snapshot.error);
-              } else if (snapshot.hasData) {
-                return ComputationOutput(text: snapshot.requireData);
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator.adaptive(),
-                );
-              }
-            },
-          ),
+        child: Column(
+          children: [
+            SwitchListTile.adaptive(
+              value: _withContructor,
+              title: const Text("with constructor"),
+              onChanged: (bool? value) {
+                if (value == null) {
+                  return;
+                }
+                setState(() {
+                  _withContructor = value;
+                });
+                _onControllerChanged();
+              },
+            ),
+            SwitchListTile.adaptive(
+              value: _onlyTypecheck,
+              title: const Text("only typecheck"),
+              onChanged: (bool? value) {
+                if (value == null) {
+                  return;
+                }
+                setState(() {
+                  _onlyTypecheck = value;
+                });
+                _onControllerChanged();
+              },
+            ),
+            const Divider(),
+            Expanded(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                child: StreamBuilder<InterpreterResult>(
+                  stream: _outputController.stream,
+                  builder: (
+                    BuildContext context,
+                    AsyncSnapshot<InterpreterResult> snapshot,
+                  ) {
+                    if (snapshot.hasError) {
+                      return ErrorOutput(error: snapshot.error);
+                    } else if (snapshot.hasData) {
+                      return ComputationOutput(result: snapshot.requireData);
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      );
+                    }
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
       );
 
@@ -138,31 +183,42 @@ class ErrorOutput extends StatelessWidget {
 class ComputationOutput extends StatelessWidget {
   const ComputationOutput({
     Key? key,
-    required this.text,
+    required this.result,
   }) : super(key: key);
 
-  final String text;
+  final InterpreterResult result;
 
   @override
-  Widget build(BuildContext context) => TextField(
-        controller: TextEditingController(text: text),
-        readOnly: true,
-        maxLines: null,
-        expands: true,
-        autofocus: false,
-        autocorrect: false,
-        decoration: const InputDecoration(
-          border: InputBorder.none,
-        ),
-        style: const TextStyle(
-          fontFamily: "FiraCode",
-          fontFamilyFallback: <String>["monospace"],
-        ),
-      );
+  Widget build(BuildContext context) {
+    final StringBuffer buffer = StringBuffer();
+    if (!result.onlyTypecheck) {
+      buffer
+        ..writeln(result.program)
+        ..writeln()
+        ..write(result.computedExpression)
+        ..write(" :: ");
+    }
+    buffer.writeln(result.typingResult);
+    return TextField(
+      controller: TextEditingController(text: buffer.toString()),
+      readOnly: true,
+      maxLines: null,
+      expands: true,
+      autofocus: false,
+      autocorrect: false,
+      decoration: const InputDecoration(
+        border: InputBorder.none,
+      ),
+      style: const TextStyle(
+        fontFamily: "FiraCode",
+        fontFamilyFallback: <String>["monospace"],
+      ),
+    );
+  }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(StringProperty("text", text));
+    properties.add(DiagnosticsProperty<InterpreterResult>("result", result));
   }
 }

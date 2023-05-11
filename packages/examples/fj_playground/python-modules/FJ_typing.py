@@ -80,8 +80,6 @@ def typecheck_method(method: FJ.MethodDef, class_name: str, env: dict[str, FJ.Ty
         intern_env[argument] = type_of_argument
     intern_env["this"] = FJ.FJClass(class_name)
     match CT[class_name].superclass:
-        case FJ.FJObject():
-            errors.append(f"In class '{class_name}' in method '{method.method_name}' a call to 'super' isnt possible, because 'super' is 'Object'")
         case FJ.FJClass(name):
             intern_env["super"] = FJ.FJClass(name)
     type_of_e0 = typecheck_expression(method.body, intern_env, CT, warnings, f"In class '{class_name}' in method '{method.method_name}'")

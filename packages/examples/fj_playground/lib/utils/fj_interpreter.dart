@@ -1,14 +1,40 @@
 import "package:fj_playground/python_modules/fj.dart";
-import "package:python_ffi/python_ffi.dart";
 
-Future<String> runFJInterpreter(String input) async {
+class InterpreterResult {
+  const InterpreterResult({
+    required this.program,
+    required this.computedExpression,
+    required this.typingResult,
+    this.withContructor = false,
+    this.onlyTypecheck = false,
+  });
+
+  final String program;
+  final String computedExpression;
+  final String typingResult;
+
+  final bool withContructor;
+  final bool onlyTypecheck;
+}
+
+Future<InterpreterResult> runFJInterpreter(
+  String input, {
+  bool withConstructor = false,
+  bool onlyTypecheck = false,
+}) async {
   final FJModule fjModule = FJModule.import();
 
-  final FJProgram program = fjModule.fjParse(input);
-  final PythonClassInterface<PythonFfiDelegate<Object?>, Object?> typingResult =
-      fjModule.typecheckProgram(program);
-  final PythonClassInterface<PythonFfiDelegate<Object?>, Object?>
-      computationResult = fjModule.computeProgram(program);
+  final List<String> result = fjModule.fjRun(input);
 
-  return "$computationResult :: $typingResult";
+  if (result.length != 3) {
+    throw Exception("Expected 3 results, got ${result.length}");
+  }
+
+  return InterpreterResult(
+    program: result[0],
+    computedExpression: result[1],
+    typingResult: result[2],
+    withContructor: withConstructor,
+    onlyTypecheck: onlyTypecheck,
+  );
 }

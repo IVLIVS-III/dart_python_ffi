@@ -4,53 +4,9 @@ from FJ_typing import typecheck_program
 from FJ_computation import compute_program
 
 from lark import UnexpectedCharacters
+import argparse
 
 import sys
-
-
-def run_interpreter_on_file_to_terminal(file_path: str):
-    program = read_from(file_path)
-    type_of_expression = typecheck_program(program)
-    computed_expression = compute_program(program)
-    print()
-    print(program.str_with_constructor())
-    # print(program)
-    print(f"\n{computed_expression} :: {type_of_expression}\n")
-
-
-def only_typecheck_on_file_to_terminal(file_path: str):
-    program = read_from(file_path)
-    type_of_expression = typecheck_program(program)
-    print()
-    print(program.str_with_constructor())
-    print(f"\nType is -> {type_of_expression}\n")
-
-
-def run_interpreter_on_file(file_path: str, out_file_path: str = ""):
-    """
-    Interpretes the Featherweight Java code in the given file.\n
-    \n
-    By default the computed expression is appended in the given file.\n
-    A different outputfile can be given via the 'out_file_path' parameter.
-    """
-    if out_file_path == "":
-        out_file_path = file_path
-    program = read_from(file_path)
-    type_of_expression = typecheck_program(program)
-    computed_expression = compute_program(program)
-    if file_path != out_file_path:
-        write_in(out_file_path, program)
-    write_in_computed(out_file_path, type_of_expression, computed_expression)
-
-
-def only_typecheck(file_path: str, out_file_path: str = ""):
-    if out_file_path == "":
-        out_file_path = file_path
-    program = read_from(file_path)
-    type_of_expression = typecheck_program(program)
-    if file_path != out_file_path:
-        write_in(out_file_path, program)
-    write_in_type(out_file_path, type_of_expression)
 
 
 def read_from(file_path: str) -> FJ.Program:
@@ -61,50 +17,67 @@ def read_from(file_path: str) -> FJ.Program:
             raise Exception(f"\n\nSyntax Error\n\n{str(exc).split('^')[0]}^")
 
 
-def write_in(file_path: str, code: FJ.Program):
-    with open(file_path, "a") as file:
-        # file.write(str(code) + "\n")
-        file.write(code.str_with_constructor() + "\n")
+def run(file_path: str, out_file_path: str, to_stdout: bool, only_typecheck: bool, with_constructor: bool):
+    program = read_from(file_path)
+    type_of_expr = typecheck_program(program)
+
+    def write(text: str, mode: str = "a"):
+        if to_stdout:
+            print(text)
+        else:
+            with open(out_file_path, mode) as file:
+                file.write(text)
+
+    if with_constructor:
+        write(program.str_with_constructor() + "\n", mode="w")
+    elif file_path != out_file_path:
+        write(str(program), mode="w")
+
+    if only_typecheck:
+        write(f"\n{program.expression} :: {type_of_expr}\n")
+    else:
+        computed_expr = compute_program(program)
+        write(f"\n{computed_expr} :: {type_of_expr}\n")
 
 
-def write_in_computed(file_path: str, type_of_expression: FJ.Type, computed_expression: FJ.NewClass):
-    with open(file_path, "a") as file:
-        file.write("\n")
-        file.write(f"{computed_expression} :: {type_of_expression}\n")
-
-
-def write_in_type(file_path: str, type_of_expression: FJ.Type):
-    with open(file_path, "a") as file:
-        file.write("\n")
-        file.write(f"Type is -> {type_of_expression}\n")
-
-
-def print_help():
-    print("\nWelcome to the Featherweight Java interpreter\n")
-    print("\tUSAGE: python3 FJ_interpreter.py inpath [outpath | -o] [-t]\n")
-    print("\tIf no outpath is given the outpath is set to the inpath")
-    print("\tIf instead of the outpath '-o' is given, the output is printed to the terminal")
-    print("\tIf '-t' is given, the program is only typechecked and the resulting type is returned")
-    print("\tIf the given outpath doesn't exist, a new file is created\n")
+def fj_run(program_as_str: str, with_constructor: bool = False, only_typecheck: bool = False) -> tuple[str, str, str]:
+    """
+    Takes a featherweight java program as a string.\n
+    \n
+    By default returns a tuple of strings containing:\n
+    \tThe program, the computed expression and the type of the expression.\n
+    \n
+    If 'with_constructor' is set to True:\n
+    \tThe returned program contains constructor definitions, even if the original program does not.\n
+    \n
+    If 'only_typecheck' is set to True:\n
+    \tThe returned tuple contains the program, the not computed expression and the type of the expression.
+    """
+    program = fj_parse(program_as_str)
+    type_of_expr = typecheck_program(program)
+    if only_typecheck:
+        if with_constructor:
+            return program.str_with_constructor(), str(program.expression), str(type_of_expr)
+        return str(program), str(program.expression), str(type_of_expr)
+    else:
+        comp_expr = compute_program(program)
+        if with_constructor:
+            return program.str_with_constructor(), str(comp_expr), str(type_of_expr)
+        return str(program), str(comp_expr), str(type_of_expr)
 
 
 if __name__ == "__main__":
-    match sys.argv:
-        case [_]:
-            print("\nWrong use of the Featherweight Java interpreter.\nTry '--help' to see the correct usage\n")
-        case [_, "--help"]:
-            print_help()
-        case [_, inpath]:
-            run_interpreter_on_file(inpath)
-        case [_, inpath, "-t"]:
-            only_typecheck(inpath)
-        case [_, inpath, "-o"]:
-            run_interpreter_on_file_to_terminal(sys.argv[1])
-        case [_, inpath, outpath]:
-            run_interpreter_on_file(inpath, outpath)
-        case [_, inpath, "-o", "-t"]:
-            only_typecheck_on_file_to_terminal(inpath)
-        case [_, inpath, outpath, "-t"]:
-            only_typecheck(inpath, outpath)
-        case _:
-            print("\nWrong use of the Featherweight Java interpreter.\nTry '--help' to see the correct usage\n")
+    parser = argparse.ArgumentParser(
+        prog="Featerweight Java Interpreter",
+        description="Given a Featherweight Java program, this interpreter typechecks and computes it."
+    )
+
+    parser.add_argument("inpath", help="The file your FJ program is in.")
+    parser.add_argument("outpath", nargs="?", help="The file the output is printed in. If none given, the output is printed into the infile.")
+    parser.add_argument("-o", "--outpath", action="store_true", help="Print the output to the terminal.")
+    parser.add_argument("-t", "--typecheck", action="store_true", help="The program is typechecked but not computed.")
+    parser.add_argument("-c", "--constructor", action="store_true", help="The output includes constructors (even if the infile does not).")
+
+    options = parser.parse_args(sys.argv[1:])
+
+    run(options.inpath, options.outpath or options.inpath, options.outpath, options.typecheck, options.constructor)

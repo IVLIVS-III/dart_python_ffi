@@ -1,5 +1,5 @@
 import FJ_AST as FJ
-from FJ_auxiliary_typing import fields, mbody, is_subtype
+from FJ_auxiliary_typing import fields, mbody, is_subtype  #, cast_counter
 
 
 def compute_expression(outer_expression: FJ.Expression, CT: dict[str, FJ.ClassDef]) -> FJ.Expression:
@@ -56,7 +56,7 @@ def replace_things(e0: FJ.Expression, arguments: list[FJ.Expression], xs: list[s
             match expression:
                 case FJ.Variable("super"):
                     new_super_counter = super_counter + 1
-                case FJ.Variable("this"):
+                case _:
                     new_super_counter = 0
             new_expression = replace_things(expression, arguments, xs, newClass, CT, super_counter)
             new_expressions = [replace_things(e, arguments, xs, newClass, CT, super_counter) for e in expressions]

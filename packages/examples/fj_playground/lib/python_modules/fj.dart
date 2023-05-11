@@ -1,9 +1,5 @@
 import "package:python_ffi/python_ffi.dart";
 
-class FJProgram extends PythonClass {
-  FJProgram.from(super.pythonClass) : super.from();
-}
-
 class FJModule extends PythonModule {
   FJModule.from(super.pythonModule) : super.from();
 
@@ -12,17 +8,18 @@ class FJModule extends PythonModule {
         FJModule.from,
       );
 
-  FJProgram fjParse(String sourceCodeTxt) => FJProgram.from(
-        getFunction("fj_parse").call(<Object?>[sourceCodeTxt]),
+  List<String> fjRun(
+    String sourceCodeTxt, {
+    bool withConstructor = false,
+    bool onlyTypecheck = false,
+  }) =>
+      List<String>.from(
+        getFunction("fj_run").call(
+          <Object?>[sourceCodeTxt],
+          kwargs: <String, bool>{
+            "with_constructor": withConstructor,
+            "only_typecheck": onlyTypecheck,
+          },
+        ),
       );
-
-  PythonClassInterface<PythonFfiDelegate<Object?>, Object?> typecheckProgram(
-    FJProgram program,
-  ) =>
-      getFunction("typecheck_program").call(<Object?>[program]);
-
-  PythonClassInterface<PythonFfiDelegate<Object?>, Object?> computeProgram(
-    FJProgram program,
-  ) =>
-      getFunction("compute_program").call(<Object?>[program]);
 }
