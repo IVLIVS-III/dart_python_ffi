@@ -6,4 +6,4 @@ Python project.
 
 ## Demo
 
-[![showcase](./resources/showcase.png)](https://user-images.githubusercontent.com/48645716/231783262-1c851119-b9ef-4cfb-bd2d-9177c34142fd.mp4 "showcase")
+[![showcase](./resources/showcase.png)](https://github.com/IVLIVS-III/dart_python_ffi/assets/48645716/6793e538-2ed1-4b9d-8ed6-8bc5e9e9e8fc "showcase")
