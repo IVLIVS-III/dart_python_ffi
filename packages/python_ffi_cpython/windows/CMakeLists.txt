@@ -20,6 +20,6 @@ set(python_ffi_cpython_bundled_libraries
   # This can be changed to accomodate different builds.
   $<TARGET_FILE:python_ffi_cpython>
   # Path to the Python DLL on Windows.
-  ${CMAKE_CURRENT_SOURCE_DIR}/python3.11.dll
+  ${CMAKE_CURRENT_SOURCE_DIR}/python311.dll
   PARENT_SCOPE
 )

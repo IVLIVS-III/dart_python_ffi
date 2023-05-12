@@ -42,7 +42,7 @@ class PythonFfiCPython extends _PythonFfiCPython with PythonFfiCPythonMixin {
     if (Platform.isMacOS) {
       dylibPath = "libpython$version.dylib";
     } else if (Platform.isWindows) {
-      dylibPath = "python$version.dll";
+      dylibPath = "python${version.replaceAll(".", "")}.dll";
     } else if (Platform.isLinux) {
       dylibPath = "libpython$version.so";
     } else {

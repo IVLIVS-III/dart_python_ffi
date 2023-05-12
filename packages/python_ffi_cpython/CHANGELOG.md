@@ -1,3 +1,7 @@
+## NEXT
+
+- Fixed a crash caused by the bundled windows python DLL.
+
 ## 0.2.2
 
 - Updated dependencies.
