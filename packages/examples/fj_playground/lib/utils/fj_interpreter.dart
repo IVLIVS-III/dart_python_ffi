@@ -15,6 +15,19 @@ class InterpreterResult {
 
   final bool withContructor;
   final bool onlyTypecheck;
+
+  String get text {
+    final StringBuffer buffer = StringBuffer();
+    if (!onlyTypecheck) {
+      buffer
+        ..writeln(program)
+        ..writeln()
+        ..write(computedExpression)
+        ..write(" :: ");
+    }
+    buffer.writeln(typingResult);
+    return buffer.toString();
+  }
 }
 
 Future<InterpreterResult> runFJInterpreter(

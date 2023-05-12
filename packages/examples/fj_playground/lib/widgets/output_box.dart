@@ -1,6 +1,9 @@
 import "dart:async";
+import "dart:io";
 
+import "package:file_picker/file_picker.dart";
 import "package:fj_playground/utils/fj_interpreter.dart";
+import "package:fj_playground/widgets/switch_chip.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:python_ffi/python_ffi.dart";
@@ -31,6 +34,39 @@ class _OutputBoxState extends State<OutputBox> {
 
   bool _withContructor = false;
   bool _onlyTypecheck = false;
+  InterpreterResult? _result;
+
+  Future<void> _export() async {
+    final String? result = _result?.text;
+    if (result == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Error: no output to export"),
+        ),
+      );
+      return;
+    }
+    final String? filePath = await FilePicker.platform.saveFile(
+      dialogTitle: "Export",
+      type: FileType.custom,
+      allowedExtensions: <String>["txt", "fj", "java"],
+      lockParentWindow: true,
+    );
+    if (filePath != null) {
+      final File file = File(filePath);
+      if (!file.existsSync()) {
+        await file.create(recursive: true);
+      }
+      await file.writeAsString(result);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Exported output successfully to '$filePath'"),
+          ),
+        );
+      }
+    }
+  }
 
   Future<void> _onControllerChanged() async {
     try {
@@ -82,32 +118,56 @@ class _OutputBoxState extends State<OutputBox> {
           ),
         ),
         child: Column(
-          children: [
-            SwitchListTile.adaptive(
-              value: _withContructor,
-              title: const Text("with constructor"),
-              onChanged: (bool? value) {
-                if (value == null) {
-                  return;
-                }
-                setState(() {
-                  _withContructor = value;
-                });
-                _onControllerChanged();
-              },
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: <Widget>[
+                    OutlinedButton.icon(
+                      onPressed: _export,
+                      icon: const Icon(Icons.save_as),
+                      label: const Text("Export"),
+                    ),
+                  ],
+                ),
+              ),
             ),
-            SwitchListTile.adaptive(
-              value: _onlyTypecheck,
-              title: const Text("only typecheck"),
-              onChanged: (bool? value) {
-                if (value == null) {
-                  return;
-                }
-                setState(() {
-                  _onlyTypecheck = value;
-                });
-                _onControllerChanged();
-              },
+            const Divider(),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: <Widget>[
+                    SwitchChip(
+                      value: _withContructor,
+                      label: "with constructor",
+                      onChanged: (bool value) {
+                        setState(() {
+                          _withContructor = value;
+                        });
+                        _onControllerChanged();
+                      },
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(right: 8),
+                    ),
+                    SwitchChip(
+                      value: _onlyTypecheck,
+                      label: "only typecheck",
+                      onChanged: (bool value) {
+                        setState(() {
+                          _onlyTypecheck = value;
+                        });
+                        _onControllerChanged();
+                      },
+                    ),
+                  ],
+                ),
+              ),
             ),
             const Divider(),
             Expanded(
@@ -121,10 +181,13 @@ class _OutputBoxState extends State<OutputBox> {
                     AsyncSnapshot<InterpreterResult> snapshot,
                   ) {
                     if (snapshot.hasError) {
+                      _result = null;
                       return ErrorOutput(error: snapshot.error);
                     } else if (snapshot.hasData) {
+                      _result = snapshot.requireData;
                       return ComputationOutput(result: snapshot.requireData);
                     } else {
+                      _result = null;
                       return const Center(
                         child: CircularProgressIndicator.adaptive(),
                       );
@@ -189,32 +252,21 @@ class ComputationOutput extends StatelessWidget {
   final InterpreterResult result;
 
   @override
-  Widget build(BuildContext context) {
-    final StringBuffer buffer = StringBuffer();
-    if (!result.onlyTypecheck) {
-      buffer
-        ..writeln(result.program)
-        ..writeln()
-        ..write(result.computedExpression)
-        ..write(" :: ");
-    }
-    buffer.writeln(result.typingResult);
-    return TextField(
-      controller: TextEditingController(text: buffer.toString()),
-      readOnly: true,
-      maxLines: null,
-      expands: true,
-      autofocus: false,
-      autocorrect: false,
-      decoration: const InputDecoration(
-        border: InputBorder.none,
-      ),
-      style: const TextStyle(
-        fontFamily: "FiraCode",
-        fontFamilyFallback: <String>["monospace"],
-      ),
-    );
-  }
+  Widget build(BuildContext context) => TextField(
+        controller: TextEditingController(text: result.text),
+        readOnly: true,
+        maxLines: null,
+        expands: true,
+        autofocus: false,
+        autocorrect: false,
+        decoration: const InputDecoration(
+          border: InputBorder.none,
+        ),
+        style: const TextStyle(
+          fontFamily: "FiraCode",
+          fontFamilyFallback: <String>["monospace"],
+        ),
+      );
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {

@@ -1,5 +1,7 @@
-## NEXT
+## 0.0.4
 
+- Added file system interactions.
+- Updated fj python project.
 - Updated dependencies.
 
 ## 0.0.3
