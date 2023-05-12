@@ -79,7 +79,6 @@ class _EditorPageState extends State<EditorPage> {
   }
 
   void _tab() {
-    debugPrint(_inputController.selection.toString());
     final int start = _inputController.selection.start;
     final int end = _inputController.selection.end;
     final String text = _inputController.text;
@@ -118,7 +117,7 @@ class _EditorPageState extends State<EditorPage> {
 
   @override
   Widget build(BuildContext context) {
-    final String? fileName = _filePath?.split("/").last;
+    final String? fileName = _filePath?.split(Platform.pathSeparator).last;
     final bool isNewFile = fileName == null;
     final String title = fileName ?? "new File";
     final String titleWithStar = title + (isEdited ? "*" : "");

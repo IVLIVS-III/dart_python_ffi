@@ -271,6 +271,9 @@ mixin PythonFfiCPythonMixin on PythonFfiCPythonBase {
     bindings.Py_DecRef(pythonModuleName);
 
     if (pyImport == nullptr) {
+      if (pythonErrorOccurred()) {
+        pythonErrorPrint();
+      }
       throw PythonFfiException("Failed to import module $moduleName");
     }
 

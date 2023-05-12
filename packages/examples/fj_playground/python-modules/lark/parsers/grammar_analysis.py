@@ -122,9 +122,8 @@ def calculate_sets(rules):
 
 
 class GrammarAnalyzer:
-    def __init__(self, parser_conf, debug=False, strict=False):
+    def __init__(self, parser_conf, debug=False):
         self.debug = debug
-        self.strict = strict
 
         root_rules = {start: Rule(NonTerminal('$root_' + start), [NonTerminal(start), Terminal('$END')])
                       for start in parser_conf.start}

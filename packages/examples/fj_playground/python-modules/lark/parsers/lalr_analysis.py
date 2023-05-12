@@ -91,7 +91,9 @@ class IntParseTable(ParseTable):
 def digraph(X, R, G):
     F = {}
     S = []
-    N = dict.fromkeys(X, 0)
+    N = {}
+    for x in X:
+        N[x] = 0
     for x in X:
         # this is always true for the first iteration, but N[x] may be updated in traverse below
         if N[x] == 0:
@@ -131,8 +133,8 @@ def traverse(x, S, N, X, R, G, F):
 
 
 class LALR_Analyzer(GrammarAnalyzer):
-    def __init__(self, parser_conf, debug=False, strict=False):
-        GrammarAnalyzer.__init__(self, parser_conf, debug, strict)
+    def __init__(self, parser_conf, debug=False):
+        GrammarAnalyzer.__init__(self, parser_conf, debug)
         self.nonterminal_transitions = []
         self.directly_reads = defaultdict(set)
         self.reads = defaultdict(set)
@@ -245,7 +247,9 @@ class LALR_Analyzer(GrammarAnalyzer):
         m = {}
         reduce_reduce = []
         for state in self.lr0_states:
-            actions = {la: (Shift, next_state.closure) for la, next_state in state.transitions.items()}
+            actions = {}
+            for la, next_state in state.transitions.items():
+                actions[la] = (Shift, next_state.closure)
             for la, rules in state.lookaheads.items():
                 if len(rules) > 1:
                     # Try to resolve conflict based on priority
@@ -256,18 +260,10 @@ class LALR_Analyzer(GrammarAnalyzer):
                         rules = [best[1]]
                     else:
                         reduce_reduce.append((state, la, rules))
-                        continue
-
-                rule ,= rules
                 if la in actions:
-                    if self.strict:
-                        raise GrammarError(f"Shift/Reduce conflict for terminal {la.name}. [strict-mode]\n ")
-                    elif self.debug:
+                    if self.debug:
                         logger.warning('Shift/Reduce conflict for terminal %s: (resolving as shift)', la.name)
-                        logger.warning(' * %s', rule)
-                    else:
-                        logger.debug('Shift/Reduce conflict for terminal %s: (resolving as shift)', la.name)
-                        logger.debug(' * %s', rule)
+                        logger.warning(' * %s', list(rules)[0])
                 else:
                     actions[la] = (Reduce, list(rules)[0])
             m[state] = { k.name: v for k, v in actions.items() }

@@ -1,5 +1,6 @@
 ## NEXT
 
+- Fixed an issue with loading python modules.
 - Updated dependencies.
 
 ## 0.2.2
