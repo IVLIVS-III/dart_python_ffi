@@ -6,16 +6,16 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{F1FFBADF-EEDA-4AFE-A79B-426DE74A0B55}
 AppName=FJ Playground
-AppVersion=0.0.1
-;AppVerName=FJ Playground 0.0.1
+AppVersion=0.0.4
+;AppVerName=FJ Playground 0.0.4
 AppPublisher=ivlivs.dev
 AppPublisherURL=https://github.com/IVLIVS-III/dart_python_ffi
 AppSupportURL=https://github.com/IVLIVS-III/dart_python_ffi
 AppUpdatesURL=https://github.com/IVLIVS-III/dart_python_ffi
 DefaultDirName={autopf}\FJ Playground
 DisableProgramGroupPage=yes
-LicenseFile=C:\Users\jb941\development\dart_python_ffi\LICENSE
-InfoBeforeFile=C:\Users\jb941\development\dart_python_ffi\packages\examples\fj_playground\README.md
+LicenseFile="..\..\..\LICENSE"
+InfoBeforeFile="README.md"
 ; Remove the following line to run in administrative install mode (install for all users.)
 PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
@@ -32,8 +32,8 @@ Name: "german"; MessagesFile: "compiler:Languages\German.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Users\jb941\development\dart_python_ffi\packages\examples\fj_playground\build\windows\runner\Release\fj_playground.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\jb941\development\dart_python_ffi\packages\examples\fj_playground\build\windows\runner\Release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "build\windows\runner\Release\fj_playground.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\windows\runner\Release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
@@ -42,4 +42,3 @@ Name: "{autodesktop}\FJ Playground"; Filename: "{app}\fj_playground.exe"; Tasks:
 
 [Run]
 Filename: "{app}\fj_playground.exe"; Description: "{cm:LaunchProgram,FJ Playground}"; Flags: nowait postinstall skipifsilent
-
