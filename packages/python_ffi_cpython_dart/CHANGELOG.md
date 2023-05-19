@@ -1,5 +1,6 @@
-## NEXT
+## 0.3.0
 
+- Updated to Dart 3.x.
 - Fixed an issue with loading python modules.
 - Updated dependencies.
 

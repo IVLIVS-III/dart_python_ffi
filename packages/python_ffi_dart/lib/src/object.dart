@@ -1,7 +1,7 @@
 part of python_ffi_dart;
 
 /// The Dart representation of a Python object.
-abstract class PythonObject
+abstract base class PythonObject
     extends PythonObjectInterface<PythonFfiDelegate<Object?>, Object?> {
   /// Creates a new [PythonObject] from a [PythonFfiDelegate].
   PythonObject.from(this._delegate)

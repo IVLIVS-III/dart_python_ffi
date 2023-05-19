@@ -7,35 +7,36 @@ packages:
 command:
   bootstrap:
     usePubspecOverrides: true
+    hooks:
+      post: melos run ffigen
 
 scripts:
   analyze:
     exec: dart analyze . --fatal-infos
   compile-dartpip:
     exec: dart compile exe bin/dartpip.dart -o ../../bin/dartpip
-    select-package:
+    packageFilters:
       scope: dartpip
   ffigen:
     exec: |
       dart run ffigen
       melos run post_ffigen
-    select-package:
-      scope: python_ffi_cpython_dart
+    packageFilters:
+      scope:
+        - python_ffi_cpython_dart
   post_ffigen:
-    exec: perl -0777 -pi -e "s/import 'dart:ffi' as ffi;/import 'dart:ffi' as ffi;\\n\\npart '..\/extensions\/bindings_extension.dart';/igs" lib/src/ffi/generated_bindings.g.dart
-    select-package:
-      scope: python_ffi_cpython_dart
+    exec: |
+      perl -0777 -pi -e "s/import 'dart:ffi' as ffi;/import 'dart:ffi' as ffi;\\n\\npart '..\/extensions\/bindings_extension.dart';/igs" lib/src/ffi/generated_bindings.g.dart
+      perl -0777 -pi -e "s/\\nclass/\\nbase class/igs" lib/src/ffi/generated_bindings.g.dart
+      perl -0777 -pi -e "s/\\nabstract class/\\nabstract class/igs" lib/src/ffi/generated_bindings.g.dart
+    packageFilters:
+      scope:
+        - python_ffi_cpython_dart
   format:
     exec: dart format . && git restore **/*.g.dart
   doc:
     exec: dart doc .
   outdated:
     exec: dart pub get && dart pub outdated
-  postbootstrap: melos run ffigen
   test:
     exec: dart test
-    select-package:
-      scope:
-        - basic_cli_adder
-        - basic_dataclass
-        - pytimeparse_dart

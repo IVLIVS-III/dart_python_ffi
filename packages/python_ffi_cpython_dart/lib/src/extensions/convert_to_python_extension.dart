@@ -51,9 +51,9 @@ extension _ConvertToPythonExtension on Object? {
     throw Exception("Unsupported type converting dart -> python: $runtimeType");
   }
 
-  // ignore: avoid_positional_boolean_parameters
   static Pointer<PyObject> fromBool(
     PythonFfiCPythonBase platform,
+    // ignore: avoid_positional_boolean_parameters
     bool value,
   ) =>
       value ? platform.bindings.Py_True : platform.bindings.Py_False;

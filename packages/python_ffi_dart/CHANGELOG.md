@@ -1,3 +1,7 @@
+## 0.3.0
+
+- Updated to Dart 3.x.
+
 ## 0.2.2
 
 - Updated dependencies.

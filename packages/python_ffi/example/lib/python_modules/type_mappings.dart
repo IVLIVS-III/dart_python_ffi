@@ -3,7 +3,7 @@ import "dart:typed_data";
 
 import "package:python_ffi/python_ffi.dart";
 
-class TypeMappingsModule extends PythonModule {
+final class TypeMappingsModule extends PythonModule {
   TypeMappingsModule.from(super.pythonModule) : super.from();
 
   static TypeMappingsModule import() => PythonModule.import(

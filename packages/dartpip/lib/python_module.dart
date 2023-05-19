@@ -5,7 +5,7 @@ extension _FileSystemEntityNameExtension on FileSystemEntity {
       path.substring(path.lastIndexOf(Platform.pathSeparator) + 1);
 }
 
-abstract class _PythonModule<T extends Object> {
+sealed class _PythonModule<T extends Object> {
   _PythonModule._(this.path);
 
   static _PythonModule<Object> fromPath(String path) {
@@ -71,7 +71,7 @@ abstract class _PythonModule<T extends Object> {
   Map<String, dynamic> get moduleInfo;
 }
 
-class _BuiltinPythonModule extends _PythonModule<ByteData> {
+final class _BuiltinPythonModule extends _PythonModule<ByteData> {
   _BuiltinPythonModule(super.path) : super._();
 
   @override
@@ -100,7 +100,7 @@ class _BuiltinPythonModule extends _PythonModule<ByteData> {
   }
 }
 
-class _SingleFilePythonModule extends _PythonModule<ByteData> {
+final class _SingleFilePythonModule extends _PythonModule<ByteData> {
   _SingleFilePythonModule(super.path) : super._();
 
   String get fileName => File(path).name;
@@ -117,7 +117,7 @@ class _SingleFilePythonModule extends _PythonModule<ByteData> {
   Map<String, dynamic> get moduleInfo => <String, dynamic>{"root": fileName};
 }
 
-class _FileNode {
+final class _FileNode {
   _FileNode({required this.name}) : children = <_FileNode>[];
 
   final String name;
@@ -145,7 +145,7 @@ class _FileNode {
         };
 }
 
-class _MultiFilePythonModule
+final class _MultiFilePythonModule
     extends _PythonModule<Map<List<String>, ByteData>> {
   _MultiFilePythonModule(super.path) : super._();
 

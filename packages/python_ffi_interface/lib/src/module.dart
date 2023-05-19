@@ -1,7 +1,7 @@
 part of python_ffi_interface;
 
 /// Abstract base class for any Dart representation of a Python module.
-abstract class PythonModuleInterface<P extends PythonFfiDelegate<R>,
+abstract base class PythonModuleInterface<P extends PythonFfiDelegate<R>,
     R extends Object?> extends PythonObjectInterface<P, R> {
   /// Creates a new Python module.
   PythonModuleInterface(

@@ -6,7 +6,7 @@ typedef PythonModuleFrom<T extends PythonModule> = T Function(
 );
 
 /// The Dart representation of a Python module.
-abstract class PythonModule extends PythonObject {
+abstract base class PythonModule extends PythonObject {
   /// Creates a new [PythonModule] from a [PythonFfiDelegate].
   PythonModule.from(this._moduleDelegate) : super.from(_moduleDelegate);
 

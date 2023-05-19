@@ -8,8 +8,6 @@ analyzer:
     strict-casts: true
     strict-inference: true
     strict-raw-types: true
-  strong-mode:
-    implicit-dynamic: false
 
 # Additional custom lints
 # https://dart-lang.github.io/linter/lints/

@@ -3,7 +3,7 @@ part of python_ffi_interface;
 /// Base class for all Exceptions thrown by the Python FFI.
 ///
 /// It is **NOT** a representation of a Python exception.
-class PythonFfiException implements Exception {
+base class PythonFfiException implements Exception {
   /// Creates a new [PythonFfiException].
   PythonFfiException(this.message);
 
@@ -16,7 +16,7 @@ class PythonFfiException implements Exception {
 
 /// Thrown when an attribute is accessed that does not exist on the underlying
 /// Python object.
-class UnknownAttributeException extends PythonFfiException {
+final class UnknownAttributeException extends PythonFfiException {
   /// Creates a new [UnknownAttributeException].
   UnknownAttributeException(this.attributeName)
       : super("Failed to get attribute '$attributeName'");
@@ -26,7 +26,7 @@ class UnknownAttributeException extends PythonFfiException {
 }
 
 /// Abstract base class for any Dart representation of a Python exception.
-abstract class PythonExceptionInterface<P extends PythonFfiDelegate<R>,
+abstract base class PythonExceptionInterface<P extends PythonFfiDelegate<R>,
         R extends Object?> extends PythonObjectInterface<P, R>
     implements Exception {
   /// Creates a new Python exception.
@@ -46,7 +46,16 @@ abstract class PythonExceptionInterface<P extends PythonFfiDelegate<R>,
   /// Gets the traceback of the exception.
   Object? get traceback;
 
-  // TODO: provide a better implementation
   @override
-  String toString() => "PythonExceptionInterface";
+  String toString() {
+    final StringBuffer buffer = StringBuffer("PythonException($type)");
+    if (value != null) {
+      buffer.write(": $value");
+    }
+    if (traceback != null) {
+      buffer.write("at $traceback");
+    }
+    buffer.writeln();
+    return buffer.toString();
+  }
 }

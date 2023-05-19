@@ -1,7 +1,7 @@
 part of python_ffi_interface;
 
 /// Represents a Python iterable.
-class PythonIterable<T extends Object?, P extends PythonFfiDelegate<R>,
+final class PythonIterable<T extends Object?, P extends PythonFfiDelegate<R>,
         R extends Object?> extends PythonClassInterface<P, R>
     with IterableMixin<T>
     implements Iterable<T> {

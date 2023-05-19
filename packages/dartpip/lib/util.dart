@@ -46,13 +46,11 @@ Future<void> _bundleModule({
         pythonModule: pythonModule,
         appRoot: appRoot,
       );
-      break;
     case _kAppTypeConsole:
       moduleBundle = _ConsoleModuleBundle<Object>(
         pythonModule: pythonModule,
         appRoot: appRoot,
       );
-      break;
   }
 
   await moduleBundle.export();

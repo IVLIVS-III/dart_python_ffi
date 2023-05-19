@@ -3,7 +3,7 @@ part of python_ffi_cpython_dart;
 /// Base class for the macOS and Windows implementation of [PythonFfiDelegate].
 ///
 /// This is shared between the pure Dart and Flutter implementations.
-abstract class PythonFfiCPythonBase
+abstract base class PythonFfiCPythonBase
     extends PythonFfiDelegate<Pointer<PyObject>> {
   final Set<PythonModuleDefinition> _pythonModules = <PythonModuleDefinition>{};
 
@@ -27,7 +27,7 @@ abstract class PythonFfiCPythonBase
 
 // ignore: comment_references
 /// The macOS and Windows implementation of [PythonFfiDelegate].
-class PythonFfiCPythonDart extends PythonFfiCPythonBase
+final class PythonFfiCPythonDart extends PythonFfiCPythonBase
     with PythonFfiCPythonMixin {
   /// Creates a new [PythonFfiCPythonDart] instance.
   PythonFfiCPythonDart(
@@ -151,7 +151,7 @@ class PythonFfiCPythonDart extends PythonFfiCPythonBase
 /// Mixin for the macOS and Windows implementation of [PythonFfiDelegate].
 ///
 /// This is shared between the pure Dart and Flutter implementations.
-mixin PythonFfiCPythonMixin on PythonFfiCPythonBase {
+base mixin PythonFfiCPythonMixin on PythonFfiCPythonBase {
   /// A handle to the Python C-bindings.
   DartPythonCBindings? _bindings;
 

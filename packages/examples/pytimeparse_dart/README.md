@@ -87,7 +87,7 @@ Each Python module needs its corresponding Dart Module-definition:
 
 import "package:python_ffi_dart/python_ffi_dart.dart";
 
-class PyTimeParse extends PythonModule {
+final class PyTimeParse extends PythonModule {
   PyTimeParse.from(super.pythonModule) : super.from();
 
   static PyTimeParse import() =>

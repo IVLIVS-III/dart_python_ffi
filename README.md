@@ -30,7 +30,7 @@ Easily import any pure Python module into your Dart or Flutter project.
     3. [Importing a Python module from pypi](#importing-a-python-module-from-pypi)
     4. [Converting all supported types between Dart and Python](#converting-all-supported-types-between-dart-and-python)
     5. [Importing multiple Python modules in a Flutter app](#importing-multiple-python-modules-in-a-flutter-app)
-    6. [Importing incomplete Python modules in a Flutter app (creating an incomplete Class-definition)](#importing-incomplete-python-modules-in-a-flutter-app-creating-an-incomplete-class-definition)
+    6. [Powering a Flutter GUI-app with a Python backend](#powering-a-flutter-gui-app-with-a-python-backend)
 4. [Type mappings](#type-mappings)
 5. [Package status](#package-status)
 6. [Usage](#usage)
@@ -117,7 +117,7 @@ getter / setter.
 ```dart
 import "package:python_ffi/python_ffi.dart";
 
-class JsonParserModule extends PythonModule {
+final class JsonParserModule extends PythonModule {
   JsonParserModule.from(super.pythonModule) : super.from();
 
   static JsonParserModule import() =>
@@ -141,7 +141,7 @@ parent module:
 ```dart
 import "package:python_ffi/python_ffi.dart";
 
-class LiblaxParserModule extends PythonModule {
+final class LiblaxParserModule extends PythonModule {
   LiblaxParserModule.from(super.pythonModule) : super.from();
 
   static LiblaxParserModule import() =>
@@ -154,7 +154,7 @@ class LiblaxParserModule extends PythonModule {
       getFunction("run").call(<Object?>[data]).toString();
 }
 
-class LiblaxModule extends PythonModule {
+final class LiblaxModule extends PythonModule {
   LiblaxModule.from(super.pythonModule) : super.from();
 
   static LiblaxModule import() =>
@@ -192,7 +192,7 @@ Python method `__str__` will be invoked, if available.
 ```dart
 import "package:python_ffi/python_ffi.dart";
 
-class Coordinate extends PythonClass {
+final class Coordinate extends PythonClass {
   factory Coordinate(double latitude, double longitude) {
     final Coordinate coordinate = PythonFfi.instance.importClass(
       "structs",
@@ -220,7 +220,7 @@ to create a new Dart instance from the Python instance:
 ```dart
 import "package:python_ffi/python_ffi.dart";
 
-class GeocodingModule extends PythonModule {
+final class GeocodingModule extends PythonModule {
   GeocodingModule.from(super.pythonModule) : super.from();
 
   static GeocodingModule import() =>
@@ -326,7 +326,7 @@ See the [`python_ffi_dart` example](packages/python_ffi_dart/example/README.md).
 
 See the [`python_ffi` example](packages/python_ffi/example/README.md).
 
-### Importing incomplete Python modules in a Flutter app (creating an incomplete Class-definition)
+### Powering a Flutter GUI-app with a Python backend
 
 See [`fj_playground`](packages/examples/fj_playground/README.md).
 
@@ -375,7 +375,6 @@ case.*
 | [python_ffi_dart](https://pub.dev/packages/python_ffi_dart)                             | [![pub package](https://img.shields.io/pub/v/python_ffi_dart.svg)](https://pub.dev/packages/python_ffi_dart)                             | 🟩     | A Python-FFI for Dart, intended for Dart-only applications outside of a Flutter project. |
 | [python_ffi_cpython](https://pub.dev/packages/python_ffi_cpython)                       | [![pub package](https://img.shields.io/pub/v/python_ffi_cpython.svg)](https://pub.dev/packages/python_ffi_cpython)                       | 🟥🟦   | The macOS, Windows and Linux implementation of `python_ffi`, a Python-FFI for Dart.      |
 | [python_ffi_cpython_dart](https://pub.dev/packages/python_ffi_cpython_dart)             | [![pub package](https://img.shields.io/pub/v/python_ffi_cpython_dart.svg)](https://pub.dev/packages/python_ffi_cpython_dart)             | 🟥     | The macOS, Windows and Linux implementation of `python_ffi_dart`, a Python-FFI for Dart. |
-| [python_ffi_platform_interface](https://pub.dev/packages/python_ffi_platform_interface) | [![pub package](https://img.shields.io/pub/v/python_ffi_platform_interface.svg)](https://pub.dev/packages/python_ffi_platform_interface) | 🟥🟦   | The platform interface for `python_ffi`, a Python-FFI for Dart.                          |
 | [python_ffi_interface](https://pub.dev/packages/python_ffi_interface)                   | [![pub package](https://img.shields.io/pub/v/python_ffi_interface.svg)](https://pub.dev/packages/python_ffi_interface)                   | 🟥     | A base interface for `python_ffi_dart`, a Python-FFI for Dart.                           |
 | [python_ffi_lint](https://pub.dev/packages/python_ffi_lint)                             | [![pub package](https://img.shields.io/pub/v/python_ffi_lint.svg)](https://pub.dev/packages/python_ffi_lint)                             | 🟥     | Analysis options used across the Python-FFI for Dart project.                            |
 | [python_ffi_lint_dart](https://pub.dev/packages/python_ffi_lint_dart)                   | [![pub package](https://img.shields.io/pub/v/python_ffi_lint_dart.svg)](https://pub.dev/packages/python_ffi_lint_dart)                   | 🟥     | Analysis options used across the Python-FFI for Dart project.                            |
@@ -444,9 +443,7 @@ used for developing, testing and showcasing the Python FFI.
 │  │   python_ffi_cpython          │   │  │
 │  │   │          │                │   │  │
 │  │   │     python_ffi_cpython_dart   │  │
-│  │   │                           │   │  │
-│  python_ffi_platform_interface   │   │  │
-│                       │          │   │  │
+│  └───┴────────────┐              │   │  │
 │                   python_ffi_interface  │
 └─────────────────────────────────────────┘       dartpip
                                        │             │
@@ -458,6 +455,7 @@ used for developing, testing and showcasing the Python FFI.
 ## Limitations
 
 - Python `print` is not supported when used in a Flutter environment.
+- The Python stdlib must be installed on the target system and available in the `PATH`.
 
 ## Roadmap
 

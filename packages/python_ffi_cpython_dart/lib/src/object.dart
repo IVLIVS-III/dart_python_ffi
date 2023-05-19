@@ -29,7 +29,7 @@ class _PythonObjectCPythonRefcountUtil {
   );
 }
 
-class _PythonObjectCPython
+final class _PythonObjectCPython
     extends PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>>
     with _PythonObjectCPythonMixin {
   _PythonObjectCPython(super.platform, super.reference)
@@ -39,7 +39,7 @@ class _PythonObjectCPython
         );
 }
 
-mixin _PythonObjectCPythonMixin
+base mixin _PythonObjectCPythonMixin
     on PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>> {
   static T staticCall<T extends Object?>(
     PythonFfiCPythonBase platform,

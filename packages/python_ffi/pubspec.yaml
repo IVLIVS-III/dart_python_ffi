@@ -1,11 +1,11 @@
 name: python_ffi
 description: A Python-FFI for Dart, intended for use in a Flutter project.
-version: 0.2.2
+version: 0.3.0
 homepage: https://github.com/IVLIVS-III/dart_python_ffi
 
 environment:
-  sdk: '>=2.18.2 <3.0.0'
-  flutter: ">=2.5.0"
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: ">=3.10.0"
 
 dependencies:
   flutter:
@@ -13,12 +13,13 @@ dependencies:
   plugin_platform_interface: ^2.1.4
   python_ffi_cpython: ^0.2.2
   python_ffi_dart: ^0.2.2
-  python_ffi_platform_interface: ^0.0.2+1
+  python_ffi_interface: ^0.0.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   python_ffi_lint: ^0.0.1
+  test: ^1.24.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

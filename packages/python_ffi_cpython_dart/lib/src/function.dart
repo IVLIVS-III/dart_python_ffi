@@ -1,6 +1,6 @@
 part of python_ffi_cpython_dart;
 
-class _PythonFunctionCPython
+final class _PythonFunctionCPython
     extends PythonFunctionInterface<PythonFfiCPythonBase, Pointer<PyObject>>
     with _PythonObjectCPythonMixin {
   _PythonFunctionCPython(super.platform, super.reference)

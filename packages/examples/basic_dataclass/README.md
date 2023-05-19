@@ -97,7 +97,7 @@ Each Python class needs its corresponding Dart Class-definition:
 
 import "package:python_ffi_dart/python_ffi_dart.dart";
 
-class Person extends PythonClass {
+final class Person extends PythonClass {
   factory Person(String name) =>
       PythonFfiDart.instance.importClass(
         "basic_dataclass",

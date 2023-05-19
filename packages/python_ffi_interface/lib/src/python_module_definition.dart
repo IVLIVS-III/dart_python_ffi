@@ -3,7 +3,7 @@ part of python_ffi_interface;
 /// Represents a Python source entity.
 ///
 /// This can be a file or a directory.
-abstract class PythonSourceEntity {
+sealed class PythonSourceEntity {
   /// Creates a new Python source entity from a path element.
   PythonSourceEntity(this.name);
 
@@ -17,7 +17,7 @@ abstract class PythonSourceEntity {
 /// Represents a Python source file entity.
 ///
 /// This can be a file or a base64 String.
-abstract class PythonSourceFileEntity extends PythonSourceEntity {
+sealed class PythonSourceFileEntity extends PythonSourceEntity {
   /// Creates a new Python source file entity from a file name.
   PythonSourceFileEntity(super.name);
 
@@ -28,13 +28,13 @@ abstract class PythonSourceFileEntity extends PythonSourceEntity {
 }
 
 /// Represents a Python source file.
-class SourceFile extends PythonSourceFileEntity {
+final class SourceFile extends PythonSourceFileEntity {
   /// Creates a new Python source file from a file name.
   SourceFile(super.name);
 }
 
 /// Represents a Python source file as a base64 String.
-class SourceBase64 extends PythonSourceFileEntity {
+final class SourceBase64 extends PythonSourceFileEntity {
   /// Creates a new Python source file from a file name and base64 String.
   SourceBase64(super.name, this.base64);
 
@@ -43,7 +43,7 @@ class SourceBase64 extends PythonSourceFileEntity {
 }
 
 /// Represents a Python source directory.
-class SourceDirectory extends PythonSourceEntity {
+final class SourceDirectory extends PythonSourceEntity {
   /// Creates a new Python source directory from a directory name.
   SourceDirectory(super.name);
 
@@ -72,7 +72,7 @@ class SourceDirectory extends PythonSourceEntity {
 /// Represents a Python module definition.
 ///
 /// This is used to generate the Python module.
-class PythonModuleDefinition {
+final class PythonModuleDefinition {
   /// Creates a new Python module definition.
   PythonModuleDefinition({
     required this.name,

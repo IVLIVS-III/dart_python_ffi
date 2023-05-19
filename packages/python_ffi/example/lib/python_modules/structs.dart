@@ -2,7 +2,7 @@
 
 import "package:python_ffi/python_ffi.dart";
 
-class Coordinate extends PythonClass {
+final class Coordinate extends PythonClass {
   factory Coordinate(double latitude, double longitude) {
     final Coordinate coordinate = PythonFfi.instance.importClass(
       "structs",
@@ -23,7 +23,7 @@ class Coordinate extends PythonClass {
   String toString() => "Coordinate(latitude: $latitude, longitude: $longitude)";
 }
 
-class Place extends PythonClass {
+final class Place extends PythonClass {
   factory Place(String name, Coordinate coordinate) {
     final Place place = PythonFfi.instance.importClass(
       "structs",
@@ -44,7 +44,7 @@ class Place extends PythonClass {
   String toString() => "Place(name: $name, coordinate: $coordinate)";
 }
 
-class StructsModule extends PythonModule {
+final class StructsModule extends PythonModule {
   StructsModule.from(super.pythonModule) : super.from();
 
   static StructsModule import() => PythonFfi.instance.importModule(

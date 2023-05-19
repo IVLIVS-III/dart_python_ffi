@@ -1,6 +1,6 @@
 part of dartpip;
 
-abstract class _ModuleBundle<T extends _PythonModule<Object>> {
+sealed class _ModuleBundle<T extends _PythonModule<Object>> {
   _ModuleBundle({
     required this.pythonModule,
     required this.appRoot,

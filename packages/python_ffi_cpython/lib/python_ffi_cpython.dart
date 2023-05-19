@@ -9,10 +9,11 @@ import "package:flutter/foundation.dart";
 import "package:flutter/services.dart";
 import "package:path_provider/path_provider.dart" as path_provider;
 import "package:python_ffi_cpython_dart/python_ffi_cpython_dart.dart";
-import "package:python_ffi_platform_interface/python_ffi_platform_interface.dart";
+import "package:python_ffi_interface/python_ffi_interface.dart";
 
-abstract class _PythonFfiCPython extends PythonFfiPlatform<Pointer<PyObject>>
-    implements PythonFfiCPythonBase {
+/// The macOS and Windows implementation of [PythonFfiPlatform].
+final class PythonFfiCPython extends PythonFfiCPythonBase
+    with PythonFfiCPythonMixin {
   @override
   Future<Directory> getApplicationSupportDirectory() async =>
       path_provider.getApplicationSupportDirectory();
@@ -26,13 +27,10 @@ abstract class _PythonFfiCPython extends PythonFfiPlatform<Pointer<PyObject>>
     }
     throw Exception("Unsupported source file type: $sourceFile");
   }
-}
 
-/// The macOS and Windows implementation of [PythonFfiPlatform].
-class PythonFfiCPython extends _PythonFfiCPython with PythonFfiCPythonMixin {
   /// Registers this class as the default instance of [PythonFfiPlatform].
   static void registerWith() {
-    PythonFfiPlatform.instance = PythonFfiCPython();
+    PythonFfiDelegate.instance = PythonFfiCPython();
   }
 
   @override

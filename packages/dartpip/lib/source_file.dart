@@ -1,6 +1,6 @@
 part of dartpip;
 
-class _SourceFile extends FileSystemEntity implements File {
+final class _SourceFile extends FileSystemEntity implements File {
   _SourceFile(String filePath) : _file = File(filePath);
 
   final File _file;

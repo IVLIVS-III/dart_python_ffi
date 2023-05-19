@@ -8,8 +8,6 @@ analyzer:
     strict-casts: true
     strict-inference: true
     strict-raw-types: true
-  strong-mode:
-    implicit-dynamic: false
 
 # Additional custom lints
 # https://dart-lang.github.io/linter/lints/
@@ -24,14 +22,11 @@ linter:
     - close_sinks
     - collection_methods_unrelated_type
     - comment_references
-    # TODO: enable once released (https://dart-lang.github.io/linter/lints/deprecated_member_use_from_same_package.html)
-    # - deprecated_member_use_from_same_package
+    - deprecated_member_use_from_same_package
     - diagnostic_describe_all_properties
     - discarded_futures
-    # TODO: enable once released (https://dart-lang.github.io/linter/lints/implicit_reopen.html)
-    # - implicit_reopen
-    # TODO: enable once released (https://dart-lang.github.io/linter/lints/invalid_case_patterns.html)
-    # - invalid_case_patterns
+    - implicit_reopen
+    - invalid_case_patterns
     - literal_only_boolean_expressions
     - no_adjacent_strings_in_list
     - test_types_in_equals
@@ -94,12 +89,10 @@ linter:
     - sort_unnamed_constructors_first
     - tighten_type_of_initializing_formals
     - type_annotate_public_apis
-    # TODO: enable once released (https://dart-lang.github.io/linter/lints/type_literal_in_constant_pattern.html)
-    # - type_literal_in_constant_pattern
+    - type_literal_in_constant_pattern
     - unawaited_futures
     - unnecessary_await_in_return
-    # TODO: enable once released (https://dart-lang.github.io/linter/lints/unnecessary_breaks.html)
-    # - unnecessary_breaks
+    - unnecessary_breaks
     - unnecessary_lambdas
     - unnecessary_null_aware_operator_on_extension_on_nullable
     - unnecessary_null_checks

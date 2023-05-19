@@ -1,6 +1,6 @@
 part of python_ffi_cpython_dart;
 
-class _PythonClassDefinitionCPython extends PythonClassDefinitionInterface<
+base class _PythonClassDefinitionCPython extends PythonClassDefinitionInterface<
     PythonFfiCPythonBase, Pointer<PyObject>> with _PythonObjectCPythonMixin {
   _PythonClassDefinitionCPython(super.platform, super.reference)
       : super(
@@ -64,7 +64,7 @@ class _PythonClassDefinitionCPython extends PythonClassDefinitionInterface<
       );
 }
 
-class _PythonClassCPython
+base class _PythonClassCPython
     extends PythonClassInterface<PythonFfiCPythonBase, Pointer<PyObject>>
     with _PythonObjectCPythonMixin {
   _PythonClassCPython(super.platform, super.reference)

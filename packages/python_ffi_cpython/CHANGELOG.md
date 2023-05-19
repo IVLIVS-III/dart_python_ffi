@@ -1,5 +1,6 @@
-## NEXT
+## 0.3.0
 
+- Updated to Dart 3.x.
 - Fixed a crash caused by the bundled windows python DLL.
 
 ## 0.2.2

@@ -1,7 +1,7 @@
 part of python_ffi_interface;
 
 /// Abstract base class for all platform implementations of the Python FFI.
-abstract class PythonFfiDelegate<R extends Object?> extends BaseInterface {
+abstract base class PythonFfiDelegate<R extends Object?> extends BaseInterface {
   /// Creates a new Python FFI delegate.
   PythonFfiDelegate() : super(token: _token);
 

@@ -1,6 +1,6 @@
 import "package:python_ffi/python_ffi.dart";
 
-class FJModule extends PythonModule {
+final class FJModule extends PythonModule {
   FJModule.from(super.pythonModule) : super.from();
 
   static FJModule import() => PythonModule.import(

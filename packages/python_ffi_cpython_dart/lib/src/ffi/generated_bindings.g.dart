@@ -7,7 +7,7 @@ import 'dart:ffi' as ffi;
 part '../extensions/bindings_extension.dart';
 
 /// Bindings to Python C interface
-class DartPythonCBindings {
+base class DartPythonCBindings {
   /// Holds the symbol lookup function.
   final ffi.Pointer<T> Function<T extends ffi.NativeType>(String symbolName)
       _lookup;
@@ -12876,7 +12876,7 @@ class DartPythonCBindings {
       .asFunction<ffi.Pointer<PyObject> Function(int, int)>();
 }
 
-class PyModuleDef extends ffi.Struct {
+final class PyModuleDef extends ffi.Struct {
   external PyModuleDef_Base m_base;
 
   external ffi.Pointer<ffi.Char> m_name;
@@ -12897,7 +12897,7 @@ class PyModuleDef extends ffi.Struct {
   external freefunc m_free;
 }
 
-class PyModuleDef_Base extends ffi.Struct {
+final class PyModuleDef_Base extends ffi.Struct {
   external PyObject ob_base;
 
   external ffi.Pointer<ffi.NativeFunction<ffi.Pointer<PyObject> Function()>>
@@ -12911,7 +12911,7 @@ class PyModuleDef_Base extends ffi.Struct {
 
 typedef PyObject = _object;
 
-class _object extends ffi.Struct {
+final class _object extends ffi.Struct {
   @Py_ssize_t()
   external int ob_refcnt;
 
@@ -12923,7 +12923,7 @@ typedef ssize_t = __darwin_ssize_t;
 typedef __darwin_ssize_t = ffi.Long;
 typedef PyTypeObject = _typeobject;
 
-class _typeobject extends ffi.Struct {
+final class _typeobject extends ffi.Struct {
   external PyVarObject ob_base;
 
   external ffi.Pointer<ffi.Char> tp_name;
@@ -13030,7 +13030,7 @@ class _typeobject extends ffi.Struct {
   external vectorcallfunc tp_vectorcall;
 }
 
-class PyVarObject extends ffi.Struct {
+final class PyVarObject extends ffi.Struct {
   external PyObject1 ob_base;
 
   @Py_ssize_t()
@@ -13049,7 +13049,7 @@ typedef setattrfunc = ffi.Pointer<
         ffi.Int Function(ffi.Pointer<PyObject1>, ffi.Pointer<ffi.Char>,
             ffi.Pointer<PyObject1>)>>;
 
-class PyAsyncMethods extends ffi.Struct {
+final class PyAsyncMethods extends ffi.Struct {
   external unaryfunc am_await;
 
   external unaryfunc am_aiter;
@@ -13079,7 +13079,7 @@ typedef reprfunc = ffi.Pointer<
     ffi.NativeFunction<
         ffi.Pointer<PyObject1> Function(ffi.Pointer<PyObject1>)>>;
 
-class PyNumberMethods extends ffi.Struct {
+final class PyNumberMethods extends ffi.Struct {
   external binaryfunc nb_add;
 
   external binaryfunc nb_subtract;
@@ -13164,7 +13164,7 @@ typedef ternaryfunc = ffi.Pointer<
 typedef inquiry
     = ffi.Pointer<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<PyObject1>)>>;
 
-class PySequenceMethods extends ffi.Struct {
+final class PySequenceMethods extends ffi.Struct {
   external lenfunc sq_length;
 
   external binaryfunc sq_concat;
@@ -13199,7 +13199,7 @@ typedef objobjproc = ffi.Pointer<
     ffi.NativeFunction<
         ffi.Int Function(ffi.Pointer<PyObject1>, ffi.Pointer<PyObject1>)>>;
 
-class PyMappingMethods extends ffi.Struct {
+final class PyMappingMethods extends ffi.Struct {
   external lenfunc mp_length;
 
   external binaryfunc mp_subscript;
@@ -13223,7 +13223,7 @@ typedef setattrofunc = ffi.Pointer<
         ffi.Int Function(ffi.Pointer<PyObject1>, ffi.Pointer<PyObject1>,
             ffi.Pointer<PyObject1>)>>;
 
-class PyBufferProcs extends ffi.Struct {
+final class PyBufferProcs extends ffi.Struct {
   external getbufferproc bf_getbuffer;
 
   external releasebufferproc bf_releasebuffer;
@@ -13234,7 +13234,7 @@ typedef getbufferproc = ffi.Pointer<
         ffi.Int Function(
             ffi.Pointer<PyObject1>, ffi.Pointer<Py_buffer>, ffi.Int)>>;
 
-class Py_buffer extends ffi.Struct {
+final class Py_buffer extends ffi.Struct {
   external ffi.Pointer<ffi.Void> buf;
 
   external ffi.Pointer<PyObject1> obj;
@@ -13283,7 +13283,7 @@ typedef iternextfunc = ffi.Pointer<
     ffi.NativeFunction<
         ffi.Pointer<PyObject1> Function(ffi.Pointer<PyObject1>)>>;
 
-class PyMethodDef extends ffi.Struct {
+final class PyMethodDef extends ffi.Struct {
   external ffi.Pointer<ffi.Char> ml_name;
 
   external PyCFunction ml_meth;
@@ -13299,9 +13299,9 @@ typedef PyCFunction = ffi.Pointer<
         ffi.Pointer<PyObject1> Function(
             ffi.Pointer<PyObject1>, ffi.Pointer<PyObject1>)>>;
 
-class PyMemberDef extends ffi.Opaque {}
+final class PyMemberDef extends ffi.Opaque {}
 
-class PyGetSetDef extends ffi.Struct {
+final class PyGetSetDef extends ffi.Struct {
   external ffi.Pointer<ffi.Char> name;
 
   external getter get1;
@@ -13352,14 +13352,14 @@ typedef vectorcallfunc = ffi.Pointer<
             ffi.Size nargsf,
             ffi.Pointer<PyObject1> kwnames)>>;
 
-class PyModuleDef_Slot extends ffi.Struct {
+final class PyModuleDef_Slot extends ffi.Struct {
   @ffi.Int()
   external int slot;
 
   external ffi.Pointer<ffi.Void> value;
 }
 
-class _longobject extends ffi.Struct {
+final class _longobject extends ffi.Struct {
   external PyVarObject ob_base;
 
   @ffi.Array.multi([1])
@@ -13368,7 +13368,7 @@ class _longobject extends ffi.Struct {
 
 typedef digit = ffi.Uint32;
 
-class PyCodeObject extends ffi.Struct {
+final class PyCodeObject extends ffi.Struct {
   external PyVarObject ob_base;
 
   external ffi.Pointer<PyObject> co_consts;
@@ -13443,9 +13443,9 @@ class PyCodeObject extends ffi.Struct {
   external ffi.Array<ffi.Char> co_code_adaptive;
 }
 
-class _frame extends ffi.Opaque {}
+final class _frame extends ffi.Opaque {}
 
-class _ts extends ffi.Struct {
+final class _ts extends ffi.Struct {
   external ffi.Pointer<PyThreadState> prev;
 
   external ffi.Pointer<PyThreadState> next;
@@ -13546,9 +13546,9 @@ class _ts extends ffi.Struct {
 typedef PyThreadState = _ts;
 typedef PyInterpreterState = _is;
 
-class _is extends ffi.Opaque {}
+final class _is extends ffi.Opaque {}
 
-class _PyCFrame extends ffi.Struct {
+final class _PyCFrame extends ffi.Struct {
   @ffi.Uint8()
   external int use_tracing;
 
@@ -13557,7 +13557,7 @@ class _PyCFrame extends ffi.Struct {
   external ffi.Pointer<_PyCFrame> previous;
 }
 
-class _PyInterpreterFrame extends ffi.Opaque {}
+final class _PyInterpreterFrame extends ffi.Opaque {}
 
 typedef Py_tracefunc = ffi.Pointer<
     ffi.NativeFunction<
@@ -13566,13 +13566,13 @@ typedef Py_tracefunc = ffi.Pointer<
 typedef PyFrameObject = _frame;
 typedef _PyErr_StackItem = _err_stackitem;
 
-class _err_stackitem extends ffi.Struct {
+final class _err_stackitem extends ffi.Struct {
   external ffi.Pointer<PyObject> exc_value;
 
   external ffi.Pointer<_err_stackitem> previous_item;
 }
 
-class PyTraceInfo extends ffi.Struct {
+final class PyTraceInfo extends ffi.Struct {
   external ffi.Pointer<PyCodeObject> code;
 
   external PyCodeAddressRange bounds;
@@ -13580,7 +13580,7 @@ class PyTraceInfo extends ffi.Struct {
 
 typedef PyCodeAddressRange = _line_offsets;
 
-class _line_offsets extends ffi.Struct {
+final class _line_offsets extends ffi.Struct {
   @ffi.Int()
   external int ar_start;
 
@@ -13593,7 +13593,7 @@ class _line_offsets extends ffi.Struct {
   external _opaque opaque;
 }
 
-class _opaque extends ffi.Struct {
+final class _opaque extends ffi.Struct {
   @ffi.Int()
   external int computed_line;
 
@@ -13604,7 +13604,7 @@ class _opaque extends ffi.Struct {
 
 typedef _PyStackChunk = _stack_chunk;
 
-class _stack_chunk extends ffi.Struct {
+final class _stack_chunk extends ffi.Struct {
   external ffi.Pointer<_stack_chunk> previous;
 
   @ffi.Size()
@@ -13617,14 +13617,14 @@ class _stack_chunk extends ffi.Struct {
   external ffi.Array<ffi.Pointer<PyObject>> data;
 }
 
-class PyType_Slot extends ffi.Struct {
+final class PyType_Slot extends ffi.Struct {
   @ffi.Int()
   external int slot;
 
   external ffi.Pointer<ffi.Void> pfunc;
 }
 
-class PyType_Spec extends ffi.Struct {
+final class PyType_Spec extends ffi.Struct {
   external ffi.Pointer<ffi.Char> name;
 
   @ffi.Int()
@@ -13639,7 +13639,7 @@ class PyType_Spec extends ffi.Struct {
   external ffi.Pointer<PyType_Slot> slots;
 }
 
-class _Py_HashSecret_t extends ffi.Union {
+final class _Py_HashSecret_t extends ffi.Union {
   @ffi.Array.multi([24])
   external ffi.Array<ffi.UnsignedChar> uc;
 
@@ -13652,7 +13652,7 @@ class _Py_HashSecret_t extends ffi.Union {
   external UnnamedStruct4 expat;
 }
 
-class UnnamedStruct1 extends ffi.Struct {
+final class UnnamedStruct1 extends ffi.Struct {
   @Py_hash_t()
   external int prefix;
 
@@ -13660,7 +13660,7 @@ class UnnamedStruct1 extends ffi.Struct {
   external int suffix;
 }
 
-class UnnamedStruct2 extends ffi.Struct {
+final class UnnamedStruct2 extends ffi.Struct {
   @ffi.Uint64()
   external int k0;
 
@@ -13668,7 +13668,7 @@ class UnnamedStruct2 extends ffi.Struct {
   external int k1;
 }
 
-class UnnamedStruct3 extends ffi.Struct {
+final class UnnamedStruct3 extends ffi.Struct {
   @ffi.Array.multi([16])
   external ffi.Array<ffi.UnsignedChar> padding;
 
@@ -13676,7 +13676,7 @@ class UnnamedStruct3 extends ffi.Struct {
   external int suffix;
 }
 
-class UnnamedStruct4 extends ffi.Struct {
+final class UnnamedStruct4 extends ffi.Struct {
   @ffi.Array.multi([16])
   external ffi.Array<ffi.UnsignedChar> padding;
 
@@ -13684,7 +13684,7 @@ class UnnamedStruct4 extends ffi.Struct {
   external int hashsalt;
 }
 
-class PyHash_FuncDef extends ffi.Struct {
+final class PyHash_FuncDef extends ffi.Struct {
   external ffi.Pointer<
       ffi.NativeFunction<
           Py_hash_t Function(ffi.Pointer<ffi.Void>, Py_ssize_t)>> hash;
@@ -13698,7 +13698,7 @@ class PyHash_FuncDef extends ffi.Struct {
   external int seed_bits;
 }
 
-class __va_list_tag extends ffi.Struct {
+final class __va_list_tag extends ffi.Struct {
   @ffi.UnsignedInt()
   external int gp_offset;
 
@@ -13713,7 +13713,7 @@ class __va_list_tag extends ffi.Struct {
 typedef Py_UCS4 = ffi.Uint32;
 typedef PyLongObject = _longobject;
 
-class _PyManagedBufferObject extends ffi.Struct {
+final class _PyManagedBufferObject extends ffi.Struct {
   external PyObject ob_base;
 
   @ffi.Int()
@@ -13725,7 +13725,7 @@ class _PyManagedBufferObject extends ffi.Struct {
   external Py_buffer master;
 }
 
-class PyMemoryViewObject extends ffi.Struct {
+final class PyMemoryViewObject extends ffi.Struct {
   external PyVarObject ob_base;
 
   external ffi.Pointer<_PyManagedBufferObject> mbuf;
@@ -13750,7 +13750,7 @@ class PyMemoryViewObject extends ffi.Struct {
 typedef PyCapsule_Destructor
     = ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<PyObject>)>>;
 
-class PySliceObject extends ffi.Struct {
+final class PySliceObject extends ffi.Struct {
   external PyObject ob_base;
 
   external ffi.Pointer<PyObject> start;
@@ -13765,7 +13765,7 @@ abstract class PyGILState_STATE {
   static const int PyGILState_UNLOCKED = 1;
 }
 
-class _PyWeakReference extends ffi.Struct {
+final class _PyWeakReference extends ffi.Struct {
   external PyObject ob_base;
 
   external ffi.Pointer<PyObject> wr_object;
@@ -13784,13 +13784,13 @@ class _PyWeakReference extends ffi.Struct {
 
 typedef PyWeakReference = _PyWeakReference;
 
-class PyStructSequence_Field extends ffi.Struct {
+final class PyStructSequence_Field extends ffi.Struct {
   external ffi.Pointer<ffi.Char> name;
 
   external ffi.Pointer<ffi.Char> doc;
 }
 
-class PyStructSequence_Desc extends ffi.Struct {
+final class PyStructSequence_Desc extends ffi.Struct {
   external ffi.Pointer<ffi.Char> name;
 
   external ffi.Pointer<ffi.Char> doc;
@@ -13809,7 +13809,7 @@ abstract class PyLockStatus {
 
 typedef PyThread_type_lock = ffi.Pointer<ffi.Void>;
 
-class _Py_tss_t extends ffi.Struct {
+final class _Py_tss_t extends ffi.Struct {
   @ffi.Int()
   external int _is_initialized;
 

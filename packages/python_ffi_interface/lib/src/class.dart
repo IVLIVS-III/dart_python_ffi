@@ -3,7 +3,8 @@ part of python_ffi_interface;
 /// Abstract base class for any Dart representation of a Python class definition.
 ///
 /// This is purely used to instantiate a new Python class instance.
-abstract class PythonClassDefinitionInterface<P extends PythonFfiDelegate<R>,
+abstract base class PythonClassDefinitionInterface<
+    P extends PythonFfiDelegate<R>,
     R extends Object?> extends PythonObjectInterface<P, R> {
   /// Creates a new Python class definition.
   PythonClassDefinitionInterface(
@@ -27,7 +28,7 @@ abstract class PythonClassDefinitionInterface<P extends PythonFfiDelegate<R>,
 }
 
 /// Abstract base class for any Dart representation of a Python class instance.
-abstract class PythonClassInterface<P extends PythonFfiDelegate<R>,
+abstract base class PythonClassInterface<P extends PythonFfiDelegate<R>,
     R extends Object?> extends PythonObjectInterface<P, R> {
   /// Creates a new Python class instance.
   PythonClassInterface(

@@ -1,6 +1,6 @@
 part of python_ffi_cpython_dart;
 
-class _PythonExceptionCPython
+base class _PythonExceptionCPython
     extends PythonExceptionInterface<PythonFfiCPythonBase, Pointer<PyObject>>
     with _PythonObjectCPythonMixin {
   _PythonExceptionCPython(

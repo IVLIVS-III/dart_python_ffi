@@ -1,6 +1,6 @@
 part of dartpip;
 
-class _ConsoleModuleBundle<T extends Object>
+final class _ConsoleModuleBundle<T extends Object>
     extends _ModuleBundle<_PythonModule<T>> {
   _ConsoleModuleBundle({
     required super.pythonModule,

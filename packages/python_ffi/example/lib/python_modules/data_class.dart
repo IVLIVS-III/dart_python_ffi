@@ -1,6 +1,6 @@
 import "package:python_ffi/python_ffi.dart";
 
-class DataClass extends PythonClass {
+final class DataClass extends PythonClass {
   factory DataClass(int a, String b) {
     final DataClass dataClass = PythonFfi.instance.importClass(
       "data_class",
@@ -25,7 +25,7 @@ class DataClass extends PythonClass {
   String toString() => "DataClass(a: $a, b: $b)";
 }
 
-class DataClassModule extends PythonModule {
+final class DataClassModule extends PythonModule {
   DataClassModule.from(super.pythonModule) : super.from();
 
   static DataClassModule import() => PythonFfi.instance.importModule(

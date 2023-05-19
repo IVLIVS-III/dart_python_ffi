@@ -1,6 +1,6 @@
 part of python_ffi_cpython_dart;
 
-class _PythonModuleCPython
+final class _PythonModuleCPython
     extends PythonModuleInterface<PythonFfiCPythonBase, Pointer<PyObject>>
     with _PythonObjectCPythonMixin {
   _PythonModuleCPython(super.platform, super.reference)

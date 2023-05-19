@@ -1,6 +1,6 @@
 part of python_ffi;
 
-abstract class PythonModule extends python_ffi_dart.PythonModule {
+abstract base class PythonModule extends python_ffi_dart.PythonModule {
   PythonModule.from(super.moduleDelegate) : super.from();
 
   static T import<T extends PythonModule>(

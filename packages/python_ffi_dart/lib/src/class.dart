@@ -11,7 +11,7 @@ typedef PythonClassFrom<T extends PythonClass> = T Function(
 ///
 /// This is only used to create a [PythonClass] instance.
 /// See [PythonClass] for the Dart class of a Python class instance.
-abstract class PythonClassDefinition extends PythonObject {
+abstract base class PythonClassDefinition extends PythonObject {
   /// Creates a new [PythonClassDefinition] from a [PythonClassDefinitionInterface].
   PythonClassDefinition.from(this._classDefinitionDelegate)
       : super.from(_classDefinitionDelegate);
@@ -41,7 +41,7 @@ abstract class PythonClassDefinition extends PythonObject {
 /// Interface for a Python class instance.
 ///
 /// This is an abstraction over a generic Python class instance.
-abstract class PythonClass extends PythonObject {
+abstract base class PythonClass extends PythonObject {
   /// Creates a new [PythonClass] from a [PythonClassInterface].
   PythonClass.from(this._classDelegate) : super.from(_classDelegate);
 

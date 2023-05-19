@@ -33,9 +33,9 @@ class BaseInputParserPage<T extends Object?> extends StatefulWidget {
       ..add(
         ObjectFlagProperty<
             Widget Function(
-          BuildContext context,
-          T parsedData,
-        )>.has("builder", builder),
+              BuildContext context,
+              T parsedData,
+            )>.has("builder", builder),
       );
   }
 }

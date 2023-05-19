@@ -1,7 +1,7 @@
 part of python_ffi_dart;
 
 /// The Dart representation of a Python function.
-class PythonFunction extends PythonObject {
+base class PythonFunction extends PythonObject {
   /// Creates a new [PythonFunction] from a [PythonFfiDelegate].
   PythonFunction.from(this._functionDelegate) : super.from(_functionDelegate);
 

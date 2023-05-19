@@ -17,16 +17,12 @@ void main(List<String> arguments) async {
     switch (input) {
       case "w":
         person.move(0, -1);
-        break;
       case "a":
         person.move(-1, 0);
-        break;
       case "s":
         person.move(0, 1);
-        break;
       case "d":
         person.move(1, 0);
-        break;
     }
   } while (input != "q");
 }

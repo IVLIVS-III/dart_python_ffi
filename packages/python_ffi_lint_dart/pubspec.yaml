@@ -1,10 +1,12 @@
 name: python_ffi_lint_dart
 description: Analysis options used across the Python-FFI for Dart project.
-version: 0.0.1
+version: 0.1.0
 homepage: https://github.com/IVLIVS-III/dart_python_ffi
 
 environment:
-  sdk: '>=2.18.2 <3.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
-  lints: ^2.0.1
+  lints: ^2.1.0
+dev_dependencies:
+  test: ^1.24.3

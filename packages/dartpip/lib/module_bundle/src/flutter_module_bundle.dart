@@ -1,6 +1,6 @@
 part of dartpip;
 
-class _AssetsInsertionConfig {
+final class _AssetsInsertionConfig {
   _AssetsInsertionConfig._({
     required this.pubspecString,
     required this.assets,
@@ -104,7 +104,7 @@ class _AssetsInsertionConfig {
   }
 }
 
-class _FlutterModuleBundle<T extends Object>
+final class _FlutterModuleBundle<T extends Object>
     extends _ModuleBundle<_PythonModule<T>> {
   _FlutterModuleBundle({
     required super.pythonModule,

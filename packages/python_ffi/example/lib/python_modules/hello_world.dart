@@ -2,7 +2,7 @@
 
 import "package:python_ffi/python_ffi.dart";
 
-class HelloWorldModule extends PythonModule {
+final class HelloWorldModule extends PythonModule {
   HelloWorldModule.from(super.pythonModule) : super.from();
 
   static HelloWorldModule import() => PythonModule.import(

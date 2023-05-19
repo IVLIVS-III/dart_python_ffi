@@ -1,7 +1,7 @@
 part of python_ffi_interface;
 
 /// Represents a Python iterator.
-class PythonIterator<T extends Object?, P extends PythonFfiDelegate<R>,
+final class PythonIterator<T extends Object?, P extends PythonFfiDelegate<R>,
         R extends Object?> extends PythonClassInterface<P, R>
     implements Iterator<T> {
   /// Creates a new Python iterator.

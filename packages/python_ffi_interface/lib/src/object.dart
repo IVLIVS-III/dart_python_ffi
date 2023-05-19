@@ -1,7 +1,7 @@
 part of python_ffi_interface;
 
 /// Wraps a function that initializes a python object.
-class Initializer<T1 extends Object?, T2 extends Object?> {
+final class Initializer<T1 extends Object?, T2 extends Object?> {
   /// Creates a new initializer.
   const Initializer(this._initializer);
 
@@ -12,7 +12,7 @@ class Initializer<T1 extends Object?, T2 extends Object?> {
 }
 
 /// Abstract base class for any Dart representation of a Python object.
-abstract class PythonObjectInterface<P extends PythonFfiDelegate<R>,
+abstract base class PythonObjectInterface<P extends PythonFfiDelegate<R>,
     R extends Object?> extends BaseInterface {
   /// Creates a new Python object.
   PythonObjectInterface(

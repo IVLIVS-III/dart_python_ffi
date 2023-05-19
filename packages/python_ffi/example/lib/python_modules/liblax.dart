@@ -1,6 +1,6 @@
 import "package:python_ffi/python_ffi.dart";
 
-class LiblaxParserModule extends PythonModule {
+final class LiblaxParserModule extends PythonModule {
   LiblaxParserModule.from(super.pythonModule) : super.from();
 
   static LiblaxParserModule import() => PythonModule.import(
@@ -12,7 +12,7 @@ class LiblaxParserModule extends PythonModule {
       getFunction("run").call(<Object?>[data]).toString();
 }
 
-class LiblaxModule extends PythonModule {
+final class LiblaxModule extends PythonModule {
   LiblaxModule.from(super.pythonModule) : super.from();
 
   static LiblaxModule import() => PythonModule.import(

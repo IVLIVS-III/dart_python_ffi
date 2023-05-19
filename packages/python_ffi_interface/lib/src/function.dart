@@ -6,7 +6,7 @@ typedef TypedFunctionConverter<T extends Function> = T Function(
 );
 
 /// Abstract base class for any Dart representation of a Python function.
-abstract class PythonFunctionInterface<P extends PythonFfiDelegate<R>,
+abstract base class PythonFunctionInterface<P extends PythonFfiDelegate<R>,
     R extends Object?> extends PythonObjectInterface<P, R> {
   /// Creates a new Python function.
   PythonFunctionInterface(

@@ -4,6 +4,7 @@ import "package:file_picker/file_picker.dart";
 import "package:fj_playground/widgets/input_box.dart";
 import "package:fj_playground/widgets/intents.dart";
 import "package:fj_playground/widgets/output_box.dart";
+import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 
 class EditorPage extends StatefulWidget {
@@ -223,5 +224,11 @@ class _EditorPageState extends State<EditorPage> {
         ),
       ),
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<bool>("isEdited", isEdited));
   }
 }
