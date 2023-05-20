@@ -167,21 +167,27 @@ const int Py_TPFLAGS_BASE_EXC_SUBCLASS = 1 << 30;
 // ignore: constant_identifier_names
 const int Py_TPFLAGS_TYPE_SUBCLASS = 1 << 31;
 
-extension _ObjectDebugExtension on PyObject {
+/// Helper class to debug PyObject instances.
+extension ObjectDebugExtension on PyObject {
+  /// Returns a map of all members of the PyObject.
   Map<String, dynamic> get members => <String, dynamic>{
         "ob_refcnt": ob_refcnt,
         "ob_type": ob_type,
       };
 }
 
-extension _VarDebugExtension on PyVarObject {
+/// Helper class to debug PyVarObject instances.
+extension VarDebugExtension on PyVarObject {
+  /// Returns a map of all members of the PyVarObject.
   Map<String, dynamic> get members => <String, dynamic>{
         "ob_base": ob_base,
         "ob_size": ob_size,
       };
 }
 
-extension _TypeDebugExtension on PyTypeObject {
+/// Helper class to debug PyTypeObject instances.
+extension TypeDebugExtension on PyTypeObject {
+  /// Returns a map of all members of the PyTypeObject.
   Map<String, dynamic> get members => <String, dynamic>{
         "ob_base": ob_base,
         "tp_name": tp_name,
@@ -307,9 +313,6 @@ extension _TypeExtension on Pointer<PyObject> {
 
   bool isFalse(PythonFfiCPythonBase platform) =>
       this == platform.bindings.Py_False;
-
-  bool isBool(PythonFfiCPythonBase platform) =>
-      isTrue(platform) || isFalse(platform);
 
   bool isInt(PythonFfiCPythonBase platform) =>
       ((Platform.isWindows || Platform.isLinux) && typeName == "int") ||
