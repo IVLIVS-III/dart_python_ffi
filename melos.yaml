@@ -39,4 +39,12 @@ scripts:
   outdated:
     exec: dart pub get && dart pub outdated
   test:
+    run: melos run dart-test && melos run flutter-test
+  dart-test:
     exec: dart test
+    packageFilters:
+      flutter: false
+  flutter-test:
+    exec: flutter test
+    packageFilters:
+      flutter: true
