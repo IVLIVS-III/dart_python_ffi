@@ -37,7 +37,9 @@ scripts:
   doc:
     exec: dart doc .
   outdated:
-    exec: dart pub get && dart pub outdated
+    run: dart pub get && dart pub outdated
+    exec:
+      concurrency: 1
   test:
     run: melos run dart-test && melos run flutter-test
   dart-test:
