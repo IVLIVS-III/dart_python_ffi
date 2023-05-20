@@ -9,6 +9,6 @@ environment:
 
 dependencies:
   flutter_lints: ^2.0.1
-  python_ffi_lint_dart: ^0.0.1
+  python_ffi_lint_dart: ^0.1.0
 dev_dependencies:
   test: ^1.24.3

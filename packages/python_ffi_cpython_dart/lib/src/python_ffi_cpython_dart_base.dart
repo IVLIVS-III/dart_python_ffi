@@ -26,10 +26,13 @@ abstract base class PythonFfiCPythonBase
 }
 
 // ignore: comment_references
-/// The macOS and Windows implementation of [PythonFfiDelegate].
+/// The macOS, Windows and Linux implementation of [PythonFfiDelegate].
 final class PythonFfiCPythonDart extends PythonFfiCPythonBase
     with PythonFfiCPythonMixin {
   /// Creates a new [PythonFfiCPythonDart] instance.
+  ///
+  /// Note: On Windows and Linux the path to the dynamic Python library must be
+  ///       provided via the [libPath] parameter.
   PythonFfiCPythonDart(
     String pythonModulesBase64, {
     String? libPath,
@@ -42,11 +45,10 @@ final class PythonFfiCPythonDart extends PythonFfiCPythonBase
     if (Platform.isMacOS) {
       return "/Library/Frameworks/Python.framework/Versions/$version/Python";
     }
-    if (Platform.isWindows) {
-      return "python311.dll";
-    }
-    if (Platform.isLinux) {
-      return "libpython$version.so";
+    if (Platform.isWindows || Platform.isLinux) {
+      throw Exception(
+        "libPath must be provided on ${Platform.operatingSystem}",
+      );
     }
     throw Exception("Unsupported platform: ${Platform.operatingSystem}");
   }
@@ -55,24 +57,7 @@ final class PythonFfiCPythonDart extends PythonFfiCPythonBase
 
   @override
   Future<void> openDylib() async {
-    String effectiveLibPath = _libPath;
-    if ((Platform.isWindows || Platform.isLinux) &&
-        _libPath == _defaultLibPath) {
-      final Directory supportDir = getApplicationSupportDirectory();
-      final File dllFile = File("${supportDir.path}/$_defaultLibPath");
-      late final String dllSource;
-      if (Platform.isWindows) {
-        dllSource = _kPython311Dll;
-      } else if (Platform.isLinux) {
-        dllSource = _kLibPython311SO;
-      }
-      if (!dllFile.existsSync()) {
-        final Uint8List dllBytes = base64Decode(dllSource);
-        await dllFile.writeAsBytes(dllBytes, flush: true);
-      }
-      effectiveLibPath = dllFile.path;
-    }
-    final DynamicLibrary dylib = DynamicLibrary.open(effectiveLibPath);
+    final DynamicLibrary dylib = DynamicLibrary.open(_libPath);
     bindings = DartPythonCBindings(dylib);
   }
 

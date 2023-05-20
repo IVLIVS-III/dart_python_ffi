@@ -11,14 +11,14 @@ dependencies:
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.1.4
-  python_ffi_cpython: ^0.2.2
-  python_ffi_dart: ^0.2.2
-  python_ffi_interface: ^0.0.2
+  python_ffi_cpython: ^0.3.0
+  python_ffi_dart: ^0.3.0+1
+  python_ffi_interface: ^0.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  python_ffi_lint: ^0.0.1
+  python_ffi_lint: ^0.1.0
   test: ^1.24.1
 
 # For information on the generic Dart part of this file, see the

@@ -1,6 +1,13 @@
+## 0.3.0+1
+
+- Declared support for Windows and Linux.
+
 ## 0.3.0
 
 - Updated to Dart 3.x.
+- On Windows and Linux the `libPath` parameter is now required, since the dynamic Python library is
+  no longer included in the package as this drastically reduces package size and initialization
+  time.
 - Fixed an issue with loading python modules.
 - Updated dependencies.
 
