@@ -33,7 +33,7 @@ scripts:
       scope:
         - python_ffi_cpython_dart
   format:
-    exec: dart format . && git restore **/*.g.dart
+    exec: find . -type f -name "*.dart" | grep -v "\.g\.dart$" | xargs dart format
   doc:
     exec: dart doc .
   outdated:
@@ -48,3 +48,5 @@ scripts:
     exec: flutter test
     packageFilters:
       flutter: true
+  format-test:
+    exec: find . -type f -name "*.dart" | grep -v "\.g\.dart$" | xargs dart format --output=none --set-exit-if-changed
