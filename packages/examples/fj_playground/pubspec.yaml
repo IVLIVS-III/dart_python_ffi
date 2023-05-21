@@ -34,12 +34,12 @@ dependencies:
   file_picker: ^5.3.0
   flutter:
     sdk: flutter
-  python_ffi: ^0.2.2
+  python_ffi: ^0.3.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  python_ffi_lint: ^0.0.1
+  python_ffi_lint: ^0.1.0
   test: ^1.24.1
 
 python_ffi:
@@ -60,53 +60,53 @@ python_ffi:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
-    - python-modules/lark/ast_utils.py
-    - python-modules/lark/common.py
-    - python-modules/lark/exceptions.py
-    - python-modules/lark/grammar.py
-    - python-modules/lark/grammars/common.lark
-    - python-modules/lark/grammars/lark.lark
-    - python-modules/lark/grammars/python.lark
-    - python-modules/lark/grammars/unicode.lark
-    - python-modules/lark/grammars/__init__.py
-    - python-modules/lark/indenter.py
-    - python-modules/lark/lark.py
-    - python-modules/lark/lexer.py
-    - python-modules/lark/LICENSE
+    - python-modules/lark/parser_frontends.py
+    - python-modules/lark/tree_templates.py
+    - python-modules/lark/tree.py
     - python-modules/lark/load_grammar.py
-    - python-modules/lark/parsers/cyk.py
-    - python-modules/lark/parsers/earley.py
-    - python-modules/lark/parsers/earley_common.py
     - python-modules/lark/parsers/earley_forest.py
-    - python-modules/lark/parsers/grammar_analysis.py
+    - python-modules/lark/parsers/lalr_parser.py
+    - python-modules/lark/parsers/earley_common.py
+    - python-modules/lark/parsers/cyk.py
+    - python-modules/lark/parsers/__init__.py
+    - python-modules/lark/parsers/xearley.py
     - python-modules/lark/parsers/lalr_analysis.py
     - python-modules/lark/parsers/lalr_interactive_parser.py
-    - python-modules/lark/parsers/lalr_parser.py
-    - python-modules/lark/parsers/xearley.py
-    - python-modules/lark/parsers/__init__.py
-    - python-modules/lark/parser_frontends.py
-    - python-modules/lark/parse_tree_builder.py
-    - python-modules/lark/py.typed
-    - python-modules/lark/reconstruct.py
-    - python-modules/lark/tools/nearley.py
+    - python-modules/lark/parsers/grammar_analysis.py
+    - python-modules/lark/parsers/earley.py
     - python-modules/lark/tools/serialize.py
     - python-modules/lark/tools/standalone.py
     - python-modules/lark/tools/__init__.py
-    - python-modules/lark/tree.py
-    - python-modules/lark/tree_matcher.py
-    - python-modules/lark/tree_templates.py
-    - python-modules/lark/utils.py
-    - python-modules/lark/visitors.py
-    - python-modules/lark/__init__.py
-    - python-modules/lark/__pyinstaller/hook-lark.py
+    - python-modules/lark/tools/nearley.py
+    - python-modules/lark/LICENSE
     - python-modules/lark/__pyinstaller/__init__.py
+    - python-modules/lark/__pyinstaller/hook-lark.py
+    - python-modules/lark/visitors.py
+    - python-modules/lark/lark.py
+    - python-modules/lark/__init__.py
+    - python-modules/lark/grammar.py
+    - python-modules/lark/indenter.py
+    - python-modules/lark/grammars/lark.lark
+    - python-modules/lark/grammars/python.lark
+    - python-modules/lark/grammars/__init__.py
+    - python-modules/lark/grammars/common.lark
+    - python-modules/lark/grammars/unicode.lark
+    - python-modules/lark/common.py
+    - python-modules/lark/utils.py
+    - python-modules/lark/ast_utils.py
+    - python-modules/lark/lexer.py
+    - python-modules/lark/py.typed
+    - python-modules/lark/exceptions.py
+    - python-modules/lark/tree_matcher.py
+    - python-modules/lark/reconstruct.py
+    - python-modules/lark/parse_tree_builder.py
     - python-modules/fj/LICENSE
     - python-modules/fj/__init__.py
-    - python-modules/FJ_computation.py
+    - python-modules/FJ_auxiliary_typing.py
     - python-modules/FJ_typing.py
     - python-modules/FJ_parser.py
     - python-modules/FJ_interpreter.py
-    - python-modules/FJ_auxiliary_typing.py
+    - python-modules/FJ_computation.py
     - python-modules/FJ_AST.py
     - python-modules/python_ffi.py
     - python-modules/modules.json
