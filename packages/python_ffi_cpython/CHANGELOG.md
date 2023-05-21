@@ -1,3 +1,9 @@
+## NEXT
+
+- Updated bundled Python runtime for macOS.
+    - TODO: Recompile the Python runtime for Windows and Linux.
+- Bundled also the Python stdlib.
+
 ## 0.3.0
 
 - Updated to Dart 3.x.

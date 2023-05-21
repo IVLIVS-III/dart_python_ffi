@@ -28,7 +28,7 @@ ffigen:
     entry-points:
       - 'python/Headers/Python.h'
     include-directives:
-      - 'python/Headers/*'
+      - 'python/Headers/**'
   globals:
     rename:
       "_(.*)": "$1"

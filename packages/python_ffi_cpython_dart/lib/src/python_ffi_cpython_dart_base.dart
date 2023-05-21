@@ -19,6 +19,9 @@ abstract base class PythonFfiCPythonBase
   /// pure Dart apps) or from Flutter assets.
   FutureOr<ByteData> loadPythonFile(PythonSourceFileEntity sourceFile);
 
+  /// Extracts the Python stdlib files from the app bundle.
+  Future<void> copyPythonStdLib();
+
   /// Opens the Python dylib.
   ///
   /// This is called by [PythonFfiDelegate.initialize].
@@ -40,8 +43,10 @@ final class PythonFfiCPythonDart extends PythonFfiCPythonBase
     _pythonModules.addAll(_decodePythonModules(pythonModulesBase64));
   }
 
+  /// The version of the Python C API bundled with this package.
+  static const String version = "3.11";
+
   static String get _defaultLibPath {
-    final String version = "3.11";
     if (Platform.isMacOS) {
       return "/Library/Frameworks/Python.framework/Versions/$version/Python";
     }
@@ -54,6 +59,19 @@ final class PythonFfiCPythonDart extends PythonFfiCPythonBase
   }
 
   final String _libPath;
+
+  @override
+  Future<void> copyPythonStdLib() async {
+    // TODO: Fix this on Windows. To create a symlink on Windows the process
+    //       must be run as administrator. We don't want to do that.
+    if (Platform.isWindows) {
+      return;
+    }
+    await Link("${(await pythonFfiDir).path}/lib/python3.11").create(
+      "/usr/local/lib/python3.11",
+      recursive: true,
+    );
+  }
 
   @override
   Future<void> openDylib() async {
@@ -158,11 +176,18 @@ base mixin PythonFfiCPythonMixin on PythonFfiCPythonBase {
   FutureOr<Directory> get supportDir async =>
       _supportDir ??= await getApplicationSupportDirectory();
 
+  Directory? _pythonFfiDir;
+
+  /// Directory for all Python ffi related files
+  FutureOr<Directory> get pythonFfiDir async => _pythonFfiDir ??= Directory(
+        "${(await supportDir).path}/python_ffi",
+      );
+
   Directory? _packagesDir;
 
   /// Directory for all bundled Python packages
   FutureOr<Directory> get packagesDir async => _packagesDir ??= Directory(
-        "${(await supportDir).path}/python_ffi/packages",
+        "${(await pythonFfiDir).path}/packages",
       );
 
   /// Checks whether the Python C-bindings are available
@@ -173,13 +198,123 @@ base mixin PythonFfiCPythonMixin on PythonFfiCPythonBase {
   bool get isInitialized =>
       areBindingsInitialized && bindings.Py_IsInitialized() != 0;
 
+  void _pyStatusGuarded(
+    PyStatus Function() callback, {
+    void Function()? onError,
+  }) {
+    final PyStatus status = callback();
+    if (bindings.PyStatus_Exception(status) != 0) {
+      onError?.call();
+      // Let Dart handle the exception. Uncomment below to handle it in Python.
+      // bindings.Py_ExitStatusException(status);
+      final StringBuffer buffer =
+          StringBuffer("Python runtime exited with status ${status.exitcode}");
+      if (status.func != nullptr) {
+        buffer.write(" in function ${status.func.cast<Utf8>().toDartString()}");
+      }
+      buffer.write(": ${status.err_msg.cast<Utf8>().toDartString()}");
+      throw PythonFfiException(buffer.toString());
+    }
+  }
+
+  T? _injectPyWChar<T>(
+    String wchar,
+    T Function(Pointer<WChar> wchar) callback,
+  ) {
+    final Pointer<WChar> wcharPointer = bindings.Py_DecodeLocale(
+      wchar.toNativeUtf8().cast(),
+      nullptr,
+    );
+    if (wcharPointer == nullptr) {
+      return null;
+    }
+    return callback(wcharPointer);
+  }
+
+  T _updateWCharPointer<T>({
+    required T Function(Pointer<Pointer<WChar>> wcharPointer) callback,
+    required void Function(Pointer<WChar> wchar) updateCallback,
+  }) {
+    final Pointer<Pointer<WChar>> tmpPointer = malloc<Pointer<WChar>>();
+    final T result = callback(tmpPointer);
+    updateCallback(tmpPointer.value);
+    malloc.free(tmpPointer);
+    return result;
+  }
+
   @override
   Future<void> initialize() async {
+    await copyPythonStdLib();
+
     if (!areBindingsInitialized) {
       await openDylib();
     }
 
-    bindings.Py_Initialize();
+    final Pointer<PyPreConfig> preConfig = malloc<PyPreConfig>();
+    // https://docs.python.org/3/c-api/init_config.html#init-isolated-conf
+    bindings.PyPreConfig_InitIsolatedConfig(preConfig);
+    // enable UTF-8 mode (https://docs.python.org/3/library/os.html#utf8-mode)
+    preConfig.ref.utf8_mode = 1;
+    // enable locale configuration (https://docs.python.org/3/c-api/init_config.html#c.PyPreConfig.configure_locale)
+    preConfig.ref.configure_locale = 1;
+    preConfig.ref.coerce_c_locale = 2;
+    _pyStatusGuarded(() => bindings.Py_PreInitialize(preConfig));
+
+    final Pointer<PyConfig> config = malloc<PyConfig>();
+    bindings.PyConfig_InitIsolatedConfig(config);
+
+    void clearConfig() {
+      bindings.PyConfig_Clear(config);
+      malloc.free(config);
+    }
+
+    // https://docs.python.org/3/c-api/init_config.html#c.PyConfig.filesystem_encoding
+    _injectPyWChar(
+      "utf-8",
+      (Pointer<WChar> wchar) => _pyStatusGuarded(
+        () => _updateWCharPointer(
+          callback: (Pointer<Pointer<WChar>> wcharPointer) =>
+              bindings.PyConfig_SetString(config, wcharPointer, wchar),
+          updateCallback: (Pointer<WChar> wchar) =>
+              config.ref.filesystem_encoding = wchar,
+        ),
+        onError: clearConfig,
+      ),
+    );
+
+    // https://docs.python.org/3/c-api/init_config.html#c.PyConfig.filesystem_errors
+    _injectPyWChar(
+      "surrogateescape",
+      (Pointer<WChar> wchar) => _pyStatusGuarded(
+        () => _updateWCharPointer(
+          callback: (Pointer<Pointer<WChar>> wcharPointer) =>
+              bindings.PyConfig_SetString(config, wcharPointer, wchar),
+          updateCallback: (Pointer<WChar> wchar) =>
+              config.ref.filesystem_errors = wchar,
+        ),
+        onError: clearConfig,
+      ),
+    );
+
+    final String pythonFfiPath = (await pythonFfiDir).path;
+    _injectPyWChar(
+      pythonFfiPath,
+      (Pointer<WChar> wchar) => _pyStatusGuarded(
+        () => _updateWCharPointer(
+          callback: (Pointer<Pointer<WChar>> wcharPointer) =>
+              bindings.PyConfig_SetString(config, wcharPointer, wchar),
+          updateCallback: (Pointer<WChar> wchar) => config.ref.home = wchar,
+        ),
+        onError: clearConfig,
+      ),
+    );
+
+    _pyStatusGuarded(
+      () => bindings.Py_InitializeFromConfig(config),
+      onError: clearConfig,
+    );
+
+    bindings.PyConfig_Clear(config);
 
     appendToPath((await packagesDir).path);
 

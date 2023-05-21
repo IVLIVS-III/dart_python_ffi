@@ -5,6 +5,7 @@ import "dart:convert";
 import "dart:ffi";
 import "dart:io";
 
+import "package:archive/archive_io.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/services.dart";
 import "package:path_provider/path_provider.dart" as path_provider;
@@ -33,16 +34,34 @@ final class PythonFfiCPython extends PythonFfiCPythonBase
     PythonFfiDelegate.instance = PythonFfiCPython();
   }
 
+  static String get _version => PythonFfiCPythonDart.version;
+
+  @override
+  Future<void> copyPythonStdLib() async {
+    final ByteData zipFile = await rootBundle
+        .load("packages/python_ffi_cpython/assets/python$_version.zip");
+    final Directory libDir = Directory("${(await pythonFfiDir).path}/lib");
+    if (libDir.existsSync()) {
+      await libDir.delete(recursive: true);
+    }
+    final File tmpZipFile = File("${libDir.path}/python$_version.zip");
+    await tmpZipFile.create(recursive: true);
+    await tmpZipFile.writeAsBytes(zipFile.buffer.asUint8List());
+    final InputFileStream inputStream = InputFileStream(tmpZipFile.path);
+    final Archive archive = ZipDecoder().decodeBuffer(inputStream);
+    extractArchiveToDisk(archive, libDir.path);
+    await tmpZipFile.delete();
+  }
+
   @override
   Future<void> openDylib() async {
-    const String version = "3.11";
     final String dylibPath;
     if (Platform.isMacOS) {
-      dylibPath = "libpython$version.dylib";
+      dylibPath = "libpython$_version.dylib";
     } else if (Platform.isWindows) {
-      dylibPath = "python${version.replaceAll(".", "")}.dll";
+      dylibPath = "python${_version.replaceAll(".", "")}.dll";
     } else if (Platform.isLinux) {
-      dylibPath = "libpython$version.so";
+      dylibPath = "libpython$_version.so";
     } else {
       throw Exception("Unsupported platform: ${Platform.operatingSystem}");
     }

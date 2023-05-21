@@ -1,3 +1,8 @@
+## NEXT
+
+- Regenerated Python C-API bindings with all Python header files.
+- Made Python runtime initialization more robust.
+
 ## 0.3.0+1
 
 - Declared support for Windows and Linux.

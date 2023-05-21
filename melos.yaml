@@ -29,6 +29,7 @@ scripts:
       perl -0777 -pi -e "s/import 'dart:ffi' as ffi;/import 'dart:ffi' as ffi;\\n\\npart '..\/extensions\/bindings_extension.dart';/igs" lib/src/ffi/generated_bindings.g.dart
       perl -0777 -pi -e "s/\\nclass/\\nbase class/igs" lib/src/ffi/generated_bindings.g.dart
       perl -0777 -pi -e "s/\\nabstract class/\\nabstract class/igs" lib/src/ffi/generated_bindings.g.dart
+      dart format lib/src/ffi/generated_bindings.g.dart
     packageFilters:
       scope:
         - python_ffi_cpython_dart
