@@ -30,11 +30,14 @@ jobs:
           cache-path: '${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:'
           architecture: x64
       - run: flutter --version
-      
+
       - run: dart pub global activate melos
 
       - name: Install dependencies
         run: melos bs
+
+      - name: Revert codegen changes
+        run: git restore packages/python_ffi_cpython_dart/lib/src/ffi/generated_bindings.g.dart
 
       - name: Verify formatting
         run: melos format-test
