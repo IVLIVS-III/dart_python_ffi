@@ -67,10 +67,10 @@ final class PythonFfiCPythonDart extends PythonFfiCPythonBase
     if (Platform.isWindows) {
       return;
     }
-    await Link("${(await pythonFfiDir).path}/lib/python3.11").create(
-      "/usr/local/lib/python3.11",
-      recursive: true,
-    );
+    final Link link = Link("${(await pythonFfiDir).path}/lib/python3.11");
+    if (!link.existsSync()) {
+      await link.create("/usr/local/lib/python3.11", recursive: true);
+    }
   }
 
   @override
