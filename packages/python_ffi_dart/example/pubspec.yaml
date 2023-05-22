@@ -19,7 +19,7 @@ dependencies:
     path: ../
 
 dev_dependencies:
-  python_ffi_lint_dart: ^0.0.1
+  python_ffi_lint_dart: ^0.1.0
   test: ^1.24.3
 
 python_ffi:
