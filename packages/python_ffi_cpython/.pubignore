@@ -34,3 +34,9 @@ build/
 
 # cpython source directory
 /cpython/
+
+# cpython patches
+/patches/
+
+# cpython build scripts
+/scripts/

@@ -1,0 +1,17 @@
+name: scripts
+description: A collection of tools used to build and test the `python_ffi_cpython` package.
+version: 0.0.1
+repository: https://github.com/IVLIVS-III/dart_python_ffi
+
+environment:
+  sdk: ^3.0.1
+
+# Add regular dependencies here.
+dependencies:
+  args: ^2.4.1
+  cli_util: ^0.4.0
+# path: ^1.8.0
+
+dev_dependencies:
+  python_ffi_lint_dart: ^0.1.0
+  test: ^1.24.1

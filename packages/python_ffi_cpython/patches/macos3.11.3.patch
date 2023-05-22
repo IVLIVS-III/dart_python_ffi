@@ -375,37 +375,6 @@ index c62a565eb6..f49261ac04 100644
  )
  AC_MSG_RESULT([$MODULES_SETUP_STDLIB])
  AC_SUBST([MODULES_SETUP_STDLIB])
-diff --git a/custom_build.sh b/custom_build.sh
-new file mode 100755
-index 0000000000..e0591652a1
---- /dev/null
-+++ b/custom_build.sh
-@@ -0,0 +1,25 @@
-+#! /bin/sh
-+
-+export MACOSX_DEPLOYMENT_TARGET=10.13
-+
-+CONFIGURE="./configure"
-+
-+# CONFIGURE="$CONFIGURE --enable-optimizations"
-+# CONFIGURE="$CONFIGURE --with-lto=full"
-+CONFIGURE="$CONFIGURE --disable-test-modules"
-+CONFIGURE="$CONFIGURE --without-doc-strings"
-+CONFIGURE="$CONFIGURE --enable-shared"
-+CONFIGURE="$CONFIGURE --without-ensurepip"
-+# CONFIGURE="$CONFIGURE --without-static-libpython"
-+CONFIGURE="$CONFIGURE --without-system-ffi"
-+CONFIGURE="$CONFIGURE --enable-universalsdk"
-+CONFIGURE="$CONFIGURE --with-universal-archs=universal2"
-+
-+# run command
-+echo "Running $CONFIGURE"
-+$CONFIGURE
-+
-+# run make
-+MAKE="make libpython3.11.dylib -j"
-+echo "Running $MAKE"
-+$MAKE
 diff --git a/dylib_check b/dylib_check
 new file mode 100755
 index 0000000000..0b43757ff0
