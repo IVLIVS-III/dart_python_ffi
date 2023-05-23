@@ -1,16 +1,3 @@
-diff --git a/Makefile.pre.in b/Makefile.pre.in
-index b356f6293e..82b4b66dbd 100644
---- a/Makefile.pre.in
-+++ b/Makefile.pre.in
-@@ -761,7 +761,7 @@ libpython3.so:	libpython$(LDVERSION).so
- 	$(BLDSHARED) $(NO_AS_NEEDED) -o $@ -Wl,-h$@ $^
- 
- libpython$(LDVERSION).dylib: $(LIBRARY_OBJS)
--	 $(CC) -dynamiclib -Wl,-single_module $(PY_CORE_LDFLAGS) -undefined dynamic_lookup -Wl,-install_name,$(prefix)/lib/libpython$(LDVERSION).dylib -Wl,-compatibility_version,$(VERSION) -Wl,-current_version,$(VERSION) -o $@ $(LIBRARY_OBJS) $(DTRACE_OBJS) $(SHLIBS) $(LIBC) $(LIBM); \
-+	 $(CC) -dynamiclib -Wl,-single_module $(PY_CORE_LDFLAGS) -undefined dynamic_lookup -Wl,-install_name,@rpath/libpython$(LDVERSION).dylib -Wl,-compatibility_version,$(VERSION) -Wl,-current_version,$(VERSION) -o $@ $(LIBRARY_OBJS) $(DTRACE_OBJS) $(SHLIBS) $(LIBC) $(LIBM); \
- 
- 
- libpython$(VERSION).sl: $(LIBRARY_OBJS)
 diff --git a/Modules/Setup.local b/Modules/Setup.local
 new file mode 100644
 index 0000000000..cfea2a7b26
