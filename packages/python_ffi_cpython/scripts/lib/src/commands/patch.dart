@@ -1,5 +1,21 @@
 part of scripts;
 
+final class _CpythonPatchConfig {
+  factory _CpythonPatchConfig(
+    ArgResults? argResults, {
+    Logger? logger,
+  }) =>
+      _CpythonPatchConfig._(
+        logger: logger ?? _logger(argResults),
+      );
+
+  _CpythonPatchConfig._({
+    required this.logger,
+  });
+
+  final Logger logger;
+}
+
 final class _CpythonPatchCommand extends _CpythonSubCommand {
   @override
   final String name = "patch";
@@ -9,11 +25,13 @@ final class _CpythonPatchCommand extends _CpythonSubCommand {
 
   @override
   Future<void> run() async {
-    await _patch(_logger(argResults));
+    await _patch(_CpythonPatchConfig(argResults));
   }
 }
 
-Future<void> _patch(Logger logger) async {
+Future<void> _patch(_CpythonPatchConfig config) async {
+  final Logger logger = config.logger;
+
   final String version = await _getVersion(logger);
   final File patchFile = File(
     "${_current.path}/patches/${Platform.operatingSystem}$version.patch",
@@ -49,7 +67,7 @@ Future<void> _patch(Logger logger) async {
     },
   );
   final Iterable<Future<void>> deleteTasks = addedFiles.map((String e) async {
-    final File file = File("${_cpython.path}/${e.substring(6)}");
+    final File file = File("${_cpython.path}/$e");
     if (file.existsSync()) {
       await file.delete(recursive: true);
     }

@@ -1,7 +1,30 @@
 part of scripts;
 
+final class _CpythonCloneConfig {
+  factory _CpythonCloneConfig(
+    ArgResults? argResults, {
+    Logger? logger,
+  }) =>
+      _CpythonCloneConfig._(
+        logger: logger ?? _logger(argResults),
+        force: argResults?["force"] as bool? ?? false,
+      );
+
+  _CpythonCloneConfig._({
+    required this.logger,
+    required this.force,
+  });
+
+  final Logger logger;
+  final bool force;
+}
+
 final class _CpythonCloneCommand extends _CpythonSubCommand {
   _CpythonCloneCommand() {
+    addFlags(argParser);
+  }
+
+  static void addFlags(ArgParser argParser) {
     argParser.addFlag(
       "force",
       abbr: "f",
@@ -18,8 +41,7 @@ final class _CpythonCloneCommand extends _CpythonSubCommand {
 
   @override
   Future<void> run() async {
-    final bool force = argResults?["force"] as bool? ?? false;
-    await _clone(_logger(argResults), force: force);
+    await _clone(_CpythonCloneConfig(argResults));
   }
 }
 
@@ -116,8 +138,10 @@ class _State {
   }
 }
 
-Future<void> _clone(Logger logger, {bool force = false}) async {
-  final _State state = _State(force: force).._checkDirExists(logger);
+Future<void> _clone(_CpythonCloneConfig config) async {
+  final Logger logger = config.logger;
+
+  final _State state = _State(force: config.force).._checkDirExists(logger);
   await state._checkIsGitRepo(logger);
   await state._checkIsClone(logger);
 

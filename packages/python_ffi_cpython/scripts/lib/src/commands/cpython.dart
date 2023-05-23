@@ -57,6 +57,12 @@ class _CpythonCommand extends Command<void> {
 }
 
 final class _CpythonAllCommand extends _CpythonSubCommand {
+  _CpythonAllCommand() {
+    _CpythonCloneCommand.addFlags(argParser);
+    _CpythonUseCommand.addFlags(argParser);
+    _CpythonBuildCommand.addFlags(argParser);
+  }
+
   @override
   final String name = "all";
 
@@ -66,9 +72,9 @@ final class _CpythonAllCommand extends _CpythonSubCommand {
   @override
   Future<void> run() async {
     final Logger logger = _logger(argResults);
-    await _clone(logger, force: true);
-    await _use(logger, versionTag: _CpythonUseCommand.defaultVersion);
-    await _patch(logger);
-    await _build(logger);
+    await _clone(_CpythonCloneConfig(argResults, logger: logger));
+    await _use(_CpythonUseConfig(argResults, logger: logger));
+    await _patch(_CpythonPatchConfig(argResults, logger: logger));
+    await _build(_CpythonBuildConfig(argResults, logger: logger));
   }
 }

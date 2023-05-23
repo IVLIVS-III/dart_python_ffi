@@ -1,7 +1,32 @@
 part of scripts;
 
+final class _CpythonUseConfig {
+  factory _CpythonUseConfig(
+    ArgResults? argResults, {
+    Logger? logger,
+  }) =>
+      _CpythonUseConfig._(
+        logger: logger ?? _logger(argResults),
+        versionTag:
+            argResults?[_CpythonUseCommand._kVersionTagOption] as String? ??
+                _CpythonUseCommand.defaultVersion,
+      );
+
+  _CpythonUseConfig._({
+    required this.logger,
+    required this.versionTag,
+  });
+
+  final Logger logger;
+  final String versionTag;
+}
+
 final class _CpythonUseCommand extends _CpythonSubCommand {
   _CpythonUseCommand() {
+    addFlags(argParser);
+  }
+
+  static void addFlags(ArgParser argParser) {
     argParser.addOption(
       _kVersionTagOption,
       abbr: "t",
@@ -29,22 +54,20 @@ final class _CpythonUseCommand extends _CpythonSubCommand {
 
   @override
   Future<void> run() async {
-    final String? versionTag = argResults?[_kVersionTagOption] as String?;
-    if (versionTag == null) {
-      throw _ToolExit(1, "No version specified.");
-    }
-    await _use(_logger(argResults), versionTag: versionTag);
+    await _use(_CpythonUseConfig(argResults));
   }
 }
 
-Future<void> _use(Logger logger, {required String versionTag}) async {
-  final Progress progress = logger.progress("Checking out v$versionTag");
+Future<void> _use(_CpythonUseConfig config) async {
+  final Logger logger = config.logger;
+  final Progress progress =
+      logger.progress("Checking out v${config.versionTag}");
   await Process.run(
     "git",
-    <String>["checkout", "v$versionTag"],
+    <String>["checkout", "v${config.versionTag}"],
     workingDirectory: _cpython.path,
   ).then(
-    _throwIfNeeded(message: "git failed checking out $versionTag"),
+    _throwIfNeeded(message: "git failed checking out ${config.versionTag}"),
   );
   progress.finish(showTiming: true);
 }
