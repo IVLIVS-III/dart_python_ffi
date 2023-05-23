@@ -1,5 +1,57 @@
 part of python_ffi_cpython_dart;
 
+final class _DylibDownloadEntry {
+  _DylibDownloadEntry({required this.url, required this.sha256});
+
+  final String url;
+  final String sha256;
+}
+
+final class _DylibDownloadMap {
+  Future<ByteData?> get({required String version}) async {
+    final Map<String, _DylibDownloadEntry>? versionEntry = _table[version];
+    if (versionEntry == null) {
+      return null;
+    }
+    final _DylibDownloadEntry? entry = versionEntry[Platform.operatingSystem];
+    if (entry == null) {
+      return null;
+    }
+    final HttpClient client = HttpClient();
+    final HttpClientRequest request = await client.getUrl(Uri.parse(entry.url));
+    final HttpClientResponse response = await request.close();
+    final Uint8List bytes = await response.fold<Uint8List>(
+      Uint8List.fromList(<int>[]),
+      (Uint8List previous, List<int> element) => Uint8List.fromList(
+        previous + element,
+      ),
+    );
+    final String sha256 = crypto.sha256.convert(bytes).toString();
+    if (sha256 != entry.sha256) {
+      return null;
+    }
+    return ByteData.view(bytes.buffer);
+  }
+
+  static final Map<String, Map<String, _DylibDownloadEntry>> _table =
+      <String, Map<String, _DylibDownloadEntry>>{
+    "3.11.3": <String, _DylibDownloadEntry>{
+      "macos": _DylibDownloadEntry(
+        url:
+            "https://github.com/IVLIVS-III/dart_python_ffi/blob/f24776a00dd76b1b171c7671c555ee6678b81046/packages/python_ffi_cpython_dart/macos/libpython3.11.dylib",
+        sha256:
+            "49c2beedbff74d5c7ab1d63b2ab74f3264602fe5ddd85f7f5900b6676c02ad7f",
+      ),
+      "linux": _DylibDownloadEntry(
+        url:
+            "https://github.com/IVLIVS-III/dart_python_ffi/blob/f24776a00dd76b1b171c7671c555ee6678b81046/packages/python_ffi_cpython_dart/linux/libpython3.11.so",
+        sha256:
+            "6ac68fdf70bdfd721231a305321856f692c7e28f647664f1cc4b3b71b28da31e",
+      ),
+    },
+  };
+}
+
 /// Base class for the macOS and Windows implementation of [PythonFfiDelegate].
 ///
 /// This is shared between the pure Dart and Flutter implementations.

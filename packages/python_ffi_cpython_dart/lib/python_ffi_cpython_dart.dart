@@ -7,6 +7,7 @@ import "dart:ffi";
 import "dart:io";
 import "dart:typed_data";
 
+import 'package:crypto/crypto.dart' as crypto;
 import "package:ffi/ffi.dart";
 import "package:python_ffi_cpython_dart/src/ffi/generated_bindings.g.dart";
 import "package:python_ffi_interface/python_ffi_interface.dart";
