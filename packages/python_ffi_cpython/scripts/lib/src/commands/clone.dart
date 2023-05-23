@@ -125,7 +125,8 @@ class _State {
         return;
       }
       final Progress progress = logger.progress(
-          "Checking if '${_cpython.relativePath}' is a clone of '$_remote'");
+        "Checking if '${_cpython.relativePath}' is a clone of '$_remote'",
+      );
       final String remoteUrl = await Process.run(
         "git",
         <String>["config", "--get", "remote.origin.url"],

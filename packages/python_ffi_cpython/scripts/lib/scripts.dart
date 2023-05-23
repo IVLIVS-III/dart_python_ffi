@@ -14,7 +14,6 @@ part "src/commands/get_version.dart";
 part "src/commands/patch.dart";
 part "src/commands/use.dart";
 part "src/extensions/relative.dart";
-part "src/extensions/yes_no.dart";
 part "src/util/tool_exit.dart";
 
 Future<void> main(List<String> arguments) async {

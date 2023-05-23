@@ -1,7 +1,5 @@
 part of scripts;
 
-const int _gitFailedExitCode = 21;
-
 Directory get _current => Directory.current;
 
 Directory get _cpython =>
