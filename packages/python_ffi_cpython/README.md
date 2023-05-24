@@ -9,7 +9,13 @@ plugin. As such, this package is compatible with Flutter apps.
 
 ### Preparing the dylib for bundled distribution
 
-1. Put it somewhere in the `macos` folder, and add the path to `s.vendored_libraries`
+1. Run `dart run scripts/bin/scripts.dart cpython all` to compile the Python dynamic library for the
+   current platform. This creates a `cpython` folder in the root of this package with the compiled
+   dynamic library (`libpython<version>.dylib` / `libpython<version>.so`).
+2. Copy the dynamic library to the `macos`, `windows` or `linux` folder, depending on the platform
+   you're targeting.
+
+### Extra steps on macOS
+
+1. Add the path to the dynamic library (inside the `macos` folder) to `s.vendored_libraries`
    in `macos/python_ffi_cpython.podspec`.
-2. Rename the dylib to `libpython3.11.dylib` (or whatever version you're using).
-3. Run `install_name_tool -id @rpath/libpython3.11.dylib libpython3.11.dylib`

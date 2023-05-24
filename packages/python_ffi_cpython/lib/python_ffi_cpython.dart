@@ -5,7 +5,6 @@ import "dart:convert";
 import "dart:ffi";
 import "dart:io";
 
-import "package:archive/archive_io.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/services.dart";
 import "package:path_provider/path_provider.dart" as path_provider;
@@ -47,9 +46,7 @@ final class PythonFfiCPython extends PythonFfiCPythonBase
     final File tmpZipFile = File("${libDir.path}/python$_version.zip");
     await tmpZipFile.create(recursive: true);
     await tmpZipFile.writeAsBytes(zipFile.buffer.asUint8List());
-    final InputFileStream inputStream = InputFileStream(tmpZipFile.path);
-    final Archive archive = ZipDecoder().decodeBuffer(inputStream);
-    extractArchiveToDisk(archive, libDir.path);
+    await extractPythonStdLibZip(tmpZipFile);
     await tmpZipFile.delete();
   }
 

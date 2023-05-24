@@ -8,14 +8,13 @@ environment:
   flutter: ">=3.10.0"
 
 dependencies:
-  archive: ^3.3.7
   ffi: ^2.0.2
   flutter:
     sdk: flutter
   path_provider: ^2.0.15
   plugin_platform_interface: ^2.1.4
   python_ffi_cpython_dart: ^0.3.0+1
-  python_ffi_interface: ^0.1.0
+  python_ffi_interface: ^0.1.1
 
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,8 @@
 ## NEXT
 
-- Updated bundled Python runtime for macOS.
-    - TODO: Recompile the Python runtime for Windows and Linux.
+- Updated dependencies.
+- Updated bundled Python runtime for macOS and Linux.
+    - TODO: Recompile the Python runtime for Windows.
 - Bundled also the Python stdlib.
 
 ## 0.3.0
