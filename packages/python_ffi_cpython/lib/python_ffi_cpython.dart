@@ -40,9 +40,6 @@ final class PythonFfiCPython extends PythonFfiCPythonBase
     final ByteData zipFile = await rootBundle
         .load("packages/python_ffi_cpython/assets/python$_version.zip");
     final Directory libDir = Directory("${(await pythonFfiDir).path}/lib");
-    if (libDir.existsSync()) {
-      await libDir.delete(recursive: true);
-    }
     final File tmpZipFile = File("${libDir.path}/python$_version.zip");
     await tmpZipFile.create(recursive: true);
     await tmpZipFile.writeAsBytes(zipFile.buffer.asUint8List());

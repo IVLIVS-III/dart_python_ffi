@@ -256,9 +256,6 @@ base mixin PythonFfiCPythonMixin on PythonFfiCPythonBase {
   @override
   Future<void> extractPythonStdLibZip(File zipFile) async {
     final Directory libDir = Directory("${(await pythonFfiDir).path}/lib");
-    if (libDir.existsSync()) {
-      await libDir.delete(recursive: true);
-    }
     final InputFileStream inputStream = InputFileStream(zipFile.path);
     final Archive archive = ZipDecoder().decodeBuffer(inputStream);
     extractArchiveToDisk(archive, libDir.path);
