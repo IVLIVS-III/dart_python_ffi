@@ -1,0 +1,6 @@
+# executables
+initialize
+
+# dynamic libraries
+lib*.so
+lib*.dylib
