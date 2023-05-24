@@ -386,7 +386,7 @@ index 0000000000..eaad46b6e8
 +
 +int main()
 +{
-+    void *handle = dlopen("libpython3.11.dylib", RTLD_LAZY);
++    void *handle = dlopen("libpython3.11.so", RTLD_LAZY);
 +    if (handle == NULL)
 +    {
 +        printf("Failed to load the library: %s\n", dlerror());
