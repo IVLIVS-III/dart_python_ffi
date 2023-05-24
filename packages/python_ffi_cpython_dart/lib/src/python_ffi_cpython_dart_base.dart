@@ -1,57 +1,5 @@
 part of python_ffi_cpython_dart;
 
-final class _DylibDownloadEntry {
-  _DylibDownloadEntry({required this.url, required this.sha256});
-
-  final String url;
-  final String sha256;
-}
-
-final class _DylibDownloadMap {
-  Future<ByteData?> get({required String version}) async {
-    final Map<String, _DylibDownloadEntry>? versionEntry = _table[version];
-    if (versionEntry == null) {
-      return null;
-    }
-    final _DylibDownloadEntry? entry = versionEntry[Platform.operatingSystem];
-    if (entry == null) {
-      return null;
-    }
-    final HttpClient client = HttpClient();
-    final HttpClientRequest request = await client.getUrl(Uri.parse(entry.url));
-    final HttpClientResponse response = await request.close();
-    final Uint8List bytes = await response.fold<Uint8List>(
-      Uint8List.fromList(<int>[]),
-      (Uint8List previous, List<int> element) => Uint8List.fromList(
-        previous + element,
-      ),
-    );
-    final String sha256 = crypto.sha256.convert(bytes).toString();
-    if (sha256 != entry.sha256) {
-      return null;
-    }
-    return ByteData.view(bytes.buffer);
-  }
-
-  static final Map<String, Map<String, _DylibDownloadEntry>> _table =
-      <String, Map<String, _DylibDownloadEntry>>{
-    "3.11.3": <String, _DylibDownloadEntry>{
-      "macos": _DylibDownloadEntry(
-        url:
-            "https://github.com/IVLIVS-III/dart_python_ffi/blob/f24776a00dd76b1b171c7671c555ee6678b81046/packages/python_ffi_cpython_dart/macos/libpython3.11.dylib",
-        sha256:
-            "49c2beedbff74d5c7ab1d63b2ab74f3264602fe5ddd85f7f5900b6676c02ad7f",
-      ),
-      "linux": _DylibDownloadEntry(
-        url:
-            "https://github.com/IVLIVS-III/dart_python_ffi/blob/f24776a00dd76b1b171c7671c555ee6678b81046/packages/python_ffi_cpython_dart/linux/libpython3.11.so",
-        sha256:
-            "6ac68fdf70bdfd721231a305321856f692c7e28f647664f1cc4b3b71b28da31e",
-      ),
-    },
-  };
-}
-
 /// Base class for the macOS and Windows implementation of [PythonFfiDelegate].
 ///
 /// This is shared between the pure Dart and Flutter implementations.
@@ -72,6 +20,12 @@ abstract base class PythonFfiCPythonBase
   FutureOr<ByteData> loadPythonFile(PythonSourceFileEntity sourceFile);
 
   /// Extracts the Python stdlib files from the app bundle.
+  Future<void> extractPythonStdLibZip(File zipFile);
+
+  /// Fetches and extracts the Python stdlib files from the app bundle.
+  ///
+  /// Note: Any implementation should call [extractPythonStdLibZip] to extract
+  ///       the Python stdlib files.
   Future<void> copyPythonStdLib();
 
   /// Opens the Python dylib.
@@ -86,49 +40,98 @@ final class PythonFfiCPythonDart extends PythonFfiCPythonBase
     with PythonFfiCPythonMixin {
   /// Creates a new [PythonFfiCPythonDart] instance.
   ///
-  /// Note: On Windows and Linux the path to the dynamic Python library must be
-  ///       provided via the [libPath] parameter.
+  /// Note: On Windows the path to the dynamic Python library must be provided
+  ///       via the [libPath] parameter.
   PythonFfiCPythonDart(
     String pythonModulesBase64, {
-    String? libPath,
-  }) : _libPath = libPath ?? _defaultLibPath {
+    this.libPath,
+  }) {
     _pythonModules.addAll(_decodePythonModules(pythonModulesBase64));
   }
 
-  /// The version of the Python C API bundled with this package.
-  static const String version = "3.11";
+  static const String _majorVersion = "3";
+  static const String _minorVersion = "11";
+  static const String _patchVersion = "3";
 
-  static String get _defaultLibPath {
-    if (Platform.isMacOS) {
-      return "/Library/Frameworks/Python.framework/Versions/$version/Python";
-    }
-    if (Platform.isWindows || Platform.isLinux) {
-      throw Exception(
+  /// The version of the Python C API bundled with this package.
+  static const String version = "$_majorVersion.$_minorVersion";
+
+  static const String _fullVersion = "$version.$_patchVersion";
+
+  Directory? _cacheDir;
+
+  /// Directory for cached Python runtimes
+  FutureOr<Directory> get cacheDir async => _cacheDir ??= Directory(
+        "${(await pythonFfiDir).path}/cache",
+      );
+
+  FutureOr<String> get _defaultLibPath {
+    if (Platform.isWindows) {
+      throw PythonFfiException(
         "libPath must be provided on ${Platform.operatingSystem}",
       );
+    }
+    if (Platform.isMacOS) {
+      return cacheDir
+          .then((Directory dir) => "${dir.path}/libpython$version.dylib");
+    }
+    if (Platform.isLinux) {
+      return cacheDir
+          .then((Directory dir) => "${dir.path}/libpython$version.so");
     }
     throw Exception("Unsupported platform: ${Platform.operatingSystem}");
   }
 
-  final String _libPath;
+  /// The path to the Python dynamic library.
+  ///
+  /// If this is null, then a default library will be used, which might need to
+  /// be (automatically) downloaded first.
+  final String? libPath;
 
   @override
   Future<void> copyPythonStdLib() async {
-    // TODO: Fix this on Windows. To create a symlink on Windows the process
-    //       must be run as administrator. We don't want to do that.
-    if (Platform.isWindows) {
-      return;
-    }
-    final Link link = Link("${(await pythonFfiDir).path}/lib/python3.11");
-    if (!link.existsSync()) {
-      await link.create("/usr/local/lib/python3.11", recursive: true);
-    }
+    await _ensurePythonStdlib();
+    final File zipFile = File("${(await cacheDir).path}/python$version.zip");
+    await extractPythonStdLibZip(zipFile);
   }
 
   @override
   Future<void> openDylib() async {
-    final DynamicLibrary dylib = DynamicLibrary.open(_libPath);
+    final String? libPath = this.libPath;
+    if (libPath == null) {
+      await _ensurePythonRuntime();
+    }
+    final DynamicLibrary dylib =
+        DynamicLibrary.open(libPath ?? await _defaultLibPath);
     bindings = DartPythonCBindings(dylib);
+  }
+
+  Future<void> _ensurePythonStdlib() async {
+    final Directory cacheDir = await this.cacheDir;
+    final _StdLibCache cache = _StdLibCache(
+      version: version,
+      cacheDir: cacheDir,
+    );
+    final bool cached = await cache.ensure();
+    if (!cached) {
+      throw PythonFfiException(
+        "Failed to cache Python stdlib for version $version on ${Platform.operatingSystem}",
+      );
+    }
+  }
+
+  Future<void> _ensurePythonRuntime() async {
+    final Directory cacheDir = await this.cacheDir;
+    final _DylibCache cache = _DylibCache(
+      version: _fullVersion,
+      cacheDir: cacheDir,
+    );
+    final bool cached = await cache.ensure();
+    if (!cached) {
+      throw PythonFfiException(
+        "Failed to cache Python runtime for version $_fullVersion on ${Platform.operatingSystem}",
+      );
+    }
   }
 
   static Pair<PythonSourceEntity, PythonSourceFileEntity?>
@@ -249,6 +252,17 @@ base mixin PythonFfiCPythonMixin on PythonFfiCPythonBase {
   @override
   bool get isInitialized =>
       areBindingsInitialized && bindings.Py_IsInitialized() != 0;
+
+  @override
+  Future<void> extractPythonStdLibZip(File zipFile) async {
+    final Directory libDir = Directory("${(await pythonFfiDir).path}/lib");
+    if (libDir.existsSync()) {
+      await libDir.delete(recursive: true);
+    }
+    final InputFileStream inputStream = InputFileStream(zipFile.path);
+    final Archive archive = ZipDecoder().decodeBuffer(inputStream);
+    extractArchiveToDisk(archive, libDir.path);
+  }
 
   void _pyStatusGuarded(
     PyStatus Function() callback, {

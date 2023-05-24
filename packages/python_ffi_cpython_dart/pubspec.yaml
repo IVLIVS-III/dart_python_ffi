@@ -7,9 +7,11 @@ environment:
   sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
+  archive: ^3.3.7
+  cli_util: ^0.4.0
   crypto: ^3.0.3
   ffi: ^2.0.2
-  python_ffi_interface: ^0.1.0
+  python_ffi_interface: ^0.1.1
 
 dev_dependencies:
   ffigen: ^8.0.2

@@ -7,7 +7,9 @@ import "dart:ffi";
 import "dart:io";
 import "dart:typed_data";
 
-import 'package:crypto/crypto.dart' as crypto;
+import "package:archive/archive_io.dart";
+import "package:cli_util/cli_logging.dart";
+import "package:crypto/crypto.dart" as crypto;
 import "package:ffi/ffi.dart";
 import "package:python_ffi_cpython_dart/src/ffi/generated_bindings.g.dart";
 import "package:python_ffi_interface/python_ffi_interface.dart";
@@ -19,6 +21,10 @@ export "package:python_ffi_cpython_dart/src/ffi/generated_bindings.g.dart"
 export "package:python_ffi_cpython_dart/src/ffi/generated_bindings.g.dart"
     show DartPythonCBindings;
 
+part "src/cache/cache.dart";
+part "src/cache/download_entry.dart";
+part "src/cache/dylib.dart";
+part "src/cache/stdlib.dart";
 part "src/class.dart";
 part "src/exception.dart";
 part "src/extensions/convert_to_dart_extension.dart";
