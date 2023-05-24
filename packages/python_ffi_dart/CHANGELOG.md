@@ -1,3 +1,9 @@
+## 0.3.1
+
+- Updated dependencies.
+- On macOS, the Python runtime is not automatically downloaded and cached.
+- The Python stdlib is now automatically downloaded and cached.
+
 ## 0.3.0+1
 
 - Updated dependencies.

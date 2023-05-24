@@ -21,14 +21,11 @@ See also the [example project](./example) for a working example.
 
 ## Limitations
 
-On macOS this package expects the Python dynamic library (Python 3.11) to be installed on the system
-in the default location (`"/Library/Frameworks/Python.framework/Versions/3.11/Python"`). You can
-override this by specifying `libpath` when calling `PythonFfiDart.instance.initialize()`.
-
 On Linux this package expects `python3.11` to be installed on the system and available in the PATH,
-e.g. by installing the `python3.11` package. The Python dynamic library is bundled with the package,
-you can use a local copy by specifying `libpath` when calling `PythonFfiDart.instance.initialize()`.
+e.g. by installing the `python3.11` package. The Python dynamic library is **not** bundled with the
+package, you must use a local copy by specifying `libPath` when
+calling `PythonFfiDart.instance.initialize()`.
 
 On Windows this package expects `python3.11` to be installed on the system and available in the
-PATH. The Python dynamic library is bundled with the package, you can use a local copy by
-specifying `libpath` when calling `PythonFfiDart.instance.initialize()`.
+PATH. The Python dynamic library is **not** bundled with the package, you must use a local copy by
+specifying `libPath` when calling `PythonFfiDart.instance.initialize()`.

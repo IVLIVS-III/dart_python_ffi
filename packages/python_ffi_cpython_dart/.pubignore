@@ -1,6 +1,9 @@
 dart_publish
 python
 python_files
+linux/
+macos/
+stdlib/
 
 # files ignored by .gitignore
 

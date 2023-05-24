@@ -1,3 +1,9 @@
+## 0.3.1
+
+- Updated dependencies.
+- The Python stdlib is now bundles with the package. This allows using the package without having
+  Python installed on the target system.
+
 ## 0.3.0
 
 - Updated to Dart 3.x.

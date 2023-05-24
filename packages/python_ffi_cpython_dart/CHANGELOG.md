@@ -1,8 +1,9 @@
-## NEXT
+## 0.3.1
 
 - Regenerated Python C-API bindings with all Python header files.
 - Made Python runtime initialization more robust.
-- The Python runtime is now downloaded and cached if the `libPyth` parameter is not specified.
+- On macOS, the Python runtime is now downloaded and cached if the `libPath` parameter is not
+  specified.
 - The Python stdlib is now downloaded and cached.
 
 ## 0.3.0+1

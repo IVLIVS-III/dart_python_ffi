@@ -1,4 +1,4 @@
-## NEXT
+## 0.3.1
 
 - Updated dependencies.
 - Updated bundled Python runtime for macOS and Linux.

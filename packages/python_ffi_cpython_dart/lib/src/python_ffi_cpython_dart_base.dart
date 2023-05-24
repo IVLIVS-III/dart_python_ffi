@@ -40,8 +40,8 @@ final class PythonFfiCPythonDart extends PythonFfiCPythonBase
     with PythonFfiCPythonMixin {
   /// Creates a new [PythonFfiCPythonDart] instance.
   ///
-  /// Note: On Windows the path to the dynamic Python library must be provided
-  ///       via the [libPath] parameter.
+  /// Note: On Windows and Linux the path to the dynamic Python library must be
+  ///       provided via the [libPath] parameter.
   PythonFfiCPythonDart(
     String pythonModulesBase64, {
     this.libPath,
@@ -66,7 +66,7 @@ final class PythonFfiCPythonDart extends PythonFfiCPythonBase
       );
 
   FutureOr<String> get _defaultLibPath {
-    if (Platform.isWindows) {
+    if (Platform.isWindows || Platform.isLinux) {
       throw PythonFfiException(
         "libPath must be provided on ${Platform.operatingSystem}",
       );
@@ -75,10 +75,12 @@ final class PythonFfiCPythonDart extends PythonFfiCPythonBase
       return cacheDir
           .then((Directory dir) => "${dir.path}/libpython$version.dylib");
     }
+    /*
     if (Platform.isLinux) {
       return cacheDir
           .then((Directory dir) => "${dir.path}/libpython$version.so");
     }
+    */
     throw Exception("Unsupported platform: ${Platform.operatingSystem}");
   }
 
