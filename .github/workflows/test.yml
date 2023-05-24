@@ -21,6 +21,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
+      fail-fast: true
+      max-parallel: 1
     runs-on: ${{ matrix.os }}
 
     steps:
