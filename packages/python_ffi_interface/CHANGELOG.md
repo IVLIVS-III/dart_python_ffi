@@ -1,3 +1,7 @@
+## 0.1.1
+
+- Added `then` method to `FutureOrExtension`.
+
 ## 0.1.0
 
 - Updated to Dart 3.x.

@@ -1,6 +1,6 @@
 name: python_ffi_interface
 description: A base interface for python_ffi_dart, a Python-FFI for Dart.
-version: 0.1.0
+version: 0.1.1
 repository: https://github.com/IVLIVS-III/dart_python_ffi
 
 environment:

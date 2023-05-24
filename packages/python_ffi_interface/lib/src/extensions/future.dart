@@ -18,4 +18,13 @@ extension FutureOrExtension<T> on FutureOr<T> {
     }
     return futuresList.map((FutureOr<T> e) => e as T);
   }
+
+  /// Registers callbacks to be called when this [FutureOr] completes.
+  FutureOr<R> then<R>(FutureOr<R> Function(T result) callback) {
+    if (this is Future<T>) {
+      return (this as Future<T>).then(callback);
+    } else {
+      return callback(this as T);
+    }
+  }
 }
