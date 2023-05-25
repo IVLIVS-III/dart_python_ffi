@@ -12,6 +12,25 @@ Easily import any pure Python module into your Dart or Flutter project.
 | Windows  | supported (alpha) |
 | Linux    | supported (alpha) |
 
+## Flutter support
+
+| Platform | Python runtime | Python stdlib |
+|----------|----------------|---------------|
+| macOS    | bundled        | bundled       |
+| Windows  | bundled        | bundled       |
+| Linux    | bundled        | bundled       |
+
+## Dart support
+
+| Platform | Python runtime    | Python stdlib |
+|----------|-------------------|---------------|
+| macOS    | bundled           | bundled       |
+| Windows  | **not** bundled\* | bundled       |
+| Linux    | **not** bundled\* | bundled       |
+
+*\* The Python runtime must be installed on the system and the path to the
+dynamic library must be provided during initialization.*
+
 ## Table of Contents
 
 1. [Motivation](#motivation)
