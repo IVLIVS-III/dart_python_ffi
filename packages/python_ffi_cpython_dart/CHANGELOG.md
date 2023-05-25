@@ -1,3 +1,7 @@
+## NEXT
+
+- Refactored to make use of Dart 3.x record types.
+
 ## 0.3.1
 
 - Regenerated Python C-API bindings with all Python header files.

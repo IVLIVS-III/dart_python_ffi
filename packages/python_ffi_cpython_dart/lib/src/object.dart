@@ -3,10 +3,10 @@ part of python_ffi_cpython_dart;
 // ignore: avoid_classes_with_only_static_members
 class _PythonObjectCPythonRefcountUtil {
   static void _initializerCallback(
-    Pair<PythonFfiCPythonBase, Pointer<PyObject>> value,
-  ) {
-    value.second.incRef(value.first);
-  }
+    PythonFfiCPythonBase platform,
+    Pointer<PyObject> reference,
+  ) =>
+      reference.incRef(platform);
 
   static const Initializer<PythonFfiCPythonBase, Pointer<PyObject>>
       initializer = Initializer<PythonFfiCPythonBase, Pointer<PyObject>>(
@@ -14,17 +14,17 @@ class _PythonObjectCPythonRefcountUtil {
   );
 
   static void _finalizerCallback(
-    Pair<PythonFfiDelegate<Object?>, Object?> value,
+    (PythonFfiDelegate<Object?>, Object?) value,
   ) {
-    final PythonFfiDelegate<Object?> platform = value.first;
-    final Object? reference = value.second;
+    // ignore: always_specify_types
+    final (platform, reference) = value;
     if (platform is PythonFfiCPythonBase && reference is Pointer<PyObject>) {
       reference.decRef(platform);
     }
   }
 
-  static final Finalizer<Pair<PythonFfiDelegate<Object?>, Object?>> finalizer =
-      Finalizer<Pair<PythonFfiDelegate<Object?>, Object?>>(
+  static final Finalizer<(PythonFfiDelegate<Object?>, Object?)> finalizer =
+      Finalizer<(PythonFfiDelegate<Object?>, Object?)>(
     _finalizerCallback,
   );
 }

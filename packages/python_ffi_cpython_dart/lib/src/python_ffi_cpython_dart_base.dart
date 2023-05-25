@@ -136,7 +136,7 @@ final class PythonFfiCPythonDart extends PythonFfiCPythonBase
     }
   }
 
-  static Pair<PythonSourceEntity, PythonSourceFileEntity?>
+  static (PythonSourceEntity, PythonSourceFileEntity?)
       _decodePythonSourceEntity(
     Map<String, dynamic> data,
   ) {
@@ -153,17 +153,15 @@ final class PythonFfiCPythonDart extends PythonFfiCPythonBase
               SourceBase64(child["name"] as String, child["base64"] as String);
           continue;
         }
-        final Pair<PythonSourceEntity, PythonSourceFileEntity?> result =
+        // ignore: always_specify_types
+        final (pythonSourceEntity, pythonSourceFileEntity) =
             _decodePythonSourceEntity(child);
-        licenseFile ??= result.second;
-        entity.add(result.first);
+        licenseFile ??= pythonSourceFileEntity;
+        entity.add(pythonSourceEntity);
       }
-      return Pair<PythonSourceEntity, PythonSourceFileEntity?>(
-        entity,
-        licenseFile,
-      );
+      return (entity, licenseFile);
     } else {
-      return Pair<PythonSourceEntity, PythonSourceFileEntity?>(
+      return (
         SourceBase64(data["name"] as String, data["base64"] as String),
         null,
       );
@@ -183,12 +181,12 @@ final class PythonFfiCPythonDart extends PythonFfiCPythonBase
           entry.value as Map<String, dynamic>;
       final Map<String, dynamic> root =
           moduleJson["root"] as Map<String, dynamic>;
-      final Pair<PythonSourceEntity, PythonSourceFileEntity?> result =
-          _decodePythonSourceEntity(root);
+      // ignore: always_specify_types
+      final (decodedRoot, license) = _decodePythonSourceEntity(root);
       yield PythonModuleDefinition(
         name: moduleName,
-        root: result.first,
-        license: result.second,
+        root: decodedRoot,
+        license: license,
       );
     }
   }

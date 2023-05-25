@@ -80,15 +80,10 @@ final class PythonFfiCPython extends PythonFfiCPythonBase
     return super.prepareModule(moduleDefinition);
   }
 
-  static Pair<PythonSourceEntity, PythonSourceFileEntity?>
-      _decodePythonSourceEntity(
-    Object data,
-  ) {
+  static (PythonSourceEntity, PythonSourceFileEntity?)
+      _decodePythonSourceEntity(Object data) {
     if (data is String) {
-      return Pair<PythonSourceEntity, PythonSourceFileEntity?>(
-        SourceFile(data),
-        null,
-      );
+      return (SourceFile(data), null);
     }
     data = data as Map<String, dynamic>;
     if (data.keys.contains("children")) {
@@ -104,17 +99,15 @@ final class PythonFfiCPython extends PythonFfiCPythonBase
             continue;
           }
         }
-        final Pair<PythonSourceEntity, PythonSourceFileEntity?> result =
+        // ignore: always_specify_types
+        final (pythonSourceEntity, pythonSourceFileEntity) =
             _decodePythonSourceEntity(child);
-        licenseFile ??= result.second;
-        entity.add(result.first);
+        licenseFile ??= pythonSourceFileEntity;
+        entity.add(pythonSourceEntity);
       }
-      return Pair<PythonSourceEntity, PythonSourceFileEntity?>(
-        entity,
-        licenseFile,
-      );
+      return (entity, licenseFile);
     } else {
-      return Pair<PythonSourceEntity, PythonSourceFileEntity?>(
+      return (
         SourceBase64(data["name"] as String, data["base64"] as String),
         null,
       );
@@ -134,12 +127,12 @@ final class PythonFfiCPython extends PythonFfiCPythonBase
       if (root == null) {
         continue;
       }
-      final Pair<PythonSourceEntity, PythonSourceFileEntity?> result =
-          _decodePythonSourceEntity(root);
+      // ignore: always_specify_types
+      final (decodedRoot, license) = _decodePythonSourceEntity(root);
       yield PythonModuleDefinition(
         name: moduleName,
-        root: result.first,
-        license: result.second,
+        root: decodedRoot,
+        license: license,
       );
     }
   }

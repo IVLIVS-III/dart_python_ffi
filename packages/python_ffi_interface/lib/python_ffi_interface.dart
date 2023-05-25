@@ -22,4 +22,3 @@ part "src/python_module_definition.dart";
 part "src/types/iterable.dart";
 part "src/types/iterator.dart";
 part "src/types/tuple.dart";
-part "src/util/pair.dart";

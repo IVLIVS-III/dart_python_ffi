@@ -5,10 +5,10 @@ final class Initializer<T1 extends Object?, T2 extends Object?> {
   /// Creates a new initializer.
   const Initializer(this._initializer);
 
-  final void Function(Pair<T1, T2>) _initializer;
+  final void Function(T1, T2) _initializer;
 
   /// Invokes the initializer.
-  void call(T1 value1, T2 value2) => _initializer(Pair<T1, T2>(value1, value2));
+  void call(T1 value1, T2 value2) => _initializer(value1, value2);
 }
 
 /// Abstract base class for any Dart representation of a Python object.
@@ -24,7 +24,7 @@ abstract base class PythonObjectInterface<P extends PythonFfiDelegate<R>,
     initializer(_platform, _reference);
     finalizer.attach(
       this,
-      Pair<P, R>(_platform, _reference),
+      (_platform, _reference),
       detach: this,
     );
   }
@@ -47,7 +47,7 @@ abstract base class PythonObjectInterface<P extends PythonFfiDelegate<R>,
 
   /// The finalizer for the python object.
   /// Gets invoked when the object is no longer accessible to the program.
-  final Finalizer<Pair<PythonFfiDelegate<Object?>, Object?>> finalizer;
+  final Finalizer<(PythonFfiDelegate<Object?>, Object?)> finalizer;
 
   /// Gets the platform that this object is associated with.
   P get platform => _platform;
