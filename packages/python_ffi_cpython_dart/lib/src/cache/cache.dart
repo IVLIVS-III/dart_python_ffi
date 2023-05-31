@@ -76,7 +76,7 @@ abstract base class _Cache {
     }
     final Uint8List bytes = await cacheFile.readAsBytes();
     final crypto.Digest digest = crypto.sha256.convert(bytes);
-    return digest.toString() == entry.sha256;
+    return digest.toString().toLowerCase() == entry.sha256.toLowerCase();
   }
 
   Future<bool> _get(_DownloadEntry entry) async {

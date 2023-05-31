@@ -1,6 +1,7 @@
 ## NEXT
 
 - Refactored to make use of Dart 3.x record types.
+- Increased robustness of file-hash validation.
 
 ## 0.3.1
 
