@@ -80,6 +80,12 @@ final class PythonFfiCPythonDart extends PythonFfiCPythonBase
       return cacheDir
           .then((Directory dir) => "${dir.path}/libpython$version.so");
     }
+    if (Platform.isWindows) {
+      return cacheDir.then(
+        (Directory dir) =>
+            "${dir.path}/python${version.replaceAll(".", "")}.dll",
+      );
+    }
     */
     throw Exception("Unsupported platform: ${Platform.operatingSystem}");
   }

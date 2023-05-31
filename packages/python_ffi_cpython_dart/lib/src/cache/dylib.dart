@@ -31,6 +31,11 @@ final class _DylibCache extends _Cache {
         sha256:
             "6ac68fdf70bdfd721231a305321856f692c7e28f647664f1cc4b3b71b28da31e",
       ),
+      "windows": _DownloadEntry(
+        url: "https://github.com/IVLIVS-III/dart_python_ffi/raw/2907413c709759ba3d1c90c848b0ba9e0a321b35/packages/python_ffi_cpython_dart/windows/python311.dll",
+        sha256:
+            "7701424c5c3f3990f6e442117d2b7b9a9eabed0818cf5402c33cd84eb5327a17",
+      ),
       */
     },
   };
