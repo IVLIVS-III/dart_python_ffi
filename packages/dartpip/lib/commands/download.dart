@@ -1,6 +1,6 @@
 part of dartpip;
 
-/// Implements the `bundle` command.
+/// Implements the `download` command.
 class DownloadCommand extends Command<void> {
   /// Creates a new instance of the [DownloadCommand] class.
   DownloadCommand();
@@ -26,10 +26,7 @@ class DownloadCommand extends Command<void> {
 
     final List<Future<void>> futures = <Future<void>>[];
     for (final String projectName in projectNames) {
-      print("Downloading Python module '$projectName'...");
-      futures.add(
-        PyPIService().fetch(projectName: projectName),
-      );
+      futures.add(PyPIService().fetch(projectName: projectName));
     }
 
     await Future.wait(futures);

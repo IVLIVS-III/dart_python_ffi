@@ -55,3 +55,31 @@ Future<void> _bundleModule({
 
   await moduleBundle.export();
 }
+
+Future<void> _bundleCacheModule({
+  required String appRoot,
+  required String projectName,
+  required String projectVersion,
+  required String appType,
+}) async {
+  final _PythonModule<Object> pythonModule = await _PythonModule.fromCache(
+    projectName: projectName,
+    version: projectVersion,
+  );
+  late final _ModuleBundle<_PythonModule<Object>> moduleBundle;
+
+  switch (appType) {
+    case _kAppTypeFlutter:
+      moduleBundle = _FlutterModuleBundle<Object>(
+        pythonModule: pythonModule,
+        appRoot: appRoot,
+      );
+    case _kAppTypeConsole:
+      moduleBundle = _ConsoleModuleBundle<Object>(
+        pythonModule: pythonModule,
+        appRoot: appRoot,
+      );
+  }
+
+  await moduleBundle.export();
+}

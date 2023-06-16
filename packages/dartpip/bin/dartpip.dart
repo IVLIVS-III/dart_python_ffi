@@ -3,9 +3,10 @@ import "package:dartpip/dartpip.dart";
 
 Future<void> main(List<String> arguments) async {
   final CommandRunner<void> runner = CommandRunner<void>(
-    "python_ffi_bundler",
+    "dartpip",
     "The command line application for bundling Python modules into Dart applications.",
   )
+    ..addCommand(InstallCommand())
     ..addCommand(BundleModuleCommand())
     ..addCommand(BundleCommand())
     ..addCommand(DownloadCommand());

@@ -27,6 +27,19 @@ sealed class _PythonModule<T extends Object> {
     return _MultiFilePythonModule(path);
   }
 
+  static Future<_PythonModule<Object>> fromCache({
+    required String projectName,
+    required String version,
+  }) async {
+    final String cachePath =
+        "${(await PyPIService().cacheDir).path}/$projectName-$version";
+    return _MultiFileCachePythonModule._(
+      projectName: projectName,
+      projectVersion: version,
+      projectCacheDirectory: Directory(cachePath),
+    );
+  }
+
   final String path;
   T? _data;
 
@@ -143,6 +156,9 @@ final class _FileNode {
           "name": name,
           "children": children.map((_FileNode node) => node.info).toList(),
         };
+
+  @override
+  String toString() => info.toString();
 }
 
 final class _MultiFilePythonModule
@@ -192,4 +208,50 @@ final class _MultiFilePythonModule
   @override
   Map<String, dynamic> get moduleInfo =>
       <String, dynamic>{"root": _fileTree.info};
+}
+
+final class _MultiFileCachePythonModule extends _MultiFilePythonModule {
+  _MultiFileCachePythonModule._({
+    required this.projectName,
+    required this.projectVersion,
+    required this.projectCacheDirectory,
+  }) : super("${projectCacheDirectory.path}/$projectName");
+
+  final String projectName;
+  final String projectVersion;
+  final Directory projectCacheDirectory;
+
+  File? get findLicense {
+    for (final FileSystemEntity entity in projectCacheDirectory.listSync()) {
+      if (entity is File) {
+        if (entity.name.toLowerCase().contains("license")) {
+          return entity;
+        }
+      }
+    }
+    return null;
+  }
+
+  @override
+  Future<Map<List<String>, ByteData>?> _load() async {
+    final Map<List<String>, ByteData> result =
+        await super._load() ?? <List<String>, ByteData>{};
+    final File? licenseFile = findLicense;
+    final ByteData? licenseData =
+        licenseFile != null ? await _loadFile(licenseFile.path) : null;
+    if (licenseData != null) {
+      result[<String>["LICENSE"]] = licenseData;
+      _fileTree.insert(<String>["LICENSE"]);
+    }
+    print(
+      "Loaded $projectName-$projectVersion from cache with file tree: $_fileTree.",
+    );
+    if (result.isEmpty) {
+      return null;
+    }
+    return result;
+  }
+
+  @override
+  String get moduleName => projectName;
 }

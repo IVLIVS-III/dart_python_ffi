@@ -20,19 +20,24 @@ final class PyPIService {
     },
   );
 
+  /// The directory where downloaded packages are stored.
+  Future<Directory> get cacheDir => _cacheDir;
+
   final PyPIClient _client = PyPIClient();
   final http.Client _httpClient = http.Client();
 
   /// Downloads a project from PyPI if it is not already downloaded.
-  Future<void> fetch({required String projectName}) async {
+  /// Returns the version of the downloaded project.
+  Future<String> fetch({required String projectName}) async {
     final Directory outputDir = await _cacheDir;
     final String version = await _client.latestVersion(projectName);
     final Directory projectDir =
         Directory("${outputDir.path}/$projectName-$version");
     if (projectDir.existsSync()) {
       print("Project '$projectName' is already downloaded.");
-      return;
+      return version;
     }
+    print("Downloading Python module '$projectName'...");
     final String url = await _client.downloadUrl(
       projectName: projectName,
       version: version,
@@ -47,5 +52,6 @@ final class PyPIService {
     print("Extracting ${outputFile.path}...");
     await extractFileToDisk(outputFile.path, outputDir.path);
     await outputFile.delete();
+    return version;
   }
 }
