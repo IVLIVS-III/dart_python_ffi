@@ -1,6 +1,8 @@
 part of dartpip;
 
+/// TODO: Document.
 final class PubspecEditor {
+  /// TODO: Document.
   PubspecEditor(this._pubspecPath)
       : _yamlEditor = YamlEditor(File(_pubspecPath).readAsStringSync());
 
@@ -15,6 +17,7 @@ final class PubspecEditor {
     }
   }
 
+  /// TODO: Document.
   void save() {
     _ensureOpen();
     if (!_isDirty) {
@@ -23,6 +26,7 @@ final class PubspecEditor {
     File(_pubspecPath).writeAsStringSync(_yamlEditor.toString());
   }
 
+  /// TODO: Document.
   void close() {
     _isClosed = true;
   }
@@ -112,6 +116,7 @@ final class PubspecEditor {
     _isDirty = true;
   }
 
+  /// TODO: Document.
   Iterable<String> get dependencies {
     _ensureOpen();
     final YamlMap node = _ensureNode(
@@ -124,6 +129,7 @@ final class PubspecEditor {
         .whereType<String>();
   }
 
+  /// TODO: Document.
   void addDependency(String dependency, {String? version}) {
     _ensureOpen();
     if (dependencies.contains(dependency)) {
@@ -133,7 +139,7 @@ final class PubspecEditor {
     _constructViaPath(
       parentPath,
       YamlMap.wrap(
-        {dependency: version},
+        <String, String>{dependency: version ?? "any"},
         style: CollectionStyle.FLOW,
       ),
     );
@@ -145,6 +151,7 @@ final class PubspecEditor {
     _isDirty = true;
   }
 
+  /// TODO: Document.
   void removeDependency(String dependency) {
     _ensureOpen();
     if (!dependencies.contains(dependency)) {
@@ -154,6 +161,7 @@ final class PubspecEditor {
     _isDirty = true;
   }
 
+  /// TODO: Document.
   Iterable<String> get assets {
     _ensureOpen();
     final YamlList node = _ensureNode(
@@ -166,6 +174,7 @@ final class PubspecEditor {
         .whereType<String>();
   }
 
+  /// TODO: Document.
   void addAsset(String asset) {
     _ensureOpen();
     if (assets.contains(asset)) {
@@ -175,6 +184,7 @@ final class PubspecEditor {
     _isDirty = true;
   }
 
+  /// TODO: Document.
   void removeAsset(String asset) {
     _ensureOpen();
     if (!assets.contains(asset)) {
