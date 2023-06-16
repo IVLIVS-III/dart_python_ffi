@@ -13,21 +13,36 @@ final class PyPIService {
         "${Platform.environment["HOME"]}/.dartpip/cache/pypi",
       );
       await cacheDir.create(recursive: true);
+      print("Cache directory: ${cacheDir.path}");
       return cacheDir;
     },
   );
 
   final PyPIClient _client = PyPIClient();
+  final http.Client _httpClient = http.Client();
 
-  Future<void> fetch({
-    required String packageName,
-    required Directory outputDir,
-  }) async {
-    final String version = await _client.latestVersion(packageName);
+  Future<void> fetch({required String projectName}) async {
+    final Directory outputDir = await _cacheDir;
+    final String version = await _client.latestVersion(projectName);
+    final Directory projectDir =
+        Directory("${outputDir.path}/$projectName-$version");
+    if (projectDir.existsSync()) {
+      print("Project '$projectName' is already downloaded.");
+      return;
+    }
     final String url = await _client.downloadUrl(
-      projectName: packageName,
+      projectName: projectName,
       version: version,
-      packageType: "sdist",
+      packageType: PackageType.sdist,
     );
+    print("Downloading $url...");
+    final String filename = url.split("/").last;
+    final http.Response response = await _httpClient.get(Uri.parse(url));
+    final File outputFile = File("${outputDir.path}/$filename")
+      ..createSync(recursive: true);
+    await outputFile.writeAsBytes(response.bodyBytes);
+    print("Extracting ${outputFile.path}...");
+    await extractFileToDisk(outputFile.path, outputDir.path);
+    await outputFile.delete();
   }
 }

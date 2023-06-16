@@ -12,6 +12,7 @@ executables:
   dartpip:
 
 dependencies:
+  archive: ^3.3.7
   args: ^2.4.2
   collection: ^1.17.2
   http: ^1.0.0

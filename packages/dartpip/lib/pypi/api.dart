@@ -32,6 +32,32 @@ final class ProjectResponse {
   Map<String, dynamic> toJson() => _$ProjectResponseToJson(this);
 }
 
+///
+///
+/// Reference: https://github.com/pypi/warehouse/blob/main/warehouse/filters.py#L37
+enum PackageType {
+  @JsonValue("bdist_dmg")
+  bdistDmg("OSX Disk Image"),
+  @JsonValue("bdist_dumb")
+  bdistDumb("Dumb Binary"),
+  @JsonValue("bdist_egg")
+  bdistEgg("Egg"),
+  @JsonValue("bdist_msi")
+  bdistMsi("Windows MSI Installer"),
+  @JsonValue("bdist_rpm")
+  bdistRpm("RPM"),
+  @JsonValue("bdist_wheel")
+  bdistWheel("Wheel"),
+  @JsonValue("bdist_wininst")
+  bdistWininst("Windows Installer"),
+  @JsonValue("sdist")
+  sdist("Source");
+
+  const PackageType(this.value);
+
+  final String value;
+}
+
 @JsonSerializable()
 final class ReleaseResponseUrl {
   ReleaseResponseUrl({
@@ -43,7 +69,7 @@ final class ReleaseResponseUrl {
       _$ReleaseResponseUrlFromJson(json);
 
   @JsonKey(name: "packagetype")
-  final String packageType;
+  final PackageType packageType;
 
   final String url;
 
@@ -51,17 +77,15 @@ final class ReleaseResponseUrl {
 }
 
 final class ReleaseResponseUrlsConverter
-    implements
-        JsonConverter<List<ReleaseResponseUrl>, List<Map<String, dynamic>>> {
+    implements JsonConverter<ReleaseResponseUrl, Map<String, dynamic>> {
   const ReleaseResponseUrlsConverter();
 
   @override
-  List<ReleaseResponseUrl> fromJson(List<Map<String, dynamic>> json) =>
-      json.map(ReleaseResponseUrl.fromJson).toList();
+  ReleaseResponseUrl fromJson(Map<String, dynamic> json) =>
+      ReleaseResponseUrl.fromJson(json);
 
   @override
-  List<Map<String, dynamic>> toJson(List<ReleaseResponseUrl> object) =>
-      object.map((ReleaseResponseUrl url) => url.toJson()).toList();
+  Map<String, dynamic> toJson(ReleaseResponseUrl object) => object.toJson();
 }
 
 @JsonSerializable()

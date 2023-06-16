@@ -31,7 +31,7 @@ final class PyPIClient with http.BaseClient implements http.Client {
   Future<String> downloadUrl({
     required String projectName,
     required String version,
-    required String packageType,
+    required PackageType packageType,
   }) async {
     final ReleaseResponse releaseResponse =
         await _api.release(projectName, version);
