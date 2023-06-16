@@ -1,6 +1,9 @@
 part of dartpip;
 
+/// A [Future] that is only evaluated once.
 class LazyFuture<T> implements Future<T> {
+  /// Creates a [LazyFuture] that will evaluate [future] the first time it is
+  /// accessed.
   LazyFuture(Future<T> Function() future) : _future = future;
 
   final Future<T> Function() _future;

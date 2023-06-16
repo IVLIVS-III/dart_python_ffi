@@ -1,6 +1,8 @@
 part of dartpip;
 
+/// A collection of functions for interacting with PyPI.
 final class PyPIService {
+  /// Call [PyPIService().someMethod()] to use this service.
   factory PyPIService() => _instance;
 
   PyPIService._();
@@ -21,6 +23,7 @@ final class PyPIService {
   final PyPIClient _client = PyPIClient();
   final http.Client _httpClient = http.Client();
 
+  /// Downloads a project from PyPI if it is not already downloaded.
   Future<void> fetch({required String projectName}) async {
     final Directory outputDir = await _cacheDir;
     final String version = await _client.latestVersion(projectName);

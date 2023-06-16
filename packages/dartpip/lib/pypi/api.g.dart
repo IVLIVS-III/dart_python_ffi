@@ -6,6 +6,16 @@ part of 'api.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+ProjectResponse _$ProjectResponseFromJson(Map<String, dynamic> json) =>
+    ProjectResponse(
+      info: ProjectResponseInfo.fromJson(json['info'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$ProjectResponseToJson(ProjectResponse instance) =>
+    <String, dynamic>{
+      'info': instance.info,
+    };
+
 ProjectResponseInfo _$ProjectResponseInfoFromJson(Map<String, dynamic> json) =>
     ProjectResponseInfo(
       version: json['version'] as String,
@@ -17,14 +27,19 @@ Map<String, dynamic> _$ProjectResponseInfoToJson(
       'version': instance.version,
     };
 
-ProjectResponse _$ProjectResponseFromJson(Map<String, dynamic> json) =>
-    ProjectResponse(
-      info: ProjectResponseInfo.fromJson(json['info'] as Map<String, dynamic>),
+ReleaseResponse _$ReleaseResponseFromJson(Map<String, dynamic> json) =>
+    ReleaseResponse(
+      urls: (json['urls'] as List<dynamic>)
+          .map((e) => const _ReleaseResponseUrlsConverter()
+              .fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
-Map<String, dynamic> _$ProjectResponseToJson(ProjectResponse instance) =>
+Map<String, dynamic> _$ReleaseResponseToJson(ReleaseResponse instance) =>
     <String, dynamic>{
-      'info': instance.info,
+      'urls': instance.urls
+          .map(const _ReleaseResponseUrlsConverter().toJson)
+          .toList(),
     };
 
 ReleaseResponseUrl _$ReleaseResponseUrlFromJson(Map<String, dynamic> json) =>
@@ -49,18 +64,3 @@ const _$PackageTypeEnumMap = {
   PackageType.bdistWininst: 'bdist_wininst',
   PackageType.sdist: 'sdist',
 };
-
-ReleaseResponse _$ReleaseResponseFromJson(Map<String, dynamic> json) =>
-    ReleaseResponse(
-      urls: (json['urls'] as List<dynamic>)
-          .map((e) => const ReleaseResponseUrlsConverter()
-              .fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
-
-Map<String, dynamic> _$ReleaseResponseToJson(ReleaseResponse instance) =>
-    <String, dynamic>{
-      'urls': instance.urls
-          .map(const ReleaseResponseUrlsConverter().toJson)
-          .toList(),
-    };

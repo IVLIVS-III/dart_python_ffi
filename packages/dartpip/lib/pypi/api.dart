@@ -6,79 +6,105 @@ import "package:json_annotation/json_annotation.dart";
 
 part "api.g.dart";
 
-@JsonSerializable()
-final class ProjectResponseInfo {
-  ProjectResponseInfo({
-    required this.version,
-  });
-
-  factory ProjectResponseInfo.fromJson(Map<String, dynamic> json) =>
-      _$ProjectResponseInfoFromJson(json);
-  final String version;
-
-  Map<String, dynamic> toJson() => _$ProjectResponseInfoToJson(this);
-}
-
+/// Models the response object returned from the PyPI-API 'project' endpoint.
+///
+/// Reference: https://warehouse.pypa.io/api-reference/json.html#project
 @JsonSerializable()
 final class ProjectResponse {
+  /// Default constructor for [ProjectResponse], required by build_runner.
   ProjectResponse({
     required this.info,
   });
 
+  /// Factory constructor for [ProjectResponse], required by json_serializable.
   factory ProjectResponse.fromJson(Map<String, dynamic> json) =>
       _$ProjectResponseFromJson(json);
+
+  /// Field path: {project}.info
+  ///
+  /// See also: [ProjectResponseInfo]
   final ProjectResponseInfo info;
 
+  /// Required by json_serializable.
   Map<String, dynamic> toJson() => _$ProjectResponseToJson(this);
 }
 
+/// Models part of the response object returned from the PyPI-API 'project'
+/// endpoint.
+/// Field path: {project}.info
 ///
-///
-/// Reference: https://github.com/pypi/warehouse/blob/main/warehouse/filters.py#L37
-enum PackageType {
-  @JsonValue("bdist_dmg")
-  bdistDmg("OSX Disk Image"),
-  @JsonValue("bdist_dumb")
-  bdistDumb("Dumb Binary"),
-  @JsonValue("bdist_egg")
-  bdistEgg("Egg"),
-  @JsonValue("bdist_msi")
-  bdistMsi("Windows MSI Installer"),
-  @JsonValue("bdist_rpm")
-  bdistRpm("RPM"),
-  @JsonValue("bdist_wheel")
-  bdistWheel("Wheel"),
-  @JsonValue("bdist_wininst")
-  bdistWininst("Windows Installer"),
-  @JsonValue("sdist")
-  sdist("Source");
+/// Reference: https://warehouse.pypa.io/api-reference/json.html#project
+@JsonSerializable()
+final class ProjectResponseInfo {
+  /// Default constructor for [ProjectResponseInfo], required by build_runner.
+  ProjectResponseInfo({
+    required this.version,
+  });
 
-  const PackageType(this.value);
+  /// Factory constructor for [ProjectResponseInfo], required by
+  /// json_serializable.
+  factory ProjectResponseInfo.fromJson(Map<String, dynamic> json) =>
+      _$ProjectResponseInfoFromJson(json);
 
-  final String value;
+  /// Field path: {project}.info.version
+  final String version;
+
+  /// Required by json_serializable.
+  Map<String, dynamic> toJson() => _$ProjectResponseInfoToJson(this);
 }
 
+/// Models the response object returned from the PyPI-API 'release' endpoint.
+///
+/// Reference: https://warehouse.pypa.io/api-reference/json.html#release
+@JsonSerializable()
+final class ReleaseResponse {
+  /// Default constructor for [ReleaseResponse], required by build_runner.
+  ReleaseResponse({required this.urls});
+
+  /// Factory constructor for [ReleaseResponse], required by json_serializable.
+  factory ReleaseResponse.fromJson(Map<String, dynamic> json) =>
+      _$ReleaseResponseFromJson(json);
+
+  /// Field path: {release}.urls
+  @_ReleaseResponseUrlsConverter()
+  final List<ReleaseResponseUrl> urls;
+
+  /// Required by json_serializable.
+  Map<String, dynamic> toJson() => _$ReleaseResponseToJson(this);
+}
+
+/// Models part of the response object returned from the PyPI-API 'release'
+/// endpoint.
+/// Field path: {release}.urls
+///
+/// Reference: https://warehouse.pypa.io/api-reference/json.html#release
 @JsonSerializable()
 final class ReleaseResponseUrl {
+  /// Default constructor for [ReleaseResponseUrl], required by build_runner.
   ReleaseResponseUrl({
     required this.packageType,
     required this.url,
   });
 
+  /// Factory constructor for [ReleaseResponseUrl], required by
+  /// json_serializable.
   factory ReleaseResponseUrl.fromJson(Map<String, dynamic> json) =>
       _$ReleaseResponseUrlFromJson(json);
 
+  /// Field path: {release}.urls[].packagetype
   @JsonKey(name: "packagetype")
   final PackageType packageType;
 
+  /// Field path: {release}.urls[].url
   final String url;
 
+  /// Required by json_serializable.
   Map<String, dynamic> toJson() => _$ReleaseResponseUrlToJson(this);
 }
 
-final class ReleaseResponseUrlsConverter
+final class _ReleaseResponseUrlsConverter
     implements JsonConverter<ReleaseResponseUrl, Map<String, dynamic>> {
-  const ReleaseResponseUrlsConverter();
+  const _ReleaseResponseUrlsConverter();
 
   @override
   ReleaseResponseUrl fromJson(Map<String, dynamic> json) =>
@@ -88,20 +114,55 @@ final class ReleaseResponseUrlsConverter
   Map<String, dynamic> toJson(ReleaseResponseUrl object) => object.toJson();
 }
 
-@JsonSerializable()
-final class ReleaseResponse {
-  ReleaseResponse({required this.urls});
+/// Models part of the response object returned from the PyPI-API 'release'
+/// endpoint.
+/// Field path: {release}.urls[].packagetype
+///
+/// Reference: https://github.com/pypi/warehouse/blob/main/warehouse/filters.py#L37
+enum PackageType {
+  /// Value for 'OSX Disk Image'.
+  @JsonValue("bdist_dmg")
+  bdistDmg("OSX Disk Image"),
 
-  factory ReleaseResponse.fromJson(Map<String, dynamic> json) =>
-      _$ReleaseResponseFromJson(json);
+  /// Value for 'Dumb Binary'.
+  @JsonValue("bdist_dumb")
+  bdistDumb("Dumb Binary"),
 
-  @ReleaseResponseUrlsConverter()
-  final List<ReleaseResponseUrl> urls;
+  /// Value for 'Egg'.
+  @JsonValue("bdist_egg")
+  bdistEgg("Egg"),
 
-  Map<String, dynamic> toJson() => _$ReleaseResponseToJson(this);
+  /// Value for 'Windows Installer'.
+  @JsonValue("bdist_msi")
+  bdistMsi("Windows MSI Installer"),
+
+  /// Value for 'RPM'.
+  @JsonValue("bdist_rpm")
+  bdistRpm("RPM"),
+
+  /// Value for 'Wheel'.
+  @JsonValue("bdist_wheel")
+  bdistWheel("Wheel"),
+
+  /// Value for 'Windows Installer'.
+  @JsonValue("bdist_wininst")
+  bdistWininst("Windows Installer"),
+
+  /// Value for 'Source'.
+  @JsonValue("sdist")
+  sdist("Source");
+
+  const PackageType(this.value);
+
+  /// Human readable value for the package type as defined in
+  /// https://github.com/pypi/warehouse/blob/main/warehouse/filters.py#L37.
+  final String value;
 }
 
+/// Models the PyPI-API.
 final class PyPIAPI {
+  /// Pass a [PyPIClient] to the constructor which will be used to make HTTP
+  /// requests to the PyPI-API.
   PyPIAPI(this._client);
 
   final PyPIClient _client;
@@ -114,6 +175,9 @@ final class PyPIAPI {
     return responseJson;
   }
 
+  /// Calls the PyPI-API 'project' endpoint.
+  ///
+  /// Reference: https://warehouse.pypa.io/api-reference/json.html#project
   Future<ProjectResponse> project(String projectName) async {
     final Uri uri = Uri.parse(
       "https://pypi.org/pypi/$projectName/json",
@@ -122,6 +186,9 @@ final class PyPIAPI {
     return ProjectResponse.fromJson(responseJson);
   }
 
+  /// Calls the PyPI-API 'release' endpoint.
+  ///
+  /// Reference: https://warehouse.pypa.io/api-reference/json.html#release
   Future<ReleaseResponse> release(String projectName, String version) async {
     final Uri uri = Uri.parse(
       "https://pypi.org/pypi/$projectName/$version/json",

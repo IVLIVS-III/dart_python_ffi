@@ -1,5 +1,6 @@
 part of dartpip;
 
+/// A client for interacting with the the PyPI-API.
 final class PyPIClient with http.BaseClient implements http.Client {
   final http.Client _client = http.Client();
 
@@ -23,11 +24,13 @@ final class PyPIClient with http.BaseClient implements http.Client {
     return _client.send(request);
   }
 
+  /// Returns the latest version of a project.
   Future<String> latestVersion(String projectName) async {
     final ProjectResponse projectResponse = await _api.project(projectName);
     return projectResponse.info.version;
   }
 
+  /// Returns the download URL for a project.
   Future<String> downloadUrl({
     required String projectName,
     required String version,
