@@ -79,6 +79,43 @@ abstract base class _Cache {
     return digest.toString().toLowerCase() == entry.sha256.toLowerCase();
   }
 
+  /// Executes [callback] at most [maxRetries] + 1 times, retrying on
+  /// [Exception]s.
+  /// Returns the result of [callback] and an [Iterable] of [Exception]s that
+  /// were thrown. At most [maxRetries] + 1 [Exception]s are returned, exactly
+  /// one for each time [callback] was called unsuccessfully.
+  /// If [exceptionalReturn] is not null and [maxRetries] retries were
+  /// unsuccessful, [exceptionalReturn] is returned instead of throwing the last
+  /// [Exception]. Hence, it is advised to provide [exceptionalReturn].
+  /// Otherwise all [Exception]s but the last one are swallowed silently in case
+  /// of exhaustion of [maxRetries].
+  /// Waits for [backoff] between retries, doubles [backoff] after each retry.
+  static Future<(T, Iterable<E>)> exceptionalRetry<T, E extends Exception>(
+    FutureOr<T> Function() callback, {
+    int maxRetries = 7,
+    Duration backoff = const Duration(milliseconds: 100),
+    T? exceptionalReturn,
+  }) async {
+    try {
+      final T result = await callback();
+      return (result, <E>[]);
+    } on E catch (e) {
+      if (maxRetries == 0) {
+        if (exceptionalReturn != null) {
+          return (exceptionalReturn, <E>[e]);
+        }
+        rethrow;
+      }
+      await Future<void>.delayed(backoff);
+      final (T result, Iterable<E> errors) = await exceptionalRetry(
+        callback,
+        maxRetries: maxRetries - 1,
+        backoff: backoff * 2,
+      );
+      return (result, errors.add(e));
+    }
+  }
+
   Future<bool> _get(_DownloadEntry entry) async {
     // setup download client
     final HttpClient client = HttpClient();
@@ -104,18 +141,27 @@ abstract base class _Cache {
       return false;
     }
     final File cacheFile = _cacheFile(entry, cacheDir);
-    if (cacheFile.existsSync()) {
-      await cacheFile.delete(recursive: true);
-    }
-    await cacheFile.create(recursive: true);
-    final RandomAccessFile fileHandle =
-        cacheFile.openSync(mode: FileMode.append)..lockSync();
+    final Uint8List bytes = Uint8List(response.contentLength);
+    int offset = 0;
     await for (final List<int> chunk in response) {
-      await fileHandle.writeFrom(chunk);
+      bytes.setRange(offset, offset + chunk.length, chunk);
+      offset += chunk.length;
     }
-    fileHandle
-      ..unlockSync()
-      ..closeSync();
+    await exceptionalRetry<void, OSError>(
+      () async {
+        if (cacheFile.existsSync()) {
+          await cacheFile.delete(recursive: true);
+        }
+        await cacheFile.create(recursive: true);
+        final RandomAccessFile fileHandle =
+            cacheFile.openSync(mode: FileMode.write)..lockSync();
+        await fileHandle.writeFrom(bytes);
+        fileHandle
+          ..unlockSync()
+          ..closeSync();
+      },
+      backoff: const Duration(seconds: 1),
+    );
     downloadProgress.finish(showTiming: true);
     logger.trace("$_loggerFileIdentifier written to '${cacheFile.path}'");
     final bool success = await _exists(entry);
