@@ -385,11 +385,12 @@ base mixin PythonFfiCPythonMixin on PythonFfiCPythonBase {
 
     bindings.PyConfig_Clear(config);
 
-    appendToPath((await packagesDir).path);
+    final Directory packagesDir = await this.packagesDir;
+    appendToPath(packagesDir.path);
 
     // clear modules cache
-    if ((await packagesDir).existsSync()) {
-      (await packagesDir).deleteSync(recursive: true);
+    if (packagesDir.existsSync()) {
+      packagesDir.deleteSync(recursive: true);
     }
 
     // load modules

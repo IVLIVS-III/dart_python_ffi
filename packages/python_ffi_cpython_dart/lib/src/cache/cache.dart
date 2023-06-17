@@ -1,5 +1,20 @@
 part of python_ffi_cpython_dart;
 
+extension on DateTime {
+  Uint8List get bytes {
+    final int now = millisecondsSinceEpoch;
+    return Uint8List.fromList(
+      List<int>.generate(8, (int i) => now >> ((8 - i) * 8) & 0xff),
+    );
+  }
+}
+
+extension on Iterable<int> {
+  DateTime get dateTime => DateTime.fromMillisecondsSinceEpoch(
+        take(8).fold(0, (int a, int b) => a << 8 | b),
+      );
+}
+
 abstract base class _Cache {
   _Cache({required this.version, required this.cacheDir});
 
@@ -18,12 +33,20 @@ abstract base class _Cache {
   File _cacheFileLock(_DownloadEntry entry, Directory cacheDir) =>
       File("${cacheDir.path}/${entry.filename}.lock");
 
+  /// Lock file format:
+  /// - 1 byte: uuid of the process that holds the lock
+  /// - 8 bytes: timestamp of when the lock was acquired
+  ///            - must be updated every 10 seconds
+  ///            - if the timestamp is older than 30 seconds, the lock is
+  ///              considered stale and can be deleted
   Future<bool> _lock(_DownloadEntry entry) async {
     final File cacheFileLock = _cacheFileLock(entry, cacheDir);
     // try to get the lock
     Progress? progress;
     while (cacheFileLock.existsSync()) {
-      final int? id = (await cacheFileLock.readAsBytes()).singleOrNull;
+      final DateTime now = DateTime.now();
+      final Uint8List bytes = await cacheFileLock.readAsBytes();
+      final int? id = bytes.firstOrNull;
       if (id == uuid) {
         // we hold the lock
         progress?.finish(showTiming: true);
@@ -31,6 +54,12 @@ abstract base class _Cache {
       }
       if (id == null) {
         // weird state, delete the lock and try again
+        await cacheFileLock.delete();
+        continue;
+      }
+      final DateTime lockAcquired = bytes.skip(1).dateTime;
+      if (now.difference(lockAcquired) > const Duration(seconds: 30)) {
+        // stale lock, delete it and try again
         await cacheFileLock.delete();
         continue;
       }
@@ -53,7 +82,21 @@ abstract base class _Cache {
     // create the lock
     cacheFileLock
       ..createSync(recursive: true)
-      ..writeAsBytesSync(<int>[uuid]);
+      ..writeAsBytesSync(<int>[uuid, ...DateTime.now().bytes]);
+    Timer.periodic(
+      const Duration(seconds: 10),
+      (Timer timer) async {
+        if (cacheFileLock.existsSync()) {
+          final int? id = (await cacheFileLock.readAsBytes()).firstOrNull;
+          if (id == uuid) {
+            await cacheFileLock
+                .writeAsBytes(<int>[uuid, ...DateTime.now().bytes]);
+            return;
+          }
+        }
+        timer.cancel();
+      },
+    );
     logger.trace("Acquired $_loggerFileIdentifier lock: $uuid");
     return true;
   }
@@ -61,7 +104,7 @@ abstract base class _Cache {
   Future<void> _unlock(_DownloadEntry entry) async {
     final File cacheFileLock = _cacheFileLock(entry, cacheDir);
     if (cacheFileLock.existsSync()) {
-      final int? id = (await cacheFileLock.readAsBytes()).singleOrNull;
+      final int? id = (await cacheFileLock.readAsBytes()).firstOrNull;
       if (id == uuid) {
         await cacheFileLock.delete();
         logger.trace("Released $_loggerFileIdentifier lock: $uuid");
