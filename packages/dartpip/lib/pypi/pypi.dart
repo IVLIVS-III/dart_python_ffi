@@ -51,7 +51,18 @@ final class PyPIService {
     await outputFile.writeAsBytes(response.bodyBytes);
     print("Extracting ${outputFile.path}...");
     await extractFileToDisk(outputFile.path, outputDir.path);
+    Directory? extractedDir;
+    for (final FileSystemEntity entity in outputDir.listSync()) {
+      if (entity is Directory && filename.startsWith(entity.name)) {
+        extractedDir = entity;
+        break;
+      }
+    }
     await outputFile.delete();
+    if (extractedDir == null) {
+      throw StateError("Could not find extracted directory.");
+    }
+    await extractedDir.rename(projectDir.path);
     return version;
   }
 }

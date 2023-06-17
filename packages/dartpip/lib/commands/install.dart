@@ -19,9 +19,7 @@ class InstallCommand extends Command<void> {
     final dynamic dependencies = pubspecYaml["dependencies"];
 
     if (dependencies is! Map) {
-      throw StateError(
-        "pubspec.yaml does not contain a valid dependencies map.",
-      );
+      return _kAppTypeConsole;
     }
 
     if (dependencies.containsKey("flutter")) {
