@@ -34,53 +34,6 @@ final class PubspecEditor {
   static final YamlMap _specialMissingMarker =
       YamlMap.wrap(<String, bool>{"_missing": true});
 
-  YamlMap _flowMap() =>
-      YamlMap.wrap(<String, Object?>{}, style: CollectionStyle.FLOW);
-
-  T _constructViaPath<T extends YamlNode>(
-    Iterable<Object?> path,
-    T leaf, {
-    int depth = 0,
-  }) {
-    _ensureOpen();
-    final String padding = "  " * depth;
-    print("${padding}trying to construct via path $path");
-    final List<Object?> pathList = path.toList();
-    final YamlNode node = _yamlEditor.parseAt(
-      pathList,
-      orElse: () => _specialMissingMarker,
-    );
-    if (node is T && node != _specialMissingMarker) {
-      print("${padding}found node $node");
-      return node;
-    }
-    _isDirty = true;
-    if (path.isEmpty) {
-      _yamlEditor.update(pathList, leaf);
-      print("${padding}returning leaf $leaf");
-      return leaf;
-    }
-    final Object? last = pathList.last;
-    final List<Object?> parentPath = pathList.sublist(0, pathList.length - 1);
-    print("${padding}parent path $parentPath");
-    if (last is! String && last is! int) {
-      throw ArgumentError.value(
-        last,
-        "path",
-        "Must only contain String and int.",
-      );
-    }
-    if (last is! String) {
-      throw UnimplementedError("list construction not implemented yet");
-    }
-    if (node is! T) {
-      print("$padding$node is not a $T");
-      _insertIntoMap(parentPath, last, leaf, depth: depth);
-      return leaf;
-    }
-    return _ensureNode(pathList);
-  }
-
   T _ensureNode<T extends YamlNode>(Iterable<Object?> path, {T? orElse}) {
     _ensureOpen();
     final YamlNode node = _yamlEditor.parseAt(
@@ -104,25 +57,36 @@ final class PubspecEditor {
     return node;
   }
 
-  void _insertIntoMap(
-    Iterable<Object?> path,
-    String key,
-    YamlNode node, {
-    int depth = 0,
-  }) {
+  void _insertIntoMap(Iterable<String> path, String key, Object? node) {
     _ensureOpen();
-    _constructViaPath<YamlNode>(path, YamlScalar.wrap(null), depth: depth + 1);
-    _yamlEditor.update(<Object?>[...path, key], node);
-    _isDirty = true;
+    final List<String> pathList = path.toList();
+    final YamlNode parent = _yamlEditor.parseAt(
+      pathList,
+      orElse: () => _specialMissingMarker,
+    );
+    if (parent is YamlMap && parent != _specialMissingMarker) {
+      _yamlEditor.update(<Object?>[...pathList, key], node);
+      _isDirty = true;
+      return;
+    }
+    final YamlMap newNode = YamlMap.wrap(
+      <String, Object?>{key: node},
+      style: CollectionStyle.BLOCK,
+    );
+    if (pathList.isEmpty) {
+      _yamlEditor.update(pathList, newNode);
+      _isDirty = true;
+      return;
+    }
+    final List<String> parentPath = pathList.sublist(0, pathList.length - 1);
+    return _insertIntoMap(parentPath, pathList.last, newNode);
   }
 
   /// TODO: Document.
   Iterable<String> get dependencies {
     _ensureOpen();
-    final YamlMap node = _ensureNode(
-      <Object?>["python_ffi", "modules"],
-      orElse: _flowMap(),
-    );
+    final YamlMap node =
+        _ensureNode(<Object?>["python_ffi", "modules"], orElse: YamlMap());
     return node.nodes.keys
         .whereType<YamlScalar>()
         .map((YamlScalar e) => e.value)
@@ -135,20 +99,8 @@ final class PubspecEditor {
     if (dependencies.contains(dependency)) {
       return;
     }
-    final List<Object?> parentPath = <Object?>["python_ffi", "modules"];
-    _constructViaPath(
-      parentPath,
-      YamlMap.wrap(
-        <String, String>{dependency: version ?? "any"},
-        style: CollectionStyle.FLOW,
-      ),
-    );
-    _ensureNode(parentPath, orElse: _flowMap());
-    _yamlEditor.update(
-      <Object?>[...parentPath, dependency],
-      version ?? "any",
-    );
-    _isDirty = true;
+    final List<String> parentPath = <String>["python_ffi", "modules"];
+    _insertIntoMap(parentPath, dependency, version ?? "any");
   }
 
   /// TODO: Document.
@@ -159,6 +111,26 @@ final class PubspecEditor {
     }
     _yamlEditor.remove(<Object?>["python_ffi", "modules", dependency]);
     _isDirty = true;
+  }
+
+  /// Ensures that the `flutter.assets` node exists.
+  /// Returns `true` if the node already existed, `false` if it was created.
+  bool _ensureAssetsNode(String initialValue) {
+    _ensureOpen();
+    final YamlNode node = _yamlEditor.parseAt(
+      <Object?>["flutter", "assets"],
+      orElse: () => _specialMissingMarker,
+    );
+    if (node == _specialMissingMarker) {
+      _insertIntoMap(
+        <String>["flutter"],
+        "assets",
+        YamlList.wrap(<String>[initialValue], style: CollectionStyle.BLOCK),
+      );
+      _isDirty = true;
+      return false;
+    }
+    return true;
   }
 
   /// TODO: Document.
@@ -180,8 +152,10 @@ final class PubspecEditor {
     if (assets.contains(asset)) {
       return;
     }
-    _yamlEditor.appendToList(<Object?>["flutter", "assets"], asset);
-    _isDirty = true;
+    if (_ensureAssetsNode(asset)) {
+      _yamlEditor.appendToList(<Object?>["flutter", "assets"], asset);
+      _isDirty = true;
+    }
   }
 
   /// TODO: Document.
