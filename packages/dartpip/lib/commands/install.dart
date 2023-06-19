@@ -88,6 +88,8 @@ class InstallCommand extends Command<void> {
       throw StateError("Options must be provided.");
     }
 
+    await PythonFfiDart.instance.initialize(base64.encode(utf8.encode("{}")));
+
     final String appRoot = Directory.current.path;
     final PubspecEditor pubspecEditor = PubspecEditor("$appRoot/pubspec.yaml");
     final List<String> existingPythonModules =
@@ -161,6 +163,9 @@ class InstallCommand extends Command<void> {
           projectVersion: version,
           appRoot: appRoot,
           appType: appType,
+        ).then(
+          (_ModuleBundle<_PythonModule<Object>> moduleBundle) =>
+              _generateTypeDefs(moduleBundle.definition),
         ),
       );
     }

@@ -56,7 +56,7 @@ Future<void> _bundleModule({
   await moduleBundle.export();
 }
 
-Future<void> _bundleCacheModule({
+Future<_ModuleBundle<_PythonModule<Object>>> _bundleCacheModule({
   required String appRoot,
   required String projectName,
   required String projectVersion,
@@ -82,4 +82,12 @@ Future<void> _bundleCacheModule({
   }
 
   await moduleBundle.export();
+  return moduleBundle;
+}
+
+Future<void> _generateTypeDefs(PythonModuleDefinition moduleDefinition) async {
+  print("Generating type definitions for ${moduleDefinition.name}...");
+  await PythonFfiDart.instance.prepareModule(moduleDefinition);
+  // final pythonModuleHandle = PythonFfiDart.instance.importModule(name, (pythonModule) => null);
+  print("Generated type definitions for ${moduleDefinition.name}.");
 }

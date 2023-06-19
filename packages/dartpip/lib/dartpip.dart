@@ -11,6 +11,8 @@ import "package:args/command_runner.dart";
 import "package:collection/collection.dart";
 import "package:dartpip/pypi/api.dart";
 import "package:http/http.dart" as http;
+import "package:python_ffi_cpython_dart/python_ffi_cpython_dart.dart";
+import "package:python_ffi_dart/python_ffi_dart.dart";
 import "package:yaml/yaml.dart";
 import "package:yaml_edit/yaml_edit.dart";
 

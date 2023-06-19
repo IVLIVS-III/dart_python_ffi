@@ -142,8 +142,9 @@ final class PythonFfiCPythonDart extends PythonFfiCPythonBase
     }
   }
 
-  static (PythonSourceEntity, PythonSourceFileEntity?)
-      _decodePythonSourceEntity(
+  /// Decodes the bundled Python module into a format that can be used to create
+  /// [PythonModuleDefinition]s.
+  static (PythonSourceEntity, PythonSourceFileEntity?) decodePythonSourceEntity(
     Map<String, dynamic> data,
   ) {
     if (data.keys.contains("children")) {
@@ -161,7 +162,7 @@ final class PythonFfiCPythonDart extends PythonFfiCPythonBase
         }
         // ignore: always_specify_types
         final (pythonSourceEntity, pythonSourceFileEntity) =
-            _decodePythonSourceEntity(child);
+            decodePythonSourceEntity(child);
         licenseFile ??= pythonSourceFileEntity;
         entity.add(pythonSourceEntity);
       }
@@ -188,7 +189,7 @@ final class PythonFfiCPythonDart extends PythonFfiCPythonBase
       final Map<String, dynamic> root =
           moduleJson["root"] as Map<String, dynamic>;
       // ignore: always_specify_types
-      final (decodedRoot, license) = _decodePythonSourceEntity(root);
+      final (decodedRoot, license) = decodePythonSourceEntity(root);
       yield PythonModuleDefinition(
         name: moduleName,
         root: decodedRoot,

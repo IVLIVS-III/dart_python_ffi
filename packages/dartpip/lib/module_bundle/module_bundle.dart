@@ -91,4 +91,17 @@ sealed class _ModuleBundle<T extends _PythonModule<Object>> {
       );
     }
   }
+
+  PythonSourceEntity get _sourceTree {
+    final Map<String, dynamic> data =
+        moduleInfo[pythonModule.moduleName]["root"] as Map<String, dynamic>;
+    final (PythonSourceEntity root, _) =
+        PythonFfiCPythonDart.decodePythonSourceEntity(data);
+    return root;
+  }
+
+  PythonModuleDefinition get definition => PythonModuleDefinition(
+        name: pythonModule.moduleName,
+        root: _sourceTree,
+      );
 }
