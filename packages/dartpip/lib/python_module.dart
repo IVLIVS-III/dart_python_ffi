@@ -237,11 +237,12 @@ final class _MultiFileCachePythonModule extends _MultiFilePythonModule {
     final Map<List<String>, ByteData> result =
         await super._load() ?? <List<String>, ByteData>{};
     final File? licenseFile = findLicense;
+    final String licenseFileName = licenseFile?.name ?? "LICENSE";
     final ByteData? licenseData =
         licenseFile != null ? await _loadFile(licenseFile.path) : null;
     if (licenseData != null) {
-      result[<String>["LICENSE"]] = licenseData;
-      _fileTree.insert(<String>["LICENSE"]);
+      result[<String>[licenseFileName]] = licenseData;
+      _fileTree.insert(<String>[licenseFileName]);
     }
     print(
       "Loaded $projectName-$projectVersion from cache with file tree: $_fileTree.",
