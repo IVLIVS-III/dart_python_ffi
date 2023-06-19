@@ -88,6 +88,8 @@ Future<_ModuleBundle<_PythonModule<Object>>> _bundleCacheModule({
 Future<void> _generateTypeDefs(PythonModuleDefinition moduleDefinition) async {
   print("Generating type definitions for ${moduleDefinition.name}...");
   await PythonFfiDart.instance.prepareModule(moduleDefinition);
-  // final pythonModuleHandle = PythonFfiDart.instance.importModule(name, (pythonModule) => null);
+  final TypeGenerationModule pythonModuleHandle = PythonFfiDart.instance
+      .importModule(moduleDefinition.name, TypeGenerationModule.from);
+  print(pythonModuleHandle.annotations);
   print("Generated type definitions for ${moduleDefinition.name}.");
 }
