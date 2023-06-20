@@ -90,6 +90,12 @@ Future<void> _generateTypeDefs(PythonModuleDefinition moduleDefinition) async {
   await PythonFfiDart.instance.prepareModule(moduleDefinition);
   final TypeGenerationModule pythonModuleHandle = PythonFfiDart.instance
       .importModule(moduleDefinition.name, TypeGenerationModule.from);
-  print(pythonModuleHandle.annotations);
+  print(
+    pythonModuleHandle.typeDefinition(
+      moduleDefinition.name,
+      cache: <TypeDefinition>{},
+      depth: 0,
+    ),
+  );
   print("Generated type definitions for ${moduleDefinition.name}.");
 }
