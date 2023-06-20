@@ -1,4 +1,6 @@
-import "package:collection/collection.dart";
+import "dart:collection";
+
+import "package:python_ffi_cpython_dart/python_ffi_cpython_dart.dart";
 import "package:python_ffi_dart/python_ffi_dart.dart";
 
 final class BuiltinsModule extends PythonModule {
@@ -10,252 +12,247 @@ final class BuiltinsModule extends PythonModule {
   Object? dir(Object? object) => getFunction("dir").call(<Object?>[object]);
 }
 
-class TypeDefinition {
-  TypeDefinition(this.name, this.object, {this.parent, String? type})
-      : type = type ?? object.runtimeType.toString();
+class TypeDefinitionsCache {
+  final HashMap<Object?, TypeDefinition> _cache =
+      HashMap<Object?, TypeDefinition>(equals: _equals, hashCode: _hashCode);
+
+  UnmodifiableListView<TypeDefinition> get values =>
+      UnmodifiableListView<TypeDefinition>(_cache.values);
+
+  static bool _equals(Object? a, Object? b) {
+    if (a == null) {
+      return b == null;
+    }
+    if (a is PythonObjectInterface && b is PythonObjectInterface) {
+      return a.reference == b.reference;
+    }
+    return a == b;
+  }
+
+  static int _hashCode(Object? a) {
+    if (a == null) {
+      return 0;
+    }
+    if (a is PythonObjectInterface) {
+      final int hashCode = a.reference.hashCode;
+      return hashCode;
+    }
+    return a.hashCode;
+  }
+
+  void add(TypeDefinition value) => _cache[value.object] = value;
+
+  bool contains(Object? key) => _cache.containsKey(key);
+
+  TypeDefinition? get(Object? key) => _cache[key];
+
+  List<Map<String, dynamic>> get dump {
+    final List<TypeDefinition> values = List<TypeDefinition>.from(_cache.values)
+      ..sort(
+        (TypeDefinition a, TypeDefinition b) =>
+            b.attributes.length.compareTo(a.attributes.length),
+      );
+    return values.map((TypeDefinition e) => e.shallowDump).toList();
+  }
+}
+
+sealed class _TypeInfo {
+  _TypeInfo._(this.name, this.type);
+
+  factory _TypeInfo.from(String name, Object? object) {
+    if (object == null) {
+      return ValueTypeInfo("null", null.runtimeType, null);
+    }
+    if (object is PythonObjectInterface) {
+      final Object? reference = object.reference;
+      if (reference is Pointer<PyObject>) {
+        return PythonObjectTypeInfo(
+          object.runtimeType.toString(),
+          object.runtimeType,
+          reference.address,
+        );
+      }
+      throw ArgumentError.value(
+        object,
+        "object",
+        "PythonObjectInterface must have a reference to a PyObject, but reference has type ${reference.runtimeType}",
+      );
+    }
+    return ValueTypeInfo(
+      name,
+      object.runtimeType,
+      object is PythonObjectInterface ? object.reference : object,
+    );
+  }
 
   final String name;
-  final Object? object;
-  final TypeDefinition? parent;
-  final String type;
-  final Map<String, TypeDefinition> children = <String, TypeDefinition>{};
+  final Type type;
 
-  void add(String name, TypeDefinition child) {
-    children[name] = child;
-  }
+  Map<String, dynamic> get toJson;
+}
 
-  TypeDefinition? cached(
-    Object? wantedObject, {
-    TypeDefinition? caller,
-    required int depth,
-    required String wantedName,
-  }) {
-    throw UnimplementedError("cached");
-    print(
-      "${"  " * depth}searching for $wantedName in $name, called by ${caller?.name}",
+final class PythonObjectTypeInfo extends _TypeInfo {
+  PythonObjectTypeInfo(String name, Type type, this.reference)
+      : super._(name, type);
+
+  static _TypeInfo tryAccept(
+      String name, Type type, PythonObjectInterface object) {
+    final Object? reference = object.reference;
+    if (reference is Pointer<PyObject>) {
+      return PythonObjectTypeInfo(name, type, reference.address);
+    }
+    throw ArgumentError.value(
+      object,
+      "object",
+      "PythonObjectInterface must have a reference to a PyObject, but reference has type ${reference.runtimeType}",
     );
-    if (object == wantedObject) {
-      return this;
-    }
-    for (final TypeDefinition child in children.values) {
-      if (child.object == caller?.object) {
-        continue;
-      }
-      final TypeDefinition? result = child.cached(
-        wantedObject,
-        caller: this,
-        depth: depth + 1,
-        wantedName: wantedName,
-      );
-      if (result != null) {
-        return result;
-      }
-    }
-    if (caller?.object != parent?.object) {
-      return parent?.cached(
-        wantedObject,
-        caller: this,
-        depth: depth + 1,
-        wantedName: wantedName,
-      );
-    }
-    return null;
   }
+
+  final int reference;
 
   @override
-  String toString() => "$name<$type>: $children";
+  String toString() => "$name<$type>@0x${reference.toRadixString(16)}";
+
+  Map<String, dynamic> get toJson => <String, dynamic>{
+        "name": name,
+        "type": type.toString(),
+        "address": "0x${reference.toRadixString(16)}",
+      };
+}
+
+final class ValueTypeInfo extends _TypeInfo {
+  ValueTypeInfo(String name, Type type, this.value) : super._(name, type);
+
+  final Object? value;
+
+  @override
+  String toString() => "$name: $value";
+
+  Map<String, dynamic> get toJson {
+    final Object? value = switch (this.value) {
+      List() || Map() => this.value.runtimeType.toString(),
+      _ => this.value,
+    };
+    return <String, dynamic>{
+      "name": name,
+      "type": type.toString(),
+      "value": value,
+    };
+  }
+}
+
+class TypeDefinition {
+  TypeDefinition(this.object, {_TypeInfo? type, String? name})
+      : type = type ??
+            _TypeInfo.from(name ?? object.runtimeType.toString(), object);
+
+  final Object? object;
+  final _TypeInfo type;
+  final Map<String, TypeDefinition> attributes = <String, TypeDefinition>{};
+
+  void add(String name, TypeDefinition child) {
+    attributes[name] = child;
+  }
+
+  Map<String, dynamic> get shallowDump => <String, dynamic>{
+        "info": type.toJson,
+        "attributes": attributes.map(
+          (String key, TypeDefinition value) =>
+              MapEntry<String, dynamic>(key, value.type.toJson),
+        ),
+      };
+
+  Map<String, dynamic> get deepDump => <String, dynamic>{
+        "info": type.toJson,
+        "attributes": attributes.map(
+          (String key, TypeDefinition value) =>
+              MapEntry<String, dynamic>(key, value.deepDump),
+        ),
+      };
+
+  @override
+  String toString() => "TypeDefinition<$type>: $attributes";
 }
 
 base mixin TypeGenerationMixin on PythonObjectInterface {
-  Map<String, dynamic>? _recurse(String attribute, {required int depth}) {
-    final String indent = "  " * depth;
-    if (attribute.startsWith("_")) {
-      // print("Warning: $attribute is a private attribute, skipping.");
-      return null;
+  Iterable<String> get _subAttributes {
+    final Object? dirResult = BuiltinsModule.import().dir(this);
+    if (dirResult is List) {
+      return dirResult.whereType();
     }
-    print("${indent}Recurse: $attribute");
-    if (!hasAttribute(attribute)) {
-      return null;
-    }
-    final Map<String, dynamic> result = <String, dynamic>{};
-    final value = getAttribute(attribute);
-    // print("got $attribute");
-    if (value is PythonModuleInterface) {
-      // print("$attribute<${value.runtimeType}>");
-      result["type"] = attribute;
-      final TypeGenerationModule typeGenerationModule =
-          TypeGenerationModule.from(value);
-      result["children"] = typeGenerationModule.annotations(depth: depth + 1);
-    } else if (value is PythonClassInterface) {
-      // print("$attribute<${value.runtimeType}>");
-      result["type"] = attribute;
-      final TypeGenerationClass typeGenerationClass =
-          TypeGenerationClass.from(value);
-      result["children"] = typeGenerationClass.annotations(depth: depth + 1);
-    } else if (value is PythonObjectInterface) {
-      // print("$attribute<${value.runtimeType}>");
-      result["type"] = attribute;
-      final TypeGenerationObject typeGenerationObject =
-          TypeGenerationObject.from(value);
-      /*
-      print(
-        "wrapped $attribute<${value.runtimeType}> with TypeGenerationObject",
-      );
-      */
-      result["children"] = typeGenerationObject.annotations(depth: depth + 1);
-    } else {
-      // print("$attribute<${value.runtimeType}> = $value");
-      // print("found a non-Python object@$attribute");
-      result["type"] = value.runtimeType.toString();
-    }
-    return result;
+    return <String>[];
   }
 
-  Map<String, dynamic>? _handle(
-    String attribute,
-    Object? Function(String) getter, {
-    required Iterable<String> Function(Object) valueInterpreter,
-    required int depth,
-  }) {
-    if (!hasAttribute(attribute)) {
-      return null;
-    }
-    final Object? subAttributes = getter(attribute);
-    // print("$attribute<${subAttributes.runtimeType}> = $subAttributes");
-    if (subAttributes == null) {
-      return null;
-    }
-    final Map<String, dynamic> result = <String, dynamic>{};
-    for (final String attribute in valueInterpreter(subAttributes)) {
-      final Map<String, dynamic>? children =
-          _recurse(attribute, depth: depth + 1);
-      result[attribute] = <String, dynamic>{
-        "type": attribute,
-        "children": children,
-      };
-    }
-    return result;
-  }
-
-  Map<String, dynamic>? _handleDir({required int depth}) => _handle(
-        "__dir__",
-        (_) => BuiltinsModule.import().dir(this),
-        valueInterpreter: (Object value) =>
-            value is List ? value.whereType() : <String>[],
-        depth: depth,
-      );
-
-  Map<String, dynamic> annotations({required int depth}) =>
-      _handleDir(depth: depth) ?? <String, dynamic>{};
-
-  TypeDefinition? _recurse2(
+  TypeDefinition? _recurse(
     String attribute,
     TypeDefinition parent, {
-    required Set<TypeDefinition> cache,
-    required int depth,
+    required TypeDefinitionsCache cache,
   }) {
-    final String indent = "  " * depth;
     if (attribute.startsWith("_")) {
-      // print("Warning: $attribute is a private attribute, skipping.");
       return null;
     }
-    print("${indent}Recurse: $attribute");
     if (!hasAttribute(attribute)) {
       return null;
     }
     final value = getAttribute(attribute);
-    final TypeDefinition? cached = cache.firstWhereOrNull(
-      (TypeDefinition element) => element.object == value,
-    );
+    final TypeDefinition? cached = cache.get(value);
     if (cached != null) {
-      print("${indent}--> found cached $attribute");
       return cached;
-    } else {
-      print("${indent}--> not found cached $attribute");
     }
-    // print("got $attribute");
     if (value is PythonModuleInterface) {
-      // print("$attribute<${value.runtimeType}>");
       final TypeGenerationModule typeGenerationModule =
           TypeGenerationModule.from(value);
       return typeGenerationModule.typeDefinition(
         attribute,
         cache: cache,
-        parent: parent,
-        type: attribute,
-        depth: depth + 1,
+        type: PythonObjectTypeInfo.tryAccept(attribute, PythonModule, value),
+      );
+    } else if (value is PythonFunctionInterface) {
+      final TypeGenerationFunction typeGenerationFunction =
+          TypeGenerationFunction.from(value);
+      return typeGenerationFunction.typeDefinition(
+        attribute,
+        cache: cache,
+        type: PythonObjectTypeInfo.tryAccept(attribute, PythonFunction, value),
       );
     } else if (value is PythonClassInterface) {
-      // print("$attribute<${value.runtimeType}>");
       final TypeGenerationClass typeGenerationClass =
           TypeGenerationClass.from(value);
       return typeGenerationClass.typeDefinition(
         attribute,
         cache: cache,
-        parent: parent,
-        type: attribute,
-        depth: depth + 1,
+        type: PythonObjectTypeInfo.tryAccept(attribute, PythonClass, value),
       );
     } else if (value is PythonObjectInterface) {
-      // print("$attribute<${value.runtimeType}>");
       final TypeGenerationObject typeGenerationObject =
           TypeGenerationObject.from(value);
-      /*
-      print(
-        "wrapped $attribute<${value.runtimeType}> with TypeGenerationObject",
-      );
-      */
       return typeGenerationObject.typeDefinition(
         attribute,
         cache: cache,
-        parent: parent,
-        type: attribute,
-        depth: depth + 1,
+        type: PythonObjectTypeInfo.tryAccept(attribute, PythonObject, value),
       );
     }
     final TypeDefinition typeDefinition =
-        TypeDefinition(attribute, value, parent: parent);
+        TypeDefinition(value, name: attribute);
     cache.add(typeDefinition);
-    print(
-      "${indent}--> found non-Python object ${typeDefinition.name}<${value.runtimeType}>",
-    );
-    final String valueString = switch (value) {
-      Iterable() => "(...)",
-      Map() => "{...}",
-      PythonObjectInterface() => "PythonObjectInterface@${value.reference}",
-      _ => "$value",
-    };
-    print(
-      "${indent}--> added non-Python object ${typeDefinition.name}<${value.runtimeType}> = $valueString to cache",
-    );
     return typeDefinition;
   }
 
   TypeDefinition typeDefinition(
     String name, {
-    required Set<TypeDefinition> cache,
-    String? type,
-    TypeDefinition? parent,
-    required int depth,
+    required TypeDefinitionsCache cache,
+    _TypeInfo? type,
   }) {
-    final TypeDefinition typeDefinition =
-        TypeDefinition(name, this, parent: parent, type: type);
+    final TypeDefinition typeDefinition = TypeDefinition(this, type: type);
     cache.add(typeDefinition);
-    print(
-      "${"  " * depth}--> added ${typeDefinition.name}@$reference to cache",
-    );
-    final Object? dirResult = BuiltinsModule.import().dir(this);
-    if (dirResult is List) {
-      for (final String attribute in dirResult.whereType()) {
-        final TypeDefinition? child = _recurse2(
-          attribute,
-          typeDefinition,
-          cache: cache,
-          depth: depth + 1,
-        );
-        if (child != null) {
-          typeDefinition.add(attribute, child);
-        }
+    for (final String attribute in _subAttributes) {
+      final TypeDefinition? child = _recurse(
+        attribute,
+        typeDefinition,
+        cache: cache,
+      );
+      if (child != null) {
+        typeDefinition.add(attribute, child);
       }
     }
     return typeDefinition;
@@ -270,18 +267,16 @@ final class TypeGenerationClass extends PythonClass with TypeGenerationMixin {
   TypeGenerationClass.from(super.classDelegate) : super.from();
 }
 
+final class TypeGenerationFunction extends PythonFunction
+    with TypeGenerationMixin {
+  TypeGenerationFunction.from(super.classDelegate) : super.from();
+}
+
 final class TypeGenerationModule extends PythonModule with TypeGenerationMixin {
   TypeGenerationModule.from(super.moduleDelegate) : super.from();
 
-  Map<String, dynamic>? _handleAll({required int depth}) => _handle(
-        "__all__",
-        getAttribute,
-        valueInterpreter: (Object value) =>
-            value is List ? value.whereType() : <String>[],
-        depth: depth,
-      );
+  List<String> get __all__ => getAttribute<List<Object?>>("__all__").cast();
 
   @override
-  Map<String, dynamic> annotations({required int depth}) =>
-      _handleAll(depth: depth) ?? super.annotations(depth: depth);
+  Iterable<String> get _subAttributes => __all__;
 }
