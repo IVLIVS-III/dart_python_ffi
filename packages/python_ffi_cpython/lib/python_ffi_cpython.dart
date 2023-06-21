@@ -7,6 +7,7 @@ import "dart:io";
 
 import "package:flutter/foundation.dart";
 import "package:flutter/services.dart";
+import "package:path/path.dart" as p;
 import "package:path_provider/path_provider.dart" as path_provider;
 import "package:python_ffi_cpython_dart/python_ffi_cpython_dart.dart";
 import "package:python_ffi_interface/python_ffi_interface.dart";
@@ -21,7 +22,8 @@ final class PythonFfiCPython extends PythonFfiCPythonBase
   @override
   FutureOr<ByteData> loadPythonFile(PythonSourceFileEntity sourceFile) {
     if (sourceFile is SourceFile) {
-      return PlatformAssetBundle().load("python-modules/${sourceFile.name}");
+      return PlatformAssetBundle()
+          .load(p.join("python-modules", sourceFile.name));
     } else if (sourceFile is SourceBase64) {
       return ByteData.view(base64Decode(sourceFile.base64).buffer);
     }
@@ -37,10 +39,12 @@ final class PythonFfiCPython extends PythonFfiCPythonBase
 
   @override
   Future<void> copyPythonStdLib() async {
-    final ByteData zipFile = await rootBundle
-        .load("packages/python_ffi_cpython/assets/python$_version.zip");
-    final Directory libDir = Directory("${(await pythonFfiDir).path}/lib");
-    final File tmpZipFile = File("${libDir.path}/python$_version.zip");
+    final ByteData zipFile = await rootBundle.load(
+      p.join("packages", "python_ffi_cpython", "assets", "python$_version.zip"),
+    );
+    final Directory libDir =
+        Directory(p.join((await pythonFfiDir).path, "lib"));
+    final File tmpZipFile = File(p.join(libDir.path, "python$_version.zip"));
     await tmpZipFile.create(recursive: true);
     await tmpZipFile.writeAsBytes(zipFile.buffer.asUint8List());
     await extractPythonStdLibZip(tmpZipFile);
@@ -140,8 +144,8 @@ final class PythonFfiCPython extends PythonFfiCPythonBase
   @override
   Future<Set<PythonModuleDefinition>> discoverPythonModules() async {
     try {
-      final ByteData modulesJsonRaw =
-          await PlatformAssetBundle().load("python-modules/modules.json");
+      final ByteData modulesJsonRaw = await PlatformAssetBundle()
+          .load(p.join("python-modules", "modules.json"));
       return _decodePythonModules(
         utf8.decode(modulesJsonRaw.buffer.asUint8List()),
       ).toSet();

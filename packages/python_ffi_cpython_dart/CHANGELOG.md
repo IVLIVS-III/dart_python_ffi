@@ -3,6 +3,8 @@
 - Refactored to make use of Dart 3.x record types.
 - Increased robustness of file-hash validation.
 - Increased robustness of downloading Python runtime and stdlib.
+- Fixed path issues on Windows.
+- Fixed initialization of Python runtime on Windows.
 
 ## 0.3.1
 
