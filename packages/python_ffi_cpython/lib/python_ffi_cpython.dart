@@ -39,9 +39,8 @@ final class PythonFfiCPython extends PythonFfiCPythonBase
 
   @override
   Future<void> copyPythonStdLib() async {
-    final ByteData zipFile = await rootBundle.load(
-      p.join("packages", "python_ffi_cpython", "assets", "python$_version.zip"),
-    );
+    final ByteData zipFile = await rootBundle
+        .load("packages/python_ffi_cpython/assets/python$_version.zip");
     final Directory libDir =
         Directory(p.join((await pythonFfiDir).path, "lib"));
     final File tmpZipFile = File(p.join(libDir.path, "python$_version.zip"));
