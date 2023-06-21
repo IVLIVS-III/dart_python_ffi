@@ -62,7 +62,7 @@ final class PythonFfiCPythonDart extends PythonFfiCPythonBase
 
   /// Directory for cached Python runtimes
   FutureOr<Directory> get cacheDir async => _cacheDir ??= Directory(
-        "${(await pythonFfiDir).path}/cache",
+        p.join((await pythonFfiDir).path, "cache"),
       );
 
   FutureOr<String> get _defaultLibPath {
@@ -73,17 +73,17 @@ final class PythonFfiCPythonDart extends PythonFfiCPythonBase
     }
     if (Platform.isMacOS) {
       return cacheDir
-          .then((Directory dir) => "${dir.path}/libpython$version.dylib");
+          .then((Directory dir) => p.join(dir.path, "libpython$version.dylib"));
     }
     /*
     if (Platform.isLinux) {
       return cacheDir
-          .then((Directory dir) => "${dir.path}/libpython$version.so");
+          .then((Directory dir) => p.join("${dir.path}","libpython$version.so"));
     }
     if (Platform.isWindows) {
       return cacheDir.then(
         (Directory dir) =>
-            "${dir.path}/python${version.replaceAll(".", "")}.dll",
+            p.join("${dir.path}","python${version.replaceAll(".", "")}.dll"),
       );
     }
     */
@@ -99,7 +99,8 @@ final class PythonFfiCPythonDart extends PythonFfiCPythonBase
   @override
   Future<void> copyPythonStdLib() async {
     await _ensurePythonStdlib();
-    final File zipFile = File("${(await cacheDir).path}/python$version.zip");
+    final File zipFile =
+        File(p.join((await cacheDir).path, "python$version.zip"));
     await extractPythonStdLibZip(zipFile);
   }
 
@@ -242,14 +243,14 @@ base mixin PythonFfiCPythonMixin on PythonFfiCPythonBase {
 
   /// Directory for all Python ffi related files
   FutureOr<Directory> get pythonFfiDir async => _pythonFfiDir ??= Directory(
-        "${(await supportDir).path}/python_ffi",
+        p.join((await supportDir).path, "python_ffi"),
       );
 
   Directory? _packagesDir;
 
   /// Directory for all bundled Python packages
   FutureOr<Directory> get packagesDir async => _packagesDir ??= Directory(
-        "${(await pythonFfiDir).path}/packages",
+        p.join((await pythonFfiDir).path, "packages"),
       );
 
   /// Checks whether the Python C-bindings are available
@@ -262,10 +263,12 @@ base mixin PythonFfiCPythonMixin on PythonFfiCPythonBase {
 
   @override
   Future<void> extractPythonStdLibZip(File zipFile) async {
-    final Directory libDir = Directory("${(await pythonFfiDir).path}/lib");
+    final Directory libDir =
+        Directory(p.join((await pythonFfiDir).path, "lib"));
     final InputFileStream inputStream = InputFileStream(zipFile.path);
     final Archive archive = ZipDecoder().decodeBuffer(inputStream);
     extractArchiveToDisk(archive, libDir.path);
+    await inputStream.close();
   }
 
   void _pyStatusGuarded(
@@ -312,14 +315,19 @@ base mixin PythonFfiCPythonMixin on PythonFfiCPythonBase {
     return result;
   }
 
-  @override
-  Future<void> initialize() async {
-    await copyPythonStdLib();
-
-    if (!areBindingsInitialized) {
-      await openDylib();
+  FutureOr<void> _initializeRuntime() {
+    if (Platform.isMacOS) {
+      return _initializeRuntimeCustom();
+    } else {
+      _initializeRuntimeDefault();
     }
+  }
 
+  void _initializeRuntimeDefault() {
+    bindings.Py_Initialize();
+  }
+
+  Future<void> _initializeRuntimeCustom() async {
     final Pointer<PyPreConfig> preConfig = malloc<PyPreConfig>();
     // https://docs.python.org/3/c-api/init_config.html#init-isolated-conf
     bindings.PyPreConfig_InitIsolatedConfig(preConfig);
@@ -385,6 +393,17 @@ base mixin PythonFfiCPythonMixin on PythonFfiCPythonBase {
     );
 
     bindings.PyConfig_Clear(config);
+  }
+
+  @override
+  Future<void> initialize() async {
+    await copyPythonStdLib();
+
+    if (!areBindingsInitialized) {
+      await openDylib();
+    }
+
+    await _initializeRuntime();
 
     final Directory packagesDir = await this.packagesDir;
     appendToPath(packagesDir.path);
@@ -401,7 +420,7 @@ base mixin PythonFfiCPythonMixin on PythonFfiCPythonBase {
 
   Future<void> _copyModuleFile(PythonSourceFileEntity sourceFile) async {
     final String filePath = sourceFile.name;
-    final File moduleFile = File("${(await packagesDir).path}/$filePath");
+    final File moduleFile = File(p.join((await packagesDir).path, filePath));
     if (!moduleFile.existsSync()) {
       moduleFile.createSync(recursive: true);
     }

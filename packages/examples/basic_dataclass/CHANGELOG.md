@@ -1,6 +1,7 @@
 ## NEXT
 
 - Updated dependencies.
+- Added support to specify a custom libPath.
 
 ## 0.1.0
 

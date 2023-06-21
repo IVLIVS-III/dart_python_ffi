@@ -1,6 +1,7 @@
 ## NEXT
 
 - Refactored to make use of Dart 3.x record types.
+- Fixed path issues on Windows.
 
 ## 0.3.1
 

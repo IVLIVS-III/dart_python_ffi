@@ -8,6 +8,6 @@ import "package:pytimeparse_dart/python_modules/src/python_modules.g.dart";
 export "extensions.dart";
 export "python_modules/pytimeparse.dart";
 
-Future<void> initialize() async {
-  await PythonFfiDart.instance.initialize(kPythonModules);
+Future<void> initialize({String? libPath}) async {
+  await PythonFfiDart.instance.initialize(kPythonModules, libPath: libPath);
 }
