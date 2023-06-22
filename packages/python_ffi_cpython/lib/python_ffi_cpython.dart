@@ -23,7 +23,7 @@ final class PythonFfiCPython extends PythonFfiCPythonBase
   FutureOr<ByteData> loadPythonFile(PythonSourceFileEntity sourceFile) {
     if (sourceFile is SourceFile) {
       return PlatformAssetBundle()
-          .load(p.join("python-modules", sourceFile.name));
+          .load("python-modules/${sourceFile.name}");
     } else if (sourceFile is SourceBase64) {
       return ByteData.view(base64Decode(sourceFile.base64).buffer);
     }
@@ -144,7 +144,7 @@ final class PythonFfiCPython extends PythonFfiCPythonBase
   Future<Set<PythonModuleDefinition>> discoverPythonModules() async {
     try {
       final ByteData modulesJsonRaw = await PlatformAssetBundle()
-          .load(p.join("python-modules", "modules.json"));
+          .load("python-modules/modules.json");
       return _decodePythonModules(
         utf8.decode(modulesJsonRaw.buffer.asUint8List()),
       ).toSet();
