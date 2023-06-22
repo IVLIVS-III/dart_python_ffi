@@ -7,8 +7,6 @@ packages:
 command:
   bootstrap:
     usePubspecOverrides: true
-    hooks:
-      post: melos run ffigen
 
 scripts:
   analyze:
