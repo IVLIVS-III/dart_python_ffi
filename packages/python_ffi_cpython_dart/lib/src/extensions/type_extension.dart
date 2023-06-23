@@ -395,12 +395,26 @@ extension _TypeExtension on Pointer<PyObject> {
     return typeName == "module";
   }
 
+  bool isClassDefinition(PythonFfiCPythonBase platform) {
+    // necessary condition: type(this) == type
+    final bool couldBeType = isType(platform) ||
+        typeObject.typeObject.isOfType(platform.bindings.PyType_Type);
+    final bool isCallable = platform.bindings.PyCallable_Check(this) != 0;
+    return couldBeType &&
+        isCallable &&
+        !isFunction(platform) &&
+        !isModule(platform);
+  }
+
   bool isClass(PythonFfiCPythonBase platform) {
     // type(type(this)) == type
     final bool couldBeType = !isType(platform) &&
         typeObject.typeObject.isOfType(platform.bindings.PyType_Type);
     // exclude functions and modules
-    return couldBeType && !isFunction(platform) && !isModule(platform);
+    return couldBeType &&
+        !isFunction(platform) &&
+        !isModule(platform) &&
+        !isClassDefinition(platform);
   }
 
   bool isOfType(PyTypeObject type) => typeObject.isOfType(type);

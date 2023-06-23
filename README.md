@@ -353,25 +353,26 @@ See [`fj_playground`](packages/examples/fj_playground/README.md).
 
 Types will be converted automatically according to the following table:
 
-| Dart type     | Python type | dart ➞ python     | python ➞ dart     |
-|---------------|-------------|-------------------|-------------------|
-| `null`        | `None`      | ✅ complete        | ✅ complete        |
-| `bool`        | `bool`      | ✅ complete        | ✅ complete        |
-| `int`         | `int`       | ✅ complete        | ✅ complete        |
-| `double`      | `float`     | ✅ complete        | ✅ complete        |
-| `String`      | `str`       | ✅ complete        | ✅ complete        |
-| `Uint8List`   | `bytes`     | ✅ complete        | ✅ complete        |
-| `Map`         | `dict`      | ✅ complete        | ✅ complete        |
-| `List`        | `list`      | ✅ complete        | ✅ complete        |
-| `List`        | `tuple`     | 🚫 not applicable | ✅ complete        |
-| `PythonTuple` | `tuple`     | ✅ complete        | 🚫 not applicable |
-| `Set`         | `set`       | ✅ complete        | ✅ complete        |
-| `Iterator`    | `Iterator`  | ✅ complete        | ✅ complete        |
-| `Iterator`    | `Generator` | 🚫 not applicable | ✅ complete        |
-| `Iterable`    | `Iterable`  | ✅ complete        | ✅ complete        |
-| `Function`    | `Callable`  | ✅ complete        | ✅ complete        |
-| `Future`      | `Awaitable` | ❌ missing         | ❌ missing         |
-| `Exception`   | `Exception` | ❌ missing         | ✅ complete        |
+| Dart type               | Python type | dart ➞ python     | python ➞ dart     |
+|-------------------------|-------------|-------------------|-------------------|
+| `null`                  | `None`      | ✅ complete        | ✅ complete        |
+| `bool`                  | `bool`      | ✅ complete        | ✅ complete        |
+| `int`                   | `int`       | ✅ complete        | ✅ complete        |
+| `double`                | `float`     | ✅ complete        | ✅ complete        |
+| `String`                | `str`       | ✅ complete        | ✅ complete        |
+| `Uint8List`             | `bytes`     | ✅ complete        | ✅ complete        |
+| `Map`                   | `dict`      | ✅ complete        | ✅ complete        |
+| `List`                  | `list`      | ✅ complete        | ✅ complete        |
+| `List`                  | `tuple`     | 🚫 not applicable | ✅ complete        |
+| `PythonTuple`           | `tuple`     | ✅ complete        | 🚫 not applicable |
+| `Set`                   | `set`       | ✅ complete        | ✅ complete        |
+| `Iterator`              | `Iterator`  | ✅ complete        | ✅ complete        |
+| `Iterator`              | `Generator` | 🚫 not applicable | ✅ complete        |
+| `Iterable`              | `Iterable`  | ✅ complete        | ✅ complete        |
+| `Function`              | `Callable`  | ✅ complete        | ✅ complete        |
+| `Future`                | `Awaitable` | ❌ missing         | ❌ missing         |
+| `Exception`             | `Exception` | ❌ missing         | ✅ complete        |
+| `PythonClassDefinition` | `class`     | ❌ missing         | ✅ complete        |
 
 Anything else will be converted from Python to a `PythonObject` in Dart. It is supported to cast
 this value to `dynamic` and invoke any method or property on it. It will work, as long as the method

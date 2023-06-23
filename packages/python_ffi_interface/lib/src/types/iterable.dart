@@ -17,9 +17,15 @@ final class PythonIterable<T extends Object?, P extends PythonFfiDelegate<R>,
   final PythonObjectInterface<P, R> _iterable;
 
   @override
-  Iterator<T> get iterator => PythonIterator<T, P, R>(
-        _iterable.getFunction("__iter__").call(<Object?>[]),
-      );
+  Iterator<T> get iterator {
+    final PythonModuleInterface<PythonFfiDelegate<Object?>, Object?>
+        builtinsModule = PythonFfiDelegate.instance.importModule("builtins");
+    final PythonFunctionInterface<PythonFfiDelegate<Object?>, Object?>
+        iterFunction = builtinsModule.getFunction("iter");
+    final PythonObjectInterface<PythonFfiDelegate<Object?>, Object?> iterator =
+        iterFunction.call(<Object?>[_iterable]);
+    return PythonIterator<T, P, R>(iterator as PythonClassInterface<P, R>);
+  }
 
   @override
   T_out getAttribute<T_out extends Object?>(String attributeName) =>

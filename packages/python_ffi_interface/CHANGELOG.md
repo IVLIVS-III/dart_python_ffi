@@ -1,6 +1,7 @@
 ## NEXT
 
 - Refactored to make use of Dart 3.x record types.
+- Utilized Python builtin function `iter` to convert Python iterables to Dart iterables.
 
 ## 0.1.1
 

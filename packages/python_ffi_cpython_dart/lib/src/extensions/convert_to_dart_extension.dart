@@ -43,6 +43,9 @@ extension _ConvertToDartExtension on Pointer<PyObject> {
     if (isSet(platform)) {
       return asSet(platform);
     }
+    if (isClassDefinition(platform)) {
+      return _PythonClassDefinitionCPython(platform, object);
+    }
     if (isIterator(platform)) {
       return asIterator(platform);
     }

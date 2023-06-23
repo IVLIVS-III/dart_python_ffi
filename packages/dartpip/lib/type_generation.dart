@@ -142,13 +142,18 @@ final class ValueTypeInfo extends _TypeInfo {
 }
 
 class TypeDefinition {
-  TypeDefinition(this.object, {_TypeInfo? type, String? name})
-      : type = type ??
+  TypeDefinition(
+    this.object, {
+    _TypeInfo? type,
+    String? name,
+    required this.annotations,
+  }) : type = type ??
             _TypeInfo.from(name ?? object.runtimeType.toString(), object);
 
   final Object? object;
   final _TypeInfo type;
   final Map<String, TypeDefinition> attributes = <String, TypeDefinition>{};
+  final Map<String, dynamic> annotations;
 
   void add(String name, TypeDefinition child) {
     attributes[name] = child;
@@ -160,6 +165,7 @@ class TypeDefinition {
           (String key, TypeDefinition value) =>
               MapEntry<String, dynamic>(key, value.type.toJson),
         ),
+        "annotations": annotations,
       };
 
   Map<String, dynamic> get deepDump => <String, dynamic>{
@@ -168,10 +174,29 @@ class TypeDefinition {
           (String key, TypeDefinition value) =>
               MapEntry<String, dynamic>(key, value.deepDump),
         ),
+        "annotations": annotations,
       };
 
   @override
   String toString() => "TypeDefinition<$type>: $attributes";
+}
+
+extension _TypeName on PythonClassDefinitionInterface {
+  String get typeName {
+    if (hasAttribute("__args__")) {
+      final Object? typeArgs = getAttribute("__args__");
+      if (typeArgs is List) {
+        final Iterable<String> typeNames = typeArgs
+            .whereType<PythonClassDefinitionInterface>()
+            .map((e) => e.typeName);
+        return typeNames.join(" | ");
+      }
+    }
+    if (hasAttribute("__name__")) {
+      return getAttribute("__name__").toString();
+    }
+    return runtimeType.toString();
+  }
 }
 
 base mixin TypeGenerationMixin on PythonObjectInterface {
@@ -232,8 +257,11 @@ base mixin TypeGenerationMixin on PythonObjectInterface {
         type: PythonObjectTypeInfo.tryAccept(attribute, PythonObject, value),
       );
     }
-    final TypeDefinition typeDefinition =
-        TypeDefinition(value, name: attribute);
+    final TypeDefinition typeDefinition = TypeDefinition(
+      value,
+      name: attribute,
+      annotations: <String, dynamic>{},
+    );
     cache.add(typeDefinition);
     return typeDefinition;
   }
@@ -243,7 +271,8 @@ base mixin TypeGenerationMixin on PythonObjectInterface {
     required TypeDefinitionsCache cache,
     _TypeInfo? type,
   }) {
-    final TypeDefinition typeDefinition = TypeDefinition(this, type: type);
+    final TypeDefinition typeDefinition =
+        TypeDefinition(this, type: type, annotations: annotations);
     cache.add(typeDefinition);
     for (final String attribute in _subAttributes) {
       final TypeDefinition? child = _recurse(
@@ -256,6 +285,35 @@ base mixin TypeGenerationMixin on PythonObjectInterface {
       }
     }
     return typeDefinition;
+  }
+
+  Map<String, dynamic> get annotations {
+    final String annotationsAttribute = "__annotations__";
+    if (!hasAttribute(annotationsAttribute)) {
+      return <String, dynamic>{};
+    }
+    final Object? annotations = getAttribute(annotationsAttribute);
+    if (annotations is Map) {
+      return annotations.map(
+        (key, value) {
+          if (key is! String) {
+            throw ArgumentError.value(
+              key,
+              "key",
+              "Expected String, got ${key.runtimeType}",
+            );
+          }
+          print("key: $key, value<${value.runtimeType}>");
+          final String effectiveValue = switch (value) {
+            PythonClassDefinitionInterface() => value.typeName,
+            PythonObjectInterface() => value.toString(),
+            _ => value.runtimeType.toString(),
+          };
+          return MapEntry(key, effectiveValue);
+        },
+      );
+    }
+    return <String, dynamic>{};
   }
 }
 

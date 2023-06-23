@@ -5,6 +5,7 @@
 - Increased robustness of downloading Python runtime and stdlib.
 - Fixed path issues on Windows.
 - Fixed initialization of Python runtime on Windows.
+- Added special case for converting Python Class Definitions.
 
 ## 0.3.1
 
