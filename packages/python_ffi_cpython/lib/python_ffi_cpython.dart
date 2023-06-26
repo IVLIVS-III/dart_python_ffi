@@ -22,8 +22,7 @@ final class PythonFfiCPython extends PythonFfiCPythonBase
   @override
   FutureOr<ByteData> loadPythonFile(PythonSourceFileEntity sourceFile) {
     if (sourceFile is SourceFile) {
-      return PlatformAssetBundle()
-          .load("python-modules/${sourceFile.name}");
+      return PlatformAssetBundle().load("python-modules/${sourceFile.name}");
     } else if (sourceFile is SourceBase64) {
       return ByteData.view(base64Decode(sourceFile.base64).buffer);
     }
@@ -141,10 +140,17 @@ final class PythonFfiCPython extends PythonFfiCPythonBase
   }
 
   @override
-  Future<Set<PythonModuleDefinition>> discoverPythonModules() async {
+  Future<Set<PythonModuleDefinition>> discoverPythonModules({
+    required String? package,
+  }) async {
     try {
-      final ByteData modulesJsonRaw = await PlatformAssetBundle()
-          .load("python-modules/modules.json");
+      const String localModulesJsonPath = "python-modules/modules.json";
+      final String modulesJsonPath = switch (package) {
+        String() => "packages/$package/$localModulesJsonPath",
+        _ => localModulesJsonPath,
+      };
+      final ByteData modulesJsonRaw =
+          await PlatformAssetBundle().load(modulesJsonPath);
       return _decodePythonModules(
         utf8.decode(modulesJsonRaw.buffer.asUint8List()),
       ).toSet();

@@ -211,7 +211,10 @@ final class PythonFfiCPythonDart extends PythonFfiCPythonBase
   }
 
   @override
-  Set<PythonModuleDefinition> discoverPythonModules() => _pythonModules;
+  Set<PythonModuleDefinition> discoverPythonModules({
+    required String? package,
+  }) =>
+      _pythonModules;
 }
 
 /// Mixin for the macOS and Windows implementation of [PythonFfiDelegate].
@@ -396,7 +399,7 @@ base mixin PythonFfiCPythonMixin on PythonFfiCPythonBase {
   }
 
   @override
-  Future<void> initialize() async {
+  Future<void> initialize({required String? package}) async {
     await copyPythonStdLib();
 
     if (!areBindingsInitialized) {
@@ -414,7 +417,8 @@ base mixin PythonFfiCPythonMixin on PythonFfiCPythonBase {
     }
 
     // load modules
-    final Set<PythonModuleDefinition> modules = await discoverPythonModules();
+    final Set<PythonModuleDefinition> modules =
+        await discoverPythonModules(package: package);
     await FutureOrExtension.wait<void>(modules.map(prepareModule));
   }
 
