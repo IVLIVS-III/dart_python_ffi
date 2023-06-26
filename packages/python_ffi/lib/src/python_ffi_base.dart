@@ -1,6 +1,9 @@
 part of python_ffi;
 
 class PythonFfi extends PythonFfiBase with PythonFfiMixin {
+  @visibleForTesting
+  factory PythonFfi() => PythonFfi._();
+
   PythonFfi._();
 
   static PythonFfi? _instance;

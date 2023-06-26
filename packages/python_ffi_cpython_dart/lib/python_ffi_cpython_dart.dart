@@ -24,6 +24,7 @@ export "package:python_ffi_cpython_dart/src/ffi/generated_bindings.g.dart"
 export "package:python_ffi_cpython_dart/src/ffi/generated_bindings.g.dart"
     show DartPythonCBindings;
 
+part "src/builtins.dart";
 part "src/cache/cache.dart";
 part "src/cache/download_entry.dart";
 part "src/cache/dylib.dart";

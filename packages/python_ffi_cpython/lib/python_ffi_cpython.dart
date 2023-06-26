@@ -15,14 +15,27 @@ import "package:python_ffi_interface/python_ffi_interface.dart";
 /// The macOS and Windows implementation of [PythonFfiPlatform].
 final class PythonFfiCPython extends PythonFfiCPythonBase
     with PythonFfiCPythonMixin {
+  String? _package;
+
+  @override
+  Future<void> initialize({required String? package}) {
+    _package = package;
+    return super.initialize(package: package);
+  }
+
   @override
   Future<Directory> getApplicationSupportDirectory() async =>
       path_provider.getApplicationSupportDirectory();
 
   @override
   FutureOr<ByteData> loadPythonFile(PythonSourceFileEntity sourceFile) {
+    final String? package = _package;
+    final String assetPath = "${switch (package) {
+      String() => "packages/$package/",
+      _ => "",
+    }}python-modules/${sourceFile.name}";
     if (sourceFile is SourceFile) {
-      return PlatformAssetBundle().load("python-modules/${sourceFile.name}");
+      return PlatformAssetBundle().load(assetPath);
     } else if (sourceFile is SourceBase64) {
       return ByteData.view(base64Decode(sourceFile.base64).buffer);
     }

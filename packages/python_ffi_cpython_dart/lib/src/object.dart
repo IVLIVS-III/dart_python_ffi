@@ -205,15 +205,27 @@ base mixin _PythonObjectCPythonMixin
 
   @override
   String toString() {
-    const String kStrAttributeName = "__str__";
-    const String kReprAttributeName = "__repr__";
-    if (hasAttribute(kStrAttributeName)) {
-      return getFunction(kStrAttributeName).call<String>(<Object?>[]);
-    } else if (hasAttribute(kReprAttributeName)) {
-      return getFunction(kReprAttributeName).call<String>(<Object?>[]);
-    } else {
-      return super.toString();
+    final BuiltinsModule builtins = BuiltinsModule.import();
+    final Object? strResult = builtins.str.call(<Object?>[this]);
+    if (strResult is String) {
+      return strResult;
     }
+    final Object? reprResult = builtins.repr.call(<Object?>[this]);
+    if (reprResult is String) {
+      return reprResult;
+    }
+    try {
+      const String kStrAttributeName = "__str__";
+      const String kReprAttributeName = "__repr__";
+      if (hasAttribute(kStrAttributeName)) {
+        return getFunction(kStrAttributeName).call<String>(<Object?>[]);
+      } else if (hasAttribute(kReprAttributeName)) {
+        return getFunction(kReprAttributeName).call<String>(<Object?>[]);
+      }
+    } on PythonExceptionInterface<PythonFfiDelegate<Object?>, Object?> {
+      // ignore
+    }
+    return super.toString();
   }
 
   @override

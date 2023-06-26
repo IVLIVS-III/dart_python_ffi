@@ -5,26 +5,36 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-
-import 'package:flutter_package_import/main.dart';
+import "package:flutter/material.dart";
+import "package:flutter_package_export/flutter_package_export.dart";
+import "package:flutter_package_import/main.dart";
+import "package:flutter_test/flutter_test.dart";
+import "package:python_ffi/python_ffi.dart";
+import "package:python_ffi_cpython/python_ffi_cpython.dart";
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets("Counter increments smoke test", (WidgetTester tester) async {
+    print("Running test");
+    TestWidgetsFlutterBinding.ensureInitialized();
+    print("Initialized");
+    PythonFfi.instance.delegate = PythonFfiCPython();
+    print("Set delegate");
+    await initialize();
+    print("Initialized PythonFfi");
     // Build our app and trigger a frame.
     await tester.pumpWidget(const MyApp());
+    print("Pumped widget");
 
     // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    expect(find.text("0"), findsOneWidget);
+    expect(find.text("1"), findsNothing);
 
     // Tap the '+' icon and trigger a frame.
     await tester.tap(find.byIcon(Icons.add));
     await tester.pump();
 
     // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.text("0"), findsNothing);
+    expect(find.text("1"), findsOneWidget);
   });
 }
