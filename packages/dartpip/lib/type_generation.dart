@@ -1,5 +1,6 @@
 import "dart:collection";
 
+import "package:collection/collection.dart";
 import "package:python_ffi_cpython_dart/python_ffi_cpython_dart.dart";
 import "package:python_ffi_dart/python_ffi_dart.dart";
 
@@ -26,12 +27,13 @@ class TypeDefinitionsCache {
     if (a is PythonObjectInterface && b is PythonObjectInterface) {
       return a.reference == b.reference;
     }
-    return a == b;
+    // do not cache values that are not PythonObjectInterface
+    return false;
   }
 
   static int _hashCode(Object? a) {
     if (a == null) {
-      return 0;
+      return null.hashCode;
     }
     if (a is PythonObjectInterface) {
       final int hashCode = a.reference.hashCode;
@@ -178,6 +180,7 @@ class TypeDefinition {
       };
 
   String get export {
+    final _TypeInfo type = this.type;
     switch (type) {
       case PythonObjectTypeInfo():
         switch (object) {
@@ -185,22 +188,32 @@ class TypeDefinition {
           case PythonModule():
             final Iterable<String> fields =
                 attributes.entries.map((e) => "${e.key}: ${e.value.export}");
-            return "PythonModule<${(type as PythonObjectTypeInfo).name}>(${fields.join(", ")})";
+            return "PythonModule<${type.name}>(${fields.join(", ")})";
           case PythonClassDefinitionInterface():
           case PythonClassDefinition():
-            return "PythonClassDefinition<${(type as PythonObjectTypeInfo).name}>";
+            final Iterable<String> fields =
+                attributes.entries.map((e) => "${e.key}: ${e.value.export}");
+            return "PythonClassDefinition<${type.name}>(${fields.join(", ")})";
           case PythonClassInterface():
           case PythonClass():
-            return "PythonClass<${(type as PythonObjectTypeInfo).name}>";
+            return "PythonClass<${type.name}>";
           case PythonFunctionInterface():
           case PythonFunction():
-            return "PythonFunction";
+            final Object? returnType = annotations["return"] ?? "dynamic";
+            final Iterable<String> args = annotations.entries
+                .whereNot(
+                  (MapEntry<String, dynamic> e) => e.key == "return",
+                )
+                .map(
+                  (MapEntry<String, dynamic> e) => "${e.key}: ${e.value}",
+                );
+            return "$returnType PythonFunction(${args.join(", ")})";
           case PythonObjectInterface():
             return "PythonObject";
         }
         return "(default) ${type.type}";
       case ValueTypeInfo():
-        return "Value";
+        return type.value.toString();
     }
   }
 
@@ -227,20 +240,28 @@ extension _TypeName on PythonClassDefinitionInterface {
 }
 
 base mixin TypeGenerationMixin on PythonObjectInterface {
-  Iterable<String> get _subAttributes {
+  Iterable<String> get _subAttributes sync* {
     final Object? dirResult = BuiltinsModule.import().dir(this);
     if (dirResult is List) {
-      return dirResult.whereType();
+      yield* dirResult.whereType();
     }
-    return <String>[];
+    yield* _explicitlyAllowedAttributes;
   }
+
+  Iterable<String> get _explicitlyAllowedAttributes => const <String>[];
+
+  Iterable<String> get _explicitlyIgnoredAttributes => const <String>[];
 
   TypeDefinition? _recurse(
     String attribute,
     TypeDefinition parent, {
     required TypeDefinitionsCache cache,
   }) {
-    if (attribute.startsWith("_")) {
+    if (_explicitlyIgnoredAttributes.contains(attribute)) {
+      return null;
+    }
+    if (attribute.startsWith("_") &&
+        !_explicitlyAllowedAttributes.contains(attribute)) {
       return null;
     }
     if (!hasAttribute(attribute)) {
@@ -266,6 +287,18 @@ base mixin TypeGenerationMixin on PythonObjectInterface {
         attribute,
         cache: cache,
         type: PythonObjectTypeInfo.tryAccept(attribute, PythonFunction, value),
+      );
+    } else if (value is PythonClassDefinitionInterface) {
+      final TypeGenerationClassDefinition typeGenerationClassDefinition =
+          TypeGenerationClassDefinition.from(value);
+      return typeGenerationClassDefinition.typeDefinition(
+        attribute,
+        cache: cache,
+        type: PythonObjectTypeInfo.tryAccept(
+          attribute,
+          PythonClassDefinition,
+          value,
+        ),
       );
     } else if (value is PythonClassInterface) {
       final TypeGenerationClass typeGenerationClass =
@@ -350,6 +383,17 @@ final class TypeGenerationObject extends PythonObject with TypeGenerationMixin {
 
 final class TypeGenerationClass extends PythonClass with TypeGenerationMixin {
   TypeGenerationClass.from(super.classDelegate) : super.from();
+}
+
+final class TypeGenerationClassDefinition extends PythonClassDefinition
+    with TypeGenerationMixin {
+  TypeGenerationClassDefinition.from(super.classDefinitionDelegate)
+      : super.from();
+
+  @override
+  Iterable<String> get _explicitlyAllowedAttributes sync* {
+    yield "__init__";
+  }
 }
 
 final class TypeGenerationFunction extends PythonFunction

@@ -95,6 +95,8 @@ Future<void> _generateTypeDefs(PythonModuleDefinition moduleDefinition) async {
   final TypeDefinition typeDefinition =
       pythonModuleHandle.typeDefinition(moduleDefinition.name, cache: cache);
   print(jsonEncode(cache.dump.reversed.toList()));
-  print(typeDefinition.export);
+  for (final TypeDefinition typeDefinition in cache.values) {
+    print("${typeDefinition.type.name}: ${typeDefinition.export}");
+  }
   print("Generated type definitions for ${moduleDefinition.name}.");
 }
