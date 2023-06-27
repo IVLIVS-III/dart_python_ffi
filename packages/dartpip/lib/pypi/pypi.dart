@@ -28,19 +28,28 @@ final class PyPIService {
 
   /// Downloads a project from PyPI if it is not already downloaded.
   /// Returns the version of the downloaded project.
-  Future<String> fetch({required String projectName}) async {
+  Future<String> fetch({
+    required String projectName,
+    String version = "any",
+  }) async {
     final Directory outputDir = await _cacheDir;
-    final String version = await _client.latestVersion(projectName);
+    final RegExp versionRegex = RegExp(r"^\^?(\d+\.\d+\.\d+)$");
+    final Match? versionMatch = versionRegex.allMatches(version).singleOrNull;
+    final String effectiveVersion = switch (version) {
+      "any" => await _client.latestVersion(projectName),
+      String() when versionMatch != null => versionMatch.group(1)!,
+      _ => await _client.latestVersion(projectName),
+    };
     final Directory projectDir =
-        Directory("${outputDir.path}/$projectName-$version");
+        Directory("${outputDir.path}/$projectName-$effectiveVersion");
     if (projectDir.existsSync()) {
       print("Project '$projectName' is already downloaded.");
-      return version;
+      return effectiveVersion;
     }
     print("Downloading Python module '$projectName'...");
     final String url = await _client.downloadUrl(
       projectName: projectName,
-      version: version,
+      version: effectiveVersion,
       packageType: PackageType.sdist,
     );
     print("Downloading $url...");
@@ -63,6 +72,6 @@ final class PyPIService {
       throw StateError("Could not find extracted directory.");
     }
     await extractedDir.rename(projectDir.path);
-    return version;
+    return effectiveVersion;
   }
 }

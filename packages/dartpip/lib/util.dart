@@ -31,7 +31,7 @@ int _detectIndentation(String pubspecString) {
   return relevantSubstring.length - lastNewlineIndex - 1;
 }
 
-Future<void> _bundleModule({
+Future<_ModuleBundle<_PythonModule<Object>>> _bundleModule({
   required String appRoot,
   required String pythonModulePath,
   required String appType,
@@ -54,6 +54,7 @@ Future<void> _bundleModule({
   }
 
   await moduleBundle.export();
+  return moduleBundle;
 }
 
 Future<_ModuleBundle<_PythonModule<Object>>> _bundleCacheModule({
@@ -94,5 +95,6 @@ Future<void> _generateTypeDefs(PythonModuleDefinition moduleDefinition) async {
   final TypeDefinition typeDefinition =
       pythonModuleHandle.typeDefinition(moduleDefinition.name, cache: cache);
   print(jsonEncode(cache.dump.reversed.toList()));
+  print(typeDefinition.export);
   print("Generated type definitions for ${moduleDefinition.name}.");
 }

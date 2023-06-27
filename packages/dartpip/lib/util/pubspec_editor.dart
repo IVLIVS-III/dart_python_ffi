@@ -26,7 +26,8 @@ final class PubspecEditor {
     File(_pubspecPath).writeAsStringSync(_yamlEditor.toString());
   }
 
-  /// TODO: Document.
+  /// Closes the editor. After this method is called, the editor is no longer
+  /// usable.
   void close() {
     _isClosed = true;
   }
@@ -88,29 +89,27 @@ final class PubspecEditor {
     final YamlMap node =
         _ensureNode(<Object?>["python_ffi", "modules"], orElse: YamlMap());
     final Iterable<(String, Object?)> entries = node.entries
-        .whereType<MapEntry<YamlScalar, Object?>>()
-        .map(
-          (MapEntry<YamlScalar, Object?> e) =>
-              MapEntry<Object?, Object?>(e.key.value, e.value),
+        .map<(Object?, Object?)>(
+          (MapEntry<Object?, Object?> e) => (e.key, e.value),
         )
-        .whereType<MapEntry<String, Object?>>()
-        .map((MapEntry<String, Object?> e) => (e.key, e.value));
+        .whereType<(String, Object?)>();
     for (final (String key, Object? value) in entries) {
       switch (value) {
         case String():
           yield PyPiDependency(name: key, version: value);
-        case YamlMap() when value.containsKey("git"):
+        case YamlMap() when value.keys.contains("git"):
           final Object? git = value["git"];
           throw UnimplementedError("Git dependencies are not yet supported.");
-        case YamlMap() when value.containsKey("path"):
+        case YamlMap() when value.keys.contains("path"):
           final Object? path = value["path"];
-          final PythonDependency? pythonDpendency = switch (path) {
+          final PythonDependency? pythonDependency = switch (path) {
             YamlScalar(value: final String pathValue) =>
               PathDependency(name: key, path: pathValue),
+            String() => PathDependency(name: key, path: path),
             _ => null,
           };
-          if (pythonDpendency != null) {
-            yield pythonDpendency;
+          if (pythonDependency != null) {
+            yield pythonDependency;
           }
       }
     }

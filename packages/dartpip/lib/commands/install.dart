@@ -107,23 +107,27 @@ class InstallCommand extends Command<void> {
       "Adding python modules to pubspec.yaml: ${pythonModules.join(", ")}",
     );
 
-    final Map<String, String> projects = <String, String>{};
+    final Map<String, (PythonDependency, String)> projects =
+        <String, (PythonDependency, String)>{};
 
     final List<Future<void>> downloadTasks = <Future<void>>[];
     for (final PythonDependency pythonModule in <PythonDependency>[
       ...existingPythonModules,
       ...pythonModules
     ]) {
+      print("Installing $pythonModule");
       switch (pythonModule) {
         case PyPiDependency(
             name: final String moduleName,
             version: final String specifiedVersion,
           ):
           downloadTasks.add(
-            PyPIService().fetch(projectName: moduleName).then(
+            PyPIService()
+                .fetch(projectName: moduleName, version: specifiedVersion)
+                .then(
               (String version) {
                 pubspecEditor.addDependency(moduleName, version: "^$version");
-                projects[moduleName] = version;
+                projects[moduleName] = (pythonModule, version);
               },
             ),
           );
@@ -133,7 +137,7 @@ class InstallCommand extends Command<void> {
             name: final String moduleName,
             path: final String path,
           ):
-          throw UnimplementedError("Path dependencies are not yet supported.");
+          projects[moduleName] = (pythonModule, path);
       }
     }
     await Future.wait(downloadTasks);
@@ -170,17 +174,29 @@ class InstallCommand extends Command<void> {
         appType: appType,
       ),
     ];
-    for (final MapEntry<String, String> project in projects.entries) {
+    for (final MapEntry<String, (PythonDependency, String)> project
+        in projects.entries) {
       final String pythonModuleName = project.key;
-      final String version = project.value;
+      final (PythonDependency pythonDependency, String version) = project.value;
       print("Bundling Python module '$pythonModuleName'...");
+      final Future<_ModuleBundle<_PythonModule<Object>>> bundleTask =
+          switch (pythonDependency) {
+        PyPiDependency() => _bundleCacheModule(
+            projectName: pythonModuleName,
+            projectVersion: version,
+            appRoot: appRoot,
+            appType: appType,
+          ),
+        GitDependency() =>
+          throw UnimplementedError("Git dependencies are not yet supported."),
+        PathDependency(path: final String path) => _bundleModule(
+            appRoot: appRoot,
+            pythonModulePath: path,
+            appType: appType,
+          ),
+      };
       futures.add(
-        _bundleCacheModule(
-          projectName: pythonModuleName,
-          projectVersion: version,
-          appRoot: appRoot,
-          appType: appType,
-        ).then(
+        bundleTask.then(
           (_ModuleBundle<_PythonModule<Object>> moduleBundle) =>
               _generateTypeDefs(moduleBundle.definition),
         ),

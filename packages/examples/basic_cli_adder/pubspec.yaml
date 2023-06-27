@@ -16,4 +16,5 @@ dev_dependencies:
 
 python_ffi:
   modules:
-    basic_cli_adder: any
+    basic_cli_adder:
+      path: python-modules/basic_cli_adder.py

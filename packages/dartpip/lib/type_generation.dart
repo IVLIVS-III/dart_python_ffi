@@ -177,6 +177,33 @@ class TypeDefinition {
         "annotations": annotations,
       };
 
+  String get export {
+    switch (type) {
+      case PythonObjectTypeInfo():
+        switch (object) {
+          case PythonModuleInterface():
+          case PythonModule():
+            final Iterable<String> fields =
+                attributes.entries.map((e) => "${e.key}: ${e.value.export}");
+            return "PythonModule<${(type as PythonObjectTypeInfo).name}>(${fields.join(", ")})";
+          case PythonClassDefinitionInterface():
+          case PythonClassDefinition():
+            return "PythonClassDefinition<${(type as PythonObjectTypeInfo).name}>";
+          case PythonClassInterface():
+          case PythonClass():
+            return "PythonClass<${(type as PythonObjectTypeInfo).name}>";
+          case PythonFunctionInterface():
+          case PythonFunction():
+            return "PythonFunction";
+          case PythonObjectInterface():
+            return "PythonObject";
+        }
+        return "(default) ${type.type}";
+      case ValueTypeInfo():
+        return "Value";
+    }
+  }
+
   @override
   String toString() => "TypeDefinition<$type>: $attributes";
 }
@@ -333,8 +360,11 @@ final class TypeGenerationFunction extends PythonFunction
 final class TypeGenerationModule extends PythonModule with TypeGenerationMixin {
   TypeGenerationModule.from(super.moduleDelegate) : super.from();
 
-  List<String> get __all__ => getAttribute<List<Object?>>("__all__").cast();
+  static const String _k__all__ = "__all__";
+
+  List<String> get __all__ => getAttribute<List<Object?>>(_k__all__).cast();
 
   @override
-  Iterable<String> get _subAttributes => __all__;
+  Iterable<String> get _subAttributes =>
+      hasAttribute(_k__all__) ? __all__ : super._subAttributes;
 }
