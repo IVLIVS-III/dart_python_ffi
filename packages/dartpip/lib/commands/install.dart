@@ -92,10 +92,14 @@ class InstallCommand extends Command<void> {
 
     final String appRoot = Directory.current.path;
     final PubspecEditor pubspecEditor = PubspecEditor("$appRoot/pubspec.yaml");
-    final List<String> existingPythonModules =
+    final List<PythonDependency> existingPythonModules =
         pubspecEditor.dependencies.toList();
-    final List<String> pythonModules =
-        argResults.rest.whereNot(existingPythonModules.contains).toList();
+    final List<String> existingPythonModulesNames =
+        existingPythonModules.map((PythonDependency e) => e.name).toList();
+    final List<PythonDependency> pythonModules = argResults.rest
+        .whereNot(existingPythonModulesNames.contains)
+        .map((String e) => PyPiDependency(name: e, version: "any"))
+        .toList();
     print(
       "Found python modules in pubspec.yaml: ${existingPythonModules.join(", ")}",
     );
@@ -106,18 +110,31 @@ class InstallCommand extends Command<void> {
     final Map<String, String> projects = <String, String>{};
 
     final List<Future<void>> downloadTasks = <Future<void>>[];
-    for (final String pythonModule in <String>[
+    for (final PythonDependency pythonModule in <PythonDependency>[
       ...existingPythonModules,
       ...pythonModules
     ]) {
-      downloadTasks.add(
-        PyPIService().fetch(projectName: pythonModule).then(
-          (String version) {
-            pubspecEditor.addDependency(pythonModule, version: "^$version");
-            projects[pythonModule] = version;
-          },
-        ),
-      );
+      switch (pythonModule) {
+        case PyPiDependency(
+            name: final String moduleName,
+            version: final String specifiedVersion,
+          ):
+          downloadTasks.add(
+            PyPIService().fetch(projectName: moduleName).then(
+              (String version) {
+                pubspecEditor.addDependency(moduleName, version: "^$version");
+                projects[moduleName] = version;
+              },
+            ),
+          );
+        case GitDependency():
+          throw UnimplementedError("Git dependencies are not yet supported.");
+        case PathDependency(
+            name: final String moduleName,
+            path: final String path,
+          ):
+          throw UnimplementedError("Path dependencies are not yet supported.");
+      }
     }
     await Future.wait(downloadTasks);
     pubspecEditor

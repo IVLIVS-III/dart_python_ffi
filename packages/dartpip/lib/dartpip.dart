@@ -34,6 +34,7 @@ part "source_file.dart";
 part "util.dart";
 part "util/lazy_future.dart";
 part "util/pubspec_editor.dart";
+part "util/python_dependency.dart";
 
 /// The version of dartpip.
 const String kDartpipVersion = "0.1.0";
