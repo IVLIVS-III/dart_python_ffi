@@ -1,3 +1,9 @@
+## NEXT
+
+- Fixed
+  [Bundling Python modules with external package](https://github.com/IVLIVS-III/dart_python_ffi/issues/10)
+  .
+
 ## 0.3.1
 
 - Updated dependencies.

@@ -41,7 +41,7 @@ class PythonFfiDart extends PythonFfiBase with PythonFfiMixin {
   FutureOr<void> initialize(String pythonModules, {String? libPath}) {
     if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
       delegate = PythonFfiCPythonDart(pythonModules, libPath: libPath);
-      return delegate.initialize();
+      return delegate.initialize(package: null);
     }
 
     // TODO: implement for other platforms

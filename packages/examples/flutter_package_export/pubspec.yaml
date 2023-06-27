@@ -1,0 +1,29 @@
+name: flutter_package_export
+description: A Flutter package which wraps a python module.
+version: 0.0.1
+homepage: https://github.com/IVLIVS-III/dart_python_ffi
+
+environment:
+  sdk: '>=3.0.2 <4.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  python_ffi: ^0.3.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  python_ffi_lint: ^0.1.0
+
+# The following section is specific to Flutter packages.
+flutter:
+  assets:
+    - python-modules/basic_adder.py
+    - python-modules/python_ffi.py
+    - python-modules/modules.json
+
+python_ffi:
+  modules:
+    basic_adder: any

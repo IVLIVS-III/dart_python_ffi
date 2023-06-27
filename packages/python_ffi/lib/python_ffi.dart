@@ -9,6 +9,7 @@ library python_ffi;
 
 import "dart:async";
 
+import "package:flutter/foundation.dart";
 import "package:python_ffi_dart/python_ffi_dart.dart";
 import "package:python_ffi_dart/python_ffi_dart.dart" as python_ffi_dart
     show PythonModule;

@@ -29,13 +29,16 @@ abstract base class PythonFfiDelegate<R extends Object?> extends BaseInterface {
   bool get isInitialized;
 
   /// Initializes the native platform Python runtime.
-  FutureOr<void> initialize() async {
-    final Set<PythonModuleDefinition> modules = await discoverPythonModules();
+  FutureOr<void> initialize({required String? package}) async {
+    final Set<PythonModuleDefinition> modules =
+        await discoverPythonModules(package: package);
     await FutureOrExtension.wait<void>(modules.map(prepareModule));
   }
 
   /// Discovers all Python modules bundled with the app by dartpip.
-  FutureOr<Set<PythonModuleDefinition>> discoverPythonModules();
+  FutureOr<Set<PythonModuleDefinition>> discoverPythonModules({
+    required String? package,
+  });
 
   /// Prepares a Python module for use.
   FutureOr<void> prepareModule(PythonModuleDefinition moduleDefinition);

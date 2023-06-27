@@ -6,6 +6,9 @@
 - Fixed path issues on Windows.
 - Fixed initialization of Python runtime on Windows.
 - Added special case for converting Python Class Definitions.
+- Fixed
+  [Bundling Python modules with external package](https://github.com/IVLIVS-III/dart_python_ffi/issues/10)
+  .
 
 ## 0.3.1
 
