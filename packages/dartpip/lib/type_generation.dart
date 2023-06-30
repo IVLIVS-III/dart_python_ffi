@@ -68,10 +68,11 @@ sealed class _TypeInfo {
     if (object is PythonObjectInterface) {
       final Object? reference = object.reference;
       if (reference is Pointer<PyObject>) {
-        return PythonObjectTypeInfo(
+        return PythonObjectTypeInfo._(
           object.runtimeType.toString(),
           object.runtimeType,
           reference.address,
+          object,
         );
       }
       throw ArgumentError.value(
@@ -94,14 +95,14 @@ sealed class _TypeInfo {
 }
 
 final class PythonObjectTypeInfo extends _TypeInfo {
-  PythonObjectTypeInfo(String name, Type type, this.reference)
+  PythonObjectTypeInfo._(String name, Type type, this.reference, this.delegate)
       : super._(name, type);
 
-  static _TypeInfo tryAccept(
+  static PythonObjectTypeInfo tryAccept(
       String name, Type type, PythonObjectInterface object) {
     final Object? reference = object.reference;
     if (reference is Pointer<PyObject>) {
-      return PythonObjectTypeInfo(name, type, reference.address);
+      return PythonObjectTypeInfo._(name, type, reference.address, object);
     }
     throw ArgumentError.value(
       object,
@@ -111,6 +112,15 @@ final class PythonObjectTypeInfo extends _TypeInfo {
   }
 
   final int reference;
+  final PythonObjectInterface delegate;
+
+  String? get pythonName {
+    final String __name__ = "__name__";
+    if (delegate.hasAttribute(__name__)) {
+      return delegate.getAttribute(__name__).toString();
+    }
+    return null;
+  }
 
   @override
   String toString() => "$name<$type>@0x${reference.toRadixString(16)}";
@@ -143,6 +153,29 @@ final class ValueTypeInfo extends _TypeInfo {
   }
 }
 
+class _PythonType {
+  _PythonType({
+    required this.name,
+    required this.type,
+  });
+
+  final String name;
+  final Type type;
+
+  Map<String, String> get toJson => <String, String>{
+        "name": name,
+        "type": type.toString(),
+      };
+
+  @override
+  String toString() {
+    if (type == PythonClass) {
+      return "PythonType<'$name'>";
+    }
+    return type.toString();
+  }
+}
+
 class TypeDefinition {
   TypeDefinition(
     this.object, {
@@ -155,7 +188,12 @@ class TypeDefinition {
   final Object? object;
   final _TypeInfo type;
   final Map<String, TypeDefinition> attributes = <String, TypeDefinition>{};
-  final Map<String, dynamic> annotations;
+  final Map<String, _PythonType> annotations;
+
+  Map<String, Map<String, String>> get annotationsToJson => annotations.map(
+        (String key, _PythonType value) =>
+            MapEntry<String, Map<String, String>>(key, value.toJson),
+      );
 
   void add(String name, TypeDefinition child) {
     attributes[name] = child;
@@ -167,7 +205,7 @@ class TypeDefinition {
           (String key, TypeDefinition value) =>
               MapEntry<String, dynamic>(key, value.type.toJson),
         ),
-        "annotations": annotations,
+        "annotations": annotationsToJson,
       };
 
   Map<String, dynamic> get deepDump => <String, dynamic>{
@@ -176,7 +214,7 @@ class TypeDefinition {
           (String key, TypeDefinition value) =>
               MapEntry<String, dynamic>(key, value.deepDump),
         ),
-        "annotations": annotations,
+        "annotations": annotationsToJson,
       };
 
   String get export {
@@ -186,13 +224,15 @@ class TypeDefinition {
         switch (object) {
           case PythonModuleInterface():
           case PythonModule():
-            final Iterable<String> fields =
-                attributes.entries.map((e) => "${e.key}: ${e.value.export}");
-            return "PythonModule<${type.name}>(${fields.join(", ")})";
+            final Iterable<String> fields = attributes.entries.map(
+                (MapEntry<String, TypeDefinition> e) =>
+                    "${e.key}: ${e.value.export}");
+            return "PythonModule<${type.pythonName ?? type.name}>(${fields.join(", ")})";
           case PythonClassDefinitionInterface():
           case PythonClassDefinition():
-            final Iterable<String> fields =
-                attributes.entries.map((e) => "${e.key}: ${e.value.export}");
+            final Iterable<String> fields = attributes.entries.map(
+                (MapEntry<String, TypeDefinition> e) =>
+                    "${e.key}: ${e.value.export}");
             return "PythonClassDefinition<${type.name}>(${fields.join(", ")})";
           case PythonClassInterface():
           case PythonClass():
@@ -217,6 +257,129 @@ class TypeDefinition {
     }
   }
 
+  String get codeify {
+    final _TypeInfo type = this.type;
+    switch (type) {
+      case PythonObjectTypeInfo():
+        switch (object) {
+          case PythonModuleInterface():
+          case PythonModule():
+            final StringBuffer buffer = StringBuffer();
+            buffer.writeln("```dart");
+            final Iterable<String> fields = attributes.entries
+                .map((MapEntry<String, TypeDefinition> e) => e.value.codeify);
+            bool isTypedefField(String field) => field.startsWith("typedef ");
+            bool isClassDefField(String field) => field.startsWith(
+                  RegExp(
+                    r"/// [^\n]+\nclass [^\n]+ extends PythonClass {\n.*}",
+                    dotAll: true,
+                  ),
+                );
+            for (final String field in fields.where(isTypedefField)) {
+              buffer.writeln(field);
+            }
+            for (final String field in fields.where(isClassDefField)) {
+              buffer.writeln(field);
+            }
+            buffer.writeln();
+            buffer.writeln("/// $export");
+            buffer.writeln(
+              "class ${type.pythonName ?? type.name} extends PythonModule {",
+            );
+            for (final String field
+                in fields.whereNot(isTypedefField).whereNot(isClassDefField)) {
+              buffer.writeln("  $field");
+            }
+            buffer.writeln("}");
+            buffer.writeln("```");
+            return buffer.toString();
+          case PythonClassDefinitionInterface():
+          case PythonClassDefinition():
+            final String className = type.pythonName ?? type.name;
+            final StringBuffer buffer = StringBuffer();
+            buffer.writeln("/// $export");
+            buffer.writeln(
+              "class $className extends PythonClass {",
+            );
+            final TypeDefinition? constructor = attributes["__init__"];
+            if (constructor != null) {
+              buffer.writeln("  factory $className(");
+              final Iterable<String> args = constructor.annotations.entries
+                  .whereNot(
+                    (MapEntry<String, _PythonType> e) => e.key == "return",
+                  )
+                  .map(
+                    (MapEntry<String, _PythonType> e) => "${e.value} ${e.key}",
+                  );
+              buffer
+                ..write(args.join(", "))
+                ..writeln(
+                  ") => PythonFfi.instance.importClass(\"<module>\", \"$className\", $className.from, <Object>[${args.map((String e) => e.split(" ").first).join(", ")}]);",
+                )
+                ..writeln(
+                  "  $className.from(super.pythonClass) : super.from();",
+                );
+            }
+            final Iterable<String> fields = attributes.entries
+                .whereNot(
+                  (MapEntry<String, TypeDefinition> element) =>
+                      annotations.containsKey(element.key),
+                )
+                .whereNot(
+                  (MapEntry<String, TypeDefinition> element) =>
+                      element.key == "__init__",
+                )
+                .map((MapEntry<String, TypeDefinition> e) => e.value.codeify);
+            buffer.writeln("/// annotations");
+            for (final MapEntry<String, _PythonType> entry
+                in annotations.entries) {
+              final String name = entry.key;
+              final _PythonType type = entry.value;
+              buffer
+                ..writeln("  $type get $name => getAttribute(\"$name\");")
+                ..writeln(
+                  "  set $name($type value) => setAttribute(\"$name\", value);",
+                );
+            }
+            buffer.writeln("/// fields");
+            for (final String field in fields) {
+              buffer.writeln("  $field");
+            }
+            buffer.writeln("}");
+            return buffer.toString();
+          case PythonClassInterface():
+          case PythonClass():
+            return "typedef ${type.name} = ${_PythonType(name: type.name, type: type.type)};";
+          case PythonFunctionInterface():
+          case PythonFunction():
+            final StringBuffer buffer = StringBuffer();
+            final Object? returnTypeObject = annotations["return"];
+            final String returnType = switch (returnTypeObject) {
+              _PythonType() => returnTypeObject.toString(),
+              _ => "dynamic",
+            };
+            buffer.write("$returnType ${type.name}(");
+            final Iterable<String> args = annotations.entries
+                .whereNot(
+                  (MapEntry<String, _PythonType> e) => e.key == "return",
+                )
+                .map(
+                  (MapEntry<String, _PythonType> e) => "${e.value} ${e.key}",
+                );
+            buffer.write(args.join(", "));
+            buffer.writeln(
+              ") => getFunction(\"${type.name}\").call(<Object?>[${args.map((String e) => e.split(" ").first).join(", ")}]);",
+            );
+            return buffer.toString();
+          case PythonObjectInterface():
+            throw UnimplementedError("PythonObject is not implemented");
+        }
+        return "(default) ${type.type}";
+      case ValueTypeInfo():
+        return type.value.toString();
+    }
+  }
+
   @override
   String toString() => "TypeDefinition<$type>: $attributes";
 }
@@ -228,7 +391,10 @@ extension _TypeName on PythonClassDefinitionInterface {
       if (typeArgs is List) {
         final Iterable<String> typeNames = typeArgs
             .whereType<PythonClassDefinitionInterface>()
-            .map((e) => e.typeName);
+            .map((PythonClassDefinitionInterface<PythonFfiDelegate<Object?>,
+                        Object?>
+                    e) =>
+                e.typeName);
         return typeNames.join(" | ");
       }
     }
@@ -267,7 +433,7 @@ base mixin TypeGenerationMixin on PythonObjectInterface {
     if (!hasAttribute(attribute)) {
       return null;
     }
-    final value = getAttribute(attribute);
+    final Object? value = getAttribute(attribute);
     final TypeDefinition? cached = cache.get(value);
     if (cached != null) {
       return cached;
@@ -320,7 +486,7 @@ base mixin TypeGenerationMixin on PythonObjectInterface {
     final TypeDefinition typeDefinition = TypeDefinition(
       value,
       name: attribute,
-      annotations: <String, dynamic>{},
+      annotations: <String, _PythonType>{},
     );
     cache.add(typeDefinition);
     return typeDefinition;
@@ -347,15 +513,15 @@ base mixin TypeGenerationMixin on PythonObjectInterface {
     return typeDefinition;
   }
 
-  Map<String, dynamic> get annotations {
+  Map<String, _PythonType> get annotations {
     final String annotationsAttribute = "__annotations__";
     if (!hasAttribute(annotationsAttribute)) {
-      return <String, dynamic>{};
+      return <String, _PythonType>{};
     }
     final Object? annotations = getAttribute(annotationsAttribute);
     if (annotations is Map) {
       return annotations.map(
-        (key, value) {
+        (Object? key, Object? value) {
           if (key is! String) {
             throw ArgumentError.value(
               key,
@@ -364,16 +530,29 @@ base mixin TypeGenerationMixin on PythonObjectInterface {
             );
           }
           print("key: $key, value<${value.runtimeType}>");
-          final String effectiveValue = switch (value) {
+          final String typeName = switch (value) {
             PythonClassDefinitionInterface() => value.typeName,
+            PythonClassInterface() => value.hasAttribute("__name__")
+                ? value.getAttribute("__name__").toString()
+                : value.toString(),
             PythonObjectInterface() => value.toString(),
             _ => value.runtimeType.toString(),
           };
-          return MapEntry(key, effectiveValue);
+          final Type typeType = switch (value) {
+            PythonClassDefinitionInterface() => PythonClassDefinition,
+            // TODO: implement custom conversion for PythonClass (Python Type) to Type
+            PythonClassInterface() => PythonClass,
+            PythonObjectInterface() => PythonObject,
+            _ => value.runtimeType,
+          };
+          return MapEntry<String, _PythonType>(
+            key,
+            _PythonType(name: typeName, type: typeType),
+          );
         },
       );
     }
-    return <String, dynamic>{};
+    return <String, _PythonType>{};
   }
 }
 
