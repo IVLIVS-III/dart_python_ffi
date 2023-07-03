@@ -1,8 +1,4 @@
-import "dart:collection";
-
-import "package:collection/collection.dart";
-import "package:python_ffi_cpython_dart/python_ffi_cpython_dart.dart";
-import "package:python_ffi_dart/python_ffi_dart.dart";
+part of dartpip;
 
 final class BuiltinsModule extends PythonModule {
   BuiltinsModule.from(super.moduleDelegate) : super.from();
@@ -169,7 +165,11 @@ class _PythonType {
 
   @override
   String toString() {
+    if (type == PythonClassDefinition) {
+      return "Object?";
+    }
     if (type == PythonClass) {
+      return "Object?";
       return "PythonType<'$name'>";
     }
     return type.toString();
@@ -257,7 +257,7 @@ class TypeDefinition {
     }
   }
 
-  String get codeify {
+  String codeify({required String appType, String? moduleName}) {
     final _TypeInfo type = this.type;
     switch (type) {
       case PythonObjectTypeInfo():
@@ -266,12 +266,21 @@ class TypeDefinition {
           case PythonModule():
             final StringBuffer buffer = StringBuffer();
             buffer.writeln("```dart");
-            final Iterable<String> fields = attributes.entries
-                .map((MapEntry<String, TypeDefinition> e) => e.value.codeify);
+            final String importedPackage =
+                "python_ffi${appType == _kAppTypeConsole ? "_dart" : ""}";
+            buffer.writeln(
+              "import \"package:$importedPackage/$importedPackage.dart\";",
+            );
+            final Iterable<String> fields = attributes.entries.map(
+              (MapEntry<String, TypeDefinition> e) => e.value.codeify(
+                appType: appType,
+                moduleName: type.pythonName ?? type.name,
+              ),
+            );
             bool isTypedefField(String field) => field.startsWith("typedef ");
             bool isClassDefField(String field) => field.startsWith(
                   RegExp(
-                    r"/// [^\n]+\nclass [^\n]+ extends PythonClass {\n.*}",
+                    r"/// [^\n]+\nfinal class [^\n]+ extends PythonClass {\n.*}",
                     dotAll: true,
                   ),
                 );
@@ -284,7 +293,10 @@ class TypeDefinition {
             buffer.writeln();
             buffer.writeln("/// $export");
             buffer.writeln(
-              "class ${type.pythonName ?? type.name} extends PythonModule {",
+              "final class ${type.pythonName ?? type.name} extends PythonModule {",
+            );
+            buffer.writeln(
+              "${type.pythonName ?? type.name}.from(super.pythonModule) : super.from();",
             );
             for (final String field
                 in fields.whereNot(isTypedefField).whereNot(isClassDefField)) {
@@ -299,22 +311,38 @@ class TypeDefinition {
             final StringBuffer buffer = StringBuffer();
             buffer.writeln("/// $export");
             buffer.writeln(
-              "class $className extends PythonClass {",
+              "final class $className extends PythonClass {",
             );
             final TypeDefinition? constructor = attributes["__init__"];
             if (constructor != null) {
-              buffer.writeln("  factory $className(");
-              final Iterable<String> args = constructor.annotations.entries
-                  .whereNot(
-                    (MapEntry<String, _PythonType> e) => e.key == "return",
-                  )
-                  .map(
-                    (MapEntry<String, _PythonType> e) => "${e.value} ${e.key}",
+              buffer.writeln("  factory $className({");
+              final Iterable<(String, String)> args =
+                  constructor.annotations.entries
+                      .whereNot(
+                (MapEntry<String, _PythonType> e) => e.key == "return",
+              )
+                      .map(
+                (MapEntry<String, _PythonType> e) {
+                  final String name = e.key;
+                  final TypeDefinition? defaultValue = attributes[name];
+                  final String? defaultValueString =
+                      switch (defaultValue?.type) {
+                    ValueTypeInfo(value: final Object? value) =>
+                      value.toString(),
+                    _ => null,
+                  };
+                  return (
+                    name,
+                    "Object? $name${defaultValueString != null ? " = $defaultValueString" : ""}"
                   );
+                },
+              );
               buffer
-                ..write(args.join(", "))
+                ..write(args.map(((String, String) e) => e.$2).join(", "))
                 ..writeln(
-                  ") => PythonFfi.instance.importClass(\"<module>\", \"$className\", $className.from, <Object>[${args.map((String e) => e.split(" ").first).join(", ")}]);",
+                  "}) => PythonFfi${appType == _kAppTypeConsole ? "Dart" : ""}.instance.importClass(\"${moduleName ?? "<module>"}\", \"$className\", $className.from, <Object?>[${args.map(
+                        ((String, String) e) => e.$1,
+                      ).join(", ")}]);",
                 )
                 ..writeln(
                   "  $className.from(super.pythonClass) : super.from();",
@@ -329,7 +357,10 @@ class TypeDefinition {
                   (MapEntry<String, TypeDefinition> element) =>
                       element.key == "__init__",
                 )
-                .map((MapEntry<String, TypeDefinition> e) => e.value.codeify);
+                .map(
+                  (MapEntry<String, TypeDefinition> e) =>
+                      e.value.codeify(appType: appType, moduleName: moduleName),
+                );
             buffer.writeln("/// annotations");
             for (final MapEntry<String, _PythonType> entry
                 in annotations.entries) {
@@ -368,7 +399,7 @@ class TypeDefinition {
                 );
             buffer.write(args.join(", "));
             buffer.writeln(
-              ") => getFunction(\"${type.name}\").call(<Object?>[${args.map((String e) => e.split(" ").first).join(", ")}]);",
+              ") => getFunction(\"${type.name}\").call(<Object?>[${args.map((String e) => e.split(" ").last).join(", ")}]);",
             );
             return buffer.toString();
           case PythonObjectInterface():

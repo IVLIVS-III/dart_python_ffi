@@ -86,7 +86,10 @@ Future<_ModuleBundle<_PythonModule<Object>>> _bundleCacheModule({
   return moduleBundle;
 }
 
-Future<void> _generateTypeDefs(PythonModuleDefinition moduleDefinition) async {
+Future<void> _generateTypeDefs(
+  PythonModuleDefinition moduleDefinition, {
+  required String appType,
+}) async {
   print("Generating type definitions for ${moduleDefinition.name}...");
   await PythonFfiDart.instance.prepareModule(moduleDefinition);
   final TypeGenerationModule pythonModuleHandle = PythonFfiDart.instance
@@ -98,6 +101,6 @@ Future<void> _generateTypeDefs(PythonModuleDefinition moduleDefinition) async {
   for (final TypeDefinition typeDefinition in cache.values) {
     print("${typeDefinition.type.name}: ${typeDefinition.export}");
   }
-  print(typeDefinition.codeify);
+  print(typeDefinition.codeify(appType: appType));
   print("Generated type definitions for ${moduleDefinition.name}.");
 }

@@ -198,7 +198,7 @@ class InstallCommand extends Command<void> {
       futures.add(
         bundleTask.then(
           (_ModuleBundle<_PythonModule<Object>> moduleBundle) =>
-              _generateTypeDefs(moduleBundle.definition),
+              _generateTypeDefs(moduleBundle.definition, appType: appType),
         ),
       );
     }

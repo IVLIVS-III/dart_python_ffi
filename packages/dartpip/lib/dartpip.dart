@@ -1,6 +1,7 @@
 library dartpip;
 
 import "dart:async";
+import "dart:collection";
 import "dart:convert";
 import "dart:io";
 import "dart:typed_data";
@@ -10,7 +11,6 @@ import "package:args/args.dart";
 import "package:args/command_runner.dart";
 import "package:collection/collection.dart";
 import "package:dartpip/pypi/api.dart";
-import "package:dartpip/type_generation.dart";
 import "package:http/http.dart" as http;
 import "package:python_ffi_cpython_dart/python_ffi_cpython_dart.dart";
 import "package:python_ffi_dart/python_ffi_dart.dart";
@@ -31,6 +31,7 @@ part "pypi/client.dart";
 part "pypi/pypi.dart";
 part "python_module.dart";
 part "source_file.dart";
+part "type_generation.dart";
 part "util.dart";
 part "util/lazy_future.dart";
 part "util/pubspec_editor.dart";
