@@ -585,6 +585,89 @@ base mixin TypeGenerationMixin on PythonObjectInterface {
     }
     return <String, _PythonType>{};
   }
+
+  String? get jsonName {
+    final String nameAttribute = "__name__";
+    if (!hasAttribute(nameAttribute)) {
+      return null;
+    }
+    return getAttribute(nameAttribute).toString();
+  }
+
+  Map<String, dynamic>? get jsonAnnotations {
+    final String annotationsAttribute = "__annotations__";
+    if (!hasAttribute(annotationsAttribute)) {
+      return null;
+    }
+    final Object? annotations = getAttribute(annotationsAttribute);
+    final Map<String, Object?> result = <String, Object?>{};
+    if (annotations is Map) {
+      final Iterable<String> keys = annotations.keys.whereType();
+      for (final String key in keys) {
+        result[key] = null;
+      }
+    }
+    return result;
+  }
+
+  List<String>? get jsonDir {
+    final Object? dir = BuiltinsModule.import().dir(this);
+    if (dir is List) {
+      return dir.whereType<String>().toList();
+    }
+    return null;
+  }
+
+  Map<String, dynamic> get toJsonRaw => <String, dynamic>{
+        "name": jsonName,
+        "annotations": jsonAnnotations,
+        "dir": jsonDir,
+        "raw": reference.toString(),
+      };
+
+  Iterable<String> get _attributeKeys => jsonDir ?? const <String>[];
+
+  bool _attributeFilter(String attributeKey) => !attributeKey.startsWith("_");
+
+  Map<String, dynamic> jsonAttributes(Map<Object?, int> cache) {
+    final Map<String, dynamic> result = <String, dynamic>{};
+    for (final String attributeKey in _attributeKeys.where(_attributeFilter)) {
+      if (!hasAttribute(attributeKey)) {
+        continue;
+      }
+      final Object? attribute = getAttribute(attributeKey);
+      if (attribute is! PythonObjectInterface) {
+        result[attributeKey] = attribute;
+        continue;
+      }
+      final int? cached = cache[attribute.reference];
+      if (cached != null) {
+        result[attributeKey] = <String, dynamic>{
+          "_cacheId": cached,
+        };
+        continue;
+      }
+      final TypeGenerationObject typeGenerationObject =
+          TypeGenerationObject.from(attribute);
+      final Map<String, dynamic> json =
+          typeGenerationObject.toJsonHydrated(cache);
+      result[attributeKey] = json;
+    }
+    return result;
+  }
+
+  Map<String, dynamic> toJsonHydrated(Map<Object?, int> cache) {
+    final int timestamp = DateTime.now().microsecondsSinceEpoch;
+    final Map<String, dynamic> result = <String, dynamic>{
+      "name": jsonName,
+      "raw": reference.toString(),
+    };
+    final int cacheId = timestamp ^ result.hashCode;
+    cache[reference] = cacheId;
+    result["_cacheId"] = cacheId;
+    result["attributes"] = jsonAttributes(cache);
+    return result;
+  }
 }
 
 final class TypeGenerationObject extends PythonObject with TypeGenerationMixin {
@@ -621,4 +704,25 @@ final class TypeGenerationModule extends PythonModule with TypeGenerationMixin {
   @override
   Iterable<String> get _subAttributes =>
       hasAttribute(_k__all__) ? __all__ : super._subAttributes;
+
+  List<String>? get jsonAll {
+    final String allAttribute = "__all__";
+    if (!hasAttribute(allAttribute)) {
+      return null;
+    }
+    final Object? all = getAttribute(allAttribute);
+    if (all is List) {
+      return all.whereType<String>().toList();
+    }
+    return null;
+  }
+
+  @override
+  Map<String, dynamic> get toJsonRaw => super.toJsonRaw
+    ..addAll(<String, dynamic>{
+      "all": jsonAll,
+    });
+
+  @override
+  Iterable<String> get _attributeKeys => jsonAll ?? super._attributeKeys;
 }
