@@ -11,7 +11,7 @@ sealed class Interface {
 
   void collectChildren();
 
-  void collectChild(String childName);
+  Interface? collectChild(String childName);
 
   String emit();
 
@@ -39,33 +39,33 @@ base mixin InterfaceImpl on PythonObjectInterface implements Interface {
 
   void collectChildren() {
     for (final String childName in _childrenNames.where(_filterAttribute)) {
-      print("Collecting child: $childName");
       collectChild(childName);
     }
   }
 
   @override
-  void collectChild(String childName) =>
+  Interface? collectChild(String childName) =>
       throw UnimplementedError("collectChild: $childName");
 
-  void _collectAttribute(String attribute) {
+  Interface? _collectAttribute(String attribute) {
     if (!hasAttribute(attribute)) {
       print("Warning: $this does not have attribute $attribute");
-      return;
+      return null;
     }
     final Object? value = getAttribute(attribute);
     if (value == null) {
       print("Warning: $this has null attribute $attribute");
-      return;
+      return null;
     }
     if (value is! PythonObjectInterface) {
-      _children[attribute] = PrimitiveInterface(value);
-      return;
+      final PrimitiveInterface result = PrimitiveInterface(value);
+      _children[attribute] = result;
+      return result;
     }
-    final Interface? cached = InterfaceCache.instance[value];
+    final Interface? cached = _InterfaceCache.instance[value];
     if (cached != null) {
       _children[attribute] = cached;
-      return;
+      return cached;
     }
     final Interface result = switch (value) {
       PythonModuleInterface() => ModuleInterface.from(value),
@@ -74,9 +74,10 @@ base mixin InterfaceImpl on PythonObjectInterface implements Interface {
       PythonFunctionInterface() => FunctionInterface.from(value),
       PythonObjectInterface() => ObjectInterface.from(value),
     } as Interface;
-    InterfaceCache.instance[value] = result;
+    _InterfaceCache.instance[value] = result;
     _children[attribute] = result;
     result.collectChildren();
+    return result;
   }
 
   String emit() => throw UnimplementedError("emit");

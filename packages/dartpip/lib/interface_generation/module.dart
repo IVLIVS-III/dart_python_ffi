@@ -19,7 +19,7 @@ final class ModuleInterface extends PythonModule
   Iterable<String> get _childrenNames => __all__ ?? super._childrenNames;
 
   @override
-  void collectChild(String childName) => _collectAttribute(childName);
+  Interface? collectChild(String childName) => _collectAttribute(childName);
 
   @override
   String emit() {
@@ -42,7 +42,7 @@ final class $moduleName extends PythonModule {
   $moduleName.from(super.pythonModule) : super.from();
   
   static $moduleName import() => PythonFfiDart.instance
-      .importModule("$moduleName", $moduleName.from);
+      .importModule("$moduleName", $moduleName.from,);
   
   ${_children.values.whereType<FunctionInterface>().map((Interface child) => child.emit()).join("\n")}
 }

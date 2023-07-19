@@ -1,4 +1,4 @@
-// ignore_for_file: camel_case_types
+// ignore_for_file: camel_case_types, non_constant_identifier_names
 
 import "package:python_ffi_dart/python_ffi_dart.dart";
 
@@ -14,9 +14,18 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 final class basic_cli_adder extends PythonModule {
   basic_cli_adder.from(super.pythonModule) : super.from();
 
-  static basic_cli_adder import() => PythonFfiDart.instance
-      .importModule("basic_cli_adder", basic_cli_adder.from);
+  static basic_cli_adder import() => PythonFfiDart.instance.importModule(
+        "basic_cli_adder",
+        basic_cli_adder.from,
+      );
 
   /// ## add
-  Object? add(Object? x, Object? y) => getFunction("add").call(<Object?>[x, y]);
+  Object? add({
+    required Object? x,
+    required Object? y,
+  }) =>
+      getFunction("add").call(<Object?>[
+        x,
+        y,
+      ]);
 }

@@ -1,4 +1,4 @@
-// ignore_for_file: camel_case_types
+// ignore_for_file: camel_case_types, non_constant_identifier_names
 
 import "package:python_ffi_dart/python_ffi_dart.dart";
 
@@ -7,18 +7,33 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 /// ### python docstring
 /// Person(name: str, x: int = 0, y: int = 0)
 final class Person extends PythonClass {
-  factory Person(String name) => PythonFfiDart.instance.importClass(
+  factory Person({
+    required Object? name,
+    Object? x = 0,
+    Object? y = 0,
+  }) =>
+      PythonFfiDart.instance.importClass(
         "basic_dataclass",
         "Person",
         Person.from,
-        <Object?>[name],
+        <Object?>[
+          name,
+          x,
+          y,
+        ],
       );
 
   Person.from(super.pythonClass) : super.from();
 
   /// ## move
-  Object? move(Object? self, Object? dx, Object? dy) =>
-      getFunction("move").call(<Object?>[self, dx, dy]);
+  Object? move({
+    required Object? dx,
+    required Object? dy,
+  }) =>
+      getFunction("move").call(<Object?>[
+        dx,
+        dy,
+      ]);
 }
 
 /// ## basic_dataclass
@@ -43,8 +58,10 @@ final class Person extends PythonClass {
 final class basic_dataclass extends PythonModule {
   basic_dataclass.from(super.pythonModule) : super.from();
 
-  static basic_dataclass import() => PythonFfiDart.instance
-      .importModule("basic_dataclass", basic_dataclass.from);
+  static basic_dataclass import() => PythonFfiDart.instance.importModule(
+        "basic_dataclass",
+        basic_dataclass.from,
+      );
 
   /// ## dataclass
   ///
@@ -61,19 +78,20 @@ final class basic_dataclass extends PythonModule {
   /// __match_args__ tuple is added. If kw_only is true, then by default
   /// all fields are keyword-only. If slots is true, a new class with a
   /// __slots__ attribute is returned.
-  Object? dataclass(
-          Object? cls,
-          Object? init,
-          Object? repr,
-          Object? eq,
-          Object? order,
-          Object? unsafe_hash,
-          Object? frozen,
-          Object? match_args,
-          Object? kw_only,
-          Object? slots,
-          Object? weakref_slot,
-          Object? wrap) =>
+  Object? dataclass({
+    required Object? cls,
+    required Object? init,
+    required Object? repr,
+    required Object? eq,
+    required Object? order,
+    required Object? unsafe_hash,
+    required Object? frozen,
+    required Object? match_args,
+    required Object? kw_only,
+    required Object? slots,
+    required Object? weakref_slot,
+    required Object? wrap,
+  }) =>
       getFunction("dataclass").call(<Object?>[
         cls,
         init,
@@ -86,6 +104,6 @@ final class basic_dataclass extends PythonModule {
         kw_only,
         slots,
         weakref_slot,
-        wrap
+        wrap,
       ]);
 }

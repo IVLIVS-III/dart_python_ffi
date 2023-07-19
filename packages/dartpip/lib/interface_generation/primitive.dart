@@ -18,11 +18,27 @@ final class PrimitiveInterface implements Interface {
   void collectChildren() {}
 
   @override
-  void collectChild(String childName) {}
+  Interface? collectChild(String childName) => null;
 
   @override
-  String emit() => throw UnimplementedError();
+  String emit() {
+    final Object source = _source;
+    return switch (source) {
+      List() when source.isEmpty => "const []",
+      Map() when source.isEmpty => "const {}",
+      Set() when source.isEmpty => "const {}",
+      String() => jsonEncode(source),
+      _ => _source.toString(),
+    };
+  }
 
   @override
   void emitDocstring(StringBuffer buffer) {}
+}
+
+final class NullInterface extends PrimitiveInterface {
+  NullInterface() : super(const Object());
+
+  @override
+  String emit() => throw UnsupportedError("NullInterface.emit");
 }

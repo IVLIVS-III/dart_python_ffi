@@ -9,8 +9,27 @@ final class ClassDefinitionInterface extends PythonClassDefinition
 
   PythonClassDefinitionInterface _source;
 
+  static const String _k__init__ = "__init__";
+
+  FunctionInterface? _init;
+
   @override
-  void collectChild(String childName) => _collectAttribute(childName);
+  Interface? collectChild(String childName) => _collectAttribute(childName);
+
+  @override
+  void collectChildren() {
+    super.collectChildren();
+    if (name == _k__init__) {
+      return;
+    }
+    if (_init == null) {
+      final Interface? child = collectChild(_k__init__);
+      if (child is FunctionInterface) {
+        _init = child;
+      }
+    }
+    _children.remove(_k__init__);
+  }
 
   String get name => (_source as dynamic).__name__ as String;
 
@@ -28,16 +47,16 @@ final class ClassDefinitionInterface extends PythonClassDefinition
     emitDocstring(buffer);
     buffer.writeln("""
 final class $className extends PythonClass {
-  factory $className(String name) => PythonFfiDart.instance.importClass(
+  factory $className(${_init?.parameterList(isMethod: true) ?? ""}) => PythonFfiDart.instance.importClass(
         "$moduleName",
         "$className",
         $className.from,
-        <Object?>[name],
+        <Object?>[${_init?.argumentList(isMethod: true) ?? ""}],
       );
 
   $className.from(super.pythonClass) : super.from();
 
-  ${_children.values.whereType<FunctionInterface>().map((Interface child) => child.emit()).join("\n")}
+  ${_children.values.whereType<FunctionInterface>().map((FunctionInterface child) => child.emit(isMethod: true)).join("\n")}
 }
 """);
     return buffer.toString();

@@ -1,5 +1,6 @@
 library interface_generation;
 
+import "dart:convert";
 import "dart:io";
 
 import "package:dartpip/dartpip.dart";
@@ -27,14 +28,14 @@ Future<dynamic> generateInterface({
 
   final String importSuffix = appType == kAppTypeConsole ? "_dart" : "";
   final String prelude = """
-// ignore_for_file: camel_case_types
+// ignore_for_file: camel_case_types, non_constant_identifier_names
 
 import "package:python_ffi$importSuffix/python_ffi$importSuffix.dart";
 """;
   final StringBuffer buffer = StringBuffer(prelude);
   final Set<String> classes = <String>{};
   for (final ClassDefinitionInterface interface
-      in InterfaceCache.instance.classDefinitions) {
+      in _InterfaceCache.instance.classDefinitions) {
     final String className = interface.name;
     if (classes.contains(className)) {
       continue;

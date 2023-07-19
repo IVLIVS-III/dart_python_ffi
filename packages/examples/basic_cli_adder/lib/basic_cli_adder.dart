@@ -1,5 +1,7 @@
 import "package:python_ffi_dart/python_ffi_dart.dart";
 
+export "python_modules/basic_cli_adder.g.dart";
+
 final class BasicCliAdder extends PythonModule {
   BasicCliAdder.from(super.pythonModule) : super.from();
 

@@ -1,14 +1,14 @@
-// ignore_for_file: camel_case_types
+// ignore_for_file: camel_case_types, non_constant_identifier_names
 
 import "package:python_ffi_dart/python_ffi_dart.dart";
 
 /// ## GrammarError
 final class GrammarError extends PythonClass {
-  factory GrammarError(String name) => PythonFfiDart.instance.importClass(
+  factory GrammarError() => PythonFfiDart.instance.importClass(
         "lark.exceptions",
         "GrammarError",
         GrammarError.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   GrammarError.from(super.pythonClass) : super.from();
@@ -16,11 +16,11 @@ final class GrammarError extends PythonClass {
 
 /// ## LarkError
 final class LarkError extends PythonClass {
-  factory LarkError(String name) => PythonFfiDart.instance.importClass(
+  factory LarkError() => PythonFfiDart.instance.importClass(
         "lark.exceptions",
         "LarkError",
         LarkError.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   LarkError.from(super.pythonClass) : super.from();
@@ -28,11 +28,11 @@ final class LarkError extends PythonClass {
 
 /// ## LexError
 final class LexError extends PythonClass {
-  factory LexError(String name) => PythonFfiDart.instance.importClass(
+  factory LexError() => PythonFfiDart.instance.importClass(
         "lark.exceptions",
         "LexError",
         LexError.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   LexError.from(super.pythonClass) : super.from();
@@ -40,11 +40,11 @@ final class LexError extends PythonClass {
 
 /// ## ParseError
 final class ParseError extends PythonClass {
-  factory ParseError(String name) => PythonFfiDart.instance.importClass(
+  factory ParseError() => PythonFfiDart.instance.importClass(
         "lark.exceptions",
         "ParseError",
         ParseError.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   ParseError.from(super.pythonClass) : super.from();
@@ -56,12 +56,34 @@ final class ParseError extends PythonClass {
 /// An exception that is raised by the lexer, when it cannot match the next
 /// string of characters to any of its terminals.
 final class UnexpectedCharacters extends PythonClass {
-  factory UnexpectedCharacters(String name) =>
+  factory UnexpectedCharacters({
+    required Object? seq,
+    required Object? lex_pos,
+    required Object? line,
+    required Object? column,
+    required Object? allowed,
+    required Object? considered_tokens,
+    required Object? state,
+    required Object? token_history,
+    required Object? terminals_by_name,
+    required Object? considered_rules,
+  }) =>
       PythonFfiDart.instance.importClass(
         "lark.exceptions",
         "UnexpectedCharacters",
         UnexpectedCharacters.from,
-        <Object?>[name],
+        <Object?>[
+          seq,
+          lex_pos,
+          line,
+          column,
+          allowed,
+          considered_tokens,
+          state,
+          token_history,
+          terminals_by_name,
+          considered_rules,
+        ],
       );
 
   UnexpectedCharacters.from(super.pythonClass) : super.from();
@@ -75,10 +97,24 @@ final class UnexpectedCharacters extends PythonClass {
   /// Note:
   /// The parser doesn't hold a copy of the text it has to parse,
   /// so you have to provide it again
-  Object? get_context(Object? self, Object? text, Object? span, Object? pos,
-          Object? start, Object? end, Object? before, Object? after) =>
-      getFunction("get_context")
-          .call(<Object?>[self, text, span, pos, start, end, before, after]);
+  Object? get_context({
+    required Object? text,
+    required Object? span,
+    required Object? pos,
+    required Object? start,
+    required Object? end,
+    required Object? before,
+    Object? after = 40,
+  }) =>
+      getFunction("get_context").call(<Object?>[
+        text,
+        span,
+        pos,
+        start,
+        end,
+        before,
+        after,
+      ]);
 
   /// ## match_examples
   ///
@@ -98,21 +134,20 @@ final class UnexpectedCharacters extends PythonClass {
   /// parse_fn: parse function (usually ``lark_instance.parse``)
   /// examples: dictionary of ``{'example_string': value}``.
   /// use_accepts: Recommended to keep this as ``use_accepts=True``.
-  Object? match_examples(
-          Object? self,
-          Object? parse_fn,
-          Object? examples,
-          Object? token_type_match_fallback,
-          Object? use_accepts,
-          Object? candidate,
-          Object? i,
-          Object? label,
-          Object? example,
-          Object? j,
-          Object? malformed,
-          Object? ut) =>
+  Object? match_examples({
+    required Object? parse_fn,
+    required Object? examples,
+    required Object? token_type_match_fallback,
+    required Object? use_accepts,
+    required Object? candidate,
+    required Object? i,
+    required Object? label,
+    required Object? example,
+    required Object? j,
+    Object? malformed = false,
+    Object? ut = true,
+  }) =>
       getFunction("match_examples").call(<Object?>[
-        self,
         parse_fn,
         examples,
         token_type_match_fallback,
@@ -123,7 +158,7 @@ final class UnexpectedCharacters extends PythonClass {
         example,
         j,
         malformed,
-        ut
+        ut,
       ]);
 }
 
@@ -132,11 +167,22 @@ final class UnexpectedCharacters extends PythonClass {
 /// ### python docstring
 /// An exception that is raised by the parser, when the input ends while it still expects a token.
 final class UnexpectedEOF extends PythonClass {
-  factory UnexpectedEOF(String name) => PythonFfiDart.instance.importClass(
+  factory UnexpectedEOF({
+    required Object? expected,
+    required Object? state,
+    required Object? terminals_by_name,
+    required Object? Token,
+  }) =>
+      PythonFfiDart.instance.importClass(
         "lark.exceptions",
         "UnexpectedEOF",
         UnexpectedEOF.from,
-        <Object?>[name],
+        <Object?>[
+          expected,
+          state,
+          terminals_by_name,
+          Token,
+        ],
       );
 
   UnexpectedEOF.from(super.pythonClass) : super.from();
@@ -150,10 +196,24 @@ final class UnexpectedEOF extends PythonClass {
   /// Note:
   /// The parser doesn't hold a copy of the text it has to parse,
   /// so you have to provide it again
-  Object? get_context(Object? self, Object? text, Object? span, Object? pos,
-          Object? start, Object? end, Object? before, Object? after) =>
-      getFunction("get_context")
-          .call(<Object?>[self, text, span, pos, start, end, before, after]);
+  Object? get_context({
+    required Object? text,
+    required Object? span,
+    required Object? pos,
+    required Object? start,
+    required Object? end,
+    required Object? before,
+    Object? after = 40,
+  }) =>
+      getFunction("get_context").call(<Object?>[
+        text,
+        span,
+        pos,
+        start,
+        end,
+        before,
+        after,
+      ]);
 
   /// ## match_examples
   ///
@@ -173,21 +233,20 @@ final class UnexpectedEOF extends PythonClass {
   /// parse_fn: parse function (usually ``lark_instance.parse``)
   /// examples: dictionary of ``{'example_string': value}``.
   /// use_accepts: Recommended to keep this as ``use_accepts=True``.
-  Object? match_examples(
-          Object? self,
-          Object? parse_fn,
-          Object? examples,
-          Object? token_type_match_fallback,
-          Object? use_accepts,
-          Object? candidate,
-          Object? i,
-          Object? label,
-          Object? example,
-          Object? j,
-          Object? malformed,
-          Object? ut) =>
+  Object? match_examples({
+    required Object? parse_fn,
+    required Object? examples,
+    required Object? token_type_match_fallback,
+    required Object? use_accepts,
+    required Object? candidate,
+    required Object? i,
+    required Object? label,
+    required Object? example,
+    required Object? j,
+    Object? malformed = false,
+    Object? ut = true,
+  }) =>
       getFunction("match_examples").call(<Object?>[
-        self,
         parse_fn,
         examples,
         token_type_match_fallback,
@@ -198,7 +257,7 @@ final class UnexpectedEOF extends PythonClass {
         example,
         j,
         malformed,
-        ut
+        ut,
       ]);
 }
 
@@ -215,11 +274,11 @@ final class UnexpectedEOF extends PythonClass {
 ///
 /// After catching one of these exceptions, you may call the following helper methods to create a nicer error message.
 final class UnexpectedInput extends PythonClass {
-  factory UnexpectedInput(String name) => PythonFfiDart.instance.importClass(
+  factory UnexpectedInput() => PythonFfiDart.instance.importClass(
         "lark.exceptions",
         "UnexpectedInput",
         UnexpectedInput.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   UnexpectedInput.from(super.pythonClass) : super.from();
@@ -233,10 +292,24 @@ final class UnexpectedInput extends PythonClass {
   /// Note:
   /// The parser doesn't hold a copy of the text it has to parse,
   /// so you have to provide it again
-  Object? get_context(Object? self, Object? text, Object? span, Object? pos,
-          Object? start, Object? end, Object? before, Object? after) =>
-      getFunction("get_context")
-          .call(<Object?>[self, text, span, pos, start, end, before, after]);
+  Object? get_context({
+    required Object? text,
+    required Object? span,
+    required Object? pos,
+    required Object? start,
+    required Object? end,
+    required Object? before,
+    Object? after = 40,
+  }) =>
+      getFunction("get_context").call(<Object?>[
+        text,
+        span,
+        pos,
+        start,
+        end,
+        before,
+        after,
+      ]);
 
   /// ## match_examples
   ///
@@ -256,21 +329,20 @@ final class UnexpectedInput extends PythonClass {
   /// parse_fn: parse function (usually ``lark_instance.parse``)
   /// examples: dictionary of ``{'example_string': value}``.
   /// use_accepts: Recommended to keep this as ``use_accepts=True``.
-  Object? match_examples(
-          Object? self,
-          Object? parse_fn,
-          Object? examples,
-          Object? token_type_match_fallback,
-          Object? use_accepts,
-          Object? candidate,
-          Object? i,
-          Object? label,
-          Object? example,
-          Object? j,
-          Object? malformed,
-          Object? ut) =>
+  Object? match_examples({
+    required Object? parse_fn,
+    required Object? examples,
+    required Object? token_type_match_fallback,
+    required Object? use_accepts,
+    required Object? candidate,
+    required Object? i,
+    required Object? label,
+    required Object? example,
+    required Object? j,
+    Object? malformed = false,
+    Object? ut = true,
+  }) =>
       getFunction("match_examples").call(<Object?>[
-        self,
         parse_fn,
         examples,
         token_type_match_fallback,
@@ -281,7 +353,7 @@ final class UnexpectedInput extends PythonClass {
         example,
         j,
         malformed,
-        ut
+        ut,
       ]);
 }
 
@@ -301,11 +373,28 @@ final class UnexpectedInput extends PythonClass {
 ///
 /// Note: These parameters are available as attributes of the instance.
 final class UnexpectedToken extends PythonClass {
-  factory UnexpectedToken(String name) => PythonFfiDart.instance.importClass(
+  factory UnexpectedToken({
+    required Object? token,
+    required Object? expected,
+    required Object? considered_rules,
+    required Object? state,
+    required Object? interactive_parser,
+    required Object? terminals_by_name,
+    required Object? token_history,
+  }) =>
+      PythonFfiDart.instance.importClass(
         "lark.exceptions",
         "UnexpectedToken",
         UnexpectedToken.from,
-        <Object?>[name],
+        <Object?>[
+          token,
+          expected,
+          considered_rules,
+          state,
+          interactive_parser,
+          terminals_by_name,
+          token_history,
+        ],
       );
 
   UnexpectedToken.from(super.pythonClass) : super.from();
@@ -319,10 +408,24 @@ final class UnexpectedToken extends PythonClass {
   /// Note:
   /// The parser doesn't hold a copy of the text it has to parse,
   /// so you have to provide it again
-  Object? get_context(Object? self, Object? text, Object? span, Object? pos,
-          Object? start, Object? end, Object? before, Object? after) =>
-      getFunction("get_context")
-          .call(<Object?>[self, text, span, pos, start, end, before, after]);
+  Object? get_context({
+    required Object? text,
+    required Object? span,
+    required Object? pos,
+    required Object? start,
+    required Object? end,
+    required Object? before,
+    Object? after = 40,
+  }) =>
+      getFunction("get_context").call(<Object?>[
+        text,
+        span,
+        pos,
+        start,
+        end,
+        before,
+        after,
+      ]);
 
   /// ## match_examples
   ///
@@ -342,21 +445,20 @@ final class UnexpectedToken extends PythonClass {
   /// parse_fn: parse function (usually ``lark_instance.parse``)
   /// examples: dictionary of ``{'example_string': value}``.
   /// use_accepts: Recommended to keep this as ``use_accepts=True``.
-  Object? match_examples(
-          Object? self,
-          Object? parse_fn,
-          Object? examples,
-          Object? token_type_match_fallback,
-          Object? use_accepts,
-          Object? candidate,
-          Object? i,
-          Object? label,
-          Object? example,
-          Object? j,
-          Object? malformed,
-          Object? ut) =>
+  Object? match_examples({
+    required Object? parse_fn,
+    required Object? examples,
+    required Object? token_type_match_fallback,
+    required Object? use_accepts,
+    required Object? candidate,
+    required Object? i,
+    required Object? label,
+    required Object? example,
+    required Object? j,
+    Object? malformed = false,
+    Object? ut = true,
+  }) =>
       getFunction("match_examples").call(<Object?>[
-        self,
         parse_fn,
         examples,
         token_type_match_fallback,
@@ -367,7 +469,7 @@ final class UnexpectedToken extends PythonClass {
         example,
         j,
         malformed,
-        ut
+        ut,
       ]);
 }
 
@@ -458,11 +560,60 @@ final class UnexpectedToken extends PythonClass {
 /// Override the source of from where the grammar was loaded. Useful for relative imports and unconventional grammar loading
 /// **=== End of Options ===**
 final class Lark extends PythonClass {
-  factory Lark(String name) => PythonFfiDart.instance.importClass(
+  factory Lark({
+    required Object? grammar,
+    required Object? options,
+    required Object? use_regex,
+    required Object? re_module,
+    required Object? read,
+    required Object? cache_fn,
+    required Object? cache_md5,
+    required Object? options_str,
+    required Object? s,
+    required Object? username,
+    required Object? old_options,
+    required Object? f,
+    required Object? name,
+    required Object? file_md5,
+    required Object? cached_used_files,
+    required Object? cached_parser_data,
+    required Object? used_files,
+    required Object? lexer,
+    required Object? terminals_to_keep,
+    required Object? t,
+    required Object? rule,
+    required Object? term,
+    required Object? e,
+  }) =>
+      PythonFfiDart.instance.importClass(
         "lark.lark",
         "Lark",
         Lark.from,
-        <Object?>[name],
+        <Object?>[
+          grammar,
+          options,
+          use_regex,
+          re_module,
+          read,
+          cache_fn,
+          cache_md5,
+          options_str,
+          s,
+          username,
+          old_options,
+          f,
+          name,
+          file_md5,
+          cached_used_files,
+          cached_parser_data,
+          used_files,
+          lexer,
+          terminals_to_keep,
+          t,
+          rule,
+          term,
+          e,
+        ],
       );
 
   Lark.from(super.pythonClass) : super.from();
@@ -471,8 +622,12 @@ final class Lark extends PythonClass {
   ///
   /// ### python docstring
   /// Get information about a terminal
-  Object? get_terminal(Object? self, Object? name) =>
-      getFunction("get_terminal").call(<Object?>[self, name]);
+  Object? get_terminal({
+    required Object? name,
+  }) =>
+      getFunction("get_terminal").call(<Object?>[
+        name,
+      ]);
 
   /// ## lex
   ///
@@ -482,16 +637,30 @@ final class Lark extends PythonClass {
   /// When dont_ignore=True, the lexer will return all tokens, even those marked for %ignore.
   ///
   /// :raises UnexpectedCharacters: In case the lexer cannot find a suitable match.
-  Object? lex(Object? self, Object? text, Object? dont_ignore, Object? lexer,
-          Object? lexer_thread, Object? stream) =>
-      getFunction("lex").call(
-          <Object?>[self, text, dont_ignore, lexer, lexer_thread, stream]);
+  Object? lex({
+    required Object? text,
+    required Object? dont_ignore,
+    required Object? lexer,
+    required Object? lexer_thread,
+    Object? stream = false,
+  }) =>
+      getFunction("lex").call(<Object?>[
+        text,
+        dont_ignore,
+        lexer,
+        lexer_thread,
+        stream,
+      ]);
 
   /// ## memo_serialize
-  Object? memo_serialize(
-          Object? self, Object? types_to_memoize, Object? memo) =>
-      getFunction("memo_serialize")
-          .call(<Object?>[self, types_to_memoize, memo]);
+  Object? memo_serialize({
+    required Object? types_to_memoize,
+    required Object? memo,
+  }) =>
+      getFunction("memo_serialize").call(<Object?>[
+        types_to_memoize,
+        memo,
+      ]);
 
   /// ## parse
   ///
@@ -511,8 +680,16 @@ final class Lark extends PythonClass {
   /// :raises UnexpectedInput: On a parse error, one of these sub-exceptions will rise:
   /// ``UnexpectedCharacters``, ``UnexpectedToken``, or ``UnexpectedEOF``.
   /// For convenience, these sub-exceptions also inherit from ``ParserError`` and ``LexerError``.
-  Object? parse(Object? self, Object? text, Object? start, Object? on_error) =>
-      getFunction("parse").call(<Object?>[self, text, start, on_error]);
+  Object? parse({
+    required Object? text,
+    required Object? start,
+    required Object? on_error,
+  }) =>
+      getFunction("parse").call(<Object?>[
+        text,
+        start,
+        on_error,
+      ]);
 
   /// ## parse_interactive
   ///
@@ -527,8 +704,14 @@ final class Lark extends PythonClass {
   /// A new InteractiveParser instance.
   ///
   /// See Also: ``Lark.parse()``
-  Object? parse_interactive(Object? self, Object? text, Object? start) =>
-      getFunction("parse_interactive").call(<Object?>[self, text, start]);
+  Object? parse_interactive({
+    required Object? text,
+    required Object? start,
+  }) =>
+      getFunction("parse_interactive").call(<Object?>[
+        text,
+        start,
+      ]);
 
   /// ## save
   ///
@@ -536,22 +719,39 @@ final class Lark extends PythonClass {
   /// Saves the instance into the given file object
   ///
   /// Useful for caching and multiprocessing.
-  Object? save(Object? self, Object? f, Object? exclude_options, Object? data,
-          Object? m) =>
-      getFunction("save").call(<Object?>[self, f, exclude_options, data, m]);
+  Object? save({
+    required Object? f,
+    required Object? exclude_options,
+    required Object? data,
+    Object? m = const [],
+  }) =>
+      getFunction("save").call(<Object?>[
+        f,
+        exclude_options,
+        data,
+        m,
+      ]);
 
   /// ## serialize
-  Object? serialize(Object? self, Object? memo, Object? fields, Object? res) =>
-      getFunction("serialize").call(<Object?>[self, memo, fields, res]);
+  Object? serialize({
+    required Object? memo,
+    required Object? fields,
+    required Object? res,
+  }) =>
+      getFunction("serialize").call(<Object?>[
+        memo,
+        fields,
+        res,
+      ]);
 }
 
 /// ## deserialize
 final class deserialize extends PythonClass {
-  factory deserialize(String name) => PythonFfiDart.instance.importClass(
+  factory deserialize() => PythonFfiDart.instance.importClass(
         "lark.utils",
         "deserialize",
         deserialize.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   deserialize.from(super.pythonClass) : super.from();
@@ -564,11 +764,11 @@ final class deserialize extends PythonClass {
 ///
 /// Useful for caching and multiprocessing.
 final class load extends PythonClass {
-  factory load(String name) => PythonFfiDart.instance.importClass(
+  factory load() => PythonFfiDart.instance.importClass(
         "lark.lark",
         "load",
         load.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   load.from(super.pythonClass) : super.from();
@@ -586,11 +786,11 @@ final class load extends PythonClass {
 /// >>> Lark.open("grammar_file.lark", rel_to=__file__, parser="lalr")
 /// Lark(...)
 final class open extends PythonClass {
-  factory open(String name) => PythonFfiDart.instance.importClass(
+  factory open() => PythonFfiDart.instance.importClass(
         "lark.lark",
         "open",
         open.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   open.from(super.pythonClass) : super.from();
@@ -608,11 +808,11 @@ final class open extends PythonClass {
 ///
 /// Lark.open_from_package(__name__, "example.lark", ("grammars",), parser=...)
 final class open_from_package extends PythonClass {
-  factory open_from_package(String name) => PythonFfiDart.instance.importClass(
+  factory open_from_package() => PythonFfiDart.instance.importClass(
         "lark.lark",
         "open_from_package",
         open_from_package.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   open_from_package.from(super.pythonClass) : super.from();
@@ -639,27 +839,33 @@ final class open_from_package extends PythonClass {
 /// end_column will be 5.
 /// end_pos: the index where the token ends (basically ``start_pos + len(token)``)
 final class Token extends PythonClass {
-  factory Token(String name) => PythonFfiDart.instance.importClass(
+  factory Token() => PythonFfiDart.instance.importClass(
         "lark.lexer",
         "Token",
         Token.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   Token.from(super.pythonClass) : super.from();
 
   /// ## update
-  Object? update(Object? self, Object? args, Object? kwargs) =>
-      getFunction("update").call(<Object?>[self, args, kwargs]);
+  Object? update({
+    required Object? args,
+    required Object? kwargs,
+  }) =>
+      getFunction("update").call(<Object?>[
+        args,
+        kwargs,
+      ]);
 }
 
 /// ## new_borrow_pos
 final class new_borrow_pos extends PythonClass {
-  factory new_borrow_pos(String name) => PythonFfiDart.instance.importClass(
+  factory new_borrow_pos() => PythonFfiDart.instance.importClass(
         "lark.lexer",
         "new_borrow_pos",
         new_borrow_pos.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   new_borrow_pos.from(super.pythonClass) : super.from();
@@ -667,40 +873,56 @@ final class new_borrow_pos extends PythonClass {
 
 /// ## Tree
 final class Tree extends PythonClass {
-  factory Tree(String name) => PythonFfiDart.instance.importClass(
+  factory Tree() => PythonFfiDart.instance.importClass(
         "lark.tree",
         "Tree",
         Tree.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   Tree.from(super.pythonClass) : super.from();
 
   /// ## copy
-  Object? copy(Object? self) => getFunction("copy").call(<Object?>[self]);
+  Object? copy() => getFunction("copy").call(<Object?>[]);
 
   /// ## expand_kids_by_data
   ///
   /// ### python docstring
   /// Expand (inline) children with any of the given data values. Returns True if anything changed
-  Object? expand_kids_by_data(Object? self, Object? data_values,
-          Object? changed, Object? i, Object? child) =>
-      getFunction("expand_kids_by_data")
-          .call(<Object?>[self, data_values, changed, i, child]);
+  Object? expand_kids_by_data({
+    required Object? data_values,
+    required Object? changed,
+    required Object? i,
+    required Object? child,
+  }) =>
+      getFunction("expand_kids_by_data").call(<Object?>[
+        data_values,
+        changed,
+        i,
+        child,
+      ]);
 
   /// ## find_data
   ///
   /// ### python docstring
   /// Returns all nodes of the tree whose data equals the given data.
-  Object? find_data(Object? self, Object? data) =>
-      getFunction("find_data").call(<Object?>[self, data]);
+  Object? find_data({
+    required Object? data,
+  }) =>
+      getFunction("find_data").call(<Object?>[
+        data,
+      ]);
 
   /// ## find_pred
   ///
   /// ### python docstring
   /// Returns all nodes of the tree that evaluate pred(node) as true.
-  Object? find_pred(Object? self, Object? pred) =>
-      getFunction("find_pred").call(<Object?>[self, pred]);
+  Object? find_pred({
+    required Object? pred,
+  }) =>
+      getFunction("find_pred").call(<Object?>[
+        pred,
+      ]);
 
   /// ## iter_subtrees
   ///
@@ -708,8 +930,14 @@ final class Tree extends PythonClass {
   /// Depth-first iteration.
   ///
   /// Iterates over all the subtrees, never returning to the same node twice (Lark's parse-tree is actually a DAG).
-  Object? iter_subtrees(Object? self, Object? queue, Object? subtree) =>
-      getFunction("iter_subtrees").call(<Object?>[self, queue, subtree]);
+  Object? iter_subtrees({
+    required Object? queue,
+    required Object? subtree,
+  }) =>
+      getFunction("iter_subtrees").call(<Object?>[
+        queue,
+        subtree,
+      ]);
 
   /// ## iter_subtrees_topdown
   ///
@@ -717,15 +945,20 @@ final class Tree extends PythonClass {
   /// Breadth-first iteration.
   ///
   /// Iterates over all the subtrees, return nodes in order like pretty() does.
-  Object? iter_subtrees_topdown(
-          Object? self,
-          Object? stack,
-          Object? stack_append,
-          Object? stack_pop,
-          Object? node,
-          Object? child) =>
-      getFunction("iter_subtrees_topdown")
-          .call(<Object?>[self, stack, stack_append, stack_pop, node, child]);
+  Object? iter_subtrees_topdown({
+    required Object? stack,
+    required Object? stack_append,
+    required Object? stack_pop,
+    required Object? node,
+    required Object? child,
+  }) =>
+      getFunction("iter_subtrees_topdown").call(<Object?>[
+        stack,
+        stack_append,
+        stack_pop,
+        node,
+        child,
+      ]);
 
   /// ## pretty
   ///
@@ -733,8 +966,12 @@ final class Tree extends PythonClass {
   /// Returns an indented string representation of the tree.
   ///
   /// Great for debugging.
-  Object? pretty(Object? self, Object? indent_str) =>
-      getFunction("pretty").call(<Object?>[self, indent_str]);
+  Object? pretty({
+    Object? indent_str = "  ",
+  }) =>
+      getFunction("pretty").call(<Object?>[
+        indent_str,
+      ]);
 
   /// ## scan_values
   ///
@@ -745,21 +982,35 @@ final class Tree extends PythonClass {
   ///
   /// Example:
   /// >>> all_tokens = tree.scan_values(lambda v: isinstance(v, Token))
-  Object? scan_values(Object? self, Object? pred, Object? c, Object? t) =>
-      getFunction("scan_values").call(<Object?>[self, pred, c, t]);
+  Object? scan_values({
+    required Object? pred,
+    required Object? c,
+    required Object? t,
+  }) =>
+      getFunction("scan_values").call(<Object?>[
+        pred,
+        c,
+        t,
+      ]);
 
   /// ## set
-  Object? set(Object? self, Object? data, Object? children) =>
-      getFunction("set").call(<Object?>[self, data, children]);
+  Object? set({
+    required Object? data,
+    required Object? children,
+  }) =>
+      getFunction("set").call(<Object?>[
+        data,
+        children,
+      ]);
 }
 
 /// ## copy_with
 final class copy_with extends PythonClass {
-  factory copy_with(String name) => PythonFfiDart.instance.importClass(
+  factory copy_with() => PythonFfiDart.instance.importClass(
         "typing",
         "copy_with",
         copy_with.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   copy_with.from(super.pythonClass) : super.from();
@@ -770,11 +1021,11 @@ final class copy_with extends PythonClass {
 /// ### python docstring
 /// Add the specified filter to this handler.
 final class addFilter extends PythonClass {
-  factory addFilter(String name) => PythonFfiDart.instance.importClass(
+  factory addFilter() => PythonFfiDart.instance.importClass(
         "logging",
         "addFilter",
         addFilter.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   addFilter.from(super.pythonClass) : super.from();
@@ -785,11 +1036,11 @@ final class addFilter extends PythonClass {
 /// ### python docstring
 /// Add the specified handler to this logger.
 final class addHandler extends PythonClass {
-  factory addHandler(String name) => PythonFfiDart.instance.importClass(
+  factory addHandler() => PythonFfiDart.instance.importClass(
         "logging",
         "addHandler",
         addHandler.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   addHandler.from(super.pythonClass) : super.from();
@@ -806,11 +1057,11 @@ final class addHandler extends PythonClass {
 /// logger with the "propagate" attribute set to zero is found - that
 /// will be the last logger whose handlers are called.
 final class callHandlers extends PythonClass {
-  factory callHandlers(String name) => PythonFfiDart.instance.importClass(
+  factory callHandlers() => PythonFfiDart.instance.importClass(
         "logging",
         "callHandlers",
         callHandlers.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   callHandlers.from(super.pythonClass) : super.from();
@@ -826,11 +1077,11 @@ final class callHandlers extends PythonClass {
 ///
 /// logger.critical("Houston, we have a %s", "major disaster", exc_info=1)
 final class critical extends PythonClass {
-  factory critical(String name) => PythonFfiDart.instance.importClass(
+  factory critical() => PythonFfiDart.instance.importClass(
         "logging",
         "critical",
         critical.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   critical.from(super.pythonClass) : super.from();
@@ -846,11 +1097,11 @@ final class critical extends PythonClass {
 ///
 /// logger.debug("Houston, we have a %s", "thorny problem", exc_info=1)
 final class debug extends PythonClass {
-  factory debug(String name) => PythonFfiDart.instance.importClass(
+  factory debug() => PythonFfiDart.instance.importClass(
         "logging",
         "debug",
         debug.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   debug.from(super.pythonClass) : super.from();
@@ -866,11 +1117,11 @@ final class debug extends PythonClass {
 ///
 /// logger.error("Houston, we have a %s", "major problem", exc_info=1)
 final class error extends PythonClass {
-  factory error(String name) => PythonFfiDart.instance.importClass(
+  factory error() => PythonFfiDart.instance.importClass(
         "logging",
         "error",
         error.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   error.from(super.pythonClass) : super.from();
@@ -881,11 +1132,11 @@ final class error extends PythonClass {
 /// ### python docstring
 /// Convenience method for logging an ERROR with exception information.
 final class exception extends PythonClass {
-  factory exception(String name) => PythonFfiDart.instance.importClass(
+  factory exception() => PythonFfiDart.instance.importClass(
         "logging",
         "exception",
         exception.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   exception.from(super.pythonClass) : super.from();
@@ -896,11 +1147,11 @@ final class exception extends PythonClass {
 /// ### python docstring
 /// Don't use this method, use critical() instead.
 final class fatal extends PythonClass {
-  factory fatal(String name) => PythonFfiDart.instance.importClass(
+  factory fatal() => PythonFfiDart.instance.importClass(
         "logging",
         "fatal",
         fatal.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   fatal.from(super.pythonClass) : super.from();
@@ -919,11 +1170,11 @@ final class fatal extends PythonClass {
 ///
 /// Allow filters to be just callables.
 final class filter extends PythonClass {
-  factory filter(String name) => PythonFfiDart.instance.importClass(
+  factory filter() => PythonFfiDart.instance.importClass(
         "logging",
         "filter",
         filter.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   filter.from(super.pythonClass) : super.from();
@@ -935,11 +1186,11 @@ final class filter extends PythonClass {
 /// Find the stack frame of the caller so that we can note the source
 /// file name, line number and function name.
 final class findCaller extends PythonClass {
-  factory findCaller(String name) => PythonFfiDart.instance.importClass(
+  factory findCaller() => PythonFfiDart.instance.importClass(
         "logging",
         "findCaller",
         findCaller.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   findCaller.from(super.pythonClass) : super.from();
@@ -961,11 +1212,11 @@ final class findCaller extends PythonClass {
 /// It's useful, for example, when the parent logger is named using
 /// __name__ rather than a literal string.
 final class getChild extends PythonClass {
-  factory getChild(String name) => PythonFfiDart.instance.importClass(
+  factory getChild() => PythonFfiDart.instance.importClass(
         "logging",
         "getChild",
         getChild.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   getChild.from(super.pythonClass) : super.from();
@@ -979,11 +1230,11 @@ final class getChild extends PythonClass {
 /// Loop through this logger and its parents in the logger hierarchy,
 /// looking for a non-zero logging level. Return the first one found.
 final class getEffectiveLevel extends PythonClass {
-  factory getEffectiveLevel(String name) => PythonFfiDart.instance.importClass(
+  factory getEffectiveLevel() => PythonFfiDart.instance.importClass(
         "logging",
         "getEffectiveLevel",
         getEffectiveLevel.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   getEffectiveLevel.from(super.pythonClass) : super.from();
@@ -997,11 +1248,11 @@ final class getEffectiveLevel extends PythonClass {
 /// This method is used for unpickled records received from a socket, as
 /// well as those created locally. Logger-level filtering is applied.
 final class handle extends PythonClass {
-  factory handle(String name) => PythonFfiDart.instance.importClass(
+  factory handle() => PythonFfiDart.instance.importClass(
         "logging",
         "handle",
         handle.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   handle.from(super.pythonClass) : super.from();
@@ -1018,11 +1269,11 @@ final class handle extends PythonClass {
 /// attribute set to zero is found - that will be the last logger which
 /// is checked for the existence of handlers.
 final class hasHandlers extends PythonClass {
-  factory hasHandlers(String name) => PythonFfiDart.instance.importClass(
+  factory hasHandlers() => PythonFfiDart.instance.importClass(
         "logging",
         "hasHandlers",
         hasHandlers.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   hasHandlers.from(super.pythonClass) : super.from();
@@ -1038,11 +1289,11 @@ final class hasHandlers extends PythonClass {
 ///
 /// logger.info("Houston, we have a %s", "interesting problem", exc_info=1)
 final class info extends PythonClass {
-  factory info(String name) => PythonFfiDart.instance.importClass(
+  factory info() => PythonFfiDart.instance.importClass(
         "logging",
         "info",
         info.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   info.from(super.pythonClass) : super.from();
@@ -1053,11 +1304,11 @@ final class info extends PythonClass {
 /// ### python docstring
 /// Is this logger enabled for level 'level'?
 final class isEnabledFor extends PythonClass {
-  factory isEnabledFor(String name) => PythonFfiDart.instance.importClass(
+  factory isEnabledFor() => PythonFfiDart.instance.importClass(
         "logging",
         "isEnabledFor",
         isEnabledFor.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   isEnabledFor.from(super.pythonClass) : super.from();
@@ -1073,11 +1324,11 @@ final class isEnabledFor extends PythonClass {
 ///
 /// logger.log(level, "We have a %s", "mysterious problem", exc_info=1)
 final class log extends PythonClass {
-  factory log(String name) => PythonFfiDart.instance.importClass(
+  factory log() => PythonFfiDart.instance.importClass(
         "logging",
         "log",
         log.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   log.from(super.pythonClass) : super.from();
@@ -1089,11 +1340,11 @@ final class log extends PythonClass {
 /// A factory method which can be overridden in subclasses to create
 /// specialized LogRecords.
 final class makeRecord extends PythonClass {
-  factory makeRecord(String name) => PythonFfiDart.instance.importClass(
+  factory makeRecord() => PythonFfiDart.instance.importClass(
         "logging",
         "makeRecord",
         makeRecord.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   makeRecord.from(super.pythonClass) : super.from();
@@ -1111,11 +1362,11 @@ final class makeRecord extends PythonClass {
 /// logger and fix up the parent/child references which pointed to the
 /// placeholder to now point to the logger.
 final class getLogger extends PythonClass {
-  factory getLogger(String name) => PythonFfiDart.instance.importClass(
+  factory getLogger() => PythonFfiDart.instance.importClass(
         "logging",
         "getLogger",
         getLogger.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   getLogger.from(super.pythonClass) : super.from();
@@ -1126,11 +1377,11 @@ final class getLogger extends PythonClass {
 /// ### python docstring
 /// Remove the specified filter from this handler.
 final class removeFilter extends PythonClass {
-  factory removeFilter(String name) => PythonFfiDart.instance.importClass(
+  factory removeFilter() => PythonFfiDart.instance.importClass(
         "logging",
         "removeFilter",
         removeFilter.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   removeFilter.from(super.pythonClass) : super.from();
@@ -1141,11 +1392,11 @@ final class removeFilter extends PythonClass {
 /// ### python docstring
 /// Remove the specified handler from this logger.
 final class removeHandler extends PythonClass {
-  factory removeHandler(String name) => PythonFfiDart.instance.importClass(
+  factory removeHandler() => PythonFfiDart.instance.importClass(
         "logging",
         "removeHandler",
         removeHandler.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   removeHandler.from(super.pythonClass) : super.from();
@@ -1156,11 +1407,11 @@ final class removeHandler extends PythonClass {
 /// ### python docstring
 /// Set the logging level of this logger.  level must be an int or a str.
 final class setLevel extends PythonClass {
-  factory setLevel(String name) => PythonFfiDart.instance.importClass(
+  factory setLevel() => PythonFfiDart.instance.importClass(
         "logging",
         "setLevel",
         setLevel.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   setLevel.from(super.pythonClass) : super.from();
@@ -1168,11 +1419,11 @@ final class setLevel extends PythonClass {
 
 /// ## warn
 final class warn extends PythonClass {
-  factory warn(String name) => PythonFfiDart.instance.importClass(
+  factory warn() => PythonFfiDart.instance.importClass(
         "logging",
         "warn",
         warn.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   warn.from(super.pythonClass) : super.from();
@@ -1188,11 +1439,11 @@ final class warn extends PythonClass {
 ///
 /// logger.warning("Houston, we have a %s", "bit of a problem", exc_info=1)
 final class warning extends PythonClass {
-  factory warning(String name) => PythonFfiDart.instance.importClass(
+  factory warning() => PythonFfiDart.instance.importClass(
         "logging",
         "warning",
         warning.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   warning.from(super.pythonClass) : super.from();
@@ -1204,12 +1455,11 @@ final class warning extends PythonClass {
 /// Set the factory to be used when instantiating a log record with this
 /// Manager.
 final class setLogRecordFactory extends PythonClass {
-  factory setLogRecordFactory(String name) =>
-      PythonFfiDart.instance.importClass(
+  factory setLogRecordFactory() => PythonFfiDart.instance.importClass(
         "logging",
         "setLogRecordFactory",
         setLogRecordFactory.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   setLogRecordFactory.from(super.pythonClass) : super.from();
@@ -1220,11 +1470,11 @@ final class setLogRecordFactory extends PythonClass {
 /// ### python docstring
 /// Set the class to be used when instantiating a logger with this Manager.
 final class setLoggerClass extends PythonClass {
-  factory setLoggerClass(String name) => PythonFfiDart.instance.importClass(
+  factory setLoggerClass() => PythonFfiDart.instance.importClass(
         "logging",
         "setLoggerClass",
         setLoggerClass.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   setLoggerClass.from(super.pythonClass) : super.from();
@@ -1263,11 +1513,16 @@ final class setLoggerClass extends PythonClass {
 /// Setting this to ``False`` is slightly faster. Defaults to ``True``.
 /// (For processing ignored tokens, use the ``lexer_callbacks`` options)
 final class Transformer extends PythonClass {
-  factory Transformer(String name) => PythonFfiDart.instance.importClass(
+  factory Transformer({
+    Object? visit_tokens = true,
+  }) =>
+      PythonFfiDart.instance.importClass(
         "lark.visitors",
         "Transformer",
         Transformer.from,
-        <Object?>[name],
+        <Object?>[
+          visit_tokens,
+        ],
       );
 
   Transformer.from(super.pythonClass) : super.from();
@@ -1276,8 +1531,12 @@ final class Transformer extends PythonClass {
   ///
   /// ### python docstring
   /// Transform the given tree, and return the final result
-  Object? transform(Object? self, Object? tree) =>
-      getFunction("transform").call(<Object?>[self, tree]);
+  Object? transform({
+    required Object? tree,
+  }) =>
+      getFunction("transform").call(<Object?>[
+        tree,
+      ]);
 }
 
 /// ## Transformer_NonRecursive
@@ -1289,31 +1548,34 @@ final class Transformer extends PythonClass {
 ///
 /// Useful for huge trees.
 final class Transformer_NonRecursive extends PythonClass {
-  factory Transformer_NonRecursive(String name) =>
+  factory Transformer_NonRecursive({
+    Object? visit_tokens = true,
+  }) =>
       PythonFfiDart.instance.importClass(
         "lark.visitors",
         "Transformer_NonRecursive",
         Transformer_NonRecursive.from,
-        <Object?>[name],
+        <Object?>[
+          visit_tokens,
+        ],
       );
 
   Transformer_NonRecursive.from(super.pythonClass) : super.from();
 
   /// ## transform
-  Object? transform(
-          Object? self,
-          Object? tree,
-          Object? rev_postfix,
-          Object? q,
-          Object? t,
-          Object? stack,
-          Object? x,
-          Object? size,
-          Object? args,
-          Object? res,
-          Object? result) =>
+  Object? transform({
+    required Object? tree,
+    required Object? rev_postfix,
+    required Object? q,
+    required Object? t,
+    required Object? stack,
+    required Object? x,
+    required Object? size,
+    required Object? args,
+    required Object? res,
+    required Object? result,
+  }) =>
       getFunction("transform").call(<Object?>[
-        self,
         tree,
         rev_postfix,
         q,
@@ -1323,7 +1585,7 @@ final class Transformer_NonRecursive extends PythonClass {
         size,
         args,
         res,
-        result
+        result,
       ]);
 }
 
@@ -1334,11 +1596,11 @@ final class Transformer_NonRecursive extends PythonClass {
 ///
 /// Visiting a node calls its methods (provided by the user via inheritance) according to ``tree.data``
 final class Visitor extends PythonClass {
-  factory Visitor(String name) => PythonFfiDart.instance.importClass(
+  factory Visitor() => PythonFfiDart.instance.importClass(
         "lark.visitors",
         "Visitor",
         Visitor.from,
-        <Object?>[name],
+        <Object?>[],
       );
 
   Visitor.from(super.pythonClass) : super.from();
@@ -1347,15 +1609,27 @@ final class Visitor extends PythonClass {
   ///
   /// ### python docstring
   /// Visits the tree, starting with the leaves and finally the root (bottom-up)
-  Object? visit(Object? self, Object? tree, Object? subtree) =>
-      getFunction("visit").call(<Object?>[self, tree, subtree]);
+  Object? visit({
+    required Object? tree,
+    required Object? subtree,
+  }) =>
+      getFunction("visit").call(<Object?>[
+        tree,
+        subtree,
+      ]);
 
   /// ## visit_topdown
   ///
   /// ### python docstring
   /// Visit the tree, starting at the root, and ending at the leaves (top-down)
-  Object? visit_topdown(Object? self, Object? tree, Object? subtree) =>
-      getFunction("visit_topdown").call(<Object?>[self, tree, subtree]);
+  Object? visit_topdown({
+    required Object? tree,
+    required Object? subtree,
+  }) =>
+      getFunction("visit_topdown").call(<Object?>[
+        tree,
+        subtree,
+      ]);
 }
 
 /// ## lark
@@ -1404,8 +1678,10 @@ final class Visitor extends PythonClass {
 final class lark extends PythonModule {
   lark.from(super.pythonModule) : super.from();
 
-  static lark import() =>
-      PythonFfiDart.instance.importModule("lark", lark.from);
+  static lark import() => PythonFfiDart.instance.importModule(
+        "lark",
+        lark.from,
+      );
 
   /// ## v_args
   ///
@@ -1439,6 +1715,16 @@ final class lark extends PythonModule {
   /// @v_args(tree=True)
   /// def tree_node(self, tree):
   /// tree.children = tree.children[::-1]
-  Object? v_args(Object? inline, Object? meta, Object? tree, Object? wrapper) =>
-      getFunction("v_args").call(<Object?>[inline, meta, tree, wrapper]);
+  Object? v_args({
+    required Object? inline,
+    Object? meta = false,
+    Object? tree = false,
+    Object? wrapper = false,
+  }) =>
+      getFunction("v_args").call(<Object?>[
+        inline,
+        meta,
+        tree,
+        wrapper,
+      ]);
 }

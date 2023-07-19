@@ -10,5 +10,5 @@ final class ClassInterface extends PythonClass
   Object _source;
 
   @override
-  void collectChild(String childName) => _collectAttribute(childName);
+  Interface? collectChild(String childName) => _collectAttribute(childName);
 }
