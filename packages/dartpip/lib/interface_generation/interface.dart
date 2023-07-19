@@ -88,7 +88,7 @@ base mixin InterfaceImpl on PythonObjectInterface implements Interface {
       buffer
         ..writeln("///")
         ..writeln("/// ### python docstring")
-        ..writeln(doc.trim().leftPadLines(1, pad: "/// "));
+        ..writeln(doc.trim().leftPadLines(1, pad: "/// ", trimLines: true));
     }
   }
 }

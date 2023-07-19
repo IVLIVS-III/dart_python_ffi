@@ -31,9 +31,17 @@ Future<dynamic> generateInterface({
 
 import "package:python_ffi$importSuffix/python_ffi$importSuffix.dart";
 """;
-  return """
-$prelude
-${InterfaceCache.instance.classDefinitions.map((Interface interface) => interface.emit()).join("\n")}
-${interface.emit()}
-""";
+  final StringBuffer buffer = StringBuffer(prelude);
+  final Set<String> classes = <String>{};
+  for (final ClassDefinitionInterface interface
+      in InterfaceCache.instance.classDefinitions) {
+    final String className = interface.name;
+    if (classes.contains(className)) {
+      continue;
+    }
+    buffer.writeln(interface.emit());
+    classes.add(className);
+  }
+  buffer.writeln(interface.emit());
+  return buffer.toString();
 }

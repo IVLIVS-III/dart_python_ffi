@@ -12,21 +12,24 @@ final class ClassDefinitionInterface extends PythonClassDefinition
   @override
   void collectChild(String childName) => _collectAttribute(childName);
 
+  String get name => (_source as dynamic).__name__ as String;
+
   @override
   String emit() {
-    dynamic classDefinition = _source;
-    final String className = classDefinition.__name__ as String;
-    final StringBuffer buffer = StringBuffer()
-      ..writeln("/// ## $className")
-      ..writeln("/// ### debug info")
-      ..writeln("/// ```")
-      ..writeln("/// ${_source.reference}")
-      ..writeln("/// ```");
+    final String? moduleName = _source.hasAttribute("__module__")
+        ? _source.getAttribute("__module__")
+        : null;
+    if (moduleName == null) {
+      return "";
+    }
+
+    final String className = name;
+    final StringBuffer buffer = StringBuffer()..writeln("/// ## $className");
     emitDocstring(buffer);
     buffer.writeln("""
 final class $className extends PythonClass {
   factory $className(String name) => PythonFfiDart.instance.importClass(
-        "basic_dataclass",
+        "$moduleName",
         "$className",
         $className.from,
         <Object?>[name],
