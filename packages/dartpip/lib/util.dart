@@ -90,6 +90,17 @@ Future<void> _generateTypeDefs(
   PythonModuleDefinition moduleDefinition, {
   required String appType,
 }) async {
+  final result = await generateInterface(
+    moduleDefinition: moduleDefinition,
+    appType: appType,
+  );
+  final outfile = File("lib/python_modules/${moduleDefinition.name}.g.dart");
+  if (!outfile.existsSync()) {
+    outfile.createSync();
+  }
+  await outfile.writeAsString(result.toString());
+  Process.runSync("dart", <String>["format", outfile.absolute.path]);
+  return;
   print("Generating type definitions for ${moduleDefinition.name}...");
   await PythonFfiDart.instance.prepareModule(moduleDefinition);
   final TypeGenerationModule pythonModuleHandle = PythonFfiDart.instance

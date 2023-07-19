@@ -10,6 +10,7 @@ import "package:archive/archive_io.dart";
 import "package:args/args.dart";
 import "package:args/command_runner.dart";
 import "package:collection/collection.dart";
+import "package:dartpip/interface_generation/interface_generation.dart";
 import "package:dartpip/pypi/api.dart";
 import "package:http/http.dart" as http;
 import "package:python_ffi_cpython_dart/python_ffi_cpython_dart.dart";
@@ -39,3 +40,6 @@ part "util/python_dependency.dart";
 
 /// The version of dartpip.
 const String kDartpipVersion = "0.1.0";
+
+const String kAppTypeFlutter = _kAppTypeFlutter;
+const String kAppTypeConsole = _kAppTypeConsole;
