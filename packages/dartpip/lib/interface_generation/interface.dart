@@ -39,7 +39,8 @@ base mixin InterfaceImpl on PythonObjectInterface implements Interface {
 
   void collectChildren() {
     for (final String childName in _childrenNames.where(_filterAttribute)) {
-      collectChild(childName);
+      final result = collectChild(childName);
+      print("collected $childName: $result");
     }
   }
 

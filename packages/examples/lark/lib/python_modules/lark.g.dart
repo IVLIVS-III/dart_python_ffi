@@ -12,6 +12,9 @@ final class GrammarError extends PythonClass {
       );
 
   GrammarError.from(super.pythonClass) : super.from();
+
+  Object? get args => getAttribute("args");
+  set args(Object? args) => setAttribute("args", args);
 }
 
 /// ## LarkError
@@ -24,6 +27,9 @@ final class LarkError extends PythonClass {
       );
 
   LarkError.from(super.pythonClass) : super.from();
+
+  Object? get args => getAttribute("args");
+  set args(Object? args) => setAttribute("args", args);
 }
 
 /// ## LexError
@@ -36,6 +42,9 @@ final class LexError extends PythonClass {
       );
 
   LexError.from(super.pythonClass) : super.from();
+
+  Object? get args => getAttribute("args");
+  set args(Object? args) => setAttribute("args", args);
 }
 
 /// ## ParseError
@@ -48,6 +57,9 @@ final class ParseError extends PythonClass {
       );
 
   ParseError.from(super.pythonClass) : super.from();
+
+  Object? get args => getAttribute("args");
+  set args(Object? args) => setAttribute("args", args);
 }
 
 /// ## UnexpectedCharacters
@@ -87,6 +99,9 @@ final class UnexpectedCharacters extends PythonClass {
       );
 
   UnexpectedCharacters.from(super.pythonClass) : super.from();
+
+  Object? get args => getAttribute("args");
+  set args(Object? args) => setAttribute("args", args);
 
   /// ## get_context
   ///
@@ -187,6 +202,9 @@ final class UnexpectedEOF extends PythonClass {
 
   UnexpectedEOF.from(super.pythonClass) : super.from();
 
+  Object? get args => getAttribute("args");
+  set args(Object? args) => setAttribute("args", args);
+
   /// ## get_context
   ///
   /// ### python docstring
@@ -282,6 +300,9 @@ final class UnexpectedInput extends PythonClass {
       );
 
   UnexpectedInput.from(super.pythonClass) : super.from();
+
+  Object? get args => getAttribute("args");
+  set args(Object? args) => setAttribute("args", args);
 
   /// ## get_context
   ///
@@ -398,6 +419,12 @@ final class UnexpectedToken extends PythonClass {
       );
 
   UnexpectedToken.from(super.pythonClass) : super.from();
+
+  Object? get accepts => getAttribute("accepts");
+  set accepts(Object? accepts) => setAttribute("accepts", accepts);
+
+  Object? get args => getAttribute("args");
+  set args(Object? args) => setAttribute("args", args);
 
   /// ## get_context
   ///
@@ -848,6 +875,30 @@ final class Token extends PythonClass {
 
   Token.from(super.pythonClass) : super.from();
 
+  Object? get column => getAttribute("column");
+  set column(Object? column) => setAttribute("column", column);
+
+  Object? get end_column => getAttribute("end_column");
+  set end_column(Object? end_column) => setAttribute("end_column", end_column);
+
+  Object? get end_line => getAttribute("end_line");
+  set end_line(Object? end_line) => setAttribute("end_line", end_line);
+
+  Object? get end_pos => getAttribute("end_pos");
+  set end_pos(Object? end_pos) => setAttribute("end_pos", end_pos);
+
+  Object? get line => getAttribute("line");
+  set line(Object? line) => setAttribute("line", line);
+
+  Object? get start_pos => getAttribute("start_pos");
+  set start_pos(Object? start_pos) => setAttribute("start_pos", start_pos);
+
+  Object? get type => getAttribute("type");
+  set type(Object? type) => setAttribute("type", type);
+
+  Object? get value => getAttribute("value");
+  set value(Object? value) => setAttribute("value", value);
+
   /// ## update
   Object? update({
     required Object? args,
@@ -881,6 +932,9 @@ final class Tree extends PythonClass {
       );
 
   Tree.from(super.pythonClass) : super.from();
+
+  Object? get meta => getAttribute("meta");
+  set meta(Object? meta) => setAttribute("meta", meta);
 
   /// ## copy
   Object? copy() => getFunction("copy").call(<Object?>[]);

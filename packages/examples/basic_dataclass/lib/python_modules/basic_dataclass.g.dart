@@ -25,6 +25,12 @@ final class Person extends PythonClass {
 
   Person.from(super.pythonClass) : super.from();
 
+  Object? get x => getAttribute("x");
+  set x(Object? x) => setAttribute("x", x);
+
+  Object? get y => getAttribute("y");
+  set y(Object? y) => setAttribute("y", y);
+
   /// ## move
   Object? move({
     required Object? dx,

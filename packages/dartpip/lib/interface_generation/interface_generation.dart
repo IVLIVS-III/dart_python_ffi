@@ -3,6 +3,7 @@ library interface_generation;
 import "dart:convert";
 import "dart:io";
 
+import "package:collection/collection.dart";
 import "package:dartpip/dartpip.dart";
 import "package:python_ffi_dart/python_ffi_dart.dart";
 
