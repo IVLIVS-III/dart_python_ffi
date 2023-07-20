@@ -43,7 +43,9 @@ final class $moduleName extends PythonModule {
   
   static $moduleName import() => PythonFfiDart.instance
       .importModule("$moduleName", $moduleName.from,);
-  
+""");
+    emitProperties(buffer);
+    buffer.writeln("""
   ${_children.values.whereType<FunctionInterface>().map((Interface child) => child.emit()).join("\n")}
 }
 """);

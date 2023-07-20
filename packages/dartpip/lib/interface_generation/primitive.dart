@@ -34,6 +34,9 @@ final class PrimitiveInterface implements Interface {
 
   @override
   void emitDocstring(StringBuffer buffer) {}
+
+  @override
+  void emitProperties(StringBuffer buffer) {}
 }
 
 final class NullInterface extends PrimitiveInterface {

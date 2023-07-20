@@ -56,19 +56,7 @@ final class $className extends PythonClass {
 
   $className.from(super.pythonClass) : super.from();
 """);
-    for (final (String, Interface) property in _children.entries
-        .map((MapEntry<String, Interface> e) => (e.key, e.value))
-        .whereNot(
-          ((String, Interface) e) =>
-              e.$2 is FunctionInterface || e.$2 is ClassDefinitionInterface,
-        )) {
-      buffer.writeln(
-        """
-Object? get ${property.$1} => getAttribute("${property.$1}");
-set ${property.$1}(Object? ${property.$1}) => setAttribute("${property.$1}", ${property.$1});
-""",
-      );
-    }
+    emitProperties(buffer);
     buffer.writeln("""
   ${_children.values.whereType<FunctionInterface>().map((FunctionInterface child) => child.emit(isMethod: true)).join("\n")}
 }

@@ -20,5 +20,7 @@ class _InterfaceCache {
       _cache[_effectiveKey(key)] = value;
 
   Iterable<ClassDefinitionInterface> get classDefinitions =>
-      _cache.values.whereType<ClassDefinitionInterface>();
+      _cache.values.whereType();
+
+  Iterable<ClassInterface> get classes => _cache.values.whereType();
 }

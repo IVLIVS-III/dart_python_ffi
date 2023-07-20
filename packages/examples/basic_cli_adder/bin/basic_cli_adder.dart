@@ -1,7 +1,7 @@
 import "dart:io";
 
 import "package:args/args.dart";
-import "package:basic_cli_adder/basic_cli_adder.dart";
+import "package:basic_cli_adder/basic_cli_adder.dart" hide num;
 import "package:basic_cli_adder/python_modules/src/python_modules.g.dart";
 import "package:python_ffi_dart/python_ffi_dart.dart";
 

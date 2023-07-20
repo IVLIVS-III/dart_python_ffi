@@ -16,6 +16,8 @@ sealed class Interface {
   String emit();
 
   void emitDocstring(StringBuffer buffer);
+
+  void emitProperties(StringBuffer buffer);
 }
 
 base mixin InterfaceImpl on PythonObjectInterface implements Interface {
@@ -71,7 +73,7 @@ base mixin InterfaceImpl on PythonObjectInterface implements Interface {
     final Interface result = switch (value) {
       PythonModuleInterface() => ModuleInterface.from(value),
       PythonClassDefinitionInterface() => ClassDefinitionInterface.from(value),
-      PythonClassInterface() => ClassInterface.from(value),
+      PythonClassInterface() => ClassInterface.from(value, attribute),
       PythonFunctionInterface() => FunctionInterface.from(value),
       PythonObjectInterface() => ObjectInterface.from(value),
     } as Interface;
@@ -91,6 +93,22 @@ base mixin InterfaceImpl on PythonObjectInterface implements Interface {
         ..writeln("///")
         ..writeln("/// ### python docstring")
         ..writeln(doc.trim().leftPadLines(1, pad: "/// ", trimLines: true));
+    }
+  }
+
+  void emitProperties(StringBuffer buffer) {
+    for (final (String, Interface) property in _children.entries
+        .map((MapEntry<String, Interface> e) => (e.key, e.value))
+        .whereNot(
+          ((String, Interface) e) =>
+              e.$2 is FunctionInterface || e.$2 is ClassDefinitionInterface,
+        )) {
+      buffer.writeln(
+        """
+Object? get ${property.$1} => getAttribute("${property.$1}");
+set ${property.$1}(Object? ${property.$1}) => setAttribute("${property.$1}", ${property.$1});
+""",
+      );
     }
   }
 }

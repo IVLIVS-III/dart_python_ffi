@@ -2,6 +2,92 @@
 
 import "package:python_ffi_dart/python_ffi_dart.dart";
 
+/// ## args
+typedef args = Object?;
+
+/// ## accepts
+typedef accepts = Object?;
+
+/// ## column
+typedef column = Object?;
+
+/// ## end_column
+typedef end_column = Object?;
+
+/// ## end_line
+typedef end_line = Object?;
+
+/// ## end_pos
+typedef end_pos = Object?;
+
+/// ## line
+typedef line = Object?;
+
+/// ## start_pos
+typedef start_pos = Object?;
+
+/// ## type
+typedef type = Object?;
+
+/// ## value
+typedef value = Object?;
+
+/// ## meta
+typedef meta = Object?;
+
+/// ## logger
+///
+/// ### python docstring
+/// Instances of the Logger class represent a single logging channel. A
+/// "logging channel" indicates an area of an application. Exactly how an
+/// "area" is defined is up to the application developer. Since an
+/// application can have any number of areas, logging channels are identified
+/// by a unique string. Application areas can be nested (e.g. an area
+/// of "input processing" might include sub-areas "read CSV files", "read
+/// XLS files" and "read Gnumeric files"). To cater for this natural nesting,
+/// channel names are organized into a namespace hierarchy where levels are
+/// separated by periods, much like the Java or Python package namespace. So
+/// in the instance given above, channel names might be "input" for the upper
+/// level, and "input.csv", "input.xls" and "input.gnu" for the sub-levels.
+/// There is no arbitrary limit to the depth of nesting.
+typedef logger = Object?;
+
+/// ## manager
+///
+/// ### python docstring
+/// There is [under normal circumstances] just one Manager instance, which
+/// holds the hierarchy of loggers.
+typedef manager = Object?;
+
+/// ## root
+///
+/// ### python docstring
+/// A root logger is not that different to any other logger, except that
+/// it must have a logging level and there is only one instance of it in
+/// the hierarchy.
+typedef root = Object?;
+
+/// ## Discard
+///
+/// ### python docstring
+/// When the Discard value is returned from a transformer callback,
+/// that node is discarded and won't appear in the parent.
+///
+/// Note:
+/// This feature is disabled when the transformer is provided to Lark
+/// using the ``transformer`` keyword (aka Tree-less LALR mode).
+///
+/// Example:
+/// ::
+///
+/// class T(Transformer):
+/// def ignore_tree(self, children):
+/// return Discard
+///
+/// def IGNORE_TOKEN(self, token):
+/// return Discard
+typedef Discard = Object?;
+
 /// ## GrammarError
 final class GrammarError extends PythonClass {
   factory GrammarError() => PythonFfiDart.instance.importClass(
@@ -1736,6 +1822,12 @@ final class lark extends PythonModule {
         "lark",
         lark.from,
       );
+
+  Object? get logger => getAttribute("logger");
+  set logger(Object? logger) => setAttribute("logger", logger);
+
+  Object? get Discard => getAttribute("Discard");
+  set Discard(Object? Discard) => setAttribute("Discard", Discard);
 
   /// ## v_args
   ///
