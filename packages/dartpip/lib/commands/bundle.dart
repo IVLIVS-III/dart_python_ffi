@@ -124,11 +124,6 @@ class BundleCommand extends Command<void> {
     final Iterable<String> pythonModuleNames =
         _getPythonModuleNames(_getPythonFfiMap(pubspecYaml));
 
-    if (pythonModuleNames.isEmpty) {
-      print("No Python modules specified in pubspec.yaml.");
-      return;
-    }
-
     // Remove modules.json file if it exists.
     // This is necessary because the file is not overwritten. Otherwise old and
     // no longer used modules would still be listed in the file.

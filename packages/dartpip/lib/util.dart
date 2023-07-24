@@ -38,20 +38,18 @@ Future<_ModuleBundle<_PythonModule<Object>>> _bundleModule({
 }) async {
   final _PythonModule<Object> pythonModule =
       _PythonModule.fromPath(pythonModulePath);
-  late final _ModuleBundle<_PythonModule<Object>> moduleBundle;
 
-  switch (appType) {
-    case _kAppTypeFlutter:
-      moduleBundle = _FlutterModuleBundle<Object>(
+  final _ModuleBundle<_PythonModule<Object>> moduleBundle = switch (appType) {
+    _kAppTypeFlutter => _FlutterModuleBundle<Object>(
         pythonModule: pythonModule,
         appRoot: appRoot,
-      );
-    case _kAppTypeConsole:
-      moduleBundle = _ConsoleModuleBundle<Object>(
+      ),
+    _kAppTypeConsole => _ConsoleModuleBundle<Object>(
         pythonModule: pythonModule,
         appRoot: appRoot,
-      );
-  }
+      ),
+    _ => throw StateError("Invalid app type: $appType"),
+  };
 
   await moduleBundle.export();
   return moduleBundle;
@@ -90,6 +88,11 @@ Future<void> _generateTypeDefs(
   PythonModuleDefinition moduleDefinition, {
   required String appType,
 }) async {
+  await doInspection(
+    moduleDefinition,
+    appType: appType,
+  );
+  return;
   final result = await generateInterface(
     moduleDefinition: moduleDefinition,
     appType: appType,

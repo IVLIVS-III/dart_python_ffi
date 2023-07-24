@@ -88,7 +88,7 @@ class InstallCommand extends Command<void> {
       throw StateError("Options must be provided.");
     }
 
-    await PythonFfiDart.instance.initialize(base64.encode(utf8.encode("{}")));
+    await PythonFfiDart.instance.initialize(kPythonModules);
 
     final String appRoot = Directory.current.path;
     final PubspecEditor pubspecEditor = PubspecEditor("$appRoot/pubspec.yaml");
@@ -197,8 +197,12 @@ class InstallCommand extends Command<void> {
       };
       futures.add(
         bundleTask.then(
-          (_ModuleBundle<_PythonModule<Object>> moduleBundle) =>
-              _generateTypeDefs(moduleBundle.definition, appType: appType),
+          (_ModuleBundle<_PythonModule<Object>> moduleBundle) async {
+            if (moduleBundle.isBuiltin) {
+              return;
+            }
+            return _generateTypeDefs(moduleBundle.definition, appType: appType);
+          },
         ),
       );
     }

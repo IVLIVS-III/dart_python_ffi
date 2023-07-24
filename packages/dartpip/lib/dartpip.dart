@@ -18,6 +18,9 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 import "package:yaml/yaml.dart";
 import "package:yaml_edit/yaml_edit.dart";
 
+import "interface_generation/inspect.dart";
+import "python_modules/src/python_modules.g.dart";
+
 part "builtin_modules/python_ffi.py.dart";
 part "commands/bundle.dart";
 part "commands/bundle_module.dart";
