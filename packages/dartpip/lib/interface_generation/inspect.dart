@@ -1,8 +1,9 @@
 // ignore_for_file: non_constant_identifier_names
 
-import "dart:collection";
 import "dart:convert";
 
+import "package:collection/collection.dart";
+import "package:meta/meta.dart";
 import "package:python_ffi_cpython_dart/python_ffi_cpython_dart.dart";
 import "package:python_ffi_dart/python_ffi_dart.dart";
 
@@ -96,9 +97,27 @@ final class InspectionCache {
   int? id(Object? key) => _cache[_effectiveKey(key)]?.$1;
 
   Iterable<(int, InspectEntry)> get entries => _cache.values;
+
+  Iterable<T> _getOfType<T extends InspectEntry>(InspectEntryType type) =>
+      entries
+          .where(((int, InspectEntry) e) => e.$2.type == type)
+          .map(((int, InspectEntry) e) => e.$2)
+          .whereType();
+
+  Iterable<ModuleInspect> get modules => _getOfType(InspectEntryType.module);
+
+  Iterable<ClassDefinitionInspect> get classDefinitions =>
+      _getOfType(InspectEntryType.classDefinition);
+
+  Iterable<ClassInspect> get classes => _getOfType(InspectEntryType.class_);
+
+  Iterable<FunctionInspect> get functions =>
+      _getOfType(InspectEntryType.function);
+
+  Iterable<ObjectInspect> get objects => _getOfType(InspectEntryType.object);
 }
 
-abstract interface class InspectEntry {
+sealed class InspectEntry {
   String get name;
 
   Object? get value;
@@ -111,13 +130,21 @@ abstract interface class InspectEntry {
 
   void collectChildren();
 
-  String emit();
+  void emit(StringBuffer buffer);
+
+  void emitDoc(StringBuffer buffer);
+
+  void emitSource(StringBuffer buffer);
 
   Map<String, Object?> debugDump({bool expandChildren = true});
 }
 
 base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
   final Map<String, InspectEntry> _children = <String, InspectEntry>{};
+
+  void _setChild(String name, InspectEntry child) {
+    _children[name] = child;
+  }
 
   final inspect inspectModule = inspect.import();
 
@@ -168,7 +195,7 @@ base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
       }
       final InspectEntry? cached = InspectionCache.instance[value];
       if (cached != null) {
-        _children[name] = cached;
+        _setChild(name, cached);
         continue;
       }
       final InspectEntry child = switch (value) {
@@ -187,14 +214,44 @@ base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
         _ => PrimitiveInspect(name, value),
       } as InspectEntry;
       InspectionCache.instance[value] = child;
-      _children[name] = child;
+      _setChild(name, child);
       child.collectChildren();
     }
   }
 
   @override
-  String emit() {
+  void emit(StringBuffer buffer) {
     throw UnimplementedError("$runtimeType.emit");
+  }
+
+  void emitDoc(StringBuffer buffer) {
+    final String? doc = inspectModule.getdoc(value)?.trim();
+    if (doc == null) {
+      return;
+    }
+    buffer.writeln("""
+///
+/// ### python docstring
+///""");
+    for (final String line in doc.split("\n")) {
+      buffer.writeln("/// $line");
+    }
+  }
+
+  void emitSource(StringBuffer buffer) {
+    final String? source = inspectModule.getsource(value)?.trim();
+    if (source == null) {
+      return;
+    }
+    buffer.writeln("""
+///
+/// ### python source
+/// ```py""");
+    for (final String line in source.split("\n")) {
+      buffer.writeln("/// $line");
+    }
+    buffer.writeln("""
+/// ```""");
   }
 
   @override
@@ -232,6 +289,39 @@ final class ModuleInspect extends PythonModule
 
   @override
   InspectEntryType get type => InspectEntryType.module;
+
+  bool _isMyChild(InspectEntry child) {
+    switch (child) {
+      case InspectMixin():
+        final Object? parentModule = child.parentModule;
+        if (parentModule is PythonModuleInterface) {
+          return ReferenceEqualityWrapper(parentModule) ==
+              ReferenceEqualityWrapper(value);
+        }
+        return false;
+      case PrimitiveInspect():
+    }
+    return false;
+  }
+
+  @override
+  void emit(StringBuffer buffer) {
+    buffer.writeln("/// ## $name");
+    emitDoc(buffer);
+    emitSource(buffer);
+    buffer.writeln("""
+final class $name extends PythonModule {
+  $name.from(super.pythonModule) : super.from();
+  
+  static $name import() => PythonFfiDart.instance
+      .importModule("$name", $name.from,);
+""");
+    for (final FunctionInspect child
+        in _children.values.whereType<FunctionInspect>().where(_isMyChild)) {
+      child.emit(buffer);
+    }
+    buffer.writeln("}");
+  }
 }
 
 final class ClassDefinitionInspect extends PythonClassDefinition
@@ -247,6 +337,53 @@ final class ClassDefinitionInspect extends PythonClassDefinition
 
   @override
   InspectEntryType get type => InspectEntryType.classDefinition;
+
+  @override
+  void _setChild(String name, InspectEntry child) {
+    if (child is FunctionInspect) {
+      child = MethodInspect.from(child.name, child.value);
+    }
+    super._setChild(name, child);
+  }
+
+  @override
+  void emit(StringBuffer buffer) {
+    final String moduleName = switch (parentModule) {
+      PythonModuleInterface() => (parentModule as dynamic).__name__ as String,
+      _ => throw Exception("parentModule is not a module: $parentModule"),
+    };
+    final InspectEntry? init = _children["__init__"];
+    final MethodInspect? initMethod = init is MethodInspect ? init : null;
+    buffer.writeln("/// ## $name");
+    emitDoc(buffer);
+    emitSource(buffer);
+    buffer.writeln("""
+final class $name extends PythonClass {
+  factory $name(""");
+    initMethod?.emitArguments(buffer);
+    buffer.writeln("""
+    ) =>
+      PythonFfiDart.instance.importClass(
+        "$moduleName",
+        "$name",
+        $name.from,""");
+    if (initMethod != null) {
+      initMethod.emitCallArgs(buffer);
+    } else {
+      buffer.writeln("<Object?>[],");
+    }
+    initMethod?.emitCallKwargs(buffer);
+    buffer.writeln("""
+      );
+
+  $name.from(super.pythonClass) : super.from();
+""");
+    for (final FunctionInspect child
+        in _children.values.whereType<FunctionInspect>()) {
+      child.emit(buffer);
+    }
+    buffer.writeln("}");
+  }
 }
 
 final class ClassInspect extends PythonClass
@@ -280,11 +417,123 @@ final class FunctionInspect extends PythonFunction
 
   Signature get signature => inspectModule.signature(value);
 
+  Iterable<Parameter> get parameters => signature.parameters.values;
+
+  Iterable<Parameter> _parametersOfKind(ParameterKind kind) =>
+      parameters.where((Parameter parameter) => parameter.kind == kind);
+
+  bool _hasKeywordParameters() =>
+      _parametersOfKind(ParameterKind.positional_or_keyword).isNotEmpty ||
+      _parametersOfKind(ParameterKind.keyword_only).isNotEmpty ||
+      _parametersOfKind(ParameterKind.var_keyword).isNotEmpty;
+
+  void emitArguments(StringBuffer buffer) {
+    for (final Parameter parameter
+        in _parametersOfKind(ParameterKind.positional_only)) {
+      buffer.writeln("Object? ${parameter.name},");
+    }
+    for (final Parameter parameter
+        in _parametersOfKind(ParameterKind.var_positional)) {
+      buffer.writeln(
+        "List<Object?> ${parameter.name} ${parameter.defaultString},",
+      );
+    }
+    if (_hasKeywordParameters()) {
+      buffer.write("{");
+      for (final Parameter parameter
+          in _parametersOfKind(ParameterKind.positional_or_keyword)) {
+        buffer.writeln(
+          "${parameter.requiredString} Object? ${parameter.name} ${parameter.defaultString},",
+        );
+      }
+      for (final Parameter parameter
+          in _parametersOfKind(ParameterKind.keyword_only)) {
+        buffer.writeln(
+          "${parameter.requiredString} Object? ${parameter.name} ${parameter.defaultString},",
+        );
+      }
+      for (final Parameter parameter
+          in _parametersOfKind(ParameterKind.var_keyword)) {
+        buffer.writeln(
+          "Map<String, Object?> ${parameter.name} ${parameter.defaultString},",
+        );
+      }
+      buffer.write("}");
+    }
+  }
+
+  void emitCallArgs(StringBuffer buffer) {
+    buffer.writeln("<Object?>[");
+    for (final Parameter parameter
+        in _parametersOfKind(ParameterKind.positional_only)) {
+      buffer.writeln("${parameter.name},");
+    }
+    for (final Parameter parameter
+        in _parametersOfKind(ParameterKind.positional_or_keyword)) {
+      buffer.writeln("${parameter.name},");
+    }
+    for (final Parameter parameter
+        in _parametersOfKind(ParameterKind.var_positional)) {
+      buffer.writeln("...${parameter.name},");
+    }
+    buffer.writeln("],");
+  }
+
+  void emitCallKwargs(StringBuffer buffer) {
+    buffer.writeln("<String, Object?>{");
+    for (final Parameter parameter
+        in _parametersOfKind(ParameterKind.keyword_only)) {
+      buffer.writeln("\"${parameter.name}\": ${parameter.name},");
+    }
+    for (final Parameter parameter
+        in _parametersOfKind(ParameterKind.var_keyword)) {
+      buffer.writeln("...${parameter.name}\",");
+    }
+    buffer.writeln("},");
+  }
+
+  void emitCall(StringBuffer buffer) {
+    emitCallArgs(buffer);
+    buffer.write("kwargs: ");
+    emitCallKwargs(buffer);
+  }
+
+  @override
+  void emit(StringBuffer buffer) {
+    buffer.writeln("/// ## $name");
+    emitDoc(buffer);
+    emitSource(buffer);
+    buffer.writeln("Object? $name(");
+    emitArguments(buffer);
+    buffer.writeln(") => getFunction(\"$name\").call(");
+    emitCall(buffer);
+    buffer.writeln(");");
+  }
+
   @override
   debugDump({bool expandChildren = true}) => <String, Object?>{
         ...super.debugDump(expandChildren: expandChildren),
         "signature": signature.debugDump(),
       };
+}
+
+final class MethodInspect extends FunctionInspect {
+  MethodInspect.from(super.name, super.functionDelegate) : super.from();
+
+  @override
+  Iterable<Parameter> get parameters sync* {
+    bool didSkipSelf = false;
+    for (final Parameter parameter in super.parameters) {
+      if (!didSkipSelf) {
+        if (parameter.kind == ParameterKind.positional_only ||
+            parameter.kind == ParameterKind.positional_or_keyword) {
+          didSkipSelf = true;
+          continue;
+        }
+      }
+      yield parameter;
+    }
+  }
 }
 
 final class ObjectInspect extends PythonObject
@@ -300,6 +549,14 @@ final class ObjectInspect extends PythonObject
 
   @override
   InspectEntryType get type => InspectEntryType.object;
+
+  @override
+  void emit(StringBuffer buffer) {
+    buffer.writeln("""
+    Object? get $name => getAttribute("$name");
+    set $name(Object? $name) => setAttribute("$name", $name);
+""");
+  }
 }
 
 final class PrimitiveInspect implements InspectEntry {
@@ -323,9 +580,15 @@ final class PrimitiveInspect implements InspectEntry {
   void collectChildren() {}
 
   @override
-  String emit() {
+  void emit(StringBuffer buffer) {
     throw UnimplementedError("$runtimeType.emit");
   }
+
+  @override
+  void emitDoc(StringBuffer buffer) {}
+
+  @override
+  void emitSource(StringBuffer buffer) {}
 
   @override
   Map<String, Object?> debugDump({bool expandChildren = true}) =>
@@ -336,7 +599,7 @@ final class PrimitiveInspect implements InspectEntry {
       };
 }
 
-Future<void> doInspection(
+Future<String> doInspection(
   PythonModuleDefinition moduleDefinition, {
   required String appType,
 }) async {
@@ -353,6 +616,9 @@ Future<void> doInspection(
     <String, Object?>{
       "_module": interface.debugDump(),
       "_entries": InspectionCache.instance.entries
+          .whereNot(
+            ((int, InspectEntry) e) => e.$2.type == InspectEntryType.primitive,
+          )
           .map(
             ((int, InspectEntry) e) => <String, Object?>{
               "id": e.$1,
@@ -361,9 +627,53 @@ Future<void> doInspection(
           )
           .toList(),
     },
-    toEncodable: (Object? o) => o.toString(),
+    toEncodable: (Object? o) {
+      switch (o) {
+        case ModuleInspect():
+        case ClassDefinitionInspect():
+        case ClassInspect():
+        case FunctionInspect():
+        case ObjectInspect():
+          final InspectEntry entry = o as InspectEntry;
+          return <String, Object?>{
+            "type": o.runtimeType.toString(),
+            "value": entry.value,
+            "string": o.toString(),
+          };
+        case PythonObjectInterface():
+          return <String, Object?>{
+            "type": o.runtimeType.toString(),
+            "value": o.reference,
+            "string": o.toString(),
+          };
+        default:
+          return o.toString();
+      }
+    },
   );
-  print(json);
+  return json;
+}
+
+String emitInspection() {
+  final InspectionCache cache = InspectionCache.instance;
+  final StringBuffer buffer = StringBuffer("""
+// ignore_for_file: camel_case_types, non_constant_identifier_names
+
+import "package:python_ffi_dart/python_ffi_dart.dart";
+""");
+  final Set<String> _classNames = <String>{};
+  for (final ClassDefinitionInspect classDefinition in cache.classDefinitions) {
+    final String className = classDefinition.name;
+    if (_classNames.contains(className)) {
+      continue;
+    }
+    _classNames.add(className);
+    classDefinition.emit(buffer);
+  }
+  for (final ModuleInspect module in cache.modules) {
+    module.emit(buffer);
+  }
+  return buffer.toString();
 }
 
 final class inspect extends PythonModule {
@@ -424,15 +734,16 @@ final class inspect extends PythonModule {
   bool ismodule(Object? object) =>
       getFunction("ismodule").call(<Object?>[object]);
 
-  /// Return `true` if the object is a class.
+  /// Return `true` if the object is a class, whether built-in or created in Python code.
   bool isclass(Object? object) =>
       getFunction("isclass").call(<Object?>[object]);
 
-  /// Return `true` if the object is a method.
+  /// Return `true` if the object is a bound method written in Python.
   bool ismethod(Object? object) =>
       getFunction("ismethod").call(<Object?>[object]);
 
-  /// Return `true` if the object is a function.
+  /// Return `true` if the object is a Python function, which includes functions
+  /// created by a lambda expression.
   bool isfunction(Object? object) =>
       getFunction("isfunction").call(<Object?>[object]);
 
@@ -465,6 +776,29 @@ final class inspect extends PythonModule {
   /// module cannot be determined.
   PythonModuleInterface? getmodule(Object? object) =>
       getFunction("getmodule").call(<Object?>[object]);
+
+  /// Return the text of the source code for an object. The argument may be a
+  /// module, class, method, function, traceback, frame, or code object. The
+  /// source code is returned as a single string. An OSError is raised if the
+  /// source code cannot be retrieved. A TypeError is raised if the object is a
+  /// built-in module, class, or function.
+  String? getsource(Object? object) {
+    try {
+      return getFunction("getsource").call(<Object?>[object]);
+    } on PythonExceptionInterface catch (e) {
+      if (e.type == "TypeError") {
+        print(
+          "Cannot get source for built-in module, class, or function: $object",
+        );
+        return null;
+      }
+      if (e.type == "OSError") {
+        print("Cannot get source for $object: $e");
+        return null;
+      }
+      rethrow;
+    }
+  }
 
   /// Clean up indentation from docstrings that are indented to line up with
   /// blocks of code.
@@ -519,6 +853,33 @@ final class inspect extends PythonModule {
       );
 }
 
+@immutable
+final class ReferenceEqualityWrapper extends PythonObjectInterface {
+  ReferenceEqualityWrapper(this._source)
+      : super(
+          _source.platform,
+          _source.reference,
+          initializer: _source.initializer,
+          finalizer: _source.finalizer,
+        );
+
+  final PythonObjectInterface _source;
+
+  @override
+  bool operator ==(Object? other) {
+    if (other is! ReferenceEqualityWrapper) {
+      return false;
+    }
+    return _source.reference == other._source.reference;
+  }
+
+  @override
+  int get hashCode => _source.reference.hashCode;
+
+  @override
+  String toString() => _source.toString();
+}
+
 final class _SignatureClassDefinition extends PythonClassDefinition {
   _SignatureClassDefinition.from(super.classDefinitionDelegate) : super.from();
 }
@@ -532,11 +893,11 @@ final class Signature extends PythonClass {
   Signature.from(super.classDelegate) : super.from();
 
   /// A special class-level marker to specify absence of a return annotation.
-  static Object? get empty {
+  static ReferenceEqualityWrapper get empty {
     final inspect inspectModule = inspect.import();
     final _SignatureClassDefinition signatureClass =
         _SignatureClassDefinition.from(inspectModule.getAttribute("Signature"));
-    return signatureClass.getAttribute("empty");
+    return ReferenceEqualityWrapper(signatureClass.getAttribute("empty"));
   }
 
   Iterable<String> get _parameterNames =>
@@ -568,7 +929,16 @@ final class Signature extends PythonClass {
 
   /// The “return” annotation for the callable. If the callable has no “return”
   /// annotation, this attribute is set to [Signature.empty].
-  Object? get return_annotation => getAttribute("return_annotation");
+  Object? get return_annotation {
+    final Object? result = getAttribute("return_annotation");
+    if (result is PythonObjectInterface) {
+      final ReferenceEqualityWrapper empty = Signature.empty;
+      if (ReferenceEqualityWrapper(result) == empty) {
+        return empty;
+      }
+    }
+    return result;
+  }
 
   Map<String, Object?> debugDump() => <String, Object?>{
         "parameters": parameters.map(
@@ -597,11 +967,11 @@ final class Parameter extends PythonClass {
 
   /// A special class-level marker to specify absence of default values and
   /// annotations.
-  static Object? get empty {
+  static ReferenceEqualityWrapper get empty {
     final inspect inspectModule = inspect.import();
     final _ParameterClassDefinition parameterClass =
         _ParameterClassDefinition.from(inspectModule.getAttribute("Parameter"));
-    return parameterClass.getAttribute("empty");
+    return ReferenceEqualityWrapper(parameterClass.getAttribute("empty"));
   }
 
   /// Value must be supplied as a positional argument. Positional only
@@ -655,13 +1025,23 @@ final class Parameter extends PythonClass {
   /// identifier.
   String get name => getAttribute("name");
 
+  Object? _handleEmpty(Object? value) {
+    if (value is PythonObjectInterface) {
+      final ReferenceEqualityWrapper empty = Parameter.empty;
+      if (ReferenceEqualityWrapper(value) == empty) {
+        return empty;
+      }
+    }
+    return value;
+  }
+
   /// The default value for the parameter. If the parameter has no default
   /// value, this attribute is set to [Parameter.empty].
-  Object? get default_ => getAttribute("default");
+  Object? get default_ => _handleEmpty(getAttribute("default"));
 
   /// The annotation for the parameter. If the parameter has no annotation,
   /// this attribute is set to [Parameter.empty].
-  Object? get annotation => getAttribute("annotation");
+  Object? get annotation => _handleEmpty(getAttribute("annotation"));
 
   /// Describes how argument values are bound to the parameter. The possible
   /// values are accessible via Parameter (like Parameter.KEYWORD_ONLY), and
@@ -684,6 +1064,32 @@ final class Parameter extends PythonClass {
       return ParameterKind.var_keyword;
     }
     throw UnimplementedError();
+  }
+
+  String get requiredString {
+    switch (kind) {
+      case ParameterKind.positional_only:
+      case ParameterKind.var_positional:
+      case ParameterKind.var_keyword:
+        return name;
+      case ParameterKind.positional_or_keyword:
+      case ParameterKind.keyword_only:
+        return default_ == empty ? "required" : "";
+    }
+  }
+
+  String get defaultString {
+    switch (kind) {
+      case ParameterKind.positional_only:
+        return "";
+      case ParameterKind.var_positional:
+        return "= const <Object?>[]";
+      case ParameterKind.var_keyword:
+        return "= const Map<String, Object?>{}";
+      case ParameterKind.positional_or_keyword:
+      case ParameterKind.keyword_only:
+        return default_ == empty ? "" : " = $default_";
+    }
   }
 
   Map<String, Object?> debugDump() => <String, Object?>{

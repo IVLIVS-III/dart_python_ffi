@@ -88,20 +88,22 @@ Future<void> _generateTypeDefs(
   PythonModuleDefinition moduleDefinition, {
   required String appType,
 }) async {
-  await doInspection(
+  final String json = await doInspection(
     moduleDefinition,
     appType: appType,
   );
-  return;
+  /*
   final result = await generateInterface(
     moduleDefinition: moduleDefinition,
     appType: appType,
   );
+  */
+  print(json);
   final outfile = File("lib/python_modules/${moduleDefinition.name}.g.dart");
   if (!outfile.existsSync()) {
     outfile.createSync();
   }
-  await outfile.writeAsString(result.toString());
+  await outfile.writeAsString(emitInspection());
   Process.runSync("dart", <String>["format", outfile.absolute.path]);
   return;
   print("Generating type definitions for ${moduleDefinition.name}...");

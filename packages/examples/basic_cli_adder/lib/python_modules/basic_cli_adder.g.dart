@@ -2,12 +2,6 @@
 
 import "package:python_ffi_dart/python_ffi_dart.dart";
 
-/// ## num
-///
-/// ### python docstring
-///
-typedef num = Object?;
-
 /// ## basic_cli_adder
 ///
 /// ### python source
@@ -25,16 +19,22 @@ final class basic_cli_adder extends PythonModule {
         basic_cli_adder.from,
       );
 
-  Object? get num => getAttribute("num");
-  set num(Object? num) => setAttribute("num", num);
-
   /// ## add
+  ///
+  /// ### python source
+  /// ```py
+  /// def add(x: num, y: num) -> num:
+  ///     return x + y
+  /// ```
   Object? add({
     required Object? x,
     required Object? y,
   }) =>
-      getFunction("add").call(<Object?>[
-        x,
-        y,
-      ]);
+      getFunction("add").call(
+        <Object?>[
+          x,
+          y,
+        ],
+        kwargs: <String, Object?>{},
+      );
 }
