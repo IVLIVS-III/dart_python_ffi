@@ -2,6 +2,9 @@
 
 import "package:python_ffi_dart/python_ffi_dart.dart";
 
+/// ## num
+typedef num = Object?;
+
 /// ## basic_cli_adder
 ///
 /// ### python source

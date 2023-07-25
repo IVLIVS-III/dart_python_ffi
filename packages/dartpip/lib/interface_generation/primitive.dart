@@ -28,7 +28,7 @@ final class PrimitiveInterface implements Interface {
       Map() when source.isEmpty => "const {}",
       Set() when source.isEmpty => "const {}",
       String() => jsonEncode(source),
-      _ => _source.toString(),
+      _ => source.toString(),
     };
   }
 

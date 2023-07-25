@@ -89,6 +89,10 @@ final class InspectionCache {
   InspectEntry? operator [](Object? key) => _cache[_effectiveKey(key)]?.$2;
 
   void operator []=(Object? key, InspectEntry value) {
+    // do not cache primitive objects
+    if (value is PrimitiveInspect) {
+      return;
+    }
     final Object? effectiveKey = _effectiveKey(key);
     final int id = _cache[effectiveKey]?.$1 ?? _nextId;
     _cache[effectiveKey] = (id, value);
@@ -111,14 +115,94 @@ final class InspectionCache {
 
   Iterable<ClassInspect> get classes => _getOfType(InspectEntryType.class_);
 
+  Iterable<ClassInspect> get typedefs => classes.where(types.isType);
+
   Iterable<FunctionInspect> get functions =>
       _getOfType(InspectEntryType.function);
 
   Iterable<ObjectInspect> get objects => _getOfType(InspectEntryType.object);
 }
 
+String _sanitizeName(String name) {
+  /// Reference: https://dart.dev/language/keywords
+  const Set<String> dartKeywords = <String>{
+    "abstract",
+    "as",
+    "assert",
+    "async",
+    "await",
+    "base",
+    "break",
+    "case",
+    "catch",
+    "class",
+    "const",
+    "continue",
+    "covariant",
+    "default",
+    "deferred",
+    "do",
+    "dynamic",
+    "else",
+    "enum",
+    "export",
+    "extends",
+    "extension",
+    "external",
+    "factory",
+    "false",
+    "final",
+    "finally",
+    "for",
+    "Function",
+    "get",
+    "hide",
+    "if",
+    "implements",
+    "import",
+    "in",
+    "interface",
+    "is",
+    "late",
+    "library",
+    "mixin",
+    "new",
+    "null",
+    "on",
+    "operator",
+    "part",
+    "required",
+    "rethrow",
+    "return",
+    "sealed",
+    "set",
+    "show",
+    "static",
+    "super",
+    "switch",
+    "sync",
+    "this",
+    "throw",
+    "true",
+    "try",
+    "typedef",
+    "var",
+    "void",
+    "when",
+    "while",
+    "with",
+    "yield",
+  };
+  if (dartKeywords.contains(name)) {
+    return "\$$name";
+  }
+  return name;
+}
+
 sealed class InspectEntry {
   String get name;
+
+  String get sanitizedName;
 
   Object? get value;
 
@@ -160,6 +244,8 @@ base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
     );
   }
 
+  String get sanitizedName => _sanitizeName(name);
+
   Object? get parentModule => inspectModule.getmodule(value);
 
   @override
@@ -167,6 +253,8 @@ base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
 
   Iterable<(String, InspectEntry)> get children => _children.entries
       .map((MapEntry<String, InspectEntry> e) => (e.key, e.value));
+
+  static const Set<String> _explicitlyAllowedChildNames = <String>{"__init__"};
 
   @override
   void collectChildren() {
@@ -176,22 +264,23 @@ base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
       InspectionCache.instance[value] = this;
     }
     for (final (String name, Object? value) in _members) {
-      /*
-      if (name.startsWith("_")) {
+      if (name.startsWith("_") &&
+          !_explicitlyAllowedChildNames.contains(name)) {
         continue;
       }
-      */
+      try {
+        if (inspectModule.isbuiltin(value)) {
+          continue;
+        }
+      } on PythonExceptionInterface catch (_) {
+        // ignore
+      }
       try {
         if (inspectModule.ismethodwrapper(value)) {
           continue;
         }
-        if (inspectModule.isbuiltin(value)) {
-          continue;
-        }
-      } on PythonExceptionInterface catch (e, stackTrace) {
+      } on PythonExceptionInterface catch (_) {
         // ignore
-        print(e);
-        print(stackTrace);
       }
       final InspectEntry? cached = InspectionCache.instance[value];
       if (cached != null) {
@@ -229,6 +318,9 @@ base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
     if (doc == null) {
       return;
     }
+    if (doc.isEmpty) {
+      return;
+    }
     buffer.writeln("""
 ///
 /// ### python docstring
@@ -239,19 +331,23 @@ base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
   }
 
   void emitSource(StringBuffer buffer) {
-    final String? source = inspectModule.getsource(value)?.trim();
-    if (source == null) {
-      return;
-    }
-    buffer.writeln("""
+    try {
+      final String? source = inspectModule.getsource(value)?.trim();
+      if (source == null) {
+        return;
+      }
+      buffer.writeln("""
 ///
 /// ### python source
 /// ```py""");
-    for (final String line in source.split("\n")) {
-      buffer.writeln("/// $line");
-    }
-    buffer.writeln("""
+      for (final String line in source.split("\n")) {
+        buffer.writeln("/// $line");
+      }
+      buffer.writeln("""
 /// ```""");
+    } on PythonExceptionInterface catch (_) {
+      // ignore
+    }
   }
 
   @override
@@ -259,6 +355,7 @@ base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
       <String, Object?>{
         "_id": id,
         "name": name,
+        "sanitizedName": sanitizedName,
         "value": value,
         "type": type.displayName,
         "parentModule": parentModule,
@@ -285,6 +382,15 @@ final class ModuleInspect extends PythonModule
 
   final String name;
 
+  String get qualifiedName {
+    try {
+      return (value as dynamic).__name__ as String;
+      // ignore: avoid_catches_without_on_clauses
+    } catch (_) {
+      return name;
+    }
+  }
+
   final PythonModuleInterface value;
 
   @override
@@ -310,15 +416,80 @@ final class ModuleInspect extends PythonModule
     emitDoc(buffer);
     emitSource(buffer);
     buffer.writeln("""
-final class $name extends PythonModule {
-  $name.from(super.pythonModule) : super.from();
+final class $sanitizedName extends PythonModule {
+  $sanitizedName.from(super.pythonModule) : super.from();
   
-  static $name import() => PythonFfiDart.instance
-      .importModule("$name", $name.from,);
+  static $sanitizedName import() => PythonFfiDart.instance
+      .importModule("$qualifiedName", $sanitizedName.from,);
 """);
+    final Set<String> memberNames = <String>{};
     for (final FunctionInspect child
         in _children.values.whereType<FunctionInspect>().where(_isMyChild)) {
+      final String functionName = child.sanitizedName;
+      if (memberNames.contains(functionName)) {
+        continue;
+      }
+      if (functionName == name) {
+        continue;
+      }
+      memberNames.add(functionName);
       child.emit(buffer);
+    }
+    for (final ModuleInspect child
+        in _children.values.whereType<ModuleInspect>().where(_isMyChild)) {
+      final String moduleName = child.sanitizedName;
+      if (memberNames.contains(moduleName)) {
+        continue;
+      }
+      memberNames.add(moduleName);
+      buffer.writeln(
+        "PythonModule get $moduleName => $moduleName.import();",
+      );
+    }
+    for (final ClassInspect child
+        in _children.values.whereType<ClassInspect>()) {
+      if (types.isType(child)) {
+        continue;
+      }
+      final String className = child.sanitizedName;
+      if (memberNames.contains(className)) {
+        continue;
+      }
+      memberNames.add(className);
+      buffer.writeln("""
+Object? get $className => getAttribute("${child.name}");
+
+set $className(Object? $className)
+  => setAttribute("${child.name}", $className);
+""");
+    }
+    for (final ObjectInspect child
+        in _children.values.whereType<ObjectInspect>().where(_isMyChild)) {
+      final String objectName = child.sanitizedName;
+      if (memberNames.contains(objectName)) {
+        continue;
+      }
+      memberNames.add(objectName);
+      buffer.writeln("""
+Object? get $objectName => getAttribute("${child.name}");
+
+set $objectName(Object? $objectName)
+  => setAttribute("${child.name}", $objectName);
+""");
+    }
+    for (final PrimitiveInspect child
+        in _children.values.whereType<PrimitiveInspect>().where(_isMyChild)) {
+      final String primitiveName = child.sanitizedName;
+      if (memberNames.contains(primitiveName)) {
+        continue;
+      }
+      memberNames.add(primitiveName);
+      buffer.writeln("""
+Object? get $primitiveName => getAttribute("${child.name}");
+
+set $primitiveName(Object? $primitiveName)
+  => setAttribute("${child.name}", $primitiveName);
+""");
     }
     buffer.writeln("}");
   }
@@ -348,6 +519,7 @@ final class ClassDefinitionInspect extends PythonClassDefinition
 
   @override
   void emit(StringBuffer buffer) {
+    final Object? parentModule = this.parentModule;
     final String moduleName = switch (parentModule) {
       PythonModuleInterface() => (parentModule as dynamic).__name__ as String,
       _ => throw Exception("parentModule is not a module: $parentModule"),
@@ -358,15 +530,15 @@ final class ClassDefinitionInspect extends PythonClassDefinition
     emitDoc(buffer);
     emitSource(buffer);
     buffer.writeln("""
-final class $name extends PythonClass {
-  factory $name(""");
+final class $sanitizedName extends PythonClass {
+  factory $sanitizedName(""");
     initMethod?.emitArguments(buffer);
     buffer.writeln("""
     ) =>
       PythonFfiDart.instance.importClass(
         "$moduleName",
         "$name",
-        $name.from,""");
+        $sanitizedName.from,""");
     if (initMethod != null) {
       initMethod.emitCallArgs(buffer);
     } else {
@@ -376,11 +548,65 @@ final class $name extends PythonClass {
     buffer.writeln("""
       );
 
-  $name.from(super.pythonClass) : super.from();
+  $sanitizedName.from(super.pythonClass) : super.from();
 """);
+    final Set<String> memberNames = <String>{"__init__"};
     for (final FunctionInspect child
         in _children.values.whereType<FunctionInspect>()) {
+      final String functionName = child.sanitizedName;
+      if (memberNames.contains(functionName)) {
+        continue;
+      }
+      if (functionName == name) {
+        continue;
+      }
+      memberNames.add(functionName);
       child.emit(buffer);
+    }
+    for (final ClassInspect child
+        in _children.values.whereType<ClassInspect>()) {
+      if (types.isType(child)) {
+        continue;
+      }
+      final String className = child.sanitizedName;
+      if (memberNames.contains(className)) {
+        continue;
+      }
+      memberNames.add(className);
+      buffer.writeln("""
+Object? get $className => getAttribute("${child.name}");
+
+set $className(Object? $className)
+  => setAttribute("${child.name}", $className);
+""");
+    }
+    for (final ObjectInspect child
+        in _children.values.whereType<ObjectInspect>()) {
+      final String objectName = child.sanitizedName;
+      if (memberNames.contains(objectName)) {
+        continue;
+      }
+      memberNames.add(objectName);
+      buffer.writeln("""
+Object? get $objectName => getAttribute("${child.name}");
+
+set $objectName(Object? $objectName)
+  => setAttribute("${child.name}", $objectName);
+""");
+    }
+    for (final PrimitiveInspect child
+        in _children.values.whereType<PrimitiveInspect>()) {
+      final String primitiveName = child.sanitizedName;
+      if (memberNames.contains(primitiveName)) {
+        continue;
+      }
+      memberNames.add(primitiveName);
+      buffer.writeln("""
+Object? get $primitiveName => getAttribute("${child.name}");
+
+set $primitiveName(Object? $primitiveName)
+  => setAttribute("${child.name}", $primitiveName);
+""");
     }
     buffer.writeln("}");
   }
@@ -399,6 +625,14 @@ final class ClassInspect extends PythonClass
 
   @override
   InspectEntryType get type => InspectEntryType.class_;
+
+  @override
+  void emit(StringBuffer buffer) {
+    buffer.writeln("/// ## $name");
+    emitDoc(buffer);
+    emitSource(buffer);
+    buffer.writeln("typedef $sanitizedName = Object?;");
+  }
 }
 
 final class FunctionInspect extends PythonFunction
@@ -423,6 +657,7 @@ final class FunctionInspect extends PythonFunction
       parameters.where((Parameter parameter) => parameter.kind == kind);
 
   bool _hasKeywordParameters() =>
+      _parametersOfKind(ParameterKind.var_positional).isNotEmpty ||
       _parametersOfKind(ParameterKind.positional_or_keyword).isNotEmpty ||
       _parametersOfKind(ParameterKind.keyword_only).isNotEmpty ||
       _parametersOfKind(ParameterKind.var_keyword).isNotEmpty;
@@ -430,32 +665,32 @@ final class FunctionInspect extends PythonFunction
   void emitArguments(StringBuffer buffer) {
     for (final Parameter parameter
         in _parametersOfKind(ParameterKind.positional_only)) {
-      buffer.writeln("Object? ${parameter.name},");
-    }
-    for (final Parameter parameter
-        in _parametersOfKind(ParameterKind.var_positional)) {
-      buffer.writeln(
-        "List<Object?> ${parameter.name} ${parameter.defaultString},",
-      );
+      buffer.writeln("Object? ${parameter.sanitizedName},");
     }
     if (_hasKeywordParameters()) {
       buffer.write("{");
       for (final Parameter parameter
+          in _parametersOfKind(ParameterKind.var_positional)) {
+        buffer.writeln(
+          "List<Object?> ${parameter.sanitizedName} ${parameter.defaultString},",
+        );
+      }
+      for (final Parameter parameter
           in _parametersOfKind(ParameterKind.positional_or_keyword)) {
         buffer.writeln(
-          "${parameter.requiredString} Object? ${parameter.name} ${parameter.defaultString},",
+          "${parameter.requiredString} Object? ${parameter.sanitizedName} ${parameter.defaultString},",
         );
       }
       for (final Parameter parameter
           in _parametersOfKind(ParameterKind.keyword_only)) {
         buffer.writeln(
-          "${parameter.requiredString} Object? ${parameter.name} ${parameter.defaultString},",
+          "${parameter.requiredString} Object? ${parameter.sanitizedName} ${parameter.defaultString},",
         );
       }
       for (final Parameter parameter
           in _parametersOfKind(ParameterKind.var_keyword)) {
         buffer.writeln(
-          "Map<String, Object?> ${parameter.name} ${parameter.defaultString},",
+          "Map<String, Object?> ${parameter.sanitizedName} ${parameter.defaultString},",
         );
       }
       buffer.write("}");
@@ -466,15 +701,15 @@ final class FunctionInspect extends PythonFunction
     buffer.writeln("<Object?>[");
     for (final Parameter parameter
         in _parametersOfKind(ParameterKind.positional_only)) {
-      buffer.writeln("${parameter.name},");
+      buffer.writeln("${parameter.sanitizedName},");
     }
     for (final Parameter parameter
         in _parametersOfKind(ParameterKind.positional_or_keyword)) {
-      buffer.writeln("${parameter.name},");
+      buffer.writeln("${parameter.sanitizedName},");
     }
     for (final Parameter parameter
         in _parametersOfKind(ParameterKind.var_positional)) {
-      buffer.writeln("...${parameter.name},");
+      buffer.writeln("...${parameter.sanitizedName},");
     }
     buffer.writeln("],");
   }
@@ -483,11 +718,11 @@ final class FunctionInspect extends PythonFunction
     buffer.writeln("<String, Object?>{");
     for (final Parameter parameter
         in _parametersOfKind(ParameterKind.keyword_only)) {
-      buffer.writeln("\"${parameter.name}\": ${parameter.name},");
+      buffer.writeln("\"${parameter.name}\": ${parameter.sanitizedName},");
     }
     for (final Parameter parameter
         in _parametersOfKind(ParameterKind.var_keyword)) {
-      buffer.writeln("...${parameter.name}\",");
+      buffer.writeln("...${parameter.sanitizedName},");
     }
     buffer.writeln("},");
   }
@@ -503,7 +738,7 @@ final class FunctionInspect extends PythonFunction
     buffer.writeln("/// ## $name");
     emitDoc(buffer);
     emitSource(buffer);
-    buffer.writeln("Object? $name(");
+    buffer.writeln("Object? $sanitizedName(");
     emitArguments(buffer);
     buffer.writeln(") => getFunction(\"$name\").call(");
     emitCall(buffer);
@@ -564,6 +799,8 @@ final class PrimitiveInspect implements InspectEntry {
 
   final String name;
 
+  String get sanitizedName => _sanitizeName(name);
+
   final Object? value;
 
   @override
@@ -594,6 +831,7 @@ final class PrimitiveInspect implements InspectEntry {
   Map<String, Object?> debugDump({bool expandChildren = true}) =>
       <String, Object?>{
         "name": name,
+        "sanitizedName": sanitizedName,
         "value": value,
         "type": type.displayName,
       };
@@ -612,6 +850,38 @@ Future<String> doInspection(
     (PythonModuleInterface<PythonFfiDelegate<Object?>, Object?> m) =>
         ModuleInspect.from(moduleDefinition.name, m),
   )..collectChildren();
+
+  Object? toEncodable(Object? o) {
+    switch (o) {
+      case ModuleInspect():
+      case ClassDefinitionInspect():
+      case ClassInspect():
+      case FunctionInspect():
+      case ObjectInspect():
+        final InspectEntry entry = o as InspectEntry;
+        return <String, Object?>{
+          "type": o.runtimeType.toString(),
+          "value": jsonEncode(entry.value, toEncodable: toEncodable),
+          "string": o.toString(),
+        };
+      case PythonIterable():
+      case PythonIterator():
+        final PythonObjectInterface object = o as PythonObjectInterface;
+        return <String, Object?>{
+          "type": o.runtimeType.toString(),
+          "value": jsonEncode(object.reference, toEncodable: toEncodable),
+        };
+      case PythonObjectInterface():
+        return <String, Object?>{
+          "type": o.runtimeType.toString(),
+          "value": jsonEncode(o.reference, toEncodable: toEncodable),
+          "string": o.toString(),
+        };
+      default:
+        return o.toString();
+    }
+  }
+
   final String json = jsonEncode(
     <String, Object?>{
       "_module": interface.debugDump(),
@@ -627,50 +897,71 @@ Future<String> doInspection(
           )
           .toList(),
     },
-    toEncodable: (Object? o) {
-      switch (o) {
-        case ModuleInspect():
-        case ClassDefinitionInspect():
-        case ClassInspect():
-        case FunctionInspect():
-        case ObjectInspect():
-          final InspectEntry entry = o as InspectEntry;
-          return <String, Object?>{
-            "type": o.runtimeType.toString(),
-            "value": entry.value,
-            "string": o.toString(),
-          };
-        case PythonObjectInterface():
-          return <String, Object?>{
-            "type": o.runtimeType.toString(),
-            "value": o.reference,
-            "string": o.toString(),
-          };
-        default:
-          return o.toString();
-      }
-    },
+    toEncodable: toEncodable,
   );
   return json;
 }
 
-String emitInspection() {
+final class types extends PythonModule {
+  types.from(super.moduleDelegate) : super.from();
+
+  static types import() => PythonFfiDart.instance.importModule(
+        "types",
+        types.from,
+      );
+
+  static bool isType(ClassInspect class_) {
+    final types typesModule = types.import();
+    final ReferenceEqualityWrapper typesModuleWrapper =
+        ReferenceEqualityWrapper(typesModule);
+    final Object? classParentModule = class_.parentModule;
+    if (classParentModule is! PythonModuleInterface) {
+      return false;
+    }
+    final ReferenceEqualityWrapper classParentModuleWrapper =
+        ReferenceEqualityWrapper(classParentModule);
+    if (classParentModuleWrapper != typesModuleWrapper) {
+      return false;
+    }
+    // TODO: make this more robust
+    return true;
+  }
+}
+
+String emitInspection({bool primaryModuleOnly = true}) {
   final InspectionCache cache = InspectionCache.instance;
+  final ModuleInspect? primaryModule = cache.modules.firstOrNull;
+  if (primaryModule == null) {
+    primaryModuleOnly = false;
+  }
   final StringBuffer buffer = StringBuffer("""
 // ignore_for_file: camel_case_types, non_constant_identifier_names
 
 import "package:python_ffi_dart/python_ffi_dart.dart";
 """);
-  final Set<String> _classNames = <String>{};
-  for (final ClassDefinitionInspect classDefinition in cache.classDefinitions) {
-    final String className = classDefinition.name;
-    if (_classNames.contains(className)) {
+  final Set<String> topLevelNames = <String>{};
+  for (final ClassInspect typedef in cache.typedefs) {
+    final String typedefName = typedef.sanitizedName;
+    if (topLevelNames.contains(typedefName)) {
       continue;
     }
-    _classNames.add(className);
+    topLevelNames.add(typedefName);
+    typedef.emit(buffer);
+  }
+  for (final ClassDefinitionInspect classDefinition in cache.classDefinitions) {
+    final String className = classDefinition.sanitizedName;
+    if (topLevelNames.contains(className)) {
+      continue;
+    }
+    topLevelNames.add(className);
     classDefinition.emit(buffer);
   }
   for (final ModuleInspect module in cache.modules) {
+    final String moduleName = module.sanitizedName;
+    if (topLevelNames.contains(moduleName)) {
+      continue;
+    }
+    topLevelNames.add(moduleName);
     module.emit(buffer);
   }
   return buffer.toString();
@@ -1025,6 +1316,14 @@ final class Parameter extends PythonClass {
   /// identifier.
   String get name => getAttribute("name");
 
+  String get sanitizedName {
+    final String name = _sanitizeName(this.name);
+    if (name.startsWith("_")) {
+      return "\$$name";
+    }
+    return name;
+  }
+
   Object? _handleEmpty(Object? value) {
     if (value is PythonObjectInterface) {
       final ReferenceEqualityWrapper empty = Parameter.empty;
@@ -1078,6 +1377,21 @@ final class Parameter extends PythonClass {
     }
   }
 
+  String _encode(Object? source) => switch (source) {
+        List() when source.isEmpty => "const []",
+        List() => "const ${source.map(_encode).toList()}",
+        Map() when source.isEmpty => "const {}",
+        Map() => "const ${source.map(
+            (Object? key, Object? value) =>
+                MapEntry<Object?, Object?>(_encode(key), _encode(value)),
+          )}",
+        Set() when source.isEmpty => "const {}",
+        Set() => "const ${source.map(_encode).toSet()}",
+        String() => jsonEncode(source),
+        PythonObjectInterface() => "null",
+        _ => source.toString(),
+      };
+
   String get defaultString {
     switch (kind) {
       case ParameterKind.positional_only:
@@ -1085,10 +1399,13 @@ final class Parameter extends PythonClass {
       case ParameterKind.var_positional:
         return "= const <Object?>[]";
       case ParameterKind.var_keyword:
-        return "= const Map<String, Object?>{}";
+        return "= const <String, Object?>{}";
+      case ParameterKind.positional_or_keyword when default_ == empty:
+      case ParameterKind.keyword_only when default_ == empty:
+        return "";
       case ParameterKind.positional_or_keyword:
       case ParameterKind.keyword_only:
-        return default_ == empty ? "" : " = $default_";
+        return "= ${_encode(default_)}";
     }
   }
 

@@ -1,5 +1,15 @@
 part of python_ffi_cpython_dart;
 
+class _OverflowsIntException implements Exception {
+  const _OverflowsIntException(this.value);
+
+  final Pointer<PyObject> value;
+
+  @override
+  String toString() =>
+      "OverflowsIntException: $value (${BuiltinsModule.import().str(value)})";
+}
+
 extension _ConvertToDartExtension on Pointer<PyObject> {
   Object? toDartObject(PythonFfiCPythonBase platform) {
     final Pointer<PyObject> object = this;
@@ -20,7 +30,12 @@ extension _ConvertToDartExtension on Pointer<PyObject> {
       return false;
     }
     if (isInt(platform)) {
-      return asInt(platform);
+      try {
+        return asInt(platform);
+      } on _OverflowsIntException {
+        // TODO: implement a proper BigInt type
+        return null;
+      }
     }
     if (isFloat(platform)) {
       return asDouble(platform);
@@ -66,7 +81,12 @@ extension _ConvertToDartExtension on Pointer<PyObject> {
     );
     switch (nameString) {
       case "int":
-        return asInt(platform);
+        try {
+          return asInt(platform);
+        } on _OverflowsIntException {
+          // TODO: implement a proper BigInt type
+          return null;
+        }
       case "float":
         return asDouble(platform);
       case "str":
@@ -95,10 +115,38 @@ extension _ConvertToDartExtension on Pointer<PyObject> {
     return _PythonObjectCPython(platform, object);
   }
 
-  int asInt(PythonFfiCPythonBase platform) {
+  BigInt _asBigInt(PythonFfiCPythonBase platform) {
+    print(
+      "⚠️   Warning: falling back to conversion to BigInt for '$typeName': ${toString()} (${BuiltinsModule.import().str(this)})",
+    );
+    throw _OverflowsIntException(this);
+  }
+
+  (int, bool) _asInt(PythonFfiCPythonBase platform) {
     final int result = platform.bindings.PyLong_AsLong(this);
     if (result == -1 && platform.bindings.PyErr_Occurred() != nullptr) {
+      if (platform.bindings
+              .PyErr_ExceptionMatches(platform.bindings.PyExc_OverflowError) !=
+          0) {
+        platform.bindings.PyErr_Clear();
+        return (result, true);
+      }
+      platform.bindings.PyErr_Print();
       throw PythonFfiException("Failed to convert to int");
+    }
+    return (result, false);
+  }
+
+  int asInt(PythonFfiCPythonBase platform) {
+    final (int result, bool didOverflow) = _asInt(platform);
+    if (didOverflow) {
+      final BigInt result = _asBigInt(platform);
+      if (result.isValidInt) {
+        return result.toInt();
+      }
+      throw PythonFfiException(
+        "Failed to convert to int, value too large: $result",
+      );
     }
     return result;
   }

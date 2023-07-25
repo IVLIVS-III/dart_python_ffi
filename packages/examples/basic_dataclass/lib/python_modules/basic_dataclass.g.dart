@@ -43,50 +43,6 @@ final class Person extends PythonClass {
 
   Person.from(super.pythonClass) : super.from();
 
-  /// ## __eq__
-  Object? __eq__({
-    required Object? other,
-  }) =>
-      getFunction("__eq__").call(
-        <Object?>[
-          other,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## __init__
-  Object? __init__({
-    required Object? name,
-    Object? x = 0,
-    Object? y = 0,
-  }) =>
-      getFunction("__init__").call(
-        <Object?>[
-          name,
-          x,
-          y,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## __repr__
-  Object? __repr__() => getFunction("__repr__").call(
-        <Object?>[],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## __str__
-  ///
-  /// ### python source
-  /// ```py
-  /// def __str__(self) -> str:
-  ///         return f"{self.name} @ ({self.x}, {self.y})"
-  /// ```
-  Object? __str__() => getFunction("__str__").call(
-        <Object?>[],
-        kwargs: <String, Object?>{},
-      );
-
   /// ## move
   ///
   /// ### python source
@@ -106,30 +62,14 @@ final class Person extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
-}
 
-/// ## __class__
-final class __class__ extends PythonClass {
-  factory __class__() => PythonFfiDart.instance.importClass(
-        "builtins",
-        "__class__",
-        __class__.from,
-        <Object?>[],
-      );
+  Object? get x => getAttribute("x");
 
-  __class__.from(super.pythonClass) : super.from();
-}
+  set x(Object? x) => setAttribute("x", x);
 
-/// ## __objclass__
-final class __objclass__ extends PythonClass {
-  factory __objclass__() => PythonFfiDart.instance.importClass(
-        "builtins",
-        "__objclass__",
-        __objclass__.from,
-        <Object?>[],
-      );
+  Object? get y => getAttribute("y");
 
-  __objclass__.from(super.pythonClass) : super.from();
+  set y(Object? y) => setAttribute("y", y);
 }
 
 /// ## basic_dataclass
