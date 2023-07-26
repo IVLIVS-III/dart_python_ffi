@@ -517,6 +517,57 @@ final class ClassDefinitionInspect extends PythonClassDefinition
     super._setChild(name, child);
   }
 
+  MethodInspect? get __init__ {
+    final InspectEntry? init = _children["__init__"];
+    return init is MethodInspect ? init : null;
+  }
+
+  void _extractFieldsFromInit() {
+    final MethodInspect? initMethod = __init__;
+    if (initMethod == null) {
+      return;
+    }
+    // TODO: walk the code object to determine dynamically added fields
+    // maybe go via ast
+    // get name of first positional argument
+    final Parameter? selfParameter = initMethod.selfParameter;
+    if (selfParameter == null) {
+      return;
+    }
+    final String selfParameterName = selfParameter.name;
+    final Object? codeObject = (initMethod.value as dynamic).__code__;
+    if (codeObject == null) {
+      return;
+    }
+    if (codeObject is! PythonObjectInterface) {
+      return;
+    }
+    final List<String> names =
+        codeObject.getAttribute<List<dynamic>>("co_names").cast();
+    final List<String> varnames =
+        codeObject.getAttribute<List<dynamic>>("co_varnames").cast();
+    if (!varnames.contains(selfParameterName)) {
+      print("Warning: $selfParameterName not in $varnames");
+    }
+    if (names.contains(selfParameterName)) {
+      print("Warning: $selfParameterName in $names");
+    }
+    final String? sourceCode = inspectModule.getsource(initMethod.value);
+    if (sourceCode == null) {
+      return;
+    }
+    for (final String field in names) {
+      final InspectEntry child = PrimitiveInspect(field, null);
+      _setChild(field, child);
+    }
+  }
+
+  @override
+  void collectChildren() {
+    super.collectChildren();
+    _extractFieldsFromInit();
+  }
+
   @override
   void emit(StringBuffer buffer) {
     final Object? parentModule = this.parentModule;
@@ -524,8 +575,7 @@ final class ClassDefinitionInspect extends PythonClassDefinition
       PythonModuleInterface() => (parentModule as dynamic).__name__ as String,
       _ => throw Exception("parentModule is not a module: $parentModule"),
     };
-    final InspectEntry? init = _children["__init__"];
-    final MethodInspect? initMethod = init is MethodInspect ? init : null;
+    final MethodInspect? initMethod = __init__;
     buffer.writeln("/// ## $name");
     emitDoc(buffer);
     emitSource(buffer);
@@ -769,6 +819,12 @@ final class MethodInspect extends FunctionInspect {
       yield parameter;
     }
   }
+
+  Parameter? get selfParameter => super.parameters.firstWhereOrNull(
+        (Parameter element) =>
+            element.kind == ParameterKind.positional_only ||
+            element.kind == ParameterKind.positional_or_keyword,
+      );
 }
 
 final class ObjectInspect extends PythonObject
@@ -1205,7 +1261,8 @@ final class Signature extends PythonClass {
   UnmodifiableMapView<String, Parameter> get parameters {
     final PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>>
         parameters = getAttributeRaw("parameters");
-    final itemGetter = parameters.getFunction("__getitem__");
+    final PythonFunctionInterface<PythonFfiCPythonBase, Pointer> itemGetter =
+        parameters.getFunction("__getitem__");
     return UnmodifiableMapView<String, Parameter>(
       Map<String, Parameter>.fromEntries(
         _parameterNames.map(
