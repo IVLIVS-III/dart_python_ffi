@@ -69,4 +69,21 @@ class TypedIterable<T> with IterableMixin<T> implements Iterable<T> {
 
   @override
   Iterator<T> get iterator => TypedIterator<T>.from(_iterable.iterator);
+
+  TransformIterable<T_out, T> transform<T_out>(T_out Function(T) transformer) =>
+      TransformIterable<T_out, T>.from(this, transformer);
+}
+
+/// Transforms the elements of an iterable.
+class TransformIterable<T, T_in> with IterableMixin<T> implements Iterable<T> {
+  TransformIterable.from(this._iterable, this._transformer);
+
+  final TypedIterable<T_in> _iterable;
+  final T Function(T_in) _transformer;
+
+  @override
+  Iterator<T> get iterator => TransformIterator<T, T_in>.from(
+        TypedIterator<T_in>.from(_iterable.iterator),
+        _transformer,
+      );
 }

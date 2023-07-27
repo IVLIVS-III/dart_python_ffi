@@ -85,4 +85,21 @@ class TypedIterator<T> implements Iterator<T> {
 
   @override
   bool moveNext() => _iterator.moveNext();
+
+  TransformIterator<T_out, T> transform<T_out>(T_out Function(T) transformer) =>
+      TransformIterator<T_out, T>.from(this, transformer);
+}
+
+/// Transforms the elements of an iterator.
+class TransformIterator<T, T_in> implements Iterator<T> {
+  TransformIterator.from(this._iterator, this._transformer);
+
+  final TypedIterator<T_in> _iterator;
+  final T Function(T_in) _transformer;
+
+  @override
+  T get current => _transformer(_iterator.current);
+
+  @override
+  bool moveNext() => _iterator.moveNext();
 }

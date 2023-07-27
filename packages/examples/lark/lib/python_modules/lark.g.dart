@@ -805,6 +805,36 @@ final class Lark extends PythonClass {
 
   set open_from_package(Object? open_from_package) =>
       setAttribute("open_from_package", open_from_package);
+
+  Object? get options => getAttribute("options");
+
+  set options(Object? options) => setAttribute("options", options);
+
+  Object? get source_path => getAttribute("source_path");
+
+  set source_path(Object? source_path) =>
+      setAttribute("source_path", source_path);
+
+  Object? get source_grammar => getAttribute("source_grammar");
+
+  set source_grammar(Object? source_grammar) =>
+      setAttribute("source_grammar", source_grammar);
+
+  Object? get parser => getAttribute("parser");
+
+  set parser(Object? parser) => setAttribute("parser", parser);
+
+  Object? get grammar => getAttribute("grammar");
+
+  set grammar(Object? grammar) => setAttribute("grammar", grammar);
+
+  Object? get lexer => getAttribute("lexer");
+
+  set lexer(Object? lexer) => setAttribute("lexer", lexer);
+
+  Object? get lexer_conf => getAttribute("lexer_conf");
+
+  set lexer_conf(Object? lexer_conf) => setAttribute("lexer_conf", lexer_conf);
 }
 
 /// ## LarkError
@@ -2076,6 +2106,14 @@ final class Tree extends PythonClass {
   Object? get meta => getAttribute("meta");
 
   set meta(Object? meta) => setAttribute("meta", meta);
+
+  Object? get data => getAttribute("data");
+
+  set data(Object? data) => setAttribute("data", data);
+
+  Object? get children => getAttribute("children");
+
+  set children(Object? children) => setAttribute("children", children);
 }
 
 /// ## UnexpectedCharacters
@@ -2325,6 +2363,41 @@ final class UnexpectedCharacters extends PythonClass {
 
   set pos_in_stream(Object? pos_in_stream) =>
       setAttribute("pos_in_stream", pos_in_stream);
+
+  Object? get line => getAttribute("line");
+
+  set line(Object? line) => setAttribute("line", line);
+
+  Object? get column => getAttribute("column");
+
+  set column(Object? column) => setAttribute("column", column);
+
+  Object? get state => getAttribute("state");
+
+  set state(Object? state) => setAttribute("state", state);
+
+  Object? get allowed => getAttribute("allowed");
+
+  set allowed(Object? allowed) => setAttribute("allowed", allowed);
+
+  Object? get considered_tokens => getAttribute("considered_tokens");
+
+  set considered_tokens(Object? considered_tokens) =>
+      setAttribute("considered_tokens", considered_tokens);
+
+  Object? get considered_rules => getAttribute("considered_rules");
+
+  set considered_rules(Object? considered_rules) =>
+      setAttribute("considered_rules", considered_rules);
+
+  Object? get token_history => getAttribute("token_history");
+
+  set token_history(Object? token_history) =>
+      setAttribute("token_history", token_history);
+
+  Object? get char => getAttribute("char");
+
+  set char(Object? char) => setAttribute("char", char);
 }
 
 /// ## UnexpectedEOF
@@ -2542,6 +2615,26 @@ final class UnexpectedEOF extends PythonClass {
 
   set pos_in_stream(Object? pos_in_stream) =>
       setAttribute("pos_in_stream", pos_in_stream);
+
+  Object? get expected => getAttribute("expected");
+
+  set expected(Object? expected) => setAttribute("expected", expected);
+
+  Object? get state => getAttribute("state");
+
+  set state(Object? state) => setAttribute("state", state);
+
+  Object? get token => getAttribute("token");
+
+  set token(Object? token) => setAttribute("token", token);
+
+  Object? get line => getAttribute("line");
+
+  set line(Object? line) => setAttribute("line", line);
+
+  Object? get column => getAttribute("column");
+
+  set column(Object? column) => setAttribute("column", column);
 }
 
 /// ## UnexpectedInput
@@ -3110,6 +3203,41 @@ final class UnexpectedToken extends PythonClass {
 
   set pos_in_stream(Object? pos_in_stream) =>
       setAttribute("pos_in_stream", pos_in_stream);
+
+  Object? get line => getAttribute("line");
+
+  set line(Object? line) => setAttribute("line", line);
+
+  Object? get column => getAttribute("column");
+
+  set column(Object? column) => setAttribute("column", column);
+
+  Object? get state => getAttribute("state");
+
+  set state(Object? state) => setAttribute("state", state);
+
+  Object? get token => getAttribute("token");
+
+  set token(Object? token) => setAttribute("token", token);
+
+  Object? get expected => getAttribute("expected");
+
+  set expected(Object? expected) => setAttribute("expected", expected);
+
+  Object? get considered_rules => getAttribute("considered_rules");
+
+  set considered_rules(Object? considered_rules) =>
+      setAttribute("considered_rules", considered_rules);
+
+  Object? get interactive_parser => getAttribute("interactive_parser");
+
+  set interactive_parser(Object? interactive_parser) =>
+      setAttribute("interactive_parser", interactive_parser);
+
+  Object? get token_history => getAttribute("token_history");
+
+  set token_history(Object? token_history) =>
+      setAttribute("token_history", token_history);
 }
 
 /// ## Visitor
@@ -3330,6 +3458,49 @@ final class LexerConf extends PythonClass {
 
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
+
+  Object? get terminals => getAttribute("terminals");
+
+  set terminals(Object? terminals) => setAttribute("terminals", terminals);
+
+  Object? get terminals_by_name => getAttribute("terminals_by_name");
+
+  set terminals_by_name(Object? terminals_by_name) =>
+      setAttribute("terminals_by_name", terminals_by_name);
+
+  Object? get ignore => getAttribute("ignore");
+
+  set ignore(Object? ignore) => setAttribute("ignore", ignore);
+
+  Object? get postlex => getAttribute("postlex");
+
+  set postlex(Object? postlex) => setAttribute("postlex", postlex);
+
+  Object? get callbacks => getAttribute("callbacks");
+
+  set callbacks(Object? callbacks) => setAttribute("callbacks", callbacks);
+
+  Object? get g_regex_flags => getAttribute("g_regex_flags");
+
+  set g_regex_flags(Object? g_regex_flags) =>
+      setAttribute("g_regex_flags", g_regex_flags);
+
+  Object? get re_module => getAttribute("re_module");
+
+  set re_module(Object? re_module) => setAttribute("re_module", re_module);
+
+  Object? get skip_validation => getAttribute("skip_validation");
+
+  set skip_validation(Object? skip_validation) =>
+      setAttribute("skip_validation", skip_validation);
+
+  Object? get use_bytes => getAttribute("use_bytes");
+
+  set use_bytes(Object? use_bytes) => setAttribute("use_bytes", use_bytes);
+
+  Object? get lexer_type => getAttribute("lexer_type");
+
+  set lexer_type(Object? lexer_type) => setAttribute("lexer_type", lexer_type);
 }
 
 /// ## ModuleType
@@ -3434,6 +3605,23 @@ final class ParserConf extends PythonClass {
 
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
+
+  Object? get rules => getAttribute("rules");
+
+  set rules(Object? rules) => setAttribute("rules", rules);
+
+  Object? get callbacks => getAttribute("callbacks");
+
+  set callbacks(Object? callbacks) => setAttribute("callbacks", callbacks);
+
+  Object? get start => getAttribute("start");
+
+  set start(Object? start) => setAttribute("start", start);
+
+  Object? get parser_type => getAttribute("parser_type");
+
+  set parser_type(Object? parser_type) =>
+      setAttribute("parser_type", parser_type);
 }
 
 /// ## Serialize
@@ -3670,6 +3858,18 @@ final class TerminalDef extends PythonClass {
 
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
+
+  Object? get name => getAttribute("name");
+
+  set name(Object? name) => setAttribute("name", name);
+
+  Object? get pattern => getAttribute("pattern");
+
+  set pattern(Object? pattern) => setAttribute("pattern", pattern);
+
+  Object? get priority => getAttribute("priority");
+
+  set priority(Object? priority) => setAttribute("priority", priority);
 }
 
 /// ## Any
@@ -3703,7 +3903,6 @@ final class TerminalDef extends PythonClass {
 ///         if cls is Any:
 ///             raise TypeError("Any cannot be instantiated")
 ///         return super().__new__(cls, *args, **kwargs)
-/// %
 /// ```
 final class Any extends PythonClass {
   factory Any() => PythonFfiDart.instance.importClass(
@@ -3992,6 +4191,18 @@ final class VisitError extends PythonClass {
 
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
+
+  Object? get rule => getAttribute("rule");
+
+  set rule(Object? rule) => setAttribute("rule", rule);
+
+  Object? get obj => getAttribute("obj");
+
+  set obj(Object? obj) => setAttribute("obj", obj);
+
+  Object? get orig_exc => getAttribute("orig_exc");
+
+  set orig_exc(Object? orig_exc) => setAttribute("orig_exc", orig_exc);
 }
 
 /// ## NonTerminal
@@ -4091,10 +4302,6 @@ final class NonTerminal extends PythonClass {
 
   set fullrepr(Object? fullrepr) => setAttribute("fullrepr", fullrepr);
 
-  Object? get name => getAttribute("name");
-
-  set name(Object? name) => setAttribute("name", name);
-
   Object? get deserialize => getAttribute("deserialize");
 
   set deserialize(Object? deserialize) =>
@@ -4103,6 +4310,10 @@ final class NonTerminal extends PythonClass {
   Object? get is_term => getAttribute("is_term");
 
   set is_term(Object? is_term) => setAttribute("is_term", is_term);
+
+  Object? get name => getAttribute("name");
+
+  set name(Object? name) => setAttribute("name", name);
 }
 
 /// ## Rule
@@ -4217,6 +4428,11 @@ final class Rule extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get deserialize => getAttribute("deserialize");
+
+  set deserialize(Object? deserialize) =>
+      setAttribute("deserialize", deserialize);
+
   Object? get alias => getAttribute("alias");
 
   set alias(Object? alias) => setAttribute("alias", alias);
@@ -4236,11 +4452,6 @@ final class Rule extends PythonClass {
   Object? get origin => getAttribute("origin");
 
   set origin(Object? origin) => setAttribute("origin", origin);
-
-  Object? get deserialize => getAttribute("deserialize");
-
-  set deserialize(Object? deserialize) =>
-      setAttribute("deserialize", deserialize);
 }
 
 /// ## RuleOptions
@@ -4350,6 +4561,29 @@ final class RuleOptions extends PythonClass {
 
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
+
+  Object? get keep_all_tokens => getAttribute("keep_all_tokens");
+
+  set keep_all_tokens(Object? keep_all_tokens) =>
+      setAttribute("keep_all_tokens", keep_all_tokens);
+
+  Object? get expand1 => getAttribute("expand1");
+
+  set expand1(Object? expand1) => setAttribute("expand1", expand1);
+
+  Object? get priority => getAttribute("priority");
+
+  set priority(Object? priority) => setAttribute("priority", priority);
+
+  Object? get template_source => getAttribute("template_source");
+
+  set template_source(Object? template_source) =>
+      setAttribute("template_source", template_source);
+
+  Object? get empty_indices => getAttribute("empty_indices");
+
+  set empty_indices(Object? empty_indices) =>
+      setAttribute("empty_indices", empty_indices);
 }
 
 /// ## Symbol
@@ -4475,14 +4709,14 @@ final class Symbol extends PythonClass {
 
   set is_term(Object? is_term) => setAttribute("is_term", is_term);
 
-  Object? get name => getAttribute("name");
-
-  set name(Object? name) => setAttribute("name", name);
-
   Object? get deserialize => getAttribute("deserialize");
 
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
+
+  Object? get name => getAttribute("name");
+
+  set name(Object? name) => setAttribute("name", name);
 }
 
 /// ## Terminal
@@ -4595,10 +4829,6 @@ final class Terminal extends PythonClass {
 
   set fullrepr(Object? fullrepr) => setAttribute("fullrepr", fullrepr);
 
-  Object? get name => getAttribute("name");
-
-  set name(Object? name) => setAttribute("name", name);
-
   Object? get deserialize => getAttribute("deserialize");
 
   set deserialize(Object? deserialize) =>
@@ -4607,6 +4837,14 @@ final class Terminal extends PythonClass {
   Object? get is_term => getAttribute("is_term");
 
   set is_term(Object? is_term) => setAttribute("is_term", is_term);
+
+  Object? get name => getAttribute("name");
+
+  set name(Object? name) => setAttribute("name", name);
+
+  Object? get filter_out => getAttribute("filter_out");
+
+  set filter_out(Object? filter_out) => setAttribute("filter_out", filter_out);
 }
 
 /// ## ABC
@@ -4881,6 +5119,43 @@ final class BasicLexer extends PythonClass {
   Object? get scanner => getAttribute("scanner");
 
   set scanner(Object? scanner) => setAttribute("scanner", scanner);
+
+  Object? get terminals => getAttribute("terminals");
+
+  set terminals(Object? terminals) => setAttribute("terminals", terminals);
+
+  Object? get re => getAttribute("re");
+
+  set re(Object? re) => setAttribute("re", re);
+
+  Object? get g_regex_flags => getAttribute("g_regex_flags");
+
+  set g_regex_flags(Object? g_regex_flags) =>
+      setAttribute("g_regex_flags", g_regex_flags);
+
+  Object? get newline_types => getAttribute("newline_types");
+
+  set newline_types(Object? newline_types) =>
+      setAttribute("newline_types", newline_types);
+
+  Object? get ignore_types => getAttribute("ignore_types");
+
+  set ignore_types(Object? ignore_types) =>
+      setAttribute("ignore_types", ignore_types);
+
+  Object? get user_callbacks => getAttribute("user_callbacks");
+
+  set user_callbacks(Object? user_callbacks) =>
+      setAttribute("user_callbacks", user_callbacks);
+
+  Object? get use_bytes => getAttribute("use_bytes");
+
+  set use_bytes(Object? use_bytes) => setAttribute("use_bytes", use_bytes);
+
+  Object? get terminals_by_name => getAttribute("terminals_by_name");
+
+  set terminals_by_name(Object? terminals_by_name) =>
+      setAttribute("terminals_by_name", terminals_by_name);
 }
 
 /// ## FS
@@ -5017,6 +5292,15 @@ final class FromPackageLoader extends PythonClass {
       );
 
   FromPackageLoader.from(super.pythonClass) : super.from();
+
+  Object? get pkg_name => getAttribute("pkg_name");
+
+  set pkg_name(Object? pkg_name) => setAttribute("pkg_name", pkg_name);
+
+  Object? get search_paths => getAttribute("search_paths");
+
+  set search_paths(Object? search_paths) =>
+      setAttribute("search_paths", search_paths);
 }
 
 /// ## Grammar
@@ -5317,6 +5601,17 @@ final class Grammar extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get term_defs => getAttribute("term_defs");
+
+  set term_defs(Object? term_defs) => setAttribute("term_defs", term_defs);
+
+  Object? get rule_defs => getAttribute("rule_defs");
+
+  set rule_defs(Object? rule_defs) => setAttribute("rule_defs", rule_defs);
+
+  Object? get ignore => getAttribute("ignore");
+
+  set ignore(Object? ignore) => setAttribute("ignore", ignore);
 }
 
 /// ## IO
@@ -6148,6 +6443,14 @@ final class LexerThread extends PythonClass {
   Object? get from_text => getAttribute("from_text");
 
   set from_text(Object? from_text) => setAttribute("from_text", from_text);
+
+  Object? get lexer => getAttribute("lexer");
+
+  set lexer(Object? lexer) => setAttribute("lexer", lexer);
+
+  Object? get state => getAttribute("state");
+
+  set state(Object? state) => setAttribute("state", state);
 }
 
 /// ## PackageResource
@@ -6316,6 +6619,28 @@ final class ParseTreeBuilder extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get tree_class => getAttribute("tree_class");
+
+  set tree_class(Object? tree_class) => setAttribute("tree_class", tree_class);
+
+  Object? get propagate_positions => getAttribute("propagate_positions");
+
+  set propagate_positions(Object? propagate_positions) =>
+      setAttribute("propagate_positions", propagate_positions);
+
+  Object? get ambiguous => getAttribute("ambiguous");
+
+  set ambiguous(Object? ambiguous) => setAttribute("ambiguous", ambiguous);
+
+  Object? get maybe_placeholders => getAttribute("maybe_placeholders");
+
+  set maybe_placeholders(Object? maybe_placeholders) =>
+      setAttribute("maybe_placeholders", maybe_placeholders);
+
+  Object? get rule_builders => getAttribute("rule_builders");
+
+  set rule_builders(Object? rule_builders) =>
+      setAttribute("rule_builders", rule_builders);
 }
 
 /// ## PostLex
@@ -6460,6 +6785,15 @@ final class SerializeMemoizer extends PythonClass {
 
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
+
+  Object? get types_to_memoize => getAttribute("types_to_memoize");
+
+  set types_to_memoize(Object? types_to_memoize) =>
+      setAttribute("types_to_memoize", types_to_memoize);
+
+  Object? get memoized => getAttribute("memoized");
+
+  set memoized(Object? memoized) => setAttribute("memoized", memoized);
 }
 
 /// ## GetPassWarning
@@ -7655,6 +7989,10 @@ final class aclosing extends PythonClass {
       );
 
   aclosing.from(super.pythonClass) : super.from();
+
+  Object? get thing => getAttribute("thing");
+
+  set thing(Object? thing) => setAttribute("thing", thing);
 }
 
 /// ## chdir
@@ -7694,6 +8032,10 @@ final class chdir extends PythonClass {
       );
 
   chdir.from(super.pythonClass) : super.from();
+
+  Object? get path => getAttribute("path");
+
+  set path(Object? path) => setAttribute("path", path);
 }
 
 /// ## closing
@@ -7756,6 +8098,10 @@ final class closing extends PythonClass {
       );
 
   closing.from(super.pythonClass) : super.from();
+
+  Object? get thing => getAttribute("thing");
+
+  set thing(Object? thing) => setAttribute("thing", thing);
 }
 
 /// ## deque
@@ -7886,6 +8232,11 @@ final class nullcontext extends PythonClass {
       );
 
   nullcontext.from(super.pythonClass) : super.from();
+
+  Object? get enter_result => getAttribute("enter_result");
+
+  set enter_result(Object? enter_result) =>
+      setAttribute("enter_result", enter_result);
 }
 
 /// ## DirEntry
@@ -10240,6 +10591,34 @@ final class WarningMessage extends PythonClass {
       );
 
   WarningMessage.from(super.pythonClass) : super.from();
+
+  Object? get message => getAttribute("message");
+
+  set message(Object? message) => setAttribute("message", message);
+
+  Object? get category => getAttribute("category");
+
+  set category(Object? category) => setAttribute("category", category);
+
+  Object? get filename => getAttribute("filename");
+
+  set filename(Object? filename) => setAttribute("filename", filename);
+
+  Object? get lineno => getAttribute("lineno");
+
+  set lineno(Object? lineno) => setAttribute("lineno", lineno);
+
+  Object? get file => getAttribute("file");
+
+  set file(Object? file) => setAttribute("file", file);
+
+  Object? get line => getAttribute("line");
+
+  set line(Object? line) => setAttribute("line", line);
+
+  Object? get source => getAttribute("source");
+
+  set source(Object? source) => setAttribute("source", source);
 }
 
 /// ## catch_warnings
@@ -16171,6 +16550,13 @@ final class Scanner extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get lexicon => getAttribute("lexicon");
+
+  set lexicon(Object? lexicon) => setAttribute("lexicon", lexicon);
+
+  Object? get scanner => getAttribute("scanner");
+
+  set scanner(Object? scanner) => setAttribute("scanner", scanner);
 }
 
 /// ## DynamicClassAttribute
@@ -16335,6 +16721,22 @@ final class DynamicClassAttribute extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get fget => getAttribute("fget");
+
+  set fget(Object? fget) => setAttribute("fget", fget);
+
+  Object? get fset => getAttribute("fset");
+
+  set fset(Object? fset) => setAttribute("fset", fset);
+
+  Object? get fdel => getAttribute("fdel");
+
+  set fdel(Object? fdel) => setAttribute("fdel", fdel);
+
+  Object? get overwrite_doc => getAttribute("overwrite_doc");
+
+  set overwrite_doc(Object? overwrite_doc) =>
+      setAttribute("overwrite_doc", overwrite_doc);
 }
 
 /// ## Enum
@@ -18421,6 +18823,10 @@ final class auto extends PythonClass {
       );
 
   auto.from(super.pythonClass) : super.from();
+
+  Object? get value => getAttribute("value");
+
+  set value(Object? value) => setAttribute("value", value);
 }
 
 /// ## member
@@ -18453,6 +18859,10 @@ final class member extends PythonClass {
       );
 
   member.from(super.pythonClass) : super.from();
+
+  Object? get value => getAttribute("value");
+
+  set value(Object? value) => setAttribute("value", value);
 }
 
 /// ## nonmember
@@ -18485,6 +18895,10 @@ final class nonmember extends PythonClass {
       );
 
   nonmember.from(super.pythonClass) : super.from();
+
+  Object? get value => getAttribute("value");
+
+  set value(Object? value) => setAttribute("value", value);
 }
 
 /// ## verify
@@ -18595,6 +19009,10 @@ final class verify extends PythonClass {
       );
 
   verify.from(super.pythonClass) : super.from();
+
+  Object? get checks => getAttribute("checks");
+
+  set checks(Object? checks) => setAttribute("checks", checks);
 }
 
 /// ## RLock
@@ -18685,6 +19103,18 @@ final class cached_property extends PythonClass {
       );
 
   cached_property.from(super.pythonClass) : super.from();
+
+  Object? get func => getAttribute("func");
+
+  set func(Object? func) => setAttribute("func", func);
+
+  Object? get attrname => getAttribute("attrname");
+
+  set attrname(Object? attrname) => setAttribute("attrname", attrname);
+
+  Object? get lock => getAttribute("lock");
+
+  set lock(Object? lock) => setAttribute("lock", lock);
 }
 
 /// ## partialmethod
@@ -18790,6 +19220,18 @@ final class partialmethod extends PythonClass {
       );
 
   partialmethod.from(super.pythonClass) : super.from();
+
+  Object? get func => getAttribute("func");
+
+  set func(Object? func) => setAttribute("func", func);
+
+  Object? get args => getAttribute("args");
+
+  set args(Object? args) => setAttribute("args", args);
+
+  Object? get keywords => getAttribute("keywords");
+
+  set keywords(Object? keywords) => setAttribute("keywords", keywords);
 }
 
 /// ## singledispatchmethod
@@ -18882,6 +19324,13 @@ final class singledispatchmethod extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get dispatcher => getAttribute("dispatcher");
+
+  set dispatcher(Object? dispatcher) => setAttribute("dispatcher", dispatcher);
+
+  Object? get func => getAttribute("func");
+
+  set func(Object? func) => setAttribute("func", func);
 }
 
 /// ## SpooledTemporaryFile
@@ -19561,6 +20010,9 @@ final class TemporaryDirectory extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+  Object? get name => getAttribute("name");
+
+  set name(Object? name) => setAttribute("name", name);
 }
 
 /// ## AsyncGeneratorType
@@ -20091,6 +20543,18 @@ final class CallChain extends PythonClass {
       );
 
   CallChain.from(super.pythonClass) : super.from();
+
+  Object? get callback1 => getAttribute("callback1");
+
+  set callback1(Object? callback1) => setAttribute("callback1", callback1);
+
+  Object? get callback2 => getAttribute("callback2");
+
+  set callback2(Object? callback2) => setAttribute("callback2", callback2);
+
+  Object? get cond => getAttribute("cond");
+
+  set cond(Object? cond) => setAttribute("cond", cond);
 }
 
 /// ## ContextualLexer
@@ -20225,6 +20689,13 @@ final class ContextualLexer extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get lexers => getAttribute("lexers");
+
+  set lexers(Object? lexers) => setAttribute("lexers", lexers);
+
+  Object? get root_lexer => getAttribute("root_lexer");
+
+  set root_lexer(Object? root_lexer) => setAttribute("root_lexer", root_lexer);
 }
 
 /// ## LexerState
@@ -20523,6 +20994,18 @@ final class PatternRE extends PythonClass {
   Object? get type => getAttribute("type");
 
   set type(Object? type) => setAttribute("type", type);
+
+  Object? get value => getAttribute("value");
+
+  set value(Object? value) => setAttribute("value", value);
+
+  Object? get flags => getAttribute("flags");
+
+  set flags(Object? flags) => setAttribute("flags", flags);
+
+  Object? get raw => getAttribute("raw");
+
+  set raw(Object? raw) => setAttribute("raw", raw);
 }
 
 /// ## PatternStr
@@ -20644,6 +21127,18 @@ final class PatternStr extends PythonClass {
   Object? get type => getAttribute("type");
 
   set type(Object? type) => setAttribute("type", type);
+
+  Object? get value => getAttribute("value");
+
+  set value(Object? value) => setAttribute("value", value);
+
+  Object? get flags => getAttribute("flags");
+
+  set flags(Object? flags) => setAttribute("flags", flags);
+
+  Object? get raw => getAttribute("raw");
+
+  set raw(Object? raw) => setAttribute("raw", raw);
 }
 
 /// ## UnlessCallback
@@ -20675,6 +21170,10 @@ final class UnlessCallback extends PythonClass {
       );
 
   UnlessCallback.from(super.pythonClass) : super.from();
+
+  Object? get scanner => getAttribute("scanner");
+
+  set scanner(Object? scanner) => setAttribute("scanner", scanner);
 }
 
 /// ## ApplyTemplates
@@ -20774,6 +21273,18 @@ final class ApplyTemplates extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get rule_defs => getAttribute("rule_defs");
+
+  set rule_defs(Object? rule_defs) => setAttribute("rule_defs", rule_defs);
+
+  Object? get replacer => getAttribute("replacer");
+
+  set replacer(Object? replacer) => setAttribute("replacer", replacer);
+
+  Object? get created_templates => getAttribute("created_templates");
+
+  set created_templates(Object? created_templates) =>
+      setAttribute("created_templates", created_templates);
 }
 
 /// ## Definition
@@ -20808,6 +21319,22 @@ final class Definition extends PythonClass {
       );
 
   Definition.from(super.pythonClass) : super.from();
+
+  Object? get is_term => getAttribute("is_term");
+
+  set is_term(Object? is_term) => setAttribute("is_term", is_term);
+
+  Object? get tree => getAttribute("tree");
+
+  set tree(Object? tree) => setAttribute("tree", tree);
+
+  Object? get params => getAttribute("params");
+
+  set params(Object? params) => setAttribute("params", params);
+
+  Object? get options => getAttribute("options");
+
+  set options(Object? options) => setAttribute("options", options);
 }
 
 /// ## EBNF_to_BNF
@@ -21016,6 +21543,28 @@ final class EBNF_to_BNF extends PythonClass {
   Object? get maybe => getAttribute("maybe");
 
   set maybe(Object? maybe) => setAttribute("maybe", maybe);
+
+  Object? get new_rules => getAttribute("new_rules");
+
+  set new_rules(Object? new_rules) => setAttribute("new_rules", new_rules);
+
+  Object? get rules_cache => getAttribute("rules_cache");
+
+  set rules_cache(Object? rules_cache) =>
+      setAttribute("rules_cache", rules_cache);
+
+  Object? get prefix => getAttribute("prefix");
+
+  set prefix(Object? prefix) => setAttribute("prefix", prefix);
+
+  Object? get i => getAttribute("i");
+
+  set i(Object? i) => setAttribute("i", i);
+
+  Object? get rule_options => getAttribute("rule_options");
+
+  set rule_options(Object? rule_options) =>
+      setAttribute("rule_options", rule_options);
 }
 
 /// ## FindRuleSize
@@ -21153,6 +21702,10 @@ final class FindRuleSize extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get keep_all_tokens => getAttribute("keep_all_tokens");
+
+  set keep_all_tokens(Object? keep_all_tokens) =>
+      setAttribute("keep_all_tokens", keep_all_tokens);
 }
 
 /// ## GrammarBuilder
@@ -21670,6 +22223,19 @@ final class GrammarBuilder extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+  Object? get global_keep_all_tokens => getAttribute("global_keep_all_tokens");
+
+  set global_keep_all_tokens(Object? global_keep_all_tokens) =>
+      setAttribute("global_keep_all_tokens", global_keep_all_tokens);
+
+  Object? get import_paths => getAttribute("import_paths");
+
+  set import_paths(Object? import_paths) =>
+      setAttribute("import_paths", import_paths);
+
+  Object? get used_files => getAttribute("used_files");
+
+  set used_files(Object? used_files) => setAttribute("used_files", used_files);
 }
 
 /// ## ParsingFrontend
@@ -21867,6 +22433,31 @@ final class ParsingFrontend extends PythonClass {
 
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
+
+  Object? get parser_conf => getAttribute("parser_conf");
+
+  set parser_conf(Object? parser_conf) =>
+      setAttribute("parser_conf", parser_conf);
+
+  Object? get lexer_conf => getAttribute("lexer_conf");
+
+  set lexer_conf(Object? lexer_conf) => setAttribute("lexer_conf", lexer_conf);
+
+  Object? get options => getAttribute("options");
+
+  set options(Object? options) => setAttribute("options", options);
+
+  Object? get parser => getAttribute("parser");
+
+  set parser(Object? parser) => setAttribute("parser", parser);
+
+  Object? get skip_lexer => getAttribute("skip_lexer");
+
+  set skip_lexer(Object? skip_lexer) => setAttribute("skip_lexer", skip_lexer);
+
+  Object? get lexer => getAttribute("lexer");
+
+  set lexer(Object? lexer) => setAttribute("lexer", lexer);
 }
 
 /// ## PrepareAnonTerminals
@@ -21973,6 +22564,28 @@ final class PrepareAnonTerminals extends PythonClass {
   Object? get pattern => getAttribute("pattern");
 
   set pattern(Object? pattern) => setAttribute("pattern", pattern);
+
+  Object? get terminals => getAttribute("terminals");
+
+  set terminals(Object? terminals) => setAttribute("terminals", terminals);
+
+  Object? get term_set => getAttribute("term_set");
+
+  set term_set(Object? term_set) => setAttribute("term_set", term_set);
+
+  Object? get term_reverse => getAttribute("term_reverse");
+
+  set term_reverse(Object? term_reverse) =>
+      setAttribute("term_reverse", term_reverse);
+
+  Object? get i => getAttribute("i");
+
+  set i(Object? i) => setAttribute("i", i);
+
+  Object? get rule_options => getAttribute("rule_options");
+
+  set rule_options(Object? rule_options) =>
+      setAttribute("rule_options", rule_options);
 }
 
 /// ## PrepareGrammar
@@ -22524,14 +23137,6 @@ final class ST extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
-  Object? get children => getAttribute("children");
-
-  set children(Object? children) => setAttribute("children", children);
-
-  Object? get data => getAttribute("data");
-
-  set data(Object? data) => setAttribute("data", data);
-
   Object? get meta => getAttribute("meta");
 
   set meta(Object? meta) => setAttribute("meta", meta);
@@ -22539,6 +23144,14 @@ final class ST extends PythonClass {
   Object? get rule => getAttribute("rule");
 
   set rule(Object? rule) => setAttribute("rule", rule);
+
+  Object? get children => getAttribute("children");
+
+  set children(Object? children) => setAttribute("children", children);
+
+  Object? get data => getAttribute("data");
+
+  set data(Object? data) => setAttribute("data", data);
 }
 
 /// ## SimplifyRule_Visitor
@@ -23705,6 +24318,9 @@ final class ImpImporter extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get path => getAttribute("path");
+
+  set path(Object? path) => setAttribute("path", path);
 }
 
 /// ## ImpLoader
@@ -23989,6 +24605,22 @@ final class ImpLoader extends PythonClass {
   Object? get source => getAttribute("source");
 
   set source(Object? source) => setAttribute("source", source);
+
+  Object? get file => getAttribute("file");
+
+  set file(Object? file) => setAttribute("file", file);
+
+  Object? get filename => getAttribute("filename");
+
+  set filename(Object? filename) => setAttribute("filename", filename);
+
+  Object? get fullname => getAttribute("fullname");
+
+  set fullname(Object? fullname) => setAttribute("fullname", fullname);
+
+  Object? get etc => getAttribute("etc");
+
+  set etc(Object? etc) => setAttribute("etc", etc);
 }
 
 /// ## ModuleInfo
@@ -27227,6 +27859,19 @@ final class AmbiguousExpander extends PythonClass {
       );
 
   AmbiguousExpander.from(super.pythonClass) : super.from();
+
+  Object? get node_builder => getAttribute("node_builder");
+
+  set node_builder(Object? node_builder) =>
+      setAttribute("node_builder", node_builder);
+
+  Object? get tree_class => getAttribute("tree_class");
+
+  set tree_class(Object? tree_class) => setAttribute("tree_class", tree_class);
+
+  Object? get to_expand => getAttribute("to_expand");
+
+  set to_expand(Object? to_expand) => setAttribute("to_expand", to_expand);
 }
 
 /// ## AmbiguousIntermediateExpander
@@ -27370,6 +28015,15 @@ final class AmbiguousIntermediateExpander extends PythonClass {
       );
 
   AmbiguousIntermediateExpander.from(super.pythonClass) : super.from();
+
+  Object? get node_builder => getAttribute("node_builder");
+
+  set node_builder(Object? node_builder) =>
+      setAttribute("node_builder", node_builder);
+
+  Object? get tree_class => getAttribute("tree_class");
+
+  set tree_class(Object? tree_class) => setAttribute("tree_class", tree_class);
 }
 
 /// ## ChildFilter
@@ -27417,6 +28071,20 @@ final class ChildFilter extends PythonClass {
       );
 
   ChildFilter.from(super.pythonClass) : super.from();
+
+  Object? get node_builder => getAttribute("node_builder");
+
+  set node_builder(Object? node_builder) =>
+      setAttribute("node_builder", node_builder);
+
+  Object? get to_include => getAttribute("to_include");
+
+  set to_include(Object? to_include) => setAttribute("to_include", to_include);
+
+  Object? get append_none => getAttribute("append_none");
+
+  set append_none(Object? append_none) =>
+      setAttribute("append_none", append_none);
 }
 
 /// ## ChildFilterLALR
@@ -27467,6 +28135,20 @@ final class ChildFilterLALR extends PythonClass {
       );
 
   ChildFilterLALR.from(super.pythonClass) : super.from();
+
+  Object? get node_builder => getAttribute("node_builder");
+
+  set node_builder(Object? node_builder) =>
+      setAttribute("node_builder", node_builder);
+
+  Object? get to_include => getAttribute("to_include");
+
+  set to_include(Object? to_include) => setAttribute("to_include", to_include);
+
+  Object? get append_none => getAttribute("append_none");
+
+  set append_none(Object? append_none) =>
+      setAttribute("append_none", append_none);
 }
 
 /// ## ChildFilterLALR_NoPlaceholders
@@ -27512,6 +28194,15 @@ final class ChildFilterLALR_NoPlaceholders extends PythonClass {
       );
 
   ChildFilterLALR_NoPlaceholders.from(super.pythonClass) : super.from();
+
+  Object? get node_builder => getAttribute("node_builder");
+
+  set node_builder(Object? node_builder) =>
+      setAttribute("node_builder", node_builder);
+
+  Object? get to_include => getAttribute("to_include");
+
+  set to_include(Object? to_include) => setAttribute("to_include", to_include);
 }
 
 /// ## ExpandSingleChild
@@ -27543,6 +28234,11 @@ final class ExpandSingleChild extends PythonClass {
       );
 
   ExpandSingleChild.from(super.pythonClass) : super.from();
+
+  Object? get node_builder => getAttribute("node_builder");
+
+  set node_builder(Object? node_builder) =>
+      setAttribute("node_builder", node_builder);
 }
 
 /// ## PropagatePositions
@@ -27619,6 +28315,16 @@ final class PropagatePositions extends PythonClass {
       );
 
   PropagatePositions.from(super.pythonClass) : super.from();
+
+  Object? get node_builder => getAttribute("node_builder");
+
+  set node_builder(Object? node_builder) =>
+      setAttribute("node_builder", node_builder);
+
+  Object? get node_filter => getAttribute("node_filter");
+
+  set node_filter(Object? node_filter) =>
+      setAttribute("node_filter", node_filter);
 }
 
 /// ## product
@@ -27699,6 +28405,13 @@ final class CYK_FrontEnd extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get parser => getAttribute("parser");
+
+  set parser(Object? parser) => setAttribute("parser", parser);
+
+  Object? get callbacks => getAttribute("callbacks");
+
+  set callbacks(Object? callbacks) => setAttribute("callbacks", callbacks);
 }
 
 /// ## EarleyRegexpMatcher
@@ -27761,6 +28474,9 @@ final class EarleyRegexpMatcher extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get regexps => getAttribute("regexps");
+
+  set regexps(Object? regexps) => setAttribute("regexps", regexps);
 }
 
 /// ## GrammarAnalyzer
@@ -27891,6 +28607,33 @@ final class GrammarAnalyzer extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get debug => getAttribute("debug");
+
+  set debug(Object? debug) => setAttribute("debug", debug);
+
+  Object? get rules_by_origin => getAttribute("rules_by_origin");
+
+  set rules_by_origin(Object? rules_by_origin) =>
+      setAttribute("rules_by_origin", rules_by_origin);
+
+  Object? get start_states => getAttribute("start_states");
+
+  set start_states(Object? start_states) =>
+      setAttribute("start_states", start_states);
+
+  Object? get end_states => getAttribute("end_states");
+
+  set end_states(Object? end_states) => setAttribute("end_states", end_states);
+
+  Object? get lr0_rules_by_origin => getAttribute("lr0_rules_by_origin");
+
+  set lr0_rules_by_origin(Object? lr0_rules_by_origin) =>
+      setAttribute("lr0_rules_by_origin", lr0_rules_by_origin);
+
+  Object? get lr0_start_states => getAttribute("lr0_start_states");
+
+  set lr0_start_states(Object? lr0_start_states) =>
+      setAttribute("lr0_start_states", lr0_start_states);
 }
 
 /// ## LALR_Parser
@@ -28086,6 +28829,15 @@ final class LALR_Parser extends PythonClass {
 
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
+
+  Object? get parser_conf => getAttribute("parser_conf");
+
+  set parser_conf(Object? parser_conf) =>
+      setAttribute("parser_conf", parser_conf);
+
+  Object? get parser => getAttribute("parser");
+
+  set parser(Object? parser) => setAttribute("parser", parser);
 }
 
 /// ## PostLexConnector
@@ -28138,6 +28890,13 @@ final class PostLexConnector extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get lexer => getAttribute("lexer");
+
+  set lexer(Object? lexer) => setAttribute("lexer", lexer);
+
+  Object? get postlexer => getAttribute("postlexer");
+
+  set postlexer(Object? postlexer) => setAttribute("postlexer", postlexer);
 }
 
 /// ## CnfWrapper
@@ -28168,6 +28927,24 @@ final class CnfWrapper extends PythonClass {
       );
 
   CnfWrapper.from(super.pythonClass) : super.from();
+
+  Object? get grammar => getAttribute("grammar");
+
+  set grammar(Object? grammar) => setAttribute("grammar", grammar);
+
+  Object? get rules => getAttribute("rules");
+
+  set rules(Object? rules) => setAttribute("rules", rules);
+
+  Object? get terminal_rules => getAttribute("terminal_rules");
+
+  set terminal_rules(Object? terminal_rules) =>
+      setAttribute("terminal_rules", terminal_rules);
+
+  Object? get nonterminal_rules => getAttribute("nonterminal_rules");
+
+  set nonterminal_rules(Object? nonterminal_rules) =>
+      setAttribute("nonterminal_rules", nonterminal_rules);
 }
 
 /// ## Parser
@@ -28269,6 +29046,13 @@ final class Parser extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get orig_rules => getAttribute("orig_rules");
+
+  set orig_rules(Object? orig_rules) => setAttribute("orig_rules", orig_rules);
+
+  Object? get grammar => getAttribute("grammar");
+
+  set grammar(Object? grammar) => setAttribute("grammar", grammar);
 }
 
 /// ## RuleNode
@@ -28309,6 +29093,18 @@ final class RuleNode extends PythonClass {
       );
 
   RuleNode.from(super.pythonClass) : super.from();
+
+  Object? get rule => getAttribute("rule");
+
+  set rule(Object? rule) => setAttribute("rule", rule);
+
+  Object? get children => getAttribute("children");
+
+  set children(Object? children) => setAttribute("children", children);
+
+  Object? get weight => getAttribute("weight");
+
+  set weight(Object? weight) => setAttribute("weight", weight);
 }
 
 /// ## UnitSkipRule
@@ -28354,6 +29150,11 @@ final class UnitSkipRule extends PythonClass {
       );
 
   UnitSkipRule.from(super.pythonClass) : super.from();
+
+  Object? get skipped_rules => getAttribute("skipped_rules");
+
+  set skipped_rules(Object? skipped_rules) =>
+      setAttribute("skipped_rules", skipped_rules);
 }
 
 /// ## defaultdict
@@ -29512,6 +30313,23 @@ final class ForestToParseTree extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get tree_class => getAttribute("tree_class");
+
+  set tree_class(Object? tree_class) => setAttribute("tree_class", tree_class);
+
+  Object? get callbacks => getAttribute("callbacks");
+
+  set callbacks(Object? callbacks) => setAttribute("callbacks", callbacks);
+
+  Object? get prioritizer => getAttribute("prioritizer");
+
+  set prioritizer(Object? prioritizer) =>
+      setAttribute("prioritizer", prioritizer);
+
+  Object? get resolve_ambiguity => getAttribute("resolve_ambiguity");
+
+  set resolve_ambiguity(Object? resolve_ambiguity) =>
+      setAttribute("resolve_ambiguity", resolve_ambiguity);
 }
 
 /// ## Item
@@ -29823,14 +30641,14 @@ final class SymbolNode extends PythonClass {
 
   set children(Object? children) => setAttribute("children", children);
 
-  Object? get end => getAttribute("end");
-
-  set end(Object? end) => setAttribute("end", end);
-
   Object? get is_ambiguous => getAttribute("is_ambiguous");
 
   set is_ambiguous(Object? is_ambiguous) =>
       setAttribute("is_ambiguous", is_ambiguous);
+
+  Object? get end => getAttribute("end");
+
+  set end(Object? end) => setAttribute("end", end);
 
   Object? get is_intermediate => getAttribute("is_intermediate");
 
@@ -30307,6 +31125,13 @@ final class ForestToPyDotVisitor extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get pydot => getAttribute("pydot");
+
+  set pydot(Object? pydot) => setAttribute("pydot", pydot);
+
+  Object? get graph => getAttribute("graph");
+
+  set graph(Object? graph) => setAttribute("graph", graph);
 }
 
 /// ## ForestTransformer
@@ -30849,6 +31674,13 @@ final class ForestTransformer extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get data => getAttribute("data");
+
+  set data(Object? data) => setAttribute("data", data);
+
+  Object? get node_stack => getAttribute("node_stack");
+
+  set node_stack(Object? node_stack) => setAttribute("node_stack", node_stack);
 }
 
 /// ## ForestVisitor
@@ -31346,6 +32178,10 @@ final class ForestVisitor extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get single_visit => getAttribute("single_visit");
+
+  set single_visit(Object? single_visit) =>
+      setAttribute("single_visit", single_visit);
 }
 
 /// ## PackedData
@@ -31399,6 +32235,14 @@ final class PackedData extends PythonClass {
   Object? get NO_DATA => getAttribute("NO_DATA");
 
   set NO_DATA(Object? NO_DATA) => setAttribute("NO_DATA", NO_DATA);
+
+  Object? get left => getAttribute("left");
+
+  set left(Object? left) => setAttribute("left", left);
+
+  Object? get right => getAttribute("right");
+
+  set right(Object? right) => setAttribute("right", right);
 }
 
 /// ## PackedNode
@@ -31514,6 +32358,10 @@ final class PackedNode extends PythonClass {
 
   set is_empty(Object? is_empty) => setAttribute("is_empty", is_empty);
 
+  Object? get sort_key => getAttribute("sort_key");
+
+  set sort_key(Object? sort_key) => setAttribute("sort_key", sort_key);
+
   Object? get left => getAttribute("left");
 
   set left(Object? left) => setAttribute("left", left);
@@ -31537,10 +32385,6 @@ final class PackedNode extends PythonClass {
   Object? get s => getAttribute("s");
 
   set s(Object? s) => setAttribute("s", s);
-
-  Object? get sort_key => getAttribute("sort_key");
-
-  set sort_key(Object? sort_key) => setAttribute("sort_key", sort_key);
 
   Object? get start => getAttribute("start");
 
@@ -33025,10 +33869,6 @@ final class RulePtr extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
-  Object? get index => getAttribute("index");
-
-  set index(Object? index) => setAttribute("index", index);
-
   Object? get is_satisfied => getAttribute("is_satisfied");
 
   set is_satisfied(Object? is_satisfied) =>
@@ -33037,6 +33877,10 @@ final class RulePtr extends PythonClass {
   Object? get next => getAttribute("next");
 
   set next(Object? next) => setAttribute("next", next);
+
+  Object? get index => getAttribute("index");
+
+  set index(Object? index) => setAttribute("index", index);
 
   Object? get rule => getAttribute("rule");
 
@@ -33123,6 +33967,10 @@ final class Action extends PythonClass {
       );
 
   Action.from(super.pythonClass) : super.from();
+
+  Object? get name => getAttribute("name");
+
+  set name(Object? name) => setAttribute("name", name);
 }
 
 /// ## Enumerator
@@ -33327,6 +34175,19 @@ final class IntParseTable extends PythonClass {
 
   set from_ParseTable(Object? from_ParseTable) =>
       setAttribute("from_ParseTable", from_ParseTable);
+
+  Object? get states => getAttribute("states");
+
+  set states(Object? states) => setAttribute("states", states);
+
+  Object? get start_states => getAttribute("start_states");
+
+  set start_states(Object? start_states) =>
+      setAttribute("start_states", start_states);
+
+  Object? get end_states => getAttribute("end_states");
+
+  set end_states(Object? end_states) => setAttribute("end_states", end_states);
 }
 
 /// ## LALR_Analyzer
@@ -33780,6 +34641,28 @@ final class LALR_Analyzer extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get nonterminal_transitions =>
+      getAttribute("nonterminal_transitions");
+
+  set nonterminal_transitions(Object? nonterminal_transitions) =>
+      setAttribute("nonterminal_transitions", nonterminal_transitions);
+
+  Object? get directly_reads => getAttribute("directly_reads");
+
+  set directly_reads(Object? directly_reads) =>
+      setAttribute("directly_reads", directly_reads);
+
+  Object? get reads => getAttribute("reads");
+
+  set reads(Object? reads) => setAttribute("reads", reads);
+
+  Object? get includes => getAttribute("includes");
+
+  set includes(Object? includes) => setAttribute("includes", includes);
+
+  Object? get lookback => getAttribute("lookback");
+
+  set lookback(Object? lookback) => setAttribute("lookback", lookback);
 }
 
 /// ## ParseTable
@@ -33871,6 +34754,19 @@ final class ParseTable extends PythonClass {
 
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
+
+  Object? get states => getAttribute("states");
+
+  set states(Object? states) => setAttribute("states", states);
+
+  Object? get start_states => getAttribute("start_states");
+
+  set start_states(Object? start_states) =>
+      setAttribute("start_states", start_states);
+
+  Object? get end_states => getAttribute("end_states");
+
+  set end_states(Object? end_states) => setAttribute("end_states", end_states);
 }
 
 /// ## ImmutableInteractiveParser
@@ -34178,6 +35074,20 @@ final class ImmutableInteractiveParser extends PythonClass {
   Object? get result => getAttribute("result");
 
   set result(Object? result) => setAttribute("result", result);
+
+  Object? get parser => getAttribute("parser");
+
+  set parser(Object? parser) => setAttribute("parser", parser);
+
+  Object? get parser_state => getAttribute("parser_state");
+
+  set parser_state(Object? parser_state) =>
+      setAttribute("parser_state", parser_state);
+
+  Object? get lexer_thread => getAttribute("lexer_thread");
+
+  set lexer_thread(Object? lexer_thread) =>
+      setAttribute("lexer_thread", lexer_thread);
 }
 
 /// ## InteractiveParser
@@ -34547,6 +35457,24 @@ final class InteractiveParser extends PythonClass {
 
   set lexer_state(Object? lexer_state) =>
       setAttribute("lexer_state", lexer_state);
+
+  Object? get parser => getAttribute("parser");
+
+  set parser(Object? parser) => setAttribute("parser", parser);
+
+  Object? get parser_state => getAttribute("parser_state");
+
+  set parser_state(Object? parser_state) =>
+      setAttribute("parser_state", parser_state);
+
+  Object? get lexer_thread => getAttribute("lexer_thread");
+
+  set lexer_thread(Object? lexer_thread) =>
+      setAttribute("lexer_thread", lexer_thread);
+
+  Object? get result => getAttribute("result");
+
+  set result(Object? result) => setAttribute("result", result);
 }
 
 /// ## ParseConf
@@ -34784,6 +35712,10 @@ final class ParserState extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get position => getAttribute("position");
+
+  set position(Object? position) => setAttribute("position", position);
+
   Object? get lexer => getAttribute("lexer");
 
   set lexer(Object? lexer) => setAttribute("lexer", lexer);
@@ -34791,10 +35723,6 @@ final class ParserState extends PythonClass {
   Object? get parse_conf => getAttribute("parse_conf");
 
   set parse_conf(Object? parse_conf) => setAttribute("parse_conf", parse_conf);
-
-  Object? get position => getAttribute("position");
-
-  set position(Object? position) => setAttribute("position", position);
 
   Object? get state_stack => getAttribute("state_stack");
 
@@ -34979,6 +35907,10 @@ final class Meta extends PythonClass {
       );
 
   Meta.from(super.pythonClass) : super.from();
+
+  Object? get empty => getAttribute("empty");
+
+  set empty(Object? empty) => setAttribute("empty", empty);
 }
 
 /// ## OrderedDict
@@ -35433,6 +36365,9 @@ final class BufferingFormatter extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get linefmt => getAttribute("linefmt");
+
+  set linefmt(Object? linefmt) => setAttribute("linefmt", linefmt);
 }
 
 /// ## FileHandler
@@ -35986,6 +36921,31 @@ final class FileHandler extends PythonClass {
   Object? get terminator => getAttribute("terminator");
 
   set terminator(Object? terminator) => setAttribute("terminator", terminator);
+
+  Object? get baseFilename => getAttribute("baseFilename");
+
+  set baseFilename(Object? baseFilename) =>
+      setAttribute("baseFilename", baseFilename);
+
+  Object? get mode => getAttribute("mode");
+
+  set mode(Object? mode) => setAttribute("mode", mode);
+
+  Object? get encoding => getAttribute("encoding");
+
+  set encoding(Object? encoding) => setAttribute("encoding", encoding);
+
+  Object? get errors => getAttribute("errors");
+
+  set errors(Object? errors) => setAttribute("errors", errors);
+
+  Object? get delay => getAttribute("delay");
+
+  set delay(Object? delay) => setAttribute("delay", delay);
+
+  Object? get stream => getAttribute("stream");
+
+  set stream(Object? stream) => setAttribute("stream", stream);
 }
 
 /// ## Filter
@@ -36091,6 +37051,13 @@ final class Filter extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get name => getAttribute("name");
+
+  set name(Object? name) => setAttribute("name", name);
+
+  Object? get nlen => getAttribute("nlen");
+
+  set nlen(Object? nlen) => setAttribute("nlen", nlen);
 }
 
 /// ## Filterer
@@ -36259,6 +37226,9 @@ final class Filterer extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get filters => getAttribute("filters");
+
+  set filters(Object? filters) => setAttribute("filters", filters);
 }
 
 /// ## Formatter
@@ -36536,6 +37506,10 @@ final class Formatter extends PythonClass {
 
   set default_time_format(Object? default_time_format) =>
       setAttribute("default_time_format", default_time_format);
+
+  Object? get datefmt => getAttribute("datefmt");
+
+  set datefmt(Object? datefmt) => setAttribute("datefmt", datefmt);
 }
 
 /// ## Handler
@@ -37247,6 +38221,14 @@ final class Handler extends PythonClass {
   Object? get name => getAttribute("name");
 
   set name(Object? name) => setAttribute("name", name);
+
+  Object? get level => getAttribute("level");
+
+  set level(Object? level) => setAttribute("level", level);
+
+  Object? get formatter => getAttribute("formatter");
+
+  set formatter(Object? formatter) => setAttribute("formatter", formatter);
 }
 
 /// ## LogRecord
@@ -37427,6 +38409,87 @@ final class LogRecord extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+  Object? get name => getAttribute("name");
+
+  set name(Object? name) => setAttribute("name", name);
+
+  Object? get msg => getAttribute("msg");
+
+  set msg(Object? msg) => setAttribute("msg", msg);
+
+  Object? get args => getAttribute("args");
+
+  set args(Object? args) => setAttribute("args", args);
+
+  Object? get levelname => getAttribute("levelname");
+
+  set levelname(Object? levelname) => setAttribute("levelname", levelname);
+
+  Object? get levelno => getAttribute("levelno");
+
+  set levelno(Object? levelno) => setAttribute("levelno", levelno);
+
+  Object? get pathname => getAttribute("pathname");
+
+  set pathname(Object? pathname) => setAttribute("pathname", pathname);
+
+  Object? get filename => getAttribute("filename");
+
+  set filename(Object? filename) => setAttribute("filename", filename);
+
+  Object? get module => getAttribute("module");
+
+  set module(Object? module) => setAttribute("module", module);
+
+  Object? get exc_info => getAttribute("exc_info");
+
+  set exc_info(Object? exc_info) => setAttribute("exc_info", exc_info);
+
+  Object? get exc_text => getAttribute("exc_text");
+
+  set exc_text(Object? exc_text) => setAttribute("exc_text", exc_text);
+
+  Object? get stack_info => getAttribute("stack_info");
+
+  set stack_info(Object? stack_info) => setAttribute("stack_info", stack_info);
+
+  Object? get lineno => getAttribute("lineno");
+
+  set lineno(Object? lineno) => setAttribute("lineno", lineno);
+
+  Object? get funcName => getAttribute("funcName");
+
+  set funcName(Object? funcName) => setAttribute("funcName", funcName);
+
+  Object? get created => getAttribute("created");
+
+  set created(Object? created) => setAttribute("created", created);
+
+  Object? get msecs => getAttribute("msecs");
+
+  set msecs(Object? msecs) => setAttribute("msecs", msecs);
+
+  Object? get relativeCreated => getAttribute("relativeCreated");
+
+  set relativeCreated(Object? relativeCreated) =>
+      setAttribute("relativeCreated", relativeCreated);
+
+  Object? get thread => getAttribute("thread");
+
+  set thread(Object? thread) => setAttribute("thread", thread);
+
+  Object? get threadName => getAttribute("threadName");
+
+  set threadName(Object? threadName) => setAttribute("threadName", threadName);
+
+  Object? get processName => getAttribute("processName");
+
+  set processName(Object? processName) =>
+      setAttribute("processName", processName);
+
+  Object? get process => getAttribute("process");
+
+  set process(Object? process) => setAttribute("process", process);
 }
 
 /// ## Logger
@@ -38689,6 +39752,30 @@ final class Logger extends PythonClass {
   Object? get root => getAttribute("root");
 
   set root(Object? root) => setAttribute("root", root);
+
+  Object? get name => getAttribute("name");
+
+  set name(Object? name) => setAttribute("name", name);
+
+  Object? get level => getAttribute("level");
+
+  set level(Object? level) => setAttribute("level", level);
+
+  Object? get parent => getAttribute("parent");
+
+  set parent(Object? parent) => setAttribute("parent", parent);
+
+  Object? get propagate => getAttribute("propagate");
+
+  set propagate(Object? propagate) => setAttribute("propagate", propagate);
+
+  Object? get handlers => getAttribute("handlers");
+
+  set handlers(Object? handlers) => setAttribute("handlers", handlers);
+
+  Object? get disabled => getAttribute("disabled");
+
+  set disabled(Object? disabled) => setAttribute("disabled", disabled);
 }
 
 /// ## LoggerAdapter
@@ -39226,6 +40313,14 @@ final class LoggerAdapter extends PythonClass {
   Object? get name => getAttribute("name");
 
   set name(Object? name) => setAttribute("name", name);
+
+  Object? get logger => getAttribute("logger");
+
+  set logger(Object? logger) => setAttribute("logger", logger);
+
+  Object? get extra => getAttribute("extra");
+
+  set extra(Object? extra) => setAttribute("extra", extra);
 }
 
 /// ## Manager
@@ -39493,6 +40588,30 @@ final class Manager extends PythonClass {
   Object? get disable => getAttribute("disable");
 
   set disable(Object? disable) => setAttribute("disable", disable);
+
+  Object? get root => getAttribute("root");
+
+  set root(Object? root) => setAttribute("root", root);
+
+  Object? get emittedNoHandlerWarning =>
+      getAttribute("emittedNoHandlerWarning");
+
+  set emittedNoHandlerWarning(Object? emittedNoHandlerWarning) =>
+      setAttribute("emittedNoHandlerWarning", emittedNoHandlerWarning);
+
+  Object? get loggerDict => getAttribute("loggerDict");
+
+  set loggerDict(Object? loggerDict) => setAttribute("loggerDict", loggerDict);
+
+  Object? get loggerClass => getAttribute("loggerClass");
+
+  set loggerClass(Object? loggerClass) =>
+      setAttribute("loggerClass", loggerClass);
+
+  Object? get logRecordFactory => getAttribute("logRecordFactory");
+
+  set logRecordFactory(Object? logRecordFactory) =>
+      setAttribute("logRecordFactory", logRecordFactory);
 }
 
 /// ## NullHandler
@@ -39999,6 +41118,14 @@ final class NullHandler extends PythonClass {
   Object? get name => getAttribute("name");
 
   set name(Object? name) => setAttribute("name", name);
+
+  Object? get level => getAttribute("level");
+
+  set level(Object? level) => setAttribute("level", level);
+
+  Object? get formatter => getAttribute("formatter");
+
+  set formatter(Object? formatter) => setAttribute("formatter", formatter);
 }
 
 /// ## PercentStyle
@@ -40195,6 +41322,9 @@ final class PlaceHolder extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get loggerMap => getAttribute("loggerMap");
+
+  set loggerMap(Object? loggerMap) => setAttribute("loggerMap", loggerMap);
 }
 
 /// ## RootLogger
@@ -41914,6 +43044,10 @@ final class StreamHandler extends PythonClass {
   Object? get terminator => getAttribute("terminator");
 
   set terminator(Object? terminator) => setAttribute("terminator", terminator);
+
+  Object? get stream => getAttribute("stream");
+
+  set stream(Object? stream) => setAttribute("stream", stream);
 }
 
 /// ## StringTemplateStyle
@@ -42333,6 +43467,10 @@ final class Template extends PythonClass {
   Object? get idpattern => getAttribute("idpattern");
 
   set idpattern(Object? idpattern) => setAttribute("idpattern", idpattern);
+
+  Object? get template => getAttribute("template");
+
+  set template(Object? template) => setAttribute("template", template);
 }
 
 /// ## ChainMap
@@ -42707,6 +43845,10 @@ final class ChainMap extends PythonClass {
   Object? get fromkeys => getAttribute("fromkeys");
 
   set fromkeys(Object? fromkeys) => setAttribute("fromkeys", fromkeys);
+
+  Object? get maps => getAttribute("maps");
+
+  set maps(Object? maps) => setAttribute("maps", maps);
 }
 
 /// ## UserDict
@@ -42974,6 +44116,10 @@ final class UserDict extends PythonClass {
   Object? get fromkeys => getAttribute("fromkeys");
 
   set fromkeys(Object? fromkeys) => setAttribute("fromkeys", fromkeys);
+
+  Object? get data => getAttribute("data");
+
+  set data(Object? data) => setAttribute("data", data);
 }
 
 /// ## UserList
@@ -43351,6 +44497,9 @@ final class UserList extends PythonClass {
           ...kwds,
         },
       );
+  Object? get data => getAttribute("data");
+
+  set data(Object? data) => setAttribute("data", data);
 }
 
 /// ## UserString
@@ -44393,6 +45542,9 @@ final class UserString extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get data => getAttribute("data");
+
+  set data(Object? data) => setAttribute("data", data);
 }
 
 /// ## AsyncGenerator
@@ -46246,6 +47398,13 @@ final class Condition extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get acquire => getAttribute("acquire");
+
+  set acquire(Object? acquire) => setAttribute("acquire", acquire);
+
+  Object? get release => getAttribute("release");
+
+  set release(Object? release) => setAttribute("release", release);
 }
 
 /// ## Event
@@ -47953,6 +49112,26 @@ final class Timer extends PythonClass {
   Object? get native_id => getAttribute("native_id");
 
   set native_id(Object? native_id) => setAttribute("native_id", native_id);
+
+  Object? get interval => getAttribute("interval");
+
+  set interval(Object? interval) => setAttribute("interval", interval);
+
+  Object? get function => getAttribute("function");
+
+  set function(Object? function) => setAttribute("function", function);
+
+  Object? get args => getAttribute("args");
+
+  set args(Object? args) => setAttribute("args", args);
+
+  Object? get kwargs => getAttribute("kwargs");
+
+  set kwargs(Object? kwargs) => setAttribute("kwargs", kwargs);
+
+  Object? get finished => getAttribute("finished");
+
+  set finished(Object? finished) => setAttribute("finished", finished);
 }
 
 /// ## WeakSet
@@ -48443,6 +49622,9 @@ final class WeakSet extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get data => getAttribute("data");
+
+  set data(Object? data) => setAttribute("data", data);
 }
 
 /// ## local
@@ -48589,6 +49771,10 @@ final class FrameSummary extends PythonClass {
 
   FrameSummary.from(super.pythonClass) : super.from();
 
+  Object? get line => getAttribute("line");
+
+  set line(Object? line) => setAttribute("line", line);
+
   Object? get colno => getAttribute("colno");
 
   set colno(Object? colno) => setAttribute("colno", colno);
@@ -48604,10 +49790,6 @@ final class FrameSummary extends PythonClass {
   Object? get filename => getAttribute("filename");
 
   set filename(Object? filename) => setAttribute("filename", filename);
-
-  Object? get line => getAttribute("line");
-
-  set line(Object? line) => setAttribute("line", line);
 
   Object? get lineno => getAttribute("lineno");
 
@@ -49662,6 +50844,52 @@ final class TracebackException extends PythonClass {
 
   set from_exception(Object? from_exception) =>
       setAttribute("from_exception", from_exception);
+
+  Object? get max_group_width => getAttribute("max_group_width");
+
+  set max_group_width(Object? max_group_width) =>
+      setAttribute("max_group_width", max_group_width);
+
+  Object? get max_group_depth => getAttribute("max_group_depth");
+
+  set max_group_depth(Object? max_group_depth) =>
+      setAttribute("max_group_depth", max_group_depth);
+
+  Object? get stack => getAttribute("stack");
+
+  set stack(Object? stack) => setAttribute("stack", stack);
+
+  Object? get exc_type => getAttribute("exc_type");
+
+  set exc_type(Object? exc_type) => setAttribute("exc_type", exc_type);
+
+  Object? get filename => getAttribute("filename");
+
+  set filename(Object? filename) => setAttribute("filename", filename);
+
+  Object? get lineno => getAttribute("lineno");
+
+  set lineno(Object? lineno) => setAttribute("lineno", lineno);
+
+  Object? get end_lineno => getAttribute("end_lineno");
+
+  set end_lineno(Object? end_lineno) => setAttribute("end_lineno", end_lineno);
+
+  Object? get text => getAttribute("text");
+
+  set text(Object? text) => setAttribute("text", text);
+
+  Object? get offset => getAttribute("offset");
+
+  set offset(Object? offset) => setAttribute("offset", offset);
+
+  Object? get end_offset => getAttribute("end_offset");
+
+  set end_offset(Object? end_offset) => setAttribute("end_offset", end_offset);
+
+  Object? get msg => getAttribute("msg");
+
+  set msg(Object? msg) => setAttribute("msg", msg);
 }
 
 /// ## StopTokenizing
@@ -50026,6 +51254,21 @@ final class Untokenizer extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get tokens => getAttribute("tokens");
+
+  set tokens(Object? tokens) => setAttribute("tokens", tokens);
+
+  Object? get prev_row => getAttribute("prev_row");
+
+  set prev_row(Object? prev_row) => setAttribute("prev_row", prev_row);
+
+  Object? get prev_col => getAttribute("prev_col");
+
+  set prev_col(Object? prev_col) => setAttribute("prev_col", prev_col);
+
+  Object? get encoding => getAttribute("encoding");
+
+  set encoding(Object? encoding) => setAttribute("encoding", encoding);
 }
 
 /// ## TextWrapper
@@ -50559,6 +51802,63 @@ final class TextWrapper extends PythonClass {
 
   set unicode_whitespace_trans(Object? unicode_whitespace_trans) =>
       setAttribute("unicode_whitespace_trans", unicode_whitespace_trans);
+
+  Object? get width => getAttribute("width");
+
+  set width(Object? width) => setAttribute("width", width);
+
+  Object? get initial_indent => getAttribute("initial_indent");
+
+  set initial_indent(Object? initial_indent) =>
+      setAttribute("initial_indent", initial_indent);
+
+  Object? get subsequent_indent => getAttribute("subsequent_indent");
+
+  set subsequent_indent(Object? subsequent_indent) =>
+      setAttribute("subsequent_indent", subsequent_indent);
+
+  Object? get expand_tabs => getAttribute("expand_tabs");
+
+  set expand_tabs(Object? expand_tabs) =>
+      setAttribute("expand_tabs", expand_tabs);
+
+  Object? get replace_whitespace => getAttribute("replace_whitespace");
+
+  set replace_whitespace(Object? replace_whitespace) =>
+      setAttribute("replace_whitespace", replace_whitespace);
+
+  Object? get fix_sentence_endings => getAttribute("fix_sentence_endings");
+
+  set fix_sentence_endings(Object? fix_sentence_endings) =>
+      setAttribute("fix_sentence_endings", fix_sentence_endings);
+
+  Object? get break_long_words => getAttribute("break_long_words");
+
+  set break_long_words(Object? break_long_words) =>
+      setAttribute("break_long_words", break_long_words);
+
+  Object? get drop_whitespace => getAttribute("drop_whitespace");
+
+  set drop_whitespace(Object? drop_whitespace) =>
+      setAttribute("drop_whitespace", drop_whitespace);
+
+  Object? get break_on_hyphens => getAttribute("break_on_hyphens");
+
+  set break_on_hyphens(Object? break_on_hyphens) =>
+      setAttribute("break_on_hyphens", break_on_hyphens);
+
+  Object? get tabsize => getAttribute("tabsize");
+
+  set tabsize(Object? tabsize) => setAttribute("tabsize", tabsize);
+
+  Object? get max_lines => getAttribute("max_lines");
+
+  set max_lines(Object? max_lines) => setAttribute("max_lines", max_lines);
+
+  Object? get placeholder => getAttribute("placeholder");
+
+  set placeholder(Object? placeholder) =>
+      setAttribute("placeholder", placeholder);
 }
 
 /// ## CallableProxyType
@@ -51113,6 +52413,9 @@ final class WeakKeyDictionary extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+  Object? get data => getAttribute("data");
+
+  set data(Object? data) => setAttribute("data", data);
 }
 
 /// ## WeakMethod
@@ -51784,6 +53087,9 @@ final class WeakValueDictionary extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+  Object? get data => getAttribute("data");
+
+  set data(Object? data) => setAttribute("data", data);
 }
 
 /// ## finalize
@@ -52155,6 +53461,29 @@ final class State extends PythonClass {
   Object? get groups => getAttribute("groups");
 
   set groups(Object? groups) => setAttribute("groups", groups);
+
+  Object? get flags => getAttribute("flags");
+
+  set flags(Object? flags) => setAttribute("flags", flags);
+
+  Object? get groupdict => getAttribute("groupdict");
+
+  set groupdict(Object? groupdict) => setAttribute("groupdict", groupdict);
+
+  Object? get groupwidths => getAttribute("groupwidths");
+
+  set groupwidths(Object? groupwidths) =>
+      setAttribute("groupwidths", groupwidths);
+
+  Object? get lookbehindgroups => getAttribute("lookbehindgroups");
+
+  set lookbehindgroups(Object? lookbehindgroups) =>
+      setAttribute("lookbehindgroups", lookbehindgroups);
+
+  Object? get grouprefpos => getAttribute("grouprefpos");
+
+  set grouprefpos(Object? grouprefpos) =>
+      setAttribute("grouprefpos", grouprefpos);
 }
 
 /// ## SubPattern
@@ -52441,6 +53770,17 @@ final class SubPattern extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get state => getAttribute("state");
+
+  set state(Object? state) => setAttribute("state", state);
+
+  Object? get data => getAttribute("data");
+
+  set data(Object? data) => setAttribute("data", data);
+
+  Object? get width => getAttribute("width");
+
+  set width(Object? width) => setAttribute("width", width);
 }
 
 /// ## Tokenizer
@@ -52725,6 +54065,27 @@ final class Tokenizer extends PythonClass {
   Object? get pos => getAttribute("pos");
 
   set pos(Object? pos) => setAttribute("pos", pos);
+
+  Object? get istext => getAttribute("istext");
+
+  set istext(Object? istext) => setAttribute("istext", istext);
+
+  Object? get string => getAttribute("string");
+
+  set string(Object? string) => setAttribute("string", string);
+
+  Object? get decoded_string => getAttribute("decoded_string");
+
+  set decoded_string(Object? decoded_string) =>
+      setAttribute("decoded_string", decoded_string);
+
+  Object? get index => getAttribute("index");
+
+  set index(Object? index) => setAttribute("index", index);
+
+  Object? get next => getAttribute("next");
+
+  set next(Object? next) => setAttribute("next", next);
 }
 
 /// ## UCD
@@ -53135,6 +54496,10 @@ final class TransformerChain extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+  Object? get transformers => getAttribute("transformers");
+
+  set transformers(Object? transformers) =>
+      setAttribute("transformers", transformers);
 }
 
 /// ## Transformer_InPlaceRecursive

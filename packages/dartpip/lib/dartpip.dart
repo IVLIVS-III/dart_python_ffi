@@ -10,16 +10,14 @@ import "package:archive/archive_io.dart";
 import "package:args/args.dart";
 import "package:args/command_runner.dart";
 import "package:collection/collection.dart";
-import "package:dartpip/interface_generation/interface_generation.dart";
+import "package:dartpip/interface_gen/interface_gen.dart";
 import "package:dartpip/pypi/api.dart";
+import "package:dartpip/python_modules/src/python_modules.g.dart";
 import "package:http/http.dart" as http;
 import "package:python_ffi_cpython_dart/python_ffi_cpython_dart.dart";
 import "package:python_ffi_dart/python_ffi_dart.dart";
 import "package:yaml/yaml.dart";
 import "package:yaml_edit/yaml_edit.dart";
-
-import "interface_generation/inspect.dart";
-import "python_modules/src/python_modules.g.dart";
 
 part "builtin_modules/python_ffi.py.dart";
 part "commands/bundle.dart";
