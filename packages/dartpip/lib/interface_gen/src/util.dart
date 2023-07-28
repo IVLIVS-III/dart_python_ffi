@@ -124,7 +124,7 @@ Future<String> doInspection(
 
   final String json = jsonEncode(
     <String, Object?>{
-      "_module": interface.debugDump(),
+      "_module": interface.debugDump(cache: cache),
       "_entries": cache.entries
           .whereNot(
             ((int, InspectEntry) e) => e.$2.type == InspectEntryType.primitive,
@@ -132,7 +132,7 @@ Future<String> doInspection(
           .map(
             ((int, InspectEntry) e) => <String, Object?>{
               "id": e.$1,
-              "entry": e.$2.debugDump(),
+              "entry": e.$2.debugDump(cache: cache),
             },
           )
           .toList(),

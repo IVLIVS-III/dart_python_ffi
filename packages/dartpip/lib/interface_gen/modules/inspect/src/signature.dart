@@ -63,7 +63,7 @@ final class Signature extends PythonClass {
     return result;
   }
 
-  Map<String, Object?> debugDump() => <String, Object?>{
+  Map<String, Object?> debugDump({InspectionCache? cache}) => <String, Object?>{
         "parameters": parameters.map(
           (String key, Parameter value) =>
               MapEntry<String, Map<String, Object?>>(key, value.debugDump()),

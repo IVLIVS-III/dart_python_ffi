@@ -144,7 +144,7 @@ base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
             ((String, InspectEntry) e) =>
                 MapEntry<String, Map<String, Object?>>(
               e.$1,
-              e.$2.debugDump(expandChildren: id == null),
+              e.$2.debugDump(cache: cache, expandChildren: id == null),
             ),
           ),
         ),

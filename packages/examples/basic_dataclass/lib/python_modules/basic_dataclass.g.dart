@@ -1,5 +1,7 @@
 // ignore_for_file: camel_case_types, non_constant_identifier_names
 
+library basic_dataclass;
+
 import "package:python_ffi_dart/python_ffi_dart.dart";
 
 /// ## Person
@@ -63,13 +65,23 @@ final class Person extends PythonClass {
         kwargs: <String, Object?>{},
       );
 
+  /// ## x (getter)
   Object? get x => getAttribute("x");
 
+  /// ## x (setter)
   set x(Object? x) => setAttribute("x", x);
 
+  /// ## y (getter)
   Object? get y => getAttribute("y");
 
+  /// ## y (setter)
   set y(Object? y) => setAttribute("y", y);
+
+  /// ## name (getter)
+  Object? get name => getAttribute("name");
+
+  /// ## name (setter)
+  set name(Object? name) => setAttribute("name", name);
 }
 
 /// ## basic_dataclass

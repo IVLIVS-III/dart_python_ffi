@@ -117,6 +117,6 @@ final class Function_ extends PythonFunction
   }) =>
       <String, Object?>{
         ...super.debugDump(cache: cache, expandChildren: expandChildren),
-        "signature": signature.debugDump(),
+        "signature": signature.debugDump(cache: cache),
       };
 }

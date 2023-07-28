@@ -162,8 +162,8 @@ final class Parameter extends PythonClass {
         return "= const <Object?>[]";
       case ParameterKind.var_keyword:
         return "= const <String, Object?>{}";
-      case ParameterKind.positional_or_keyword when default_ == empty:
-      case ParameterKind.keyword_only when default_ == empty:
+      case (ParameterKind.positional_or_keyword || ParameterKind.keyword_only)
+          when default_ == empty || default_ == null:
         return "";
       case ParameterKind.positional_or_keyword:
       case ParameterKind.keyword_only:

@@ -1,5 +1,7 @@
 // ignore_for_file: camel_case_types, non_constant_identifier_names
 
+library basic_cli_adder;
+
 import "package:python_ffi_dart/python_ffi_dart.dart";
 
 /// ## num

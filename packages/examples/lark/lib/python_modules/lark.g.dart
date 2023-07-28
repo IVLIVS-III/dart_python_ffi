@@ -1,5 +1,7 @@
 // ignore_for_file: camel_case_types, non_constant_identifier_names
 
+library lark;
+
 import "package:python_ffi_dart/python_ffi_dart.dart";
 
 /// ## GrammarError
@@ -19,16 +21,22 @@ final class GrammarError extends PythonClass {
 
   GrammarError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -677,8 +685,8 @@ final class Lark extends PythonClass {
   /// ```
   Object? parse({
     required Object? text,
-    Object? start = null,
-    Object? on_error = null,
+    Object? start,
+    Object? on_error,
   }) =>
       getFunction("parse").call(
         <Object?>[
@@ -721,8 +729,8 @@ final class Lark extends PythonClass {
   ///         return self.parser.parse_interactive(text, start=start)
   /// ```
   Object? parse_interactive({
-    Object? text = null,
-    Object? start = null,
+    Object? text,
+    Object? start,
   }) =>
       getFunction("parse_interactive").call(
         <Object?>[
@@ -780,7 +788,7 @@ final class Lark extends PythonClass {
   ///         return res
   /// ```
   Object? serialize({
-    Object? memo = null,
+    Object? memo,
   }) =>
       getFunction("serialize").call(
         <Object?>[
@@ -788,52 +796,131 @@ final class Lark extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## deserialize (getter)
   Object? get deserialize => getAttribute("deserialize");
 
+  /// ## deserialize (setter)
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
+  /// ## load (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Loads an instance from the given file object
+  ///
+  /// Useful for caching and multiprocessing.
   Object? get load => getAttribute("load");
 
+  /// ## load (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Loads an instance from the given file object
+  ///
+  /// Useful for caching and multiprocessing.
   set load(Object? load) => setAttribute("load", load);
 
+  /// ## open (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Create an instance of Lark with the grammar given by its filename
+  ///
+  /// If ``rel_to`` is provided, the function will find the grammar filename in relation to it.
+  ///
+  /// Example:
+  ///
+  ///     >>> Lark.open("grammar_file.lark", rel_to=__file__, parser="lalr")
+  ///     Lark(...)
   Object? get open => getAttribute("open");
 
+  /// ## open (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Create an instance of Lark with the grammar given by its filename
+  ///
+  /// If ``rel_to`` is provided, the function will find the grammar filename in relation to it.
+  ///
+  /// Example:
+  ///
+  ///     >>> Lark.open("grammar_file.lark", rel_to=__file__, parser="lalr")
+  ///     Lark(...)
   set open(Object? open) => setAttribute("open", open);
 
+  /// ## open_from_package (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Create an instance of Lark with the grammar loaded from within the package `package`.
+  /// This allows grammar loading from zipapps.
+  ///
+  /// Imports in the grammar will use the `package` and `search_paths` provided, through `FromPackageLoader`
+  ///
+  /// Example:
+  ///
+  ///     Lark.open_from_package(__name__, "example.lark", ("grammars",), parser=...)
   Object? get open_from_package => getAttribute("open_from_package");
 
+  /// ## open_from_package (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Create an instance of Lark with the grammar loaded from within the package `package`.
+  /// This allows grammar loading from zipapps.
+  ///
+  /// Imports in the grammar will use the `package` and `search_paths` provided, through `FromPackageLoader`
+  ///
+  /// Example:
+  ///
+  ///     Lark.open_from_package(__name__, "example.lark", ("grammars",), parser=...)
   set open_from_package(Object? open_from_package) =>
       setAttribute("open_from_package", open_from_package);
 
+  /// ## options (getter)
   Object? get options => getAttribute("options");
 
+  /// ## options (setter)
   set options(Object? options) => setAttribute("options", options);
 
+  /// ## source_path (getter)
   Object? get source_path => getAttribute("source_path");
 
+  /// ## source_path (setter)
   set source_path(Object? source_path) =>
       setAttribute("source_path", source_path);
 
+  /// ## source_grammar (getter)
   Object? get source_grammar => getAttribute("source_grammar");
 
+  /// ## source_grammar (setter)
   set source_grammar(Object? source_grammar) =>
       setAttribute("source_grammar", source_grammar);
 
+  /// ## parser (getter)
   Object? get parser => getAttribute("parser");
 
+  /// ## parser (setter)
   set parser(Object? parser) => setAttribute("parser", parser);
 
+  /// ## grammar (getter)
   Object? get grammar => getAttribute("grammar");
 
+  /// ## grammar (setter)
   set grammar(Object? grammar) => setAttribute("grammar", grammar);
 
+  /// ## lexer (getter)
   Object? get lexer => getAttribute("lexer");
 
+  /// ## lexer (setter)
   set lexer(Object? lexer) => setAttribute("lexer", lexer);
 
+  /// ## lexer_conf (getter)
   Object? get lexer_conf => getAttribute("lexer_conf");
 
+  /// ## lexer_conf (setter)
   set lexer_conf(Object? lexer_conf) => setAttribute("lexer_conf", lexer_conf);
 }
 
@@ -854,16 +941,22 @@ final class LarkError extends PythonClass {
 
   LarkError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -885,16 +978,22 @@ final class LexError extends PythonClass {
 
   LexError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -916,16 +1015,22 @@ final class ParseError extends PythonClass {
 
   ParseError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -1121,229 +1226,340 @@ final class Token extends PythonClass {
           ...kwargs,
         },
       );
+
+  /// ## column (getter)
   Object? get column => getAttribute("column");
 
+  /// ## column (setter)
   set column(Object? column) => setAttribute("column", column);
 
+  /// ## end_column (getter)
   Object? get end_column => getAttribute("end_column");
 
+  /// ## end_column (setter)
   set end_column(Object? end_column) => setAttribute("end_column", end_column);
 
+  /// ## end_line (getter)
   Object? get end_line => getAttribute("end_line");
 
+  /// ## end_line (setter)
   set end_line(Object? end_line) => setAttribute("end_line", end_line);
 
+  /// ## end_pos (getter)
   Object? get end_pos => getAttribute("end_pos");
 
+  /// ## end_pos (setter)
   set end_pos(Object? end_pos) => setAttribute("end_pos", end_pos);
 
+  /// ## line (getter)
   Object? get line => getAttribute("line");
 
+  /// ## line (setter)
   set line(Object? line) => setAttribute("line", line);
 
+  /// ## start_pos (getter)
   Object? get start_pos => getAttribute("start_pos");
 
+  /// ## start_pos (setter)
   set start_pos(Object? start_pos) => setAttribute("start_pos", start_pos);
 
+  /// ## type (getter)
   Object? get type => getAttribute("type");
 
+  /// ## type (setter)
   set type(Object? type) => setAttribute("type", type);
 
+  /// ## value (getter)
   Object? get value => getAttribute("value");
 
+  /// ## value (setter)
   set value(Object? value) => setAttribute("value", value);
 
+  /// ## capitalize (getter)
   Object? get capitalize => getAttribute("capitalize");
 
+  /// ## capitalize (setter)
   set capitalize(Object? capitalize) => setAttribute("capitalize", capitalize);
 
+  /// ## casefold (getter)
   Object? get casefold => getAttribute("casefold");
 
+  /// ## casefold (setter)
   set casefold(Object? casefold) => setAttribute("casefold", casefold);
 
+  /// ## center (getter)
   Object? get center => getAttribute("center");
 
+  /// ## center (setter)
   set center(Object? center) => setAttribute("center", center);
 
+  /// ## count (getter)
   Object? get count => getAttribute("count");
 
+  /// ## count (setter)
   set count(Object? count) => setAttribute("count", count);
 
+  /// ## encode (getter)
   Object? get encode => getAttribute("encode");
 
+  /// ## encode (setter)
   set encode(Object? encode) => setAttribute("encode", encode);
 
+  /// ## endswith (getter)
   Object? get endswith => getAttribute("endswith");
 
+  /// ## endswith (setter)
   set endswith(Object? endswith) => setAttribute("endswith", endswith);
 
+  /// ## expandtabs (getter)
   Object? get expandtabs => getAttribute("expandtabs");
 
+  /// ## expandtabs (setter)
   set expandtabs(Object? expandtabs) => setAttribute("expandtabs", expandtabs);
 
+  /// ## find (getter)
   Object? get find => getAttribute("find");
 
+  /// ## find (setter)
   set find(Object? find) => setAttribute("find", find);
 
+  /// ## format (getter)
   Object? get format => getAttribute("format");
 
+  /// ## format (setter)
   set format(Object? format) => setAttribute("format", format);
 
+  /// ## format_map (getter)
   Object? get format_map => getAttribute("format_map");
 
+  /// ## format_map (setter)
   set format_map(Object? format_map) => setAttribute("format_map", format_map);
 
+  /// ## index (getter)
   Object? get index => getAttribute("index");
 
+  /// ## index (setter)
   set index(Object? index) => setAttribute("index", index);
 
+  /// ## isalnum (getter)
   Object? get isalnum => getAttribute("isalnum");
 
+  /// ## isalnum (setter)
   set isalnum(Object? isalnum) => setAttribute("isalnum", isalnum);
 
+  /// ## isalpha (getter)
   Object? get isalpha => getAttribute("isalpha");
 
+  /// ## isalpha (setter)
   set isalpha(Object? isalpha) => setAttribute("isalpha", isalpha);
 
+  /// ## isascii (getter)
   Object? get isascii => getAttribute("isascii");
 
+  /// ## isascii (setter)
   set isascii(Object? isascii) => setAttribute("isascii", isascii);
 
+  /// ## isdecimal (getter)
   Object? get isdecimal => getAttribute("isdecimal");
 
+  /// ## isdecimal (setter)
   set isdecimal(Object? isdecimal) => setAttribute("isdecimal", isdecimal);
 
+  /// ## isdigit (getter)
   Object? get isdigit => getAttribute("isdigit");
 
+  /// ## isdigit (setter)
   set isdigit(Object? isdigit) => setAttribute("isdigit", isdigit);
 
+  /// ## isidentifier (getter)
   Object? get isidentifier => getAttribute("isidentifier");
 
+  /// ## isidentifier (setter)
   set isidentifier(Object? isidentifier) =>
       setAttribute("isidentifier", isidentifier);
 
+  /// ## islower (getter)
   Object? get islower => getAttribute("islower");
 
+  /// ## islower (setter)
   set islower(Object? islower) => setAttribute("islower", islower);
 
+  /// ## isnumeric (getter)
   Object? get isnumeric => getAttribute("isnumeric");
 
+  /// ## isnumeric (setter)
   set isnumeric(Object? isnumeric) => setAttribute("isnumeric", isnumeric);
 
+  /// ## isprintable (getter)
   Object? get isprintable => getAttribute("isprintable");
 
+  /// ## isprintable (setter)
   set isprintable(Object? isprintable) =>
       setAttribute("isprintable", isprintable);
 
+  /// ## isspace (getter)
   Object? get isspace => getAttribute("isspace");
 
+  /// ## isspace (setter)
   set isspace(Object? isspace) => setAttribute("isspace", isspace);
 
+  /// ## istitle (getter)
   Object? get istitle => getAttribute("istitle");
 
+  /// ## istitle (setter)
   set istitle(Object? istitle) => setAttribute("istitle", istitle);
 
+  /// ## isupper (getter)
   Object? get isupper => getAttribute("isupper");
 
+  /// ## isupper (setter)
   set isupper(Object? isupper) => setAttribute("isupper", isupper);
 
+  /// ## join (getter)
   Object? get join => getAttribute("join");
 
+  /// ## join (setter)
   set join(Object? join) => setAttribute("join", join);
 
+  /// ## ljust (getter)
   Object? get ljust => getAttribute("ljust");
 
+  /// ## ljust (setter)
   set ljust(Object? ljust) => setAttribute("ljust", ljust);
 
+  /// ## lower (getter)
   Object? get lower => getAttribute("lower");
 
+  /// ## lower (setter)
   set lower(Object? lower) => setAttribute("lower", lower);
 
+  /// ## lstrip (getter)
   Object? get lstrip => getAttribute("lstrip");
 
+  /// ## lstrip (setter)
   set lstrip(Object? lstrip) => setAttribute("lstrip", lstrip);
 
+  /// ## new_borrow_pos (getter)
   Object? get new_borrow_pos => getAttribute("new_borrow_pos");
 
+  /// ## new_borrow_pos (setter)
   set new_borrow_pos(Object? new_borrow_pos) =>
       setAttribute("new_borrow_pos", new_borrow_pos);
 
+  /// ## partition (getter)
   Object? get partition => getAttribute("partition");
 
+  /// ## partition (setter)
   set partition(Object? partition) => setAttribute("partition", partition);
 
+  /// ## removeprefix (getter)
   Object? get removeprefix => getAttribute("removeprefix");
 
+  /// ## removeprefix (setter)
   set removeprefix(Object? removeprefix) =>
       setAttribute("removeprefix", removeprefix);
 
+  /// ## removesuffix (getter)
   Object? get removesuffix => getAttribute("removesuffix");
 
+  /// ## removesuffix (setter)
   set removesuffix(Object? removesuffix) =>
       setAttribute("removesuffix", removesuffix);
 
+  /// ## replace (getter)
   Object? get replace => getAttribute("replace");
 
+  /// ## replace (setter)
   set replace(Object? replace) => setAttribute("replace", replace);
 
+  /// ## rfind (getter)
   Object? get rfind => getAttribute("rfind");
 
+  /// ## rfind (setter)
   set rfind(Object? rfind) => setAttribute("rfind", rfind);
 
+  /// ## rindex (getter)
   Object? get rindex => getAttribute("rindex");
 
+  /// ## rindex (setter)
   set rindex(Object? rindex) => setAttribute("rindex", rindex);
 
+  /// ## rjust (getter)
   Object? get rjust => getAttribute("rjust");
 
+  /// ## rjust (setter)
   set rjust(Object? rjust) => setAttribute("rjust", rjust);
 
+  /// ## rpartition (getter)
   Object? get rpartition => getAttribute("rpartition");
 
+  /// ## rpartition (setter)
   set rpartition(Object? rpartition) => setAttribute("rpartition", rpartition);
 
+  /// ## rsplit (getter)
   Object? get rsplit => getAttribute("rsplit");
 
+  /// ## rsplit (setter)
   set rsplit(Object? rsplit) => setAttribute("rsplit", rsplit);
 
+  /// ## rstrip (getter)
   Object? get rstrip => getAttribute("rstrip");
 
+  /// ## rstrip (setter)
   set rstrip(Object? rstrip) => setAttribute("rstrip", rstrip);
 
+  /// ## split (getter)
   Object? get split => getAttribute("split");
 
+  /// ## split (setter)
   set split(Object? split) => setAttribute("split", split);
 
+  /// ## splitlines (getter)
   Object? get splitlines => getAttribute("splitlines");
 
+  /// ## splitlines (setter)
   set splitlines(Object? splitlines) => setAttribute("splitlines", splitlines);
 
+  /// ## startswith (getter)
   Object? get startswith => getAttribute("startswith");
 
+  /// ## startswith (setter)
   set startswith(Object? startswith) => setAttribute("startswith", startswith);
 
+  /// ## strip (getter)
   Object? get strip => getAttribute("strip");
 
+  /// ## strip (setter)
   set strip(Object? strip) => setAttribute("strip", strip);
 
+  /// ## swapcase (getter)
   Object? get swapcase => getAttribute("swapcase");
 
+  /// ## swapcase (setter)
   set swapcase(Object? swapcase) => setAttribute("swapcase", swapcase);
 
+  /// ## title (getter)
   Object? get title => getAttribute("title");
 
+  /// ## title (setter)
   set title(Object? title) => setAttribute("title", title);
 
+  /// ## translate (getter)
   Object? get translate => getAttribute("translate");
 
+  /// ## translate (setter)
   set translate(Object? translate) => setAttribute("translate", translate);
 
+  /// ## upper (getter)
   Object? get upper => getAttribute("upper");
 
+  /// ## upper (setter)
   set upper(Object? upper) => setAttribute("upper", upper);
 
+  /// ## zfill (getter)
   Object? get zfill => getAttribute("zfill");
 
+  /// ## zfill (setter)
   set zfill(Object? zfill) => setAttribute("zfill", zfill);
 }
 
@@ -1856,7 +2072,7 @@ final class Tree extends PythonClass {
   factory Tree({
     required Object? data,
     required Object? children,
-    Object? meta = null,
+    Object? meta,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.tree",
@@ -2103,16 +2319,23 @@ final class Tree extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## meta (getter)
   Object? get meta => getAttribute("meta");
 
+  /// ## meta (setter)
   set meta(Object? meta) => setAttribute("meta", meta);
 
+  /// ## data (getter)
   Object? get data => getAttribute("data");
 
+  /// ## data (setter)
   set data(Object? data) => setAttribute("data", data);
 
+  /// ## children (getter)
   Object? get children => getAttribute("children");
 
+  /// ## children (setter)
   set children(Object? children) => setAttribute("children", children);
 }
 
@@ -2171,12 +2394,12 @@ final class UnexpectedCharacters extends PythonClass {
     required Object? lex_pos,
     required Object? line,
     required Object? column,
-    Object? allowed = null,
-    Object? considered_tokens = null,
-    Object? state = null,
-    Object? token_history = null,
-    Object? terminals_by_name = null,
-    Object? considered_rules = null,
+    Object? allowed,
+    Object? considered_tokens,
+    Object? state,
+    Object? token_history,
+    Object? terminals_by_name,
+    Object? considered_rules,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.exceptions",
@@ -2346,57 +2569,82 @@ final class UnexpectedCharacters extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 
+  /// ## pos_in_stream (getter)
   Object? get pos_in_stream => getAttribute("pos_in_stream");
 
+  /// ## pos_in_stream (setter)
   set pos_in_stream(Object? pos_in_stream) =>
       setAttribute("pos_in_stream", pos_in_stream);
 
+  /// ## line (getter)
   Object? get line => getAttribute("line");
 
+  /// ## line (setter)
   set line(Object? line) => setAttribute("line", line);
 
+  /// ## column (getter)
   Object? get column => getAttribute("column");
 
+  /// ## column (setter)
   set column(Object? column) => setAttribute("column", column);
 
+  /// ## state (getter)
   Object? get state => getAttribute("state");
 
+  /// ## state (setter)
   set state(Object? state) => setAttribute("state", state);
 
+  /// ## allowed (getter)
   Object? get allowed => getAttribute("allowed");
 
+  /// ## allowed (setter)
   set allowed(Object? allowed) => setAttribute("allowed", allowed);
 
+  /// ## considered_tokens (getter)
   Object? get considered_tokens => getAttribute("considered_tokens");
 
+  /// ## considered_tokens (setter)
   set considered_tokens(Object? considered_tokens) =>
       setAttribute("considered_tokens", considered_tokens);
 
+  /// ## considered_rules (getter)
   Object? get considered_rules => getAttribute("considered_rules");
 
+  /// ## considered_rules (setter)
   set considered_rules(Object? considered_rules) =>
       setAttribute("considered_rules", considered_rules);
 
+  /// ## token_history (getter)
   Object? get token_history => getAttribute("token_history");
 
+  /// ## token_history (setter)
   set token_history(Object? token_history) =>
       setAttribute("token_history", token_history);
 
+  /// ## char (getter)
   Object? get char => getAttribute("char");
 
+  /// ## char (setter)
   set char(Object? char) => setAttribute("char", char);
 }
 
@@ -2434,8 +2682,8 @@ final class UnexpectedCharacters extends PythonClass {
 final class UnexpectedEOF extends PythonClass {
   factory UnexpectedEOF({
     required Object? expected,
-    Object? state = null,
-    Object? terminals_by_name = null,
+    Object? state,
+    Object? terminals_by_name,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.exceptions",
@@ -2598,42 +2846,61 @@ final class UnexpectedEOF extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 
+  /// ## pos_in_stream (getter)
   Object? get pos_in_stream => getAttribute("pos_in_stream");
 
+  /// ## pos_in_stream (setter)
   set pos_in_stream(Object? pos_in_stream) =>
       setAttribute("pos_in_stream", pos_in_stream);
 
+  /// ## expected (getter)
   Object? get expected => getAttribute("expected");
 
+  /// ## expected (setter)
   set expected(Object? expected) => setAttribute("expected", expected);
 
+  /// ## state (getter)
   Object? get state => getAttribute("state");
 
+  /// ## state (setter)
   set state(Object? state) => setAttribute("state", state);
 
+  /// ## token (getter)
   Object? get token => getAttribute("token");
 
+  /// ## token (setter)
   set token(Object? token) => setAttribute("token", token);
 
+  /// ## line (getter)
   Object? get line => getAttribute("line");
 
+  /// ## line (setter)
   set line(Object? line) => setAttribute("line", line);
 
+  /// ## column (getter)
   Object? get column => getAttribute("column");
 
+  /// ## column (setter)
   set column(Object? column) => setAttribute("column", column);
 }
 
@@ -2918,21 +3185,30 @@ final class UnexpectedInput extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 
+  /// ## pos_in_stream (getter)
   Object? get pos_in_stream => getAttribute("pos_in_stream");
 
+  /// ## pos_in_stream (setter)
   set pos_in_stream(Object? pos_in_stream) =>
       setAttribute("pos_in_stream", pos_in_stream);
 }
@@ -3011,11 +3287,11 @@ final class UnexpectedToken extends PythonClass {
   factory UnexpectedToken({
     required Object? token,
     required Object? expected,
-    Object? considered_rules = null,
-    Object? state = null,
-    Object? interactive_parser = null,
-    Object? terminals_by_name = null,
-    Object? token_history = null,
+    Object? considered_rules,
+    Object? state,
+    Object? interactive_parser,
+    Object? terminals_by_name,
+    Object? token_history,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.exceptions",
@@ -3182,60 +3458,87 @@ final class UnexpectedToken extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## accepts (getter)
   Object? get accepts => getAttribute("accepts");
 
+  /// ## accepts (setter)
   set accepts(Object? accepts) => setAttribute("accepts", accepts);
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 
+  /// ## pos_in_stream (getter)
   Object? get pos_in_stream => getAttribute("pos_in_stream");
 
+  /// ## pos_in_stream (setter)
   set pos_in_stream(Object? pos_in_stream) =>
       setAttribute("pos_in_stream", pos_in_stream);
 
+  /// ## line (getter)
   Object? get line => getAttribute("line");
 
+  /// ## line (setter)
   set line(Object? line) => setAttribute("line", line);
 
+  /// ## column (getter)
   Object? get column => getAttribute("column");
 
+  /// ## column (setter)
   set column(Object? column) => setAttribute("column", column);
 
+  /// ## state (getter)
   Object? get state => getAttribute("state");
 
+  /// ## state (setter)
   set state(Object? state) => setAttribute("state", state);
 
+  /// ## token (getter)
   Object? get token => getAttribute("token");
 
+  /// ## token (setter)
   set token(Object? token) => setAttribute("token", token);
 
+  /// ## expected (getter)
   Object? get expected => getAttribute("expected");
 
+  /// ## expected (setter)
   set expected(Object? expected) => setAttribute("expected", expected);
 
+  /// ## considered_rules (getter)
   Object? get considered_rules => getAttribute("considered_rules");
 
+  /// ## considered_rules (setter)
   set considered_rules(Object? considered_rules) =>
       setAttribute("considered_rules", considered_rules);
 
+  /// ## interactive_parser (getter)
   Object? get interactive_parser => getAttribute("interactive_parser");
 
+  /// ## interactive_parser (setter)
   set interactive_parser(Object? interactive_parser) =>
       setAttribute("interactive_parser", interactive_parser);
 
+  /// ## token_history (getter)
   Object? get token_history => getAttribute("token_history");
 
+  /// ## token_history (setter)
   set token_history(Object? token_history) =>
       setAttribute("token_history", token_history);
 }
@@ -3387,8 +3690,8 @@ final class LexerConf extends PythonClass {
     required Object? terminals,
     required Object? re_module,
     Object? ignore = const [],
-    Object? postlex = null,
-    Object? callbacks = null,
+    Object? postlex,
+    Object? callbacks,
     Object? g_regex_flags = 0,
     Object? skip_validation = false,
     Object? use_bytes = false,
@@ -3446,7 +3749,7 @@ final class LexerConf extends PythonClass {
   ///         return res
   /// ```
   Object? serialize({
-    Object? memo = null,
+    Object? memo,
   }) =>
       getFunction("serialize").call(
         <Object?>[
@@ -3454,52 +3757,75 @@ final class LexerConf extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## deserialize (getter)
   Object? get deserialize => getAttribute("deserialize");
 
+  /// ## deserialize (setter)
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
+  /// ## terminals (getter)
   Object? get terminals => getAttribute("terminals");
 
+  /// ## terminals (setter)
   set terminals(Object? terminals) => setAttribute("terminals", terminals);
 
+  /// ## terminals_by_name (getter)
   Object? get terminals_by_name => getAttribute("terminals_by_name");
 
+  /// ## terminals_by_name (setter)
   set terminals_by_name(Object? terminals_by_name) =>
       setAttribute("terminals_by_name", terminals_by_name);
 
+  /// ## ignore (getter)
   Object? get ignore => getAttribute("ignore");
 
+  /// ## ignore (setter)
   set ignore(Object? ignore) => setAttribute("ignore", ignore);
 
+  /// ## postlex (getter)
   Object? get postlex => getAttribute("postlex");
 
+  /// ## postlex (setter)
   set postlex(Object? postlex) => setAttribute("postlex", postlex);
 
+  /// ## callbacks (getter)
   Object? get callbacks => getAttribute("callbacks");
 
+  /// ## callbacks (setter)
   set callbacks(Object? callbacks) => setAttribute("callbacks", callbacks);
 
+  /// ## g_regex_flags (getter)
   Object? get g_regex_flags => getAttribute("g_regex_flags");
 
+  /// ## g_regex_flags (setter)
   set g_regex_flags(Object? g_regex_flags) =>
       setAttribute("g_regex_flags", g_regex_flags);
 
+  /// ## re_module (getter)
   Object? get re_module => getAttribute("re_module");
 
+  /// ## re_module (setter)
   set re_module(Object? re_module) => setAttribute("re_module", re_module);
 
+  /// ## skip_validation (getter)
   Object? get skip_validation => getAttribute("skip_validation");
 
+  /// ## skip_validation (setter)
   set skip_validation(Object? skip_validation) =>
       setAttribute("skip_validation", skip_validation);
 
+  /// ## use_bytes (getter)
   Object? get use_bytes => getAttribute("use_bytes");
 
+  /// ## use_bytes (setter)
   set use_bytes(Object? use_bytes) => setAttribute("use_bytes", use_bytes);
 
+  /// ## lexer_type (getter)
   Object? get lexer_type => getAttribute("lexer_type");
 
+  /// ## lexer_type (setter)
   set lexer_type(Object? lexer_type) => setAttribute("lexer_type", lexer_type);
 }
 
@@ -3593,7 +3919,7 @@ final class ParserConf extends PythonClass {
   ///         return res
   /// ```
   Object? serialize({
-    Object? memo = null,
+    Object? memo,
   }) =>
       getFunction("serialize").call(
         <Object?>[
@@ -3601,25 +3927,36 @@ final class ParserConf extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## deserialize (getter)
   Object? get deserialize => getAttribute("deserialize");
 
+  /// ## deserialize (setter)
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
+  /// ## rules (getter)
   Object? get rules => getAttribute("rules");
 
+  /// ## rules (setter)
   set rules(Object? rules) => setAttribute("rules", rules);
 
+  /// ## callbacks (getter)
   Object? get callbacks => getAttribute("callbacks");
 
+  /// ## callbacks (setter)
   set callbacks(Object? callbacks) => setAttribute("callbacks", callbacks);
 
+  /// ## start (getter)
   Object? get start => getAttribute("start");
 
+  /// ## start (setter)
   set start(Object? start) => setAttribute("start", start);
 
+  /// ## parser_type (getter)
   Object? get parser_type => getAttribute("parser_type");
 
+  /// ## parser_type (setter)
   set parser_type(Object? parser_type) =>
       setAttribute("parser_type", parser_type);
 }
@@ -3727,7 +4064,7 @@ final class Serialize extends PythonClass {
   ///         return res
   /// ```
   Object? serialize({
-    Object? memo = null,
+    Object? memo,
   }) =>
       getFunction("serialize").call(
         <Object?>[
@@ -3735,8 +4072,11 @@ final class Serialize extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## deserialize (getter)
   Object? get deserialize => getAttribute("deserialize");
 
+  /// ## deserialize (setter)
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 }
@@ -3831,7 +4171,7 @@ final class TerminalDef extends PythonClass {
   ///         return res
   /// ```
   Object? serialize({
-    Object? memo = null,
+    Object? memo,
   }) =>
       getFunction("serialize").call(
         <Object?>[
@@ -3854,21 +4194,30 @@ final class TerminalDef extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## deserialize (getter)
   Object? get deserialize => getAttribute("deserialize");
 
+  /// ## deserialize (setter)
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## pattern (getter)
   Object? get pattern => getAttribute("pattern");
 
+  /// ## pattern (setter)
   set pattern(Object? pattern) => setAttribute("pattern", pattern);
 
+  /// ## priority (getter)
   Object? get priority => getAttribute("priority");
 
+  /// ## priority (setter)
   set priority(Object? priority) => setAttribute("priority", priority);
 }
 
@@ -3932,16 +4281,22 @@ final class ConfigurationError extends PythonClass {
 
   ConfigurationError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -3963,16 +4318,22 @@ final class MissingVariableError extends PythonClass {
 
   MissingVariableError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -4096,7 +4457,7 @@ final class TypeVar extends PythonClass {
   factory TypeVar({
     List<Object?> constraints = const <Object?>[],
     required Object? name,
-    Object? bound = null,
+    Object? bound,
     Object? $covariant = false,
     Object? contravariant = false,
   }) =>
@@ -4179,29 +4540,41 @@ final class VisitError extends PythonClass {
 
   VisitError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 
+  /// ## rule (getter)
   Object? get rule => getAttribute("rule");
 
+  /// ## rule (setter)
   set rule(Object? rule) => setAttribute("rule", rule);
 
+  /// ## obj (getter)
   Object? get obj => getAttribute("obj");
 
+  /// ## obj (setter)
   set obj(Object? obj) => setAttribute("obj", obj);
 
+  /// ## orig_exc (getter)
   Object? get orig_exc => getAttribute("orig_exc");
 
+  /// ## orig_exc (setter)
   set orig_exc(Object? orig_exc) => setAttribute("orig_exc", orig_exc);
 }
 
@@ -4290,7 +4663,7 @@ final class NonTerminal extends PythonClass {
   ///         return res
   /// ```
   Object? serialize({
-    Object? memo = null,
+    Object? memo,
   }) =>
       getFunction("serialize").call(
         <Object?>[
@@ -4298,21 +4671,30 @@ final class NonTerminal extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## fullrepr (getter)
   Object? get fullrepr => getAttribute("fullrepr");
 
+  /// ## fullrepr (setter)
   set fullrepr(Object? fullrepr) => setAttribute("fullrepr", fullrepr);
 
+  /// ## deserialize (getter)
   Object? get deserialize => getAttribute("deserialize");
 
+  /// ## deserialize (setter)
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
+  /// ## is_term (getter)
   Object? get is_term => getAttribute("is_term");
 
+  /// ## is_term (setter)
   set is_term(Object? is_term) => setAttribute("is_term", is_term);
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 }
 
@@ -4367,8 +4749,8 @@ final class Rule extends PythonClass {
     required Object? origin,
     required Object? expansion,
     Object? order = 0,
-    Object? alias = null,
-    Object? options = null,
+    Object? alias,
+    Object? options,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.grammar",
@@ -4420,7 +4802,7 @@ final class Rule extends PythonClass {
   ///         return res
   /// ```
   Object? serialize({
-    Object? memo = null,
+    Object? memo,
   }) =>
       getFunction("serialize").call(
         <Object?>[
@@ -4428,29 +4810,42 @@ final class Rule extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## deserialize (getter)
   Object? get deserialize => getAttribute("deserialize");
 
+  /// ## deserialize (setter)
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
+  /// ## alias (getter)
   Object? get alias => getAttribute("alias");
 
+  /// ## alias (setter)
   set alias(Object? alias) => setAttribute("alias", alias);
 
+  /// ## expansion (getter)
   Object? get expansion => getAttribute("expansion");
 
+  /// ## expansion (setter)
   set expansion(Object? expansion) => setAttribute("expansion", expansion);
 
+  /// ## options (getter)
   Object? get options => getAttribute("options");
 
+  /// ## options (setter)
   set options(Object? options) => setAttribute("options", options);
 
+  /// ## order (getter)
   Object? get order => getAttribute("order");
 
+  /// ## order (setter)
   set order(Object? order) => setAttribute("order", order);
 
+  /// ## origin (getter)
   Object? get origin => getAttribute("origin");
 
+  /// ## origin (setter)
   set origin(Object? origin) => setAttribute("origin", origin);
 }
 
@@ -4495,8 +4890,8 @@ final class RuleOptions extends PythonClass {
   factory RuleOptions({
     Object? keep_all_tokens = false,
     Object? expand1 = false,
-    Object? priority = null,
-    Object? template_source = null,
+    Object? priority,
+    Object? template_source,
     Object? empty_indices = const [],
   }) =>
       PythonFfiDart.instance.importClass(
@@ -4549,7 +4944,7 @@ final class RuleOptions extends PythonClass {
   ///         return res
   /// ```
   Object? serialize({
-    Object? memo = null,
+    Object? memo,
   }) =>
       getFunction("serialize").call(
         <Object?>[
@@ -4557,31 +4952,44 @@ final class RuleOptions extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## deserialize (getter)
   Object? get deserialize => getAttribute("deserialize");
 
+  /// ## deserialize (setter)
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
+  /// ## keep_all_tokens (getter)
   Object? get keep_all_tokens => getAttribute("keep_all_tokens");
 
+  /// ## keep_all_tokens (setter)
   set keep_all_tokens(Object? keep_all_tokens) =>
       setAttribute("keep_all_tokens", keep_all_tokens);
 
+  /// ## expand1 (getter)
   Object? get expand1 => getAttribute("expand1");
 
+  /// ## expand1 (setter)
   set expand1(Object? expand1) => setAttribute("expand1", expand1);
 
+  /// ## priority (getter)
   Object? get priority => getAttribute("priority");
 
+  /// ## priority (setter)
   set priority(Object? priority) => setAttribute("priority", priority);
 
+  /// ## template_source (getter)
   Object? get template_source => getAttribute("template_source");
 
+  /// ## template_source (setter)
   set template_source(Object? template_source) =>
       setAttribute("template_source", template_source);
 
+  /// ## empty_indices (getter)
   Object? get empty_indices => getAttribute("empty_indices");
 
+  /// ## empty_indices (setter)
   set empty_indices(Object? empty_indices) =>
       setAttribute("empty_indices", empty_indices);
 }
@@ -4693,7 +5101,7 @@ final class Symbol extends PythonClass {
   ///         return res
   /// ```
   Object? serialize({
-    Object? memo = null,
+    Object? memo,
   }) =>
       getFunction("serialize").call(
         <Object?>[
@@ -4701,21 +5109,30 @@ final class Symbol extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## fullrepr (getter)
   Object? get fullrepr => getAttribute("fullrepr");
 
+  /// ## fullrepr (setter)
   set fullrepr(Object? fullrepr) => setAttribute("fullrepr", fullrepr);
 
+  /// ## is_term (getter)
   Object? get is_term => getAttribute("is_term");
 
+  /// ## is_term (setter)
   set is_term(Object? is_term) => setAttribute("is_term", is_term);
 
+  /// ## deserialize (getter)
   Object? get deserialize => getAttribute("deserialize");
 
+  /// ## deserialize (setter)
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 }
 
@@ -4817,7 +5234,7 @@ final class Terminal extends PythonClass {
   ///         return res
   /// ```
   Object? serialize({
-    Object? memo = null,
+    Object? memo,
   }) =>
       getFunction("serialize").call(
         <Object?>[
@@ -4825,25 +5242,36 @@ final class Terminal extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## fullrepr (getter)
   Object? get fullrepr => getAttribute("fullrepr");
 
+  /// ## fullrepr (setter)
   set fullrepr(Object? fullrepr) => setAttribute("fullrepr", fullrepr);
 
+  /// ## deserialize (getter)
   Object? get deserialize => getAttribute("deserialize");
 
+  /// ## deserialize (setter)
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
+  /// ## is_term (getter)
   Object? get is_term => getAttribute("is_term");
 
+  /// ## is_term (setter)
   set is_term(Object? is_term) => setAttribute("is_term", is_term);
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## filter_out (getter)
   Object? get filter_out => getAttribute("filter_out");
 
+  /// ## filter_out (setter)
   set filter_out(Object? filter_out) => setAttribute("filter_out", filter_out);
 }
 
@@ -5107,7 +5535,7 @@ final class BasicLexer extends PythonClass {
   /// ```
   Object? next_token({
     required Object? lex_state,
-    Object? parser_state = null,
+    Object? parser_state,
   }) =>
       getFunction("next_token").call(
         <Object?>[
@@ -5116,44 +5544,63 @@ final class BasicLexer extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## scanner (getter)
   Object? get scanner => getAttribute("scanner");
 
+  /// ## scanner (setter)
   set scanner(Object? scanner) => setAttribute("scanner", scanner);
 
+  /// ## terminals (getter)
   Object? get terminals => getAttribute("terminals");
 
+  /// ## terminals (setter)
   set terminals(Object? terminals) => setAttribute("terminals", terminals);
 
+  /// ## re (getter)
   Object? get re => getAttribute("re");
 
+  /// ## re (setter)
   set re(Object? re) => setAttribute("re", re);
 
+  /// ## g_regex_flags (getter)
   Object? get g_regex_flags => getAttribute("g_regex_flags");
 
+  /// ## g_regex_flags (setter)
   set g_regex_flags(Object? g_regex_flags) =>
       setAttribute("g_regex_flags", g_regex_flags);
 
+  /// ## newline_types (getter)
   Object? get newline_types => getAttribute("newline_types");
 
+  /// ## newline_types (setter)
   set newline_types(Object? newline_types) =>
       setAttribute("newline_types", newline_types);
 
+  /// ## ignore_types (getter)
   Object? get ignore_types => getAttribute("ignore_types");
 
+  /// ## ignore_types (setter)
   set ignore_types(Object? ignore_types) =>
       setAttribute("ignore_types", ignore_types);
 
+  /// ## user_callbacks (getter)
   Object? get user_callbacks => getAttribute("user_callbacks");
 
+  /// ## user_callbacks (setter)
   set user_callbacks(Object? user_callbacks) =>
       setAttribute("user_callbacks", user_callbacks);
 
+  /// ## use_bytes (getter)
   Object? get use_bytes => getAttribute("use_bytes");
 
+  /// ## use_bytes (setter)
   set use_bytes(Object? use_bytes) => setAttribute("use_bytes", use_bytes);
 
+  /// ## terminals_by_name (getter)
   Object? get terminals_by_name => getAttribute("terminals_by_name");
 
+  /// ## terminals_by_name (setter)
   set terminals_by_name(Object? terminals_by_name) =>
       setAttribute("terminals_by_name", terminals_by_name);
 }
@@ -5293,12 +5740,16 @@ final class FromPackageLoader extends PythonClass {
 
   FromPackageLoader.from(super.pythonClass) : super.from();
 
+  /// ## pkg_name (getter)
   Object? get pkg_name => getAttribute("pkg_name");
 
+  /// ## pkg_name (setter)
   set pkg_name(Object? pkg_name) => setAttribute("pkg_name", pkg_name);
 
+  /// ## search_paths (getter)
   Object? get search_paths => getAttribute("search_paths");
 
+  /// ## search_paths (setter)
   set search_paths(Object? search_paths) =>
       setAttribute("search_paths", search_paths);
 }
@@ -5601,16 +6052,23 @@ final class Grammar extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## term_defs (getter)
   Object? get term_defs => getAttribute("term_defs");
 
+  /// ## term_defs (setter)
   set term_defs(Object? term_defs) => setAttribute("term_defs", term_defs);
 
+  /// ## rule_defs (getter)
   Object? get rule_defs => getAttribute("rule_defs");
 
+  /// ## rule_defs (setter)
   set rule_defs(Object? rule_defs) => setAttribute("rule_defs", rule_defs);
 
+  /// ## ignore (getter)
   Object? get ignore => getAttribute("ignore");
 
+  /// ## ignore (setter)
   set ignore(Object? ignore) => setAttribute("ignore", ignore);
 }
 
@@ -5913,7 +6371,7 @@ final class IO extends PythonClass {
   ///         pass
   /// ```
   Object? truncate({
-    Object? size = null,
+    Object? size,
   }) =>
       getFunction("truncate").call(
         <Object?>[
@@ -5970,16 +6428,23 @@ final class IO extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## closed (getter)
   Object? get closed => getAttribute("closed");
 
+  /// ## closed (setter)
   set closed(Object? closed) => setAttribute("closed", closed);
 
+  /// ## mode (getter)
   Object? get mode => getAttribute("mode");
 
+  /// ## mode (setter)
   set mode(Object? mode) => setAttribute("mode", mode);
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 }
 
@@ -6281,7 +6746,7 @@ final class LarkOptions extends PythonClass {
   ///         return self.options
   /// ```
   Object? serialize({
-    Object? memo = null,
+    Object? memo,
   }) =>
       getFunction("serialize").call(
         <Object?>[
@@ -6289,13 +6754,18 @@ final class LarkOptions extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## deserialize (getter)
   Object? get deserialize => getAttribute("deserialize");
 
+  /// ## deserialize (setter)
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
+  /// ## OPTIONS_DOC (getter)
   Object? get OPTIONS_DOC => getAttribute("OPTIONS_DOC");
 
+  /// ## OPTIONS_DOC (setter)
   set OPTIONS_DOC(Object? OPTIONS_DOC) =>
       setAttribute("OPTIONS_DOC", OPTIONS_DOC);
 }
@@ -6440,16 +6910,23 @@ final class LexerThread extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## from_text (getter)
   Object? get from_text => getAttribute("from_text");
 
+  /// ## from_text (setter)
   set from_text(Object? from_text) => setAttribute("from_text", from_text);
 
+  /// ## lexer (getter)
   Object? get lexer => getAttribute("lexer");
 
+  /// ## lexer (setter)
   set lexer(Object? lexer) => setAttribute("lexer", lexer);
 
+  /// ## state (getter)
   Object? get state => getAttribute("state");
 
+  /// ## state (setter)
   set state(Object? state) => setAttribute("state", state);
 }
 
@@ -6468,20 +6945,44 @@ final class PackageResource extends PythonClass {
 
   PackageResource.from(super.pythonClass) : super.from();
 
+  /// ## path (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Alias for field number 1
   Object? get path => getAttribute("path");
 
+  /// ## path (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Alias for field number 1
   set path(Object? path) => setAttribute("path", path);
 
+  /// ## pkg_name (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Alias for field number 0
   Object? get pkg_name => getAttribute("pkg_name");
 
+  /// ## pkg_name (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Alias for field number 0
   set pkg_name(Object? pkg_name) => setAttribute("pkg_name", pkg_name);
 
+  /// ## count (getter)
   Object? get count => getAttribute("count");
 
+  /// ## count (setter)
   set count(Object? count) => setAttribute("count", count);
 
+  /// ## index (getter)
   Object? get index => getAttribute("index");
 
+  /// ## index (setter)
   set index(Object? index) => setAttribute("index", index);
 }
 
@@ -6611,7 +7112,7 @@ final class ParseTreeBuilder extends PythonClass {
   ///         return callbacks
   /// ```
   Object? create_callback({
-    Object? transformer = null,
+    Object? transformer,
   }) =>
       getFunction("create_callback").call(
         <Object?>[
@@ -6619,26 +7120,37 @@ final class ParseTreeBuilder extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## tree_class (getter)
   Object? get tree_class => getAttribute("tree_class");
 
+  /// ## tree_class (setter)
   set tree_class(Object? tree_class) => setAttribute("tree_class", tree_class);
 
+  /// ## propagate_positions (getter)
   Object? get propagate_positions => getAttribute("propagate_positions");
 
+  /// ## propagate_positions (setter)
   set propagate_positions(Object? propagate_positions) =>
       setAttribute("propagate_positions", propagate_positions);
 
+  /// ## ambiguous (getter)
   Object? get ambiguous => getAttribute("ambiguous");
 
+  /// ## ambiguous (setter)
   set ambiguous(Object? ambiguous) => setAttribute("ambiguous", ambiguous);
 
+  /// ## maybe_placeholders (getter)
   Object? get maybe_placeholders => getAttribute("maybe_placeholders");
 
+  /// ## maybe_placeholders (setter)
   set maybe_placeholders(Object? maybe_placeholders) =>
       setAttribute("maybe_placeholders", maybe_placeholders);
 
+  /// ## rule_builders (getter)
   Object? get rule_builders => getAttribute("rule_builders");
 
+  /// ## rule_builders (setter)
   set rule_builders(Object? rule_builders) =>
       setAttribute("rule_builders", rule_builders);
 }
@@ -6686,8 +7198,11 @@ final class PostLex extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## always_accept (getter)
   Object? get always_accept => getAttribute("always_accept");
 
+  /// ## always_accept (setter)
   set always_accept(Object? always_accept) =>
       setAttribute("always_accept", always_accept);
 }
@@ -6781,18 +7296,25 @@ final class SerializeMemoizer extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## deserialize (getter)
   Object? get deserialize => getAttribute("deserialize");
 
+  /// ## deserialize (setter)
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
+  /// ## types_to_memoize (getter)
   Object? get types_to_memoize => getAttribute("types_to_memoize");
 
+  /// ## types_to_memoize (setter)
   set types_to_memoize(Object? types_to_memoize) =>
       setAttribute("types_to_memoize", types_to_memoize);
 
+  /// ## memoized (getter)
   Object? get memoized => getAttribute("memoized");
 
+  /// ## memoized (setter)
   set memoized(Object? memoized) => setAttribute("memoized", memoized);
 }
 
@@ -6812,16 +7334,22 @@ final class GetPassWarning extends PythonClass {
 
   GetPassWarning.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -7796,8 +8324,11 @@ final class ABCMeta extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## mro (getter)
   Object? get mro => getAttribute("mro");
 
+  /// ## mro (setter)
   set mro(Object? mro) => setAttribute("mro", mro);
 }
 
@@ -7872,28 +8403,40 @@ final class abstractproperty extends PythonClass {
 
   abstractproperty.from(super.pythonClass) : super.from();
 
+  /// ## fdel (getter)
   Object? get fdel => getAttribute("fdel");
 
+  /// ## fdel (setter)
   set fdel(Object? fdel) => setAttribute("fdel", fdel);
 
+  /// ## fget (getter)
   Object? get fget => getAttribute("fget");
 
+  /// ## fget (setter)
   set fget(Object? fget) => setAttribute("fget", fget);
 
+  /// ## fset (getter)
   Object? get fset => getAttribute("fset");
 
+  /// ## fset (setter)
   set fset(Object? fset) => setAttribute("fset", fset);
 
+  /// ## deleter (getter)
   Object? get deleter => getAttribute("deleter");
 
+  /// ## deleter (setter)
   set deleter(Object? deleter) => setAttribute("deleter", deleter);
 
+  /// ## getter (getter)
   Object? get getter => getAttribute("getter");
 
+  /// ## getter (setter)
   set getter(Object? getter) => setAttribute("getter", getter);
 
+  /// ## setter (getter)
   Object? get setter => getAttribute("setter");
 
+  /// ## setter (setter)
   set setter(Object? setter) => setAttribute("setter", setter);
 }
 
@@ -7990,8 +8533,10 @@ final class aclosing extends PythonClass {
 
   aclosing.from(super.pythonClass) : super.from();
 
+  /// ## thing (getter)
   Object? get thing => getAttribute("thing");
 
+  /// ## thing (setter)
   set thing(Object? thing) => setAttribute("thing", thing);
 }
 
@@ -8033,8 +8578,10 @@ final class chdir extends PythonClass {
 
   chdir.from(super.pythonClass) : super.from();
 
+  /// ## path (getter)
   Object? get path => getAttribute("path");
 
+  /// ## path (setter)
   set path(Object? path) => setAttribute("path", path);
 }
 
@@ -8099,8 +8646,10 @@ final class closing extends PythonClass {
 
   closing.from(super.pythonClass) : super.from();
 
+  /// ## thing (getter)
   Object? get thing => getAttribute("thing");
 
+  /// ## thing (setter)
   set thing(Object? thing) => setAttribute("thing", thing);
 }
 
@@ -8115,64 +8664,102 @@ final class deque extends PythonClass {
 
   deque.from(super.pythonClass) : super.from();
 
+  /// ## maxlen (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// maximum size of a deque or None if unbounded
   Object? get maxlen => getAttribute("maxlen");
 
+  /// ## maxlen (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// maximum size of a deque or None if unbounded
   set maxlen(Object? maxlen) => setAttribute("maxlen", maxlen);
 
+  /// ## append (getter)
   Object? get append => getAttribute("append");
 
+  /// ## append (setter)
   set append(Object? append) => setAttribute("append", append);
 
+  /// ## appendleft (getter)
   Object? get appendleft => getAttribute("appendleft");
 
+  /// ## appendleft (setter)
   set appendleft(Object? appendleft) => setAttribute("appendleft", appendleft);
 
+  /// ## clear (getter)
   Object? get clear => getAttribute("clear");
 
+  /// ## clear (setter)
   set clear(Object? clear) => setAttribute("clear", clear);
 
+  /// ## copy (getter)
   Object? get copy => getAttribute("copy");
 
+  /// ## copy (setter)
   set copy(Object? copy) => setAttribute("copy", copy);
 
+  /// ## count (getter)
   Object? get count => getAttribute("count");
 
+  /// ## count (setter)
   set count(Object? count) => setAttribute("count", count);
 
+  /// ## extend (getter)
   Object? get extend => getAttribute("extend");
 
+  /// ## extend (setter)
   set extend(Object? extend) => setAttribute("extend", extend);
 
+  /// ## extendleft (getter)
   Object? get extendleft => getAttribute("extendleft");
 
+  /// ## extendleft (setter)
   set extendleft(Object? extendleft) => setAttribute("extendleft", extendleft);
 
+  /// ## index (getter)
   Object? get index => getAttribute("index");
 
+  /// ## index (setter)
   set index(Object? index) => setAttribute("index", index);
 
+  /// ## insert (getter)
   Object? get insert => getAttribute("insert");
 
+  /// ## insert (setter)
   set insert(Object? insert) => setAttribute("insert", insert);
 
+  /// ## pop (getter)
   Object? get pop => getAttribute("pop");
 
+  /// ## pop (setter)
   set pop(Object? pop) => setAttribute("pop", pop);
 
+  /// ## popleft (getter)
   Object? get popleft => getAttribute("popleft");
 
+  /// ## popleft (setter)
   set popleft(Object? popleft) => setAttribute("popleft", popleft);
 
+  /// ## remove (getter)
   Object? get remove => getAttribute("remove");
 
+  /// ## remove (setter)
   set remove(Object? remove) => setAttribute("remove", remove);
 
+  /// ## reverse (getter)
   Object? get reverse => getAttribute("reverse");
 
+  /// ## reverse (setter)
   set reverse(Object? reverse) => setAttribute("reverse", reverse);
 
+  /// ## rotate (getter)
   Object? get rotate => getAttribute("rotate");
 
+  /// ## rotate (setter)
   set rotate(Object? rotate) => setAttribute("rotate", rotate);
 }
 
@@ -8219,7 +8806,7 @@ final class deque extends PythonClass {
 /// ```
 final class nullcontext extends PythonClass {
   factory nullcontext({
-    Object? enter_result = null,
+    Object? enter_result,
   }) =>
       PythonFfiDart.instance.importClass(
         "contextlib",
@@ -8233,8 +8820,10 @@ final class nullcontext extends PythonClass {
 
   nullcontext.from(super.pythonClass) : super.from();
 
+  /// ## enter_result (getter)
   Object? get enter_result => getAttribute("enter_result");
 
+  /// ## enter_result (setter)
   set enter_result(Object? enter_result) =>
       setAttribute("enter_result", enter_result);
 }
@@ -8250,32 +8839,62 @@ final class DirEntry extends PythonClass {
 
   DirEntry.from(super.pythonClass) : super.from();
 
+  /// ## name (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// the entry's base filename, relative to scandir() "path" argument
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// the entry's base filename, relative to scandir() "path" argument
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## path (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// the entry's full path name; equivalent to os.path.join(scandir_path, entry.name)
   Object? get path => getAttribute("path");
 
+  /// ## path (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// the entry's full path name; equivalent to os.path.join(scandir_path, entry.name)
   set path(Object? path) => setAttribute("path", path);
 
+  /// ## inode (getter)
   Object? get inode => getAttribute("inode");
 
+  /// ## inode (setter)
   set inode(Object? inode) => setAttribute("inode", inode);
 
+  /// ## is_dir (getter)
   Object? get is_dir => getAttribute("is_dir");
 
+  /// ## is_dir (setter)
   set is_dir(Object? is_dir) => setAttribute("is_dir", is_dir);
 
+  /// ## is_file (getter)
   Object? get is_file => getAttribute("is_file");
 
+  /// ## is_file (setter)
   set is_file(Object? is_file) => setAttribute("is_file", is_file);
 
+  /// ## is_symlink (getter)
   Object? get is_symlink => getAttribute("is_symlink");
 
+  /// ## is_symlink (setter)
   set is_symlink(Object? is_symlink) => setAttribute("is_symlink", is_symlink);
 
+  /// ## stat (getter)
   Object? get stat => getAttribute("stat");
 
+  /// ## stat (setter)
   set stat(Object? stat) => setAttribute("stat", stat);
 }
 
@@ -8305,7 +8924,7 @@ final class Mapping extends PythonClass {
   /// D.get(k[,d]) -> D[k] if k in D, else d.  d defaults to None.
   Object? $get({
     required Object? key,
-    Object? $default = null,
+    Object? $default,
   }) =>
       getFunction("get").call(
         <Object?>[
@@ -8383,7 +9002,7 @@ final class MutableMapping extends PythonClass {
   /// D.get(k[,d]) -> D[k] if k in D, else d.  d defaults to None.
   Object? $get({
     required Object? key,
-    Object? $default = null,
+    Object? $default,
   }) =>
       getFunction("get").call(
         <Object?>[
@@ -8449,7 +9068,7 @@ final class MutableMapping extends PythonClass {
   /// D.setdefault(k[,d]) -> D.get(k,d), also set D[k]=d if k not in D
   Object? setdefault({
     required Object? key,
-    Object? $default = null,
+    Object? $default,
   }) =>
       getFunction("setdefault").call(
         <Object?>[
@@ -8538,166 +9157,246 @@ final class decodekey extends PythonClass {
 
   decodekey.from(super.pythonClass) : super.from();
 
+  /// ## capitalize (getter)
   Object? get capitalize => getAttribute("capitalize");
 
+  /// ## capitalize (setter)
   set capitalize(Object? capitalize) => setAttribute("capitalize", capitalize);
 
+  /// ## center (getter)
   Object? get center => getAttribute("center");
 
+  /// ## center (setter)
   set center(Object? center) => setAttribute("center", center);
 
+  /// ## count (getter)
   Object? get count => getAttribute("count");
 
+  /// ## count (setter)
   set count(Object? count) => setAttribute("count", count);
 
+  /// ## decode (getter)
   Object? get decode => getAttribute("decode");
 
+  /// ## decode (setter)
   set decode(Object? decode) => setAttribute("decode", decode);
 
+  /// ## endswith (getter)
   Object? get endswith => getAttribute("endswith");
 
+  /// ## endswith (setter)
   set endswith(Object? endswith) => setAttribute("endswith", endswith);
 
+  /// ## expandtabs (getter)
   Object? get expandtabs => getAttribute("expandtabs");
 
+  /// ## expandtabs (setter)
   set expandtabs(Object? expandtabs) => setAttribute("expandtabs", expandtabs);
 
+  /// ## find (getter)
   Object? get find => getAttribute("find");
 
+  /// ## find (setter)
   set find(Object? find) => setAttribute("find", find);
 
+  /// ## hex (getter)
   Object? get hex => getAttribute("hex");
 
+  /// ## hex (setter)
   set hex(Object? hex) => setAttribute("hex", hex);
 
+  /// ## index (getter)
   Object? get index => getAttribute("index");
 
+  /// ## index (setter)
   set index(Object? index) => setAttribute("index", index);
 
+  /// ## isalnum (getter)
   Object? get isalnum => getAttribute("isalnum");
 
+  /// ## isalnum (setter)
   set isalnum(Object? isalnum) => setAttribute("isalnum", isalnum);
 
+  /// ## isalpha (getter)
   Object? get isalpha => getAttribute("isalpha");
 
+  /// ## isalpha (setter)
   set isalpha(Object? isalpha) => setAttribute("isalpha", isalpha);
 
+  /// ## isascii (getter)
   Object? get isascii => getAttribute("isascii");
 
+  /// ## isascii (setter)
   set isascii(Object? isascii) => setAttribute("isascii", isascii);
 
+  /// ## isdigit (getter)
   Object? get isdigit => getAttribute("isdigit");
 
+  /// ## isdigit (setter)
   set isdigit(Object? isdigit) => setAttribute("isdigit", isdigit);
 
+  /// ## islower (getter)
   Object? get islower => getAttribute("islower");
 
+  /// ## islower (setter)
   set islower(Object? islower) => setAttribute("islower", islower);
 
+  /// ## isspace (getter)
   Object? get isspace => getAttribute("isspace");
 
+  /// ## isspace (setter)
   set isspace(Object? isspace) => setAttribute("isspace", isspace);
 
+  /// ## istitle (getter)
   Object? get istitle => getAttribute("istitle");
 
+  /// ## istitle (setter)
   set istitle(Object? istitle) => setAttribute("istitle", istitle);
 
+  /// ## isupper (getter)
   Object? get isupper => getAttribute("isupper");
 
+  /// ## isupper (setter)
   set isupper(Object? isupper) => setAttribute("isupper", isupper);
 
+  /// ## join (getter)
   Object? get join => getAttribute("join");
 
+  /// ## join (setter)
   set join(Object? join) => setAttribute("join", join);
 
+  /// ## ljust (getter)
   Object? get ljust => getAttribute("ljust");
 
+  /// ## ljust (setter)
   set ljust(Object? ljust) => setAttribute("ljust", ljust);
 
+  /// ## lower (getter)
   Object? get lower => getAttribute("lower");
 
+  /// ## lower (setter)
   set lower(Object? lower) => setAttribute("lower", lower);
 
+  /// ## lstrip (getter)
   Object? get lstrip => getAttribute("lstrip");
 
+  /// ## lstrip (setter)
   set lstrip(Object? lstrip) => setAttribute("lstrip", lstrip);
 
+  /// ## partition (getter)
   Object? get partition => getAttribute("partition");
 
+  /// ## partition (setter)
   set partition(Object? partition) => setAttribute("partition", partition);
 
+  /// ## removeprefix (getter)
   Object? get removeprefix => getAttribute("removeprefix");
 
+  /// ## removeprefix (setter)
   set removeprefix(Object? removeprefix) =>
       setAttribute("removeprefix", removeprefix);
 
+  /// ## removesuffix (getter)
   Object? get removesuffix => getAttribute("removesuffix");
 
+  /// ## removesuffix (setter)
   set removesuffix(Object? removesuffix) =>
       setAttribute("removesuffix", removesuffix);
 
+  /// ## replace (getter)
   Object? get replace => getAttribute("replace");
 
+  /// ## replace (setter)
   set replace(Object? replace) => setAttribute("replace", replace);
 
+  /// ## rfind (getter)
   Object? get rfind => getAttribute("rfind");
 
+  /// ## rfind (setter)
   set rfind(Object? rfind) => setAttribute("rfind", rfind);
 
+  /// ## rindex (getter)
   Object? get rindex => getAttribute("rindex");
 
+  /// ## rindex (setter)
   set rindex(Object? rindex) => setAttribute("rindex", rindex);
 
+  /// ## rjust (getter)
   Object? get rjust => getAttribute("rjust");
 
+  /// ## rjust (setter)
   set rjust(Object? rjust) => setAttribute("rjust", rjust);
 
+  /// ## rpartition (getter)
   Object? get rpartition => getAttribute("rpartition");
 
+  /// ## rpartition (setter)
   set rpartition(Object? rpartition) => setAttribute("rpartition", rpartition);
 
+  /// ## rsplit (getter)
   Object? get rsplit => getAttribute("rsplit");
 
+  /// ## rsplit (setter)
   set rsplit(Object? rsplit) => setAttribute("rsplit", rsplit);
 
+  /// ## rstrip (getter)
   Object? get rstrip => getAttribute("rstrip");
 
+  /// ## rstrip (setter)
   set rstrip(Object? rstrip) => setAttribute("rstrip", rstrip);
 
+  /// ## split (getter)
   Object? get split => getAttribute("split");
 
+  /// ## split (setter)
   set split(Object? split) => setAttribute("split", split);
 
+  /// ## splitlines (getter)
   Object? get splitlines => getAttribute("splitlines");
 
+  /// ## splitlines (setter)
   set splitlines(Object? splitlines) => setAttribute("splitlines", splitlines);
 
+  /// ## startswith (getter)
   Object? get startswith => getAttribute("startswith");
 
+  /// ## startswith (setter)
   set startswith(Object? startswith) => setAttribute("startswith", startswith);
 
+  /// ## strip (getter)
   Object? get strip => getAttribute("strip");
 
+  /// ## strip (setter)
   set strip(Object? strip) => setAttribute("strip", strip);
 
+  /// ## swapcase (getter)
   Object? get swapcase => getAttribute("swapcase");
 
+  /// ## swapcase (setter)
   set swapcase(Object? swapcase) => setAttribute("swapcase", swapcase);
 
+  /// ## title (getter)
   Object? get title => getAttribute("title");
 
+  /// ## title (setter)
   set title(Object? title) => setAttribute("title", title);
 
+  /// ## translate (getter)
   Object? get translate => getAttribute("translate");
 
+  /// ## translate (setter)
   set translate(Object? translate) => setAttribute("translate", translate);
 
+  /// ## upper (getter)
   Object? get upper => getAttribute("upper");
 
+  /// ## upper (setter)
   set upper(Object? upper) => setAttribute("upper", upper);
 
+  /// ## zfill (getter)
   Object? get zfill => getAttribute("zfill");
 
+  /// ## zfill (setter)
   set zfill(Object? zfill) => setAttribute("zfill", zfill);
 }
 
@@ -8712,37 +9411,53 @@ final class error extends PythonClass {
 
   error.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## characters_written (getter)
   Object? get characters_written => getAttribute("characters_written");
 
+  /// ## characters_written (setter)
   set characters_written(Object? characters_written) =>
       setAttribute("characters_written", characters_written);
 
+  /// ## errno (getter)
   Object? get errno => getAttribute("errno");
 
+  /// ## errno (setter)
   set errno(Object? errno) => setAttribute("errno", errno);
 
+  /// ## filename (getter)
   Object? get filename => getAttribute("filename");
 
+  /// ## filename (setter)
   set filename(Object? filename) => setAttribute("filename", filename);
 
+  /// ## filename2 (getter)
   Object? get filename2 => getAttribute("filename2");
 
+  /// ## filename2 (setter)
   set filename2(Object? filename2) => setAttribute("filename2", filename2);
 
+  /// ## strerror (getter)
   Object? get strerror => getAttribute("strerror");
 
+  /// ## strerror (setter)
   set strerror(Object? strerror) => setAttribute("strerror", strerror);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -8758,105 +9473,305 @@ final class stat_result extends PythonClass {
 
   stat_result.from(super.pythonClass) : super.from();
 
+  /// ## st_atime (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// time of last access
   Object? get st_atime => getAttribute("st_atime");
 
+  /// ## st_atime (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// time of last access
   set st_atime(Object? st_atime) => setAttribute("st_atime", st_atime);
 
+  /// ## st_atime_ns (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// time of last access in nanoseconds
   Object? get st_atime_ns => getAttribute("st_atime_ns");
 
+  /// ## st_atime_ns (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// time of last access in nanoseconds
   set st_atime_ns(Object? st_atime_ns) =>
       setAttribute("st_atime_ns", st_atime_ns);
 
+  /// ## st_birthtime (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// time of creation
   Object? get st_birthtime => getAttribute("st_birthtime");
 
+  /// ## st_birthtime (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// time of creation
   set st_birthtime(Object? st_birthtime) =>
       setAttribute("st_birthtime", st_birthtime);
 
+  /// ## st_blksize (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// blocksize for filesystem I/O
   Object? get st_blksize => getAttribute("st_blksize");
 
+  /// ## st_blksize (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// blocksize for filesystem I/O
   set st_blksize(Object? st_blksize) => setAttribute("st_blksize", st_blksize);
 
+  /// ## st_blocks (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// number of blocks allocated
   Object? get st_blocks => getAttribute("st_blocks");
 
+  /// ## st_blocks (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// number of blocks allocated
   set st_blocks(Object? st_blocks) => setAttribute("st_blocks", st_blocks);
 
+  /// ## st_ctime (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// time of last change
   Object? get st_ctime => getAttribute("st_ctime");
 
+  /// ## st_ctime (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// time of last change
   set st_ctime(Object? st_ctime) => setAttribute("st_ctime", st_ctime);
 
+  /// ## st_ctime_ns (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// time of last change in nanoseconds
   Object? get st_ctime_ns => getAttribute("st_ctime_ns");
 
+  /// ## st_ctime_ns (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// time of last change in nanoseconds
   set st_ctime_ns(Object? st_ctime_ns) =>
       setAttribute("st_ctime_ns", st_ctime_ns);
 
+  /// ## st_dev (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// device
   Object? get st_dev => getAttribute("st_dev");
 
+  /// ## st_dev (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// device
   set st_dev(Object? st_dev) => setAttribute("st_dev", st_dev);
 
+  /// ## st_flags (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// user defined flags for file
   Object? get st_flags => getAttribute("st_flags");
 
+  /// ## st_flags (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// user defined flags for file
   set st_flags(Object? st_flags) => setAttribute("st_flags", st_flags);
 
+  /// ## st_gen (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// generation number
   Object? get st_gen => getAttribute("st_gen");
 
+  /// ## st_gen (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// generation number
   set st_gen(Object? st_gen) => setAttribute("st_gen", st_gen);
 
+  /// ## st_gid (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// group ID of owner
   Object? get st_gid => getAttribute("st_gid");
 
+  /// ## st_gid (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// group ID of owner
   set st_gid(Object? st_gid) => setAttribute("st_gid", st_gid);
 
+  /// ## st_ino (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// inode
   Object? get st_ino => getAttribute("st_ino");
 
+  /// ## st_ino (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// inode
   set st_ino(Object? st_ino) => setAttribute("st_ino", st_ino);
 
+  /// ## st_mode (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// protection bits
   Object? get st_mode => getAttribute("st_mode");
 
+  /// ## st_mode (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// protection bits
   set st_mode(Object? st_mode) => setAttribute("st_mode", st_mode);
 
+  /// ## st_mtime (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// time of last modification
   Object? get st_mtime => getAttribute("st_mtime");
 
+  /// ## st_mtime (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// time of last modification
   set st_mtime(Object? st_mtime) => setAttribute("st_mtime", st_mtime);
 
+  /// ## st_mtime_ns (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// time of last modification in nanoseconds
   Object? get st_mtime_ns => getAttribute("st_mtime_ns");
 
+  /// ## st_mtime_ns (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// time of last modification in nanoseconds
   set st_mtime_ns(Object? st_mtime_ns) =>
       setAttribute("st_mtime_ns", st_mtime_ns);
 
+  /// ## st_nlink (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// number of hard links
   Object? get st_nlink => getAttribute("st_nlink");
 
+  /// ## st_nlink (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// number of hard links
   set st_nlink(Object? st_nlink) => setAttribute("st_nlink", st_nlink);
 
+  /// ## st_rdev (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// device type (if inode device)
   Object? get st_rdev => getAttribute("st_rdev");
 
+  /// ## st_rdev (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// device type (if inode device)
   set st_rdev(Object? st_rdev) => setAttribute("st_rdev", st_rdev);
 
+  /// ## st_size (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// total size, in bytes
   Object? get st_size => getAttribute("st_size");
 
+  /// ## st_size (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// total size, in bytes
   set st_size(Object? st_size) => setAttribute("st_size", st_size);
 
+  /// ## st_uid (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// user ID of owner
   Object? get st_uid => getAttribute("st_uid");
 
+  /// ## st_uid (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// user ID of owner
   set st_uid(Object? st_uid) => setAttribute("st_uid", st_uid);
 
+  /// ## count (getter)
   Object? get count => getAttribute("count");
 
+  /// ## count (setter)
   set count(Object? count) => setAttribute("count", count);
 
+  /// ## index (getter)
   Object? get index => getAttribute("index");
 
+  /// ## index (setter)
   set index(Object? index) => setAttribute("index", index);
 
+  /// ## n_fields (getter)
   Object? get n_fields => getAttribute("n_fields");
 
+  /// ## n_fields (setter)
   set n_fields(Object? n_fields) => setAttribute("n_fields", n_fields);
 
+  /// ## n_sequence_fields (getter)
   Object? get n_sequence_fields => getAttribute("n_sequence_fields");
 
+  /// ## n_sequence_fields (setter)
   set n_sequence_fields(Object? n_sequence_fields) =>
       setAttribute("n_sequence_fields", n_sequence_fields);
 
+  /// ## n_unnamed_fields (getter)
   Object? get n_unnamed_fields => getAttribute("n_unnamed_fields");
 
+  /// ## n_unnamed_fields (setter)
   set n_unnamed_fields(Object? n_unnamed_fields) =>
       setAttribute("n_unnamed_fields", n_unnamed_fields);
 }
@@ -8872,69 +9787,101 @@ final class statvfs_result extends PythonClass {
 
   statvfs_result.from(super.pythonClass) : super.from();
 
+  /// ## f_bavail (getter)
   Object? get f_bavail => getAttribute("f_bavail");
 
+  /// ## f_bavail (setter)
   set f_bavail(Object? f_bavail) => setAttribute("f_bavail", f_bavail);
 
+  /// ## f_bfree (getter)
   Object? get f_bfree => getAttribute("f_bfree");
 
+  /// ## f_bfree (setter)
   set f_bfree(Object? f_bfree) => setAttribute("f_bfree", f_bfree);
 
+  /// ## f_blocks (getter)
   Object? get f_blocks => getAttribute("f_blocks");
 
+  /// ## f_blocks (setter)
   set f_blocks(Object? f_blocks) => setAttribute("f_blocks", f_blocks);
 
+  /// ## f_bsize (getter)
   Object? get f_bsize => getAttribute("f_bsize");
 
+  /// ## f_bsize (setter)
   set f_bsize(Object? f_bsize) => setAttribute("f_bsize", f_bsize);
 
+  /// ## f_favail (getter)
   Object? get f_favail => getAttribute("f_favail");
 
+  /// ## f_favail (setter)
   set f_favail(Object? f_favail) => setAttribute("f_favail", f_favail);
 
+  /// ## f_ffree (getter)
   Object? get f_ffree => getAttribute("f_ffree");
 
+  /// ## f_ffree (setter)
   set f_ffree(Object? f_ffree) => setAttribute("f_ffree", f_ffree);
 
+  /// ## f_files (getter)
   Object? get f_files => getAttribute("f_files");
 
+  /// ## f_files (setter)
   set f_files(Object? f_files) => setAttribute("f_files", f_files);
 
+  /// ## f_flag (getter)
   Object? get f_flag => getAttribute("f_flag");
 
+  /// ## f_flag (setter)
   set f_flag(Object? f_flag) => setAttribute("f_flag", f_flag);
 
+  /// ## f_frsize (getter)
   Object? get f_frsize => getAttribute("f_frsize");
 
+  /// ## f_frsize (setter)
   set f_frsize(Object? f_frsize) => setAttribute("f_frsize", f_frsize);
 
+  /// ## f_fsid (getter)
   Object? get f_fsid => getAttribute("f_fsid");
 
+  /// ## f_fsid (setter)
   set f_fsid(Object? f_fsid) => setAttribute("f_fsid", f_fsid);
 
+  /// ## f_namemax (getter)
   Object? get f_namemax => getAttribute("f_namemax");
 
+  /// ## f_namemax (setter)
   set f_namemax(Object? f_namemax) => setAttribute("f_namemax", f_namemax);
 
+  /// ## count (getter)
   Object? get count => getAttribute("count");
 
+  /// ## count (setter)
   set count(Object? count) => setAttribute("count", count);
 
+  /// ## index (getter)
   Object? get index => getAttribute("index");
 
+  /// ## index (setter)
   set index(Object? index) => setAttribute("index", index);
 
+  /// ## n_fields (getter)
   Object? get n_fields => getAttribute("n_fields");
 
+  /// ## n_fields (setter)
   set n_fields(Object? n_fields) => setAttribute("n_fields", n_fields);
 
+  /// ## n_sequence_fields (getter)
   Object? get n_sequence_fields => getAttribute("n_sequence_fields");
 
+  /// ## n_sequence_fields (setter)
   set n_sequence_fields(Object? n_sequence_fields) =>
       setAttribute("n_sequence_fields", n_sequence_fields);
 
+  /// ## n_unnamed_fields (getter)
   Object? get n_unnamed_fields => getAttribute("n_unnamed_fields");
 
+  /// ## n_unnamed_fields (setter)
   set n_unnamed_fields(Object? n_unnamed_fields) =>
       setAttribute("n_unnamed_fields", n_unnamed_fields);
 }
@@ -8950,33 +9897,63 @@ final class terminal_size extends PythonClass {
 
   terminal_size.from(super.pythonClass) : super.from();
 
+  /// ## columns (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// width of the terminal window in characters
   Object? get columns => getAttribute("columns");
 
+  /// ## columns (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// width of the terminal window in characters
   set columns(Object? columns) => setAttribute("columns", columns);
 
+  /// ## lines (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// height of the terminal window in characters
   Object? get lines => getAttribute("lines");
 
+  /// ## lines (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// height of the terminal window in characters
   set lines(Object? lines) => setAttribute("lines", lines);
 
+  /// ## count (getter)
   Object? get count => getAttribute("count");
 
+  /// ## count (setter)
   set count(Object? count) => setAttribute("count", count);
 
+  /// ## index (getter)
   Object? get index => getAttribute("index");
 
+  /// ## index (setter)
   set index(Object? index) => setAttribute("index", index);
 
+  /// ## n_fields (getter)
   Object? get n_fields => getAttribute("n_fields");
 
+  /// ## n_fields (setter)
   set n_fields(Object? n_fields) => setAttribute("n_fields", n_fields);
 
+  /// ## n_sequence_fields (getter)
   Object? get n_sequence_fields => getAttribute("n_sequence_fields");
 
+  /// ## n_sequence_fields (setter)
   set n_sequence_fields(Object? n_sequence_fields) =>
       setAttribute("n_sequence_fields", n_sequence_fields);
 
+  /// ## n_unnamed_fields (getter)
   Object? get n_unnamed_fields => getAttribute("n_unnamed_fields");
 
+  /// ## n_unnamed_fields (setter)
   set n_unnamed_fields(Object? n_unnamed_fields) =>
       setAttribute("n_unnamed_fields", n_unnamed_fields);
 }
@@ -8992,47 +9969,107 @@ final class times_result extends PythonClass {
 
   times_result.from(super.pythonClass) : super.from();
 
+  /// ## children_system (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// system time of children
   Object? get children_system => getAttribute("children_system");
 
+  /// ## children_system (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// system time of children
   set children_system(Object? children_system) =>
       setAttribute("children_system", children_system);
 
+  /// ## children_user (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// user time of children
   Object? get children_user => getAttribute("children_user");
 
+  /// ## children_user (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// user time of children
   set children_user(Object? children_user) =>
       setAttribute("children_user", children_user);
 
+  /// ## elapsed (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// elapsed time since an arbitrary point in the past
   Object? get elapsed => getAttribute("elapsed");
 
+  /// ## elapsed (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// elapsed time since an arbitrary point in the past
   set elapsed(Object? elapsed) => setAttribute("elapsed", elapsed);
 
+  /// ## system (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// system time
   Object? get system => getAttribute("system");
 
+  /// ## system (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// system time
   set system(Object? system) => setAttribute("system", system);
 
+  /// ## user (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// user time
   Object? get user => getAttribute("user");
 
+  /// ## user (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// user time
   set user(Object? user) => setAttribute("user", user);
 
+  /// ## count (getter)
   Object? get count => getAttribute("count");
 
+  /// ## count (setter)
   set count(Object? count) => setAttribute("count", count);
 
+  /// ## index (getter)
   Object? get index => getAttribute("index");
 
+  /// ## index (setter)
   set index(Object? index) => setAttribute("index", index);
 
+  /// ## n_fields (getter)
   Object? get n_fields => getAttribute("n_fields");
 
+  /// ## n_fields (setter)
   set n_fields(Object? n_fields) => setAttribute("n_fields", n_fields);
 
+  /// ## n_sequence_fields (getter)
   Object? get n_sequence_fields => getAttribute("n_sequence_fields");
 
+  /// ## n_sequence_fields (setter)
   set n_sequence_fields(Object? n_sequence_fields) =>
       setAttribute("n_sequence_fields", n_sequence_fields);
 
+  /// ## n_unnamed_fields (getter)
   Object? get n_unnamed_fields => getAttribute("n_unnamed_fields");
 
+  /// ## n_unnamed_fields (setter)
   set n_unnamed_fields(Object? n_unnamed_fields) =>
       setAttribute("n_unnamed_fields", n_unnamed_fields);
 }
@@ -9048,45 +10085,105 @@ final class uname_result extends PythonClass {
 
   uname_result.from(super.pythonClass) : super.from();
 
+  /// ## machine (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// hardware identifier
   Object? get machine => getAttribute("machine");
 
+  /// ## machine (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// hardware identifier
   set machine(Object? machine) => setAttribute("machine", machine);
 
+  /// ## nodename (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// name of machine on network (implementation-defined)
   Object? get nodename => getAttribute("nodename");
 
+  /// ## nodename (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// name of machine on network (implementation-defined)
   set nodename(Object? nodename) => setAttribute("nodename", nodename);
 
+  /// ## release (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// operating system release
   Object? get release => getAttribute("release");
 
+  /// ## release (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// operating system release
   set release(Object? release) => setAttribute("release", release);
 
+  /// ## sysname (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// operating system name
   Object? get sysname => getAttribute("sysname");
 
+  /// ## sysname (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// operating system name
   set sysname(Object? sysname) => setAttribute("sysname", sysname);
 
+  /// ## version (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// operating system version
   Object? get version => getAttribute("version");
 
+  /// ## version (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// operating system version
   set version(Object? version) => setAttribute("version", version);
 
+  /// ## count (getter)
   Object? get count => getAttribute("count");
 
+  /// ## count (setter)
   set count(Object? count) => setAttribute("count", count);
 
+  /// ## index (getter)
   Object? get index => getAttribute("index");
 
+  /// ## index (setter)
   set index(Object? index) => setAttribute("index", index);
 
+  /// ## n_fields (getter)
   Object? get n_fields => getAttribute("n_fields");
 
+  /// ## n_fields (setter)
   set n_fields(Object? n_fields) => setAttribute("n_fields", n_fields);
 
+  /// ## n_sequence_fields (getter)
   Object? get n_sequence_fields => getAttribute("n_sequence_fields");
 
+  /// ## n_sequence_fields (setter)
   set n_sequence_fields(Object? n_sequence_fields) =>
       setAttribute("n_sequence_fields", n_sequence_fields);
 
+  /// ## n_unnamed_fields (getter)
   Object? get n_unnamed_fields => getAttribute("n_unnamed_fields");
 
+  /// ## n_unnamed_fields (setter)
   set n_unnamed_fields(Object? n_unnamed_fields) =>
       setAttribute("n_unnamed_fields", n_unnamed_fields);
 }
@@ -9242,37 +10339,53 @@ final class BlockingIOError extends PythonClass {
 
   BlockingIOError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## characters_written (getter)
   Object? get characters_written => getAttribute("characters_written");
 
+  /// ## characters_written (setter)
   set characters_written(Object? characters_written) =>
       setAttribute("characters_written", characters_written);
 
+  /// ## errno (getter)
   Object? get errno => getAttribute("errno");
 
+  /// ## errno (setter)
   set errno(Object? errno) => setAttribute("errno", errno);
 
+  /// ## filename (getter)
   Object? get filename => getAttribute("filename");
 
+  /// ## filename (setter)
   set filename(Object? filename) => setAttribute("filename", filename);
 
+  /// ## filename2 (getter)
   Object? get filename2 => getAttribute("filename2");
 
+  /// ## filename2 (setter)
   set filename2(Object? filename2) => setAttribute("filename2", filename2);
 
+  /// ## strerror (getter)
   Object? get strerror => getAttribute("strerror");
 
+  /// ## strerror (setter)
   set strerror(Object? strerror) => setAttribute("strerror", strerror);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -9294,84 +10407,124 @@ final class BufferedIOBase extends PythonClass {
 
   BufferedIOBase.from(super.pythonClass) : super.from();
 
+  /// ## closed (getter)
   Object? get closed => getAttribute("closed");
 
+  /// ## closed (setter)
   set closed(Object? closed) => setAttribute("closed", closed);
 
+  /// ## close (getter)
   Object? get close => getAttribute("close");
 
+  /// ## close (setter)
   set close(Object? close) => setAttribute("close", close);
 
+  /// ## detach (getter)
   Object? get detach => getAttribute("detach");
 
+  /// ## detach (setter)
   set detach(Object? detach) => setAttribute("detach", detach);
 
+  /// ## fileno (getter)
   Object? get fileno => getAttribute("fileno");
 
+  /// ## fileno (setter)
   set fileno(Object? fileno) => setAttribute("fileno", fileno);
 
+  /// ## flush (getter)
   Object? get flush => getAttribute("flush");
 
+  /// ## flush (setter)
   set flush(Object? flush) => setAttribute("flush", flush);
 
+  /// ## isatty (getter)
   Object? get isatty => getAttribute("isatty");
 
+  /// ## isatty (setter)
   set isatty(Object? isatty) => setAttribute("isatty", isatty);
 
+  /// ## read (getter)
   Object? get read => getAttribute("read");
 
+  /// ## read (setter)
   set read(Object? read) => setAttribute("read", read);
 
+  /// ## read1 (getter)
   Object? get read1 => getAttribute("read1");
 
+  /// ## read1 (setter)
   set read1(Object? read1) => setAttribute("read1", read1);
 
+  /// ## readable (getter)
   Object? get readable => getAttribute("readable");
 
+  /// ## readable (setter)
   set readable(Object? readable) => setAttribute("readable", readable);
 
+  /// ## readinto (getter)
   Object? get readinto => getAttribute("readinto");
 
+  /// ## readinto (setter)
   set readinto(Object? readinto) => setAttribute("readinto", readinto);
 
+  /// ## readinto1 (getter)
   Object? get readinto1 => getAttribute("readinto1");
 
+  /// ## readinto1 (setter)
   set readinto1(Object? readinto1) => setAttribute("readinto1", readinto1);
 
+  /// ## readline (getter)
   Object? get readline => getAttribute("readline");
 
+  /// ## readline (setter)
   set readline(Object? readline) => setAttribute("readline", readline);
 
+  /// ## readlines (getter)
   Object? get readlines => getAttribute("readlines");
 
+  /// ## readlines (setter)
   set readlines(Object? readlines) => setAttribute("readlines", readlines);
 
+  /// ## seek (getter)
   Object? get seek => getAttribute("seek");
 
+  /// ## seek (setter)
   set seek(Object? seek) => setAttribute("seek", seek);
 
+  /// ## seekable (getter)
   Object? get seekable => getAttribute("seekable");
 
+  /// ## seekable (setter)
   set seekable(Object? seekable) => setAttribute("seekable", seekable);
 
+  /// ## tell (getter)
   Object? get tell => getAttribute("tell");
 
+  /// ## tell (setter)
   set tell(Object? tell) => setAttribute("tell", tell);
 
+  /// ## truncate (getter)
   Object? get truncate => getAttribute("truncate");
 
+  /// ## truncate (setter)
   set truncate(Object? truncate) => setAttribute("truncate", truncate);
 
+  /// ## writable (getter)
   Object? get writable => getAttribute("writable");
 
+  /// ## writable (setter)
   set writable(Object? writable) => setAttribute("writable", writable);
 
+  /// ## write (getter)
   Object? get write => getAttribute("write");
 
+  /// ## write (setter)
   set write(Object? write) => setAttribute("write", write);
 
+  /// ## writelines (getter)
   Object? get writelines => getAttribute("writelines");
 
+  /// ## writelines (setter)
   set writelines(Object? writelines) => setAttribute("writelines", writelines);
 }
 
@@ -9386,88 +10539,130 @@ final class BufferedRWPair extends PythonClass {
 
   BufferedRWPair.from(super.pythonClass) : super.from();
 
+  /// ## closed (getter)
   Object? get closed => getAttribute("closed");
 
+  /// ## closed (setter)
   set closed(Object? closed) => setAttribute("closed", closed);
 
+  /// ## close (getter)
   Object? get close => getAttribute("close");
 
+  /// ## close (setter)
   set close(Object? close) => setAttribute("close", close);
 
+  /// ## detach (getter)
   Object? get detach => getAttribute("detach");
 
+  /// ## detach (setter)
   set detach(Object? detach) => setAttribute("detach", detach);
 
+  /// ## fileno (getter)
   Object? get fileno => getAttribute("fileno");
 
+  /// ## fileno (setter)
   set fileno(Object? fileno) => setAttribute("fileno", fileno);
 
+  /// ## flush (getter)
   Object? get flush => getAttribute("flush");
 
+  /// ## flush (setter)
   set flush(Object? flush) => setAttribute("flush", flush);
 
+  /// ## isatty (getter)
   Object? get isatty => getAttribute("isatty");
 
+  /// ## isatty (setter)
   set isatty(Object? isatty) => setAttribute("isatty", isatty);
 
+  /// ## peek (getter)
   Object? get peek => getAttribute("peek");
 
+  /// ## peek (setter)
   set peek(Object? peek) => setAttribute("peek", peek);
 
+  /// ## read (getter)
   Object? get read => getAttribute("read");
 
+  /// ## read (setter)
   set read(Object? read) => setAttribute("read", read);
 
+  /// ## read1 (getter)
   Object? get read1 => getAttribute("read1");
 
+  /// ## read1 (setter)
   set read1(Object? read1) => setAttribute("read1", read1);
 
+  /// ## readable (getter)
   Object? get readable => getAttribute("readable");
 
+  /// ## readable (setter)
   set readable(Object? readable) => setAttribute("readable", readable);
 
+  /// ## readinto (getter)
   Object? get readinto => getAttribute("readinto");
 
+  /// ## readinto (setter)
   set readinto(Object? readinto) => setAttribute("readinto", readinto);
 
+  /// ## readinto1 (getter)
   Object? get readinto1 => getAttribute("readinto1");
 
+  /// ## readinto1 (setter)
   set readinto1(Object? readinto1) => setAttribute("readinto1", readinto1);
 
+  /// ## readline (getter)
   Object? get readline => getAttribute("readline");
 
+  /// ## readline (setter)
   set readline(Object? readline) => setAttribute("readline", readline);
 
+  /// ## readlines (getter)
   Object? get readlines => getAttribute("readlines");
 
+  /// ## readlines (setter)
   set readlines(Object? readlines) => setAttribute("readlines", readlines);
 
+  /// ## seek (getter)
   Object? get seek => getAttribute("seek");
 
+  /// ## seek (setter)
   set seek(Object? seek) => setAttribute("seek", seek);
 
+  /// ## seekable (getter)
   Object? get seekable => getAttribute("seekable");
 
+  /// ## seekable (setter)
   set seekable(Object? seekable) => setAttribute("seekable", seekable);
 
+  /// ## tell (getter)
   Object? get tell => getAttribute("tell");
 
+  /// ## tell (setter)
   set tell(Object? tell) => setAttribute("tell", tell);
 
+  /// ## truncate (getter)
   Object? get truncate => getAttribute("truncate");
 
+  /// ## truncate (setter)
   set truncate(Object? truncate) => setAttribute("truncate", truncate);
 
+  /// ## writable (getter)
   Object? get writable => getAttribute("writable");
 
+  /// ## writable (setter)
   set writable(Object? writable) => setAttribute("writable", writable);
 
+  /// ## write (getter)
   Object? get write => getAttribute("write");
 
+  /// ## write (setter)
   set write(Object? write) => setAttribute("write", write);
 
+  /// ## writelines (getter)
   Object? get writelines => getAttribute("writelines");
 
+  /// ## writelines (setter)
   set writelines(Object? writelines) => setAttribute("writelines", writelines);
 }
 
@@ -9482,100 +10677,148 @@ final class BufferedRandom extends PythonClass {
 
   BufferedRandom.from(super.pythonClass) : super.from();
 
+  /// ## closed (getter)
   Object? get closed => getAttribute("closed");
 
+  /// ## closed (setter)
   set closed(Object? closed) => setAttribute("closed", closed);
 
+  /// ## mode (getter)
   Object? get mode => getAttribute("mode");
 
+  /// ## mode (setter)
   set mode(Object? mode) => setAttribute("mode", mode);
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## raw (getter)
   Object? get raw => getAttribute("raw");
 
+  /// ## raw (setter)
   set raw(Object? raw) => setAttribute("raw", raw);
 
+  /// ## close (getter)
   Object? get close => getAttribute("close");
 
+  /// ## close (setter)
   set close(Object? close) => setAttribute("close", close);
 
+  /// ## detach (getter)
   Object? get detach => getAttribute("detach");
 
+  /// ## detach (setter)
   set detach(Object? detach) => setAttribute("detach", detach);
 
+  /// ## fileno (getter)
   Object? get fileno => getAttribute("fileno");
 
+  /// ## fileno (setter)
   set fileno(Object? fileno) => setAttribute("fileno", fileno);
 
+  /// ## flush (getter)
   Object? get flush => getAttribute("flush");
 
+  /// ## flush (setter)
   set flush(Object? flush) => setAttribute("flush", flush);
 
+  /// ## isatty (getter)
   Object? get isatty => getAttribute("isatty");
 
+  /// ## isatty (setter)
   set isatty(Object? isatty) => setAttribute("isatty", isatty);
 
+  /// ## peek (getter)
   Object? get peek => getAttribute("peek");
 
+  /// ## peek (setter)
   set peek(Object? peek) => setAttribute("peek", peek);
 
+  /// ## read (getter)
   Object? get read => getAttribute("read");
 
+  /// ## read (setter)
   set read(Object? read) => setAttribute("read", read);
 
+  /// ## read1 (getter)
   Object? get read1 => getAttribute("read1");
 
+  /// ## read1 (setter)
   set read1(Object? read1) => setAttribute("read1", read1);
 
+  /// ## readable (getter)
   Object? get readable => getAttribute("readable");
 
+  /// ## readable (setter)
   set readable(Object? readable) => setAttribute("readable", readable);
 
+  /// ## readinto (getter)
   Object? get readinto => getAttribute("readinto");
 
+  /// ## readinto (setter)
   set readinto(Object? readinto) => setAttribute("readinto", readinto);
 
+  /// ## readinto1 (getter)
   Object? get readinto1 => getAttribute("readinto1");
 
+  /// ## readinto1 (setter)
   set readinto1(Object? readinto1) => setAttribute("readinto1", readinto1);
 
+  /// ## readline (getter)
   Object? get readline => getAttribute("readline");
 
+  /// ## readline (setter)
   set readline(Object? readline) => setAttribute("readline", readline);
 
+  /// ## readlines (getter)
   Object? get readlines => getAttribute("readlines");
 
+  /// ## readlines (setter)
   set readlines(Object? readlines) => setAttribute("readlines", readlines);
 
+  /// ## seek (getter)
   Object? get seek => getAttribute("seek");
 
+  /// ## seek (setter)
   set seek(Object? seek) => setAttribute("seek", seek);
 
+  /// ## seekable (getter)
   Object? get seekable => getAttribute("seekable");
 
+  /// ## seekable (setter)
   set seekable(Object? seekable) => setAttribute("seekable", seekable);
 
+  /// ## tell (getter)
   Object? get tell => getAttribute("tell");
 
+  /// ## tell (setter)
   set tell(Object? tell) => setAttribute("tell", tell);
 
+  /// ## truncate (getter)
   Object? get truncate => getAttribute("truncate");
 
+  /// ## truncate (setter)
   set truncate(Object? truncate) => setAttribute("truncate", truncate);
 
+  /// ## writable (getter)
   Object? get writable => getAttribute("writable");
 
+  /// ## writable (setter)
   set writable(Object? writable) => setAttribute("writable", writable);
 
+  /// ## write (getter)
   Object? get write => getAttribute("write");
 
+  /// ## write (setter)
   set write(Object? write) => setAttribute("write", write);
 
+  /// ## writelines (getter)
   Object? get writelines => getAttribute("writelines");
 
+  /// ## writelines (setter)
   set writelines(Object? writelines) => setAttribute("writelines", writelines);
 }
 
@@ -9590,100 +10833,148 @@ final class BufferedReader extends PythonClass {
 
   BufferedReader.from(super.pythonClass) : super.from();
 
+  /// ## closed (getter)
   Object? get closed => getAttribute("closed");
 
+  /// ## closed (setter)
   set closed(Object? closed) => setAttribute("closed", closed);
 
+  /// ## mode (getter)
   Object? get mode => getAttribute("mode");
 
+  /// ## mode (setter)
   set mode(Object? mode) => setAttribute("mode", mode);
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## raw (getter)
   Object? get raw => getAttribute("raw");
 
+  /// ## raw (setter)
   set raw(Object? raw) => setAttribute("raw", raw);
 
+  /// ## close (getter)
   Object? get close => getAttribute("close");
 
+  /// ## close (setter)
   set close(Object? close) => setAttribute("close", close);
 
+  /// ## detach (getter)
   Object? get detach => getAttribute("detach");
 
+  /// ## detach (setter)
   set detach(Object? detach) => setAttribute("detach", detach);
 
+  /// ## fileno (getter)
   Object? get fileno => getAttribute("fileno");
 
+  /// ## fileno (setter)
   set fileno(Object? fileno) => setAttribute("fileno", fileno);
 
+  /// ## flush (getter)
   Object? get flush => getAttribute("flush");
 
+  /// ## flush (setter)
   set flush(Object? flush) => setAttribute("flush", flush);
 
+  /// ## isatty (getter)
   Object? get isatty => getAttribute("isatty");
 
+  /// ## isatty (setter)
   set isatty(Object? isatty) => setAttribute("isatty", isatty);
 
+  /// ## peek (getter)
   Object? get peek => getAttribute("peek");
 
+  /// ## peek (setter)
   set peek(Object? peek) => setAttribute("peek", peek);
 
+  /// ## read (getter)
   Object? get read => getAttribute("read");
 
+  /// ## read (setter)
   set read(Object? read) => setAttribute("read", read);
 
+  /// ## read1 (getter)
   Object? get read1 => getAttribute("read1");
 
+  /// ## read1 (setter)
   set read1(Object? read1) => setAttribute("read1", read1);
 
+  /// ## readable (getter)
   Object? get readable => getAttribute("readable");
 
+  /// ## readable (setter)
   set readable(Object? readable) => setAttribute("readable", readable);
 
+  /// ## readinto (getter)
   Object? get readinto => getAttribute("readinto");
 
+  /// ## readinto (setter)
   set readinto(Object? readinto) => setAttribute("readinto", readinto);
 
+  /// ## readinto1 (getter)
   Object? get readinto1 => getAttribute("readinto1");
 
+  /// ## readinto1 (setter)
   set readinto1(Object? readinto1) => setAttribute("readinto1", readinto1);
 
+  /// ## readline (getter)
   Object? get readline => getAttribute("readline");
 
+  /// ## readline (setter)
   set readline(Object? readline) => setAttribute("readline", readline);
 
+  /// ## readlines (getter)
   Object? get readlines => getAttribute("readlines");
 
+  /// ## readlines (setter)
   set readlines(Object? readlines) => setAttribute("readlines", readlines);
 
+  /// ## seek (getter)
   Object? get seek => getAttribute("seek");
 
+  /// ## seek (setter)
   set seek(Object? seek) => setAttribute("seek", seek);
 
+  /// ## seekable (getter)
   Object? get seekable => getAttribute("seekable");
 
+  /// ## seekable (setter)
   set seekable(Object? seekable) => setAttribute("seekable", seekable);
 
+  /// ## tell (getter)
   Object? get tell => getAttribute("tell");
 
+  /// ## tell (setter)
   set tell(Object? tell) => setAttribute("tell", tell);
 
+  /// ## truncate (getter)
   Object? get truncate => getAttribute("truncate");
 
+  /// ## truncate (setter)
   set truncate(Object? truncate) => setAttribute("truncate", truncate);
 
+  /// ## writable (getter)
   Object? get writable => getAttribute("writable");
 
+  /// ## writable (setter)
   set writable(Object? writable) => setAttribute("writable", writable);
 
+  /// ## write (getter)
   Object? get write => getAttribute("write");
 
+  /// ## write (setter)
   set write(Object? write) => setAttribute("write", write);
 
+  /// ## writelines (getter)
   Object? get writelines => getAttribute("writelines");
 
+  /// ## writelines (setter)
   set writelines(Object? writelines) => setAttribute("writelines", writelines);
 }
 
@@ -9698,96 +10989,142 @@ final class BufferedWriter extends PythonClass {
 
   BufferedWriter.from(super.pythonClass) : super.from();
 
+  /// ## closed (getter)
   Object? get closed => getAttribute("closed");
 
+  /// ## closed (setter)
   set closed(Object? closed) => setAttribute("closed", closed);
 
+  /// ## mode (getter)
   Object? get mode => getAttribute("mode");
 
+  /// ## mode (setter)
   set mode(Object? mode) => setAttribute("mode", mode);
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## raw (getter)
   Object? get raw => getAttribute("raw");
 
+  /// ## raw (setter)
   set raw(Object? raw) => setAttribute("raw", raw);
 
+  /// ## close (getter)
   Object? get close => getAttribute("close");
 
+  /// ## close (setter)
   set close(Object? close) => setAttribute("close", close);
 
+  /// ## detach (getter)
   Object? get detach => getAttribute("detach");
 
+  /// ## detach (setter)
   set detach(Object? detach) => setAttribute("detach", detach);
 
+  /// ## fileno (getter)
   Object? get fileno => getAttribute("fileno");
 
+  /// ## fileno (setter)
   set fileno(Object? fileno) => setAttribute("fileno", fileno);
 
+  /// ## flush (getter)
   Object? get flush => getAttribute("flush");
 
+  /// ## flush (setter)
   set flush(Object? flush) => setAttribute("flush", flush);
 
+  /// ## isatty (getter)
   Object? get isatty => getAttribute("isatty");
 
+  /// ## isatty (setter)
   set isatty(Object? isatty) => setAttribute("isatty", isatty);
 
+  /// ## read (getter)
   Object? get read => getAttribute("read");
 
+  /// ## read (setter)
   set read(Object? read) => setAttribute("read", read);
 
+  /// ## read1 (getter)
   Object? get read1 => getAttribute("read1");
 
+  /// ## read1 (setter)
   set read1(Object? read1) => setAttribute("read1", read1);
 
+  /// ## readable (getter)
   Object? get readable => getAttribute("readable");
 
+  /// ## readable (setter)
   set readable(Object? readable) => setAttribute("readable", readable);
 
+  /// ## readinto (getter)
   Object? get readinto => getAttribute("readinto");
 
+  /// ## readinto (setter)
   set readinto(Object? readinto) => setAttribute("readinto", readinto);
 
+  /// ## readinto1 (getter)
   Object? get readinto1 => getAttribute("readinto1");
 
+  /// ## readinto1 (setter)
   set readinto1(Object? readinto1) => setAttribute("readinto1", readinto1);
 
+  /// ## readline (getter)
   Object? get readline => getAttribute("readline");
 
+  /// ## readline (setter)
   set readline(Object? readline) => setAttribute("readline", readline);
 
+  /// ## readlines (getter)
   Object? get readlines => getAttribute("readlines");
 
+  /// ## readlines (setter)
   set readlines(Object? readlines) => setAttribute("readlines", readlines);
 
+  /// ## seek (getter)
   Object? get seek => getAttribute("seek");
 
+  /// ## seek (setter)
   set seek(Object? seek) => setAttribute("seek", seek);
 
+  /// ## seekable (getter)
   Object? get seekable => getAttribute("seekable");
 
+  /// ## seekable (setter)
   set seekable(Object? seekable) => setAttribute("seekable", seekable);
 
+  /// ## tell (getter)
   Object? get tell => getAttribute("tell");
 
+  /// ## tell (setter)
   set tell(Object? tell) => setAttribute("tell", tell);
 
+  /// ## truncate (getter)
   Object? get truncate => getAttribute("truncate");
 
+  /// ## truncate (setter)
   set truncate(Object? truncate) => setAttribute("truncate", truncate);
 
+  /// ## writable (getter)
   Object? get writable => getAttribute("writable");
 
+  /// ## writable (setter)
   set writable(Object? writable) => setAttribute("writable", writable);
 
+  /// ## write (getter)
   Object? get write => getAttribute("write");
 
+  /// ## write (setter)
   set write(Object? write) => setAttribute("write", write);
 
+  /// ## writelines (getter)
   Object? get writelines => getAttribute("writelines");
 
+  /// ## writelines (setter)
   set writelines(Object? writelines) => setAttribute("writelines", writelines);
 }
 
@@ -9802,92 +11139,144 @@ final class BytesIO extends PythonClass {
 
   BytesIO.from(super.pythonClass) : super.from();
 
+  /// ## closed (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// True if the file is closed.
   Object? get closed => getAttribute("closed");
 
+  /// ## closed (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// True if the file is closed.
   set closed(Object? closed) => setAttribute("closed", closed);
 
+  /// ## close (getter)
   Object? get close => getAttribute("close");
 
+  /// ## close (setter)
   set close(Object? close) => setAttribute("close", close);
 
+  /// ## detach (getter)
   Object? get detach => getAttribute("detach");
 
+  /// ## detach (setter)
   set detach(Object? detach) => setAttribute("detach", detach);
 
+  /// ## fileno (getter)
   Object? get fileno => getAttribute("fileno");
 
+  /// ## fileno (setter)
   set fileno(Object? fileno) => setAttribute("fileno", fileno);
 
+  /// ## flush (getter)
   Object? get flush => getAttribute("flush");
 
+  /// ## flush (setter)
   set flush(Object? flush) => setAttribute("flush", flush);
 
+  /// ## getbuffer (getter)
   Object? get getbuffer => getAttribute("getbuffer");
 
+  /// ## getbuffer (setter)
   set getbuffer(Object? getbuffer) => setAttribute("getbuffer", getbuffer);
 
+  /// ## getvalue (getter)
   Object? get getvalue => getAttribute("getvalue");
 
+  /// ## getvalue (setter)
   set getvalue(Object? getvalue) => setAttribute("getvalue", getvalue);
 
+  /// ## isatty (getter)
   Object? get isatty => getAttribute("isatty");
 
+  /// ## isatty (setter)
   set isatty(Object? isatty) => setAttribute("isatty", isatty);
 
+  /// ## read (getter)
   Object? get read => getAttribute("read");
 
+  /// ## read (setter)
   set read(Object? read) => setAttribute("read", read);
 
+  /// ## read1 (getter)
   Object? get read1 => getAttribute("read1");
 
+  /// ## read1 (setter)
   set read1(Object? read1) => setAttribute("read1", read1);
 
+  /// ## readable (getter)
   Object? get readable => getAttribute("readable");
 
+  /// ## readable (setter)
   set readable(Object? readable) => setAttribute("readable", readable);
 
+  /// ## readinto (getter)
   Object? get readinto => getAttribute("readinto");
 
+  /// ## readinto (setter)
   set readinto(Object? readinto) => setAttribute("readinto", readinto);
 
+  /// ## readinto1 (getter)
   Object? get readinto1 => getAttribute("readinto1");
 
+  /// ## readinto1 (setter)
   set readinto1(Object? readinto1) => setAttribute("readinto1", readinto1);
 
+  /// ## readline (getter)
   Object? get readline => getAttribute("readline");
 
+  /// ## readline (setter)
   set readline(Object? readline) => setAttribute("readline", readline);
 
+  /// ## readlines (getter)
   Object? get readlines => getAttribute("readlines");
 
+  /// ## readlines (setter)
   set readlines(Object? readlines) => setAttribute("readlines", readlines);
 
+  /// ## seek (getter)
   Object? get seek => getAttribute("seek");
 
+  /// ## seek (setter)
   set seek(Object? seek) => setAttribute("seek", seek);
 
+  /// ## seekable (getter)
   Object? get seekable => getAttribute("seekable");
 
+  /// ## seekable (setter)
   set seekable(Object? seekable) => setAttribute("seekable", seekable);
 
+  /// ## tell (getter)
   Object? get tell => getAttribute("tell");
 
+  /// ## tell (setter)
   set tell(Object? tell) => setAttribute("tell", tell);
 
+  /// ## truncate (getter)
   Object? get truncate => getAttribute("truncate");
 
+  /// ## truncate (setter)
   set truncate(Object? truncate) => setAttribute("truncate", truncate);
 
+  /// ## writable (getter)
   Object? get writable => getAttribute("writable");
 
+  /// ## writable (setter)
   set writable(Object? writable) => setAttribute("writable", writable);
 
+  /// ## write (getter)
   Object? get write => getAttribute("write");
 
+  /// ## write (setter)
   set write(Object? write) => setAttribute("write", write);
 
+  /// ## writelines (getter)
   Object? get writelines => getAttribute("writelines");
 
+  /// ## writelines (setter)
   set writelines(Object? writelines) => setAttribute("writelines", writelines);
 }
 
@@ -9902,84 +11291,148 @@ final class FileIO extends PythonClass {
 
   FileIO.from(super.pythonClass) : super.from();
 
+  /// ## closed (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// True if the file is closed
   Object? get closed => getAttribute("closed");
 
+  /// ## closed (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// True if the file is closed
   set closed(Object? closed) => setAttribute("closed", closed);
 
+  /// ## closefd (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// True if the file descriptor will be closed by close().
   Object? get closefd => getAttribute("closefd");
 
+  /// ## closefd (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// True if the file descriptor will be closed by close().
   set closefd(Object? closefd) => setAttribute("closefd", closefd);
 
+  /// ## mode (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// String giving the file mode
   Object? get mode => getAttribute("mode");
 
+  /// ## mode (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// String giving the file mode
   set mode(Object? mode) => setAttribute("mode", mode);
 
+  /// ## close (getter)
   Object? get close => getAttribute("close");
 
+  /// ## close (setter)
   set close(Object? close) => setAttribute("close", close);
 
+  /// ## fileno (getter)
   Object? get fileno => getAttribute("fileno");
 
+  /// ## fileno (setter)
   set fileno(Object? fileno) => setAttribute("fileno", fileno);
 
+  /// ## flush (getter)
   Object? get flush => getAttribute("flush");
 
+  /// ## flush (setter)
   set flush(Object? flush) => setAttribute("flush", flush);
 
+  /// ## isatty (getter)
   Object? get isatty => getAttribute("isatty");
 
+  /// ## isatty (setter)
   set isatty(Object? isatty) => setAttribute("isatty", isatty);
 
+  /// ## read (getter)
   Object? get read => getAttribute("read");
 
+  /// ## read (setter)
   set read(Object? read) => setAttribute("read", read);
 
+  /// ## readable (getter)
   Object? get readable => getAttribute("readable");
 
+  /// ## readable (setter)
   set readable(Object? readable) => setAttribute("readable", readable);
 
+  /// ## readall (getter)
   Object? get readall => getAttribute("readall");
 
+  /// ## readall (setter)
   set readall(Object? readall) => setAttribute("readall", readall);
 
+  /// ## readinto (getter)
   Object? get readinto => getAttribute("readinto");
 
+  /// ## readinto (setter)
   set readinto(Object? readinto) => setAttribute("readinto", readinto);
 
+  /// ## readline (getter)
   Object? get readline => getAttribute("readline");
 
+  /// ## readline (setter)
   set readline(Object? readline) => setAttribute("readline", readline);
 
+  /// ## readlines (getter)
   Object? get readlines => getAttribute("readlines");
 
+  /// ## readlines (setter)
   set readlines(Object? readlines) => setAttribute("readlines", readlines);
 
+  /// ## seek (getter)
   Object? get seek => getAttribute("seek");
 
+  /// ## seek (setter)
   set seek(Object? seek) => setAttribute("seek", seek);
 
+  /// ## seekable (getter)
   Object? get seekable => getAttribute("seekable");
 
+  /// ## seekable (setter)
   set seekable(Object? seekable) => setAttribute("seekable", seekable);
 
+  /// ## tell (getter)
   Object? get tell => getAttribute("tell");
 
+  /// ## tell (setter)
   set tell(Object? tell) => setAttribute("tell", tell);
 
+  /// ## truncate (getter)
   Object? get truncate => getAttribute("truncate");
 
+  /// ## truncate (setter)
   set truncate(Object? truncate) => setAttribute("truncate", truncate);
 
+  /// ## writable (getter)
   Object? get writable => getAttribute("writable");
 
+  /// ## writable (setter)
   set writable(Object? writable) => setAttribute("writable", writable);
 
+  /// ## write (getter)
   Object? get write => getAttribute("write");
 
+  /// ## write (setter)
   set write(Object? write) => setAttribute("write", write);
 
+  /// ## writelines (getter)
   Object? get writelines => getAttribute("writelines");
 
+  /// ## writelines (setter)
   set writelines(Object? writelines) => setAttribute("writelines", writelines);
 }
 
@@ -10000,60 +11453,88 @@ final class IOBase extends PythonClass {
 
   IOBase.from(super.pythonClass) : super.from();
 
+  /// ## closed (getter)
   Object? get closed => getAttribute("closed");
 
+  /// ## closed (setter)
   set closed(Object? closed) => setAttribute("closed", closed);
 
+  /// ## close (getter)
   Object? get close => getAttribute("close");
 
+  /// ## close (setter)
   set close(Object? close) => setAttribute("close", close);
 
+  /// ## fileno (getter)
   Object? get fileno => getAttribute("fileno");
 
+  /// ## fileno (setter)
   set fileno(Object? fileno) => setAttribute("fileno", fileno);
 
+  /// ## flush (getter)
   Object? get flush => getAttribute("flush");
 
+  /// ## flush (setter)
   set flush(Object? flush) => setAttribute("flush", flush);
 
+  /// ## isatty (getter)
   Object? get isatty => getAttribute("isatty");
 
+  /// ## isatty (setter)
   set isatty(Object? isatty) => setAttribute("isatty", isatty);
 
+  /// ## readable (getter)
   Object? get readable => getAttribute("readable");
 
+  /// ## readable (setter)
   set readable(Object? readable) => setAttribute("readable", readable);
 
+  /// ## readline (getter)
   Object? get readline => getAttribute("readline");
 
+  /// ## readline (setter)
   set readline(Object? readline) => setAttribute("readline", readline);
 
+  /// ## readlines (getter)
   Object? get readlines => getAttribute("readlines");
 
+  /// ## readlines (setter)
   set readlines(Object? readlines) => setAttribute("readlines", readlines);
 
+  /// ## seek (getter)
   Object? get seek => getAttribute("seek");
 
+  /// ## seek (setter)
   set seek(Object? seek) => setAttribute("seek", seek);
 
+  /// ## seekable (getter)
   Object? get seekable => getAttribute("seekable");
 
+  /// ## seekable (setter)
   set seekable(Object? seekable) => setAttribute("seekable", seekable);
 
+  /// ## tell (getter)
   Object? get tell => getAttribute("tell");
 
+  /// ## tell (setter)
   set tell(Object? tell) => setAttribute("tell", tell);
 
+  /// ## truncate (getter)
   Object? get truncate => getAttribute("truncate");
 
+  /// ## truncate (setter)
   set truncate(Object? truncate) => setAttribute("truncate", truncate);
 
+  /// ## writable (getter)
   Object? get writable => getAttribute("writable");
 
+  /// ## writable (setter)
   set writable(Object? writable) => setAttribute("writable", writable);
 
+  /// ## writelines (getter)
   Object? get writelines => getAttribute("writelines");
 
+  /// ## writelines (setter)
   set writelines(Object? writelines) => setAttribute("writelines", writelines);
 }
 
@@ -10068,24 +11549,34 @@ final class IncrementalNewlineDecoder extends PythonClass {
 
   IncrementalNewlineDecoder.from(super.pythonClass) : super.from();
 
+  /// ## newlines (getter)
   Object? get newlines => getAttribute("newlines");
 
+  /// ## newlines (setter)
   set newlines(Object? newlines) => setAttribute("newlines", newlines);
 
+  /// ## decode (getter)
   Object? get decode => getAttribute("decode");
 
+  /// ## decode (setter)
   set decode(Object? decode) => setAttribute("decode", decode);
 
+  /// ## getstate (getter)
   Object? get getstate => getAttribute("getstate");
 
+  /// ## getstate (setter)
   set getstate(Object? getstate) => setAttribute("getstate", getstate);
 
+  /// ## reset (getter)
   Object? get reset => getAttribute("reset");
 
+  /// ## reset (setter)
   set reset(Object? reset) => setAttribute("reset", reset);
 
+  /// ## setstate (getter)
   Object? get setstate => getAttribute("setstate");
 
+  /// ## setstate (setter)
   set setstate(Object? setstate) => setAttribute("setstate", setstate);
 }
 
@@ -10106,76 +11597,112 @@ final class RawIOBase extends PythonClass {
 
   RawIOBase.from(super.pythonClass) : super.from();
 
+  /// ## closed (getter)
   Object? get closed => getAttribute("closed");
 
+  /// ## closed (setter)
   set closed(Object? closed) => setAttribute("closed", closed);
 
+  /// ## close (getter)
   Object? get close => getAttribute("close");
 
+  /// ## close (setter)
   set close(Object? close) => setAttribute("close", close);
 
+  /// ## fileno (getter)
   Object? get fileno => getAttribute("fileno");
 
+  /// ## fileno (setter)
   set fileno(Object? fileno) => setAttribute("fileno", fileno);
 
+  /// ## flush (getter)
   Object? get flush => getAttribute("flush");
 
+  /// ## flush (setter)
   set flush(Object? flush) => setAttribute("flush", flush);
 
+  /// ## isatty (getter)
   Object? get isatty => getAttribute("isatty");
 
+  /// ## isatty (setter)
   set isatty(Object? isatty) => setAttribute("isatty", isatty);
 
+  /// ## read (getter)
   Object? get read => getAttribute("read");
 
+  /// ## read (setter)
   set read(Object? read) => setAttribute("read", read);
 
+  /// ## readable (getter)
   Object? get readable => getAttribute("readable");
 
+  /// ## readable (setter)
   set readable(Object? readable) => setAttribute("readable", readable);
 
+  /// ## readall (getter)
   Object? get readall => getAttribute("readall");
 
+  /// ## readall (setter)
   set readall(Object? readall) => setAttribute("readall", readall);
 
+  /// ## readinto (getter)
   Object? get readinto => getAttribute("readinto");
 
+  /// ## readinto (setter)
   set readinto(Object? readinto) => setAttribute("readinto", readinto);
 
+  /// ## readline (getter)
   Object? get readline => getAttribute("readline");
 
+  /// ## readline (setter)
   set readline(Object? readline) => setAttribute("readline", readline);
 
+  /// ## readlines (getter)
   Object? get readlines => getAttribute("readlines");
 
+  /// ## readlines (setter)
   set readlines(Object? readlines) => setAttribute("readlines", readlines);
 
+  /// ## seek (getter)
   Object? get seek => getAttribute("seek");
 
+  /// ## seek (setter)
   set seek(Object? seek) => setAttribute("seek", seek);
 
+  /// ## seekable (getter)
   Object? get seekable => getAttribute("seekable");
 
+  /// ## seekable (setter)
   set seekable(Object? seekable) => setAttribute("seekable", seekable);
 
+  /// ## tell (getter)
   Object? get tell => getAttribute("tell");
 
+  /// ## tell (setter)
   set tell(Object? tell) => setAttribute("tell", tell);
 
+  /// ## truncate (getter)
   Object? get truncate => getAttribute("truncate");
 
+  /// ## truncate (setter)
   set truncate(Object? truncate) => setAttribute("truncate", truncate);
 
+  /// ## writable (getter)
   Object? get writable => getAttribute("writable");
 
+  /// ## writable (setter)
   set writable(Object? writable) => setAttribute("writable", writable);
 
+  /// ## write (getter)
   Object? get write => getAttribute("write");
 
+  /// ## write (setter)
   set write(Object? write) => setAttribute("write", write);
 
+  /// ## writelines (getter)
   Object? get writelines => getAttribute("writelines");
 
+  /// ## writelines (setter)
   set writelines(Object? writelines) => setAttribute("writelines", writelines);
 }
 
@@ -10190,93 +11717,137 @@ final class StringIO extends PythonClass {
 
   StringIO.from(super.pythonClass) : super.from();
 
+  /// ## closed (getter)
   Object? get closed => getAttribute("closed");
 
+  /// ## closed (setter)
   set closed(Object? closed) => setAttribute("closed", closed);
 
+  /// ## encoding (getter)
   Object? get encoding => getAttribute("encoding");
 
+  /// ## encoding (setter)
   set encoding(Object? encoding) => setAttribute("encoding", encoding);
 
+  /// ## errors (getter)
   Object? get errors => getAttribute("errors");
 
+  /// ## errors (setter)
   set errors(Object? errors) => setAttribute("errors", errors);
 
+  /// ## line_buffering (getter)
   Object? get line_buffering => getAttribute("line_buffering");
 
+  /// ## line_buffering (setter)
   set line_buffering(Object? line_buffering) =>
       setAttribute("line_buffering", line_buffering);
 
+  /// ## newlines (getter)
   Object? get newlines => getAttribute("newlines");
 
+  /// ## newlines (setter)
   set newlines(Object? newlines) => setAttribute("newlines", newlines);
 
+  /// ## close (getter)
   Object? get close => getAttribute("close");
 
+  /// ## close (setter)
   set close(Object? close) => setAttribute("close", close);
 
+  /// ## detach (getter)
   Object? get detach => getAttribute("detach");
 
+  /// ## detach (setter)
   set detach(Object? detach) => setAttribute("detach", detach);
 
+  /// ## fileno (getter)
   Object? get fileno => getAttribute("fileno");
 
+  /// ## fileno (setter)
   set fileno(Object? fileno) => setAttribute("fileno", fileno);
 
+  /// ## flush (getter)
   Object? get flush => getAttribute("flush");
 
+  /// ## flush (setter)
   set flush(Object? flush) => setAttribute("flush", flush);
 
+  /// ## getvalue (getter)
   Object? get getvalue => getAttribute("getvalue");
 
+  /// ## getvalue (setter)
   set getvalue(Object? getvalue) => setAttribute("getvalue", getvalue);
 
+  /// ## isatty (getter)
   Object? get isatty => getAttribute("isatty");
 
+  /// ## isatty (setter)
   set isatty(Object? isatty) => setAttribute("isatty", isatty);
 
+  /// ## read (getter)
   Object? get read => getAttribute("read");
 
+  /// ## read (setter)
   set read(Object? read) => setAttribute("read", read);
 
+  /// ## readable (getter)
   Object? get readable => getAttribute("readable");
 
+  /// ## readable (setter)
   set readable(Object? readable) => setAttribute("readable", readable);
 
+  /// ## readline (getter)
   Object? get readline => getAttribute("readline");
 
+  /// ## readline (setter)
   set readline(Object? readline) => setAttribute("readline", readline);
 
+  /// ## readlines (getter)
   Object? get readlines => getAttribute("readlines");
 
+  /// ## readlines (setter)
   set readlines(Object? readlines) => setAttribute("readlines", readlines);
 
+  /// ## seek (getter)
   Object? get seek => getAttribute("seek");
 
+  /// ## seek (setter)
   set seek(Object? seek) => setAttribute("seek", seek);
 
+  /// ## seekable (getter)
   Object? get seekable => getAttribute("seekable");
 
+  /// ## seekable (setter)
   set seekable(Object? seekable) => setAttribute("seekable", seekable);
 
+  /// ## tell (getter)
   Object? get tell => getAttribute("tell");
 
+  /// ## tell (setter)
   set tell(Object? tell) => setAttribute("tell", tell);
 
+  /// ## truncate (getter)
   Object? get truncate => getAttribute("truncate");
 
+  /// ## truncate (setter)
   set truncate(Object? truncate) => setAttribute("truncate", truncate);
 
+  /// ## writable (getter)
   Object? get writable => getAttribute("writable");
 
+  /// ## writable (setter)
   set writable(Object? writable) => setAttribute("writable", writable);
 
+  /// ## write (getter)
   Object? get write => getAttribute("write");
 
+  /// ## write (setter)
   set write(Object? write) => setAttribute("write", write);
 
+  /// ## writelines (getter)
   Object? get writelines => getAttribute("writelines");
 
+  /// ## writelines (setter)
   set writelines(Object? writelines) => setAttribute("writelines", writelines);
 }
 
@@ -10297,84 +11868,124 @@ final class TextIOBase extends PythonClass {
 
   TextIOBase.from(super.pythonClass) : super.from();
 
+  /// ## closed (getter)
   Object? get closed => getAttribute("closed");
 
+  /// ## closed (setter)
   set closed(Object? closed) => setAttribute("closed", closed);
 
+  /// ## encoding (getter)
   Object? get encoding => getAttribute("encoding");
 
+  /// ## encoding (setter)
   set encoding(Object? encoding) => setAttribute("encoding", encoding);
 
+  /// ## errors (getter)
   Object? get errors => getAttribute("errors");
 
+  /// ## errors (setter)
   set errors(Object? errors) => setAttribute("errors", errors);
 
+  /// ## newlines (getter)
   Object? get newlines => getAttribute("newlines");
 
+  /// ## newlines (setter)
   set newlines(Object? newlines) => setAttribute("newlines", newlines);
 
+  /// ## close (getter)
   Object? get close => getAttribute("close");
 
+  /// ## close (setter)
   set close(Object? close) => setAttribute("close", close);
 
+  /// ## detach (getter)
   Object? get detach => getAttribute("detach");
 
+  /// ## detach (setter)
   set detach(Object? detach) => setAttribute("detach", detach);
 
+  /// ## fileno (getter)
   Object? get fileno => getAttribute("fileno");
 
+  /// ## fileno (setter)
   set fileno(Object? fileno) => setAttribute("fileno", fileno);
 
+  /// ## flush (getter)
   Object? get flush => getAttribute("flush");
 
+  /// ## flush (setter)
   set flush(Object? flush) => setAttribute("flush", flush);
 
+  /// ## isatty (getter)
   Object? get isatty => getAttribute("isatty");
 
+  /// ## isatty (setter)
   set isatty(Object? isatty) => setAttribute("isatty", isatty);
 
+  /// ## read (getter)
   Object? get read => getAttribute("read");
 
+  /// ## read (setter)
   set read(Object? read) => setAttribute("read", read);
 
+  /// ## readable (getter)
   Object? get readable => getAttribute("readable");
 
+  /// ## readable (setter)
   set readable(Object? readable) => setAttribute("readable", readable);
 
+  /// ## readline (getter)
   Object? get readline => getAttribute("readline");
 
+  /// ## readline (setter)
   set readline(Object? readline) => setAttribute("readline", readline);
 
+  /// ## readlines (getter)
   Object? get readlines => getAttribute("readlines");
 
+  /// ## readlines (setter)
   set readlines(Object? readlines) => setAttribute("readlines", readlines);
 
+  /// ## seek (getter)
   Object? get seek => getAttribute("seek");
 
+  /// ## seek (setter)
   set seek(Object? seek) => setAttribute("seek", seek);
 
+  /// ## seekable (getter)
   Object? get seekable => getAttribute("seekable");
 
+  /// ## seekable (setter)
   set seekable(Object? seekable) => setAttribute("seekable", seekable);
 
+  /// ## tell (getter)
   Object? get tell => getAttribute("tell");
 
+  /// ## tell (setter)
   set tell(Object? tell) => setAttribute("tell", tell);
 
+  /// ## truncate (getter)
   Object? get truncate => getAttribute("truncate");
 
+  /// ## truncate (setter)
   set truncate(Object? truncate) => setAttribute("truncate", truncate);
 
+  /// ## writable (getter)
   Object? get writable => getAttribute("writable");
 
+  /// ## writable (setter)
   set writable(Object? writable) => setAttribute("writable", writable);
 
+  /// ## write (getter)
   Object? get write => getAttribute("write");
 
+  /// ## write (setter)
   set write(Object? write) => setAttribute("write", write);
 
+  /// ## writelines (getter)
   Object? get writelines => getAttribute("writelines");
 
+  /// ## writelines (setter)
   set writelines(Object? writelines) => setAttribute("writelines", writelines);
 }
 
@@ -10389,107 +12000,157 @@ final class TextIOWrapper extends PythonClass {
 
   TextIOWrapper.from(super.pythonClass) : super.from();
 
+  /// ## buffer (getter)
   Object? get buffer => getAttribute("buffer");
 
+  /// ## buffer (setter)
   set buffer(Object? buffer) => setAttribute("buffer", buffer);
 
+  /// ## closed (getter)
   Object? get closed => getAttribute("closed");
 
+  /// ## closed (setter)
   set closed(Object? closed) => setAttribute("closed", closed);
 
+  /// ## encoding (getter)
   Object? get encoding => getAttribute("encoding");
 
+  /// ## encoding (setter)
   set encoding(Object? encoding) => setAttribute("encoding", encoding);
 
+  /// ## errors (getter)
   Object? get errors => getAttribute("errors");
 
+  /// ## errors (setter)
   set errors(Object? errors) => setAttribute("errors", errors);
 
+  /// ## line_buffering (getter)
   Object? get line_buffering => getAttribute("line_buffering");
 
+  /// ## line_buffering (setter)
   set line_buffering(Object? line_buffering) =>
       setAttribute("line_buffering", line_buffering);
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## newlines (getter)
   Object? get newlines => getAttribute("newlines");
 
+  /// ## newlines (setter)
   set newlines(Object? newlines) => setAttribute("newlines", newlines);
 
+  /// ## write_through (getter)
   Object? get write_through => getAttribute("write_through");
 
+  /// ## write_through (setter)
   set write_through(Object? write_through) =>
       setAttribute("write_through", write_through);
 
+  /// ## close (getter)
   Object? get close => getAttribute("close");
 
+  /// ## close (setter)
   set close(Object? close) => setAttribute("close", close);
 
+  /// ## detach (getter)
   Object? get detach => getAttribute("detach");
 
+  /// ## detach (setter)
   set detach(Object? detach) => setAttribute("detach", detach);
 
+  /// ## fileno (getter)
   Object? get fileno => getAttribute("fileno");
 
+  /// ## fileno (setter)
   set fileno(Object? fileno) => setAttribute("fileno", fileno);
 
+  /// ## flush (getter)
   Object? get flush => getAttribute("flush");
 
+  /// ## flush (setter)
   set flush(Object? flush) => setAttribute("flush", flush);
 
+  /// ## isatty (getter)
   Object? get isatty => getAttribute("isatty");
 
+  /// ## isatty (setter)
   set isatty(Object? isatty) => setAttribute("isatty", isatty);
 
+  /// ## read (getter)
   Object? get read => getAttribute("read");
 
+  /// ## read (setter)
   set read(Object? read) => setAttribute("read", read);
 
+  /// ## readable (getter)
   Object? get readable => getAttribute("readable");
 
+  /// ## readable (setter)
   set readable(Object? readable) => setAttribute("readable", readable);
 
+  /// ## readline (getter)
   Object? get readline => getAttribute("readline");
 
+  /// ## readline (setter)
   set readline(Object? readline) => setAttribute("readline", readline);
 
+  /// ## readlines (getter)
   Object? get readlines => getAttribute("readlines");
 
+  /// ## readlines (setter)
   set readlines(Object? readlines) => setAttribute("readlines", readlines);
 
+  /// ## reconfigure (getter)
   Object? get reconfigure => getAttribute("reconfigure");
 
+  /// ## reconfigure (setter)
   set reconfigure(Object? reconfigure) =>
       setAttribute("reconfigure", reconfigure);
 
+  /// ## seek (getter)
   Object? get seek => getAttribute("seek");
 
+  /// ## seek (setter)
   set seek(Object? seek) => setAttribute("seek", seek);
 
+  /// ## seekable (getter)
   Object? get seekable => getAttribute("seekable");
 
+  /// ## seekable (setter)
   set seekable(Object? seekable) => setAttribute("seekable", seekable);
 
+  /// ## tell (getter)
   Object? get tell => getAttribute("tell");
 
+  /// ## tell (setter)
   set tell(Object? tell) => setAttribute("tell", tell);
 
+  /// ## truncate (getter)
   Object? get truncate => getAttribute("truncate");
 
+  /// ## truncate (setter)
   set truncate(Object? truncate) => setAttribute("truncate", truncate);
 
+  /// ## writable (getter)
   Object? get writable => getAttribute("writable");
 
+  /// ## writable (setter)
   set writable(Object? writable) => setAttribute("writable", writable);
 
+  /// ## write (getter)
   Object? get write => getAttribute("write");
 
+  /// ## write (setter)
   set write(Object? write) => setAttribute("write", write);
 
+  /// ## writelines (getter)
   Object? get writelines => getAttribute("writelines");
 
+  /// ## writelines (setter)
   set writelines(Object? writelines) => setAttribute("writelines", writelines);
 }
 
@@ -10504,37 +12165,53 @@ final class UnsupportedOperation extends PythonClass {
 
   UnsupportedOperation.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## characters_written (getter)
   Object? get characters_written => getAttribute("characters_written");
 
+  /// ## characters_written (setter)
   set characters_written(Object? characters_written) =>
       setAttribute("characters_written", characters_written);
 
+  /// ## errno (getter)
   Object? get errno => getAttribute("errno");
 
+  /// ## errno (setter)
   set errno(Object? errno) => setAttribute("errno", errno);
 
+  /// ## filename (getter)
   Object? get filename => getAttribute("filename");
 
+  /// ## filename (setter)
   set filename(Object? filename) => setAttribute("filename", filename);
 
+  /// ## filename2 (getter)
   Object? get filename2 => getAttribute("filename2");
 
+  /// ## filename2 (setter)
   set filename2(Object? filename2) => setAttribute("filename2", filename2);
 
+  /// ## strerror (getter)
   Object? get strerror => getAttribute("strerror");
 
+  /// ## strerror (setter)
   set strerror(Object? strerror) => setAttribute("strerror", strerror);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -10570,9 +12247,9 @@ final class WarningMessage extends PythonClass {
     required Object? category,
     required Object? filename,
     required Object? lineno,
-    Object? file = null,
-    Object? line = null,
-    Object? source = null,
+    Object? file,
+    Object? line,
+    Object? source,
   }) =>
       PythonFfiDart.instance.importClass(
         "warnings",
@@ -10592,32 +12269,46 @@ final class WarningMessage extends PythonClass {
 
   WarningMessage.from(super.pythonClass) : super.from();
 
+  /// ## message (getter)
   Object? get message => getAttribute("message");
 
+  /// ## message (setter)
   set message(Object? message) => setAttribute("message", message);
 
+  /// ## category (getter)
   Object? get category => getAttribute("category");
 
+  /// ## category (setter)
   set category(Object? category) => setAttribute("category", category);
 
+  /// ## filename (getter)
   Object? get filename => getAttribute("filename");
 
+  /// ## filename (setter)
   set filename(Object? filename) => setAttribute("filename", filename);
 
+  /// ## lineno (getter)
   Object? get lineno => getAttribute("lineno");
 
+  /// ## lineno (setter)
   set lineno(Object? lineno) => setAttribute("lineno", lineno);
 
+  /// ## file (getter)
   Object? get file => getAttribute("file");
 
+  /// ## file (setter)
   set file(Object? file) => setAttribute("file", file);
 
+  /// ## line (getter)
   Object? get line => getAttribute("line");
 
+  /// ## line (setter)
   set line(Object? line) => setAttribute("line", line);
 
+  /// ## source (getter)
   Object? get source => getAttribute("source");
 
+  /// ## source (setter)
   set source(Object? source) => setAttribute("source", source);
 }
 
@@ -10722,8 +12413,8 @@ final class WarningMessage extends PythonClass {
 final class catch_warnings extends PythonClass {
   factory catch_warnings({
     Object? record = false,
-    Object? module = null,
-    Object? action = null,
+    Object? module,
+    Object? action,
     Object? category = null,
     Object? lineno = 0,
     Object? append = false,
@@ -10769,12 +12460,16 @@ final class PickleBuffer extends PythonClass {
 
   PickleBuffer.from(super.pythonClass) : super.from();
 
+  /// ## raw (getter)
   Object? get raw => getAttribute("raw");
 
+  /// ## raw (setter)
   set raw(Object? raw) => setAttribute("raw", raw);
 
+  /// ## release (getter)
   Object? get release => getAttribute("release");
 
+  /// ## release (setter)
   set release(Object? release) => setAttribute("release", release);
 }
 
@@ -10789,16 +12484,22 @@ final class PickleError extends PythonClass {
 
   PickleError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -10814,34 +12515,48 @@ final class Pickler extends PythonClass {
 
   Pickler.from(super.pythonClass) : super.from();
 
+  /// ## bin (getter)
   Object? get bin => getAttribute("bin");
 
+  /// ## bin (setter)
   set bin(Object? bin) => setAttribute("bin", bin);
 
+  /// ## dispatch_table (getter)
   Object? get dispatch_table => getAttribute("dispatch_table");
 
+  /// ## dispatch_table (setter)
   set dispatch_table(Object? dispatch_table) =>
       setAttribute("dispatch_table", dispatch_table);
 
+  /// ## fast (getter)
   Object? get fast => getAttribute("fast");
 
+  /// ## fast (setter)
   set fast(Object? fast) => setAttribute("fast", fast);
 
+  /// ## memo (getter)
   Object? get memo => getAttribute("memo");
 
+  /// ## memo (setter)
   set memo(Object? memo) => setAttribute("memo", memo);
 
+  /// ## persistent_id (getter)
   Object? get persistent_id => getAttribute("persistent_id");
 
+  /// ## persistent_id (setter)
   set persistent_id(Object? persistent_id) =>
       setAttribute("persistent_id", persistent_id);
 
+  /// ## clear_memo (getter)
   Object? get clear_memo => getAttribute("clear_memo");
 
+  /// ## clear_memo (setter)
   set clear_memo(Object? clear_memo) => setAttribute("clear_memo", clear_memo);
 
+  /// ## dump (getter)
   Object? get dump => getAttribute("dump");
 
+  /// ## dump (setter)
   set dump(Object? dump) => setAttribute("dump", dump);
 }
 
@@ -10856,16 +12571,22 @@ final class PicklingError extends PythonClass {
 
   PicklingError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -10881,21 +12602,29 @@ final class Unpickler extends PythonClass {
 
   Unpickler.from(super.pythonClass) : super.from();
 
+  /// ## memo (getter)
   Object? get memo => getAttribute("memo");
 
+  /// ## memo (setter)
   set memo(Object? memo) => setAttribute("memo", memo);
 
+  /// ## persistent_load (getter)
   Object? get persistent_load => getAttribute("persistent_load");
 
+  /// ## persistent_load (setter)
   set persistent_load(Object? persistent_load) =>
       setAttribute("persistent_load", persistent_load);
 
+  /// ## find_class (getter)
   Object? get find_class => getAttribute("find_class");
 
+  /// ## find_class (setter)
   set find_class(Object? find_class) => setAttribute("find_class", find_class);
 
+  /// ## load (getter)
   Object? get load => getAttribute("load");
 
+  /// ## load (setter)
   set load(Object? load) => setAttribute("load", load);
 }
 
@@ -10910,16 +12639,22 @@ final class UnpicklingError extends PythonClass {
 
   UnpicklingError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -11379,12 +13114,16 @@ final class CodecInfo extends PythonClass {
 
   CodecInfo.from(super.pythonClass) : super.from();
 
+  /// ## count (getter)
   Object? get count => getAttribute("count");
 
+  /// ## count (setter)
   set count(Object? count) => setAttribute("count", count);
 
+  /// ## index (getter)
   Object? get index => getAttribute("index");
 
+  /// ## index (setter)
   set index(Object? index) => setAttribute("index", index);
 }
 
@@ -12053,7 +13792,7 @@ final class StreamReader extends PythonClass {
   /// size, if given, is passed as size argument to the
   /// read() method.
   Object? readline({
-    Object? size = null,
+    Object? size,
     Object? keepends = true,
   }) =>
       getFunction("readline").call(
@@ -12077,7 +13816,7 @@ final class StreamReader extends PythonClass {
   /// sizehint, if given, is ignored since there is no efficient
   /// way to finding the true end-of-line.
   Object? readlines({
-    Object? sizehint = null,
+    Object? sizehint,
     Object? keepends = true,
   }) =>
       getFunction("readlines").call(
@@ -12133,192 +13872,284 @@ final class charbuffertype extends PythonClass {
 
   charbuffertype.from(super.pythonClass) : super.from();
 
+  /// ## capitalize (getter)
   Object? get capitalize => getAttribute("capitalize");
 
+  /// ## capitalize (setter)
   set capitalize(Object? capitalize) => setAttribute("capitalize", capitalize);
 
+  /// ## casefold (getter)
   Object? get casefold => getAttribute("casefold");
 
+  /// ## casefold (setter)
   set casefold(Object? casefold) => setAttribute("casefold", casefold);
 
+  /// ## center (getter)
   Object? get center => getAttribute("center");
 
+  /// ## center (setter)
   set center(Object? center) => setAttribute("center", center);
 
+  /// ## count (getter)
   Object? get count => getAttribute("count");
 
+  /// ## count (setter)
   set count(Object? count) => setAttribute("count", count);
 
+  /// ## encode (getter)
   Object? get encode => getAttribute("encode");
 
+  /// ## encode (setter)
   set encode(Object? encode) => setAttribute("encode", encode);
 
+  /// ## endswith (getter)
   Object? get endswith => getAttribute("endswith");
 
+  /// ## endswith (setter)
   set endswith(Object? endswith) => setAttribute("endswith", endswith);
 
+  /// ## expandtabs (getter)
   Object? get expandtabs => getAttribute("expandtabs");
 
+  /// ## expandtabs (setter)
   set expandtabs(Object? expandtabs) => setAttribute("expandtabs", expandtabs);
 
+  /// ## find (getter)
   Object? get find => getAttribute("find");
 
+  /// ## find (setter)
   set find(Object? find) => setAttribute("find", find);
 
+  /// ## format (getter)
   Object? get format => getAttribute("format");
 
+  /// ## format (setter)
   set format(Object? format) => setAttribute("format", format);
 
+  /// ## format_map (getter)
   Object? get format_map => getAttribute("format_map");
 
+  /// ## format_map (setter)
   set format_map(Object? format_map) => setAttribute("format_map", format_map);
 
+  /// ## index (getter)
   Object? get index => getAttribute("index");
 
+  /// ## index (setter)
   set index(Object? index) => setAttribute("index", index);
 
+  /// ## isalnum (getter)
   Object? get isalnum => getAttribute("isalnum");
 
+  /// ## isalnum (setter)
   set isalnum(Object? isalnum) => setAttribute("isalnum", isalnum);
 
+  /// ## isalpha (getter)
   Object? get isalpha => getAttribute("isalpha");
 
+  /// ## isalpha (setter)
   set isalpha(Object? isalpha) => setAttribute("isalpha", isalpha);
 
+  /// ## isascii (getter)
   Object? get isascii => getAttribute("isascii");
 
+  /// ## isascii (setter)
   set isascii(Object? isascii) => setAttribute("isascii", isascii);
 
+  /// ## isdecimal (getter)
   Object? get isdecimal => getAttribute("isdecimal");
 
+  /// ## isdecimal (setter)
   set isdecimal(Object? isdecimal) => setAttribute("isdecimal", isdecimal);
 
+  /// ## isdigit (getter)
   Object? get isdigit => getAttribute("isdigit");
 
+  /// ## isdigit (setter)
   set isdigit(Object? isdigit) => setAttribute("isdigit", isdigit);
 
+  /// ## isidentifier (getter)
   Object? get isidentifier => getAttribute("isidentifier");
 
+  /// ## isidentifier (setter)
   set isidentifier(Object? isidentifier) =>
       setAttribute("isidentifier", isidentifier);
 
+  /// ## islower (getter)
   Object? get islower => getAttribute("islower");
 
+  /// ## islower (setter)
   set islower(Object? islower) => setAttribute("islower", islower);
 
+  /// ## isnumeric (getter)
   Object? get isnumeric => getAttribute("isnumeric");
 
+  /// ## isnumeric (setter)
   set isnumeric(Object? isnumeric) => setAttribute("isnumeric", isnumeric);
 
+  /// ## isprintable (getter)
   Object? get isprintable => getAttribute("isprintable");
 
+  /// ## isprintable (setter)
   set isprintable(Object? isprintable) =>
       setAttribute("isprintable", isprintable);
 
+  /// ## isspace (getter)
   Object? get isspace => getAttribute("isspace");
 
+  /// ## isspace (setter)
   set isspace(Object? isspace) => setAttribute("isspace", isspace);
 
+  /// ## istitle (getter)
   Object? get istitle => getAttribute("istitle");
 
+  /// ## istitle (setter)
   set istitle(Object? istitle) => setAttribute("istitle", istitle);
 
+  /// ## isupper (getter)
   Object? get isupper => getAttribute("isupper");
 
+  /// ## isupper (setter)
   set isupper(Object? isupper) => setAttribute("isupper", isupper);
 
+  /// ## join (getter)
   Object? get join => getAttribute("join");
 
+  /// ## join (setter)
   set join(Object? join) => setAttribute("join", join);
 
+  /// ## ljust (getter)
   Object? get ljust => getAttribute("ljust");
 
+  /// ## ljust (setter)
   set ljust(Object? ljust) => setAttribute("ljust", ljust);
 
+  /// ## lower (getter)
   Object? get lower => getAttribute("lower");
 
+  /// ## lower (setter)
   set lower(Object? lower) => setAttribute("lower", lower);
 
+  /// ## lstrip (getter)
   Object? get lstrip => getAttribute("lstrip");
 
+  /// ## lstrip (setter)
   set lstrip(Object? lstrip) => setAttribute("lstrip", lstrip);
 
+  /// ## partition (getter)
   Object? get partition => getAttribute("partition");
 
+  /// ## partition (setter)
   set partition(Object? partition) => setAttribute("partition", partition);
 
+  /// ## removeprefix (getter)
   Object? get removeprefix => getAttribute("removeprefix");
 
+  /// ## removeprefix (setter)
   set removeprefix(Object? removeprefix) =>
       setAttribute("removeprefix", removeprefix);
 
+  /// ## removesuffix (getter)
   Object? get removesuffix => getAttribute("removesuffix");
 
+  /// ## removesuffix (setter)
   set removesuffix(Object? removesuffix) =>
       setAttribute("removesuffix", removesuffix);
 
+  /// ## replace (getter)
   Object? get replace => getAttribute("replace");
 
+  /// ## replace (setter)
   set replace(Object? replace) => setAttribute("replace", replace);
 
+  /// ## rfind (getter)
   Object? get rfind => getAttribute("rfind");
 
+  /// ## rfind (setter)
   set rfind(Object? rfind) => setAttribute("rfind", rfind);
 
+  /// ## rindex (getter)
   Object? get rindex => getAttribute("rindex");
 
+  /// ## rindex (setter)
   set rindex(Object? rindex) => setAttribute("rindex", rindex);
 
+  /// ## rjust (getter)
   Object? get rjust => getAttribute("rjust");
 
+  /// ## rjust (setter)
   set rjust(Object? rjust) => setAttribute("rjust", rjust);
 
+  /// ## rpartition (getter)
   Object? get rpartition => getAttribute("rpartition");
 
+  /// ## rpartition (setter)
   set rpartition(Object? rpartition) => setAttribute("rpartition", rpartition);
 
+  /// ## rsplit (getter)
   Object? get rsplit => getAttribute("rsplit");
 
+  /// ## rsplit (setter)
   set rsplit(Object? rsplit) => setAttribute("rsplit", rsplit);
 
+  /// ## rstrip (getter)
   Object? get rstrip => getAttribute("rstrip");
 
+  /// ## rstrip (setter)
   set rstrip(Object? rstrip) => setAttribute("rstrip", rstrip);
 
+  /// ## split (getter)
   Object? get split => getAttribute("split");
 
+  /// ## split (setter)
   set split(Object? split) => setAttribute("split", split);
 
+  /// ## splitlines (getter)
   Object? get splitlines => getAttribute("splitlines");
 
+  /// ## splitlines (setter)
   set splitlines(Object? splitlines) => setAttribute("splitlines", splitlines);
 
+  /// ## startswith (getter)
   Object? get startswith => getAttribute("startswith");
 
+  /// ## startswith (setter)
   set startswith(Object? startswith) => setAttribute("startswith", startswith);
 
+  /// ## strip (getter)
   Object? get strip => getAttribute("strip");
 
+  /// ## strip (setter)
   set strip(Object? strip) => setAttribute("strip", strip);
 
+  /// ## swapcase (getter)
   Object? get swapcase => getAttribute("swapcase");
 
+  /// ## swapcase (setter)
   set swapcase(Object? swapcase) => setAttribute("swapcase", swapcase);
 
+  /// ## title (getter)
   Object? get title => getAttribute("title");
 
+  /// ## title (setter)
   set title(Object? title) => setAttribute("title", title);
 
+  /// ## translate (getter)
   Object? get translate => getAttribute("translate");
 
+  /// ## translate (setter)
   set translate(Object? translate) => setAttribute("translate", translate);
 
+  /// ## upper (getter)
   Object? get upper => getAttribute("upper");
 
+  /// ## upper (setter)
   set upper(Object? upper) => setAttribute("upper", upper);
 
+  /// ## zfill (getter)
   Object? get zfill => getAttribute("zfill");
 
+  /// ## zfill (setter)
   set zfill(Object? zfill) => setAttribute("zfill", zfill);
 }
 
@@ -12455,7 +14286,7 @@ final class StreamReaderWriter extends PythonClass {
 
   /// ## readline
   Object? readline({
-    Object? size = null,
+    Object? size,
   }) =>
       getFunction("readline").call(
         <Object?>[
@@ -12466,7 +14297,7 @@ final class StreamReaderWriter extends PythonClass {
 
   /// ## readlines
   Object? readlines({
-    Object? sizehint = null,
+    Object? sizehint,
   }) =>
       getFunction("readlines").call(
         <Object?>[
@@ -12515,8 +14346,11 @@ final class StreamReaderWriter extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## encoding (getter)
   Object? get encoding => getAttribute("encoding");
 
+  /// ## encoding (setter)
   set encoding(Object? encoding) => setAttribute("encoding", encoding);
 }
 
@@ -12692,7 +14526,7 @@ final class StreamRecoder extends PythonClass {
 
   /// ## readline
   Object? readline({
-    Object? size = null,
+    Object? size,
   }) =>
       getFunction("readline").call(
         <Object?>[
@@ -12703,7 +14537,7 @@ final class StreamRecoder extends PythonClass {
 
   /// ## readlines
   Object? readlines({
-    Object? sizehint = null,
+    Object? sizehint,
   }) =>
       getFunction("readlines").call(
         <Object?>[
@@ -12752,13 +14586,18 @@ final class StreamRecoder extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## data_encoding (getter)
   Object? get data_encoding => getAttribute("data_encoding");
 
+  /// ## data_encoding (setter)
   set data_encoding(Object? data_encoding) =>
       setAttribute("data_encoding", data_encoding);
 
+  /// ## file_encoding (getter)
   Object? get file_encoding => getAttribute("file_encoding");
 
+  /// ## file_encoding (setter)
   set file_encoding(Object? file_encoding) =>
       setAttribute("file_encoding", file_encoding);
 }
@@ -13012,16 +14851,22 @@ final class ArithmeticError extends PythonClass {
 
   ArithmeticError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -13037,16 +14882,22 @@ final class AssertionError extends PythonClass {
 
   AssertionError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -13062,24 +14913,34 @@ final class AttributeError extends PythonClass {
 
   AttributeError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## obj (getter)
   Object? get obj => getAttribute("obj");
 
+  /// ## obj (setter)
   set obj(Object? obj) => setAttribute("obj", obj);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -13095,16 +14956,22 @@ final class BaseException extends PythonClass {
 
   BaseException.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -13120,36 +14987,52 @@ final class BaseExceptionGroup extends PythonClass {
 
   BaseExceptionGroup.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## exceptions (getter)
   Object? get exceptions => getAttribute("exceptions");
 
+  /// ## exceptions (setter)
   set exceptions(Object? exceptions) => setAttribute("exceptions", exceptions);
 
+  /// ## message (getter)
   Object? get message => getAttribute("message");
 
+  /// ## message (setter)
   set message(Object? message) => setAttribute("message", message);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## derive (getter)
   Object? get derive => getAttribute("derive");
 
+  /// ## derive (setter)
   set derive(Object? derive) => setAttribute("derive", derive);
 
+  /// ## split (getter)
   Object? get split => getAttribute("split");
 
+  /// ## split (setter)
   set split(Object? split) => setAttribute("split", split);
 
+  /// ## subgroup (getter)
   Object? get subgroup => getAttribute("subgroup");
 
+  /// ## subgroup (setter)
   set subgroup(Object? subgroup) => setAttribute("subgroup", subgroup);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -13165,37 +15048,53 @@ final class BrokenPipeError extends PythonClass {
 
   BrokenPipeError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## characters_written (getter)
   Object? get characters_written => getAttribute("characters_written");
 
+  /// ## characters_written (setter)
   set characters_written(Object? characters_written) =>
       setAttribute("characters_written", characters_written);
 
+  /// ## errno (getter)
   Object? get errno => getAttribute("errno");
 
+  /// ## errno (setter)
   set errno(Object? errno) => setAttribute("errno", errno);
 
+  /// ## filename (getter)
   Object? get filename => getAttribute("filename");
 
+  /// ## filename (setter)
   set filename(Object? filename) => setAttribute("filename", filename);
 
+  /// ## filename2 (getter)
   Object? get filename2 => getAttribute("filename2");
 
+  /// ## filename2 (setter)
   set filename2(Object? filename2) => setAttribute("filename2", filename2);
 
+  /// ## strerror (getter)
   Object? get strerror => getAttribute("strerror");
 
+  /// ## strerror (setter)
   set strerror(Object? strerror) => setAttribute("strerror", strerror);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -13211,16 +15110,22 @@ final class BufferError extends PythonClass {
 
   BufferError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -13236,16 +15141,22 @@ final class BytesWarning extends PythonClass {
 
   BytesWarning.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -13261,37 +15172,53 @@ final class ChildProcessError extends PythonClass {
 
   ChildProcessError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## characters_written (getter)
   Object? get characters_written => getAttribute("characters_written");
 
+  /// ## characters_written (setter)
   set characters_written(Object? characters_written) =>
       setAttribute("characters_written", characters_written);
 
+  /// ## errno (getter)
   Object? get errno => getAttribute("errno");
 
+  /// ## errno (setter)
   set errno(Object? errno) => setAttribute("errno", errno);
 
+  /// ## filename (getter)
   Object? get filename => getAttribute("filename");
 
+  /// ## filename (setter)
   set filename(Object? filename) => setAttribute("filename", filename);
 
+  /// ## filename2 (getter)
   Object? get filename2 => getAttribute("filename2");
 
+  /// ## filename2 (setter)
   set filename2(Object? filename2) => setAttribute("filename2", filename2);
 
+  /// ## strerror (getter)
   Object? get strerror => getAttribute("strerror");
 
+  /// ## strerror (setter)
   set strerror(Object? strerror) => setAttribute("strerror", strerror);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -13307,37 +15234,53 @@ final class ConnectionAbortedError extends PythonClass {
 
   ConnectionAbortedError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## characters_written (getter)
   Object? get characters_written => getAttribute("characters_written");
 
+  /// ## characters_written (setter)
   set characters_written(Object? characters_written) =>
       setAttribute("characters_written", characters_written);
 
+  /// ## errno (getter)
   Object? get errno => getAttribute("errno");
 
+  /// ## errno (setter)
   set errno(Object? errno) => setAttribute("errno", errno);
 
+  /// ## filename (getter)
   Object? get filename => getAttribute("filename");
 
+  /// ## filename (setter)
   set filename(Object? filename) => setAttribute("filename", filename);
 
+  /// ## filename2 (getter)
   Object? get filename2 => getAttribute("filename2");
 
+  /// ## filename2 (setter)
   set filename2(Object? filename2) => setAttribute("filename2", filename2);
 
+  /// ## strerror (getter)
   Object? get strerror => getAttribute("strerror");
 
+  /// ## strerror (setter)
   set strerror(Object? strerror) => setAttribute("strerror", strerror);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -13353,37 +15296,53 @@ final class ConnectionError extends PythonClass {
 
   ConnectionError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## characters_written (getter)
   Object? get characters_written => getAttribute("characters_written");
 
+  /// ## characters_written (setter)
   set characters_written(Object? characters_written) =>
       setAttribute("characters_written", characters_written);
 
+  /// ## errno (getter)
   Object? get errno => getAttribute("errno");
 
+  /// ## errno (setter)
   set errno(Object? errno) => setAttribute("errno", errno);
 
+  /// ## filename (getter)
   Object? get filename => getAttribute("filename");
 
+  /// ## filename (setter)
   set filename(Object? filename) => setAttribute("filename", filename);
 
+  /// ## filename2 (getter)
   Object? get filename2 => getAttribute("filename2");
 
+  /// ## filename2 (setter)
   set filename2(Object? filename2) => setAttribute("filename2", filename2);
 
+  /// ## strerror (getter)
   Object? get strerror => getAttribute("strerror");
 
+  /// ## strerror (setter)
   set strerror(Object? strerror) => setAttribute("strerror", strerror);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -13399,37 +15358,53 @@ final class ConnectionRefusedError extends PythonClass {
 
   ConnectionRefusedError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## characters_written (getter)
   Object? get characters_written => getAttribute("characters_written");
 
+  /// ## characters_written (setter)
   set characters_written(Object? characters_written) =>
       setAttribute("characters_written", characters_written);
 
+  /// ## errno (getter)
   Object? get errno => getAttribute("errno");
 
+  /// ## errno (setter)
   set errno(Object? errno) => setAttribute("errno", errno);
 
+  /// ## filename (getter)
   Object? get filename => getAttribute("filename");
 
+  /// ## filename (setter)
   set filename(Object? filename) => setAttribute("filename", filename);
 
+  /// ## filename2 (getter)
   Object? get filename2 => getAttribute("filename2");
 
+  /// ## filename2 (setter)
   set filename2(Object? filename2) => setAttribute("filename2", filename2);
 
+  /// ## strerror (getter)
   Object? get strerror => getAttribute("strerror");
 
+  /// ## strerror (setter)
   set strerror(Object? strerror) => setAttribute("strerror", strerror);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -13445,37 +15420,53 @@ final class ConnectionResetError extends PythonClass {
 
   ConnectionResetError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## characters_written (getter)
   Object? get characters_written => getAttribute("characters_written");
 
+  /// ## characters_written (setter)
   set characters_written(Object? characters_written) =>
       setAttribute("characters_written", characters_written);
 
+  /// ## errno (getter)
   Object? get errno => getAttribute("errno");
 
+  /// ## errno (setter)
   set errno(Object? errno) => setAttribute("errno", errno);
 
+  /// ## filename (getter)
   Object? get filename => getAttribute("filename");
 
+  /// ## filename (setter)
   set filename(Object? filename) => setAttribute("filename", filename);
 
+  /// ## filename2 (getter)
   Object? get filename2 => getAttribute("filename2");
 
+  /// ## filename2 (setter)
   set filename2(Object? filename2) => setAttribute("filename2", filename2);
 
+  /// ## strerror (getter)
   Object? get strerror => getAttribute("strerror");
 
+  /// ## strerror (setter)
   set strerror(Object? strerror) => setAttribute("strerror", strerror);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -13491,16 +15482,22 @@ final class DeprecationWarning extends PythonClass {
 
   DeprecationWarning.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -13516,16 +15513,22 @@ final class EOFError extends PythonClass {
 
   EOFError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -13541,16 +15544,22 @@ final class EncodingWarning extends PythonClass {
 
   EncodingWarning.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -13566,16 +15575,22 @@ final class Exception extends PythonClass {
 
   Exception.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -13591,36 +15606,52 @@ final class ExceptionGroup extends PythonClass {
 
   ExceptionGroup.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## exceptions (getter)
   Object? get exceptions => getAttribute("exceptions");
 
+  /// ## exceptions (setter)
   set exceptions(Object? exceptions) => setAttribute("exceptions", exceptions);
 
+  /// ## message (getter)
   Object? get message => getAttribute("message");
 
+  /// ## message (setter)
   set message(Object? message) => setAttribute("message", message);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## derive (getter)
   Object? get derive => getAttribute("derive");
 
+  /// ## derive (setter)
   set derive(Object? derive) => setAttribute("derive", derive);
 
+  /// ## split (getter)
   Object? get split => getAttribute("split");
 
+  /// ## split (setter)
   set split(Object? split) => setAttribute("split", split);
 
+  /// ## subgroup (getter)
   Object? get subgroup => getAttribute("subgroup");
 
+  /// ## subgroup (setter)
   set subgroup(Object? subgroup) => setAttribute("subgroup", subgroup);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -13636,37 +15667,53 @@ final class FileExistsError extends PythonClass {
 
   FileExistsError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## characters_written (getter)
   Object? get characters_written => getAttribute("characters_written");
 
+  /// ## characters_written (setter)
   set characters_written(Object? characters_written) =>
       setAttribute("characters_written", characters_written);
 
+  /// ## errno (getter)
   Object? get errno => getAttribute("errno");
 
+  /// ## errno (setter)
   set errno(Object? errno) => setAttribute("errno", errno);
 
+  /// ## filename (getter)
   Object? get filename => getAttribute("filename");
 
+  /// ## filename (setter)
   set filename(Object? filename) => setAttribute("filename", filename);
 
+  /// ## filename2 (getter)
   Object? get filename2 => getAttribute("filename2");
 
+  /// ## filename2 (setter)
   set filename2(Object? filename2) => setAttribute("filename2", filename2);
 
+  /// ## strerror (getter)
   Object? get strerror => getAttribute("strerror");
 
+  /// ## strerror (setter)
   set strerror(Object? strerror) => setAttribute("strerror", strerror);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -13682,37 +15729,53 @@ final class FileNotFoundError extends PythonClass {
 
   FileNotFoundError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## characters_written (getter)
   Object? get characters_written => getAttribute("characters_written");
 
+  /// ## characters_written (setter)
   set characters_written(Object? characters_written) =>
       setAttribute("characters_written", characters_written);
 
+  /// ## errno (getter)
   Object? get errno => getAttribute("errno");
 
+  /// ## errno (setter)
   set errno(Object? errno) => setAttribute("errno", errno);
 
+  /// ## filename (getter)
   Object? get filename => getAttribute("filename");
 
+  /// ## filename (setter)
   set filename(Object? filename) => setAttribute("filename", filename);
 
+  /// ## filename2 (getter)
   Object? get filename2 => getAttribute("filename2");
 
+  /// ## filename2 (setter)
   set filename2(Object? filename2) => setAttribute("filename2", filename2);
 
+  /// ## strerror (getter)
   Object? get strerror => getAttribute("strerror");
 
+  /// ## strerror (setter)
   set strerror(Object? strerror) => setAttribute("strerror", strerror);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -13728,16 +15791,22 @@ final class FloatingPointError extends PythonClass {
 
   FloatingPointError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -13753,16 +15822,22 @@ final class FutureWarning extends PythonClass {
 
   FutureWarning.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -13778,16 +15853,22 @@ final class GeneratorExit extends PythonClass {
 
   GeneratorExit.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -13803,28 +15884,40 @@ final class ImportError extends PythonClass {
 
   ImportError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## msg (getter)
   Object? get msg => getAttribute("msg");
 
+  /// ## msg (setter)
   set msg(Object? msg) => setAttribute("msg", msg);
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## path (getter)
   Object? get path => getAttribute("path");
 
+  /// ## path (setter)
   set path(Object? path) => setAttribute("path", path);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -13840,16 +15933,22 @@ final class ImportWarning extends PythonClass {
 
   ImportWarning.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -13865,49 +15964,71 @@ final class IndentationError extends PythonClass {
 
   IndentationError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## end_lineno (getter)
   Object? get end_lineno => getAttribute("end_lineno");
 
+  /// ## end_lineno (setter)
   set end_lineno(Object? end_lineno) => setAttribute("end_lineno", end_lineno);
 
+  /// ## end_offset (getter)
   Object? get end_offset => getAttribute("end_offset");
 
+  /// ## end_offset (setter)
   set end_offset(Object? end_offset) => setAttribute("end_offset", end_offset);
 
+  /// ## filename (getter)
   Object? get filename => getAttribute("filename");
 
+  /// ## filename (setter)
   set filename(Object? filename) => setAttribute("filename", filename);
 
+  /// ## lineno (getter)
   Object? get lineno => getAttribute("lineno");
 
+  /// ## lineno (setter)
   set lineno(Object? lineno) => setAttribute("lineno", lineno);
 
+  /// ## msg (getter)
   Object? get msg => getAttribute("msg");
 
+  /// ## msg (setter)
   set msg(Object? msg) => setAttribute("msg", msg);
 
+  /// ## offset (getter)
   Object? get offset => getAttribute("offset");
 
+  /// ## offset (setter)
   set offset(Object? offset) => setAttribute("offset", offset);
 
+  /// ## print_file_and_line (getter)
   Object? get print_file_and_line => getAttribute("print_file_and_line");
 
+  /// ## print_file_and_line (setter)
   set print_file_and_line(Object? print_file_and_line) =>
       setAttribute("print_file_and_line", print_file_and_line);
 
+  /// ## text (getter)
   Object? get text => getAttribute("text");
 
+  /// ## text (setter)
   set text(Object? text) => setAttribute("text", text);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -13923,16 +16044,22 @@ final class IndexError extends PythonClass {
 
   IndexError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -13948,37 +16075,53 @@ final class InterruptedError extends PythonClass {
 
   InterruptedError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## characters_written (getter)
   Object? get characters_written => getAttribute("characters_written");
 
+  /// ## characters_written (setter)
   set characters_written(Object? characters_written) =>
       setAttribute("characters_written", characters_written);
 
+  /// ## errno (getter)
   Object? get errno => getAttribute("errno");
 
+  /// ## errno (setter)
   set errno(Object? errno) => setAttribute("errno", errno);
 
+  /// ## filename (getter)
   Object? get filename => getAttribute("filename");
 
+  /// ## filename (setter)
   set filename(Object? filename) => setAttribute("filename", filename);
 
+  /// ## filename2 (getter)
   Object? get filename2 => getAttribute("filename2");
 
+  /// ## filename2 (setter)
   set filename2(Object? filename2) => setAttribute("filename2", filename2);
 
+  /// ## strerror (getter)
   Object? get strerror => getAttribute("strerror");
 
+  /// ## strerror (setter)
   set strerror(Object? strerror) => setAttribute("strerror", strerror);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -13994,37 +16137,53 @@ final class IsADirectoryError extends PythonClass {
 
   IsADirectoryError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## characters_written (getter)
   Object? get characters_written => getAttribute("characters_written");
 
+  /// ## characters_written (setter)
   set characters_written(Object? characters_written) =>
       setAttribute("characters_written", characters_written);
 
+  /// ## errno (getter)
   Object? get errno => getAttribute("errno");
 
+  /// ## errno (setter)
   set errno(Object? errno) => setAttribute("errno", errno);
 
+  /// ## filename (getter)
   Object? get filename => getAttribute("filename");
 
+  /// ## filename (setter)
   set filename(Object? filename) => setAttribute("filename", filename);
 
+  /// ## filename2 (getter)
   Object? get filename2 => getAttribute("filename2");
 
+  /// ## filename2 (setter)
   set filename2(Object? filename2) => setAttribute("filename2", filename2);
 
+  /// ## strerror (getter)
   Object? get strerror => getAttribute("strerror");
 
+  /// ## strerror (setter)
   set strerror(Object? strerror) => setAttribute("strerror", strerror);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14040,16 +16199,22 @@ final class KeyError extends PythonClass {
 
   KeyError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14065,16 +16230,22 @@ final class KeyboardInterrupt extends PythonClass {
 
   KeyboardInterrupt.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14090,16 +16261,22 @@ final class LookupError extends PythonClass {
 
   LookupError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14115,16 +16292,22 @@ final class MemoryError extends PythonClass {
 
   MemoryError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14140,28 +16323,40 @@ final class ModuleNotFoundError extends PythonClass {
 
   ModuleNotFoundError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## msg (getter)
   Object? get msg => getAttribute("msg");
 
+  /// ## msg (setter)
   set msg(Object? msg) => setAttribute("msg", msg);
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## path (getter)
   Object? get path => getAttribute("path");
 
+  /// ## path (setter)
   set path(Object? path) => setAttribute("path", path);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14177,20 +16372,28 @@ final class NameError extends PythonClass {
 
   NameError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14206,37 +16409,53 @@ final class NotADirectoryError extends PythonClass {
 
   NotADirectoryError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## characters_written (getter)
   Object? get characters_written => getAttribute("characters_written");
 
+  /// ## characters_written (setter)
   set characters_written(Object? characters_written) =>
       setAttribute("characters_written", characters_written);
 
+  /// ## errno (getter)
   Object? get errno => getAttribute("errno");
 
+  /// ## errno (setter)
   set errno(Object? errno) => setAttribute("errno", errno);
 
+  /// ## filename (getter)
   Object? get filename => getAttribute("filename");
 
+  /// ## filename (setter)
   set filename(Object? filename) => setAttribute("filename", filename);
 
+  /// ## filename2 (getter)
   Object? get filename2 => getAttribute("filename2");
 
+  /// ## filename2 (setter)
   set filename2(Object? filename2) => setAttribute("filename2", filename2);
 
+  /// ## strerror (getter)
   Object? get strerror => getAttribute("strerror");
 
+  /// ## strerror (setter)
   set strerror(Object? strerror) => setAttribute("strerror", strerror);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14252,16 +16471,22 @@ final class NotImplementedError extends PythonClass {
 
   NotImplementedError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14277,16 +16502,22 @@ final class OverflowError extends PythonClass {
 
   OverflowError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14302,16 +16533,22 @@ final class PendingDeprecationWarning extends PythonClass {
 
   PendingDeprecationWarning.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14327,37 +16564,53 @@ final class PermissionError extends PythonClass {
 
   PermissionError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## characters_written (getter)
   Object? get characters_written => getAttribute("characters_written");
 
+  /// ## characters_written (setter)
   set characters_written(Object? characters_written) =>
       setAttribute("characters_written", characters_written);
 
+  /// ## errno (getter)
   Object? get errno => getAttribute("errno");
 
+  /// ## errno (setter)
   set errno(Object? errno) => setAttribute("errno", errno);
 
+  /// ## filename (getter)
   Object? get filename => getAttribute("filename");
 
+  /// ## filename (setter)
   set filename(Object? filename) => setAttribute("filename", filename);
 
+  /// ## filename2 (getter)
   Object? get filename2 => getAttribute("filename2");
 
+  /// ## filename2 (setter)
   set filename2(Object? filename2) => setAttribute("filename2", filename2);
 
+  /// ## strerror (getter)
   Object? get strerror => getAttribute("strerror");
 
+  /// ## strerror (setter)
   set strerror(Object? strerror) => setAttribute("strerror", strerror);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14373,37 +16626,53 @@ final class ProcessLookupError extends PythonClass {
 
   ProcessLookupError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## characters_written (getter)
   Object? get characters_written => getAttribute("characters_written");
 
+  /// ## characters_written (setter)
   set characters_written(Object? characters_written) =>
       setAttribute("characters_written", characters_written);
 
+  /// ## errno (getter)
   Object? get errno => getAttribute("errno");
 
+  /// ## errno (setter)
   set errno(Object? errno) => setAttribute("errno", errno);
 
+  /// ## filename (getter)
   Object? get filename => getAttribute("filename");
 
+  /// ## filename (setter)
   set filename(Object? filename) => setAttribute("filename", filename);
 
+  /// ## filename2 (getter)
   Object? get filename2 => getAttribute("filename2");
 
+  /// ## filename2 (setter)
   set filename2(Object? filename2) => setAttribute("filename2", filename2);
 
+  /// ## strerror (getter)
   Object? get strerror => getAttribute("strerror");
 
+  /// ## strerror (setter)
   set strerror(Object? strerror) => setAttribute("strerror", strerror);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14419,16 +16688,22 @@ final class RecursionError extends PythonClass {
 
   RecursionError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14444,16 +16719,22 @@ final class ReferenceError extends PythonClass {
 
   ReferenceError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14469,16 +16750,22 @@ final class ResourceWarning extends PythonClass {
 
   ResourceWarning.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14494,16 +16781,22 @@ final class RuntimeError extends PythonClass {
 
   RuntimeError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14519,16 +16812,22 @@ final class RuntimeWarning extends PythonClass {
 
   RuntimeWarning.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14544,16 +16843,22 @@ final class StopAsyncIteration extends PythonClass {
 
   StopAsyncIteration.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14569,20 +16874,28 @@ final class StopIteration extends PythonClass {
 
   StopIteration.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## value (getter)
   Object? get value => getAttribute("value");
 
+  /// ## value (setter)
   set value(Object? value) => setAttribute("value", value);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14598,49 +16911,71 @@ final class SyntaxError extends PythonClass {
 
   SyntaxError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## end_lineno (getter)
   Object? get end_lineno => getAttribute("end_lineno");
 
+  /// ## end_lineno (setter)
   set end_lineno(Object? end_lineno) => setAttribute("end_lineno", end_lineno);
 
+  /// ## end_offset (getter)
   Object? get end_offset => getAttribute("end_offset");
 
+  /// ## end_offset (setter)
   set end_offset(Object? end_offset) => setAttribute("end_offset", end_offset);
 
+  /// ## filename (getter)
   Object? get filename => getAttribute("filename");
 
+  /// ## filename (setter)
   set filename(Object? filename) => setAttribute("filename", filename);
 
+  /// ## lineno (getter)
   Object? get lineno => getAttribute("lineno");
 
+  /// ## lineno (setter)
   set lineno(Object? lineno) => setAttribute("lineno", lineno);
 
+  /// ## msg (getter)
   Object? get msg => getAttribute("msg");
 
+  /// ## msg (setter)
   set msg(Object? msg) => setAttribute("msg", msg);
 
+  /// ## offset (getter)
   Object? get offset => getAttribute("offset");
 
+  /// ## offset (setter)
   set offset(Object? offset) => setAttribute("offset", offset);
 
+  /// ## print_file_and_line (getter)
   Object? get print_file_and_line => getAttribute("print_file_and_line");
 
+  /// ## print_file_and_line (setter)
   set print_file_and_line(Object? print_file_and_line) =>
       setAttribute("print_file_and_line", print_file_and_line);
 
+  /// ## text (getter)
   Object? get text => getAttribute("text");
 
+  /// ## text (setter)
   set text(Object? text) => setAttribute("text", text);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14656,16 +16991,22 @@ final class SyntaxWarning extends PythonClass {
 
   SyntaxWarning.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14681,16 +17022,22 @@ final class SystemError extends PythonClass {
 
   SystemError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14706,20 +17053,28 @@ final class SystemExit extends PythonClass {
 
   SystemExit.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## code (getter)
   Object? get code => getAttribute("code");
 
+  /// ## code (setter)
   set code(Object? code) => setAttribute("code", code);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14735,49 +17090,71 @@ final class TabError extends PythonClass {
 
   TabError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## end_lineno (getter)
   Object? get end_lineno => getAttribute("end_lineno");
 
+  /// ## end_lineno (setter)
   set end_lineno(Object? end_lineno) => setAttribute("end_lineno", end_lineno);
 
+  /// ## end_offset (getter)
   Object? get end_offset => getAttribute("end_offset");
 
+  /// ## end_offset (setter)
   set end_offset(Object? end_offset) => setAttribute("end_offset", end_offset);
 
+  /// ## filename (getter)
   Object? get filename => getAttribute("filename");
 
+  /// ## filename (setter)
   set filename(Object? filename) => setAttribute("filename", filename);
 
+  /// ## lineno (getter)
   Object? get lineno => getAttribute("lineno");
 
+  /// ## lineno (setter)
   set lineno(Object? lineno) => setAttribute("lineno", lineno);
 
+  /// ## msg (getter)
   Object? get msg => getAttribute("msg");
 
+  /// ## msg (setter)
   set msg(Object? msg) => setAttribute("msg", msg);
 
+  /// ## offset (getter)
   Object? get offset => getAttribute("offset");
 
+  /// ## offset (setter)
   set offset(Object? offset) => setAttribute("offset", offset);
 
+  /// ## print_file_and_line (getter)
   Object? get print_file_and_line => getAttribute("print_file_and_line");
 
+  /// ## print_file_and_line (setter)
   set print_file_and_line(Object? print_file_and_line) =>
       setAttribute("print_file_and_line", print_file_and_line);
 
+  /// ## text (getter)
   Object? get text => getAttribute("text");
 
+  /// ## text (setter)
   set text(Object? text) => setAttribute("text", text);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14793,37 +17170,53 @@ final class TimeoutError extends PythonClass {
 
   TimeoutError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## characters_written (getter)
   Object? get characters_written => getAttribute("characters_written");
 
+  /// ## characters_written (setter)
   set characters_written(Object? characters_written) =>
       setAttribute("characters_written", characters_written);
 
+  /// ## errno (getter)
   Object? get errno => getAttribute("errno");
 
+  /// ## errno (setter)
   set errno(Object? errno) => setAttribute("errno", errno);
 
+  /// ## filename (getter)
   Object? get filename => getAttribute("filename");
 
+  /// ## filename (setter)
   set filename(Object? filename) => setAttribute("filename", filename);
 
+  /// ## filename2 (getter)
   Object? get filename2 => getAttribute("filename2");
 
+  /// ## filename2 (setter)
   set filename2(Object? filename2) => setAttribute("filename2", filename2);
 
+  /// ## strerror (getter)
   Object? get strerror => getAttribute("strerror");
 
+  /// ## strerror (setter)
   set strerror(Object? strerror) => setAttribute("strerror", strerror);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14839,16 +17232,22 @@ final class TypeError extends PythonClass {
 
   TypeError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14864,20 +17263,28 @@ final class UnboundLocalError extends PythonClass {
 
   UnboundLocalError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14893,36 +17300,52 @@ final class UnicodeDecodeError extends PythonClass {
 
   UnicodeDecodeError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## encoding (getter)
   Object? get encoding => getAttribute("encoding");
 
+  /// ## encoding (setter)
   set encoding(Object? encoding) => setAttribute("encoding", encoding);
 
+  /// ## end (getter)
   Object? get end => getAttribute("end");
 
+  /// ## end (setter)
   set end(Object? end) => setAttribute("end", end);
 
+  /// ## object (getter)
   Object? get object => getAttribute("object");
 
+  /// ## object (setter)
   set object(Object? object) => setAttribute("object", object);
 
+  /// ## reason (getter)
   Object? get reason => getAttribute("reason");
 
+  /// ## reason (setter)
   set reason(Object? reason) => setAttribute("reason", reason);
 
+  /// ## start (getter)
   Object? get start => getAttribute("start");
 
+  /// ## start (setter)
   set start(Object? start) => setAttribute("start", start);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14938,36 +17361,52 @@ final class UnicodeEncodeError extends PythonClass {
 
   UnicodeEncodeError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## encoding (getter)
   Object? get encoding => getAttribute("encoding");
 
+  /// ## encoding (setter)
   set encoding(Object? encoding) => setAttribute("encoding", encoding);
 
+  /// ## end (getter)
   Object? get end => getAttribute("end");
 
+  /// ## end (setter)
   set end(Object? end) => setAttribute("end", end);
 
+  /// ## object (getter)
   Object? get object => getAttribute("object");
 
+  /// ## object (setter)
   set object(Object? object) => setAttribute("object", object);
 
+  /// ## reason (getter)
   Object? get reason => getAttribute("reason");
 
+  /// ## reason (setter)
   set reason(Object? reason) => setAttribute("reason", reason);
 
+  /// ## start (getter)
   Object? get start => getAttribute("start");
 
+  /// ## start (setter)
   set start(Object? start) => setAttribute("start", start);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -14983,16 +17422,22 @@ final class UnicodeError extends PythonClass {
 
   UnicodeError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -15008,36 +17453,52 @@ final class UnicodeTranslateError extends PythonClass {
 
   UnicodeTranslateError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## encoding (getter)
   Object? get encoding => getAttribute("encoding");
 
+  /// ## encoding (setter)
   set encoding(Object? encoding) => setAttribute("encoding", encoding);
 
+  /// ## end (getter)
   Object? get end => getAttribute("end");
 
+  /// ## end (setter)
   set end(Object? end) => setAttribute("end", end);
 
+  /// ## object (getter)
   Object? get object => getAttribute("object");
 
+  /// ## object (setter)
   set object(Object? object) => setAttribute("object", object);
 
+  /// ## reason (getter)
   Object? get reason => getAttribute("reason");
 
+  /// ## reason (setter)
   set reason(Object? reason) => setAttribute("reason", reason);
 
+  /// ## start (getter)
   Object? get start => getAttribute("start");
 
+  /// ## start (setter)
   set start(Object? start) => setAttribute("start", start);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -15053,16 +17514,22 @@ final class UnicodeWarning extends PythonClass {
 
   UnicodeWarning.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -15078,16 +17545,22 @@ final class UserWarning extends PythonClass {
 
   UserWarning.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -15103,16 +17576,22 @@ final class ValueError extends PythonClass {
 
   ValueError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -15128,16 +17607,22 @@ final class Warning extends PythonClass {
 
   Warning.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -15153,16 +17638,22 @@ final class ZeroDivisionError extends PythonClass {
 
   ZeroDivisionError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -15178,42 +17669,100 @@ final class bool extends PythonClass {
 
   bool.from(super.pythonClass) : super.from();
 
+  /// ## denominator (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// the denominator of a rational number in lowest terms
   Object? get denominator => getAttribute("denominator");
 
+  /// ## denominator (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// the denominator of a rational number in lowest terms
   set denominator(Object? denominator) =>
       setAttribute("denominator", denominator);
 
+  /// ## imag (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// the imaginary part of a complex number
   Object? get imag => getAttribute("imag");
 
+  /// ## imag (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// the imaginary part of a complex number
   set imag(Object? imag) => setAttribute("imag", imag);
 
+  /// ## numerator (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// the numerator of a rational number in lowest terms
   Object? get numerator => getAttribute("numerator");
 
+  /// ## numerator (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// the numerator of a rational number in lowest terms
   set numerator(Object? numerator) => setAttribute("numerator", numerator);
 
+  /// ## real (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// the real part of a complex number
   Object? get real => getAttribute("real");
 
+  /// ## real (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// the real part of a complex number
   set real(Object? real) => setAttribute("real", real);
 
+  /// ## as_integer_ratio (getter)
   Object? get as_integer_ratio => getAttribute("as_integer_ratio");
 
+  /// ## as_integer_ratio (setter)
   set as_integer_ratio(Object? as_integer_ratio) =>
       setAttribute("as_integer_ratio", as_integer_ratio);
 
+  /// ## bit_count (getter)
   Object? get bit_count => getAttribute("bit_count");
 
+  /// ## bit_count (setter)
   set bit_count(Object? bit_count) => setAttribute("bit_count", bit_count);
 
+  /// ## bit_length (getter)
   Object? get bit_length => getAttribute("bit_length");
 
+  /// ## bit_length (setter)
   set bit_length(Object? bit_length) => setAttribute("bit_length", bit_length);
 
+  /// ## conjugate (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Returns self, the complex conjugate of any int.
   Object? get conjugate => getAttribute("conjugate");
 
+  /// ## conjugate (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Returns self, the complex conjugate of any int.
   set conjugate(Object? conjugate) => setAttribute("conjugate", conjugate);
 
+  /// ## to_bytes (getter)
   Object? get to_bytes => getAttribute("to_bytes");
 
+  /// ## to_bytes (setter)
   set to_bytes(Object? to_bytes) => setAttribute("to_bytes", to_bytes);
 }
 
@@ -15228,198 +17777,294 @@ final class bytearray extends PythonClass {
 
   bytearray.from(super.pythonClass) : super.from();
 
+  /// ## append (getter)
   Object? get append => getAttribute("append");
 
+  /// ## append (setter)
   set append(Object? append) => setAttribute("append", append);
 
+  /// ## capitalize (getter)
   Object? get capitalize => getAttribute("capitalize");
 
+  /// ## capitalize (setter)
   set capitalize(Object? capitalize) => setAttribute("capitalize", capitalize);
 
+  /// ## center (getter)
   Object? get center => getAttribute("center");
 
+  /// ## center (setter)
   set center(Object? center) => setAttribute("center", center);
 
+  /// ## clear (getter)
   Object? get clear => getAttribute("clear");
 
+  /// ## clear (setter)
   set clear(Object? clear) => setAttribute("clear", clear);
 
+  /// ## copy (getter)
   Object? get copy => getAttribute("copy");
 
+  /// ## copy (setter)
   set copy(Object? copy) => setAttribute("copy", copy);
 
+  /// ## count (getter)
   Object? get count => getAttribute("count");
 
+  /// ## count (setter)
   set count(Object? count) => setAttribute("count", count);
 
+  /// ## decode (getter)
   Object? get decode => getAttribute("decode");
 
+  /// ## decode (setter)
   set decode(Object? decode) => setAttribute("decode", decode);
 
+  /// ## endswith (getter)
   Object? get endswith => getAttribute("endswith");
 
+  /// ## endswith (setter)
   set endswith(Object? endswith) => setAttribute("endswith", endswith);
 
+  /// ## expandtabs (getter)
   Object? get expandtabs => getAttribute("expandtabs");
 
+  /// ## expandtabs (setter)
   set expandtabs(Object? expandtabs) => setAttribute("expandtabs", expandtabs);
 
+  /// ## extend (getter)
   Object? get extend => getAttribute("extend");
 
+  /// ## extend (setter)
   set extend(Object? extend) => setAttribute("extend", extend);
 
+  /// ## find (getter)
   Object? get find => getAttribute("find");
 
+  /// ## find (setter)
   set find(Object? find) => setAttribute("find", find);
 
+  /// ## hex (getter)
   Object? get hex => getAttribute("hex");
 
+  /// ## hex (setter)
   set hex(Object? hex) => setAttribute("hex", hex);
 
+  /// ## index (getter)
   Object? get index => getAttribute("index");
 
+  /// ## index (setter)
   set index(Object? index) => setAttribute("index", index);
 
+  /// ## insert (getter)
   Object? get insert => getAttribute("insert");
 
+  /// ## insert (setter)
   set insert(Object? insert) => setAttribute("insert", insert);
 
+  /// ## isalnum (getter)
   Object? get isalnum => getAttribute("isalnum");
 
+  /// ## isalnum (setter)
   set isalnum(Object? isalnum) => setAttribute("isalnum", isalnum);
 
+  /// ## isalpha (getter)
   Object? get isalpha => getAttribute("isalpha");
 
+  /// ## isalpha (setter)
   set isalpha(Object? isalpha) => setAttribute("isalpha", isalpha);
 
+  /// ## isascii (getter)
   Object? get isascii => getAttribute("isascii");
 
+  /// ## isascii (setter)
   set isascii(Object? isascii) => setAttribute("isascii", isascii);
 
+  /// ## isdigit (getter)
   Object? get isdigit => getAttribute("isdigit");
 
+  /// ## isdigit (setter)
   set isdigit(Object? isdigit) => setAttribute("isdigit", isdigit);
 
+  /// ## islower (getter)
   Object? get islower => getAttribute("islower");
 
+  /// ## islower (setter)
   set islower(Object? islower) => setAttribute("islower", islower);
 
+  /// ## isspace (getter)
   Object? get isspace => getAttribute("isspace");
 
+  /// ## isspace (setter)
   set isspace(Object? isspace) => setAttribute("isspace", isspace);
 
+  /// ## istitle (getter)
   Object? get istitle => getAttribute("istitle");
 
+  /// ## istitle (setter)
   set istitle(Object? istitle) => setAttribute("istitle", istitle);
 
+  /// ## isupper (getter)
   Object? get isupper => getAttribute("isupper");
 
+  /// ## isupper (setter)
   set isupper(Object? isupper) => setAttribute("isupper", isupper);
 
+  /// ## join (getter)
   Object? get join => getAttribute("join");
 
+  /// ## join (setter)
   set join(Object? join) => setAttribute("join", join);
 
+  /// ## ljust (getter)
   Object? get ljust => getAttribute("ljust");
 
+  /// ## ljust (setter)
   set ljust(Object? ljust) => setAttribute("ljust", ljust);
 
+  /// ## lower (getter)
   Object? get lower => getAttribute("lower");
 
+  /// ## lower (setter)
   set lower(Object? lower) => setAttribute("lower", lower);
 
+  /// ## lstrip (getter)
   Object? get lstrip => getAttribute("lstrip");
 
+  /// ## lstrip (setter)
   set lstrip(Object? lstrip) => setAttribute("lstrip", lstrip);
 
+  /// ## partition (getter)
   Object? get partition => getAttribute("partition");
 
+  /// ## partition (setter)
   set partition(Object? partition) => setAttribute("partition", partition);
 
+  /// ## pop (getter)
   Object? get pop => getAttribute("pop");
 
+  /// ## pop (setter)
   set pop(Object? pop) => setAttribute("pop", pop);
 
+  /// ## remove (getter)
   Object? get remove => getAttribute("remove");
 
+  /// ## remove (setter)
   set remove(Object? remove) => setAttribute("remove", remove);
 
+  /// ## removeprefix (getter)
   Object? get removeprefix => getAttribute("removeprefix");
 
+  /// ## removeprefix (setter)
   set removeprefix(Object? removeprefix) =>
       setAttribute("removeprefix", removeprefix);
 
+  /// ## removesuffix (getter)
   Object? get removesuffix => getAttribute("removesuffix");
 
+  /// ## removesuffix (setter)
   set removesuffix(Object? removesuffix) =>
       setAttribute("removesuffix", removesuffix);
 
+  /// ## replace (getter)
   Object? get replace => getAttribute("replace");
 
+  /// ## replace (setter)
   set replace(Object? replace) => setAttribute("replace", replace);
 
+  /// ## reverse (getter)
   Object? get reverse => getAttribute("reverse");
 
+  /// ## reverse (setter)
   set reverse(Object? reverse) => setAttribute("reverse", reverse);
 
+  /// ## rfind (getter)
   Object? get rfind => getAttribute("rfind");
 
+  /// ## rfind (setter)
   set rfind(Object? rfind) => setAttribute("rfind", rfind);
 
+  /// ## rindex (getter)
   Object? get rindex => getAttribute("rindex");
 
+  /// ## rindex (setter)
   set rindex(Object? rindex) => setAttribute("rindex", rindex);
 
+  /// ## rjust (getter)
   Object? get rjust => getAttribute("rjust");
 
+  /// ## rjust (setter)
   set rjust(Object? rjust) => setAttribute("rjust", rjust);
 
+  /// ## rpartition (getter)
   Object? get rpartition => getAttribute("rpartition");
 
+  /// ## rpartition (setter)
   set rpartition(Object? rpartition) => setAttribute("rpartition", rpartition);
 
+  /// ## rsplit (getter)
   Object? get rsplit => getAttribute("rsplit");
 
+  /// ## rsplit (setter)
   set rsplit(Object? rsplit) => setAttribute("rsplit", rsplit);
 
+  /// ## rstrip (getter)
   Object? get rstrip => getAttribute("rstrip");
 
+  /// ## rstrip (setter)
   set rstrip(Object? rstrip) => setAttribute("rstrip", rstrip);
 
+  /// ## split (getter)
   Object? get split => getAttribute("split");
 
+  /// ## split (setter)
   set split(Object? split) => setAttribute("split", split);
 
+  /// ## splitlines (getter)
   Object? get splitlines => getAttribute("splitlines");
 
+  /// ## splitlines (setter)
   set splitlines(Object? splitlines) => setAttribute("splitlines", splitlines);
 
+  /// ## startswith (getter)
   Object? get startswith => getAttribute("startswith");
 
+  /// ## startswith (setter)
   set startswith(Object? startswith) => setAttribute("startswith", startswith);
 
+  /// ## strip (getter)
   Object? get strip => getAttribute("strip");
 
+  /// ## strip (setter)
   set strip(Object? strip) => setAttribute("strip", strip);
 
+  /// ## swapcase (getter)
   Object? get swapcase => getAttribute("swapcase");
 
+  /// ## swapcase (setter)
   set swapcase(Object? swapcase) => setAttribute("swapcase", swapcase);
 
+  /// ## title (getter)
   Object? get title => getAttribute("title");
 
+  /// ## title (setter)
   set title(Object? title) => setAttribute("title", title);
 
+  /// ## translate (getter)
   Object? get translate => getAttribute("translate");
 
+  /// ## translate (setter)
   set translate(Object? translate) => setAttribute("translate", translate);
 
+  /// ## upper (getter)
   Object? get upper => getAttribute("upper");
 
+  /// ## upper (setter)
   set upper(Object? upper) => setAttribute("upper", upper);
 
+  /// ## zfill (getter)
   Object? get zfill => getAttribute("zfill");
 
+  /// ## zfill (setter)
   set zfill(Object? zfill) => setAttribute("zfill", zfill);
 }
 
@@ -15446,16 +18091,38 @@ final class complex extends PythonClass {
 
   complex.from(super.pythonClass) : super.from();
 
+  /// ## imag (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// the imaginary part of a complex number
   Object? get imag => getAttribute("imag");
 
+  /// ## imag (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// the imaginary part of a complex number
   set imag(Object? imag) => setAttribute("imag", imag);
 
+  /// ## real (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// the real part of a complex number
   Object? get real => getAttribute("real");
 
+  /// ## real (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// the real part of a complex number
   set real(Object? real) => setAttribute("real", real);
 
+  /// ## conjugate (getter)
   Object? get conjugate => getAttribute("conjugate");
 
+  /// ## conjugate (setter)
   set conjugate(Object? conjugate) => setAttribute("conjugate", conjugate);
 }
 
@@ -15470,44 +18137,64 @@ final class dict extends PythonClass {
 
   dict.from(super.pythonClass) : super.from();
 
+  /// ## clear (getter)
   Object? get clear => getAttribute("clear");
 
+  /// ## clear (setter)
   set clear(Object? clear) => setAttribute("clear", clear);
 
+  /// ## copy (getter)
   Object? get copy => getAttribute("copy");
 
+  /// ## copy (setter)
   set copy(Object? copy) => setAttribute("copy", copy);
 
+  /// ## get (getter)
   Object? get $get => getAttribute("get");
 
+  /// ## get (setter)
   set $get(Object? $get) => setAttribute("get", $get);
 
+  /// ## items (getter)
   Object? get items => getAttribute("items");
 
+  /// ## items (setter)
   set items(Object? items) => setAttribute("items", items);
 
+  /// ## keys (getter)
   Object? get keys => getAttribute("keys");
 
+  /// ## keys (setter)
   set keys(Object? keys) => setAttribute("keys", keys);
 
+  /// ## pop (getter)
   Object? get pop => getAttribute("pop");
 
+  /// ## pop (setter)
   set pop(Object? pop) => setAttribute("pop", pop);
 
+  /// ## popitem (getter)
   Object? get popitem => getAttribute("popitem");
 
+  /// ## popitem (setter)
   set popitem(Object? popitem) => setAttribute("popitem", popitem);
 
+  /// ## setdefault (getter)
   Object? get setdefault => getAttribute("setdefault");
 
+  /// ## setdefault (setter)
   set setdefault(Object? setdefault) => setAttribute("setdefault", setdefault);
 
+  /// ## update (getter)
   Object? get update => getAttribute("update");
 
+  /// ## update (setter)
   set update(Object? update) => setAttribute("update", update);
 
+  /// ## values (getter)
   Object? get values => getAttribute("values");
 
+  /// ## values (setter)
   set values(Object? values) => setAttribute("values", values);
 }
 
@@ -15546,29 +18233,57 @@ final class float extends PythonClass {
 
   float.from(super.pythonClass) : super.from();
 
+  /// ## imag (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// the imaginary part of a complex number
   Object? get imag => getAttribute("imag");
 
+  /// ## imag (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// the imaginary part of a complex number
   set imag(Object? imag) => setAttribute("imag", imag);
 
+  /// ## real (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// the real part of a complex number
   Object? get real => getAttribute("real");
 
+  /// ## real (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// the real part of a complex number
   set real(Object? real) => setAttribute("real", real);
 
+  /// ## as_integer_ratio (getter)
   Object? get as_integer_ratio => getAttribute("as_integer_ratio");
 
+  /// ## as_integer_ratio (setter)
   set as_integer_ratio(Object? as_integer_ratio) =>
       setAttribute("as_integer_ratio", as_integer_ratio);
 
+  /// ## conjugate (getter)
   Object? get conjugate => getAttribute("conjugate");
 
+  /// ## conjugate (setter)
   set conjugate(Object? conjugate) => setAttribute("conjugate", conjugate);
 
+  /// ## hex (getter)
   Object? get hex => getAttribute("hex");
 
+  /// ## hex (setter)
   set hex(Object? hex) => setAttribute("hex", hex);
 
+  /// ## is_integer (getter)
   Object? get is_integer => getAttribute("is_integer");
 
+  /// ## is_integer (setter)
   set is_integer(Object? is_integer) => setAttribute("is_integer", is_integer);
 }
 
@@ -15583,38 +18298,54 @@ final class frozenset extends PythonClass {
 
   frozenset.from(super.pythonClass) : super.from();
 
+  /// ## copy (getter)
   Object? get copy => getAttribute("copy");
 
+  /// ## copy (setter)
   set copy(Object? copy) => setAttribute("copy", copy);
 
+  /// ## difference (getter)
   Object? get difference => getAttribute("difference");
 
+  /// ## difference (setter)
   set difference(Object? difference) => setAttribute("difference", difference);
 
+  /// ## intersection (getter)
   Object? get intersection => getAttribute("intersection");
 
+  /// ## intersection (setter)
   set intersection(Object? intersection) =>
       setAttribute("intersection", intersection);
 
+  /// ## isdisjoint (getter)
   Object? get isdisjoint => getAttribute("isdisjoint");
 
+  /// ## isdisjoint (setter)
   set isdisjoint(Object? isdisjoint) => setAttribute("isdisjoint", isdisjoint);
 
+  /// ## issubset (getter)
   Object? get issubset => getAttribute("issubset");
 
+  /// ## issubset (setter)
   set issubset(Object? issubset) => setAttribute("issubset", issubset);
 
+  /// ## issuperset (getter)
   Object? get issuperset => getAttribute("issuperset");
 
+  /// ## issuperset (setter)
   set issuperset(Object? issuperset) => setAttribute("issuperset", issuperset);
 
+  /// ## symmetric_difference (getter)
   Object? get symmetric_difference => getAttribute("symmetric_difference");
 
+  /// ## symmetric_difference (setter)
   set symmetric_difference(Object? symmetric_difference) =>
       setAttribute("symmetric_difference", symmetric_difference);
 
+  /// ## union (getter)
   Object? get union => getAttribute("union");
 
+  /// ## union (setter)
   set union(Object? union) => setAttribute("union", union);
 }
 
@@ -15629,42 +18360,100 @@ final class int extends PythonClass {
 
   int.from(super.pythonClass) : super.from();
 
+  /// ## denominator (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// the denominator of a rational number in lowest terms
   Object? get denominator => getAttribute("denominator");
 
+  /// ## denominator (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// the denominator of a rational number in lowest terms
   set denominator(Object? denominator) =>
       setAttribute("denominator", denominator);
 
+  /// ## imag (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// the imaginary part of a complex number
   Object? get imag => getAttribute("imag");
 
+  /// ## imag (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// the imaginary part of a complex number
   set imag(Object? imag) => setAttribute("imag", imag);
 
+  /// ## numerator (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// the numerator of a rational number in lowest terms
   Object? get numerator => getAttribute("numerator");
 
+  /// ## numerator (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// the numerator of a rational number in lowest terms
   set numerator(Object? numerator) => setAttribute("numerator", numerator);
 
+  /// ## real (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// the real part of a complex number
   Object? get real => getAttribute("real");
 
+  /// ## real (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// the real part of a complex number
   set real(Object? real) => setAttribute("real", real);
 
+  /// ## as_integer_ratio (getter)
   Object? get as_integer_ratio => getAttribute("as_integer_ratio");
 
+  /// ## as_integer_ratio (setter)
   set as_integer_ratio(Object? as_integer_ratio) =>
       setAttribute("as_integer_ratio", as_integer_ratio);
 
+  /// ## bit_count (getter)
   Object? get bit_count => getAttribute("bit_count");
 
+  /// ## bit_count (setter)
   set bit_count(Object? bit_count) => setAttribute("bit_count", bit_count);
 
+  /// ## bit_length (getter)
   Object? get bit_length => getAttribute("bit_length");
 
+  /// ## bit_length (setter)
   set bit_length(Object? bit_length) => setAttribute("bit_length", bit_length);
 
+  /// ## conjugate (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Returns self, the complex conjugate of any int.
   Object? get conjugate => getAttribute("conjugate");
 
+  /// ## conjugate (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Returns self, the complex conjugate of any int.
   set conjugate(Object? conjugate) => setAttribute("conjugate", conjugate);
 
+  /// ## to_bytes (getter)
   Object? get to_bytes => getAttribute("to_bytes");
 
+  /// ## to_bytes (setter)
   set to_bytes(Object? to_bytes) => setAttribute("to_bytes", to_bytes);
 }
 
@@ -15679,48 +18468,70 @@ final class list extends PythonClass {
 
   list.from(super.pythonClass) : super.from();
 
+  /// ## append (getter)
   Object? get append => getAttribute("append");
 
+  /// ## append (setter)
   set append(Object? append) => setAttribute("append", append);
 
+  /// ## clear (getter)
   Object? get clear => getAttribute("clear");
 
+  /// ## clear (setter)
   set clear(Object? clear) => setAttribute("clear", clear);
 
+  /// ## copy (getter)
   Object? get copy => getAttribute("copy");
 
+  /// ## copy (setter)
   set copy(Object? copy) => setAttribute("copy", copy);
 
+  /// ## count (getter)
   Object? get count => getAttribute("count");
 
+  /// ## count (setter)
   set count(Object? count) => setAttribute("count", count);
 
+  /// ## extend (getter)
   Object? get extend => getAttribute("extend");
 
+  /// ## extend (setter)
   set extend(Object? extend) => setAttribute("extend", extend);
 
+  /// ## index (getter)
   Object? get index => getAttribute("index");
 
+  /// ## index (setter)
   set index(Object? index) => setAttribute("index", index);
 
+  /// ## insert (getter)
   Object? get insert => getAttribute("insert");
 
+  /// ## insert (setter)
   set insert(Object? insert) => setAttribute("insert", insert);
 
+  /// ## pop (getter)
   Object? get pop => getAttribute("pop");
 
+  /// ## pop (setter)
   set pop(Object? pop) => setAttribute("pop", pop);
 
+  /// ## remove (getter)
   Object? get remove => getAttribute("remove");
 
+  /// ## remove (setter)
   set remove(Object? remove) => setAttribute("remove", remove);
 
+  /// ## reverse (getter)
   Object? get reverse => getAttribute("reverse");
 
+  /// ## reverse (setter)
   set reverse(Object? reverse) => setAttribute("reverse", reverse);
 
+  /// ## sort (getter)
   Object? get sort => getAttribute("sort");
 
+  /// ## sort (setter)
   set sort(Object? sort) => setAttribute("sort", sort);
 }
 
@@ -15747,78 +18558,114 @@ final class memoryview extends PythonClass {
 
   memoryview.from(super.pythonClass) : super.from();
 
+  /// ## c_contiguous (getter)
   Object? get c_contiguous => getAttribute("c_contiguous");
 
+  /// ## c_contiguous (setter)
   set c_contiguous(Object? c_contiguous) =>
       setAttribute("c_contiguous", c_contiguous);
 
+  /// ## contiguous (getter)
   Object? get contiguous => getAttribute("contiguous");
 
+  /// ## contiguous (setter)
   set contiguous(Object? contiguous) => setAttribute("contiguous", contiguous);
 
+  /// ## f_contiguous (getter)
   Object? get f_contiguous => getAttribute("f_contiguous");
 
+  /// ## f_contiguous (setter)
   set f_contiguous(Object? f_contiguous) =>
       setAttribute("f_contiguous", f_contiguous);
 
+  /// ## format (getter)
   Object? get format => getAttribute("format");
 
+  /// ## format (setter)
   set format(Object? format) => setAttribute("format", format);
 
+  /// ## itemsize (getter)
   Object? get itemsize => getAttribute("itemsize");
 
+  /// ## itemsize (setter)
   set itemsize(Object? itemsize) => setAttribute("itemsize", itemsize);
 
+  /// ## nbytes (getter)
   Object? get nbytes => getAttribute("nbytes");
 
+  /// ## nbytes (setter)
   set nbytes(Object? nbytes) => setAttribute("nbytes", nbytes);
 
+  /// ## ndim (getter)
   Object? get ndim => getAttribute("ndim");
 
+  /// ## ndim (setter)
   set ndim(Object? ndim) => setAttribute("ndim", ndim);
 
+  /// ## obj (getter)
   Object? get obj => getAttribute("obj");
 
+  /// ## obj (setter)
   set obj(Object? obj) => setAttribute("obj", obj);
 
+  /// ## readonly (getter)
   Object? get readonly => getAttribute("readonly");
 
+  /// ## readonly (setter)
   set readonly(Object? readonly) => setAttribute("readonly", readonly);
 
+  /// ## shape (getter)
   Object? get shape => getAttribute("shape");
 
+  /// ## shape (setter)
   set shape(Object? shape) => setAttribute("shape", shape);
 
+  /// ## strides (getter)
   Object? get strides => getAttribute("strides");
 
+  /// ## strides (setter)
   set strides(Object? strides) => setAttribute("strides", strides);
 
+  /// ## suboffsets (getter)
   Object? get suboffsets => getAttribute("suboffsets");
 
+  /// ## suboffsets (setter)
   set suboffsets(Object? suboffsets) => setAttribute("suboffsets", suboffsets);
 
+  /// ## cast (getter)
   Object? get cast => getAttribute("cast");
 
+  /// ## cast (setter)
   set cast(Object? cast) => setAttribute("cast", cast);
 
+  /// ## hex (getter)
   Object? get hex => getAttribute("hex");
 
+  /// ## hex (setter)
   set hex(Object? hex) => setAttribute("hex", hex);
 
+  /// ## release (getter)
   Object? get release => getAttribute("release");
 
+  /// ## release (setter)
   set release(Object? release) => setAttribute("release", release);
 
+  /// ## tobytes (getter)
   Object? get tobytes => getAttribute("tobytes");
 
+  /// ## tobytes (setter)
   set tobytes(Object? tobytes) => setAttribute("tobytes", tobytes);
 
+  /// ## tolist (getter)
   Object? get tolist => getAttribute("tolist");
 
+  /// ## tolist (setter)
   set tolist(Object? tolist) => setAttribute("tolist", tolist);
 
+  /// ## toreadonly (getter)
   Object? get toreadonly => getAttribute("toreadonly");
 
+  /// ## toreadonly (setter)
   set toreadonly(Object? toreadonly) => setAttribute("toreadonly", toreadonly);
 }
 
@@ -15845,28 +18692,40 @@ final class property extends PythonClass {
 
   property.from(super.pythonClass) : super.from();
 
+  /// ## fdel (getter)
   Object? get fdel => getAttribute("fdel");
 
+  /// ## fdel (setter)
   set fdel(Object? fdel) => setAttribute("fdel", fdel);
 
+  /// ## fget (getter)
   Object? get fget => getAttribute("fget");
 
+  /// ## fget (setter)
   set fget(Object? fget) => setAttribute("fget", fget);
 
+  /// ## fset (getter)
   Object? get fset => getAttribute("fset");
 
+  /// ## fset (setter)
   set fset(Object? fset) => setAttribute("fset", fset);
 
+  /// ## deleter (getter)
   Object? get deleter => getAttribute("deleter");
 
+  /// ## deleter (setter)
   set deleter(Object? deleter) => setAttribute("deleter", deleter);
 
+  /// ## getter (getter)
   Object? get getter => getAttribute("getter");
 
+  /// ## getter (setter)
   set getter(Object? getter) => setAttribute("getter", getter);
 
+  /// ## setter (getter)
   Object? get setter => getAttribute("setter");
 
+  /// ## setter (setter)
   set setter(Object? setter) => setAttribute("setter", setter);
 }
 
@@ -15881,24 +18740,34 @@ final class range extends PythonClass {
 
   range.from(super.pythonClass) : super.from();
 
+  /// ## start (getter)
   Object? get start => getAttribute("start");
 
+  /// ## start (setter)
   set start(Object? start) => setAttribute("start", start);
 
+  /// ## step (getter)
   Object? get step => getAttribute("step");
 
+  /// ## step (setter)
   set step(Object? step) => setAttribute("step", step);
 
+  /// ## stop (getter)
   Object? get stop => getAttribute("stop");
 
+  /// ## stop (setter)
   set stop(Object? stop) => setAttribute("stop", stop);
 
+  /// ## count (getter)
   Object? get count => getAttribute("count");
 
+  /// ## count (setter)
   set count(Object? count) => setAttribute("count", count);
 
+  /// ## index (getter)
   Object? get index => getAttribute("index");
 
+  /// ## index (setter)
   set index(Object? index) => setAttribute("index", index);
 }
 
@@ -15925,78 +18794,112 @@ final class $set extends PythonClass {
 
   $set.from(super.pythonClass) : super.from();
 
+  /// ## add (getter)
   Object? get add => getAttribute("add");
 
+  /// ## add (setter)
   set add(Object? add) => setAttribute("add", add);
 
+  /// ## clear (getter)
   Object? get clear => getAttribute("clear");
 
+  /// ## clear (setter)
   set clear(Object? clear) => setAttribute("clear", clear);
 
+  /// ## copy (getter)
   Object? get copy => getAttribute("copy");
 
+  /// ## copy (setter)
   set copy(Object? copy) => setAttribute("copy", copy);
 
+  /// ## difference (getter)
   Object? get difference => getAttribute("difference");
 
+  /// ## difference (setter)
   set difference(Object? difference) => setAttribute("difference", difference);
 
+  /// ## difference_update (getter)
   Object? get difference_update => getAttribute("difference_update");
 
+  /// ## difference_update (setter)
   set difference_update(Object? difference_update) =>
       setAttribute("difference_update", difference_update);
 
+  /// ## discard (getter)
   Object? get discard => getAttribute("discard");
 
+  /// ## discard (setter)
   set discard(Object? discard) => setAttribute("discard", discard);
 
+  /// ## intersection (getter)
   Object? get intersection => getAttribute("intersection");
 
+  /// ## intersection (setter)
   set intersection(Object? intersection) =>
       setAttribute("intersection", intersection);
 
+  /// ## intersection_update (getter)
   Object? get intersection_update => getAttribute("intersection_update");
 
+  /// ## intersection_update (setter)
   set intersection_update(Object? intersection_update) =>
       setAttribute("intersection_update", intersection_update);
 
+  /// ## isdisjoint (getter)
   Object? get isdisjoint => getAttribute("isdisjoint");
 
+  /// ## isdisjoint (setter)
   set isdisjoint(Object? isdisjoint) => setAttribute("isdisjoint", isdisjoint);
 
+  /// ## issubset (getter)
   Object? get issubset => getAttribute("issubset");
 
+  /// ## issubset (setter)
   set issubset(Object? issubset) => setAttribute("issubset", issubset);
 
+  /// ## issuperset (getter)
   Object? get issuperset => getAttribute("issuperset");
 
+  /// ## issuperset (setter)
   set issuperset(Object? issuperset) => setAttribute("issuperset", issuperset);
 
+  /// ## pop (getter)
   Object? get pop => getAttribute("pop");
 
+  /// ## pop (setter)
   set pop(Object? pop) => setAttribute("pop", pop);
 
+  /// ## remove (getter)
   Object? get remove => getAttribute("remove");
 
+  /// ## remove (setter)
   set remove(Object? remove) => setAttribute("remove", remove);
 
+  /// ## symmetric_difference (getter)
   Object? get symmetric_difference => getAttribute("symmetric_difference");
 
+  /// ## symmetric_difference (setter)
   set symmetric_difference(Object? symmetric_difference) =>
       setAttribute("symmetric_difference", symmetric_difference);
 
+  /// ## symmetric_difference_update (getter)
   Object? get symmetric_difference_update =>
       getAttribute("symmetric_difference_update");
 
+  /// ## symmetric_difference_update (setter)
   set symmetric_difference_update(Object? symmetric_difference_update) =>
       setAttribute("symmetric_difference_update", symmetric_difference_update);
 
+  /// ## union (getter)
   Object? get union => getAttribute("union");
 
+  /// ## union (setter)
   set union(Object? union) => setAttribute("union", union);
 
+  /// ## update (getter)
   Object? get update => getAttribute("update");
 
+  /// ## update (setter)
   set update(Object? update) => setAttribute("update", update);
 }
 
@@ -16011,20 +18914,28 @@ final class slice extends PythonClass {
 
   slice.from(super.pythonClass) : super.from();
 
+  /// ## start (getter)
   Object? get start => getAttribute("start");
 
+  /// ## start (setter)
   set start(Object? start) => setAttribute("start", start);
 
+  /// ## step (getter)
   Object? get step => getAttribute("step");
 
+  /// ## step (setter)
   set step(Object? step) => setAttribute("step", step);
 
+  /// ## stop (getter)
   Object? get stop => getAttribute("stop");
 
+  /// ## stop (setter)
   set stop(Object? stop) => setAttribute("stop", stop);
 
+  /// ## indices (getter)
   Object? get indices => getAttribute("indices");
 
+  /// ## indices (setter)
   set indices(Object? indices) => setAttribute("indices", indices);
 }
 
@@ -16063,12 +18974,16 @@ final class tuple extends PythonClass {
 
   tuple.from(super.pythonClass) : super.from();
 
+  /// ## count (getter)
   Object? get count => getAttribute("count");
 
+  /// ## count (setter)
   set count(Object? count) => setAttribute("count", count);
 
+  /// ## index (getter)
   Object? get index => getAttribute("index");
 
+  /// ## index (setter)
   set index(Object? index) => setAttribute("index", index);
 }
 
@@ -16083,8 +18998,10 @@ final class type extends PythonClass {
 
   type.from(super.pythonClass) : super.from();
 
+  /// ## mro (getter)
   Object? get mro => getAttribute("mro");
 
+  /// ## mro (setter)
   set mro(Object? mro) => setAttribute("mro", mro);
 }
 
@@ -16191,16 +19108,46 @@ final class partial extends PythonClass {
 
   partial.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// tuple of arguments to future partial calls
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// tuple of arguments to future partial calls
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## func (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// function object to use in future partial calls
   Object? get func => getAttribute("func");
 
+  /// ## func (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// function object to use in future partial calls
   set func(Object? func) => setAttribute("func", func);
 
+  /// ## keywords (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// dictionary of keyword arguments to future partial calls
   Object? get keywords => getAttribute("keywords");
 
+  /// ## keywords (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// dictionary of keyword arguments to future partial calls
   set keywords(Object? keywords) => setAttribute("keywords", keywords);
 }
 
@@ -16215,60 +19162,136 @@ final class Match extends PythonClass {
 
   Match.from(super.pythonClass) : super.from();
 
+  /// ## endpos (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// The index into the string beyond which the RE engine will not go.
   Object? get endpos => getAttribute("endpos");
 
+  /// ## endpos (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// The index into the string beyond which the RE engine will not go.
   set endpos(Object? endpos) => setAttribute("endpos", endpos);
 
+  /// ## lastgroup (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// The name of the last matched capturing group.
   Object? get lastgroup => getAttribute("lastgroup");
 
+  /// ## lastgroup (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// The name of the last matched capturing group.
   set lastgroup(Object? lastgroup) => setAttribute("lastgroup", lastgroup);
 
+  /// ## lastindex (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// The integer index of the last matched capturing group.
   Object? get lastindex => getAttribute("lastindex");
 
+  /// ## lastindex (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// The integer index of the last matched capturing group.
   set lastindex(Object? lastindex) => setAttribute("lastindex", lastindex);
 
+  /// ## pos (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// The index into the string at which the RE engine started looking for a match.
   Object? get pos => getAttribute("pos");
 
+  /// ## pos (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// The index into the string at which the RE engine started looking for a match.
   set pos(Object? pos) => setAttribute("pos", pos);
 
+  /// ## re (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// The regular expression object.
   Object? get re => getAttribute("re");
 
+  /// ## re (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// The regular expression object.
   set re(Object? re) => setAttribute("re", re);
 
+  /// ## regs (getter)
   Object? get regs => getAttribute("regs");
 
+  /// ## regs (setter)
   set regs(Object? regs) => setAttribute("regs", regs);
 
+  /// ## string (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// The string passed to match() or search().
   Object? get string => getAttribute("string");
 
+  /// ## string (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// The string passed to match() or search().
   set string(Object? string) => setAttribute("string", string);
 
+  /// ## end (getter)
   Object? get end => getAttribute("end");
 
+  /// ## end (setter)
   set end(Object? end) => setAttribute("end", end);
 
+  /// ## expand (getter)
   Object? get expand => getAttribute("expand");
 
+  /// ## expand (setter)
   set expand(Object? expand) => setAttribute("expand", expand);
 
+  /// ## group (getter)
   Object? get group => getAttribute("group");
 
+  /// ## group (setter)
   set group(Object? group) => setAttribute("group", group);
 
+  /// ## groupdict (getter)
   Object? get groupdict => getAttribute("groupdict");
 
+  /// ## groupdict (setter)
   set groupdict(Object? groupdict) => setAttribute("groupdict", groupdict);
 
+  /// ## groups (getter)
   Object? get groups => getAttribute("groups");
 
+  /// ## groups (setter)
   set groups(Object? groups) => setAttribute("groups", groups);
 
+  /// ## span (getter)
   Object? get span => getAttribute("span");
 
+  /// ## span (setter)
   set span(Object? span) => setAttribute("span", span);
 
+  /// ## start (getter)
   Object? get start => getAttribute("start");
 
+  /// ## start (setter)
   set start(Object? start) => setAttribute("start", start);
 }
 
@@ -16283,56 +19306,114 @@ final class Pattern extends PythonClass {
 
   Pattern.from(super.pythonClass) : super.from();
 
+  /// ## flags (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// The regex matching flags.
   Object? get flags => getAttribute("flags");
 
+  /// ## flags (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// The regex matching flags.
   set flags(Object? flags) => setAttribute("flags", flags);
 
+  /// ## groupindex (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A dictionary mapping group names to group numbers.
   Object? get groupindex => getAttribute("groupindex");
 
+  /// ## groupindex (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A dictionary mapping group names to group numbers.
   set groupindex(Object? groupindex) => setAttribute("groupindex", groupindex);
 
+  /// ## groups (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// The number of capturing groups in the pattern.
   Object? get groups => getAttribute("groups");
 
+  /// ## groups (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// The number of capturing groups in the pattern.
   set groups(Object? groups) => setAttribute("groups", groups);
 
+  /// ## pattern (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// The pattern string from which the RE object was compiled.
   Object? get pattern => getAttribute("pattern");
 
+  /// ## pattern (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// The pattern string from which the RE object was compiled.
   set pattern(Object? pattern) => setAttribute("pattern", pattern);
 
+  /// ## findall (getter)
   Object? get findall => getAttribute("findall");
 
+  /// ## findall (setter)
   set findall(Object? findall) => setAttribute("findall", findall);
 
+  /// ## finditer (getter)
   Object? get finditer => getAttribute("finditer");
 
+  /// ## finditer (setter)
   set finditer(Object? finditer) => setAttribute("finditer", finditer);
 
+  /// ## fullmatch (getter)
   Object? get fullmatch => getAttribute("fullmatch");
 
+  /// ## fullmatch (setter)
   set fullmatch(Object? fullmatch) => setAttribute("fullmatch", fullmatch);
 
+  /// ## match (getter)
   Object? get match => getAttribute("match");
 
+  /// ## match (setter)
   set match(Object? match) => setAttribute("match", match);
 
+  /// ## scanner (getter)
   Object? get scanner => getAttribute("scanner");
 
+  /// ## scanner (setter)
   set scanner(Object? scanner) => setAttribute("scanner", scanner);
 
+  /// ## search (getter)
   Object? get search => getAttribute("search");
 
+  /// ## search (setter)
   set search(Object? search) => setAttribute("search", search);
 
+  /// ## split (getter)
   Object? get split => getAttribute("split");
 
+  /// ## split (setter)
   set split(Object? split) => setAttribute("split", split);
 
+  /// ## sub (getter)
   Object? get sub => getAttribute("sub");
 
+  /// ## sub (setter)
   set sub(Object? sub) => setAttribute("sub", sub);
 
+  /// ## subn (getter)
   Object? get subn => getAttribute("subn");
 
+  /// ## subn (setter)
   set subn(Object? subn) => setAttribute("subn", subn);
 }
 
@@ -16380,78 +19461,154 @@ final class RegexFlag extends PythonClass {
 
   RegexFlag.from(super.pythonClass) : super.from();
 
+  /// ## denominator (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// the denominator of a rational number in lowest terms
   Object? get denominator => getAttribute("denominator");
 
+  /// ## denominator (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// the denominator of a rational number in lowest terms
   set denominator(Object? denominator) =>
       setAttribute("denominator", denominator);
 
+  /// ## imag (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// the imaginary part of a complex number
   Object? get imag => getAttribute("imag");
 
+  /// ## imag (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// the imaginary part of a complex number
   set imag(Object? imag) => setAttribute("imag", imag);
 
+  /// ## numerator (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// the numerator of a rational number in lowest terms
   Object? get numerator => getAttribute("numerator");
 
+  /// ## numerator (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// the numerator of a rational number in lowest terms
   set numerator(Object? numerator) => setAttribute("numerator", numerator);
 
+  /// ## real (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// the real part of a complex number
   Object? get real => getAttribute("real");
 
+  /// ## real (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// the real part of a complex number
   set real(Object? real) => setAttribute("real", real);
 
+  /// ## as_integer_ratio (getter)
   Object? get as_integer_ratio => getAttribute("as_integer_ratio");
 
+  /// ## as_integer_ratio (setter)
   set as_integer_ratio(Object? as_integer_ratio) =>
       setAttribute("as_integer_ratio", as_integer_ratio);
 
+  /// ## bit_count (getter)
   Object? get bit_count => getAttribute("bit_count");
 
+  /// ## bit_count (setter)
   set bit_count(Object? bit_count) => setAttribute("bit_count", bit_count);
 
+  /// ## bit_length (getter)
   Object? get bit_length => getAttribute("bit_length");
 
+  /// ## bit_length (setter)
   set bit_length(Object? bit_length) => setAttribute("bit_length", bit_length);
 
+  /// ## conjugate (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Returns self, the complex conjugate of any int.
   Object? get conjugate => getAttribute("conjugate");
 
+  /// ## conjugate (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Returns self, the complex conjugate of any int.
   set conjugate(Object? conjugate) => setAttribute("conjugate", conjugate);
 
+  /// ## to_bytes (getter)
   Object? get to_bytes => getAttribute("to_bytes");
 
+  /// ## to_bytes (setter)
   set to_bytes(Object? to_bytes) => setAttribute("to_bytes", to_bytes);
 
+  /// ## ASCII (getter)
   Object? get ASCII => getAttribute("ASCII");
 
+  /// ## ASCII (setter)
   set ASCII(Object? ASCII) => setAttribute("ASCII", ASCII);
 
+  /// ## DEBUG (getter)
   Object? get DEBUG => getAttribute("DEBUG");
 
+  /// ## DEBUG (setter)
   set DEBUG(Object? DEBUG) => setAttribute("DEBUG", DEBUG);
 
+  /// ## DOTALL (getter)
   Object? get DOTALL => getAttribute("DOTALL");
 
+  /// ## DOTALL (setter)
   set DOTALL(Object? DOTALL) => setAttribute("DOTALL", DOTALL);
 
+  /// ## IGNORECASE (getter)
   Object? get IGNORECASE => getAttribute("IGNORECASE");
 
+  /// ## IGNORECASE (setter)
   set IGNORECASE(Object? IGNORECASE) => setAttribute("IGNORECASE", IGNORECASE);
 
+  /// ## LOCALE (getter)
   Object? get LOCALE => getAttribute("LOCALE");
 
+  /// ## LOCALE (setter)
   set LOCALE(Object? LOCALE) => setAttribute("LOCALE", LOCALE);
 
+  /// ## MULTILINE (getter)
   Object? get MULTILINE => getAttribute("MULTILINE");
 
+  /// ## MULTILINE (setter)
   set MULTILINE(Object? MULTILINE) => setAttribute("MULTILINE", MULTILINE);
 
+  /// ## TEMPLATE (getter)
   Object? get TEMPLATE => getAttribute("TEMPLATE");
 
+  /// ## TEMPLATE (setter)
   set TEMPLATE(Object? TEMPLATE) => setAttribute("TEMPLATE", TEMPLATE);
 
+  /// ## UNICODE (getter)
   Object? get UNICODE => getAttribute("UNICODE");
 
+  /// ## UNICODE (setter)
   set UNICODE(Object? UNICODE) => setAttribute("UNICODE", UNICODE);
 
+  /// ## VERBOSE (getter)
   Object? get VERBOSE => getAttribute("VERBOSE");
 
+  /// ## VERBOSE (setter)
   set VERBOSE(Object? VERBOSE) => setAttribute("VERBOSE", VERBOSE);
 }
 
@@ -16550,12 +19707,17 @@ final class Scanner extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## lexicon (getter)
   Object? get lexicon => getAttribute("lexicon");
 
+  /// ## lexicon (setter)
   set lexicon(Object? lexicon) => setAttribute("lexicon", lexicon);
 
+  /// ## scanner (getter)
   Object? get scanner => getAttribute("scanner");
 
+  /// ## scanner (setter)
   set scanner(Object? scanner) => setAttribute("scanner", scanner);
 }
 
@@ -16644,10 +19806,10 @@ final class Scanner extends PythonClass {
 /// ```
 final class DynamicClassAttribute extends PythonClass {
   factory DynamicClassAttribute({
-    Object? fget = null,
-    Object? fset = null,
-    Object? fdel = null,
-    Object? doc = null,
+    Object? fget,
+    Object? fset,
+    Object? fdel,
+    Object? doc,
   }) =>
       PythonFfiDart.instance.importClass(
         "types",
@@ -16721,20 +19883,29 @@ final class DynamicClassAttribute extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## fget (getter)
   Object? get fget => getAttribute("fget");
 
+  /// ## fget (setter)
   set fget(Object? fget) => setAttribute("fget", fget);
 
+  /// ## fset (getter)
   Object? get fset => getAttribute("fset");
 
+  /// ## fset (setter)
   set fset(Object? fset) => setAttribute("fset", fset);
 
+  /// ## fdel (getter)
   Object? get fdel => getAttribute("fdel");
 
+  /// ## fdel (setter)
   set fdel(Object? fdel) => setAttribute("fdel", fdel);
 
+  /// ## overwrite_doc (getter)
   Object? get overwrite_doc => getAttribute("overwrite_doc");
 
+  /// ## overwrite_doc (setter)
   set overwrite_doc(Object? overwrite_doc) =>
       setAttribute("overwrite_doc", overwrite_doc);
 }
@@ -17026,205 +20197,303 @@ final class EnumCheck extends PythonClass {
 
   EnumCheck.from(super.pythonClass) : super.from();
 
+  /// ## capitalize (getter)
   Object? get capitalize => getAttribute("capitalize");
 
+  /// ## capitalize (setter)
   set capitalize(Object? capitalize) => setAttribute("capitalize", capitalize);
 
+  /// ## casefold (getter)
   Object? get casefold => getAttribute("casefold");
 
+  /// ## casefold (setter)
   set casefold(Object? casefold) => setAttribute("casefold", casefold);
 
+  /// ## center (getter)
   Object? get center => getAttribute("center");
 
+  /// ## center (setter)
   set center(Object? center) => setAttribute("center", center);
 
+  /// ## count (getter)
   Object? get count => getAttribute("count");
 
+  /// ## count (setter)
   set count(Object? count) => setAttribute("count", count);
 
+  /// ## encode (getter)
   Object? get encode => getAttribute("encode");
 
+  /// ## encode (setter)
   set encode(Object? encode) => setAttribute("encode", encode);
 
+  /// ## endswith (getter)
   Object? get endswith => getAttribute("endswith");
 
+  /// ## endswith (setter)
   set endswith(Object? endswith) => setAttribute("endswith", endswith);
 
+  /// ## expandtabs (getter)
   Object? get expandtabs => getAttribute("expandtabs");
 
+  /// ## expandtabs (setter)
   set expandtabs(Object? expandtabs) => setAttribute("expandtabs", expandtabs);
 
+  /// ## find (getter)
   Object? get find => getAttribute("find");
 
+  /// ## find (setter)
   set find(Object? find) => setAttribute("find", find);
 
+  /// ## format (getter)
   Object? get format => getAttribute("format");
 
+  /// ## format (setter)
   set format(Object? format) => setAttribute("format", format);
 
+  /// ## format_map (getter)
   Object? get format_map => getAttribute("format_map");
 
+  /// ## format_map (setter)
   set format_map(Object? format_map) => setAttribute("format_map", format_map);
 
+  /// ## index (getter)
   Object? get index => getAttribute("index");
 
+  /// ## index (setter)
   set index(Object? index) => setAttribute("index", index);
 
+  /// ## isalnum (getter)
   Object? get isalnum => getAttribute("isalnum");
 
+  /// ## isalnum (setter)
   set isalnum(Object? isalnum) => setAttribute("isalnum", isalnum);
 
+  /// ## isalpha (getter)
   Object? get isalpha => getAttribute("isalpha");
 
+  /// ## isalpha (setter)
   set isalpha(Object? isalpha) => setAttribute("isalpha", isalpha);
 
+  /// ## isascii (getter)
   Object? get isascii => getAttribute("isascii");
 
+  /// ## isascii (setter)
   set isascii(Object? isascii) => setAttribute("isascii", isascii);
 
+  /// ## isdecimal (getter)
   Object? get isdecimal => getAttribute("isdecimal");
 
+  /// ## isdecimal (setter)
   set isdecimal(Object? isdecimal) => setAttribute("isdecimal", isdecimal);
 
+  /// ## isdigit (getter)
   Object? get isdigit => getAttribute("isdigit");
 
+  /// ## isdigit (setter)
   set isdigit(Object? isdigit) => setAttribute("isdigit", isdigit);
 
+  /// ## isidentifier (getter)
   Object? get isidentifier => getAttribute("isidentifier");
 
+  /// ## isidentifier (setter)
   set isidentifier(Object? isidentifier) =>
       setAttribute("isidentifier", isidentifier);
 
+  /// ## islower (getter)
   Object? get islower => getAttribute("islower");
 
+  /// ## islower (setter)
   set islower(Object? islower) => setAttribute("islower", islower);
 
+  /// ## isnumeric (getter)
   Object? get isnumeric => getAttribute("isnumeric");
 
+  /// ## isnumeric (setter)
   set isnumeric(Object? isnumeric) => setAttribute("isnumeric", isnumeric);
 
+  /// ## isprintable (getter)
   Object? get isprintable => getAttribute("isprintable");
 
+  /// ## isprintable (setter)
   set isprintable(Object? isprintable) =>
       setAttribute("isprintable", isprintable);
 
+  /// ## isspace (getter)
   Object? get isspace => getAttribute("isspace");
 
+  /// ## isspace (setter)
   set isspace(Object? isspace) => setAttribute("isspace", isspace);
 
+  /// ## istitle (getter)
   Object? get istitle => getAttribute("istitle");
 
+  /// ## istitle (setter)
   set istitle(Object? istitle) => setAttribute("istitle", istitle);
 
+  /// ## isupper (getter)
   Object? get isupper => getAttribute("isupper");
 
+  /// ## isupper (setter)
   set isupper(Object? isupper) => setAttribute("isupper", isupper);
 
+  /// ## join (getter)
   Object? get join => getAttribute("join");
 
+  /// ## join (setter)
   set join(Object? join) => setAttribute("join", join);
 
+  /// ## ljust (getter)
   Object? get ljust => getAttribute("ljust");
 
+  /// ## ljust (setter)
   set ljust(Object? ljust) => setAttribute("ljust", ljust);
 
+  /// ## lower (getter)
   Object? get lower => getAttribute("lower");
 
+  /// ## lower (setter)
   set lower(Object? lower) => setAttribute("lower", lower);
 
+  /// ## lstrip (getter)
   Object? get lstrip => getAttribute("lstrip");
 
+  /// ## lstrip (setter)
   set lstrip(Object? lstrip) => setAttribute("lstrip", lstrip);
 
+  /// ## partition (getter)
   Object? get partition => getAttribute("partition");
 
+  /// ## partition (setter)
   set partition(Object? partition) => setAttribute("partition", partition);
 
+  /// ## removeprefix (getter)
   Object? get removeprefix => getAttribute("removeprefix");
 
+  /// ## removeprefix (setter)
   set removeprefix(Object? removeprefix) =>
       setAttribute("removeprefix", removeprefix);
 
+  /// ## removesuffix (getter)
   Object? get removesuffix => getAttribute("removesuffix");
 
+  /// ## removesuffix (setter)
   set removesuffix(Object? removesuffix) =>
       setAttribute("removesuffix", removesuffix);
 
+  /// ## replace (getter)
   Object? get replace => getAttribute("replace");
 
+  /// ## replace (setter)
   set replace(Object? replace) => setAttribute("replace", replace);
 
+  /// ## rfind (getter)
   Object? get rfind => getAttribute("rfind");
 
+  /// ## rfind (setter)
   set rfind(Object? rfind) => setAttribute("rfind", rfind);
 
+  /// ## rindex (getter)
   Object? get rindex => getAttribute("rindex");
 
+  /// ## rindex (setter)
   set rindex(Object? rindex) => setAttribute("rindex", rindex);
 
+  /// ## rjust (getter)
   Object? get rjust => getAttribute("rjust");
 
+  /// ## rjust (setter)
   set rjust(Object? rjust) => setAttribute("rjust", rjust);
 
+  /// ## rpartition (getter)
   Object? get rpartition => getAttribute("rpartition");
 
+  /// ## rpartition (setter)
   set rpartition(Object? rpartition) => setAttribute("rpartition", rpartition);
 
+  /// ## rsplit (getter)
   Object? get rsplit => getAttribute("rsplit");
 
+  /// ## rsplit (setter)
   set rsplit(Object? rsplit) => setAttribute("rsplit", rsplit);
 
+  /// ## rstrip (getter)
   Object? get rstrip => getAttribute("rstrip");
 
+  /// ## rstrip (setter)
   set rstrip(Object? rstrip) => setAttribute("rstrip", rstrip);
 
+  /// ## split (getter)
   Object? get split => getAttribute("split");
 
+  /// ## split (setter)
   set split(Object? split) => setAttribute("split", split);
 
+  /// ## splitlines (getter)
   Object? get splitlines => getAttribute("splitlines");
 
+  /// ## splitlines (setter)
   set splitlines(Object? splitlines) => setAttribute("splitlines", splitlines);
 
+  /// ## startswith (getter)
   Object? get startswith => getAttribute("startswith");
 
+  /// ## startswith (setter)
   set startswith(Object? startswith) => setAttribute("startswith", startswith);
 
+  /// ## strip (getter)
   Object? get strip => getAttribute("strip");
 
+  /// ## strip (setter)
   set strip(Object? strip) => setAttribute("strip", strip);
 
+  /// ## swapcase (getter)
   Object? get swapcase => getAttribute("swapcase");
 
+  /// ## swapcase (setter)
   set swapcase(Object? swapcase) => setAttribute("swapcase", swapcase);
 
+  /// ## title (getter)
   Object? get title => getAttribute("title");
 
+  /// ## title (setter)
   set title(Object? title) => setAttribute("title", title);
 
+  /// ## translate (getter)
   Object? get translate => getAttribute("translate");
 
+  /// ## translate (setter)
   set translate(Object? translate) => setAttribute("translate", translate);
 
+  /// ## upper (getter)
   Object? get upper => getAttribute("upper");
 
+  /// ## upper (setter)
   set upper(Object? upper) => setAttribute("upper", upper);
 
+  /// ## zfill (getter)
   Object? get zfill => getAttribute("zfill");
 
+  /// ## zfill (setter)
   set zfill(Object? zfill) => setAttribute("zfill", zfill);
 
+  /// ## CONTINUOUS (getter)
   Object? get CONTINUOUS => getAttribute("CONTINUOUS");
 
+  /// ## CONTINUOUS (setter)
   set CONTINUOUS(Object? CONTINUOUS) => setAttribute("CONTINUOUS", CONTINUOUS);
 
+  /// ## NAMED_FLAGS (getter)
   Object? get NAMED_FLAGS => getAttribute("NAMED_FLAGS");
 
+  /// ## NAMED_FLAGS (setter)
   set NAMED_FLAGS(Object? NAMED_FLAGS) =>
       setAttribute("NAMED_FLAGS", NAMED_FLAGS);
 
+  /// ## UNIQUE (getter)
   Object? get UNIQUE => getAttribute("UNIQUE");
 
+  /// ## UNIQUE (setter)
   set UNIQUE(Object? UNIQUE) => setAttribute("UNIQUE", UNIQUE);
 }
 
@@ -17832,8 +21101,10 @@ final class EnumMeta extends PythonClass {
 
   EnumMeta.from(super.pythonClass) : super.from();
 
+  /// ## mro (getter)
   Object? get mro => getAttribute("mro");
 
+  /// ## mro (setter)
   set mro(Object? mro) => setAttribute("mro", mro);
 }
 
@@ -18078,12 +21349,32 @@ final class Flag extends PythonClass {
 
   Flag.from(super.pythonClass) : super.from();
 
+  /// ## name (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// The name of the Enum member.
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// The name of the Enum member.
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## value (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// The value of the Enum member.
   Object? get value => getAttribute("value");
 
+  /// ## value (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// The value of the Enum member.
   set value(Object? value) => setAttribute("value", value);
 }
 
@@ -18131,208 +21422,308 @@ final class FlagBoundary extends PythonClass {
 
   FlagBoundary.from(super.pythonClass) : super.from();
 
+  /// ## capitalize (getter)
   Object? get capitalize => getAttribute("capitalize");
 
+  /// ## capitalize (setter)
   set capitalize(Object? capitalize) => setAttribute("capitalize", capitalize);
 
+  /// ## casefold (getter)
   Object? get casefold => getAttribute("casefold");
 
+  /// ## casefold (setter)
   set casefold(Object? casefold) => setAttribute("casefold", casefold);
 
+  /// ## center (getter)
   Object? get center => getAttribute("center");
 
+  /// ## center (setter)
   set center(Object? center) => setAttribute("center", center);
 
+  /// ## count (getter)
   Object? get count => getAttribute("count");
 
+  /// ## count (setter)
   set count(Object? count) => setAttribute("count", count);
 
+  /// ## encode (getter)
   Object? get encode => getAttribute("encode");
 
+  /// ## encode (setter)
   set encode(Object? encode) => setAttribute("encode", encode);
 
+  /// ## endswith (getter)
   Object? get endswith => getAttribute("endswith");
 
+  /// ## endswith (setter)
   set endswith(Object? endswith) => setAttribute("endswith", endswith);
 
+  /// ## expandtabs (getter)
   Object? get expandtabs => getAttribute("expandtabs");
 
+  /// ## expandtabs (setter)
   set expandtabs(Object? expandtabs) => setAttribute("expandtabs", expandtabs);
 
+  /// ## find (getter)
   Object? get find => getAttribute("find");
 
+  /// ## find (setter)
   set find(Object? find) => setAttribute("find", find);
 
+  /// ## format (getter)
   Object? get format => getAttribute("format");
 
+  /// ## format (setter)
   set format(Object? format) => setAttribute("format", format);
 
+  /// ## format_map (getter)
   Object? get format_map => getAttribute("format_map");
 
+  /// ## format_map (setter)
   set format_map(Object? format_map) => setAttribute("format_map", format_map);
 
+  /// ## index (getter)
   Object? get index => getAttribute("index");
 
+  /// ## index (setter)
   set index(Object? index) => setAttribute("index", index);
 
+  /// ## isalnum (getter)
   Object? get isalnum => getAttribute("isalnum");
 
+  /// ## isalnum (setter)
   set isalnum(Object? isalnum) => setAttribute("isalnum", isalnum);
 
+  /// ## isalpha (getter)
   Object? get isalpha => getAttribute("isalpha");
 
+  /// ## isalpha (setter)
   set isalpha(Object? isalpha) => setAttribute("isalpha", isalpha);
 
+  /// ## isascii (getter)
   Object? get isascii => getAttribute("isascii");
 
+  /// ## isascii (setter)
   set isascii(Object? isascii) => setAttribute("isascii", isascii);
 
+  /// ## isdecimal (getter)
   Object? get isdecimal => getAttribute("isdecimal");
 
+  /// ## isdecimal (setter)
   set isdecimal(Object? isdecimal) => setAttribute("isdecimal", isdecimal);
 
+  /// ## isdigit (getter)
   Object? get isdigit => getAttribute("isdigit");
 
+  /// ## isdigit (setter)
   set isdigit(Object? isdigit) => setAttribute("isdigit", isdigit);
 
+  /// ## isidentifier (getter)
   Object? get isidentifier => getAttribute("isidentifier");
 
+  /// ## isidentifier (setter)
   set isidentifier(Object? isidentifier) =>
       setAttribute("isidentifier", isidentifier);
 
+  /// ## islower (getter)
   Object? get islower => getAttribute("islower");
 
+  /// ## islower (setter)
   set islower(Object? islower) => setAttribute("islower", islower);
 
+  /// ## isnumeric (getter)
   Object? get isnumeric => getAttribute("isnumeric");
 
+  /// ## isnumeric (setter)
   set isnumeric(Object? isnumeric) => setAttribute("isnumeric", isnumeric);
 
+  /// ## isprintable (getter)
   Object? get isprintable => getAttribute("isprintable");
 
+  /// ## isprintable (setter)
   set isprintable(Object? isprintable) =>
       setAttribute("isprintable", isprintable);
 
+  /// ## isspace (getter)
   Object? get isspace => getAttribute("isspace");
 
+  /// ## isspace (setter)
   set isspace(Object? isspace) => setAttribute("isspace", isspace);
 
+  /// ## istitle (getter)
   Object? get istitle => getAttribute("istitle");
 
+  /// ## istitle (setter)
   set istitle(Object? istitle) => setAttribute("istitle", istitle);
 
+  /// ## isupper (getter)
   Object? get isupper => getAttribute("isupper");
 
+  /// ## isupper (setter)
   set isupper(Object? isupper) => setAttribute("isupper", isupper);
 
+  /// ## join (getter)
   Object? get join => getAttribute("join");
 
+  /// ## join (setter)
   set join(Object? join) => setAttribute("join", join);
 
+  /// ## ljust (getter)
   Object? get ljust => getAttribute("ljust");
 
+  /// ## ljust (setter)
   set ljust(Object? ljust) => setAttribute("ljust", ljust);
 
+  /// ## lower (getter)
   Object? get lower => getAttribute("lower");
 
+  /// ## lower (setter)
   set lower(Object? lower) => setAttribute("lower", lower);
 
+  /// ## lstrip (getter)
   Object? get lstrip => getAttribute("lstrip");
 
+  /// ## lstrip (setter)
   set lstrip(Object? lstrip) => setAttribute("lstrip", lstrip);
 
+  /// ## partition (getter)
   Object? get partition => getAttribute("partition");
 
+  /// ## partition (setter)
   set partition(Object? partition) => setAttribute("partition", partition);
 
+  /// ## removeprefix (getter)
   Object? get removeprefix => getAttribute("removeprefix");
 
+  /// ## removeprefix (setter)
   set removeprefix(Object? removeprefix) =>
       setAttribute("removeprefix", removeprefix);
 
+  /// ## removesuffix (getter)
   Object? get removesuffix => getAttribute("removesuffix");
 
+  /// ## removesuffix (setter)
   set removesuffix(Object? removesuffix) =>
       setAttribute("removesuffix", removesuffix);
 
+  /// ## replace (getter)
   Object? get replace => getAttribute("replace");
 
+  /// ## replace (setter)
   set replace(Object? replace) => setAttribute("replace", replace);
 
+  /// ## rfind (getter)
   Object? get rfind => getAttribute("rfind");
 
+  /// ## rfind (setter)
   set rfind(Object? rfind) => setAttribute("rfind", rfind);
 
+  /// ## rindex (getter)
   Object? get rindex => getAttribute("rindex");
 
+  /// ## rindex (setter)
   set rindex(Object? rindex) => setAttribute("rindex", rindex);
 
+  /// ## rjust (getter)
   Object? get rjust => getAttribute("rjust");
 
+  /// ## rjust (setter)
   set rjust(Object? rjust) => setAttribute("rjust", rjust);
 
+  /// ## rpartition (getter)
   Object? get rpartition => getAttribute("rpartition");
 
+  /// ## rpartition (setter)
   set rpartition(Object? rpartition) => setAttribute("rpartition", rpartition);
 
+  /// ## rsplit (getter)
   Object? get rsplit => getAttribute("rsplit");
 
+  /// ## rsplit (setter)
   set rsplit(Object? rsplit) => setAttribute("rsplit", rsplit);
 
+  /// ## rstrip (getter)
   Object? get rstrip => getAttribute("rstrip");
 
+  /// ## rstrip (setter)
   set rstrip(Object? rstrip) => setAttribute("rstrip", rstrip);
 
+  /// ## split (getter)
   Object? get split => getAttribute("split");
 
+  /// ## split (setter)
   set split(Object? split) => setAttribute("split", split);
 
+  /// ## splitlines (getter)
   Object? get splitlines => getAttribute("splitlines");
 
+  /// ## splitlines (setter)
   set splitlines(Object? splitlines) => setAttribute("splitlines", splitlines);
 
+  /// ## startswith (getter)
   Object? get startswith => getAttribute("startswith");
 
+  /// ## startswith (setter)
   set startswith(Object? startswith) => setAttribute("startswith", startswith);
 
+  /// ## strip (getter)
   Object? get strip => getAttribute("strip");
 
+  /// ## strip (setter)
   set strip(Object? strip) => setAttribute("strip", strip);
 
+  /// ## swapcase (getter)
   Object? get swapcase => getAttribute("swapcase");
 
+  /// ## swapcase (setter)
   set swapcase(Object? swapcase) => setAttribute("swapcase", swapcase);
 
+  /// ## title (getter)
   Object? get title => getAttribute("title");
 
+  /// ## title (setter)
   set title(Object? title) => setAttribute("title", title);
 
+  /// ## translate (getter)
   Object? get translate => getAttribute("translate");
 
+  /// ## translate (setter)
   set translate(Object? translate) => setAttribute("translate", translate);
 
+  /// ## upper (getter)
   Object? get upper => getAttribute("upper");
 
+  /// ## upper (setter)
   set upper(Object? upper) => setAttribute("upper", upper);
 
+  /// ## zfill (getter)
   Object? get zfill => getAttribute("zfill");
 
+  /// ## zfill (setter)
   set zfill(Object? zfill) => setAttribute("zfill", zfill);
 
+  /// ## CONFORM (getter)
   Object? get CONFORM => getAttribute("CONFORM");
 
+  /// ## CONFORM (setter)
   set CONFORM(Object? CONFORM) => setAttribute("CONFORM", CONFORM);
 
+  /// ## EJECT (getter)
   Object? get EJECT => getAttribute("EJECT");
 
+  /// ## EJECT (setter)
   set EJECT(Object? EJECT) => setAttribute("EJECT", EJECT);
 
+  /// ## KEEP (getter)
   Object? get KEEP => getAttribute("KEEP");
 
+  /// ## KEEP (setter)
   set KEEP(Object? KEEP) => setAttribute("KEEP", KEEP);
 
+  /// ## STRICT (getter)
   Object? get STRICT => getAttribute("STRICT");
 
+  /// ## STRICT (setter)
   set STRICT(Object? STRICT) => setAttribute("STRICT", STRICT);
 }
 
@@ -18368,42 +21759,100 @@ final class IntEnum extends PythonClass {
 
   IntEnum.from(super.pythonClass) : super.from();
 
+  /// ## denominator (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// the denominator of a rational number in lowest terms
   Object? get denominator => getAttribute("denominator");
 
+  /// ## denominator (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// the denominator of a rational number in lowest terms
   set denominator(Object? denominator) =>
       setAttribute("denominator", denominator);
 
+  /// ## imag (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// the imaginary part of a complex number
   Object? get imag => getAttribute("imag");
 
+  /// ## imag (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// the imaginary part of a complex number
   set imag(Object? imag) => setAttribute("imag", imag);
 
+  /// ## numerator (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// the numerator of a rational number in lowest terms
   Object? get numerator => getAttribute("numerator");
 
+  /// ## numerator (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// the numerator of a rational number in lowest terms
   set numerator(Object? numerator) => setAttribute("numerator", numerator);
 
+  /// ## real (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// the real part of a complex number
   Object? get real => getAttribute("real");
 
+  /// ## real (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// the real part of a complex number
   set real(Object? real) => setAttribute("real", real);
 
+  /// ## as_integer_ratio (getter)
   Object? get as_integer_ratio => getAttribute("as_integer_ratio");
 
+  /// ## as_integer_ratio (setter)
   set as_integer_ratio(Object? as_integer_ratio) =>
       setAttribute("as_integer_ratio", as_integer_ratio);
 
+  /// ## bit_count (getter)
   Object? get bit_count => getAttribute("bit_count");
 
+  /// ## bit_count (setter)
   set bit_count(Object? bit_count) => setAttribute("bit_count", bit_count);
 
+  /// ## bit_length (getter)
   Object? get bit_length => getAttribute("bit_length");
 
+  /// ## bit_length (setter)
   set bit_length(Object? bit_length) => setAttribute("bit_length", bit_length);
 
+  /// ## conjugate (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Returns self, the complex conjugate of any int.
   Object? get conjugate => getAttribute("conjugate");
 
+  /// ## conjugate (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Returns self, the complex conjugate of any int.
   set conjugate(Object? conjugate) => setAttribute("conjugate", conjugate);
 
+  /// ## to_bytes (getter)
   Object? get to_bytes => getAttribute("to_bytes");
 
+  /// ## to_bytes (setter)
   set to_bytes(Object? to_bytes) => setAttribute("to_bytes", to_bytes);
 }
 
@@ -18439,42 +21888,100 @@ final class IntFlag extends PythonClass {
 
   IntFlag.from(super.pythonClass) : super.from();
 
+  /// ## denominator (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// the denominator of a rational number in lowest terms
   Object? get denominator => getAttribute("denominator");
 
+  /// ## denominator (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// the denominator of a rational number in lowest terms
   set denominator(Object? denominator) =>
       setAttribute("denominator", denominator);
 
+  /// ## imag (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// the imaginary part of a complex number
   Object? get imag => getAttribute("imag");
 
+  /// ## imag (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// the imaginary part of a complex number
   set imag(Object? imag) => setAttribute("imag", imag);
 
+  /// ## numerator (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// the numerator of a rational number in lowest terms
   Object? get numerator => getAttribute("numerator");
 
+  /// ## numerator (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// the numerator of a rational number in lowest terms
   set numerator(Object? numerator) => setAttribute("numerator", numerator);
 
+  /// ## real (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// the real part of a complex number
   Object? get real => getAttribute("real");
 
+  /// ## real (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// the real part of a complex number
   set real(Object? real) => setAttribute("real", real);
 
+  /// ## as_integer_ratio (getter)
   Object? get as_integer_ratio => getAttribute("as_integer_ratio");
 
+  /// ## as_integer_ratio (setter)
   set as_integer_ratio(Object? as_integer_ratio) =>
       setAttribute("as_integer_ratio", as_integer_ratio);
 
+  /// ## bit_count (getter)
   Object? get bit_count => getAttribute("bit_count");
 
+  /// ## bit_count (setter)
   set bit_count(Object? bit_count) => setAttribute("bit_count", bit_count);
 
+  /// ## bit_length (getter)
   Object? get bit_length => getAttribute("bit_length");
 
+  /// ## bit_length (setter)
   set bit_length(Object? bit_length) => setAttribute("bit_length", bit_length);
 
+  /// ## conjugate (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Returns self, the complex conjugate of any int.
   Object? get conjugate => getAttribute("conjugate");
 
+  /// ## conjugate (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Returns self, the complex conjugate of any int.
   set conjugate(Object? conjugate) => setAttribute("conjugate", conjugate);
 
+  /// ## to_bytes (getter)
   Object? get to_bytes => getAttribute("to_bytes");
 
+  /// ## to_bytes (setter)
   set to_bytes(Object? to_bytes) => setAttribute("to_bytes", to_bytes);
 }
 
@@ -18489,24 +21996,34 @@ final class MappingProxyType extends PythonClass {
 
   MappingProxyType.from(super.pythonClass) : super.from();
 
+  /// ## copy (getter)
   Object? get copy => getAttribute("copy");
 
+  /// ## copy (setter)
   set copy(Object? copy) => setAttribute("copy", copy);
 
+  /// ## get (getter)
   Object? get $get => getAttribute("get");
 
+  /// ## get (setter)
   set $get(Object? $get) => setAttribute("get", $get);
 
+  /// ## items (getter)
   Object? get items => getAttribute("items");
 
+  /// ## items (setter)
   set items(Object? items) => setAttribute("items", items);
 
+  /// ## keys (getter)
   Object? get keys => getAttribute("keys");
 
+  /// ## keys (setter)
   set keys(Object? keys) => setAttribute("keys", keys);
 
+  /// ## values (getter)
   Object? get values => getAttribute("values");
 
+  /// ## values (setter)
   set values(Object? values) => setAttribute("values", values);
 }
 
@@ -18533,12 +22050,32 @@ final class ReprEnum extends PythonClass {
 
   ReprEnum.from(super.pythonClass) : super.from();
 
+  /// ## name (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// The name of the Enum member.
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// The name of the Enum member.
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## value (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// The value of the Enum member.
   Object? get value => getAttribute("value");
 
+  /// ## value (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// The value of the Enum member.
   set value(Object? value) => setAttribute("value", value);
 }
 
@@ -18601,192 +22138,284 @@ final class StrEnum extends PythonClass {
 
   StrEnum.from(super.pythonClass) : super.from();
 
+  /// ## capitalize (getter)
   Object? get capitalize => getAttribute("capitalize");
 
+  /// ## capitalize (setter)
   set capitalize(Object? capitalize) => setAttribute("capitalize", capitalize);
 
+  /// ## casefold (getter)
   Object? get casefold => getAttribute("casefold");
 
+  /// ## casefold (setter)
   set casefold(Object? casefold) => setAttribute("casefold", casefold);
 
+  /// ## center (getter)
   Object? get center => getAttribute("center");
 
+  /// ## center (setter)
   set center(Object? center) => setAttribute("center", center);
 
+  /// ## count (getter)
   Object? get count => getAttribute("count");
 
+  /// ## count (setter)
   set count(Object? count) => setAttribute("count", count);
 
+  /// ## encode (getter)
   Object? get encode => getAttribute("encode");
 
+  /// ## encode (setter)
   set encode(Object? encode) => setAttribute("encode", encode);
 
+  /// ## endswith (getter)
   Object? get endswith => getAttribute("endswith");
 
+  /// ## endswith (setter)
   set endswith(Object? endswith) => setAttribute("endswith", endswith);
 
+  /// ## expandtabs (getter)
   Object? get expandtabs => getAttribute("expandtabs");
 
+  /// ## expandtabs (setter)
   set expandtabs(Object? expandtabs) => setAttribute("expandtabs", expandtabs);
 
+  /// ## find (getter)
   Object? get find => getAttribute("find");
 
+  /// ## find (setter)
   set find(Object? find) => setAttribute("find", find);
 
+  /// ## format (getter)
   Object? get format => getAttribute("format");
 
+  /// ## format (setter)
   set format(Object? format) => setAttribute("format", format);
 
+  /// ## format_map (getter)
   Object? get format_map => getAttribute("format_map");
 
+  /// ## format_map (setter)
   set format_map(Object? format_map) => setAttribute("format_map", format_map);
 
+  /// ## index (getter)
   Object? get index => getAttribute("index");
 
+  /// ## index (setter)
   set index(Object? index) => setAttribute("index", index);
 
+  /// ## isalnum (getter)
   Object? get isalnum => getAttribute("isalnum");
 
+  /// ## isalnum (setter)
   set isalnum(Object? isalnum) => setAttribute("isalnum", isalnum);
 
+  /// ## isalpha (getter)
   Object? get isalpha => getAttribute("isalpha");
 
+  /// ## isalpha (setter)
   set isalpha(Object? isalpha) => setAttribute("isalpha", isalpha);
 
+  /// ## isascii (getter)
   Object? get isascii => getAttribute("isascii");
 
+  /// ## isascii (setter)
   set isascii(Object? isascii) => setAttribute("isascii", isascii);
 
+  /// ## isdecimal (getter)
   Object? get isdecimal => getAttribute("isdecimal");
 
+  /// ## isdecimal (setter)
   set isdecimal(Object? isdecimal) => setAttribute("isdecimal", isdecimal);
 
+  /// ## isdigit (getter)
   Object? get isdigit => getAttribute("isdigit");
 
+  /// ## isdigit (setter)
   set isdigit(Object? isdigit) => setAttribute("isdigit", isdigit);
 
+  /// ## isidentifier (getter)
   Object? get isidentifier => getAttribute("isidentifier");
 
+  /// ## isidentifier (setter)
   set isidentifier(Object? isidentifier) =>
       setAttribute("isidentifier", isidentifier);
 
+  /// ## islower (getter)
   Object? get islower => getAttribute("islower");
 
+  /// ## islower (setter)
   set islower(Object? islower) => setAttribute("islower", islower);
 
+  /// ## isnumeric (getter)
   Object? get isnumeric => getAttribute("isnumeric");
 
+  /// ## isnumeric (setter)
   set isnumeric(Object? isnumeric) => setAttribute("isnumeric", isnumeric);
 
+  /// ## isprintable (getter)
   Object? get isprintable => getAttribute("isprintable");
 
+  /// ## isprintable (setter)
   set isprintable(Object? isprintable) =>
       setAttribute("isprintable", isprintable);
 
+  /// ## isspace (getter)
   Object? get isspace => getAttribute("isspace");
 
+  /// ## isspace (setter)
   set isspace(Object? isspace) => setAttribute("isspace", isspace);
 
+  /// ## istitle (getter)
   Object? get istitle => getAttribute("istitle");
 
+  /// ## istitle (setter)
   set istitle(Object? istitle) => setAttribute("istitle", istitle);
 
+  /// ## isupper (getter)
   Object? get isupper => getAttribute("isupper");
 
+  /// ## isupper (setter)
   set isupper(Object? isupper) => setAttribute("isupper", isupper);
 
+  /// ## join (getter)
   Object? get join => getAttribute("join");
 
+  /// ## join (setter)
   set join(Object? join) => setAttribute("join", join);
 
+  /// ## ljust (getter)
   Object? get ljust => getAttribute("ljust");
 
+  /// ## ljust (setter)
   set ljust(Object? ljust) => setAttribute("ljust", ljust);
 
+  /// ## lower (getter)
   Object? get lower => getAttribute("lower");
 
+  /// ## lower (setter)
   set lower(Object? lower) => setAttribute("lower", lower);
 
+  /// ## lstrip (getter)
   Object? get lstrip => getAttribute("lstrip");
 
+  /// ## lstrip (setter)
   set lstrip(Object? lstrip) => setAttribute("lstrip", lstrip);
 
+  /// ## partition (getter)
   Object? get partition => getAttribute("partition");
 
+  /// ## partition (setter)
   set partition(Object? partition) => setAttribute("partition", partition);
 
+  /// ## removeprefix (getter)
   Object? get removeprefix => getAttribute("removeprefix");
 
+  /// ## removeprefix (setter)
   set removeprefix(Object? removeprefix) =>
       setAttribute("removeprefix", removeprefix);
 
+  /// ## removesuffix (getter)
   Object? get removesuffix => getAttribute("removesuffix");
 
+  /// ## removesuffix (setter)
   set removesuffix(Object? removesuffix) =>
       setAttribute("removesuffix", removesuffix);
 
+  /// ## replace (getter)
   Object? get replace => getAttribute("replace");
 
+  /// ## replace (setter)
   set replace(Object? replace) => setAttribute("replace", replace);
 
+  /// ## rfind (getter)
   Object? get rfind => getAttribute("rfind");
 
+  /// ## rfind (setter)
   set rfind(Object? rfind) => setAttribute("rfind", rfind);
 
+  /// ## rindex (getter)
   Object? get rindex => getAttribute("rindex");
 
+  /// ## rindex (setter)
   set rindex(Object? rindex) => setAttribute("rindex", rindex);
 
+  /// ## rjust (getter)
   Object? get rjust => getAttribute("rjust");
 
+  /// ## rjust (setter)
   set rjust(Object? rjust) => setAttribute("rjust", rjust);
 
+  /// ## rpartition (getter)
   Object? get rpartition => getAttribute("rpartition");
 
+  /// ## rpartition (setter)
   set rpartition(Object? rpartition) => setAttribute("rpartition", rpartition);
 
+  /// ## rsplit (getter)
   Object? get rsplit => getAttribute("rsplit");
 
+  /// ## rsplit (setter)
   set rsplit(Object? rsplit) => setAttribute("rsplit", rsplit);
 
+  /// ## rstrip (getter)
   Object? get rstrip => getAttribute("rstrip");
 
+  /// ## rstrip (setter)
   set rstrip(Object? rstrip) => setAttribute("rstrip", rstrip);
 
+  /// ## split (getter)
   Object? get split => getAttribute("split");
 
+  /// ## split (setter)
   set split(Object? split) => setAttribute("split", split);
 
+  /// ## splitlines (getter)
   Object? get splitlines => getAttribute("splitlines");
 
+  /// ## splitlines (setter)
   set splitlines(Object? splitlines) => setAttribute("splitlines", splitlines);
 
+  /// ## startswith (getter)
   Object? get startswith => getAttribute("startswith");
 
+  /// ## startswith (setter)
   set startswith(Object? startswith) => setAttribute("startswith", startswith);
 
+  /// ## strip (getter)
   Object? get strip => getAttribute("strip");
 
+  /// ## strip (setter)
   set strip(Object? strip) => setAttribute("strip", strip);
 
+  /// ## swapcase (getter)
   Object? get swapcase => getAttribute("swapcase");
 
+  /// ## swapcase (setter)
   set swapcase(Object? swapcase) => setAttribute("swapcase", swapcase);
 
+  /// ## title (getter)
   Object? get title => getAttribute("title");
 
+  /// ## title (setter)
   set title(Object? title) => setAttribute("title", title);
 
+  /// ## translate (getter)
   Object? get translate => getAttribute("translate");
 
+  /// ## translate (setter)
   set translate(Object? translate) => setAttribute("translate", translate);
 
+  /// ## upper (getter)
   Object? get upper => getAttribute("upper");
 
+  /// ## upper (setter)
   set upper(Object? upper) => setAttribute("upper", upper);
 
+  /// ## zfill (getter)
   Object? get zfill => getAttribute("zfill");
 
+  /// ## zfill (setter)
   set zfill(Object? zfill) => setAttribute("zfill", zfill);
 }
 
@@ -18824,8 +22453,10 @@ final class auto extends PythonClass {
 
   auto.from(super.pythonClass) : super.from();
 
+  /// ## value (getter)
   Object? get value => getAttribute("value");
 
+  /// ## value (setter)
   set value(Object? value) => setAttribute("value", value);
 }
 
@@ -18860,8 +22491,10 @@ final class member extends PythonClass {
 
   member.from(super.pythonClass) : super.from();
 
+  /// ## value (getter)
   Object? get value => getAttribute("value");
 
+  /// ## value (setter)
   set value(Object? value) => setAttribute("value", value);
 }
 
@@ -18896,8 +22529,10 @@ final class nonmember extends PythonClass {
 
   nonmember.from(super.pythonClass) : super.from();
 
+  /// ## value (getter)
   Object? get value => getAttribute("value");
 
+  /// ## value (setter)
   set value(Object? value) => setAttribute("value", value);
 }
 
@@ -19010,8 +22645,10 @@ final class verify extends PythonClass {
 
   verify.from(super.pythonClass) : super.from();
 
+  /// ## checks (getter)
   Object? get checks => getAttribute("checks");
 
+  /// ## checks (setter)
   set checks(Object? checks) => setAttribute("checks", checks);
 }
 
@@ -19026,12 +22663,16 @@ final class RLock extends PythonClass {
 
   RLock.from(super.pythonClass) : super.from();
 
+  /// ## acquire (getter)
   Object? get acquire => getAttribute("acquire");
 
+  /// ## acquire (setter)
   set acquire(Object? acquire) => setAttribute("acquire", acquire);
 
+  /// ## release (getter)
   Object? get release => getAttribute("release");
 
+  /// ## release (setter)
   set release(Object? release) => setAttribute("release", release);
 }
 
@@ -19104,16 +22745,22 @@ final class cached_property extends PythonClass {
 
   cached_property.from(super.pythonClass) : super.from();
 
+  /// ## func (getter)
   Object? get func => getAttribute("func");
 
+  /// ## func (setter)
   set func(Object? func) => setAttribute("func", func);
 
+  /// ## attrname (getter)
   Object? get attrname => getAttribute("attrname");
 
+  /// ## attrname (setter)
   set attrname(Object? attrname) => setAttribute("attrname", attrname);
 
+  /// ## lock (getter)
   Object? get lock => getAttribute("lock");
 
+  /// ## lock (setter)
   set lock(Object? lock) => setAttribute("lock", lock);
 }
 
@@ -19221,16 +22868,22 @@ final class partialmethod extends PythonClass {
 
   partialmethod.from(super.pythonClass) : super.from();
 
+  /// ## func (getter)
   Object? get func => getAttribute("func");
 
+  /// ## func (setter)
   set func(Object? func) => setAttribute("func", func);
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## keywords (getter)
   Object? get keywords => getAttribute("keywords");
 
+  /// ## keywords (setter)
   set keywords(Object? keywords) => setAttribute("keywords", keywords);
 }
 
@@ -19315,7 +22968,7 @@ final class singledispatchmethod extends PythonClass {
   /// ```
   Object? register({
     required Object? cls,
-    Object? method = null,
+    Object? method,
   }) =>
       getFunction("register").call(
         <Object?>[
@@ -19324,12 +22977,17 @@ final class singledispatchmethod extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## dispatcher (getter)
   Object? get dispatcher => getAttribute("dispatcher");
 
+  /// ## dispatcher (setter)
   set dispatcher(Object? dispatcher) => setAttribute("dispatcher", dispatcher);
 
+  /// ## func (getter)
   Object? get func => getAttribute("func");
 
+  /// ## func (setter)
   set func(Object? func) => setAttribute("func", func);
 }
 
@@ -19522,12 +23180,12 @@ final class SpooledTemporaryFile extends PythonClass {
     Object? max_size = 0,
     Object? mode = "w+b",
     Object? buffering = -1,
-    Object? encoding = null,
-    Object? newline = null,
-    Object? suffix = null,
-    Object? prefix = null,
-    Object? dir = null,
-    Object? errors = null,
+    Object? encoding,
+    Object? newline,
+    Object? suffix,
+    Object? prefix,
+    Object? dir,
+    Object? errors,
   }) =>
       PythonFfiDart.instance.importClass(
         "tempfile",
@@ -19803,7 +23461,7 @@ final class SpooledTemporaryFile extends PythonClass {
   ///             return self._file.truncate(size)
   /// ```
   Object? truncate({
-    Object? size = null,
+    Object? size,
   }) =>
       getFunction("truncate").call(
         <Object?>[
@@ -19863,28 +23521,41 @@ final class SpooledTemporaryFile extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## closed (getter)
   Object? get closed => getAttribute("closed");
 
+  /// ## closed (setter)
   set closed(Object? closed) => setAttribute("closed", closed);
 
+  /// ## encoding (getter)
   Object? get encoding => getAttribute("encoding");
 
+  /// ## encoding (setter)
   set encoding(Object? encoding) => setAttribute("encoding", encoding);
 
+  /// ## errors (getter)
   Object? get errors => getAttribute("errors");
 
+  /// ## errors (setter)
   set errors(Object? errors) => setAttribute("errors", errors);
 
+  /// ## mode (getter)
   Object? get mode => getAttribute("mode");
 
+  /// ## mode (setter)
   set mode(Object? mode) => setAttribute("mode", mode);
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## newlines (getter)
   Object? get newlines => getAttribute("newlines");
 
+  /// ## newlines (setter)
   set newlines(Object? newlines) => setAttribute("newlines", newlines);
 }
 
@@ -19978,9 +23649,9 @@ final class SpooledTemporaryFile extends PythonClass {
 /// ```
 final class TemporaryDirectory extends PythonClass {
   factory TemporaryDirectory({
-    Object? suffix = null,
-    Object? prefix = null,
-    Object? dir = null,
+    Object? suffix,
+    Object? prefix,
+    Object? dir,
     Object? ignore_cleanup_errors = false,
   }) =>
       PythonFfiDart.instance.importClass(
@@ -20010,8 +23681,11 @@ final class TemporaryDirectory extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 }
 
@@ -20026,32 +23700,46 @@ final class AsyncGeneratorType extends PythonClass {
 
   AsyncGeneratorType.from(super.pythonClass) : super.from();
 
+  /// ## ag_await (getter)
   Object? get ag_await => getAttribute("ag_await");
 
+  /// ## ag_await (setter)
   set ag_await(Object? ag_await) => setAttribute("ag_await", ag_await);
 
+  /// ## ag_code (getter)
   Object? get ag_code => getAttribute("ag_code");
 
+  /// ## ag_code (setter)
   set ag_code(Object? ag_code) => setAttribute("ag_code", ag_code);
 
+  /// ## ag_frame (getter)
   Object? get ag_frame => getAttribute("ag_frame");
 
+  /// ## ag_frame (setter)
   set ag_frame(Object? ag_frame) => setAttribute("ag_frame", ag_frame);
 
+  /// ## ag_running (getter)
   Object? get ag_running => getAttribute("ag_running");
 
+  /// ## ag_running (setter)
   set ag_running(Object? ag_running) => setAttribute("ag_running", ag_running);
 
+  /// ## aclose (getter)
   Object? get aclose => getAttribute("aclose");
 
+  /// ## aclose (setter)
   set aclose(Object? aclose) => setAttribute("aclose", aclose);
 
+  /// ## asend (getter)
   Object? get asend => getAttribute("asend");
 
+  /// ## asend (setter)
   set asend(Object? asend) => setAttribute("asend", asend);
 
+  /// ## athrow (getter)
   Object? get athrow => getAttribute("athrow");
 
+  /// ## athrow (setter)
   set athrow(Object? athrow) => setAttribute("athrow", athrow);
 }
 
@@ -20078,8 +23766,10 @@ final class CellType extends PythonClass {
 
   CellType.from(super.pythonClass) : super.from();
 
+  /// ## cell_contents (getter)
   Object? get cell_contents => getAttribute("cell_contents");
 
+  /// ## cell_contents (setter)
   set cell_contents(Object? cell_contents) =>
       setAttribute("cell_contents", cell_contents);
 }
@@ -20107,105 +23797,149 @@ final class CodeType extends PythonClass {
 
   CodeType.from(super.pythonClass) : super.from();
 
+  /// ## co_argcount (getter)
   Object? get co_argcount => getAttribute("co_argcount");
 
+  /// ## co_argcount (setter)
   set co_argcount(Object? co_argcount) =>
       setAttribute("co_argcount", co_argcount);
 
+  /// ## co_cellvars (getter)
   Object? get co_cellvars => getAttribute("co_cellvars");
 
+  /// ## co_cellvars (setter)
   set co_cellvars(Object? co_cellvars) =>
       setAttribute("co_cellvars", co_cellvars);
 
+  /// ## co_code (getter)
   Object? get co_code => getAttribute("co_code");
 
+  /// ## co_code (setter)
   set co_code(Object? co_code) => setAttribute("co_code", co_code);
 
+  /// ## co_consts (getter)
   Object? get co_consts => getAttribute("co_consts");
 
+  /// ## co_consts (setter)
   set co_consts(Object? co_consts) => setAttribute("co_consts", co_consts);
 
+  /// ## co_exceptiontable (getter)
   Object? get co_exceptiontable => getAttribute("co_exceptiontable");
 
+  /// ## co_exceptiontable (setter)
   set co_exceptiontable(Object? co_exceptiontable) =>
       setAttribute("co_exceptiontable", co_exceptiontable);
 
+  /// ## co_filename (getter)
   Object? get co_filename => getAttribute("co_filename");
 
+  /// ## co_filename (setter)
   set co_filename(Object? co_filename) =>
       setAttribute("co_filename", co_filename);
 
+  /// ## co_firstlineno (getter)
   Object? get co_firstlineno => getAttribute("co_firstlineno");
 
+  /// ## co_firstlineno (setter)
   set co_firstlineno(Object? co_firstlineno) =>
       setAttribute("co_firstlineno", co_firstlineno);
 
+  /// ## co_flags (getter)
   Object? get co_flags => getAttribute("co_flags");
 
+  /// ## co_flags (setter)
   set co_flags(Object? co_flags) => setAttribute("co_flags", co_flags);
 
+  /// ## co_freevars (getter)
   Object? get co_freevars => getAttribute("co_freevars");
 
+  /// ## co_freevars (setter)
   set co_freevars(Object? co_freevars) =>
       setAttribute("co_freevars", co_freevars);
 
+  /// ## co_kwonlyargcount (getter)
   Object? get co_kwonlyargcount => getAttribute("co_kwonlyargcount");
 
+  /// ## co_kwonlyargcount (setter)
   set co_kwonlyargcount(Object? co_kwonlyargcount) =>
       setAttribute("co_kwonlyargcount", co_kwonlyargcount);
 
+  /// ## co_linetable (getter)
   Object? get co_linetable => getAttribute("co_linetable");
 
+  /// ## co_linetable (setter)
   set co_linetable(Object? co_linetable) =>
       setAttribute("co_linetable", co_linetable);
 
+  /// ## co_lnotab (getter)
   Object? get co_lnotab => getAttribute("co_lnotab");
 
+  /// ## co_lnotab (setter)
   set co_lnotab(Object? co_lnotab) => setAttribute("co_lnotab", co_lnotab);
 
+  /// ## co_name (getter)
   Object? get co_name => getAttribute("co_name");
 
+  /// ## co_name (setter)
   set co_name(Object? co_name) => setAttribute("co_name", co_name);
 
+  /// ## co_names (getter)
   Object? get co_names => getAttribute("co_names");
 
+  /// ## co_names (setter)
   set co_names(Object? co_names) => setAttribute("co_names", co_names);
 
+  /// ## co_nlocals (getter)
   Object? get co_nlocals => getAttribute("co_nlocals");
 
+  /// ## co_nlocals (setter)
   set co_nlocals(Object? co_nlocals) => setAttribute("co_nlocals", co_nlocals);
 
+  /// ## co_posonlyargcount (getter)
   Object? get co_posonlyargcount => getAttribute("co_posonlyargcount");
 
+  /// ## co_posonlyargcount (setter)
   set co_posonlyargcount(Object? co_posonlyargcount) =>
       setAttribute("co_posonlyargcount", co_posonlyargcount);
 
+  /// ## co_qualname (getter)
   Object? get co_qualname => getAttribute("co_qualname");
 
+  /// ## co_qualname (setter)
   set co_qualname(Object? co_qualname) =>
       setAttribute("co_qualname", co_qualname);
 
+  /// ## co_stacksize (getter)
   Object? get co_stacksize => getAttribute("co_stacksize");
 
+  /// ## co_stacksize (setter)
   set co_stacksize(Object? co_stacksize) =>
       setAttribute("co_stacksize", co_stacksize);
 
+  /// ## co_varnames (getter)
   Object? get co_varnames => getAttribute("co_varnames");
 
+  /// ## co_varnames (setter)
   set co_varnames(Object? co_varnames) =>
       setAttribute("co_varnames", co_varnames);
 
+  /// ## co_lines (getter)
   Object? get co_lines => getAttribute("co_lines");
 
+  /// ## co_lines (setter)
   set co_lines(Object? co_lines) => setAttribute("co_lines", co_lines);
 
+  /// ## co_positions (getter)
   Object? get co_positions => getAttribute("co_positions");
 
+  /// ## co_positions (setter)
   set co_positions(Object? co_positions) =>
       setAttribute("co_positions", co_positions);
 
+  /// ## replace (getter)
   Object? get replace => getAttribute("replace");
 
+  /// ## replace (setter)
   set replace(Object? replace) => setAttribute("replace", replace);
 }
 
@@ -20220,41 +23954,59 @@ final class CoroutineType extends PythonClass {
 
   CoroutineType.from(super.pythonClass) : super.from();
 
+  /// ## cr_await (getter)
   Object? get cr_await => getAttribute("cr_await");
 
+  /// ## cr_await (setter)
   set cr_await(Object? cr_await) => setAttribute("cr_await", cr_await);
 
+  /// ## cr_code (getter)
   Object? get cr_code => getAttribute("cr_code");
 
+  /// ## cr_code (setter)
   set cr_code(Object? cr_code) => setAttribute("cr_code", cr_code);
 
+  /// ## cr_frame (getter)
   Object? get cr_frame => getAttribute("cr_frame");
 
+  /// ## cr_frame (setter)
   set cr_frame(Object? cr_frame) => setAttribute("cr_frame", cr_frame);
 
+  /// ## cr_origin (getter)
   Object? get cr_origin => getAttribute("cr_origin");
 
+  /// ## cr_origin (setter)
   set cr_origin(Object? cr_origin) => setAttribute("cr_origin", cr_origin);
 
+  /// ## cr_running (getter)
   Object? get cr_running => getAttribute("cr_running");
 
+  /// ## cr_running (setter)
   set cr_running(Object? cr_running) => setAttribute("cr_running", cr_running);
 
+  /// ## cr_suspended (getter)
   Object? get cr_suspended => getAttribute("cr_suspended");
 
+  /// ## cr_suspended (setter)
   set cr_suspended(Object? cr_suspended) =>
       setAttribute("cr_suspended", cr_suspended);
 
+  /// ## close (getter)
   Object? get close => getAttribute("close");
 
+  /// ## close (setter)
   set close(Object? close) => setAttribute("close", close);
 
+  /// ## send (getter)
   Object? get send => getAttribute("send");
 
+  /// ## send (setter)
   set send(Object? send) => setAttribute("send", send);
 
+  /// ## throw (getter)
   Object? get $throw => getAttribute("throw");
 
+  /// ## throw (setter)
   set $throw(Object? $throw) => setAttribute("throw", $throw);
 }
 
@@ -20281,50 +24033,72 @@ final class FrameType extends PythonClass {
 
   FrameType.from(super.pythonClass) : super.from();
 
+  /// ## f_back (getter)
   Object? get f_back => getAttribute("f_back");
 
+  /// ## f_back (setter)
   set f_back(Object? f_back) => setAttribute("f_back", f_back);
 
+  /// ## f_builtins (getter)
   Object? get f_builtins => getAttribute("f_builtins");
 
+  /// ## f_builtins (setter)
   set f_builtins(Object? f_builtins) => setAttribute("f_builtins", f_builtins);
 
+  /// ## f_code (getter)
   Object? get f_code => getAttribute("f_code");
 
+  /// ## f_code (setter)
   set f_code(Object? f_code) => setAttribute("f_code", f_code);
 
+  /// ## f_globals (getter)
   Object? get f_globals => getAttribute("f_globals");
 
+  /// ## f_globals (setter)
   set f_globals(Object? f_globals) => setAttribute("f_globals", f_globals);
 
+  /// ## f_lasti (getter)
   Object? get f_lasti => getAttribute("f_lasti");
 
+  /// ## f_lasti (setter)
   set f_lasti(Object? f_lasti) => setAttribute("f_lasti", f_lasti);
 
+  /// ## f_lineno (getter)
   Object? get f_lineno => getAttribute("f_lineno");
 
+  /// ## f_lineno (setter)
   set f_lineno(Object? f_lineno) => setAttribute("f_lineno", f_lineno);
 
+  /// ## f_locals (getter)
   Object? get f_locals => getAttribute("f_locals");
 
+  /// ## f_locals (setter)
   set f_locals(Object? f_locals) => setAttribute("f_locals", f_locals);
 
+  /// ## f_trace (getter)
   Object? get f_trace => getAttribute("f_trace");
 
+  /// ## f_trace (setter)
   set f_trace(Object? f_trace) => setAttribute("f_trace", f_trace);
 
+  /// ## f_trace_lines (getter)
   Object? get f_trace_lines => getAttribute("f_trace_lines");
 
+  /// ## f_trace_lines (setter)
   set f_trace_lines(Object? f_trace_lines) =>
       setAttribute("f_trace_lines", f_trace_lines);
 
+  /// ## f_trace_opcodes (getter)
   Object? get f_trace_opcodes => getAttribute("f_trace_opcodes");
 
+  /// ## f_trace_opcodes (setter)
   set f_trace_opcodes(Object? f_trace_opcodes) =>
       setAttribute("f_trace_opcodes", f_trace_opcodes);
 
+  /// ## clear (getter)
   Object? get clear => getAttribute("clear");
 
+  /// ## clear (setter)
   set clear(Object? clear) => setAttribute("clear", clear);
 }
 
@@ -20339,38 +24113,54 @@ final class GeneratorType extends PythonClass {
 
   GeneratorType.from(super.pythonClass) : super.from();
 
+  /// ## gi_code (getter)
   Object? get gi_code => getAttribute("gi_code");
 
+  /// ## gi_code (setter)
   set gi_code(Object? gi_code) => setAttribute("gi_code", gi_code);
 
+  /// ## gi_frame (getter)
   Object? get gi_frame => getAttribute("gi_frame");
 
+  /// ## gi_frame (setter)
   set gi_frame(Object? gi_frame) => setAttribute("gi_frame", gi_frame);
 
+  /// ## gi_running (getter)
   Object? get gi_running => getAttribute("gi_running");
 
+  /// ## gi_running (setter)
   set gi_running(Object? gi_running) => setAttribute("gi_running", gi_running);
 
+  /// ## gi_suspended (getter)
   Object? get gi_suspended => getAttribute("gi_suspended");
 
+  /// ## gi_suspended (setter)
   set gi_suspended(Object? gi_suspended) =>
       setAttribute("gi_suspended", gi_suspended);
 
+  /// ## gi_yieldfrom (getter)
   Object? get gi_yieldfrom => getAttribute("gi_yieldfrom");
 
+  /// ## gi_yieldfrom (setter)
   set gi_yieldfrom(Object? gi_yieldfrom) =>
       setAttribute("gi_yieldfrom", gi_yieldfrom);
 
+  /// ## close (getter)
   Object? get close => getAttribute("close");
 
+  /// ## close (setter)
   set close(Object? close) => setAttribute("close", close);
 
+  /// ## send (getter)
   Object? get send => getAttribute("send");
 
+  /// ## send (setter)
   set send(Object? send) => setAttribute("send", send);
 
+  /// ## throw (getter)
   Object? get $throw => getAttribute("throw");
 
+  /// ## throw (setter)
   set $throw(Object? $throw) => setAttribute("throw", $throw);
 }
 
@@ -20469,20 +24259,28 @@ final class TracebackType extends PythonClass {
 
   TracebackType.from(super.pythonClass) : super.from();
 
+  /// ## tb_frame (getter)
   Object? get tb_frame => getAttribute("tb_frame");
 
+  /// ## tb_frame (setter)
   set tb_frame(Object? tb_frame) => setAttribute("tb_frame", tb_frame);
 
+  /// ## tb_lasti (getter)
   Object? get tb_lasti => getAttribute("tb_lasti");
 
+  /// ## tb_lasti (setter)
   set tb_lasti(Object? tb_lasti) => setAttribute("tb_lasti", tb_lasti);
 
+  /// ## tb_lineno (getter)
   Object? get tb_lineno => getAttribute("tb_lineno");
 
+  /// ## tb_lineno (setter)
   set tb_lineno(Object? tb_lineno) => setAttribute("tb_lineno", tb_lineno);
 
+  /// ## tb_next (getter)
   Object? get tb_next => getAttribute("tb_next");
 
+  /// ## tb_next (setter)
   set tb_next(Object? tb_next) => setAttribute("tb_next", tb_next);
 }
 
@@ -20544,16 +24342,22 @@ final class CallChain extends PythonClass {
 
   CallChain.from(super.pythonClass) : super.from();
 
+  /// ## callback1 (getter)
   Object? get callback1 => getAttribute("callback1");
 
+  /// ## callback1 (setter)
   set callback1(Object? callback1) => setAttribute("callback1", callback1);
 
+  /// ## callback2 (getter)
   Object? get callback2 => getAttribute("callback2");
 
+  /// ## callback2 (setter)
   set callback2(Object? callback2) => setAttribute("callback2", callback2);
 
+  /// ## cond (getter)
   Object? get cond => getAttribute("cond");
 
+  /// ## cond (setter)
   set cond(Object? cond) => setAttribute("cond", cond);
 }
 
@@ -20689,12 +24493,17 @@ final class ContextualLexer extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## lexers (getter)
   Object? get lexers => getAttribute("lexers");
 
+  /// ## lexers (setter)
   set lexers(Object? lexers) => setAttribute("lexers", lexers);
 
+  /// ## root_lexer (getter)
   Object? get root_lexer => getAttribute("root_lexer");
 
+  /// ## root_lexer (setter)
   set root_lexer(Object? root_lexer) => setAttribute("root_lexer", root_lexer);
 }
 
@@ -20731,8 +24540,8 @@ final class ContextualLexer extends PythonClass {
 final class LexerState extends PythonClass {
   factory LexerState({
     required Object? text,
-    Object? line_ctr = null,
-    Object? last_token = null,
+    Object? line_ctr,
+    Object? last_token,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.lexer",
@@ -20748,16 +24557,22 @@ final class LexerState extends PythonClass {
 
   LexerState.from(super.pythonClass) : super.from();
 
+  /// ## last_token (getter)
   Object? get last_token => getAttribute("last_token");
 
+  /// ## last_token (setter)
   set last_token(Object? last_token) => setAttribute("last_token", last_token);
 
+  /// ## line_ctr (getter)
   Object? get line_ctr => getAttribute("line_ctr");
 
+  /// ## line_ctr (setter)
   set line_ctr(Object? line_ctr) => setAttribute("line_ctr", line_ctr);
 
+  /// ## text (getter)
   Object? get text => getAttribute("text");
 
+  /// ## text (setter)
   set text(Object? text) => setAttribute("text", text);
 }
 
@@ -20846,25 +24661,36 @@ final class LineCounter extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## char_pos (getter)
   Object? get char_pos => getAttribute("char_pos");
 
+  /// ## char_pos (setter)
   set char_pos(Object? char_pos) => setAttribute("char_pos", char_pos);
 
+  /// ## column (getter)
   Object? get column => getAttribute("column");
 
+  /// ## column (setter)
   set column(Object? column) => setAttribute("column", column);
 
+  /// ## line (getter)
   Object? get line => getAttribute("line");
 
+  /// ## line (setter)
   set line(Object? line) => setAttribute("line", line);
 
+  /// ## line_start_pos (getter)
   Object? get line_start_pos => getAttribute("line_start_pos");
 
+  /// ## line_start_pos (setter)
   set line_start_pos(Object? line_start_pos) =>
       setAttribute("line_start_pos", line_start_pos);
 
+  /// ## newline_char (getter)
   Object? get newline_char => getAttribute("newline_char");
 
+  /// ## newline_char (setter)
   set newline_char(Object? newline_char) =>
       setAttribute("newline_char", newline_char);
 }
@@ -20908,7 +24734,7 @@ final class PatternRE extends PythonClass {
   factory PatternRE({
     required Object? value,
     Object? flags = const [],
-    Object? raw = null,
+    Object? raw,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.lexer",
@@ -20958,7 +24784,7 @@ final class PatternRE extends PythonClass {
   ///         return res
   /// ```
   Object? serialize({
-    Object? memo = null,
+    Object? memo,
   }) =>
       getFunction("serialize").call(
         <Object?>[
@@ -20978,33 +24804,48 @@ final class PatternRE extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## max_width (getter)
   Object? get max_width => getAttribute("max_width");
 
+  /// ## max_width (setter)
   set max_width(Object? max_width) => setAttribute("max_width", max_width);
 
+  /// ## min_width (getter)
   Object? get min_width => getAttribute("min_width");
 
+  /// ## min_width (setter)
   set min_width(Object? min_width) => setAttribute("min_width", min_width);
 
+  /// ## deserialize (getter)
   Object? get deserialize => getAttribute("deserialize");
 
+  /// ## deserialize (setter)
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
+  /// ## type (getter)
   Object? get type => getAttribute("type");
 
+  /// ## type (setter)
   set type(Object? type) => setAttribute("type", type);
 
+  /// ## value (getter)
   Object? get value => getAttribute("value");
 
+  /// ## value (setter)
   set value(Object? value) => setAttribute("value", value);
 
+  /// ## flags (getter)
   Object? get flags => getAttribute("flags");
 
+  /// ## flags (setter)
   set flags(Object? flags) => setAttribute("flags", flags);
 
+  /// ## raw (getter)
   Object? get raw => getAttribute("raw");
 
+  /// ## raw (setter)
   set raw(Object? raw) => setAttribute("raw", raw);
 }
 
@@ -21041,7 +24882,7 @@ final class PatternStr extends PythonClass {
   factory PatternStr({
     required Object? value,
     Object? flags = const [],
-    Object? raw = null,
+    Object? raw,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.lexer",
@@ -21091,7 +24932,7 @@ final class PatternStr extends PythonClass {
   ///         return res
   /// ```
   Object? serialize({
-    Object? memo = null,
+    Object? memo,
   }) =>
       getFunction("serialize").call(
         <Object?>[
@@ -21111,33 +24952,48 @@ final class PatternStr extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## max_width (getter)
   Object? get max_width => getAttribute("max_width");
 
+  /// ## max_width (setter)
   set max_width(Object? max_width) => setAttribute("max_width", max_width);
 
+  /// ## min_width (getter)
   Object? get min_width => getAttribute("min_width");
 
+  /// ## min_width (setter)
   set min_width(Object? min_width) => setAttribute("min_width", min_width);
 
+  /// ## deserialize (getter)
   Object? get deserialize => getAttribute("deserialize");
 
+  /// ## deserialize (setter)
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
+  /// ## type (getter)
   Object? get type => getAttribute("type");
 
+  /// ## type (setter)
   set type(Object? type) => setAttribute("type", type);
 
+  /// ## value (getter)
   Object? get value => getAttribute("value");
 
+  /// ## value (setter)
   set value(Object? value) => setAttribute("value", value);
 
+  /// ## flags (getter)
   Object? get flags => getAttribute("flags");
 
+  /// ## flags (setter)
   set flags(Object? flags) => setAttribute("flags", flags);
 
+  /// ## raw (getter)
   Object? get raw => getAttribute("raw");
 
+  /// ## raw (setter)
   set raw(Object? raw) => setAttribute("raw", raw);
 }
 
@@ -21171,8 +25027,10 @@ final class UnlessCallback extends PythonClass {
 
   UnlessCallback.from(super.pythonClass) : super.from();
 
+  /// ## scanner (getter)
   Object? get scanner => getAttribute("scanner");
 
+  /// ## scanner (setter)
   set scanner(Object? scanner) => setAttribute("scanner", scanner);
 }
 
@@ -21273,16 +25131,23 @@ final class ApplyTemplates extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## rule_defs (getter)
   Object? get rule_defs => getAttribute("rule_defs");
 
+  /// ## rule_defs (setter)
   set rule_defs(Object? rule_defs) => setAttribute("rule_defs", rule_defs);
 
+  /// ## replacer (getter)
   Object? get replacer => getAttribute("replacer");
 
+  /// ## replacer (setter)
   set replacer(Object? replacer) => setAttribute("replacer", replacer);
 
+  /// ## created_templates (getter)
   Object? get created_templates => getAttribute("created_templates");
 
+  /// ## created_templates (setter)
   set created_templates(Object? created_templates) =>
       setAttribute("created_templates", created_templates);
 }
@@ -21303,7 +25168,7 @@ final class Definition extends PythonClass {
     required Object? is_term,
     required Object? tree,
     Object? params = const [],
-    Object? options = null,
+    Object? options,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.load_grammar",
@@ -21320,20 +25185,28 @@ final class Definition extends PythonClass {
 
   Definition.from(super.pythonClass) : super.from();
 
+  /// ## is_term (getter)
   Object? get is_term => getAttribute("is_term");
 
+  /// ## is_term (setter)
   set is_term(Object? is_term) => setAttribute("is_term", is_term);
 
+  /// ## tree (getter)
   Object? get tree => getAttribute("tree");
 
+  /// ## tree (setter)
   set tree(Object? tree) => setAttribute("tree", tree);
 
+  /// ## params (getter)
   Object? get params => getAttribute("params");
 
+  /// ## params (setter)
   set params(Object? params) => setAttribute("params", params);
 
+  /// ## options (getter)
   Object? get options => getAttribute("options");
 
+  /// ## options (setter)
   set options(Object? options) => setAttribute("options", options);
 }
 
@@ -21536,33 +25409,48 @@ final class EBNF_to_BNF extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## expr (getter)
   Object? get expr => getAttribute("expr");
 
+  /// ## expr (setter)
   set expr(Object? expr) => setAttribute("expr", expr);
 
+  /// ## maybe (getter)
   Object? get maybe => getAttribute("maybe");
 
+  /// ## maybe (setter)
   set maybe(Object? maybe) => setAttribute("maybe", maybe);
 
+  /// ## new_rules (getter)
   Object? get new_rules => getAttribute("new_rules");
 
+  /// ## new_rules (setter)
   set new_rules(Object? new_rules) => setAttribute("new_rules", new_rules);
 
+  /// ## rules_cache (getter)
   Object? get rules_cache => getAttribute("rules_cache");
 
+  /// ## rules_cache (setter)
   set rules_cache(Object? rules_cache) =>
       setAttribute("rules_cache", rules_cache);
 
+  /// ## prefix (getter)
   Object? get prefix => getAttribute("prefix");
 
+  /// ## prefix (setter)
   set prefix(Object? prefix) => setAttribute("prefix", prefix);
 
+  /// ## i (getter)
   Object? get i => getAttribute("i");
 
+  /// ## i (setter)
   set i(Object? i) => setAttribute("i", i);
 
+  /// ## rule_options (getter)
   Object? get rule_options => getAttribute("rule_options");
 
+  /// ## rule_options (setter)
   set rule_options(Object? rule_options) =>
       setAttribute("rule_options", rule_options);
 }
@@ -21702,8 +25590,11 @@ final class FindRuleSize extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## keep_all_tokens (getter)
   Object? get keep_all_tokens => getAttribute("keep_all_tokens");
 
+  /// ## keep_all_tokens (setter)
   set keep_all_tokens(Object? keep_all_tokens) =>
       setAttribute("keep_all_tokens", keep_all_tokens);
 }
@@ -22018,8 +25909,8 @@ final class FindRuleSize extends PythonClass {
 final class GrammarBuilder extends PythonClass {
   factory GrammarBuilder({
     Object? global_keep_all_tokens = false,
-    Object? import_paths = null,
-    Object? used_files = null,
+    Object? import_paths,
+    Object? used_files,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.load_grammar",
@@ -22101,7 +25992,7 @@ final class GrammarBuilder extends PythonClass {
     required Object? dotted_path,
     required Object? base_path,
     required Object? aliases,
-    Object? base_mangle = null,
+    Object? base_mangle,
   }) =>
       getFunction("do_import").call(
         <Object?>[
@@ -22172,7 +26063,7 @@ final class GrammarBuilder extends PythonClass {
   Object? load_grammar({
     required Object? grammar_text,
     Object? grammar_name = "<?>",
-    Object? mangle = null,
+    Object? mangle,
   }) =>
       getFunction("load_grammar").call(
         <Object?>[
@@ -22223,18 +26114,25 @@ final class GrammarBuilder extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## global_keep_all_tokens (getter)
   Object? get global_keep_all_tokens => getAttribute("global_keep_all_tokens");
 
+  /// ## global_keep_all_tokens (setter)
   set global_keep_all_tokens(Object? global_keep_all_tokens) =>
       setAttribute("global_keep_all_tokens", global_keep_all_tokens);
 
+  /// ## import_paths (getter)
   Object? get import_paths => getAttribute("import_paths");
 
+  /// ## import_paths (setter)
   set import_paths(Object? import_paths) =>
       setAttribute("import_paths", import_paths);
 
+  /// ## used_files (getter)
   Object? get used_files => getAttribute("used_files");
 
+  /// ## used_files (setter)
   set used_files(Object? used_files) => setAttribute("used_files", used_files);
 }
 
@@ -22323,7 +26221,7 @@ final class ParsingFrontend extends PythonClass {
     required Object? lexer_conf,
     required Object? parser_conf,
     required Object? options,
-    Object? parser = null,
+    Object? parser,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.parser_frontends",
@@ -22370,8 +26268,8 @@ final class ParsingFrontend extends PythonClass {
   /// ```
   Object? parse({
     required Object? text,
-    Object? start = null,
-    Object? on_error = null,
+    Object? start,
+    Object? on_error,
   }) =>
       getFunction("parse").call(
         <Object?>[
@@ -22394,8 +26292,8 @@ final class ParsingFrontend extends PythonClass {
   ///         return self.parser.parse_interactive(stream, chosen_start)
   /// ```
   Object? parse_interactive({
-    Object? text = null,
-    Object? start = null,
+    Object? text,
+    Object? start,
   }) =>
       getFunction("parse_interactive").call(
         <Object?>[
@@ -22421,7 +26319,7 @@ final class ParsingFrontend extends PythonClass {
   ///         return res
   /// ```
   Object? serialize({
-    Object? memo = null,
+    Object? memo,
   }) =>
       getFunction("serialize").call(
         <Object?>[
@@ -22429,34 +26327,49 @@ final class ParsingFrontend extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## deserialize (getter)
   Object? get deserialize => getAttribute("deserialize");
 
+  /// ## deserialize (setter)
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
+  /// ## parser_conf (getter)
   Object? get parser_conf => getAttribute("parser_conf");
 
+  /// ## parser_conf (setter)
   set parser_conf(Object? parser_conf) =>
       setAttribute("parser_conf", parser_conf);
 
+  /// ## lexer_conf (getter)
   Object? get lexer_conf => getAttribute("lexer_conf");
 
+  /// ## lexer_conf (setter)
   set lexer_conf(Object? lexer_conf) => setAttribute("lexer_conf", lexer_conf);
 
+  /// ## options (getter)
   Object? get options => getAttribute("options");
 
+  /// ## options (setter)
   set options(Object? options) => setAttribute("options", options);
 
+  /// ## parser (getter)
   Object? get parser => getAttribute("parser");
 
+  /// ## parser (setter)
   set parser(Object? parser) => setAttribute("parser", parser);
 
+  /// ## skip_lexer (getter)
   Object? get skip_lexer => getAttribute("skip_lexer");
 
+  /// ## skip_lexer (setter)
   set skip_lexer(Object? skip_lexer) => setAttribute("skip_lexer", skip_lexer);
 
+  /// ## lexer (getter)
   Object? get lexer => getAttribute("lexer");
 
+  /// ## lexer (setter)
   set lexer(Object? lexer) => setAttribute("lexer", lexer);
 }
 
@@ -22561,29 +26474,42 @@ final class PrepareAnonTerminals extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## pattern (getter)
   Object? get pattern => getAttribute("pattern");
 
+  /// ## pattern (setter)
   set pattern(Object? pattern) => setAttribute("pattern", pattern);
 
+  /// ## terminals (getter)
   Object? get terminals => getAttribute("terminals");
 
+  /// ## terminals (setter)
   set terminals(Object? terminals) => setAttribute("terminals", terminals);
 
+  /// ## term_set (getter)
   Object? get term_set => getAttribute("term_set");
 
+  /// ## term_set (setter)
   set term_set(Object? term_set) => setAttribute("term_set", term_set);
 
+  /// ## term_reverse (getter)
   Object? get term_reverse => getAttribute("term_reverse");
 
+  /// ## term_reverse (setter)
   set term_reverse(Object? term_reverse) =>
       setAttribute("term_reverse", term_reverse);
 
+  /// ## i (getter)
   Object? get i => getAttribute("i");
 
+  /// ## i (setter)
   set i(Object? i) => setAttribute("i", i);
 
+  /// ## rule_options (getter)
   Object? get rule_options => getAttribute("rule_options");
 
+  /// ## rule_options (setter)
   set rule_options(Object? rule_options) =>
       setAttribute("rule_options", rule_options);
 }
@@ -22645,13 +26571,18 @@ final class PrepareGrammar extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## nonterminal (getter)
   Object? get nonterminal => getAttribute("nonterminal");
 
+  /// ## nonterminal (setter)
   set nonterminal(Object? nonterminal) =>
       setAttribute("nonterminal", nonterminal);
 
+  /// ## terminal (getter)
   Object? get terminal => getAttribute("terminal");
 
+  /// ## terminal (setter)
   set terminal(Object? terminal) => setAttribute("terminal", terminal);
 }
 
@@ -22717,12 +26648,17 @@ final class PrepareLiterals extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## literal (getter)
   Object? get literal => getAttribute("literal");
 
+  /// ## literal (setter)
   set literal(Object? literal) => setAttribute("literal", literal);
 
+  /// ## range (getter)
   Object? get range => getAttribute("range");
 
+  /// ## range (setter)
   set range(Object? range) => setAttribute("range", range);
 }
 
@@ -22890,7 +26826,7 @@ final class ST extends PythonClass {
   factory ST({
     required Object? data,
     required Object? children,
-    Object? meta = null,
+    Object? meta,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.tree",
@@ -23137,20 +27073,29 @@ final class ST extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## meta (getter)
   Object? get meta => getAttribute("meta");
 
+  /// ## meta (setter)
   set meta(Object? meta) => setAttribute("meta", meta);
 
+  /// ## rule (getter)
   Object? get rule => getAttribute("rule");
 
+  /// ## rule (setter)
   set rule(Object? rule) => setAttribute("rule", rule);
 
+  /// ## children (getter)
   Object? get children => getAttribute("children");
 
+  /// ## children (setter)
   set children(Object? children) => setAttribute("children", children);
 
+  /// ## data (getter)
   Object? get data => getAttribute("data");
 
+  /// ## data (setter)
   set data(Object? data) => setAttribute("data", data);
 }
 
@@ -23774,52 +27719,74 @@ final class blake2b extends PythonClass {
 
   blake2b.from(super.pythonClass) : super.from();
 
+  /// ## block_size (getter)
   Object? get block_size => getAttribute("block_size");
 
+  /// ## block_size (setter)
   set block_size(Object? block_size) => setAttribute("block_size", block_size);
 
+  /// ## digest_size (getter)
   Object? get digest_size => getAttribute("digest_size");
 
+  /// ## digest_size (setter)
   set digest_size(Object? digest_size) =>
       setAttribute("digest_size", digest_size);
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## copy (getter)
   Object? get copy => getAttribute("copy");
 
+  /// ## copy (setter)
   set copy(Object? copy) => setAttribute("copy", copy);
 
+  /// ## digest (getter)
   Object? get digest => getAttribute("digest");
 
+  /// ## digest (setter)
   set digest(Object? digest) => setAttribute("digest", digest);
 
+  /// ## hexdigest (getter)
   Object? get hexdigest => getAttribute("hexdigest");
 
+  /// ## hexdigest (setter)
   set hexdigest(Object? hexdigest) => setAttribute("hexdigest", hexdigest);
 
+  /// ## update (getter)
   Object? get update => getAttribute("update");
 
+  /// ## update (setter)
   set update(Object? update) => setAttribute("update", update);
 
+  /// ## MAX_DIGEST_SIZE (getter)
   Object? get MAX_DIGEST_SIZE => getAttribute("MAX_DIGEST_SIZE");
 
+  /// ## MAX_DIGEST_SIZE (setter)
   set MAX_DIGEST_SIZE(Object? MAX_DIGEST_SIZE) =>
       setAttribute("MAX_DIGEST_SIZE", MAX_DIGEST_SIZE);
 
+  /// ## MAX_KEY_SIZE (getter)
   Object? get MAX_KEY_SIZE => getAttribute("MAX_KEY_SIZE");
 
+  /// ## MAX_KEY_SIZE (setter)
   set MAX_KEY_SIZE(Object? MAX_KEY_SIZE) =>
       setAttribute("MAX_KEY_SIZE", MAX_KEY_SIZE);
 
+  /// ## PERSON_SIZE (getter)
   Object? get PERSON_SIZE => getAttribute("PERSON_SIZE");
 
+  /// ## PERSON_SIZE (setter)
   set PERSON_SIZE(Object? PERSON_SIZE) =>
       setAttribute("PERSON_SIZE", PERSON_SIZE);
 
+  /// ## SALT_SIZE (getter)
   Object? get SALT_SIZE => getAttribute("SALT_SIZE");
 
+  /// ## SALT_SIZE (setter)
   set SALT_SIZE(Object? SALT_SIZE) => setAttribute("SALT_SIZE", SALT_SIZE);
 }
 
@@ -23834,52 +27801,74 @@ final class blake2s extends PythonClass {
 
   blake2s.from(super.pythonClass) : super.from();
 
+  /// ## block_size (getter)
   Object? get block_size => getAttribute("block_size");
 
+  /// ## block_size (setter)
   set block_size(Object? block_size) => setAttribute("block_size", block_size);
 
+  /// ## digest_size (getter)
   Object? get digest_size => getAttribute("digest_size");
 
+  /// ## digest_size (setter)
   set digest_size(Object? digest_size) =>
       setAttribute("digest_size", digest_size);
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## copy (getter)
   Object? get copy => getAttribute("copy");
 
+  /// ## copy (setter)
   set copy(Object? copy) => setAttribute("copy", copy);
 
+  /// ## digest (getter)
   Object? get digest => getAttribute("digest");
 
+  /// ## digest (setter)
   set digest(Object? digest) => setAttribute("digest", digest);
 
+  /// ## hexdigest (getter)
   Object? get hexdigest => getAttribute("hexdigest");
 
+  /// ## hexdigest (setter)
   set hexdigest(Object? hexdigest) => setAttribute("hexdigest", hexdigest);
 
+  /// ## update (getter)
   Object? get update => getAttribute("update");
 
+  /// ## update (setter)
   set update(Object? update) => setAttribute("update", update);
 
+  /// ## MAX_DIGEST_SIZE (getter)
   Object? get MAX_DIGEST_SIZE => getAttribute("MAX_DIGEST_SIZE");
 
+  /// ## MAX_DIGEST_SIZE (setter)
   set MAX_DIGEST_SIZE(Object? MAX_DIGEST_SIZE) =>
       setAttribute("MAX_DIGEST_SIZE", MAX_DIGEST_SIZE);
 
+  /// ## MAX_KEY_SIZE (getter)
   Object? get MAX_KEY_SIZE => getAttribute("MAX_KEY_SIZE");
 
+  /// ## MAX_KEY_SIZE (setter)
   set MAX_KEY_SIZE(Object? MAX_KEY_SIZE) =>
       setAttribute("MAX_KEY_SIZE", MAX_KEY_SIZE);
 
+  /// ## PERSON_SIZE (getter)
   Object? get PERSON_SIZE => getAttribute("PERSON_SIZE");
 
+  /// ## PERSON_SIZE (setter)
   set PERSON_SIZE(Object? PERSON_SIZE) =>
       setAttribute("PERSON_SIZE", PERSON_SIZE);
 
+  /// ## SALT_SIZE (getter)
   Object? get SALT_SIZE => getAttribute("SALT_SIZE");
 
+  /// ## SALT_SIZE (setter)
   set SALT_SIZE(Object? SALT_SIZE) => setAttribute("SALT_SIZE", SALT_SIZE);
 }
 
@@ -23894,33 +27883,47 @@ final class sha3_224 extends PythonClass {
 
   sha3_224.from(super.pythonClass) : super.from();
 
+  /// ## block_size (getter)
   Object? get block_size => getAttribute("block_size");
 
+  /// ## block_size (setter)
   set block_size(Object? block_size) => setAttribute("block_size", block_size);
 
+  /// ## digest_size (getter)
   Object? get digest_size => getAttribute("digest_size");
 
+  /// ## digest_size (setter)
   set digest_size(Object? digest_size) =>
       setAttribute("digest_size", digest_size);
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## copy (getter)
   Object? get copy => getAttribute("copy");
 
+  /// ## copy (setter)
   set copy(Object? copy) => setAttribute("copy", copy);
 
+  /// ## digest (getter)
   Object? get digest => getAttribute("digest");
 
+  /// ## digest (setter)
   set digest(Object? digest) => setAttribute("digest", digest);
 
+  /// ## hexdigest (getter)
   Object? get hexdigest => getAttribute("hexdigest");
 
+  /// ## hexdigest (setter)
   set hexdigest(Object? hexdigest) => setAttribute("hexdigest", hexdigest);
 
+  /// ## update (getter)
   Object? get update => getAttribute("update");
 
+  /// ## update (setter)
   set update(Object? update) => setAttribute("update", update);
 }
 
@@ -23935,33 +27938,47 @@ final class sha3_256 extends PythonClass {
 
   sha3_256.from(super.pythonClass) : super.from();
 
+  /// ## block_size (getter)
   Object? get block_size => getAttribute("block_size");
 
+  /// ## block_size (setter)
   set block_size(Object? block_size) => setAttribute("block_size", block_size);
 
+  /// ## digest_size (getter)
   Object? get digest_size => getAttribute("digest_size");
 
+  /// ## digest_size (setter)
   set digest_size(Object? digest_size) =>
       setAttribute("digest_size", digest_size);
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## copy (getter)
   Object? get copy => getAttribute("copy");
 
+  /// ## copy (setter)
   set copy(Object? copy) => setAttribute("copy", copy);
 
+  /// ## digest (getter)
   Object? get digest => getAttribute("digest");
 
+  /// ## digest (setter)
   set digest(Object? digest) => setAttribute("digest", digest);
 
+  /// ## hexdigest (getter)
   Object? get hexdigest => getAttribute("hexdigest");
 
+  /// ## hexdigest (setter)
   set hexdigest(Object? hexdigest) => setAttribute("hexdigest", hexdigest);
 
+  /// ## update (getter)
   Object? get update => getAttribute("update");
 
+  /// ## update (setter)
   set update(Object? update) => setAttribute("update", update);
 }
 
@@ -23976,33 +27993,47 @@ final class sha3_384 extends PythonClass {
 
   sha3_384.from(super.pythonClass) : super.from();
 
+  /// ## block_size (getter)
   Object? get block_size => getAttribute("block_size");
 
+  /// ## block_size (setter)
   set block_size(Object? block_size) => setAttribute("block_size", block_size);
 
+  /// ## digest_size (getter)
   Object? get digest_size => getAttribute("digest_size");
 
+  /// ## digest_size (setter)
   set digest_size(Object? digest_size) =>
       setAttribute("digest_size", digest_size);
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## copy (getter)
   Object? get copy => getAttribute("copy");
 
+  /// ## copy (setter)
   set copy(Object? copy) => setAttribute("copy", copy);
 
+  /// ## digest (getter)
   Object? get digest => getAttribute("digest");
 
+  /// ## digest (setter)
   set digest(Object? digest) => setAttribute("digest", digest);
 
+  /// ## hexdigest (getter)
   Object? get hexdigest => getAttribute("hexdigest");
 
+  /// ## hexdigest (setter)
   set hexdigest(Object? hexdigest) => setAttribute("hexdigest", hexdigest);
 
+  /// ## update (getter)
   Object? get update => getAttribute("update");
 
+  /// ## update (setter)
   set update(Object? update) => setAttribute("update", update);
 }
 
@@ -24017,33 +28048,47 @@ final class sha3_512 extends PythonClass {
 
   sha3_512.from(super.pythonClass) : super.from();
 
+  /// ## block_size (getter)
   Object? get block_size => getAttribute("block_size");
 
+  /// ## block_size (setter)
   set block_size(Object? block_size) => setAttribute("block_size", block_size);
 
+  /// ## digest_size (getter)
   Object? get digest_size => getAttribute("digest_size");
 
+  /// ## digest_size (setter)
   set digest_size(Object? digest_size) =>
       setAttribute("digest_size", digest_size);
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## copy (getter)
   Object? get copy => getAttribute("copy");
 
+  /// ## copy (setter)
   set copy(Object? copy) => setAttribute("copy", copy);
 
+  /// ## digest (getter)
   Object? get digest => getAttribute("digest");
 
+  /// ## digest (setter)
   set digest(Object? digest) => setAttribute("digest", digest);
 
+  /// ## hexdigest (getter)
   Object? get hexdigest => getAttribute("hexdigest");
 
+  /// ## hexdigest (setter)
   set hexdigest(Object? hexdigest) => setAttribute("hexdigest", hexdigest);
 
+  /// ## update (getter)
   Object? get update => getAttribute("update");
 
+  /// ## update (setter)
   set update(Object? update) => setAttribute("update", update);
 }
 
@@ -24058,33 +28103,47 @@ final class shake_128 extends PythonClass {
 
   shake_128.from(super.pythonClass) : super.from();
 
+  /// ## block_size (getter)
   Object? get block_size => getAttribute("block_size");
 
+  /// ## block_size (setter)
   set block_size(Object? block_size) => setAttribute("block_size", block_size);
 
+  /// ## digest_size (getter)
   Object? get digest_size => getAttribute("digest_size");
 
+  /// ## digest_size (setter)
   set digest_size(Object? digest_size) =>
       setAttribute("digest_size", digest_size);
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## copy (getter)
   Object? get copy => getAttribute("copy");
 
+  /// ## copy (setter)
   set copy(Object? copy) => setAttribute("copy", copy);
 
+  /// ## digest (getter)
   Object? get digest => getAttribute("digest");
 
+  /// ## digest (setter)
   set digest(Object? digest) => setAttribute("digest", digest);
 
+  /// ## hexdigest (getter)
   Object? get hexdigest => getAttribute("hexdigest");
 
+  /// ## hexdigest (setter)
   set hexdigest(Object? hexdigest) => setAttribute("hexdigest", hexdigest);
 
+  /// ## update (getter)
   Object? get update => getAttribute("update");
 
+  /// ## update (setter)
   set update(Object? update) => setAttribute("update", update);
 }
 
@@ -24099,33 +28158,47 @@ final class shake_256 extends PythonClass {
 
   shake_256.from(super.pythonClass) : super.from();
 
+  /// ## block_size (getter)
   Object? get block_size => getAttribute("block_size");
 
+  /// ## block_size (setter)
   set block_size(Object? block_size) => setAttribute("block_size", block_size);
 
+  /// ## digest_size (getter)
   Object? get digest_size => getAttribute("digest_size");
 
+  /// ## digest_size (setter)
   set digest_size(Object? digest_size) =>
       setAttribute("digest_size", digest_size);
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## copy (getter)
   Object? get copy => getAttribute("copy");
 
+  /// ## copy (setter)
   set copy(Object? copy) => setAttribute("copy", copy);
 
+  /// ## digest (getter)
   Object? get digest => getAttribute("digest");
 
+  /// ## digest (setter)
   set digest(Object? digest) => setAttribute("digest", digest);
 
+  /// ## hexdigest (getter)
   Object? get hexdigest => getAttribute("hexdigest");
 
+  /// ## hexdigest (setter)
   set hexdigest(Object? hexdigest) => setAttribute("hexdigest", hexdigest);
 
+  /// ## update (getter)
   Object? get update => getAttribute("update");
 
+  /// ## update (setter)
   set update(Object? update) => setAttribute("update", update);
 }
 
@@ -24220,7 +28293,7 @@ final class shake_256 extends PythonClass {
 /// ```
 final class ImpImporter extends PythonClass {
   factory ImpImporter({
-    Object? path = null,
+    Object? path,
   }) =>
       PythonFfiDart.instance.importClass(
         "pkgutil",
@@ -24255,7 +28328,7 @@ final class ImpImporter extends PythonClass {
   /// ```
   Object? find_module({
     required Object? fullname,
-    Object? path = null,
+    Object? path,
   }) =>
       getFunction("find_module").call(
         <Object?>[
@@ -24318,8 +28391,11 @@ final class ImpImporter extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## path (getter)
   Object? get path => getAttribute("path");
 
+  /// ## path (setter)
   set path(Object? path) => setAttribute("path", path);
 }
 
@@ -24474,7 +28550,7 @@ final class ImpLoader extends PythonClass {
   ///         return self.code
   /// ```
   Object? get_code({
-    Object? fullname = null,
+    Object? fullname,
   }) =>
       getFunction("get_code").call(
         <Object?>[
@@ -24515,7 +28591,7 @@ final class ImpLoader extends PythonClass {
   ///         return None
   /// ```
   Object? get_filename({
-    Object? fullname = null,
+    Object? fullname,
   }) =>
       getFunction("get_filename").call(
         <Object?>[
@@ -24547,7 +28623,7 @@ final class ImpLoader extends PythonClass {
   ///         return self.source
   /// ```
   Object? get_source({
-    Object? fullname = null,
+    Object? fullname,
   }) =>
       getFunction("get_source").call(
         <Object?>[
@@ -24598,28 +28674,41 @@ final class ImpLoader extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## code (getter)
   Object? get code => getAttribute("code");
 
+  /// ## code (setter)
   set code(Object? code) => setAttribute("code", code);
 
+  /// ## source (getter)
   Object? get source => getAttribute("source");
 
+  /// ## source (setter)
   set source(Object? source) => setAttribute("source", source);
 
+  /// ## file (getter)
   Object? get file => getAttribute("file");
 
+  /// ## file (setter)
   set file(Object? file) => setAttribute("file", file);
 
+  /// ## filename (getter)
   Object? get filename => getAttribute("filename");
 
+  /// ## filename (setter)
   set filename(Object? filename) => setAttribute("filename", filename);
 
+  /// ## fullname (getter)
   Object? get fullname => getAttribute("fullname");
 
+  /// ## fullname (setter)
   set fullname(Object? fullname) => setAttribute("fullname", fullname);
 
+  /// ## etc (getter)
   Object? get etc => getAttribute("etc");
 
+  /// ## etc (setter)
   set etc(Object? etc) => setAttribute("etc", etc);
 }
 
@@ -24638,25 +28727,59 @@ final class ModuleInfo extends PythonClass {
 
   ModuleInfo.from(super.pythonClass) : super.from();
 
+  /// ## ispkg (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Alias for field number 2
   Object? get ispkg => getAttribute("ispkg");
 
+  /// ## ispkg (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Alias for field number 2
   set ispkg(Object? ispkg) => setAttribute("ispkg", ispkg);
 
+  /// ## module_finder (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Alias for field number 0
   Object? get module_finder => getAttribute("module_finder");
 
+  /// ## module_finder (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Alias for field number 0
   set module_finder(Object? module_finder) =>
       setAttribute("module_finder", module_finder);
 
+  /// ## name (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Alias for field number 1
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Alias for field number 1
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## count (getter)
   Object? get count => getAttribute("count");
 
+  /// ## count (setter)
   set count(Object? count) => setAttribute("count", count);
 
+  /// ## index (getter)
   Object? get index => getAttribute("index");
 
+  /// ## index (setter)
   set index(Object? index) => setAttribute("index", index);
 }
 
@@ -24791,29 +28914,94 @@ final class BuiltinImporter extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## find_module (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Find the built-in module.
+  ///
+  /// If 'path' is ever specified then the search is considered a failure.
+  ///
+  /// This method is deprecated.  Use find_spec() instead.
   Object? get find_module => getAttribute("find_module");
 
+  /// ## find_module (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Find the built-in module.
+  ///
+  /// If 'path' is ever specified then the search is considered a failure.
+  ///
+  /// This method is deprecated.  Use find_spec() instead.
   set find_module(Object? find_module) =>
       setAttribute("find_module", find_module);
 
+  /// ## find_spec (getter)
   Object? get find_spec => getAttribute("find_spec");
 
+  /// ## find_spec (setter)
   set find_spec(Object? find_spec) => setAttribute("find_spec", find_spec);
 
+  /// ## get_code (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Return None as built-in modules do not have code objects.
   Object? get get_code => getAttribute("get_code");
 
+  /// ## get_code (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Return None as built-in modules do not have code objects.
   set get_code(Object? get_code) => setAttribute("get_code", get_code);
 
+  /// ## get_source (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Return None as built-in modules do not have source code.
   Object? get get_source => getAttribute("get_source");
 
+  /// ## get_source (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Return None as built-in modules do not have source code.
   set get_source(Object? get_source) => setAttribute("get_source", get_source);
 
+  /// ## is_package (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Return False as built-in modules are never packages.
   Object? get is_package => getAttribute("is_package");
 
+  /// ## is_package (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Return False as built-in modules are never packages.
   set is_package(Object? is_package) => setAttribute("is_package", is_package);
 
+  /// ## load_module (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Load the specified module into sys.modules and return it.
+  ///
+  /// This method is deprecated.  Use loader.exec_module() instead.
   Object? get load_module => getAttribute("load_module");
 
+  /// ## load_module (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Load the specified module into sys.modules and return it.
+  ///
+  /// This method is deprecated.  Use loader.exec_module() instead.
   set load_module(Object? load_module) =>
       setAttribute("load_module", load_module);
 }
@@ -24965,7 +29153,7 @@ final class ExtensionFileLoader extends PythonClass {
   /// Return the path to the source file as found by the finder.
   Object? get_filename({
     List<Object?> args = const <Object?>[],
-    Object? name = null,
+    Object? name,
     Map<String, Object?> kwargs = const <String, Object?>{},
   }) =>
       getFunction("get_filename").call(
@@ -24981,7 +29169,7 @@ final class ExtensionFileLoader extends PythonClass {
   /// ## get_resource_reader
   Object? get_resource_reader({
     List<Object?> args = const <Object?>[],
-    Object? name = null,
+    Object? name,
     Map<String, Object?> kwargs = const <String, Object?>{},
   }) =>
       getFunction("get_resource_reader").call(
@@ -25033,7 +29221,7 @@ final class ExtensionFileLoader extends PythonClass {
   /// This method is deprecated.  Use exec_module() instead.
   Object? load_module({
     List<Object?> args = const <Object?>[],
-    Object? name = null,
+    Object? name,
     Map<String, Object?> kwargs = const <String, Object?>{},
   }) =>
       getFunction("load_module").call(
@@ -25278,7 +29466,7 @@ final class FileFinder extends PythonClass {
   /// Returns the matching spec, or None if not found.
   Object? find_spec({
     required Object? fullname,
-    Object? target = null,
+    Object? target,
   }) =>
       getFunction("find_spec").call(
         <Object?>[
@@ -25297,8 +29485,29 @@ final class FileFinder extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## path_hook (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A class method which returns a closure to use on sys.path_hook
+  /// which will return an instance using the specified loaders and the path
+  /// called on the closure.
+  ///
+  /// If the path called on the closure is not a directory, ImportError is
+  /// raised.
   Object? get path_hook => getAttribute("path_hook");
 
+  /// ## path_hook (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A class method which returns a closure to use on sys.path_hook
+  /// which will return an instance using the specified loaders and the path
+  /// called on the closure.
+  ///
+  /// If the path called on the closure is not a directory, ImportError is
+  /// raised.
   set path_hook(Object? path_hook) => setAttribute("path_hook", path_hook);
 }
 
@@ -25565,29 +29774,90 @@ final class FrozenImporter extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## find_module (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Find a frozen module.
+  ///
+  /// This method is deprecated.  Use find_spec() instead.
   Object? get find_module => getAttribute("find_module");
 
+  /// ## find_module (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Find a frozen module.
+  ///
+  /// This method is deprecated.  Use find_spec() instead.
   set find_module(Object? find_module) =>
       setAttribute("find_module", find_module);
 
+  /// ## find_spec (getter)
   Object? get find_spec => getAttribute("find_spec");
 
+  /// ## find_spec (setter)
   set find_spec(Object? find_spec) => setAttribute("find_spec", find_spec);
 
+  /// ## get_code (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Return the code object for the frozen module.
   Object? get get_code => getAttribute("get_code");
 
+  /// ## get_code (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Return the code object for the frozen module.
   set get_code(Object? get_code) => setAttribute("get_code", get_code);
 
+  /// ## get_source (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Return None as frozen modules do not have source code.
   Object? get get_source => getAttribute("get_source");
 
+  /// ## get_source (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Return None as frozen modules do not have source code.
   set get_source(Object? get_source) => setAttribute("get_source", get_source);
 
+  /// ## is_package (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Return True if the frozen module is a package.
   Object? get is_package => getAttribute("is_package");
 
+  /// ## is_package (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Return True if the frozen module is a package.
   set is_package(Object? is_package) => setAttribute("is_package", is_package);
 
+  /// ## load_module (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Load a frozen module.
+  ///
+  /// This method is deprecated.  Use exec_module() instead.
   Object? get load_module => getAttribute("load_module");
 
+  /// ## load_module (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Load a frozen module.
+  ///
+  /// This method is deprecated.  Use exec_module() instead.
   set load_module(Object? load_module) =>
       setAttribute("load_module", load_module);
 }
@@ -25737,9 +30007,9 @@ final class ModuleSpec extends PythonClass {
   factory ModuleSpec({
     required Object? name,
     required Object? loader,
-    Object? origin = null,
-    Object? loader_state = null,
-    Object? is_package = null,
+    Object? origin,
+    Object? loader_state,
+    Object? is_package,
   }) =>
       PythonFfiDart.instance.importClass(
         "importlib._bootstrap",
@@ -25758,17 +30028,31 @@ final class ModuleSpec extends PythonClass {
 
   ModuleSpec.from(super.pythonClass) : super.from();
 
+  /// ## cached (getter)
   Object? get cached => getAttribute("cached");
 
+  /// ## cached (setter)
   set cached(Object? cached) => setAttribute("cached", cached);
 
+  /// ## has_location (getter)
   Object? get has_location => getAttribute("has_location");
 
+  /// ## has_location (setter)
   set has_location(Object? has_location) =>
       setAttribute("has_location", has_location);
 
+  /// ## parent (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// The name of the module's parent.
   Object? get parent => getAttribute("parent");
 
+  /// ## parent (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// The name of the module's parent.
   set parent(Object? parent) => setAttribute("parent", parent);
 }
 
@@ -26153,13 +30437,44 @@ final class PathFinder extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## find_module (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// find the module on sys.path or 'path' based on sys.path_hooks and
+  /// sys.path_importer_cache.
+  ///
+  /// This method is deprecated.  Use find_spec() instead.
   Object? get find_module => getAttribute("find_module");
 
+  /// ## find_module (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// find the module on sys.path or 'path' based on sys.path_hooks and
+  /// sys.path_importer_cache.
+  ///
+  /// This method is deprecated.  Use find_spec() instead.
   set find_module(Object? find_module) =>
       setAttribute("find_module", find_module);
 
+  /// ## find_spec (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Try to find a spec for 'fullname' on sys.path or 'path'.
+  ///
+  /// The search is based on sys.path_hooks and sys.path_importer_cache.
   Object? get find_spec => getAttribute("find_spec");
 
+  /// ## find_spec (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Try to find a spec for 'fullname' on sys.path or 'path'.
+  ///
+  /// The search is based on sys.path_hooks and sys.path_importer_cache.
   set find_spec(Object? find_spec) => setAttribute("find_spec", find_spec);
 }
 
@@ -26303,7 +30618,7 @@ final class SourceFileLoader extends PythonClass {
   /// Return the path to the source file as found by the finder.
   Object? get_filename({
     List<Object?> args = const <Object?>[],
-    Object? name = null,
+    Object? name,
     Map<String, Object?> kwargs = const <String, Object?>{},
   }) =>
       getFunction("get_filename").call(
@@ -26319,7 +30634,7 @@ final class SourceFileLoader extends PythonClass {
   /// ## get_resource_reader
   Object? get_resource_reader({
     List<Object?> args = const <Object?>[],
-    Object? name = null,
+    Object? name,
     Map<String, Object?> kwargs = const <String, Object?>{},
   }) =>
       getFunction("get_resource_reader").call(
@@ -26372,7 +30687,7 @@ final class SourceFileLoader extends PythonClass {
   /// This method is deprecated.  Use exec_module() instead.
   Object? load_module({
     List<Object?> args = const <Object?>[],
-    Object? name = null,
+    Object? name,
     Map<String, Object?> kwargs = const <String, Object?>{},
   }) =>
       getFunction("load_module").call(
@@ -26574,7 +30889,7 @@ final class SourcelessFileLoader extends PythonClass {
   /// Return the path to the source file as found by the finder.
   Object? get_filename({
     List<Object?> args = const <Object?>[],
-    Object? name = null,
+    Object? name,
     Map<String, Object?> kwargs = const <String, Object?>{},
   }) =>
       getFunction("get_filename").call(
@@ -26590,7 +30905,7 @@ final class SourcelessFileLoader extends PythonClass {
   /// ## get_resource_reader
   Object? get_resource_reader({
     List<Object?> args = const <Object?>[],
-    Object? name = null,
+    Object? name,
     Map<String, Object?> kwargs = const <String, Object?>{},
   }) =>
       getFunction("get_resource_reader").call(
@@ -26643,7 +30958,7 @@ final class SourcelessFileLoader extends PythonClass {
   /// This method is deprecated.  Use exec_module() instead.
   Object? load_module({
     List<Object?> args = const <Object?>[],
-    Object? name = null,
+    Object? name,
     Map<String, Object?> kwargs = const <String, Object?>{},
   }) =>
       getFunction("load_module").call(
@@ -26741,27 +31056,49 @@ final class WindowsRegistryFinder extends PythonClass {
 
   WindowsRegistryFinder.from(super.pythonClass) : super.from();
 
+  /// ## find_module (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Find module named in the registry.
+  ///
+  /// This method is deprecated.  Use find_spec() instead.
   Object? get find_module => getAttribute("find_module");
 
+  /// ## find_module (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Find module named in the registry.
+  ///
+  /// This method is deprecated.  Use find_spec() instead.
   set find_module(Object? find_module) =>
       setAttribute("find_module", find_module);
 
+  /// ## find_spec (getter)
   Object? get find_spec => getAttribute("find_spec");
 
+  /// ## find_spec (setter)
   set find_spec(Object? find_spec) => setAttribute("find_spec", find_spec);
 
+  /// ## DEBUG_BUILD (getter)
   Object? get DEBUG_BUILD => getAttribute("DEBUG_BUILD");
 
+  /// ## DEBUG_BUILD (setter)
   set DEBUG_BUILD(Object? DEBUG_BUILD) =>
       setAttribute("DEBUG_BUILD", DEBUG_BUILD);
 
+  /// ## REGISTRY_KEY (getter)
   Object? get REGISTRY_KEY => getAttribute("REGISTRY_KEY");
 
+  /// ## REGISTRY_KEY (setter)
   set REGISTRY_KEY(Object? REGISTRY_KEY) =>
       setAttribute("REGISTRY_KEY", REGISTRY_KEY);
 
+  /// ## REGISTRY_KEY_DEBUG (getter)
   Object? get REGISTRY_KEY_DEBUG => getAttribute("REGISTRY_KEY_DEBUG");
 
+  /// ## REGISTRY_KEY_DEBUG (setter)
   set REGISTRY_KEY_DEBUG(Object? REGISTRY_KEY_DEBUG) =>
       setAttribute("REGISTRY_KEY_DEBUG", REGISTRY_KEY_DEBUG);
 }
@@ -26941,8 +31278,19 @@ final class LazyLoader extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## factory (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Construct a callable which returns the eager loader made lazy.
   Object? get $factory => getAttribute("factory");
 
+  /// ## factory (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Construct a callable which returns the eager loader made lazy.
   set $factory(Object? $factory) => setAttribute("factory", $factory);
 }
 
@@ -27145,28 +31493,40 @@ final class ZipImportError extends PythonClass {
 
   ZipImportError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## msg (getter)
   Object? get msg => getAttribute("msg");
 
+  /// ## msg (setter)
   set msg(Object? msg) => setAttribute("msg", msg);
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## path (getter)
   Object? get path => getAttribute("path");
 
+  /// ## path (setter)
   set path(Object? path) => setAttribute("path", path);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -27193,69 +31553,189 @@ final class struct_time extends PythonClass {
 
   struct_time.from(super.pythonClass) : super.from();
 
+  /// ## tm_gmtoff (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// offset from UTC in seconds
   Object? get tm_gmtoff => getAttribute("tm_gmtoff");
 
+  /// ## tm_gmtoff (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// offset from UTC in seconds
   set tm_gmtoff(Object? tm_gmtoff) => setAttribute("tm_gmtoff", tm_gmtoff);
 
+  /// ## tm_hour (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// hours, range [0, 23]
   Object? get tm_hour => getAttribute("tm_hour");
 
+  /// ## tm_hour (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// hours, range [0, 23]
   set tm_hour(Object? tm_hour) => setAttribute("tm_hour", tm_hour);
 
+  /// ## tm_isdst (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// 1 if summer time is in effect, 0 if not, and -1 if unknown
   Object? get tm_isdst => getAttribute("tm_isdst");
 
+  /// ## tm_isdst (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// 1 if summer time is in effect, 0 if not, and -1 if unknown
   set tm_isdst(Object? tm_isdst) => setAttribute("tm_isdst", tm_isdst);
 
+  /// ## tm_mday (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// day of month, range [1, 31]
   Object? get tm_mday => getAttribute("tm_mday");
 
+  /// ## tm_mday (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// day of month, range [1, 31]
   set tm_mday(Object? tm_mday) => setAttribute("tm_mday", tm_mday);
 
+  /// ## tm_min (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// minutes, range [0, 59]
   Object? get tm_min => getAttribute("tm_min");
 
+  /// ## tm_min (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// minutes, range [0, 59]
   set tm_min(Object? tm_min) => setAttribute("tm_min", tm_min);
 
+  /// ## tm_mon (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// month of year, range [1, 12]
   Object? get tm_mon => getAttribute("tm_mon");
 
+  /// ## tm_mon (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// month of year, range [1, 12]
   set tm_mon(Object? tm_mon) => setAttribute("tm_mon", tm_mon);
 
+  /// ## tm_sec (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// seconds, range [0, 61])
   Object? get tm_sec => getAttribute("tm_sec");
 
+  /// ## tm_sec (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// seconds, range [0, 61])
   set tm_sec(Object? tm_sec) => setAttribute("tm_sec", tm_sec);
 
+  /// ## tm_wday (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// day of week, range [0, 6], Monday is 0
   Object? get tm_wday => getAttribute("tm_wday");
 
+  /// ## tm_wday (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// day of week, range [0, 6], Monday is 0
   set tm_wday(Object? tm_wday) => setAttribute("tm_wday", tm_wday);
 
+  /// ## tm_yday (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// day of year, range [1, 366]
   Object? get tm_yday => getAttribute("tm_yday");
 
+  /// ## tm_yday (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// day of year, range [1, 366]
   set tm_yday(Object? tm_yday) => setAttribute("tm_yday", tm_yday);
 
+  /// ## tm_year (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// year, for example, 1993
   Object? get tm_year => getAttribute("tm_year");
 
+  /// ## tm_year (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// year, for example, 1993
   set tm_year(Object? tm_year) => setAttribute("tm_year", tm_year);
 
+  /// ## tm_zone (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// abbreviation of timezone name
   Object? get tm_zone => getAttribute("tm_zone");
 
+  /// ## tm_zone (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// abbreviation of timezone name
   set tm_zone(Object? tm_zone) => setAttribute("tm_zone", tm_zone);
 
+  /// ## count (getter)
   Object? get count => getAttribute("count");
 
+  /// ## count (setter)
   set count(Object? count) => setAttribute("count", count);
 
+  /// ## index (getter)
   Object? get index => getAttribute("index");
 
+  /// ## index (setter)
   set index(Object? index) => setAttribute("index", index);
 
+  /// ## n_fields (getter)
   Object? get n_fields => getAttribute("n_fields");
 
+  /// ## n_fields (setter)
   set n_fields(Object? n_fields) => setAttribute("n_fields", n_fields);
 
+  /// ## n_sequence_fields (getter)
   Object? get n_sequence_fields => getAttribute("n_sequence_fields");
 
+  /// ## n_sequence_fields (setter)
   set n_sequence_fields(Object? n_sequence_fields) =>
       setAttribute("n_sequence_fields", n_sequence_fields);
 
+  /// ## n_unnamed_fields (getter)
   Object? get n_unnamed_fields => getAttribute("n_unnamed_fields");
 
+  /// ## n_unnamed_fields (setter)
   set n_unnamed_fields(Object? n_unnamed_fields) =>
       setAttribute("n_unnamed_fields", n_unnamed_fields);
 }
@@ -27634,10 +32114,10 @@ final class zipimporter extends PythonClass {
   /// or None otherwise. The optional 'path' argument is ignored -- it's
   /// there for compatibility with the importer protocol.
   ///
-  /// Deprecated since Python 3.10. Use find_spec() instead.!
+  /// Deprecated since Python 3.10. Use find_spec() instead.
   Object? find_loader({
     required Object? fullname,
-    Object? path = null,
+    Object? path,
   }) =>
       getFunction("find_loader").call(
         <Object?>[
@@ -27662,7 +32142,7 @@ final class zipimporter extends PythonClass {
   /// Deprecated since Python 3.10. Use find_spec() instead.
   Object? find_module({
     required Object? fullname,
-    Object? path = null,
+    Object? path,
   }) =>
       getFunction("find_module").call(
         <Object?>[
@@ -27681,7 +32161,7 @@ final class zipimporter extends PythonClass {
   /// Returns None if the module cannot be found.
   Object? find_spec({
     required Object? fullname,
-    Object? target = null,
+    Object? target,
   }) =>
       getFunction("find_spec").call(
         <Object?>[
@@ -27860,17 +32340,23 @@ final class AmbiguousExpander extends PythonClass {
 
   AmbiguousExpander.from(super.pythonClass) : super.from();
 
+  /// ## node_builder (getter)
   Object? get node_builder => getAttribute("node_builder");
 
+  /// ## node_builder (setter)
   set node_builder(Object? node_builder) =>
       setAttribute("node_builder", node_builder);
 
+  /// ## tree_class (getter)
   Object? get tree_class => getAttribute("tree_class");
 
+  /// ## tree_class (setter)
   set tree_class(Object? tree_class) => setAttribute("tree_class", tree_class);
 
+  /// ## to_expand (getter)
   Object? get to_expand => getAttribute("to_expand");
 
+  /// ## to_expand (setter)
   set to_expand(Object? to_expand) => setAttribute("to_expand", to_expand);
 }
 
@@ -28016,13 +32502,17 @@ final class AmbiguousIntermediateExpander extends PythonClass {
 
   AmbiguousIntermediateExpander.from(super.pythonClass) : super.from();
 
+  /// ## node_builder (getter)
   Object? get node_builder => getAttribute("node_builder");
 
+  /// ## node_builder (setter)
   set node_builder(Object? node_builder) =>
       setAttribute("node_builder", node_builder);
 
+  /// ## tree_class (getter)
   Object? get tree_class => getAttribute("tree_class");
 
+  /// ## tree_class (setter)
   set tree_class(Object? tree_class) => setAttribute("tree_class", tree_class);
 }
 
@@ -28072,17 +32562,23 @@ final class ChildFilter extends PythonClass {
 
   ChildFilter.from(super.pythonClass) : super.from();
 
+  /// ## node_builder (getter)
   Object? get node_builder => getAttribute("node_builder");
 
+  /// ## node_builder (setter)
   set node_builder(Object? node_builder) =>
       setAttribute("node_builder", node_builder);
 
+  /// ## to_include (getter)
   Object? get to_include => getAttribute("to_include");
 
+  /// ## to_include (setter)
   set to_include(Object? to_include) => setAttribute("to_include", to_include);
 
+  /// ## append_none (getter)
   Object? get append_none => getAttribute("append_none");
 
+  /// ## append_none (setter)
   set append_none(Object? append_none) =>
       setAttribute("append_none", append_none);
 }
@@ -28136,17 +32632,23 @@ final class ChildFilterLALR extends PythonClass {
 
   ChildFilterLALR.from(super.pythonClass) : super.from();
 
+  /// ## node_builder (getter)
   Object? get node_builder => getAttribute("node_builder");
 
+  /// ## node_builder (setter)
   set node_builder(Object? node_builder) =>
       setAttribute("node_builder", node_builder);
 
+  /// ## to_include (getter)
   Object? get to_include => getAttribute("to_include");
 
+  /// ## to_include (setter)
   set to_include(Object? to_include) => setAttribute("to_include", to_include);
 
+  /// ## append_none (getter)
   Object? get append_none => getAttribute("append_none");
 
+  /// ## append_none (setter)
   set append_none(Object? append_none) =>
       setAttribute("append_none", append_none);
 }
@@ -28195,13 +32697,17 @@ final class ChildFilterLALR_NoPlaceholders extends PythonClass {
 
   ChildFilterLALR_NoPlaceholders.from(super.pythonClass) : super.from();
 
+  /// ## node_builder (getter)
   Object? get node_builder => getAttribute("node_builder");
 
+  /// ## node_builder (setter)
   set node_builder(Object? node_builder) =>
       setAttribute("node_builder", node_builder);
 
+  /// ## to_include (getter)
   Object? get to_include => getAttribute("to_include");
 
+  /// ## to_include (setter)
   set to_include(Object? to_include) => setAttribute("to_include", to_include);
 }
 
@@ -28235,8 +32741,10 @@ final class ExpandSingleChild extends PythonClass {
 
   ExpandSingleChild.from(super.pythonClass) : super.from();
 
+  /// ## node_builder (getter)
   Object? get node_builder => getAttribute("node_builder");
 
+  /// ## node_builder (setter)
   set node_builder(Object? node_builder) =>
       setAttribute("node_builder", node_builder);
 }
@@ -28301,7 +32809,7 @@ final class ExpandSingleChild extends PythonClass {
 final class PropagatePositions extends PythonClass {
   factory PropagatePositions({
     required Object? node_builder,
-    Object? node_filter = null,
+    Object? node_filter,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.parse_tree_builder",
@@ -28316,13 +32824,17 @@ final class PropagatePositions extends PythonClass {
 
   PropagatePositions.from(super.pythonClass) : super.from();
 
+  /// ## node_builder (getter)
   Object? get node_builder => getAttribute("node_builder");
 
+  /// ## node_builder (setter)
   set node_builder(Object? node_builder) =>
       setAttribute("node_builder", node_builder);
 
+  /// ## node_filter (getter)
   Object? get node_filter => getAttribute("node_filter");
 
+  /// ## node_filter (setter)
   set node_filter(Object? node_filter) =>
       setAttribute("node_filter", node_filter);
 }
@@ -28369,7 +32881,7 @@ final class CYK_FrontEnd extends PythonClass {
   factory CYK_FrontEnd({
     required Object? lexer_conf,
     required Object? parser_conf,
-    Object? options = null,
+    Object? options,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.parser_frontends",
@@ -28405,12 +32917,17 @@ final class CYK_FrontEnd extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## parser (getter)
   Object? get parser => getAttribute("parser");
 
+  /// ## parser (setter)
   set parser(Object? parser) => setAttribute("parser", parser);
 
+  /// ## callbacks (getter)
   Object? get callbacks => getAttribute("callbacks");
 
+  /// ## callbacks (setter)
   set callbacks(Object? callbacks) => setAttribute("callbacks", callbacks);
 }
 
@@ -28474,8 +32991,11 @@ final class EarleyRegexpMatcher extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## regexps (getter)
   Object? get regexps => getAttribute("regexps");
 
+  /// ## regexps (setter)
   set regexps(Object? regexps) => setAttribute("regexps", regexps);
 }
 
@@ -28598,7 +33118,7 @@ final class GrammarAnalyzer extends PythonClass {
   /// ```
   Object? expand_rule({
     required Object? source_rule,
-    Object? rules_by_origin = null,
+    Object? rules_by_origin,
   }) =>
       getFunction("expand_rule").call(
         <Object?>[
@@ -28607,31 +33127,44 @@ final class GrammarAnalyzer extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## debug (getter)
   Object? get debug => getAttribute("debug");
 
+  /// ## debug (setter)
   set debug(Object? debug) => setAttribute("debug", debug);
 
+  /// ## rules_by_origin (getter)
   Object? get rules_by_origin => getAttribute("rules_by_origin");
 
+  /// ## rules_by_origin (setter)
   set rules_by_origin(Object? rules_by_origin) =>
       setAttribute("rules_by_origin", rules_by_origin);
 
+  /// ## start_states (getter)
   Object? get start_states => getAttribute("start_states");
 
+  /// ## start_states (setter)
   set start_states(Object? start_states) =>
       setAttribute("start_states", start_states);
 
+  /// ## end_states (getter)
   Object? get end_states => getAttribute("end_states");
 
+  /// ## end_states (setter)
   set end_states(Object? end_states) => setAttribute("end_states", end_states);
 
+  /// ## lr0_rules_by_origin (getter)
   Object? get lr0_rules_by_origin => getAttribute("lr0_rules_by_origin");
 
+  /// ## lr0_rules_by_origin (setter)
   set lr0_rules_by_origin(Object? lr0_rules_by_origin) =>
       setAttribute("lr0_rules_by_origin", lr0_rules_by_origin);
 
+  /// ## lr0_start_states (getter)
   Object? get lr0_start_states => getAttribute("lr0_start_states");
 
+  /// ## lr0_start_states (setter)
   set lr0_start_states(Object? lr0_start_states) =>
       setAttribute("lr0_start_states", lr0_start_states);
 }
@@ -28779,7 +33312,7 @@ final class LALR_Parser extends PythonClass {
   Object? parse({
     required Object? lexer,
     required Object? start,
-    Object? on_error = null,
+    Object? on_error,
   }) =>
       getFunction("parse").call(
         <Object?>[
@@ -28817,7 +33350,7 @@ final class LALR_Parser extends PythonClass {
   ///         return self._parse_table.serialize(memo)
   /// ```
   Object? serialize({
-    Object? memo = null,
+    Object? memo,
   }) =>
       getFunction("serialize").call(
         <Object?>[
@@ -28825,18 +33358,25 @@ final class LALR_Parser extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## deserialize (getter)
   Object? get deserialize => getAttribute("deserialize");
 
+  /// ## deserialize (setter)
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
+  /// ## parser_conf (getter)
   Object? get parser_conf => getAttribute("parser_conf");
 
+  /// ## parser_conf (setter)
   set parser_conf(Object? parser_conf) =>
       setAttribute("parser_conf", parser_conf);
 
+  /// ## parser (getter)
   Object? get parser => getAttribute("parser");
 
+  /// ## parser (setter)
   set parser(Object? parser) => setAttribute("parser", parser);
 }
 
@@ -28890,12 +33430,17 @@ final class PostLexConnector extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## lexer (getter)
   Object? get lexer => getAttribute("lexer");
 
+  /// ## lexer (setter)
   set lexer(Object? lexer) => setAttribute("lexer", lexer);
 
+  /// ## postlexer (getter)
   Object? get postlexer => getAttribute("postlexer");
 
+  /// ## postlexer (setter)
   set postlexer(Object? postlexer) => setAttribute("postlexer", postlexer);
 }
 
@@ -28928,21 +33473,29 @@ final class CnfWrapper extends PythonClass {
 
   CnfWrapper.from(super.pythonClass) : super.from();
 
+  /// ## grammar (getter)
   Object? get grammar => getAttribute("grammar");
 
+  /// ## grammar (setter)
   set grammar(Object? grammar) => setAttribute("grammar", grammar);
 
+  /// ## rules (getter)
   Object? get rules => getAttribute("rules");
 
+  /// ## rules (setter)
   set rules(Object? rules) => setAttribute("rules", rules);
 
+  /// ## terminal_rules (getter)
   Object? get terminal_rules => getAttribute("terminal_rules");
 
+  /// ## terminal_rules (setter)
   set terminal_rules(Object? terminal_rules) =>
       setAttribute("terminal_rules", terminal_rules);
 
+  /// ## nonterminal_rules (getter)
   Object? get nonterminal_rules => getAttribute("nonterminal_rules");
 
+  /// ## nonterminal_rules (setter)
   set nonterminal_rules(Object? nonterminal_rules) =>
       setAttribute("nonterminal_rules", nonterminal_rules);
 }
@@ -29046,12 +33599,17 @@ final class Parser extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## orig_rules (getter)
   Object? get orig_rules => getAttribute("orig_rules");
 
+  /// ## orig_rules (setter)
   set orig_rules(Object? orig_rules) => setAttribute("orig_rules", orig_rules);
 
+  /// ## grammar (getter)
   Object? get grammar => getAttribute("grammar");
 
+  /// ## grammar (setter)
   set grammar(Object? grammar) => setAttribute("grammar", grammar);
 }
 
@@ -29094,16 +33652,22 @@ final class RuleNode extends PythonClass {
 
   RuleNode.from(super.pythonClass) : super.from();
 
+  /// ## rule (getter)
   Object? get rule => getAttribute("rule");
 
+  /// ## rule (setter)
   set rule(Object? rule) => setAttribute("rule", rule);
 
+  /// ## children (getter)
   Object? get children => getAttribute("children");
 
+  /// ## children (setter)
   set children(Object? children) => setAttribute("children", children);
 
+  /// ## weight (getter)
   Object? get weight => getAttribute("weight");
 
+  /// ## weight (setter)
   set weight(Object? weight) => setAttribute("weight", weight);
 }
 
@@ -29151,8 +33715,10 @@ final class UnitSkipRule extends PythonClass {
 
   UnitSkipRule.from(super.pythonClass) : super.from();
 
+  /// ## skipped_rules (getter)
   Object? get skipped_rules => getAttribute("skipped_rules");
 
+  /// ## skipped_rules (setter)
   set skipped_rules(Object? skipped_rules) =>
       setAttribute("skipped_rules", skipped_rules);
 }
@@ -29168,49 +33734,71 @@ final class defaultdict extends PythonClass {
 
   defaultdict.from(super.pythonClass) : super.from();
 
+  /// ## default_factory (getter)
   Object? get default_factory => getAttribute("default_factory");
 
+  /// ## default_factory (setter)
   set default_factory(Object? default_factory) =>
       setAttribute("default_factory", default_factory);
 
+  /// ## clear (getter)
   Object? get clear => getAttribute("clear");
 
+  /// ## clear (setter)
   set clear(Object? clear) => setAttribute("clear", clear);
 
+  /// ## copy (getter)
   Object? get copy => getAttribute("copy");
 
+  /// ## copy (setter)
   set copy(Object? copy) => setAttribute("copy", copy);
 
+  /// ## get (getter)
   Object? get $get => getAttribute("get");
 
+  /// ## get (setter)
   set $get(Object? $get) => setAttribute("get", $get);
 
+  /// ## items (getter)
   Object? get items => getAttribute("items");
 
+  /// ## items (setter)
   set items(Object? items) => setAttribute("items", items);
 
+  /// ## keys (getter)
   Object? get keys => getAttribute("keys");
 
+  /// ## keys (setter)
   set keys(Object? keys) => setAttribute("keys", keys);
 
+  /// ## pop (getter)
   Object? get pop => getAttribute("pop");
 
+  /// ## pop (setter)
   set pop(Object? pop) => setAttribute("pop", pop);
 
+  /// ## popitem (getter)
   Object? get popitem => getAttribute("popitem");
 
+  /// ## popitem (setter)
   set popitem(Object? popitem) => setAttribute("popitem", popitem);
 
+  /// ## setdefault (getter)
   Object? get setdefault => getAttribute("setdefault");
 
+  /// ## setdefault (setter)
   set setdefault(Object? setdefault) => setAttribute("setdefault", setdefault);
 
+  /// ## update (getter)
   Object? get update => getAttribute("update");
 
+  /// ## update (setter)
   set update(Object? update) => setAttribute("update", update);
 
+  /// ## values (getter)
   Object? get values => getAttribute("values");
 
+  /// ## values (setter)
   set values(Object? values) => setAttribute("values", values);
 }
 
@@ -30313,21 +34901,30 @@ final class ForestToParseTree extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## tree_class (getter)
   Object? get tree_class => getAttribute("tree_class");
 
+  /// ## tree_class (setter)
   set tree_class(Object? tree_class) => setAttribute("tree_class", tree_class);
 
+  /// ## callbacks (getter)
   Object? get callbacks => getAttribute("callbacks");
 
+  /// ## callbacks (setter)
   set callbacks(Object? callbacks) => setAttribute("callbacks", callbacks);
 
+  /// ## prioritizer (getter)
   Object? get prioritizer => getAttribute("prioritizer");
 
+  /// ## prioritizer (setter)
   set prioritizer(Object? prioritizer) =>
       setAttribute("prioritizer", prioritizer);
 
+  /// ## resolve_ambiguity (getter)
   Object? get resolve_ambiguity => getAttribute("resolve_ambiguity");
 
+  /// ## resolve_ambiguity (setter)
   set resolve_ambiguity(Object? resolve_ambiguity) =>
       setAttribute("resolve_ambiguity", resolve_ambiguity);
 }
@@ -30406,37 +35003,54 @@ final class Item extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## expect (getter)
   Object? get expect => getAttribute("expect");
 
+  /// ## expect (setter)
   set expect(Object? expect) => setAttribute("expect", expect);
 
+  /// ## is_complete (getter)
   Object? get is_complete => getAttribute("is_complete");
 
+  /// ## is_complete (setter)
   set is_complete(Object? is_complete) =>
       setAttribute("is_complete", is_complete);
 
+  /// ## node (getter)
   Object? get node => getAttribute("node");
 
+  /// ## node (setter)
   set node(Object? node) => setAttribute("node", node);
 
+  /// ## previous (getter)
   Object? get previous => getAttribute("previous");
 
+  /// ## previous (setter)
   set previous(Object? previous) => setAttribute("previous", previous);
 
+  /// ## ptr (getter)
   Object? get ptr => getAttribute("ptr");
 
+  /// ## ptr (setter)
   set ptr(Object? ptr) => setAttribute("ptr", ptr);
 
+  /// ## rule (getter)
   Object? get rule => getAttribute("rule");
 
+  /// ## rule (setter)
   set rule(Object? rule) => setAttribute("rule", rule);
 
+  /// ## s (getter)
   Object? get s => getAttribute("s");
 
+  /// ## s (setter)
   set s(Object? s) => setAttribute("s", s);
 
+  /// ## start (getter)
   Object? get start => getAttribute("start");
 
+  /// ## start (setter)
   set start(Object? start) => setAttribute("start", start);
 }
 
@@ -30637,43 +35251,80 @@ final class SymbolNode extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## children (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Returns a list of this node's children sorted from greatest to
+  /// least priority.
   Object? get children => getAttribute("children");
 
+  /// ## children (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Returns a list of this node's children sorted from greatest to
+  /// least priority.
   set children(Object? children) => setAttribute("children", children);
 
+  /// ## is_ambiguous (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Returns True if this node is ambiguous.
   Object? get is_ambiguous => getAttribute("is_ambiguous");
 
+  /// ## is_ambiguous (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Returns True if this node is ambiguous.
   set is_ambiguous(Object? is_ambiguous) =>
       setAttribute("is_ambiguous", is_ambiguous);
 
+  /// ## end (getter)
   Object? get end => getAttribute("end");
 
+  /// ## end (setter)
   set end(Object? end) => setAttribute("end", end);
 
+  /// ## is_intermediate (getter)
   Object? get is_intermediate => getAttribute("is_intermediate");
 
+  /// ## is_intermediate (setter)
   set is_intermediate(Object? is_intermediate) =>
       setAttribute("is_intermediate", is_intermediate);
 
+  /// ## paths (getter)
   Object? get paths => getAttribute("paths");
 
+  /// ## paths (setter)
   set paths(Object? paths) => setAttribute("paths", paths);
 
+  /// ## paths_loaded (getter)
   Object? get paths_loaded => getAttribute("paths_loaded");
 
+  /// ## paths_loaded (setter)
   set paths_loaded(Object? paths_loaded) =>
       setAttribute("paths_loaded", paths_loaded);
 
+  /// ## priority (getter)
   Object? get priority => getAttribute("priority");
 
+  /// ## priority (setter)
   set priority(Object? priority) => setAttribute("priority", priority);
 
+  /// ## s (getter)
   Object? get s => getAttribute("s");
 
+  /// ## s (setter)
   set s(Object? s) => setAttribute("s", s);
 
+  /// ## start (getter)
   Object? get start => getAttribute("start");
 
+  /// ## start (setter)
   set start(Object? start) => setAttribute("start", start);
 }
 
@@ -30724,7 +35375,7 @@ final class TokenNode extends PythonClass {
   factory TokenNode({
     required Object? token,
     required Object? term,
-    Object? priority = null,
+    Object? priority,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.parsers.earley_forest",
@@ -30740,16 +35391,22 @@ final class TokenNode extends PythonClass {
 
   TokenNode.from(super.pythonClass) : super.from();
 
+  /// ## priority (getter)
   Object? get priority => getAttribute("priority");
 
+  /// ## priority (setter)
   set priority(Object? priority) => setAttribute("priority", priority);
 
+  /// ## term (getter)
   Object? get term => getAttribute("term");
 
+  /// ## term (setter)
   set term(Object? term) => setAttribute("term", term);
 
+  /// ## token (getter)
   Object? get token => getAttribute("token");
 
+  /// ## token (setter)
   set token(Object? token) => setAttribute("token", token);
 }
 
@@ -31125,12 +35782,17 @@ final class ForestToPyDotVisitor extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## pydot (getter)
   Object? get pydot => getAttribute("pydot");
 
+  /// ## pydot (setter)
   set pydot(Object? pydot) => setAttribute("pydot", pydot);
 
+  /// ## graph (getter)
   Object? get graph => getAttribute("graph");
 
+  /// ## graph (setter)
   set graph(Object? graph) => setAttribute("graph", graph);
 }
 
@@ -31674,12 +36336,17 @@ final class ForestTransformer extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## data (getter)
   Object? get data => getAttribute("data");
 
+  /// ## data (setter)
   set data(Object? data) => setAttribute("data", data);
 
+  /// ## node_stack (getter)
   Object? get node_stack => getAttribute("node_stack");
 
+  /// ## node_stack (setter)
   set node_stack(Object? node_stack) => setAttribute("node_stack", node_stack);
 }
 
@@ -32178,8 +36845,11 @@ final class ForestVisitor extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## single_visit (getter)
   Object? get single_visit => getAttribute("single_visit");
 
+  /// ## single_visit (setter)
   set single_visit(Object? single_visit) =>
       setAttribute("single_visit", single_visit);
 }
@@ -32232,16 +36902,22 @@ final class PackedData extends PythonClass {
 
   PackedData.from(super.pythonClass) : super.from();
 
+  /// ## NO_DATA (getter)
   Object? get NO_DATA => getAttribute("NO_DATA");
 
+  /// ## NO_DATA (setter)
   set NO_DATA(Object? NO_DATA) => setAttribute("NO_DATA", NO_DATA);
 
+  /// ## left (getter)
   Object? get left => getAttribute("left");
 
+  /// ## left (setter)
   set left(Object? left) => setAttribute("left", left);
 
+  /// ## right (getter)
   Object? get right => getAttribute("right");
 
+  /// ## right (setter)
   set right(Object? right) => setAttribute("right", right);
 }
 
@@ -32350,44 +37026,86 @@ final class PackedNode extends PythonClass {
 
   PackedNode.from(super.pythonClass) : super.from();
 
+  /// ## children (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Returns a list of this node's children.
   Object? get children => getAttribute("children");
 
+  /// ## children (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Returns a list of this node's children.
   set children(Object? children) => setAttribute("children", children);
 
+  /// ## is_empty (getter)
   Object? get is_empty => getAttribute("is_empty");
 
+  /// ## is_empty (setter)
   set is_empty(Object? is_empty) => setAttribute("is_empty", is_empty);
 
+  /// ## sort_key (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Used to sort PackedNode children of SymbolNodes.
+  /// A SymbolNode has multiple PackedNodes if it matched
+  /// ambiguously. Hence, we use the sort order to identify
+  /// the order in which ambiguous children should be considered.
   Object? get sort_key => getAttribute("sort_key");
 
+  /// ## sort_key (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Used to sort PackedNode children of SymbolNodes.
+  /// A SymbolNode has multiple PackedNodes if it matched
+  /// ambiguously. Hence, we use the sort order to identify
+  /// the order in which ambiguous children should be considered.
   set sort_key(Object? sort_key) => setAttribute("sort_key", sort_key);
 
+  /// ## left (getter)
   Object? get left => getAttribute("left");
 
+  /// ## left (setter)
   set left(Object? left) => setAttribute("left", left);
 
+  /// ## parent (getter)
   Object? get parent => getAttribute("parent");
 
+  /// ## parent (setter)
   set parent(Object? parent) => setAttribute("parent", parent);
 
+  /// ## priority (getter)
   Object? get priority => getAttribute("priority");
 
+  /// ## priority (setter)
   set priority(Object? priority) => setAttribute("priority", priority);
 
+  /// ## right (getter)
   Object? get right => getAttribute("right");
 
+  /// ## right (setter)
   set right(Object? right) => setAttribute("right", right);
 
+  /// ## rule (getter)
   Object? get rule => getAttribute("rule");
 
+  /// ## rule (setter)
   set rule(Object? rule) => setAttribute("rule", rule);
 
+  /// ## s (getter)
   Object? get s => getAttribute("s");
 
+  /// ## s (setter)
   set s(Object? s) => setAttribute("s", s);
 
+  /// ## start (getter)
   Object? get start => getAttribute("start");
 
+  /// ## start (setter)
   set start(Object? start) => setAttribute("start", start);
 }
 
@@ -33561,7 +38279,7 @@ final class Counter extends PythonClass {
   ///         return heapq.nlargest(n, self.items(), key=_itemgetter(1))
   /// ```
   Object? most_common({
-    Object? n = null,
+    Object? n,
   }) =>
       getFunction("most_common").call(
         <Object?>[
@@ -33710,40 +38428,59 @@ final class Counter extends PythonClass {
           ...kwds,
         },
       );
+
+  /// ## clear (getter)
   Object? get clear => getAttribute("clear");
 
+  /// ## clear (setter)
   set clear(Object? clear) => setAttribute("clear", clear);
 
+  /// ## fromkeys (getter)
   Object? get fromkeys => getAttribute("fromkeys");
 
+  /// ## fromkeys (setter)
   set fromkeys(Object? fromkeys) => setAttribute("fromkeys", fromkeys);
 
+  /// ## get (getter)
   Object? get $get => getAttribute("get");
 
+  /// ## get (setter)
   set $get(Object? $get) => setAttribute("get", $get);
 
+  /// ## items (getter)
   Object? get items => getAttribute("items");
 
+  /// ## items (setter)
   set items(Object? items) => setAttribute("items", items);
 
+  /// ## keys (getter)
   Object? get keys => getAttribute("keys");
 
+  /// ## keys (setter)
   set keys(Object? keys) => setAttribute("keys", keys);
 
+  /// ## pop (getter)
   Object? get pop => getAttribute("pop");
 
+  /// ## pop (setter)
   set pop(Object? pop) => setAttribute("pop", pop);
 
+  /// ## popitem (getter)
   Object? get popitem => getAttribute("popitem");
 
+  /// ## popitem (setter)
   set popitem(Object? popitem) => setAttribute("popitem", popitem);
 
+  /// ## setdefault (getter)
   Object? get setdefault => getAttribute("setdefault");
 
+  /// ## setdefault (setter)
   set setdefault(Object? setdefault) => setAttribute("setdefault", setdefault);
 
+  /// ## values (getter)
   Object? get values => getAttribute("values");
 
+  /// ## values (setter)
   set values(Object? values) => setAttribute("values", values);
 }
 
@@ -33781,20 +38518,28 @@ final class LR0ItemSet extends PythonClass {
 
   LR0ItemSet.from(super.pythonClass) : super.from();
 
+  /// ## closure (getter)
   Object? get closure => getAttribute("closure");
 
+  /// ## closure (setter)
   set closure(Object? closure) => setAttribute("closure", closure);
 
+  /// ## kernel (getter)
   Object? get kernel => getAttribute("kernel");
 
+  /// ## kernel (setter)
   set kernel(Object? kernel) => setAttribute("kernel", kernel);
 
+  /// ## lookaheads (getter)
   Object? get lookaheads => getAttribute("lookaheads");
 
+  /// ## lookaheads (setter)
   set lookaheads(Object? lookaheads) => setAttribute("lookaheads", lookaheads);
 
+  /// ## transitions (getter)
   Object? get transitions => getAttribute("transitions");
 
+  /// ## transitions (setter)
   set transitions(Object? transitions) =>
       setAttribute("transitions", transitions);
 }
@@ -33869,21 +38614,30 @@ final class RulePtr extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## is_satisfied (getter)
   Object? get is_satisfied => getAttribute("is_satisfied");
 
+  /// ## is_satisfied (setter)
   set is_satisfied(Object? is_satisfied) =>
       setAttribute("is_satisfied", is_satisfied);
 
+  /// ## next (getter)
   Object? get next => getAttribute("next");
 
+  /// ## next (setter)
   set next(Object? next) => setAttribute("next", next);
 
+  /// ## index (getter)
   Object? get index => getAttribute("index");
 
+  /// ## index (setter)
   set index(Object? index) => setAttribute("index", index);
 
+  /// ## rule (getter)
   Object? get rule => getAttribute("rule");
 
+  /// ## rule (setter)
   set rule(Object? rule) => setAttribute("rule", rule);
 }
 
@@ -33905,38 +38659,54 @@ final class fzset extends PythonClass {
 
   fzset.from(super.pythonClass) : super.from();
 
+  /// ## copy (getter)
   Object? get copy => getAttribute("copy");
 
+  /// ## copy (setter)
   set copy(Object? copy) => setAttribute("copy", copy);
 
+  /// ## difference (getter)
   Object? get difference => getAttribute("difference");
 
+  /// ## difference (setter)
   set difference(Object? difference) => setAttribute("difference", difference);
 
+  /// ## intersection (getter)
   Object? get intersection => getAttribute("intersection");
 
+  /// ## intersection (setter)
   set intersection(Object? intersection) =>
       setAttribute("intersection", intersection);
 
+  /// ## isdisjoint (getter)
   Object? get isdisjoint => getAttribute("isdisjoint");
 
+  /// ## isdisjoint (setter)
   set isdisjoint(Object? isdisjoint) => setAttribute("isdisjoint", isdisjoint);
 
+  /// ## issubset (getter)
   Object? get issubset => getAttribute("issubset");
 
+  /// ## issubset (setter)
   set issubset(Object? issubset) => setAttribute("issubset", issubset);
 
+  /// ## issuperset (getter)
   Object? get issuperset => getAttribute("issuperset");
 
+  /// ## issuperset (setter)
   set issuperset(Object? issuperset) => setAttribute("issuperset", issuperset);
 
+  /// ## symmetric_difference (getter)
   Object? get symmetric_difference => getAttribute("symmetric_difference");
 
+  /// ## symmetric_difference (setter)
   set symmetric_difference(Object? symmetric_difference) =>
       setAttribute("symmetric_difference", symmetric_difference);
 
+  /// ## union (getter)
   Object? get union => getAttribute("union");
 
+  /// ## union (setter)
   set union(Object? union) => setAttribute("union", union);
 }
 
@@ -33968,8 +38738,10 @@ final class Action extends PythonClass {
 
   Action.from(super.pythonClass) : super.from();
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 }
 
@@ -34081,7 +38853,7 @@ final class Enumerator extends PythonClass {
   ///         return res
   /// ```
   Object? serialize({
-    Object? memo = null,
+    Object? memo,
   }) =>
       getFunction("serialize").call(
         <Object?>[
@@ -34089,8 +38861,11 @@ final class Enumerator extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## deserialize (getter)
   Object? get deserialize => getAttribute("deserialize");
 
+  /// ## deserialize (setter)
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 }
@@ -34166,27 +38941,38 @@ final class IntParseTable extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## deserialize (getter)
   Object? get deserialize => getAttribute("deserialize");
 
+  /// ## deserialize (setter)
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
+  /// ## from_ParseTable (getter)
   Object? get from_ParseTable => getAttribute("from_ParseTable");
 
+  /// ## from_ParseTable (setter)
   set from_ParseTable(Object? from_ParseTable) =>
       setAttribute("from_ParseTable", from_ParseTable);
 
+  /// ## states (getter)
   Object? get states => getAttribute("states");
 
+  /// ## states (setter)
   set states(Object? states) => setAttribute("states", states);
 
+  /// ## start_states (getter)
   Object? get start_states => getAttribute("start_states");
 
+  /// ## start_states (setter)
   set start_states(Object? start_states) =>
       setAttribute("start_states", start_states);
 
+  /// ## end_states (getter)
   Object? get end_states => getAttribute("end_states");
 
+  /// ## end_states (setter)
   set end_states(Object? end_states) => setAttribute("end_states", end_states);
 }
 
@@ -34632,7 +39418,7 @@ final class LALR_Analyzer extends PythonClass {
   /// ```
   Object? expand_rule({
     required Object? source_rule,
-    Object? rules_by_origin = null,
+    Object? rules_by_origin,
   }) =>
       getFunction("expand_rule").call(
         <Object?>[
@@ -34641,27 +39427,38 @@ final class LALR_Analyzer extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## nonterminal_transitions (getter)
   Object? get nonterminal_transitions =>
       getAttribute("nonterminal_transitions");
 
+  /// ## nonterminal_transitions (setter)
   set nonterminal_transitions(Object? nonterminal_transitions) =>
       setAttribute("nonterminal_transitions", nonterminal_transitions);
 
+  /// ## directly_reads (getter)
   Object? get directly_reads => getAttribute("directly_reads");
 
+  /// ## directly_reads (setter)
   set directly_reads(Object? directly_reads) =>
       setAttribute("directly_reads", directly_reads);
 
+  /// ## reads (getter)
   Object? get reads => getAttribute("reads");
 
+  /// ## reads (setter)
   set reads(Object? reads) => setAttribute("reads", reads);
 
+  /// ## includes (getter)
   Object? get includes => getAttribute("includes");
 
+  /// ## includes (setter)
   set includes(Object? includes) => setAttribute("includes", includes);
 
+  /// ## lookback (getter)
   Object? get lookback => getAttribute("lookback");
 
+  /// ## lookback (setter)
   set lookback(Object? lookback) => setAttribute("lookback", lookback);
 }
 
@@ -34750,22 +39547,31 @@ final class ParseTable extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## deserialize (getter)
   Object? get deserialize => getAttribute("deserialize");
 
+  /// ## deserialize (setter)
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
+  /// ## states (getter)
   Object? get states => getAttribute("states");
 
+  /// ## states (setter)
   set states(Object? states) => setAttribute("states", states);
 
+  /// ## start_states (getter)
   Object? get start_states => getAttribute("start_states");
 
+  /// ## start_states (setter)
   set start_states(Object? start_states) =>
       setAttribute("start_states", start_states);
 
+  /// ## end_states (getter)
   Object? get end_states => getAttribute("end_states");
 
+  /// ## end_states (setter)
   set end_states(Object? end_states) => setAttribute("end_states", end_states);
 }
 
@@ -34964,7 +39770,7 @@ final class ImmutableInteractiveParser extends PythonClass {
   ///         return self.feed_token(eof)
   /// ```
   Object? feed_eof({
-    Object? last_token = null,
+    Object? last_token,
   }) =>
       getFunction("feed_eof").call(
         <Object?>[
@@ -35066,26 +39872,37 @@ final class ImmutableInteractiveParser extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## lexer_state (getter)
   Object? get lexer_state => getAttribute("lexer_state");
 
+  /// ## lexer_state (setter)
   set lexer_state(Object? lexer_state) =>
       setAttribute("lexer_state", lexer_state);
 
+  /// ## result (getter)
   Object? get result => getAttribute("result");
 
+  /// ## result (setter)
   set result(Object? result) => setAttribute("result", result);
 
+  /// ## parser (getter)
   Object? get parser => getAttribute("parser");
 
+  /// ## parser (setter)
   set parser(Object? parser) => setAttribute("parser", parser);
 
+  /// ## parser_state (getter)
   Object? get parser_state => getAttribute("parser_state");
 
+  /// ## parser_state (setter)
   set parser_state(Object? parser_state) =>
       setAttribute("parser_state", parser_state);
 
+  /// ## lexer_thread (getter)
   Object? get lexer_thread => getAttribute("lexer_thread");
 
+  /// ## lexer_thread (setter)
   set lexer_thread(Object? lexer_thread) =>
       setAttribute("lexer_thread", lexer_thread);
 }
@@ -35349,7 +40166,7 @@ final class InteractiveParser extends PythonClass {
   ///         return self.feed_token(eof)
   /// ```
   Object? feed_eof({
-    Object? last_token = null,
+    Object? last_token,
   }) =>
       getFunction("feed_eof").call(
         <Object?>[
@@ -35453,27 +40270,38 @@ final class InteractiveParser extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## lexer_state (getter)
   Object? get lexer_state => getAttribute("lexer_state");
 
+  /// ## lexer_state (setter)
   set lexer_state(Object? lexer_state) =>
       setAttribute("lexer_state", lexer_state);
 
+  /// ## parser (getter)
   Object? get parser => getAttribute("parser");
 
+  /// ## parser (setter)
   set parser(Object? parser) => setAttribute("parser", parser);
 
+  /// ## parser_state (getter)
   Object? get parser_state => getAttribute("parser_state");
 
+  /// ## parser_state (setter)
   set parser_state(Object? parser_state) =>
       setAttribute("parser_state", parser_state);
 
+  /// ## lexer_thread (getter)
   Object? get lexer_thread => getAttribute("lexer_thread");
 
+  /// ## lexer_thread (setter)
   set lexer_thread(Object? lexer_thread) =>
       setAttribute("lexer_thread", lexer_thread);
 
+  /// ## result (getter)
   Object? get result => getAttribute("result");
 
+  /// ## result (setter)
   set result(Object? result) => setAttribute("result", result);
 }
 
@@ -35514,30 +40342,42 @@ final class ParseConf extends PythonClass {
 
   ParseConf.from(super.pythonClass) : super.from();
 
+  /// ## callbacks (getter)
   Object? get callbacks => getAttribute("callbacks");
 
+  /// ## callbacks (setter)
   set callbacks(Object? callbacks) => setAttribute("callbacks", callbacks);
 
+  /// ## end_state (getter)
   Object? get end_state => getAttribute("end_state");
 
+  /// ## end_state (setter)
   set end_state(Object? end_state) => setAttribute("end_state", end_state);
 
+  /// ## parse_table (getter)
   Object? get parse_table => getAttribute("parse_table");
 
+  /// ## parse_table (setter)
   set parse_table(Object? parse_table) =>
       setAttribute("parse_table", parse_table);
 
+  /// ## start (getter)
   Object? get start => getAttribute("start");
 
+  /// ## start (setter)
   set start(Object? start) => setAttribute("start", start);
 
+  /// ## start_state (getter)
   Object? get start_state => getAttribute("start_state");
 
+  /// ## start_state (setter)
   set start_state(Object? start_state) =>
       setAttribute("start_state", start_state);
 
+  /// ## states (getter)
   Object? get states => getAttribute("states");
 
+  /// ## states (setter)
   set states(Object? states) => setAttribute("states", states);
 }
 
@@ -35623,8 +40463,8 @@ final class ParserState extends PythonClass {
   factory ParserState({
     required Object? parse_conf,
     required Object? lexer,
-    Object? state_stack = null,
-    Object? value_stack = null,
+    Object? state_stack,
+    Object? value_stack,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.parsers.lalr_parser",
@@ -35712,25 +40552,36 @@ final class ParserState extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## position (getter)
   Object? get position => getAttribute("position");
 
+  /// ## position (setter)
   set position(Object? position) => setAttribute("position", position);
 
+  /// ## lexer (getter)
   Object? get lexer => getAttribute("lexer");
 
+  /// ## lexer (setter)
   set lexer(Object? lexer) => setAttribute("lexer", lexer);
 
+  /// ## parse_conf (getter)
   Object? get parse_conf => getAttribute("parse_conf");
 
+  /// ## parse_conf (setter)
   set parse_conf(Object? parse_conf) => setAttribute("parse_conf", parse_conf);
 
+  /// ## state_stack (getter)
   Object? get state_stack => getAttribute("state_stack");
 
+  /// ## state_stack (setter)
   set state_stack(Object? state_stack) =>
       setAttribute("state_stack", state_stack);
 
+  /// ## value_stack (getter)
   Object? get value_stack => getAttribute("value_stack");
 
+  /// ## value_stack (setter)
   set value_stack(Object? value_stack) =>
       setAttribute("value_stack", value_stack);
 }
@@ -35908,8 +40759,10 @@ final class Meta extends PythonClass {
 
   Meta.from(super.pythonClass) : super.from();
 
+  /// ## empty (getter)
   Object? get empty => getAttribute("empty");
 
+  /// ## empty (setter)
   set empty(Object? empty) => setAttribute("empty", empty);
 }
 
@@ -36180,49 +41033,71 @@ final class OrderedDict extends PythonClass {
 
   OrderedDict.from(super.pythonClass) : super.from();
 
+  /// ## clear (getter)
   Object? get clear => getAttribute("clear");
 
+  /// ## clear (setter)
   set clear(Object? clear) => setAttribute("clear", clear);
 
+  /// ## copy (getter)
   Object? get copy => getAttribute("copy");
 
+  /// ## copy (setter)
   set copy(Object? copy) => setAttribute("copy", copy);
 
+  /// ## get (getter)
   Object? get $get => getAttribute("get");
 
+  /// ## get (setter)
   set $get(Object? $get) => setAttribute("get", $get);
 
+  /// ## items (getter)
   Object? get items => getAttribute("items");
 
+  /// ## items (setter)
   set items(Object? items) => setAttribute("items", items);
 
+  /// ## keys (getter)
   Object? get keys => getAttribute("keys");
 
+  /// ## keys (setter)
   set keys(Object? keys) => setAttribute("keys", keys);
 
+  /// ## move_to_end (getter)
   Object? get move_to_end => getAttribute("move_to_end");
 
+  /// ## move_to_end (setter)
   set move_to_end(Object? move_to_end) =>
       setAttribute("move_to_end", move_to_end);
 
+  /// ## pop (getter)
   Object? get pop => getAttribute("pop");
 
+  /// ## pop (setter)
   set pop(Object? pop) => setAttribute("pop", pop);
 
+  /// ## popitem (getter)
   Object? get popitem => getAttribute("popitem");
 
+  /// ## popitem (setter)
   set popitem(Object? popitem) => setAttribute("popitem", popitem);
 
+  /// ## setdefault (getter)
   Object? get setdefault => getAttribute("setdefault");
 
+  /// ## setdefault (setter)
   set setdefault(Object? setdefault) => setAttribute("setdefault", setdefault);
 
+  /// ## update (getter)
   Object? get update => getAttribute("update");
 
+  /// ## update (setter)
   set update(Object? update) => setAttribute("update", update);
 
+  /// ## values (getter)
   Object? get values => getAttribute("values");
 
+  /// ## values (setter)
   set values(Object? values) => setAttribute("values", values);
 }
 
@@ -36274,7 +41149,7 @@ final class OrderedDict extends PythonClass {
 /// ```
 final class BufferingFormatter extends PythonClass {
   factory BufferingFormatter({
-    Object? linefmt = null,
+    Object? linefmt,
   }) =>
       PythonFfiDart.instance.importClass(
         "logging",
@@ -36365,8 +41240,11 @@ final class BufferingFormatter extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## linefmt (getter)
   Object? get linefmt => getAttribute("linefmt");
 
+  /// ## linefmt (setter)
   set linefmt(Object? linefmt) => setAttribute("linefmt", linefmt);
 }
 
@@ -36379,9 +41257,9 @@ final class FileHandler extends PythonClass {
   factory FileHandler({
     required Object? filename,
     Object? mode = "a",
-    Object? encoding = null,
+    Object? encoding,
     Object? delay = false,
-    Object? errors = null,
+    Object? errors,
   }) =>
       PythonFfiDart.instance.importClass(
         "logging",
@@ -36914,37 +41792,54 @@ final class FileHandler extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## terminator (getter)
   Object? get terminator => getAttribute("terminator");
 
+  /// ## terminator (setter)
   set terminator(Object? terminator) => setAttribute("terminator", terminator);
 
+  /// ## baseFilename (getter)
   Object? get baseFilename => getAttribute("baseFilename");
 
+  /// ## baseFilename (setter)
   set baseFilename(Object? baseFilename) =>
       setAttribute("baseFilename", baseFilename);
 
+  /// ## mode (getter)
   Object? get mode => getAttribute("mode");
 
+  /// ## mode (setter)
   set mode(Object? mode) => setAttribute("mode", mode);
 
+  /// ## encoding (getter)
   Object? get encoding => getAttribute("encoding");
 
+  /// ## encoding (setter)
   set encoding(Object? encoding) => setAttribute("encoding", encoding);
 
+  /// ## errors (getter)
   Object? get errors => getAttribute("errors");
 
+  /// ## errors (setter)
   set errors(Object? errors) => setAttribute("errors", errors);
 
+  /// ## delay (getter)
   Object? get delay => getAttribute("delay");
 
+  /// ## delay (setter)
   set delay(Object? delay) => setAttribute("delay", delay);
 
+  /// ## stream (getter)
   Object? get stream => getAttribute("stream");
 
+  /// ## stream (setter)
   set stream(Object? stream) => setAttribute("stream", stream);
 }
 
@@ -37051,12 +41946,17 @@ final class Filter extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## nlen (getter)
   Object? get nlen => getAttribute("nlen");
 
+  /// ## nlen (setter)
   set nlen(Object? nlen) => setAttribute("nlen", nlen);
 }
 
@@ -37226,8 +42126,11 @@ final class Filterer extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## filters (getter)
   Object? get filters => getAttribute("filters");
 
+  /// ## filters (setter)
   set filters(Object? filters) => setAttribute("filters", filters);
 }
 
@@ -37276,11 +42179,11 @@ final class Filterer extends PythonClass {
 ///                     the record is emitted
 final class Formatter extends PythonClass {
   factory Formatter({
-    Object? fmt = null,
-    Object? datefmt = null,
+    Object? fmt,
+    Object? datefmt,
     Object? style = "%",
     Object? validate = true,
-    Object? defaults = null,
+    Object? defaults,
   }) =>
       PythonFfiDart.instance.importClass(
         "logging",
@@ -37469,7 +42372,7 @@ final class Formatter extends PythonClass {
   /// ```
   Object? formatTime({
     required Object? record,
-    Object? datefmt = null,
+    Object? datefmt,
   }) =>
       getFunction("formatTime").call(
         <Object?>[
@@ -37497,18 +42400,25 @@ final class Formatter extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## default_msec_format (getter)
   Object? get default_msec_format => getAttribute("default_msec_format");
 
+  /// ## default_msec_format (setter)
   set default_msec_format(Object? default_msec_format) =>
       setAttribute("default_msec_format", default_msec_format);
 
+  /// ## default_time_format (getter)
   Object? get default_time_format => getAttribute("default_time_format");
 
+  /// ## default_time_format (setter)
   set default_time_format(Object? default_time_format) =>
       setAttribute("default_time_format", default_time_format);
 
+  /// ## datefmt (getter)
   Object? get datefmt => getAttribute("datefmt");
 
+  /// ## datefmt (setter)
   set datefmt(Object? datefmt) => setAttribute("datefmt", datefmt);
 }
 
@@ -38218,16 +43128,23 @@ final class Handler extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## level (getter)
   Object? get level => getAttribute("level");
 
+  /// ## level (setter)
   set level(Object? level) => setAttribute("level", level);
 
+  /// ## formatter (getter)
   Object? get formatter => getAttribute("formatter");
 
+  /// ## formatter (setter)
   set formatter(Object? formatter) => setAttribute("formatter", formatter);
 }
 
@@ -38356,8 +43273,8 @@ final class LogRecord extends PythonClass {
     required Object? msg,
     required Object? args,
     required Object? exc_info,
-    Object? func = null,
-    Object? sinfo = null,
+    Object? func,
+    Object? sinfo,
     Map<String, Object?> kwargs = const <String, Object?>{},
   }) =>
       PythonFfiDart.instance.importClass(
@@ -38409,86 +43326,127 @@ final class LogRecord extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## msg (getter)
   Object? get msg => getAttribute("msg");
 
+  /// ## msg (setter)
   set msg(Object? msg) => setAttribute("msg", msg);
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## levelname (getter)
   Object? get levelname => getAttribute("levelname");
 
+  /// ## levelname (setter)
   set levelname(Object? levelname) => setAttribute("levelname", levelname);
 
+  /// ## levelno (getter)
   Object? get levelno => getAttribute("levelno");
 
+  /// ## levelno (setter)
   set levelno(Object? levelno) => setAttribute("levelno", levelno);
 
+  /// ## pathname (getter)
   Object? get pathname => getAttribute("pathname");
 
+  /// ## pathname (setter)
   set pathname(Object? pathname) => setAttribute("pathname", pathname);
 
+  /// ## filename (getter)
   Object? get filename => getAttribute("filename");
 
+  /// ## filename (setter)
   set filename(Object? filename) => setAttribute("filename", filename);
 
+  /// ## module (getter)
   Object? get module => getAttribute("module");
 
+  /// ## module (setter)
   set module(Object? module) => setAttribute("module", module);
 
+  /// ## exc_info (getter)
   Object? get exc_info => getAttribute("exc_info");
 
+  /// ## exc_info (setter)
   set exc_info(Object? exc_info) => setAttribute("exc_info", exc_info);
 
+  /// ## exc_text (getter)
   Object? get exc_text => getAttribute("exc_text");
 
+  /// ## exc_text (setter)
   set exc_text(Object? exc_text) => setAttribute("exc_text", exc_text);
 
+  /// ## stack_info (getter)
   Object? get stack_info => getAttribute("stack_info");
 
+  /// ## stack_info (setter)
   set stack_info(Object? stack_info) => setAttribute("stack_info", stack_info);
 
+  /// ## lineno (getter)
   Object? get lineno => getAttribute("lineno");
 
+  /// ## lineno (setter)
   set lineno(Object? lineno) => setAttribute("lineno", lineno);
 
+  /// ## funcName (getter)
   Object? get funcName => getAttribute("funcName");
 
+  /// ## funcName (setter)
   set funcName(Object? funcName) => setAttribute("funcName", funcName);
 
+  /// ## created (getter)
   Object? get created => getAttribute("created");
 
+  /// ## created (setter)
   set created(Object? created) => setAttribute("created", created);
 
+  /// ## msecs (getter)
   Object? get msecs => getAttribute("msecs");
 
+  /// ## msecs (setter)
   set msecs(Object? msecs) => setAttribute("msecs", msecs);
 
+  /// ## relativeCreated (getter)
   Object? get relativeCreated => getAttribute("relativeCreated");
 
+  /// ## relativeCreated (setter)
   set relativeCreated(Object? relativeCreated) =>
       setAttribute("relativeCreated", relativeCreated);
 
+  /// ## thread (getter)
   Object? get thread => getAttribute("thread");
 
+  /// ## thread (setter)
   set thread(Object? thread) => setAttribute("thread", thread);
 
+  /// ## threadName (getter)
   Object? get threadName => getAttribute("threadName");
 
+  /// ## threadName (setter)
   set threadName(Object? threadName) => setAttribute("threadName", threadName);
 
+  /// ## processName (getter)
   Object? get processName => getAttribute("processName");
 
+  /// ## processName (setter)
   set processName(Object? processName) =>
       setAttribute("processName", processName);
 
+  /// ## process (getter)
   Object? get process => getAttribute("process");
 
+  /// ## process (setter)
   set process(Object? process) => setAttribute("process", process);
 }
 
@@ -39583,9 +44541,9 @@ final class Logger extends PythonClass {
     required Object? msg,
     required Object? args,
     required Object? exc_info,
-    Object? func = null,
-    Object? extra = null,
-    Object? sinfo = null,
+    Object? func,
+    Object? extra,
+    Object? sinfo,
   }) =>
       getFunction("makeRecord").call(
         <Object?>[
@@ -39745,36 +44703,75 @@ final class Logger extends PythonClass {
           ...kwargs,
         },
       );
+
+  /// ## manager (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// There is [under normal circumstances] just one Manager instance, which
+  /// holds the hierarchy of loggers.
   Object? get manager => getAttribute("manager");
 
+  /// ## manager (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// There is [under normal circumstances] just one Manager instance, which
+  /// holds the hierarchy of loggers.
   set manager(Object? manager) => setAttribute("manager", manager);
 
+  /// ## root (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A root logger is not that different to any other logger, except that
+  /// it must have a logging level and there is only one instance of it in
+  /// the hierarchy.
   Object? get root => getAttribute("root");
 
+  /// ## root (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A root logger is not that different to any other logger, except that
+  /// it must have a logging level and there is only one instance of it in
+  /// the hierarchy.
   set root(Object? root) => setAttribute("root", root);
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## level (getter)
   Object? get level => getAttribute("level");
 
+  /// ## level (setter)
   set level(Object? level) => setAttribute("level", level);
 
+  /// ## parent (getter)
   Object? get parent => getAttribute("parent");
 
+  /// ## parent (setter)
   set parent(Object? parent) => setAttribute("parent", parent);
 
+  /// ## propagate (getter)
   Object? get propagate => getAttribute("propagate");
 
+  /// ## propagate (setter)
   set propagate(Object? propagate) => setAttribute("propagate", propagate);
 
+  /// ## handlers (getter)
   Object? get handlers => getAttribute("handlers");
 
+  /// ## handlers (setter)
   set handlers(Object? handlers) => setAttribute("handlers", handlers);
 
+  /// ## disabled (getter)
   Object? get disabled => getAttribute("disabled");
 
+  /// ## disabled (setter)
   set disabled(Object? disabled) => setAttribute("disabled", disabled);
 }
 
@@ -39932,7 +44929,7 @@ final class Logger extends PythonClass {
 final class LoggerAdapter extends PythonClass {
   factory LoggerAdapter({
     required Object? logger,
-    Object? extra = null,
+    Object? extra,
   }) =>
       PythonFfiDart.instance.importClass(
         "logging",
@@ -40306,20 +45303,29 @@ final class LoggerAdapter extends PythonClass {
           ...kwargs,
         },
       );
+
+  /// ## manager (getter)
   Object? get manager => getAttribute("manager");
 
+  /// ## manager (setter)
   set manager(Object? manager) => setAttribute("manager", manager);
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## logger (getter)
   Object? get logger => getAttribute("logger");
 
+  /// ## logger (setter)
   set logger(Object? logger) => setAttribute("logger", logger);
 
+  /// ## extra (getter)
   Object? get extra => getAttribute("extra");
 
+  /// ## extra (setter)
   set extra(Object? extra) => setAttribute("extra", extra);
 }
 
@@ -40585,31 +45591,44 @@ final class Manager extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## disable (getter)
   Object? get disable => getAttribute("disable");
 
+  /// ## disable (setter)
   set disable(Object? disable) => setAttribute("disable", disable);
 
+  /// ## root (getter)
   Object? get root => getAttribute("root");
 
+  /// ## root (setter)
   set root(Object? root) => setAttribute("root", root);
 
+  /// ## emittedNoHandlerWarning (getter)
   Object? get emittedNoHandlerWarning =>
       getAttribute("emittedNoHandlerWarning");
 
+  /// ## emittedNoHandlerWarning (setter)
   set emittedNoHandlerWarning(Object? emittedNoHandlerWarning) =>
       setAttribute("emittedNoHandlerWarning", emittedNoHandlerWarning);
 
+  /// ## loggerDict (getter)
   Object? get loggerDict => getAttribute("loggerDict");
 
+  /// ## loggerDict (setter)
   set loggerDict(Object? loggerDict) => setAttribute("loggerDict", loggerDict);
 
+  /// ## loggerClass (getter)
   Object? get loggerClass => getAttribute("loggerClass");
 
+  /// ## loggerClass (setter)
   set loggerClass(Object? loggerClass) =>
       setAttribute("loggerClass", loggerClass);
 
+  /// ## logRecordFactory (getter)
   Object? get logRecordFactory => getAttribute("logRecordFactory");
 
+  /// ## logRecordFactory (setter)
   set logRecordFactory(Object? logRecordFactory) =>
       setAttribute("logRecordFactory", logRecordFactory);
 }
@@ -41115,16 +46134,23 @@ final class NullHandler extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## level (getter)
   Object? get level => getAttribute("level");
 
+  /// ## level (setter)
   set level(Object? level) => setAttribute("level", level);
 
+  /// ## formatter (getter)
   Object? get formatter => getAttribute("formatter");
 
+  /// ## formatter (setter)
   set formatter(Object? formatter) => setAttribute("formatter", formatter);
 }
 
@@ -41167,7 +46193,7 @@ final class NullHandler extends PythonClass {
 final class PercentStyle extends PythonClass {
   factory PercentStyle({
     required Object? fmt,
-    Object? defaults = null,
+    Object? defaults,
   }) =>
       PythonFfiDart.instance.importClass(
         "logging",
@@ -41232,23 +46258,32 @@ final class PercentStyle extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## validation_pattern (getter)
   Object? get validation_pattern => getAttribute("validation_pattern");
 
+  /// ## validation_pattern (setter)
   set validation_pattern(Object? validation_pattern) =>
       setAttribute("validation_pattern", validation_pattern);
 
+  /// ## asctime_format (getter)
   Object? get asctime_format => getAttribute("asctime_format");
 
+  /// ## asctime_format (setter)
   set asctime_format(Object? asctime_format) =>
       setAttribute("asctime_format", asctime_format);
 
+  /// ## asctime_search (getter)
   Object? get asctime_search => getAttribute("asctime_search");
 
+  /// ## asctime_search (setter)
   set asctime_search(Object? asctime_search) =>
       setAttribute("asctime_search", asctime_search);
 
+  /// ## default_format (getter)
   Object? get default_format => getAttribute("default_format");
 
+  /// ## default_format (setter)
   set default_format(Object? default_format) =>
       setAttribute("default_format", default_format);
 }
@@ -41322,8 +46357,11 @@ final class PlaceHolder extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## loggerMap (getter)
   Object? get loggerMap => getAttribute("loggerMap");
 
+  /// ## loggerMap (setter)
   set loggerMap(Object? loggerMap) => setAttribute("loggerMap", loggerMap);
 }
 
@@ -42069,9 +47107,9 @@ final class RootLogger extends PythonClass {
     required Object? msg,
     required Object? args,
     required Object? exc_info,
-    Object? func = null,
-    Object? extra = null,
-    Object? sinfo = null,
+    Object? func,
+    Object? extra,
+    Object? sinfo,
   }) =>
       getFunction("makeRecord").call(
         <Object?>[
@@ -42231,12 +47269,39 @@ final class RootLogger extends PythonClass {
           ...kwargs,
         },
       );
+
+  /// ## manager (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// There is [under normal circumstances] just one Manager instance, which
+  /// holds the hierarchy of loggers.
   Object? get manager => getAttribute("manager");
 
+  /// ## manager (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// There is [under normal circumstances] just one Manager instance, which
+  /// holds the hierarchy of loggers.
   set manager(Object? manager) => setAttribute("manager", manager);
 
+  /// ## root (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A root logger is not that different to any other logger, except that
+  /// it must have a logging level and there is only one instance of it in
+  /// the hierarchy.
   Object? get root => getAttribute("root");
 
+  /// ## root (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A root logger is not that different to any other logger, except that
+  /// it must have a logging level and there is only one instance of it in
+  /// the hierarchy.
   set root(Object? root) => setAttribute("root", root);
 }
 
@@ -42280,7 +47345,7 @@ final class RootLogger extends PythonClass {
 final class StrFormatStyle extends PythonClass {
   factory StrFormatStyle({
     required Object? fmt,
-    Object? defaults = null,
+    Object? defaults,
   }) =>
       PythonFfiDart.instance.importClass(
         "logging",
@@ -42358,31 +47423,44 @@ final class StrFormatStyle extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## field_spec (getter)
   Object? get field_spec => getAttribute("field_spec");
 
+  /// ## field_spec (setter)
   set field_spec(Object? field_spec) => setAttribute("field_spec", field_spec);
 
+  /// ## fmt_spec (getter)
   Object? get fmt_spec => getAttribute("fmt_spec");
 
+  /// ## fmt_spec (setter)
   set fmt_spec(Object? fmt_spec) => setAttribute("fmt_spec", fmt_spec);
 
+  /// ## validation_pattern (getter)
   Object? get validation_pattern => getAttribute("validation_pattern");
 
+  /// ## validation_pattern (setter)
   set validation_pattern(Object? validation_pattern) =>
       setAttribute("validation_pattern", validation_pattern);
 
+  /// ## asctime_format (getter)
   Object? get asctime_format => getAttribute("asctime_format");
 
+  /// ## asctime_format (setter)
   set asctime_format(Object? asctime_format) =>
       setAttribute("asctime_format", asctime_format);
 
+  /// ## asctime_search (getter)
   Object? get asctime_search => getAttribute("asctime_search");
 
+  /// ## asctime_search (setter)
   set asctime_search(Object? asctime_search) =>
       setAttribute("asctime_search", asctime_search);
 
+  /// ## default_format (getter)
   Object? get default_format => getAttribute("default_format");
 
+  /// ## default_format (setter)
   set default_format(Object? default_format) =>
       setAttribute("default_format", default_format);
 }
@@ -42483,7 +47561,7 @@ final class StrFormatStyle extends PythonClass {
 /// ```
 final class StreamHandler extends PythonClass {
   factory StreamHandler({
-    Object? stream = null,
+    Object? stream,
   }) =>
       PythonFfiDart.instance.importClass(
         "logging",
@@ -43037,16 +48115,23 @@ final class StreamHandler extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## terminator (getter)
   Object? get terminator => getAttribute("terminator");
 
+  /// ## terminator (setter)
   set terminator(Object? terminator) => setAttribute("terminator", terminator);
 
+  /// ## stream (getter)
   Object? get stream => getAttribute("stream");
 
+  /// ## stream (setter)
   set stream(Object? stream) => setAttribute("stream", stream);
 }
 
@@ -43166,23 +48251,32 @@ final class StringTemplateStyle extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## validation_pattern (getter)
   Object? get validation_pattern => getAttribute("validation_pattern");
 
+  /// ## validation_pattern (setter)
   set validation_pattern(Object? validation_pattern) =>
       setAttribute("validation_pattern", validation_pattern);
 
+  /// ## asctime_format (getter)
   Object? get asctime_format => getAttribute("asctime_format");
 
+  /// ## asctime_format (setter)
   set asctime_format(Object? asctime_format) =>
       setAttribute("asctime_format", asctime_format);
 
+  /// ## asctime_search (getter)
   Object? get asctime_search => getAttribute("asctime_search");
 
+  /// ## asctime_search (setter)
   set asctime_search(Object? asctime_search) =>
       setAttribute("asctime_search", asctime_search);
 
+  /// ## default_format (getter)
   Object? get default_format => getAttribute("default_format");
 
+  /// ## default_format (setter)
   set default_format(Object? default_format) =>
       setAttribute("default_format", default_format);
 }
@@ -43447,29 +48541,42 @@ final class Template extends PythonClass {
           ...kws,
         },
       );
+
+  /// ## pattern (getter)
   Object? get pattern => getAttribute("pattern");
 
+  /// ## pattern (setter)
   set pattern(Object? pattern) => setAttribute("pattern", pattern);
 
+  /// ## braceidpattern (getter)
   Object? get braceidpattern => getAttribute("braceidpattern");
 
+  /// ## braceidpattern (setter)
   set braceidpattern(Object? braceidpattern) =>
       setAttribute("braceidpattern", braceidpattern);
 
+  /// ## delimiter (getter)
   Object? get delimiter => getAttribute("delimiter");
 
+  /// ## delimiter (setter)
   set delimiter(Object? delimiter) => setAttribute("delimiter", delimiter);
 
+  /// ## flags (getter)
   Object? get flags => getAttribute("flags");
 
+  /// ## flags (setter)
   set flags(Object? flags) => setAttribute("flags", flags);
 
+  /// ## idpattern (getter)
   Object? get idpattern => getAttribute("idpattern");
 
+  /// ## idpattern (setter)
   set idpattern(Object? idpattern) => setAttribute("idpattern", idpattern);
 
+  /// ## template (getter)
   Object? get template => getAttribute("template");
 
+  /// ## template (setter)
   set template(Object? template) => setAttribute("template", template);
 }
 
@@ -43680,7 +48787,7 @@ final class ChainMap extends PythonClass {
   /// ```
   Object? $get({
     required Object? key,
-    Object? $default = null,
+    Object? $default,
   }) =>
       getFunction("get").call(
         <Object?>[
@@ -43732,7 +48839,7 @@ final class ChainMap extends PythonClass {
   ///         return self.__class__(m, *self.maps)
   /// ```
   Object? new_child({
-    Object? m = null,
+    Object? m,
     Map<String, Object?> kwargs = const <String, Object?>{},
   }) =>
       getFunction("new_child").call(
@@ -43798,7 +48905,7 @@ final class ChainMap extends PythonClass {
   /// D.setdefault(k[,d]) -> D.get(k,d), also set D[k]=d if k not in D
   Object? setdefault({
     required Object? key,
-    Object? $default = null,
+    Object? $default,
   }) =>
       getFunction("setdefault").call(
         <Object?>[
@@ -43838,16 +48945,39 @@ final class ChainMap extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## parents (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// New ChainMap from maps[1:].
   Object? get parents => getAttribute("parents");
 
+  /// ## parents (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// New ChainMap from maps[1:].
   set parents(Object? parents) => setAttribute("parents", parents);
 
+  /// ## fromkeys (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Create a ChainMap with a single dict created from the iterable.
   Object? get fromkeys => getAttribute("fromkeys");
 
+  /// ## fromkeys (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Create a ChainMap with a single dict created from the iterable.
   set fromkeys(Object? fromkeys) => setAttribute("fromkeys", fromkeys);
 
+  /// ## maps (getter)
   Object? get maps => getAttribute("maps");
 
+  /// ## maps (setter)
   set maps(Object? maps) => setAttribute("maps", maps);
 }
 
@@ -44007,7 +49137,7 @@ final class UserDict extends PythonClass {
   /// D.get(k[,d]) -> D[k] if k in D, else d.  d defaults to None.
   Object? $get({
     required Object? key,
-    Object? $default = null,
+    Object? $default,
   }) =>
       getFunction("get").call(
         <Object?>[
@@ -44073,7 +49203,7 @@ final class UserDict extends PythonClass {
   /// D.setdefault(k[,d]) -> D.get(k,d), also set D[k]=d if k not in D
   Object? setdefault({
     required Object? key,
-    Object? $default = null,
+    Object? $default,
   }) =>
       getFunction("setdefault").call(
         <Object?>[
@@ -44113,12 +49243,17 @@ final class UserDict extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## fromkeys (getter)
   Object? get fromkeys => getAttribute("fromkeys");
 
+  /// ## fromkeys (setter)
   set fromkeys(Object? fromkeys) => setAttribute("fromkeys", fromkeys);
 
+  /// ## data (getter)
   Object? get data => getAttribute("data");
 
+  /// ## data (setter)
   set data(Object? data) => setAttribute("data", data);
 }
 
@@ -44260,7 +49395,7 @@ final class UserDict extends PythonClass {
 /// ```
 final class UserList extends PythonClass {
   factory UserList({
-    Object? initlist = null,
+    Object? initlist,
   }) =>
       PythonFfiDart.instance.importClass(
         "collections",
@@ -44497,8 +49632,11 @@ final class UserList extends PythonClass {
           ...kwds,
         },
       );
+
+  /// ## data (getter)
   Object? get data => getAttribute("data");
 
+  /// ## data (setter)
   set data(Object? data) => setAttribute("data", data);
 }
 
@@ -45194,7 +50332,7 @@ final class UserString extends PythonClass {
   ///         return self.__class__(self.data.lstrip(chars))
   /// ```
   Object? lstrip({
-    Object? chars = null,
+    Object? chars,
   }) =>
       getFunction("lstrip").call(
         <Object?>[
@@ -45371,7 +50509,7 @@ final class UserString extends PythonClass {
   ///         return self.data.rsplit(sep, maxsplit)
   /// ```
   Object? rsplit({
-    Object? sep = null,
+    Object? sep,
     Object? maxsplit = -1,
   }) =>
       getFunction("rsplit").call(
@@ -45390,7 +50528,7 @@ final class UserString extends PythonClass {
   ///         return self.__class__(self.data.rstrip(chars))
   /// ```
   Object? rstrip({
-    Object? chars = null,
+    Object? chars,
   }) =>
       getFunction("rstrip").call(
         <Object?>[
@@ -45407,7 +50545,7 @@ final class UserString extends PythonClass {
   ///         return self.data.split(sep, maxsplit)
   /// ```
   Object? split({
-    Object? sep = null,
+    Object? sep,
     Object? maxsplit = -1,
   }) =>
       getFunction("split").call(
@@ -45464,7 +50602,7 @@ final class UserString extends PythonClass {
   ///         return self.__class__(self.data.strip(chars))
   /// ```
   Object? strip({
-    Object? chars = null,
+    Object? chars,
   }) =>
       getFunction("strip").call(
         <Object?>[
@@ -45542,8 +50680,11 @@ final class UserString extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## data (getter)
   Object? get data => getAttribute("data");
 
+  /// ## data (setter)
   set data(Object? data) => setAttribute("data", data);
 }
 
@@ -45592,8 +50733,8 @@ final class AsyncGenerator extends PythonClass {
   /// Return next yielded value or raise StopAsyncIteration.
   Object? athrow({
     required Object? typ,
-    Object? val = null,
-    Object? tb = null,
+    Object? val,
+    Object? tb,
   }) =>
       getFunction("athrow").call(
         <Object?>[
@@ -45685,7 +50826,7 @@ final class ByteString extends PythonClass {
   Object? index({
     required Object? value,
     Object? start = 0,
-    Object? stop = null,
+    Object? stop,
   }) =>
       getFunction("index").call(
         <Object?>[
@@ -45778,8 +50919,8 @@ final class Coroutine extends PythonClass {
   /// Return next yielded value or raise StopIteration.
   Object? $throw({
     required Object? typ,
-    Object? val = null,
-    Object? tb = null,
+    Object? val,
+    Object? tb,
   }) =>
       getFunction("throw").call(
         <Object?>[
@@ -45836,8 +50977,8 @@ final class Generator extends PythonClass {
   /// Return next yielded value or raise StopIteration.
   Object? $throw({
     required Object? typ,
-    Object? val = null,
-    Object? tb = null,
+    Object? val,
+    Object? tb,
   }) =>
       getFunction("throw").call(
         <Object?>[
@@ -46076,7 +51217,7 @@ final class MutableSequence extends PythonClass {
   Object? index({
     required Object? value,
     Object? start = 0,
-    Object? stop = null,
+    Object? stop,
   }) =>
       getFunction("index").call(
         <Object?>[
@@ -46308,7 +51449,7 @@ final class Sequence extends PythonClass {
   Object? index({
     required Object? value,
     Object? start = 0,
-    Object? stop = null,
+    Object? stop,
   }) =>
       getFunction("index").call(
         <Object?>[
@@ -46563,8 +51704,8 @@ final class ValuesView extends PythonClass {
 final class Barrier extends PythonClass {
   factory Barrier({
     required Object? parties,
-    Object? action = null,
-    Object? timeout = null,
+    Object? action,
+    Object? timeout,
   }) =>
       PythonFfiDart.instance.importClass(
         "threading",
@@ -46684,7 +51825,7 @@ final class Barrier extends PythonClass {
   ///                 self._exit()
   /// ```
   Object? wait({
-    Object? timeout = null,
+    Object? timeout,
   }) =>
       getFunction("wait").call(
         <Object?>[
@@ -46692,16 +51833,47 @@ final class Barrier extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## broken (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Return True if the barrier is in a broken state.
   Object? get broken => getAttribute("broken");
 
+  /// ## broken (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Return True if the barrier is in a broken state.
   set broken(Object? broken) => setAttribute("broken", broken);
 
+  /// ## n_waiting (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Return the number of threads currently waiting at the barrier.
   Object? get n_waiting => getAttribute("n_waiting");
 
+  /// ## n_waiting (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Return the number of threads currently waiting at the barrier.
   set n_waiting(Object? n_waiting) => setAttribute("n_waiting", n_waiting);
 
+  /// ## parties (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Return the number of threads required to trip the barrier.
   Object? get parties => getAttribute("parties");
 
+  /// ## parties (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Return the number of threads required to trip the barrier.
   set parties(Object? parties) => setAttribute("parties", parties);
 }
 
@@ -46861,7 +52033,7 @@ final class BoundedSemaphore extends PythonClass {
   /// ```
   Object? acquire({
     Object? blocking = true,
-    Object? timeout = null,
+    Object? timeout,
   }) =>
       getFunction("acquire").call(
         <Object?>[
@@ -46932,16 +52104,22 @@ final class BrokenBarrierError extends PythonClass {
 
   BrokenBarrierError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -47148,7 +52326,7 @@ final class BrokenBarrierError extends PythonClass {
 /// ```
 final class Condition extends PythonClass {
   factory Condition({
-    Object? lock = null,
+    Object? lock,
   }) =>
       PythonFfiDart.instance.importClass(
         "threading",
@@ -47343,7 +52521,7 @@ final class Condition extends PythonClass {
   ///                     pass
   /// ```
   Object? wait({
-    Object? timeout = null,
+    Object? timeout,
   }) =>
       getFunction("wait").call(
         <Object?>[
@@ -47389,7 +52567,7 @@ final class Condition extends PythonClass {
   /// ```
   Object? wait_for({
     required Object? predicate,
-    Object? timeout = null,
+    Object? timeout,
   }) =>
       getFunction("wait_for").call(
         <Object?>[
@@ -47398,12 +52576,17 @@ final class Condition extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## acquire (getter)
   Object? get acquire => getAttribute("acquire");
 
+  /// ## acquire (setter)
   set acquire(Object? acquire) => setAttribute("acquire", acquire);
 
+  /// ## release (getter)
   Object? get release => getAttribute("release");
 
+  /// ## release (setter)
   set release(Object? release) => setAttribute("release", release);
 }
 
@@ -47648,7 +52831,7 @@ final class Event extends PythonClass {
   ///             return signaled
   /// ```
   Object? wait({
-    Object? timeout = null,
+    Object? timeout,
   }) =>
       getFunction("wait").call(
         <Object?>[
@@ -47669,42 +52852,92 @@ final class ExceptHookArgs extends PythonClass {
 
   ExceptHookArgs.from(super.pythonClass) : super.from();
 
+  /// ## exc_traceback (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Exception traceback
   Object? get exc_traceback => getAttribute("exc_traceback");
 
+  /// ## exc_traceback (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Exception traceback
   set exc_traceback(Object? exc_traceback) =>
       setAttribute("exc_traceback", exc_traceback);
 
+  /// ## exc_type (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Exception type
   Object? get exc_type => getAttribute("exc_type");
 
+  /// ## exc_type (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Exception type
   set exc_type(Object? exc_type) => setAttribute("exc_type", exc_type);
 
+  /// ## exc_value (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Exception value
   Object? get exc_value => getAttribute("exc_value");
 
+  /// ## exc_value (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Exception value
   set exc_value(Object? exc_value) => setAttribute("exc_value", exc_value);
 
+  /// ## thread (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Thread
   Object? get thread => getAttribute("thread");
 
+  /// ## thread (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Thread
   set thread(Object? thread) => setAttribute("thread", thread);
 
+  /// ## count (getter)
   Object? get count => getAttribute("count");
 
+  /// ## count (setter)
   set count(Object? count) => setAttribute("count", count);
 
+  /// ## index (getter)
   Object? get index => getAttribute("index");
 
+  /// ## index (setter)
   set index(Object? index) => setAttribute("index", index);
 
+  /// ## n_fields (getter)
   Object? get n_fields => getAttribute("n_fields");
 
+  /// ## n_fields (setter)
   set n_fields(Object? n_fields) => setAttribute("n_fields", n_fields);
 
+  /// ## n_sequence_fields (getter)
   Object? get n_sequence_fields => getAttribute("n_sequence_fields");
 
+  /// ## n_sequence_fields (setter)
   set n_sequence_fields(Object? n_sequence_fields) =>
       setAttribute("n_sequence_fields", n_sequence_fields);
 
+  /// ## n_unnamed_fields (getter)
   Object? get n_unnamed_fields => getAttribute("n_unnamed_fields");
 
+  /// ## n_unnamed_fields (setter)
   set n_unnamed_fields(Object? n_unnamed_fields) =>
       setAttribute("n_unnamed_fields", n_unnamed_fields);
 }
@@ -47900,7 +53133,7 @@ final class Semaphore extends PythonClass {
   /// ```
   Object? acquire({
     Object? blocking = true,
-    Object? timeout = null,
+    Object? timeout,
   }) =>
       getFunction("acquire").call(
         <Object?>[
@@ -48388,12 +53621,12 @@ final class Semaphore extends PythonClass {
 /// ```
 final class Thread extends PythonClass {
   factory Thread({
-    Object? group = null,
-    Object? target = null,
-    Object? name = null,
+    Object? group,
+    Object? target,
+    Object? name,
     Object? args = const [],
-    Object? kwargs = null,
-    Object? daemon = null,
+    Object? kwargs,
+    Object? daemon,
   }) =>
       PythonFfiDart.instance.importClass(
         "threading",
@@ -48563,7 +53796,7 @@ final class Thread extends PythonClass {
   ///             self._wait_for_tstate_lock(timeout=max(timeout, 0))
   /// ```
   Object? join({
-    Object? timeout = null,
+    Object? timeout,
   }) =>
       getFunction("join").call(
         <Object?>[
@@ -48713,20 +53946,95 @@ final class Thread extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## daemon (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A boolean value indicating whether this thread is a daemon thread.
+  ///
+  /// This must be set before start() is called, otherwise RuntimeError is
+  /// raised. Its initial value is inherited from the creating thread; the
+  /// main thread is not a daemon thread and therefore all threads created in
+  /// the main thread default to daemon = False.
+  ///
+  /// The entire Python program exits when only daemon threads are left.
   Object? get daemon => getAttribute("daemon");
 
+  /// ## daemon (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A boolean value indicating whether this thread is a daemon thread.
+  ///
+  /// This must be set before start() is called, otherwise RuntimeError is
+  /// raised. Its initial value is inherited from the creating thread; the
+  /// main thread is not a daemon thread and therefore all threads created in
+  /// the main thread default to daemon = False.
+  ///
+  /// The entire Python program exits when only daemon threads are left.
   set daemon(Object? daemon) => setAttribute("daemon", daemon);
 
+  /// ## ident (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Thread identifier of this thread or None if it has not been started.
+  ///
+  /// This is a nonzero integer. See the get_ident() function. Thread
+  /// identifiers may be recycled when a thread exits and another thread is
+  /// created. The identifier is available even after the thread has exited.
   Object? get ident => getAttribute("ident");
 
+  /// ## ident (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Thread identifier of this thread or None if it has not been started.
+  ///
+  /// This is a nonzero integer. See the get_ident() function. Thread
+  /// identifiers may be recycled when a thread exits and another thread is
+  /// created. The identifier is available even after the thread has exited.
   set ident(Object? ident) => setAttribute("ident", ident);
 
+  /// ## name (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string used for identification purposes only.
+  ///
+  /// It has no semantics. Multiple threads may be given the same name. The
+  /// initial name is set by the constructor.
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string used for identification purposes only.
+  ///
+  /// It has no semantics. Multiple threads may be given the same name. The
+  /// initial name is set by the constructor.
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## native_id (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Native integral thread ID of this thread, or None if it has not been started.
+  ///
+  /// This is a non-negative integer. See the get_native_id() function.
+  /// This represents the Thread ID as reported by the kernel.
   Object? get native_id => getAttribute("native_id");
 
+  /// ## native_id (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Native integral thread ID of this thread, or None if it has not been started.
+  ///
+  /// This is a non-negative integer. See the get_native_id() function.
+  /// This represents the Thread ID as reported by the kernel.
   set native_id(Object? native_id) => setAttribute("native_id", native_id);
 }
 
@@ -48773,8 +54081,8 @@ final class Timer extends PythonClass {
   factory Timer({
     required Object? interval,
     required Object? function,
-    Object? args = null,
-    Object? kwargs = null,
+    Object? args,
+    Object? kwargs,
   }) =>
       PythonFfiDart.instance.importClass(
         "threading",
@@ -48958,7 +54266,7 @@ final class Timer extends PythonClass {
   ///             self._wait_for_tstate_lock(timeout=max(timeout, 0))
   /// ```
   Object? join({
-    Object? timeout = null,
+    Object? timeout,
   }) =>
       getFunction("join").call(
         <Object?>[
@@ -49097,40 +54405,125 @@ final class Timer extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## daemon (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A boolean value indicating whether this thread is a daemon thread.
+  ///
+  /// This must be set before start() is called, otherwise RuntimeError is
+  /// raised. Its initial value is inherited from the creating thread; the
+  /// main thread is not a daemon thread and therefore all threads created in
+  /// the main thread default to daemon = False.
+  ///
+  /// The entire Python program exits when only daemon threads are left.
   Object? get daemon => getAttribute("daemon");
 
+  /// ## daemon (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A boolean value indicating whether this thread is a daemon thread.
+  ///
+  /// This must be set before start() is called, otherwise RuntimeError is
+  /// raised. Its initial value is inherited from the creating thread; the
+  /// main thread is not a daemon thread and therefore all threads created in
+  /// the main thread default to daemon = False.
+  ///
+  /// The entire Python program exits when only daemon threads are left.
   set daemon(Object? daemon) => setAttribute("daemon", daemon);
 
+  /// ## ident (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Thread identifier of this thread or None if it has not been started.
+  ///
+  /// This is a nonzero integer. See the get_ident() function. Thread
+  /// identifiers may be recycled when a thread exits and another thread is
+  /// created. The identifier is available even after the thread has exited.
   Object? get ident => getAttribute("ident");
 
+  /// ## ident (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Thread identifier of this thread or None if it has not been started.
+  ///
+  /// This is a nonzero integer. See the get_ident() function. Thread
+  /// identifiers may be recycled when a thread exits and another thread is
+  /// created. The identifier is available even after the thread has exited.
   set ident(Object? ident) => setAttribute("ident", ident);
 
+  /// ## name (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string used for identification purposes only.
+  ///
+  /// It has no semantics. Multiple threads may be given the same name. The
+  /// initial name is set by the constructor.
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string used for identification purposes only.
+  ///
+  /// It has no semantics. Multiple threads may be given the same name. The
+  /// initial name is set by the constructor.
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## native_id (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Native integral thread ID of this thread, or None if it has not been started.
+  ///
+  /// This is a non-negative integer. See the get_native_id() function.
+  /// This represents the Thread ID as reported by the kernel.
   Object? get native_id => getAttribute("native_id");
 
+  /// ## native_id (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Native integral thread ID of this thread, or None if it has not been started.
+  ///
+  /// This is a non-negative integer. See the get_native_id() function.
+  /// This represents the Thread ID as reported by the kernel.
   set native_id(Object? native_id) => setAttribute("native_id", native_id);
 
+  /// ## interval (getter)
   Object? get interval => getAttribute("interval");
 
+  /// ## interval (setter)
   set interval(Object? interval) => setAttribute("interval", interval);
 
+  /// ## function (getter)
   Object? get function => getAttribute("function");
 
+  /// ## function (setter)
   set function(Object? function) => setAttribute("function", function);
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## kwargs (getter)
   Object? get kwargs => getAttribute("kwargs");
 
+  /// ## kwargs (setter)
   set kwargs(Object? kwargs) => setAttribute("kwargs", kwargs);
 
+  /// ## finished (getter)
   Object? get finished => getAttribute("finished");
 
+  /// ## finished (setter)
   set finished(Object? finished) => setAttribute("finished", finished);
 }
 
@@ -49311,7 +54704,7 @@ final class Timer extends PythonClass {
 /// ```
 final class WeakSet extends PythonClass {
   factory WeakSet({
-    Object? data = null,
+    Object? data,
   }) =>
       PythonFfiDart.instance.importClass(
         "_weakrefset",
@@ -49622,8 +55015,11 @@ final class WeakSet extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## data (getter)
   Object? get data => getAttribute("data");
 
+  /// ## data (setter)
   set data(Object? data) => setAttribute("data", data);
 }
 
@@ -49744,11 +55140,11 @@ final class FrameSummary extends PythonClass {
     required Object? lineno,
     required Object? name,
     Object? lookup_line = true,
-    Object? locals = null,
-    Object? line = null,
-    Object? end_lineno = null,
-    Object? colno = null,
-    Object? end_colno = null,
+    Object? locals,
+    Object? line,
+    Object? end_lineno,
+    Object? colno,
+    Object? end_colno,
   }) =>
       PythonFfiDart.instance.importClass(
         "traceback",
@@ -49771,36 +55167,52 @@ final class FrameSummary extends PythonClass {
 
   FrameSummary.from(super.pythonClass) : super.from();
 
+  /// ## line (getter)
   Object? get line => getAttribute("line");
 
+  /// ## line (setter)
   set line(Object? line) => setAttribute("line", line);
 
+  /// ## colno (getter)
   Object? get colno => getAttribute("colno");
 
+  /// ## colno (setter)
   set colno(Object? colno) => setAttribute("colno", colno);
 
+  /// ## end_colno (getter)
   Object? get end_colno => getAttribute("end_colno");
 
+  /// ## end_colno (setter)
   set end_colno(Object? end_colno) => setAttribute("end_colno", end_colno);
 
+  /// ## end_lineno (getter)
   Object? get end_lineno => getAttribute("end_lineno");
 
+  /// ## end_lineno (setter)
   set end_lineno(Object? end_lineno) => setAttribute("end_lineno", end_lineno);
 
+  /// ## filename (getter)
   Object? get filename => getAttribute("filename");
 
+  /// ## filename (setter)
   set filename(Object? filename) => setAttribute("filename", filename);
 
+  /// ## lineno (getter)
   Object? get lineno => getAttribute("lineno");
 
+  /// ## lineno (setter)
   set lineno(Object? lineno) => setAttribute("lineno", lineno);
 
+  /// ## locals (getter)
   Object? get locals => getAttribute("locals");
 
+  /// ## locals (setter)
   set locals(Object? locals) => setAttribute("locals", locals);
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 }
 
@@ -50154,56 +55566,119 @@ final class StackSummary extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## append (getter)
   Object? get append => getAttribute("append");
 
+  /// ## append (setter)
   set append(Object? append) => setAttribute("append", append);
 
+  /// ## clear (getter)
   Object? get clear => getAttribute("clear");
 
+  /// ## clear (setter)
   set clear(Object? clear) => setAttribute("clear", clear);
 
+  /// ## copy (getter)
   Object? get copy => getAttribute("copy");
 
+  /// ## copy (setter)
   set copy(Object? copy) => setAttribute("copy", copy);
 
+  /// ## count (getter)
   Object? get count => getAttribute("count");
 
+  /// ## count (setter)
   set count(Object? count) => setAttribute("count", count);
 
+  /// ## extend (getter)
   Object? get extend => getAttribute("extend");
 
+  /// ## extend (setter)
   set extend(Object? extend) => setAttribute("extend", extend);
 
+  /// ## extract (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Create a StackSummary from a traceback or stack object.
+  ///
+  /// :param frame_gen: A generator that yields (frame, lineno) tuples
+  ///     whose summaries are to be included in the stack.
+  /// :param limit: None to include all frames or the number of frames to
+  ///     include.
+  /// :param lookup_lines: If True, lookup lines for each frame immediately,
+  ///     otherwise lookup is deferred until the frame is rendered.
+  /// :param capture_locals: If True, the local variables from each frame will
+  ///     be captured as object representations into the FrameSummary.
   Object? get extract => getAttribute("extract");
 
+  /// ## extract (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Create a StackSummary from a traceback or stack object.
+  ///
+  /// :param frame_gen: A generator that yields (frame, lineno) tuples
+  ///     whose summaries are to be included in the stack.
+  /// :param limit: None to include all frames or the number of frames to
+  ///     include.
+  /// :param lookup_lines: If True, lookup lines for each frame immediately,
+  ///     otherwise lookup is deferred until the frame is rendered.
+  /// :param capture_locals: If True, the local variables from each frame will
+  ///     be captured as object representations into the FrameSummary.
   set extract(Object? extract) => setAttribute("extract", extract);
 
+  /// ## from_list (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Create a StackSummary object from a supplied list of
+  /// FrameSummary objects or old-style list of tuples.
   Object? get from_list => getAttribute("from_list");
 
+  /// ## from_list (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Create a StackSummary object from a supplied list of
+  /// FrameSummary objects or old-style list of tuples.
   set from_list(Object? from_list) => setAttribute("from_list", from_list);
 
+  /// ## index (getter)
   Object? get index => getAttribute("index");
 
+  /// ## index (setter)
   set index(Object? index) => setAttribute("index", index);
 
+  /// ## insert (getter)
   Object? get insert => getAttribute("insert");
 
+  /// ## insert (setter)
   set insert(Object? insert) => setAttribute("insert", insert);
 
+  /// ## pop (getter)
   Object? get pop => getAttribute("pop");
 
+  /// ## pop (setter)
   set pop(Object? pop) => setAttribute("pop", pop);
 
+  /// ## remove (getter)
   Object? get remove => getAttribute("remove");
 
+  /// ## remove (setter)
   set remove(Object? remove) => setAttribute("remove", remove);
 
+  /// ## reverse (getter)
   Object? get reverse => getAttribute("reverse");
 
+  /// ## reverse (setter)
   set reverse(Object? reverse) => setAttribute("reverse", reverse);
 
+  /// ## sort (getter)
   Object? get sort => getAttribute("sort");
 
+  /// ## sort (setter)
   set sort(Object? sort) => setAttribute("sort", sort);
 }
 
@@ -50597,13 +56072,13 @@ final class TracebackException extends PythonClass {
     required Object? exc_type,
     required Object? exc_value,
     required Object? exc_traceback,
-    Object? limit = null,
+    Object? limit,
     Object? lookup_lines = true,
     Object? capture_locals = false,
     Object? compact = false,
     Object? max_group_width = 15,
     Object? max_group_depth = 10,
-    Object? $_seen = null,
+    Object? $_seen,
   }) =>
       PythonFfiDart.instance.importClass(
         "traceback",
@@ -50746,7 +56221,7 @@ final class TracebackException extends PythonClass {
   /// ```
   Object? format({
     Object? chain = true,
-    Object? $_ctx = null,
+    Object? $_ctx,
   }) =>
       getFunction("format").call(
         <Object?>[],
@@ -50830,7 +56305,7 @@ final class TracebackException extends PythonClass {
   ///             print(line, file=file, end="")
   /// ```
   Object? print({
-    Object? file = null,
+    Object? file,
     Object? chain = true,
   }) =>
       getFunction("print").call(
@@ -50840,55 +56315,88 @@ final class TracebackException extends PythonClass {
           "chain": chain,
         },
       );
+
+  /// ## from_exception (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Create a TracebackException from an exception.
   Object? get from_exception => getAttribute("from_exception");
 
+  /// ## from_exception (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Create a TracebackException from an exception.
   set from_exception(Object? from_exception) =>
       setAttribute("from_exception", from_exception);
 
+  /// ## max_group_width (getter)
   Object? get max_group_width => getAttribute("max_group_width");
 
+  /// ## max_group_width (setter)
   set max_group_width(Object? max_group_width) =>
       setAttribute("max_group_width", max_group_width);
 
+  /// ## max_group_depth (getter)
   Object? get max_group_depth => getAttribute("max_group_depth");
 
+  /// ## max_group_depth (setter)
   set max_group_depth(Object? max_group_depth) =>
       setAttribute("max_group_depth", max_group_depth);
 
+  /// ## stack (getter)
   Object? get stack => getAttribute("stack");
 
+  /// ## stack (setter)
   set stack(Object? stack) => setAttribute("stack", stack);
 
+  /// ## exc_type (getter)
   Object? get exc_type => getAttribute("exc_type");
 
+  /// ## exc_type (setter)
   set exc_type(Object? exc_type) => setAttribute("exc_type", exc_type);
 
+  /// ## filename (getter)
   Object? get filename => getAttribute("filename");
 
+  /// ## filename (setter)
   set filename(Object? filename) => setAttribute("filename", filename);
 
+  /// ## lineno (getter)
   Object? get lineno => getAttribute("lineno");
 
+  /// ## lineno (setter)
   set lineno(Object? lineno) => setAttribute("lineno", lineno);
 
+  /// ## end_lineno (getter)
   Object? get end_lineno => getAttribute("end_lineno");
 
+  /// ## end_lineno (setter)
   set end_lineno(Object? end_lineno) => setAttribute("end_lineno", end_lineno);
 
+  /// ## text (getter)
   Object? get text => getAttribute("text");
 
+  /// ## text (setter)
   set text(Object? text) => setAttribute("text", text);
 
+  /// ## offset (getter)
   Object? get offset => getAttribute("offset");
 
+  /// ## offset (setter)
   set offset(Object? offset) => setAttribute("offset", offset);
 
+  /// ## end_offset (getter)
   Object? get end_offset => getAttribute("end_offset");
 
+  /// ## end_offset (setter)
   set end_offset(Object? end_offset) => setAttribute("end_offset", end_offset);
 
+  /// ## msg (getter)
   Object? get msg => getAttribute("msg");
 
+  /// ## msg (setter)
   set msg(Object? msg) => setAttribute("msg", msg);
 }
 
@@ -50908,16 +56416,22 @@ final class StopTokenizing extends PythonClass {
 
   StopTokenizing.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -50938,16 +56452,22 @@ final class TokenError extends PythonClass {
 
   TokenError.from(super.pythonClass) : super.from();
 
+  /// ## args (getter)
   Object? get args => getAttribute("args");
 
+  /// ## args (setter)
   set args(Object? args) => setAttribute("args", args);
 
+  /// ## add_note (getter)
   Object? get add_note => getAttribute("add_note");
 
+  /// ## add_note (setter)
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
+  /// ## with_traceback (getter)
   Object? get with_traceback => getAttribute("with_traceback");
 
+  /// ## with_traceback (setter)
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 }
@@ -50983,36 +56503,92 @@ final class TokenInfo extends PythonClass {
 
   TokenInfo.from(super.pythonClass) : super.from();
 
+  /// ## end (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Alias for field number 3
   Object? get end => getAttribute("end");
 
+  /// ## end (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Alias for field number 3
   set end(Object? end) => setAttribute("end", end);
 
+  /// ## exact_type (getter)
   Object? get exact_type => getAttribute("exact_type");
 
+  /// ## exact_type (setter)
   set exact_type(Object? exact_type) => setAttribute("exact_type", exact_type);
 
+  /// ## line (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Alias for field number 4
   Object? get line => getAttribute("line");
 
+  /// ## line (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Alias for field number 4
   set line(Object? line) => setAttribute("line", line);
 
+  /// ## start (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Alias for field number 2
   Object? get start => getAttribute("start");
 
+  /// ## start (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Alias for field number 2
   set start(Object? start) => setAttribute("start", start);
 
+  /// ## string (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Alias for field number 1
   Object? get string => getAttribute("string");
 
+  /// ## string (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Alias for field number 1
   set string(Object? string) => setAttribute("string", string);
 
+  /// ## type (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Alias for field number 0
   Object? get type => getAttribute("type");
 
+  /// ## type (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Alias for field number 0
   set type(Object? type) => setAttribute("type", type);
 
+  /// ## count (getter)
   Object? get count => getAttribute("count");
 
+  /// ## count (setter)
   set count(Object? count) => setAttribute("count", count);
 
+  /// ## index (getter)
   Object? get index => getAttribute("index");
 
+  /// ## index (setter)
   set index(Object? index) => setAttribute("index", index);
 }
 
@@ -51254,20 +56830,29 @@ final class Untokenizer extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## tokens (getter)
   Object? get tokens => getAttribute("tokens");
 
+  /// ## tokens (setter)
   set tokens(Object? tokens) => setAttribute("tokens", tokens);
 
+  /// ## prev_row (getter)
   Object? get prev_row => getAttribute("prev_row");
 
+  /// ## prev_row (setter)
   set prev_row(Object? prev_row) => setAttribute("prev_row", prev_row);
 
+  /// ## prev_col (getter)
   Object? get prev_col => getAttribute("prev_col");
 
+  /// ## prev_col (setter)
   set prev_col(Object? prev_col) => setAttribute("prev_col", prev_col);
 
+  /// ## encoding (getter)
   Object? get encoding => getAttribute("encoding");
 
+  /// ## encoding (setter)
   set encoding(Object? encoding) => setAttribute("encoding", encoding);
 }
 
@@ -51688,7 +57273,7 @@ final class TextWrapper extends PythonClass {
     Object? drop_whitespace = true,
     Object? break_on_hyphens = true,
     Object? tabsize = 8,
-    Object? max_lines = null,
+    Object? max_lines,
     Object? placeholder = " [...]",
   }) =>
       PythonFfiDart.instance.importClass(
@@ -51783,80 +57368,113 @@ final class TextWrapper extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## sentence_end_re (getter)
   Object? get sentence_end_re => getAttribute("sentence_end_re");
 
+  /// ## sentence_end_re (setter)
   set sentence_end_re(Object? sentence_end_re) =>
       setAttribute("sentence_end_re", sentence_end_re);
 
+  /// ## wordsep_re (getter)
   Object? get wordsep_re => getAttribute("wordsep_re");
 
+  /// ## wordsep_re (setter)
   set wordsep_re(Object? wordsep_re) => setAttribute("wordsep_re", wordsep_re);
 
+  /// ## wordsep_simple_re (getter)
   Object? get wordsep_simple_re => getAttribute("wordsep_simple_re");
 
+  /// ## wordsep_simple_re (setter)
   set wordsep_simple_re(Object? wordsep_simple_re) =>
       setAttribute("wordsep_simple_re", wordsep_simple_re);
 
+  /// ## unicode_whitespace_trans (getter)
   Object? get unicode_whitespace_trans =>
       getAttribute("unicode_whitespace_trans");
 
+  /// ## unicode_whitespace_trans (setter)
   set unicode_whitespace_trans(Object? unicode_whitespace_trans) =>
       setAttribute("unicode_whitespace_trans", unicode_whitespace_trans);
 
+  /// ## width (getter)
   Object? get width => getAttribute("width");
 
+  /// ## width (setter)
   set width(Object? width) => setAttribute("width", width);
 
+  /// ## initial_indent (getter)
   Object? get initial_indent => getAttribute("initial_indent");
 
+  /// ## initial_indent (setter)
   set initial_indent(Object? initial_indent) =>
       setAttribute("initial_indent", initial_indent);
 
+  /// ## subsequent_indent (getter)
   Object? get subsequent_indent => getAttribute("subsequent_indent");
 
+  /// ## subsequent_indent (setter)
   set subsequent_indent(Object? subsequent_indent) =>
       setAttribute("subsequent_indent", subsequent_indent);
 
+  /// ## expand_tabs (getter)
   Object? get expand_tabs => getAttribute("expand_tabs");
 
+  /// ## expand_tabs (setter)
   set expand_tabs(Object? expand_tabs) =>
       setAttribute("expand_tabs", expand_tabs);
 
+  /// ## replace_whitespace (getter)
   Object? get replace_whitespace => getAttribute("replace_whitespace");
 
+  /// ## replace_whitespace (setter)
   set replace_whitespace(Object? replace_whitespace) =>
       setAttribute("replace_whitespace", replace_whitespace);
 
+  /// ## fix_sentence_endings (getter)
   Object? get fix_sentence_endings => getAttribute("fix_sentence_endings");
 
+  /// ## fix_sentence_endings (setter)
   set fix_sentence_endings(Object? fix_sentence_endings) =>
       setAttribute("fix_sentence_endings", fix_sentence_endings);
 
+  /// ## break_long_words (getter)
   Object? get break_long_words => getAttribute("break_long_words");
 
+  /// ## break_long_words (setter)
   set break_long_words(Object? break_long_words) =>
       setAttribute("break_long_words", break_long_words);
 
+  /// ## drop_whitespace (getter)
   Object? get drop_whitespace => getAttribute("drop_whitespace");
 
+  /// ## drop_whitespace (setter)
   set drop_whitespace(Object? drop_whitespace) =>
       setAttribute("drop_whitespace", drop_whitespace);
 
+  /// ## break_on_hyphens (getter)
   Object? get break_on_hyphens => getAttribute("break_on_hyphens");
 
+  /// ## break_on_hyphens (setter)
   set break_on_hyphens(Object? break_on_hyphens) =>
       setAttribute("break_on_hyphens", break_on_hyphens);
 
+  /// ## tabsize (getter)
   Object? get tabsize => getAttribute("tabsize");
 
+  /// ## tabsize (setter)
   set tabsize(Object? tabsize) => setAttribute("tabsize", tabsize);
 
+  /// ## max_lines (getter)
   Object? get max_lines => getAttribute("max_lines");
 
+  /// ## max_lines (setter)
   set max_lines(Object? max_lines) => setAttribute("max_lines", max_lines);
 
+  /// ## placeholder (getter)
   Object? get placeholder => getAttribute("placeholder");
 
+  /// ## placeholder (setter)
   set placeholder(Object? placeholder) =>
       setAttribute("placeholder", placeholder);
 }
@@ -51926,8 +57544,10 @@ final class KeyedRef extends PythonClass {
 
   KeyedRef.from(super.pythonClass) : super.from();
 
+  /// ## key (getter)
   Object? get key => getAttribute("key");
 
+  /// ## key (setter)
   set key(Object? key) => setAttribute("key", key);
 }
 
@@ -52155,7 +57775,7 @@ final class ReferenceType extends PythonClass {
 /// ```
 final class WeakKeyDictionary extends PythonClass {
   factory WeakKeyDictionary({
-    Object? dict = null,
+    Object? dict,
   }) =>
       PythonFfiDart.instance.importClass(
         "weakref",
@@ -52210,7 +57830,7 @@ final class WeakKeyDictionary extends PythonClass {
   /// ```
   Object? $get({
     required Object? key,
-    Object? $default = null,
+    Object? $default,
   }) =>
       getFunction("get").call(
         <Object?>[
@@ -52351,7 +57971,7 @@ final class WeakKeyDictionary extends PythonClass {
   /// ```
   Object? setdefault({
     required Object? key,
-    Object? $default = null,
+    Object? $default,
   }) =>
       getFunction("setdefault").call(
         <Object?>[
@@ -52413,8 +58033,11 @@ final class WeakKeyDictionary extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## data (getter)
   Object? get data => getAttribute("data");
 
+  /// ## data (setter)
   set data(Object? data) => setAttribute("data", data);
 }
 
@@ -52818,7 +58441,7 @@ final class WeakValueDictionary extends PythonClass {
   /// ```
   Object? $get({
     required Object? key,
-    Object? $default = null,
+    Object? $default,
   }) =>
       getFunction("get").call(
         <Object?>[
@@ -52987,7 +58610,7 @@ final class WeakValueDictionary extends PythonClass {
   /// ```
   Object? setdefault({
     required Object? key,
-    Object? $default = null,
+    Object? $default,
   }) =>
       getFunction("setdefault").call(
         <Object?>[
@@ -53087,8 +58710,11 @@ final class WeakValueDictionary extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## data (getter)
   Object? get data => getAttribute("data");
 
+  /// ## data (setter)
   set data(Object? data) => setAttribute("data", data);
 }
 
@@ -53312,12 +58938,33 @@ final class finalize extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## alive (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Whether finalizer is alive
   Object? get alive => getAttribute("alive");
 
+  /// ## alive (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Whether finalizer is alive
   set alive(Object? alive) => setAttribute("alive", alive);
 
+  /// ## atexit (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Whether finalizer should be called at exit
   Object? get atexit => getAttribute("atexit");
 
+  /// ## atexit (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Whether finalizer should be called at exit
   set atexit(Object? atexit) => setAttribute("atexit", atexit);
 }
 
@@ -53450,7 +59097,7 @@ final class State extends PythonClass {
   ///         return gid
   /// ```
   Object? opengroup({
-    Object? name = null,
+    Object? name,
   }) =>
       getFunction("opengroup").call(
         <Object?>[
@@ -53458,30 +59105,43 @@ final class State extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## groups (getter)
   Object? get groups => getAttribute("groups");
 
+  /// ## groups (setter)
   set groups(Object? groups) => setAttribute("groups", groups);
 
+  /// ## flags (getter)
   Object? get flags => getAttribute("flags");
 
+  /// ## flags (setter)
   set flags(Object? flags) => setAttribute("flags", flags);
 
+  /// ## groupdict (getter)
   Object? get groupdict => getAttribute("groupdict");
 
+  /// ## groupdict (setter)
   set groupdict(Object? groupdict) => setAttribute("groupdict", groupdict);
 
+  /// ## groupwidths (getter)
   Object? get groupwidths => getAttribute("groupwidths");
 
+  /// ## groupwidths (setter)
   set groupwidths(Object? groupwidths) =>
       setAttribute("groupwidths", groupwidths);
 
+  /// ## lookbehindgroups (getter)
   Object? get lookbehindgroups => getAttribute("lookbehindgroups");
 
+  /// ## lookbehindgroups (setter)
   set lookbehindgroups(Object? lookbehindgroups) =>
       setAttribute("lookbehindgroups", lookbehindgroups);
 
+  /// ## grouprefpos (getter)
   Object? get grouprefpos => getAttribute("grouprefpos");
 
+  /// ## grouprefpos (setter)
   set grouprefpos(Object? grouprefpos) =>
       setAttribute("grouprefpos", grouprefpos);
 }
@@ -53607,7 +59267,7 @@ final class State extends PythonClass {
 final class SubPattern extends PythonClass {
   factory SubPattern({
     required Object? state,
-    Object? data = null,
+    Object? data,
   }) =>
       PythonFfiDart.instance.importClass(
         "re._parser",
@@ -53770,16 +59430,23 @@ final class SubPattern extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## state (getter)
   Object? get state => getAttribute("state");
 
+  /// ## state (setter)
   set state(Object? state) => setAttribute("state", state);
 
+  /// ## data (getter)
   Object? get data => getAttribute("data");
 
+  /// ## data (setter)
   set data(Object? data) => setAttribute("data", data);
 
+  /// ## width (getter)
   Object? get width => getAttribute("width");
 
+  /// ## width (setter)
   set width(Object? width) => setAttribute("width", width);
 }
 
@@ -54062,29 +59729,42 @@ final class Tokenizer extends PythonClass {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## pos (getter)
   Object? get pos => getAttribute("pos");
 
+  /// ## pos (setter)
   set pos(Object? pos) => setAttribute("pos", pos);
 
+  /// ## istext (getter)
   Object? get istext => getAttribute("istext");
 
+  /// ## istext (setter)
   set istext(Object? istext) => setAttribute("istext", istext);
 
+  /// ## string (getter)
   Object? get string => getAttribute("string");
 
+  /// ## string (setter)
   set string(Object? string) => setAttribute("string", string);
 
+  /// ## decoded_string (getter)
   Object? get decoded_string => getAttribute("decoded_string");
 
+  /// ## decoded_string (setter)
   set decoded_string(Object? decoded_string) =>
       setAttribute("decoded_string", decoded_string);
 
+  /// ## index (getter)
   Object? get index => getAttribute("index");
 
+  /// ## index (setter)
   set index(Object? index) => setAttribute("index", index);
 
+  /// ## next (getter)
   Object? get next => getAttribute("next");
 
+  /// ## next (setter)
   set next(Object? next) => setAttribute("next", next);
 }
 
@@ -54099,65 +59779,93 @@ final class UCD extends PythonClass {
 
   UCD.from(super.pythonClass) : super.from();
 
+  /// ## unidata_version (getter)
   Object? get unidata_version => getAttribute("unidata_version");
 
+  /// ## unidata_version (setter)
   set unidata_version(Object? unidata_version) =>
       setAttribute("unidata_version", unidata_version);
 
+  /// ## bidirectional (getter)
   Object? get bidirectional => getAttribute("bidirectional");
 
+  /// ## bidirectional (setter)
   set bidirectional(Object? bidirectional) =>
       setAttribute("bidirectional", bidirectional);
 
+  /// ## category (getter)
   Object? get category => getAttribute("category");
 
+  /// ## category (setter)
   set category(Object? category) => setAttribute("category", category);
 
+  /// ## combining (getter)
   Object? get combining => getAttribute("combining");
 
+  /// ## combining (setter)
   set combining(Object? combining) => setAttribute("combining", combining);
 
+  /// ## decimal (getter)
   Object? get decimal => getAttribute("decimal");
 
+  /// ## decimal (setter)
   set decimal(Object? decimal) => setAttribute("decimal", decimal);
 
+  /// ## decomposition (getter)
   Object? get decomposition => getAttribute("decomposition");
 
+  /// ## decomposition (setter)
   set decomposition(Object? decomposition) =>
       setAttribute("decomposition", decomposition);
 
+  /// ## digit (getter)
   Object? get digit => getAttribute("digit");
 
+  /// ## digit (setter)
   set digit(Object? digit) => setAttribute("digit", digit);
 
+  /// ## east_asian_width (getter)
   Object? get east_asian_width => getAttribute("east_asian_width");
 
+  /// ## east_asian_width (setter)
   set east_asian_width(Object? east_asian_width) =>
       setAttribute("east_asian_width", east_asian_width);
 
+  /// ## is_normalized (getter)
   Object? get is_normalized => getAttribute("is_normalized");
 
+  /// ## is_normalized (setter)
   set is_normalized(Object? is_normalized) =>
       setAttribute("is_normalized", is_normalized);
 
+  /// ## lookup (getter)
   Object? get lookup => getAttribute("lookup");
 
+  /// ## lookup (setter)
   set lookup(Object? lookup) => setAttribute("lookup", lookup);
 
+  /// ## mirrored (getter)
   Object? get mirrored => getAttribute("mirrored");
 
+  /// ## mirrored (setter)
   set mirrored(Object? mirrored) => setAttribute("mirrored", mirrored);
 
+  /// ## name (getter)
   Object? get name => getAttribute("name");
 
+  /// ## name (setter)
   set name(Object? name) => setAttribute("name", name);
 
+  /// ## normalize (getter)
   Object? get normalize => getAttribute("normalize");
 
+  /// ## normalize (setter)
   set normalize(Object? normalize) => setAttribute("normalize", normalize);
 
+  /// ## numeric (getter)
   Object? get numeric => getAttribute("numeric");
 
+  /// ## numeric (setter)
   set numeric(Object? numeric) => setAttribute("numeric", numeric);
 }
 
@@ -54496,8 +60204,11 @@ final class TransformerChain extends PythonClass {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## transformers (getter)
   Object? get transformers => getAttribute("transformers");
 
+  /// ## transformers (setter)
   set transformers(Object? transformers) =>
       setAttribute("transformers", transformers);
 }
@@ -54739,14 +60450,6 @@ final class lark extends PythonModule {
         "lark",
         lark.from,
       );
-
-  Object? get Discard => getAttribute("Discard");
-
-  set Discard(Object? Discard) => setAttribute("Discard", Discard);
-
-  Object? get logger => getAttribute("logger");
-
-  set logger(Object? logger) => setAttribute("logger", logger);
 }
 
 /// ## common
@@ -54843,6 +60546,13 @@ final class common extends PythonModule {
         "lark.common",
         common.from,
       );
+
+  /// ## TYPE_CHECKING (getter)
+  Object? get TYPE_CHECKING => getAttribute("TYPE_CHECKING");
+
+  /// ## TYPE_CHECKING (setter)
+  set TYPE_CHECKING(Object? TYPE_CHECKING) =>
+      setAttribute("TYPE_CHECKING", TYPE_CHECKING);
 }
 
 /// ## sys
@@ -54854,27 +60564,215 @@ final class sys extends PythonModule {
         sys.from,
       );
 
-  Object? get implementation => getAttribute("implementation");
+  /// ## abiflags (getter)
+  Object? get abiflags => getAttribute("abiflags");
 
-  set implementation(Object? implementation) =>
-      setAttribute("implementation", implementation);
+  /// ## abiflags (setter)
+  set abiflags(Object? abiflags) => setAttribute("abiflags", abiflags);
 
-  Object? get stderr => getAttribute("stderr");
+  /// ## api_version (getter)
+  Object? get api_version => getAttribute("api_version");
 
-  set stderr(Object? stderr) => setAttribute("stderr", stderr);
+  /// ## api_version (setter)
+  set api_version(Object? api_version) =>
+      setAttribute("api_version", api_version);
 
-  Object? get stdin => getAttribute("stdin");
+  /// ## argv (getter)
+  Object? get argv => getAttribute("argv");
 
-  set stdin(Object? stdin) => setAttribute("stdin", stdin);
+  /// ## argv (setter)
+  set argv(Object? argv) => setAttribute("argv", argv);
 
-  Object? get stdlib_module_names => getAttribute("stdlib_module_names");
+  /// ## base_exec_prefix (getter)
+  Object? get base_exec_prefix => getAttribute("base_exec_prefix");
 
-  set stdlib_module_names(Object? stdlib_module_names) =>
-      setAttribute("stdlib_module_names", stdlib_module_names);
+  /// ## base_exec_prefix (setter)
+  set base_exec_prefix(Object? base_exec_prefix) =>
+      setAttribute("base_exec_prefix", base_exec_prefix);
 
-  Object? get stdout => getAttribute("stdout");
+  /// ## base_prefix (getter)
+  Object? get base_prefix => getAttribute("base_prefix");
 
-  set stdout(Object? stdout) => setAttribute("stdout", stdout);
+  /// ## base_prefix (setter)
+  set base_prefix(Object? base_prefix) =>
+      setAttribute("base_prefix", base_prefix);
+
+  /// ## builtin_module_names (getter)
+  Object? get builtin_module_names => getAttribute("builtin_module_names");
+
+  /// ## builtin_module_names (setter)
+  set builtin_module_names(Object? builtin_module_names) =>
+      setAttribute("builtin_module_names", builtin_module_names);
+
+  /// ## byteorder (getter)
+  Object? get byteorder => getAttribute("byteorder");
+
+  /// ## byteorder (setter)
+  set byteorder(Object? byteorder) => setAttribute("byteorder", byteorder);
+
+  /// ## copyright (getter)
+  Object? get copyright => getAttribute("copyright");
+
+  /// ## copyright (setter)
+  set copyright(Object? copyright) => setAttribute("copyright", copyright);
+
+  /// ## dont_write_bytecode (getter)
+  Object? get dont_write_bytecode => getAttribute("dont_write_bytecode");
+
+  /// ## dont_write_bytecode (setter)
+  set dont_write_bytecode(Object? dont_write_bytecode) =>
+      setAttribute("dont_write_bytecode", dont_write_bytecode);
+
+  /// ## exec_prefix (getter)
+  Object? get exec_prefix => getAttribute("exec_prefix");
+
+  /// ## exec_prefix (setter)
+  set exec_prefix(Object? exec_prefix) =>
+      setAttribute("exec_prefix", exec_prefix);
+
+  /// ## executable (getter)
+  Object? get executable => getAttribute("executable");
+
+  /// ## executable (setter)
+  set executable(Object? executable) => setAttribute("executable", executable);
+
+  /// ## flags (getter)
+  Object? get flags => getAttribute("flags");
+
+  /// ## flags (setter)
+  set flags(Object? flags) => setAttribute("flags", flags);
+
+  /// ## float_info (getter)
+  Object? get float_info => getAttribute("float_info");
+
+  /// ## float_info (setter)
+  set float_info(Object? float_info) => setAttribute("float_info", float_info);
+
+  /// ## float_repr_style (getter)
+  Object? get float_repr_style => getAttribute("float_repr_style");
+
+  /// ## float_repr_style (setter)
+  set float_repr_style(Object? float_repr_style) =>
+      setAttribute("float_repr_style", float_repr_style);
+
+  /// ## hash_info (getter)
+  Object? get hash_info => getAttribute("hash_info");
+
+  /// ## hash_info (setter)
+  set hash_info(Object? hash_info) => setAttribute("hash_info", hash_info);
+
+  /// ## hexversion (getter)
+  Object? get hexversion => getAttribute("hexversion");
+
+  /// ## hexversion (setter)
+  set hexversion(Object? hexversion) => setAttribute("hexversion", hexversion);
+
+  /// ## int_info (getter)
+  Object? get int_info => getAttribute("int_info");
+
+  /// ## int_info (setter)
+  set int_info(Object? int_info) => setAttribute("int_info", int_info);
+
+  /// ## maxsize (getter)
+  Object? get maxsize => getAttribute("maxsize");
+
+  /// ## maxsize (setter)
+  set maxsize(Object? maxsize) => setAttribute("maxsize", maxsize);
+
+  /// ## maxunicode (getter)
+  Object? get maxunicode => getAttribute("maxunicode");
+
+  /// ## maxunicode (setter)
+  set maxunicode(Object? maxunicode) => setAttribute("maxunicode", maxunicode);
+
+  /// ## meta_path (getter)
+  Object? get meta_path => getAttribute("meta_path");
+
+  /// ## meta_path (setter)
+  set meta_path(Object? meta_path) => setAttribute("meta_path", meta_path);
+
+  /// ## modules (getter)
+  Object? get modules => getAttribute("modules");
+
+  /// ## modules (setter)
+  set modules(Object? modules) => setAttribute("modules", modules);
+
+  /// ## orig_argv (getter)
+  Object? get orig_argv => getAttribute("orig_argv");
+
+  /// ## orig_argv (setter)
+  set orig_argv(Object? orig_argv) => setAttribute("orig_argv", orig_argv);
+
+  /// ## path (getter)
+  Object? get path => getAttribute("path");
+
+  /// ## path (setter)
+  set path(Object? path) => setAttribute("path", path);
+
+  /// ## path_hooks (getter)
+  Object? get path_hooks => getAttribute("path_hooks");
+
+  /// ## path_hooks (setter)
+  set path_hooks(Object? path_hooks) => setAttribute("path_hooks", path_hooks);
+
+  /// ## path_importer_cache (getter)
+  Object? get path_importer_cache => getAttribute("path_importer_cache");
+
+  /// ## path_importer_cache (setter)
+  set path_importer_cache(Object? path_importer_cache) =>
+      setAttribute("path_importer_cache", path_importer_cache);
+
+  /// ## platform (getter)
+  Object? get platform => getAttribute("platform");
+
+  /// ## platform (setter)
+  set platform(Object? platform) => setAttribute("platform", platform);
+
+  /// ## platlibdir (getter)
+  Object? get platlibdir => getAttribute("platlibdir");
+
+  /// ## platlibdir (setter)
+  set platlibdir(Object? platlibdir) => setAttribute("platlibdir", platlibdir);
+
+  /// ## prefix (getter)
+  Object? get prefix => getAttribute("prefix");
+
+  /// ## prefix (setter)
+  set prefix(Object? prefix) => setAttribute("prefix", prefix);
+
+  /// ## pycache_prefix (getter)
+  Object? get pycache_prefix => getAttribute("pycache_prefix");
+
+  /// ## pycache_prefix (setter)
+  set pycache_prefix(Object? pycache_prefix) =>
+      setAttribute("pycache_prefix", pycache_prefix);
+
+  /// ## thread_info (getter)
+  Object? get thread_info => getAttribute("thread_info");
+
+  /// ## thread_info (setter)
+  set thread_info(Object? thread_info) =>
+      setAttribute("thread_info", thread_info);
+
+  /// ## version (getter)
+  Object? get version => getAttribute("version");
+
+  /// ## version (setter)
+  set version(Object? version) => setAttribute("version", version);
+
+  /// ## version_info (getter)
+  Object? get version_info => getAttribute("version_info");
+
+  /// ## version_info (setter)
+  set version_info(Object? version_info) =>
+      setAttribute("version_info", version_info);
+
+  /// ## warnoptions (getter)
+  Object? get warnoptions => getAttribute("warnoptions");
+
+  /// ## warnoptions (setter)
+  set warnoptions(Object? warnoptions) =>
+      setAttribute("warnoptions", warnoptions);
 }
 
 /// ## exceptions
@@ -55203,17 +61101,107 @@ final class exceptions extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
-  Object? get NO_VALUE => getAttribute("NO_VALUE");
 
-  set NO_VALUE(Object? NO_VALUE) => setAttribute("NO_VALUE", NO_VALUE);
-
+  /// ## T (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Type variable.
+  ///
+  /// Usage::
+  ///
+  ///   T = TypeVar('T')  # Can be anything
+  ///   A = TypeVar('A', str, bytes)  # Must be str or bytes
+  ///
+  /// Type variables exist primarily for the benefit of static type
+  /// checkers.  They serve as the parameters for generic types as well
+  /// as for generic function definitions.  See class Generic for more
+  /// information on generic types.  Generic functions work as follows:
+  ///
+  ///   def repeat(x: T, n: int) -> List[T]:
+  ///       '''Return a list containing n references to x.'''
+  ///       return [x]*n
+  ///
+  ///   def longest(x: A, y: A) -> A:
+  ///       '''Return the longest of two strings.'''
+  ///       return x if len(x) >= len(y) else y
+  ///
+  /// The latter example's signature is essentially the overloading
+  /// of (str, str) -> str and (bytes, bytes) -> bytes.  Also note
+  /// that if the arguments are instances of some subclass of str,
+  /// the return type is still plain str.
+  ///
+  /// At runtime, isinstance(x, T) and issubclass(C, T) will raise TypeError.
+  ///
+  /// Type variables defined with covariant=True or contravariant=True
+  /// can be used to declare covariant or contravariant generic types.
+  /// See PEP 484 for more details. By default generic types are invariant
+  /// in all type variables.
+  ///
+  /// Type variables can be introspected. e.g.:
+  ///
+  ///   T.__name__ == 'T'
+  ///   T.__constraints__ == ()
+  ///   T.__covariant__ == False
+  ///   T.__contravariant__ = False
+  ///   A.__constraints__ == (str, bytes)
+  ///
+  /// Note that only type variables defined in global scope can be pickled.
   Object? get T => getAttribute("T");
 
+  /// ## T (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Type variable.
+  ///
+  /// Usage::
+  ///
+  ///   T = TypeVar('T')  # Can be anything
+  ///   A = TypeVar('A', str, bytes)  # Must be str or bytes
+  ///
+  /// Type variables exist primarily for the benefit of static type
+  /// checkers.  They serve as the parameters for generic types as well
+  /// as for generic function definitions.  See class Generic for more
+  /// information on generic types.  Generic functions work as follows:
+  ///
+  ///   def repeat(x: T, n: int) -> List[T]:
+  ///       '''Return a list containing n references to x.'''
+  ///       return [x]*n
+  ///
+  ///   def longest(x: A, y: A) -> A:
+  ///       '''Return the longest of two strings.'''
+  ///       return x if len(x) >= len(y) else y
+  ///
+  /// The latter example's signature is essentially the overloading
+  /// of (str, str) -> str and (bytes, bytes) -> bytes.  Also note
+  /// that if the arguments are instances of some subclass of str,
+  /// the return type is still plain str.
+  ///
+  /// At runtime, isinstance(x, T) and issubclass(C, T) will raise TypeError.
+  ///
+  /// Type variables defined with covariant=True or contravariant=True
+  /// can be used to declare covariant or contravariant generic types.
+  /// See PEP 484 for more details. By default generic types are invariant
+  /// in all type variables.
+  ///
+  /// Type variables can be introspected. e.g.:
+  ///
+  ///   T.__name__ == 'T'
+  ///   T.__constraints__ == ()
+  ///   T.__covariant__ == False
+  ///   T.__contravariant__ = False
+  ///   A.__constraints__ == (str, bytes)
+  ///
+  /// Note that only type variables defined in global scope can be pickled.
   set T(Object? T) => setAttribute("T", T);
 
-  Object? get logger => getAttribute("logger");
+  /// ## TYPE_CHECKING (getter)
+  Object? get TYPE_CHECKING => getAttribute("TYPE_CHECKING");
 
-  set logger(Object? logger) => setAttribute("logger", logger);
+  /// ## TYPE_CHECKING (setter)
+  set TYPE_CHECKING(Object? TYPE_CHECKING) =>
+      setAttribute("TYPE_CHECKING", TYPE_CHECKING);
 }
 
 /// ## grammar
@@ -55350,6 +61338,13 @@ final class grammar extends PythonModule {
         "lark.grammar",
         grammar.from,
       );
+
+  /// ## TOKEN_DEFAULT_PRIORITY (getter)
+  Object? get TOKEN_DEFAULT_PRIORITY => getAttribute("TOKEN_DEFAULT_PRIORITY");
+
+  /// ## TOKEN_DEFAULT_PRIORITY (setter)
+  set TOKEN_DEFAULT_PRIORITY(Object? TOKEN_DEFAULT_PRIORITY) =>
+      setAttribute("TOKEN_DEFAULT_PRIORITY", TOKEN_DEFAULT_PRIORITY);
 }
 
 /// ## getpass
@@ -55576,7 +61571,7 @@ final class getpass extends PythonModule {
   /// ```
   Object? fallback_getpass({
     Object? prompt = "Password: ",
-    Object? stream = null,
+    Object? stream,
   }) =>
       getFunction("fallback_getpass").call(
         <Object?>[
@@ -55651,7 +61646,7 @@ final class getpass extends PythonModule {
   /// ```
   Object? win_getpass({
     Object? prompt = "Password: ",
-    Object? stream = null,
+    Object? stream,
   }) =>
       getFunction("win_getpass").call(
         <Object?>[
@@ -58163,7 +64158,7 @@ final class os extends PythonModule {
     required Object? fd,
     Object? mode = "r",
     Object? buffering = -1,
-    Object? encoding = null,
+    Object? encoding,
     Map<String, Object?> kwargs = const <String, Object?>{},
   }) =>
       getFunction("fdopen").call(
@@ -58253,9 +64248,9 @@ final class os extends PythonModule {
   Object? fwalk({
     Object? top = ".",
     Object? topdown = true,
-    Object? onerror = null,
+    Object? onerror,
     Object? follow_symlinks = false,
-    Object? dir_fd = null,
+    Object? dir_fd,
   }) =>
       getFunction("fwalk").call(
         <Object?>[
@@ -58279,7 +64274,7 @@ final class os extends PythonModule {
   /// *env* must be an environment variable dict or None.  If *env* is None,
   /// os.environ will be used.
   Object? get_exec_path({
-    Object? env = null,
+    Object? env,
   }) =>
       getFunction("get_exec_path").call(
         <Object?>[
@@ -58297,7 +64292,7 @@ final class os extends PythonModule {
   /// key, default and the result are str.
   Object? getenv({
     required Object? key,
-    Object? $default = null,
+    Object? $default,
   }) =>
       getFunction("getenv").call(
         <Object?>[
@@ -58316,7 +64311,7 @@ final class os extends PythonModule {
   /// key, default and the result are bytes.
   Object? getenvb({
     required Object? key,
-    Object? $default = null,
+    Object? $default,
   }) =>
       getFunction("getenvb").call(
         <Object?>[
@@ -58682,7 +64677,7 @@ final class os extends PythonModule {
   Object? walk({
     required Object? top,
     Object? topdown = true,
-    Object? onerror = null,
+    Object? onerror,
     Object? followlinks = false,
   }) =>
       getFunction("walk").call(
@@ -58694,13 +64689,688 @@ final class os extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
-  Object? get environ => getAttribute("environ");
 
-  set environ(Object? environ) => setAttribute("environ", environ);
+  /// ## CLD_CONTINUED (getter)
+  Object? get CLD_CONTINUED => getAttribute("CLD_CONTINUED");
 
-  Object? get environb => getAttribute("environb");
+  /// ## CLD_CONTINUED (setter)
+  set CLD_CONTINUED(Object? CLD_CONTINUED) =>
+      setAttribute("CLD_CONTINUED", CLD_CONTINUED);
 
-  set environb(Object? environb) => setAttribute("environb", environb);
+  /// ## CLD_DUMPED (getter)
+  Object? get CLD_DUMPED => getAttribute("CLD_DUMPED");
+
+  /// ## CLD_DUMPED (setter)
+  set CLD_DUMPED(Object? CLD_DUMPED) => setAttribute("CLD_DUMPED", CLD_DUMPED);
+
+  /// ## CLD_EXITED (getter)
+  Object? get CLD_EXITED => getAttribute("CLD_EXITED");
+
+  /// ## CLD_EXITED (setter)
+  set CLD_EXITED(Object? CLD_EXITED) => setAttribute("CLD_EXITED", CLD_EXITED);
+
+  /// ## CLD_KILLED (getter)
+  Object? get CLD_KILLED => getAttribute("CLD_KILLED");
+
+  /// ## CLD_KILLED (setter)
+  set CLD_KILLED(Object? CLD_KILLED) => setAttribute("CLD_KILLED", CLD_KILLED);
+
+  /// ## CLD_STOPPED (getter)
+  Object? get CLD_STOPPED => getAttribute("CLD_STOPPED");
+
+  /// ## CLD_STOPPED (setter)
+  set CLD_STOPPED(Object? CLD_STOPPED) =>
+      setAttribute("CLD_STOPPED", CLD_STOPPED);
+
+  /// ## CLD_TRAPPED (getter)
+  Object? get CLD_TRAPPED => getAttribute("CLD_TRAPPED");
+
+  /// ## CLD_TRAPPED (setter)
+  set CLD_TRAPPED(Object? CLD_TRAPPED) =>
+      setAttribute("CLD_TRAPPED", CLD_TRAPPED);
+
+  /// ## EX_CANTCREAT (getter)
+  Object? get EX_CANTCREAT => getAttribute("EX_CANTCREAT");
+
+  /// ## EX_CANTCREAT (setter)
+  set EX_CANTCREAT(Object? EX_CANTCREAT) =>
+      setAttribute("EX_CANTCREAT", EX_CANTCREAT);
+
+  /// ## EX_CONFIG (getter)
+  Object? get EX_CONFIG => getAttribute("EX_CONFIG");
+
+  /// ## EX_CONFIG (setter)
+  set EX_CONFIG(Object? EX_CONFIG) => setAttribute("EX_CONFIG", EX_CONFIG);
+
+  /// ## EX_DATAERR (getter)
+  Object? get EX_DATAERR => getAttribute("EX_DATAERR");
+
+  /// ## EX_DATAERR (setter)
+  set EX_DATAERR(Object? EX_DATAERR) => setAttribute("EX_DATAERR", EX_DATAERR);
+
+  /// ## EX_IOERR (getter)
+  Object? get EX_IOERR => getAttribute("EX_IOERR");
+
+  /// ## EX_IOERR (setter)
+  set EX_IOERR(Object? EX_IOERR) => setAttribute("EX_IOERR", EX_IOERR);
+
+  /// ## EX_NOHOST (getter)
+  Object? get EX_NOHOST => getAttribute("EX_NOHOST");
+
+  /// ## EX_NOHOST (setter)
+  set EX_NOHOST(Object? EX_NOHOST) => setAttribute("EX_NOHOST", EX_NOHOST);
+
+  /// ## EX_NOINPUT (getter)
+  Object? get EX_NOINPUT => getAttribute("EX_NOINPUT");
+
+  /// ## EX_NOINPUT (setter)
+  set EX_NOINPUT(Object? EX_NOINPUT) => setAttribute("EX_NOINPUT", EX_NOINPUT);
+
+  /// ## EX_NOPERM (getter)
+  Object? get EX_NOPERM => getAttribute("EX_NOPERM");
+
+  /// ## EX_NOPERM (setter)
+  set EX_NOPERM(Object? EX_NOPERM) => setAttribute("EX_NOPERM", EX_NOPERM);
+
+  /// ## EX_NOUSER (getter)
+  Object? get EX_NOUSER => getAttribute("EX_NOUSER");
+
+  /// ## EX_NOUSER (setter)
+  set EX_NOUSER(Object? EX_NOUSER) => setAttribute("EX_NOUSER", EX_NOUSER);
+
+  /// ## EX_OK (getter)
+  Object? get EX_OK => getAttribute("EX_OK");
+
+  /// ## EX_OK (setter)
+  set EX_OK(Object? EX_OK) => setAttribute("EX_OK", EX_OK);
+
+  /// ## EX_OSERR (getter)
+  Object? get EX_OSERR => getAttribute("EX_OSERR");
+
+  /// ## EX_OSERR (setter)
+  set EX_OSERR(Object? EX_OSERR) => setAttribute("EX_OSERR", EX_OSERR);
+
+  /// ## EX_OSFILE (getter)
+  Object? get EX_OSFILE => getAttribute("EX_OSFILE");
+
+  /// ## EX_OSFILE (setter)
+  set EX_OSFILE(Object? EX_OSFILE) => setAttribute("EX_OSFILE", EX_OSFILE);
+
+  /// ## EX_PROTOCOL (getter)
+  Object? get EX_PROTOCOL => getAttribute("EX_PROTOCOL");
+
+  /// ## EX_PROTOCOL (setter)
+  set EX_PROTOCOL(Object? EX_PROTOCOL) =>
+      setAttribute("EX_PROTOCOL", EX_PROTOCOL);
+
+  /// ## EX_SOFTWARE (getter)
+  Object? get EX_SOFTWARE => getAttribute("EX_SOFTWARE");
+
+  /// ## EX_SOFTWARE (setter)
+  set EX_SOFTWARE(Object? EX_SOFTWARE) =>
+      setAttribute("EX_SOFTWARE", EX_SOFTWARE);
+
+  /// ## EX_TEMPFAIL (getter)
+  Object? get EX_TEMPFAIL => getAttribute("EX_TEMPFAIL");
+
+  /// ## EX_TEMPFAIL (setter)
+  set EX_TEMPFAIL(Object? EX_TEMPFAIL) =>
+      setAttribute("EX_TEMPFAIL", EX_TEMPFAIL);
+
+  /// ## EX_UNAVAILABLE (getter)
+  Object? get EX_UNAVAILABLE => getAttribute("EX_UNAVAILABLE");
+
+  /// ## EX_UNAVAILABLE (setter)
+  set EX_UNAVAILABLE(Object? EX_UNAVAILABLE) =>
+      setAttribute("EX_UNAVAILABLE", EX_UNAVAILABLE);
+
+  /// ## EX_USAGE (getter)
+  Object? get EX_USAGE => getAttribute("EX_USAGE");
+
+  /// ## EX_USAGE (setter)
+  set EX_USAGE(Object? EX_USAGE) => setAttribute("EX_USAGE", EX_USAGE);
+
+  /// ## F_LOCK (getter)
+  Object? get F_LOCK => getAttribute("F_LOCK");
+
+  /// ## F_LOCK (setter)
+  set F_LOCK(Object? F_LOCK) => setAttribute("F_LOCK", F_LOCK);
+
+  /// ## F_OK (getter)
+  Object? get F_OK => getAttribute("F_OK");
+
+  /// ## F_OK (setter)
+  set F_OK(Object? F_OK) => setAttribute("F_OK", F_OK);
+
+  /// ## F_TEST (getter)
+  Object? get F_TEST => getAttribute("F_TEST");
+
+  /// ## F_TEST (setter)
+  set F_TEST(Object? F_TEST) => setAttribute("F_TEST", F_TEST);
+
+  /// ## F_TLOCK (getter)
+  Object? get F_TLOCK => getAttribute("F_TLOCK");
+
+  /// ## F_TLOCK (setter)
+  set F_TLOCK(Object? F_TLOCK) => setAttribute("F_TLOCK", F_TLOCK);
+
+  /// ## F_ULOCK (getter)
+  Object? get F_ULOCK => getAttribute("F_ULOCK");
+
+  /// ## F_ULOCK (setter)
+  set F_ULOCK(Object? F_ULOCK) => setAttribute("F_ULOCK", F_ULOCK);
+
+  /// ## NGROUPS_MAX (getter)
+  Object? get NGROUPS_MAX => getAttribute("NGROUPS_MAX");
+
+  /// ## NGROUPS_MAX (setter)
+  set NGROUPS_MAX(Object? NGROUPS_MAX) =>
+      setAttribute("NGROUPS_MAX", NGROUPS_MAX);
+
+  /// ## O_ACCMODE (getter)
+  Object? get O_ACCMODE => getAttribute("O_ACCMODE");
+
+  /// ## O_ACCMODE (setter)
+  set O_ACCMODE(Object? O_ACCMODE) => setAttribute("O_ACCMODE", O_ACCMODE);
+
+  /// ## O_APPEND (getter)
+  Object? get O_APPEND => getAttribute("O_APPEND");
+
+  /// ## O_APPEND (setter)
+  set O_APPEND(Object? O_APPEND) => setAttribute("O_APPEND", O_APPEND);
+
+  /// ## O_ASYNC (getter)
+  Object? get O_ASYNC => getAttribute("O_ASYNC");
+
+  /// ## O_ASYNC (setter)
+  set O_ASYNC(Object? O_ASYNC) => setAttribute("O_ASYNC", O_ASYNC);
+
+  /// ## O_CLOEXEC (getter)
+  Object? get O_CLOEXEC => getAttribute("O_CLOEXEC");
+
+  /// ## O_CLOEXEC (setter)
+  set O_CLOEXEC(Object? O_CLOEXEC) => setAttribute("O_CLOEXEC", O_CLOEXEC);
+
+  /// ## O_CREAT (getter)
+  Object? get O_CREAT => getAttribute("O_CREAT");
+
+  /// ## O_CREAT (setter)
+  set O_CREAT(Object? O_CREAT) => setAttribute("O_CREAT", O_CREAT);
+
+  /// ## O_DIRECTORY (getter)
+  Object? get O_DIRECTORY => getAttribute("O_DIRECTORY");
+
+  /// ## O_DIRECTORY (setter)
+  set O_DIRECTORY(Object? O_DIRECTORY) =>
+      setAttribute("O_DIRECTORY", O_DIRECTORY);
+
+  /// ## O_DSYNC (getter)
+  Object? get O_DSYNC => getAttribute("O_DSYNC");
+
+  /// ## O_DSYNC (setter)
+  set O_DSYNC(Object? O_DSYNC) => setAttribute("O_DSYNC", O_DSYNC);
+
+  /// ## O_EVTONLY (getter)
+  Object? get O_EVTONLY => getAttribute("O_EVTONLY");
+
+  /// ## O_EVTONLY (setter)
+  set O_EVTONLY(Object? O_EVTONLY) => setAttribute("O_EVTONLY", O_EVTONLY);
+
+  /// ## O_EXCL (getter)
+  Object? get O_EXCL => getAttribute("O_EXCL");
+
+  /// ## O_EXCL (setter)
+  set O_EXCL(Object? O_EXCL) => setAttribute("O_EXCL", O_EXCL);
+
+  /// ## O_EXEC (getter)
+  Object? get O_EXEC => getAttribute("O_EXEC");
+
+  /// ## O_EXEC (setter)
+  set O_EXEC(Object? O_EXEC) => setAttribute("O_EXEC", O_EXEC);
+
+  /// ## O_EXLOCK (getter)
+  Object? get O_EXLOCK => getAttribute("O_EXLOCK");
+
+  /// ## O_EXLOCK (setter)
+  set O_EXLOCK(Object? O_EXLOCK) => setAttribute("O_EXLOCK", O_EXLOCK);
+
+  /// ## O_FSYNC (getter)
+  Object? get O_FSYNC => getAttribute("O_FSYNC");
+
+  /// ## O_FSYNC (setter)
+  set O_FSYNC(Object? O_FSYNC) => setAttribute("O_FSYNC", O_FSYNC);
+
+  /// ## O_NDELAY (getter)
+  Object? get O_NDELAY => getAttribute("O_NDELAY");
+
+  /// ## O_NDELAY (setter)
+  set O_NDELAY(Object? O_NDELAY) => setAttribute("O_NDELAY", O_NDELAY);
+
+  /// ## O_NOCTTY (getter)
+  Object? get O_NOCTTY => getAttribute("O_NOCTTY");
+
+  /// ## O_NOCTTY (setter)
+  set O_NOCTTY(Object? O_NOCTTY) => setAttribute("O_NOCTTY", O_NOCTTY);
+
+  /// ## O_NOFOLLOW (getter)
+  Object? get O_NOFOLLOW => getAttribute("O_NOFOLLOW");
+
+  /// ## O_NOFOLLOW (setter)
+  set O_NOFOLLOW(Object? O_NOFOLLOW) => setAttribute("O_NOFOLLOW", O_NOFOLLOW);
+
+  /// ## O_NOFOLLOW_ANY (getter)
+  Object? get O_NOFOLLOW_ANY => getAttribute("O_NOFOLLOW_ANY");
+
+  /// ## O_NOFOLLOW_ANY (setter)
+  set O_NOFOLLOW_ANY(Object? O_NOFOLLOW_ANY) =>
+      setAttribute("O_NOFOLLOW_ANY", O_NOFOLLOW_ANY);
+
+  /// ## O_NONBLOCK (getter)
+  Object? get O_NONBLOCK => getAttribute("O_NONBLOCK");
+
+  /// ## O_NONBLOCK (setter)
+  set O_NONBLOCK(Object? O_NONBLOCK) => setAttribute("O_NONBLOCK", O_NONBLOCK);
+
+  /// ## O_RDONLY (getter)
+  Object? get O_RDONLY => getAttribute("O_RDONLY");
+
+  /// ## O_RDONLY (setter)
+  set O_RDONLY(Object? O_RDONLY) => setAttribute("O_RDONLY", O_RDONLY);
+
+  /// ## O_RDWR (getter)
+  Object? get O_RDWR => getAttribute("O_RDWR");
+
+  /// ## O_RDWR (setter)
+  set O_RDWR(Object? O_RDWR) => setAttribute("O_RDWR", O_RDWR);
+
+  /// ## O_SEARCH (getter)
+  Object? get O_SEARCH => getAttribute("O_SEARCH");
+
+  /// ## O_SEARCH (setter)
+  set O_SEARCH(Object? O_SEARCH) => setAttribute("O_SEARCH", O_SEARCH);
+
+  /// ## O_SHLOCK (getter)
+  Object? get O_SHLOCK => getAttribute("O_SHLOCK");
+
+  /// ## O_SHLOCK (setter)
+  set O_SHLOCK(Object? O_SHLOCK) => setAttribute("O_SHLOCK", O_SHLOCK);
+
+  /// ## O_SYMLINK (getter)
+  Object? get O_SYMLINK => getAttribute("O_SYMLINK");
+
+  /// ## O_SYMLINK (setter)
+  set O_SYMLINK(Object? O_SYMLINK) => setAttribute("O_SYMLINK", O_SYMLINK);
+
+  /// ## O_SYNC (getter)
+  Object? get O_SYNC => getAttribute("O_SYNC");
+
+  /// ## O_SYNC (setter)
+  set O_SYNC(Object? O_SYNC) => setAttribute("O_SYNC", O_SYNC);
+
+  /// ## O_TRUNC (getter)
+  Object? get O_TRUNC => getAttribute("O_TRUNC");
+
+  /// ## O_TRUNC (setter)
+  set O_TRUNC(Object? O_TRUNC) => setAttribute("O_TRUNC", O_TRUNC);
+
+  /// ## O_WRONLY (getter)
+  Object? get O_WRONLY => getAttribute("O_WRONLY");
+
+  /// ## O_WRONLY (setter)
+  set O_WRONLY(Object? O_WRONLY) => setAttribute("O_WRONLY", O_WRONLY);
+
+  /// ## POSIX_SPAWN_CLOSE (getter)
+  Object? get POSIX_SPAWN_CLOSE => getAttribute("POSIX_SPAWN_CLOSE");
+
+  /// ## POSIX_SPAWN_CLOSE (setter)
+  set POSIX_SPAWN_CLOSE(Object? POSIX_SPAWN_CLOSE) =>
+      setAttribute("POSIX_SPAWN_CLOSE", POSIX_SPAWN_CLOSE);
+
+  /// ## POSIX_SPAWN_DUP2 (getter)
+  Object? get POSIX_SPAWN_DUP2 => getAttribute("POSIX_SPAWN_DUP2");
+
+  /// ## POSIX_SPAWN_DUP2 (setter)
+  set POSIX_SPAWN_DUP2(Object? POSIX_SPAWN_DUP2) =>
+      setAttribute("POSIX_SPAWN_DUP2", POSIX_SPAWN_DUP2);
+
+  /// ## POSIX_SPAWN_OPEN (getter)
+  Object? get POSIX_SPAWN_OPEN => getAttribute("POSIX_SPAWN_OPEN");
+
+  /// ## POSIX_SPAWN_OPEN (setter)
+  set POSIX_SPAWN_OPEN(Object? POSIX_SPAWN_OPEN) =>
+      setAttribute("POSIX_SPAWN_OPEN", POSIX_SPAWN_OPEN);
+
+  /// ## PRIO_PGRP (getter)
+  Object? get PRIO_PGRP => getAttribute("PRIO_PGRP");
+
+  /// ## PRIO_PGRP (setter)
+  set PRIO_PGRP(Object? PRIO_PGRP) => setAttribute("PRIO_PGRP", PRIO_PGRP);
+
+  /// ## PRIO_PROCESS (getter)
+  Object? get PRIO_PROCESS => getAttribute("PRIO_PROCESS");
+
+  /// ## PRIO_PROCESS (setter)
+  set PRIO_PROCESS(Object? PRIO_PROCESS) =>
+      setAttribute("PRIO_PROCESS", PRIO_PROCESS);
+
+  /// ## PRIO_USER (getter)
+  Object? get PRIO_USER => getAttribute("PRIO_USER");
+
+  /// ## PRIO_USER (setter)
+  set PRIO_USER(Object? PRIO_USER) => setAttribute("PRIO_USER", PRIO_USER);
+
+  /// ## P_ALL (getter)
+  Object? get P_ALL => getAttribute("P_ALL");
+
+  /// ## P_ALL (setter)
+  set P_ALL(Object? P_ALL) => setAttribute("P_ALL", P_ALL);
+
+  /// ## P_NOWAIT (getter)
+  Object? get P_NOWAIT => getAttribute("P_NOWAIT");
+
+  /// ## P_NOWAIT (setter)
+  set P_NOWAIT(Object? P_NOWAIT) => setAttribute("P_NOWAIT", P_NOWAIT);
+
+  /// ## P_NOWAITO (getter)
+  Object? get P_NOWAITO => getAttribute("P_NOWAITO");
+
+  /// ## P_NOWAITO (setter)
+  set P_NOWAITO(Object? P_NOWAITO) => setAttribute("P_NOWAITO", P_NOWAITO);
+
+  /// ## P_PGID (getter)
+  Object? get P_PGID => getAttribute("P_PGID");
+
+  /// ## P_PGID (setter)
+  set P_PGID(Object? P_PGID) => setAttribute("P_PGID", P_PGID);
+
+  /// ## P_PID (getter)
+  Object? get P_PID => getAttribute("P_PID");
+
+  /// ## P_PID (setter)
+  set P_PID(Object? P_PID) => setAttribute("P_PID", P_PID);
+
+  /// ## P_WAIT (getter)
+  Object? get P_WAIT => getAttribute("P_WAIT");
+
+  /// ## P_WAIT (setter)
+  set P_WAIT(Object? P_WAIT) => setAttribute("P_WAIT", P_WAIT);
+
+  /// ## RTLD_GLOBAL (getter)
+  Object? get RTLD_GLOBAL => getAttribute("RTLD_GLOBAL");
+
+  /// ## RTLD_GLOBAL (setter)
+  set RTLD_GLOBAL(Object? RTLD_GLOBAL) =>
+      setAttribute("RTLD_GLOBAL", RTLD_GLOBAL);
+
+  /// ## RTLD_LAZY (getter)
+  Object? get RTLD_LAZY => getAttribute("RTLD_LAZY");
+
+  /// ## RTLD_LAZY (setter)
+  set RTLD_LAZY(Object? RTLD_LAZY) => setAttribute("RTLD_LAZY", RTLD_LAZY);
+
+  /// ## RTLD_LOCAL (getter)
+  Object? get RTLD_LOCAL => getAttribute("RTLD_LOCAL");
+
+  /// ## RTLD_LOCAL (setter)
+  set RTLD_LOCAL(Object? RTLD_LOCAL) => setAttribute("RTLD_LOCAL", RTLD_LOCAL);
+
+  /// ## RTLD_NODELETE (getter)
+  Object? get RTLD_NODELETE => getAttribute("RTLD_NODELETE");
+
+  /// ## RTLD_NODELETE (setter)
+  set RTLD_NODELETE(Object? RTLD_NODELETE) =>
+      setAttribute("RTLD_NODELETE", RTLD_NODELETE);
+
+  /// ## RTLD_NOLOAD (getter)
+  Object? get RTLD_NOLOAD => getAttribute("RTLD_NOLOAD");
+
+  /// ## RTLD_NOLOAD (setter)
+  set RTLD_NOLOAD(Object? RTLD_NOLOAD) =>
+      setAttribute("RTLD_NOLOAD", RTLD_NOLOAD);
+
+  /// ## RTLD_NOW (getter)
+  Object? get RTLD_NOW => getAttribute("RTLD_NOW");
+
+  /// ## RTLD_NOW (setter)
+  set RTLD_NOW(Object? RTLD_NOW) => setAttribute("RTLD_NOW", RTLD_NOW);
+
+  /// ## R_OK (getter)
+  Object? get R_OK => getAttribute("R_OK");
+
+  /// ## R_OK (setter)
+  set R_OK(Object? R_OK) => setAttribute("R_OK", R_OK);
+
+  /// ## SCHED_FIFO (getter)
+  Object? get SCHED_FIFO => getAttribute("SCHED_FIFO");
+
+  /// ## SCHED_FIFO (setter)
+  set SCHED_FIFO(Object? SCHED_FIFO) => setAttribute("SCHED_FIFO", SCHED_FIFO);
+
+  /// ## SCHED_OTHER (getter)
+  Object? get SCHED_OTHER => getAttribute("SCHED_OTHER");
+
+  /// ## SCHED_OTHER (setter)
+  set SCHED_OTHER(Object? SCHED_OTHER) =>
+      setAttribute("SCHED_OTHER", SCHED_OTHER);
+
+  /// ## SCHED_RR (getter)
+  Object? get SCHED_RR => getAttribute("SCHED_RR");
+
+  /// ## SCHED_RR (setter)
+  set SCHED_RR(Object? SCHED_RR) => setAttribute("SCHED_RR", SCHED_RR);
+
+  /// ## SEEK_CUR (getter)
+  Object? get SEEK_CUR => getAttribute("SEEK_CUR");
+
+  /// ## SEEK_CUR (setter)
+  set SEEK_CUR(Object? SEEK_CUR) => setAttribute("SEEK_CUR", SEEK_CUR);
+
+  /// ## SEEK_DATA (getter)
+  Object? get SEEK_DATA => getAttribute("SEEK_DATA");
+
+  /// ## SEEK_DATA (setter)
+  set SEEK_DATA(Object? SEEK_DATA) => setAttribute("SEEK_DATA", SEEK_DATA);
+
+  /// ## SEEK_END (getter)
+  Object? get SEEK_END => getAttribute("SEEK_END");
+
+  /// ## SEEK_END (setter)
+  set SEEK_END(Object? SEEK_END) => setAttribute("SEEK_END", SEEK_END);
+
+  /// ## SEEK_HOLE (getter)
+  Object? get SEEK_HOLE => getAttribute("SEEK_HOLE");
+
+  /// ## SEEK_HOLE (setter)
+  set SEEK_HOLE(Object? SEEK_HOLE) => setAttribute("SEEK_HOLE", SEEK_HOLE);
+
+  /// ## SEEK_SET (getter)
+  Object? get SEEK_SET => getAttribute("SEEK_SET");
+
+  /// ## SEEK_SET (setter)
+  set SEEK_SET(Object? SEEK_SET) => setAttribute("SEEK_SET", SEEK_SET);
+
+  /// ## ST_NOSUID (getter)
+  Object? get ST_NOSUID => getAttribute("ST_NOSUID");
+
+  /// ## ST_NOSUID (setter)
+  set ST_NOSUID(Object? ST_NOSUID) => setAttribute("ST_NOSUID", ST_NOSUID);
+
+  /// ## ST_RDONLY (getter)
+  Object? get ST_RDONLY => getAttribute("ST_RDONLY");
+
+  /// ## ST_RDONLY (setter)
+  set ST_RDONLY(Object? ST_RDONLY) => setAttribute("ST_RDONLY", ST_RDONLY);
+
+  /// ## TMP_MAX (getter)
+  Object? get TMP_MAX => getAttribute("TMP_MAX");
+
+  /// ## TMP_MAX (setter)
+  set TMP_MAX(Object? TMP_MAX) => setAttribute("TMP_MAX", TMP_MAX);
+
+  /// ## WCONTINUED (getter)
+  Object? get WCONTINUED => getAttribute("WCONTINUED");
+
+  /// ## WCONTINUED (setter)
+  set WCONTINUED(Object? WCONTINUED) => setAttribute("WCONTINUED", WCONTINUED);
+
+  /// ## WEXITED (getter)
+  Object? get WEXITED => getAttribute("WEXITED");
+
+  /// ## WEXITED (setter)
+  set WEXITED(Object? WEXITED) => setAttribute("WEXITED", WEXITED);
+
+  /// ## WNOHANG (getter)
+  Object? get WNOHANG => getAttribute("WNOHANG");
+
+  /// ## WNOHANG (setter)
+  set WNOHANG(Object? WNOHANG) => setAttribute("WNOHANG", WNOHANG);
+
+  /// ## WNOWAIT (getter)
+  Object? get WNOWAIT => getAttribute("WNOWAIT");
+
+  /// ## WNOWAIT (setter)
+  set WNOWAIT(Object? WNOWAIT) => setAttribute("WNOWAIT", WNOWAIT);
+
+  /// ## WSTOPPED (getter)
+  Object? get WSTOPPED => getAttribute("WSTOPPED");
+
+  /// ## WSTOPPED (setter)
+  set WSTOPPED(Object? WSTOPPED) => setAttribute("WSTOPPED", WSTOPPED);
+
+  /// ## WUNTRACED (getter)
+  Object? get WUNTRACED => getAttribute("WUNTRACED");
+
+  /// ## WUNTRACED (setter)
+  set WUNTRACED(Object? WUNTRACED) => setAttribute("WUNTRACED", WUNTRACED);
+
+  /// ## W_OK (getter)
+  Object? get W_OK => getAttribute("W_OK");
+
+  /// ## W_OK (setter)
+  set W_OK(Object? W_OK) => setAttribute("W_OK", W_OK);
+
+  /// ## X_OK (getter)
+  Object? get X_OK => getAttribute("X_OK");
+
+  /// ## X_OK (setter)
+  set X_OK(Object? X_OK) => setAttribute("X_OK", X_OK);
+
+  /// ## altsep (getter)
+  Object? get altsep => getAttribute("altsep");
+
+  /// ## altsep (setter)
+  set altsep(Object? altsep) => setAttribute("altsep", altsep);
+
+  /// ## confstr_names (getter)
+  Object? get confstr_names => getAttribute("confstr_names");
+
+  /// ## confstr_names (setter)
+  set confstr_names(Object? confstr_names) =>
+      setAttribute("confstr_names", confstr_names);
+
+  /// ## curdir (getter)
+  Object? get curdir => getAttribute("curdir");
+
+  /// ## curdir (setter)
+  set curdir(Object? curdir) => setAttribute("curdir", curdir);
+
+  /// ## defpath (getter)
+  Object? get defpath => getAttribute("defpath");
+
+  /// ## defpath (setter)
+  set defpath(Object? defpath) => setAttribute("defpath", defpath);
+
+  /// ## devnull (getter)
+  Object? get devnull => getAttribute("devnull");
+
+  /// ## devnull (setter)
+  set devnull(Object? devnull) => setAttribute("devnull", devnull);
+
+  /// ## extsep (getter)
+  Object? get extsep => getAttribute("extsep");
+
+  /// ## extsep (setter)
+  set extsep(Object? extsep) => setAttribute("extsep", extsep);
+
+  /// ## linesep (getter)
+  Object? get linesep => getAttribute("linesep");
+
+  /// ## linesep (setter)
+  set linesep(Object? linesep) => setAttribute("linesep", linesep);
+
+  /// ## name (getter)
+  Object? get name => getAttribute("name");
+
+  /// ## name (setter)
+  set name(Object? name) => setAttribute("name", name);
+
+  /// ## pardir (getter)
+  Object? get pardir => getAttribute("pardir");
+
+  /// ## pardir (setter)
+  set pardir(Object? pardir) => setAttribute("pardir", pardir);
+
+  /// ## pathconf_names (getter)
+  Object? get pathconf_names => getAttribute("pathconf_names");
+
+  /// ## pathconf_names (setter)
+  set pathconf_names(Object? pathconf_names) =>
+      setAttribute("pathconf_names", pathconf_names);
+
+  /// ## pathsep (getter)
+  Object? get pathsep => getAttribute("pathsep");
+
+  /// ## pathsep (setter)
+  set pathsep(Object? pathsep) => setAttribute("pathsep", pathsep);
+
+  /// ## sep (getter)
+  Object? get sep => getAttribute("sep");
+
+  /// ## sep (setter)
+  set sep(Object? sep) => setAttribute("sep", sep);
+
+  /// ## supports_bytes_environ (getter)
+  Object? get supports_bytes_environ => getAttribute("supports_bytes_environ");
+
+  /// ## supports_bytes_environ (setter)
+  set supports_bytes_environ(Object? supports_bytes_environ) =>
+      setAttribute("supports_bytes_environ", supports_bytes_environ);
+
+  /// ## supports_dir_fd (getter)
+  Object? get supports_dir_fd => getAttribute("supports_dir_fd");
+
+  /// ## supports_dir_fd (setter)
+  set supports_dir_fd(Object? supports_dir_fd) =>
+      setAttribute("supports_dir_fd", supports_dir_fd);
+
+  /// ## supports_effective_ids (getter)
+  Object? get supports_effective_ids => getAttribute("supports_effective_ids");
+
+  /// ## supports_effective_ids (setter)
+  set supports_effective_ids(Object? supports_effective_ids) =>
+      setAttribute("supports_effective_ids", supports_effective_ids);
+
+  /// ## supports_fd (getter)
+  Object? get supports_fd => getAttribute("supports_fd");
+
+  /// ## supports_fd (setter)
+  set supports_fd(Object? supports_fd) =>
+      setAttribute("supports_fd", supports_fd);
+
+  /// ## supports_follow_symlinks (getter)
+  Object? get supports_follow_symlinks =>
+      getAttribute("supports_follow_symlinks");
+
+  /// ## supports_follow_symlinks (setter)
+  set supports_follow_symlinks(Object? supports_follow_symlinks) =>
+      setAttribute("supports_follow_symlinks", supports_follow_symlinks);
+
+  /// ## sysconf_names (getter)
+  Object? get sysconf_names => getAttribute("sysconf_names");
+
+  /// ## sysconf_names (setter)
+  set sysconf_names(Object? sysconf_names) =>
+      setAttribute("sysconf_names", sysconf_names);
 }
 
 /// ## path
@@ -59519,7 +66189,7 @@ final class path extends PythonModule {
   /// Return a relative version of a path
   Object? relpath({
     required Object? path,
-    Object? start = null,
+    Object? start,
   }) =>
       getFunction("relpath").call(
         <Object?>[
@@ -59578,6 +66248,62 @@ final class path extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## altsep (getter)
+  Object? get altsep => getAttribute("altsep");
+
+  /// ## altsep (setter)
+  set altsep(Object? altsep) => setAttribute("altsep", altsep);
+
+  /// ## curdir (getter)
+  Object? get curdir => getAttribute("curdir");
+
+  /// ## curdir (setter)
+  set curdir(Object? curdir) => setAttribute("curdir", curdir);
+
+  /// ## defpath (getter)
+  Object? get defpath => getAttribute("defpath");
+
+  /// ## defpath (setter)
+  set defpath(Object? defpath) => setAttribute("defpath", defpath);
+
+  /// ## devnull (getter)
+  Object? get devnull => getAttribute("devnull");
+
+  /// ## devnull (setter)
+  set devnull(Object? devnull) => setAttribute("devnull", devnull);
+
+  /// ## extsep (getter)
+  Object? get extsep => getAttribute("extsep");
+
+  /// ## extsep (setter)
+  set extsep(Object? extsep) => setAttribute("extsep", extsep);
+
+  /// ## pardir (getter)
+  Object? get pardir => getAttribute("pardir");
+
+  /// ## pardir (setter)
+  set pardir(Object? pardir) => setAttribute("pardir", pardir);
+
+  /// ## pathsep (getter)
+  Object? get pathsep => getAttribute("pathsep");
+
+  /// ## pathsep (setter)
+  set pathsep(Object? pathsep) => setAttribute("pathsep", pathsep);
+
+  /// ## sep (getter)
+  Object? get sep => getAttribute("sep");
+
+  /// ## sep (setter)
+  set sep(Object? sep) => setAttribute("sep", sep);
+
+  /// ## supports_unicode_filenames (getter)
+  Object? get supports_unicode_filenames =>
+      getAttribute("supports_unicode_filenames");
+
+  /// ## supports_unicode_filenames (setter)
+  set supports_unicode_filenames(Object? supports_unicode_filenames) =>
+      setAttribute("supports_unicode_filenames", supports_unicode_filenames);
 }
 
 /// ## genericpath
@@ -60142,6 +66868,454 @@ final class stat extends PythonModule {
         "stat",
         stat.from,
       );
+
+  /// ## FILE_ATTRIBUTE_ARCHIVE (getter)
+  Object? get FILE_ATTRIBUTE_ARCHIVE => getAttribute("FILE_ATTRIBUTE_ARCHIVE");
+
+  /// ## FILE_ATTRIBUTE_ARCHIVE (setter)
+  set FILE_ATTRIBUTE_ARCHIVE(Object? FILE_ATTRIBUTE_ARCHIVE) =>
+      setAttribute("FILE_ATTRIBUTE_ARCHIVE", FILE_ATTRIBUTE_ARCHIVE);
+
+  /// ## FILE_ATTRIBUTE_COMPRESSED (getter)
+  Object? get FILE_ATTRIBUTE_COMPRESSED =>
+      getAttribute("FILE_ATTRIBUTE_COMPRESSED");
+
+  /// ## FILE_ATTRIBUTE_COMPRESSED (setter)
+  set FILE_ATTRIBUTE_COMPRESSED(Object? FILE_ATTRIBUTE_COMPRESSED) =>
+      setAttribute("FILE_ATTRIBUTE_COMPRESSED", FILE_ATTRIBUTE_COMPRESSED);
+
+  /// ## FILE_ATTRIBUTE_DEVICE (getter)
+  Object? get FILE_ATTRIBUTE_DEVICE => getAttribute("FILE_ATTRIBUTE_DEVICE");
+
+  /// ## FILE_ATTRIBUTE_DEVICE (setter)
+  set FILE_ATTRIBUTE_DEVICE(Object? FILE_ATTRIBUTE_DEVICE) =>
+      setAttribute("FILE_ATTRIBUTE_DEVICE", FILE_ATTRIBUTE_DEVICE);
+
+  /// ## FILE_ATTRIBUTE_DIRECTORY (getter)
+  Object? get FILE_ATTRIBUTE_DIRECTORY =>
+      getAttribute("FILE_ATTRIBUTE_DIRECTORY");
+
+  /// ## FILE_ATTRIBUTE_DIRECTORY (setter)
+  set FILE_ATTRIBUTE_DIRECTORY(Object? FILE_ATTRIBUTE_DIRECTORY) =>
+      setAttribute("FILE_ATTRIBUTE_DIRECTORY", FILE_ATTRIBUTE_DIRECTORY);
+
+  /// ## FILE_ATTRIBUTE_ENCRYPTED (getter)
+  Object? get FILE_ATTRIBUTE_ENCRYPTED =>
+      getAttribute("FILE_ATTRIBUTE_ENCRYPTED");
+
+  /// ## FILE_ATTRIBUTE_ENCRYPTED (setter)
+  set FILE_ATTRIBUTE_ENCRYPTED(Object? FILE_ATTRIBUTE_ENCRYPTED) =>
+      setAttribute("FILE_ATTRIBUTE_ENCRYPTED", FILE_ATTRIBUTE_ENCRYPTED);
+
+  /// ## FILE_ATTRIBUTE_HIDDEN (getter)
+  Object? get FILE_ATTRIBUTE_HIDDEN => getAttribute("FILE_ATTRIBUTE_HIDDEN");
+
+  /// ## FILE_ATTRIBUTE_HIDDEN (setter)
+  set FILE_ATTRIBUTE_HIDDEN(Object? FILE_ATTRIBUTE_HIDDEN) =>
+      setAttribute("FILE_ATTRIBUTE_HIDDEN", FILE_ATTRIBUTE_HIDDEN);
+
+  /// ## FILE_ATTRIBUTE_INTEGRITY_STREAM (getter)
+  Object? get FILE_ATTRIBUTE_INTEGRITY_STREAM =>
+      getAttribute("FILE_ATTRIBUTE_INTEGRITY_STREAM");
+
+  /// ## FILE_ATTRIBUTE_INTEGRITY_STREAM (setter)
+  set FILE_ATTRIBUTE_INTEGRITY_STREAM(
+          Object? FILE_ATTRIBUTE_INTEGRITY_STREAM) =>
+      setAttribute(
+          "FILE_ATTRIBUTE_INTEGRITY_STREAM", FILE_ATTRIBUTE_INTEGRITY_STREAM);
+
+  /// ## FILE_ATTRIBUTE_NORMAL (getter)
+  Object? get FILE_ATTRIBUTE_NORMAL => getAttribute("FILE_ATTRIBUTE_NORMAL");
+
+  /// ## FILE_ATTRIBUTE_NORMAL (setter)
+  set FILE_ATTRIBUTE_NORMAL(Object? FILE_ATTRIBUTE_NORMAL) =>
+      setAttribute("FILE_ATTRIBUTE_NORMAL", FILE_ATTRIBUTE_NORMAL);
+
+  /// ## FILE_ATTRIBUTE_NOT_CONTENT_INDEXED (getter)
+  Object? get FILE_ATTRIBUTE_NOT_CONTENT_INDEXED =>
+      getAttribute("FILE_ATTRIBUTE_NOT_CONTENT_INDEXED");
+
+  /// ## FILE_ATTRIBUTE_NOT_CONTENT_INDEXED (setter)
+  set FILE_ATTRIBUTE_NOT_CONTENT_INDEXED(
+          Object? FILE_ATTRIBUTE_NOT_CONTENT_INDEXED) =>
+      setAttribute("FILE_ATTRIBUTE_NOT_CONTENT_INDEXED",
+          FILE_ATTRIBUTE_NOT_CONTENT_INDEXED);
+
+  /// ## FILE_ATTRIBUTE_NO_SCRUB_DATA (getter)
+  Object? get FILE_ATTRIBUTE_NO_SCRUB_DATA =>
+      getAttribute("FILE_ATTRIBUTE_NO_SCRUB_DATA");
+
+  /// ## FILE_ATTRIBUTE_NO_SCRUB_DATA (setter)
+  set FILE_ATTRIBUTE_NO_SCRUB_DATA(Object? FILE_ATTRIBUTE_NO_SCRUB_DATA) =>
+      setAttribute(
+          "FILE_ATTRIBUTE_NO_SCRUB_DATA", FILE_ATTRIBUTE_NO_SCRUB_DATA);
+
+  /// ## FILE_ATTRIBUTE_OFFLINE (getter)
+  Object? get FILE_ATTRIBUTE_OFFLINE => getAttribute("FILE_ATTRIBUTE_OFFLINE");
+
+  /// ## FILE_ATTRIBUTE_OFFLINE (setter)
+  set FILE_ATTRIBUTE_OFFLINE(Object? FILE_ATTRIBUTE_OFFLINE) =>
+      setAttribute("FILE_ATTRIBUTE_OFFLINE", FILE_ATTRIBUTE_OFFLINE);
+
+  /// ## FILE_ATTRIBUTE_READONLY (getter)
+  Object? get FILE_ATTRIBUTE_READONLY =>
+      getAttribute("FILE_ATTRIBUTE_READONLY");
+
+  /// ## FILE_ATTRIBUTE_READONLY (setter)
+  set FILE_ATTRIBUTE_READONLY(Object? FILE_ATTRIBUTE_READONLY) =>
+      setAttribute("FILE_ATTRIBUTE_READONLY", FILE_ATTRIBUTE_READONLY);
+
+  /// ## FILE_ATTRIBUTE_REPARSE_POINT (getter)
+  Object? get FILE_ATTRIBUTE_REPARSE_POINT =>
+      getAttribute("FILE_ATTRIBUTE_REPARSE_POINT");
+
+  /// ## FILE_ATTRIBUTE_REPARSE_POINT (setter)
+  set FILE_ATTRIBUTE_REPARSE_POINT(Object? FILE_ATTRIBUTE_REPARSE_POINT) =>
+      setAttribute(
+          "FILE_ATTRIBUTE_REPARSE_POINT", FILE_ATTRIBUTE_REPARSE_POINT);
+
+  /// ## FILE_ATTRIBUTE_SPARSE_FILE (getter)
+  Object? get FILE_ATTRIBUTE_SPARSE_FILE =>
+      getAttribute("FILE_ATTRIBUTE_SPARSE_FILE");
+
+  /// ## FILE_ATTRIBUTE_SPARSE_FILE (setter)
+  set FILE_ATTRIBUTE_SPARSE_FILE(Object? FILE_ATTRIBUTE_SPARSE_FILE) =>
+      setAttribute("FILE_ATTRIBUTE_SPARSE_FILE", FILE_ATTRIBUTE_SPARSE_FILE);
+
+  /// ## FILE_ATTRIBUTE_SYSTEM (getter)
+  Object? get FILE_ATTRIBUTE_SYSTEM => getAttribute("FILE_ATTRIBUTE_SYSTEM");
+
+  /// ## FILE_ATTRIBUTE_SYSTEM (setter)
+  set FILE_ATTRIBUTE_SYSTEM(Object? FILE_ATTRIBUTE_SYSTEM) =>
+      setAttribute("FILE_ATTRIBUTE_SYSTEM", FILE_ATTRIBUTE_SYSTEM);
+
+  /// ## FILE_ATTRIBUTE_TEMPORARY (getter)
+  Object? get FILE_ATTRIBUTE_TEMPORARY =>
+      getAttribute("FILE_ATTRIBUTE_TEMPORARY");
+
+  /// ## FILE_ATTRIBUTE_TEMPORARY (setter)
+  set FILE_ATTRIBUTE_TEMPORARY(Object? FILE_ATTRIBUTE_TEMPORARY) =>
+      setAttribute("FILE_ATTRIBUTE_TEMPORARY", FILE_ATTRIBUTE_TEMPORARY);
+
+  /// ## FILE_ATTRIBUTE_VIRTUAL (getter)
+  Object? get FILE_ATTRIBUTE_VIRTUAL => getAttribute("FILE_ATTRIBUTE_VIRTUAL");
+
+  /// ## FILE_ATTRIBUTE_VIRTUAL (setter)
+  set FILE_ATTRIBUTE_VIRTUAL(Object? FILE_ATTRIBUTE_VIRTUAL) =>
+      setAttribute("FILE_ATTRIBUTE_VIRTUAL", FILE_ATTRIBUTE_VIRTUAL);
+
+  /// ## SF_APPEND (getter)
+  Object? get SF_APPEND => getAttribute("SF_APPEND");
+
+  /// ## SF_APPEND (setter)
+  set SF_APPEND(Object? SF_APPEND) => setAttribute("SF_APPEND", SF_APPEND);
+
+  /// ## SF_ARCHIVED (getter)
+  Object? get SF_ARCHIVED => getAttribute("SF_ARCHIVED");
+
+  /// ## SF_ARCHIVED (setter)
+  set SF_ARCHIVED(Object? SF_ARCHIVED) =>
+      setAttribute("SF_ARCHIVED", SF_ARCHIVED);
+
+  /// ## SF_IMMUTABLE (getter)
+  Object? get SF_IMMUTABLE => getAttribute("SF_IMMUTABLE");
+
+  /// ## SF_IMMUTABLE (setter)
+  set SF_IMMUTABLE(Object? SF_IMMUTABLE) =>
+      setAttribute("SF_IMMUTABLE", SF_IMMUTABLE);
+
+  /// ## SF_NOUNLINK (getter)
+  Object? get SF_NOUNLINK => getAttribute("SF_NOUNLINK");
+
+  /// ## SF_NOUNLINK (setter)
+  set SF_NOUNLINK(Object? SF_NOUNLINK) =>
+      setAttribute("SF_NOUNLINK", SF_NOUNLINK);
+
+  /// ## SF_SNAPSHOT (getter)
+  Object? get SF_SNAPSHOT => getAttribute("SF_SNAPSHOT");
+
+  /// ## SF_SNAPSHOT (setter)
+  set SF_SNAPSHOT(Object? SF_SNAPSHOT) =>
+      setAttribute("SF_SNAPSHOT", SF_SNAPSHOT);
+
+  /// ## ST_ATIME (getter)
+  Object? get ST_ATIME => getAttribute("ST_ATIME");
+
+  /// ## ST_ATIME (setter)
+  set ST_ATIME(Object? ST_ATIME) => setAttribute("ST_ATIME", ST_ATIME);
+
+  /// ## ST_CTIME (getter)
+  Object? get ST_CTIME => getAttribute("ST_CTIME");
+
+  /// ## ST_CTIME (setter)
+  set ST_CTIME(Object? ST_CTIME) => setAttribute("ST_CTIME", ST_CTIME);
+
+  /// ## ST_DEV (getter)
+  Object? get ST_DEV => getAttribute("ST_DEV");
+
+  /// ## ST_DEV (setter)
+  set ST_DEV(Object? ST_DEV) => setAttribute("ST_DEV", ST_DEV);
+
+  /// ## ST_GID (getter)
+  Object? get ST_GID => getAttribute("ST_GID");
+
+  /// ## ST_GID (setter)
+  set ST_GID(Object? ST_GID) => setAttribute("ST_GID", ST_GID);
+
+  /// ## ST_INO (getter)
+  Object? get ST_INO => getAttribute("ST_INO");
+
+  /// ## ST_INO (setter)
+  set ST_INO(Object? ST_INO) => setAttribute("ST_INO", ST_INO);
+
+  /// ## ST_MODE (getter)
+  Object? get ST_MODE => getAttribute("ST_MODE");
+
+  /// ## ST_MODE (setter)
+  set ST_MODE(Object? ST_MODE) => setAttribute("ST_MODE", ST_MODE);
+
+  /// ## ST_MTIME (getter)
+  Object? get ST_MTIME => getAttribute("ST_MTIME");
+
+  /// ## ST_MTIME (setter)
+  set ST_MTIME(Object? ST_MTIME) => setAttribute("ST_MTIME", ST_MTIME);
+
+  /// ## ST_NLINK (getter)
+  Object? get ST_NLINK => getAttribute("ST_NLINK");
+
+  /// ## ST_NLINK (setter)
+  set ST_NLINK(Object? ST_NLINK) => setAttribute("ST_NLINK", ST_NLINK);
+
+  /// ## ST_SIZE (getter)
+  Object? get ST_SIZE => getAttribute("ST_SIZE");
+
+  /// ## ST_SIZE (setter)
+  set ST_SIZE(Object? ST_SIZE) => setAttribute("ST_SIZE", ST_SIZE);
+
+  /// ## ST_UID (getter)
+  Object? get ST_UID => getAttribute("ST_UID");
+
+  /// ## ST_UID (setter)
+  set ST_UID(Object? ST_UID) => setAttribute("ST_UID", ST_UID);
+
+  /// ## S_ENFMT (getter)
+  Object? get S_ENFMT => getAttribute("S_ENFMT");
+
+  /// ## S_ENFMT (setter)
+  set S_ENFMT(Object? S_ENFMT) => setAttribute("S_ENFMT", S_ENFMT);
+
+  /// ## S_IEXEC (getter)
+  Object? get S_IEXEC => getAttribute("S_IEXEC");
+
+  /// ## S_IEXEC (setter)
+  set S_IEXEC(Object? S_IEXEC) => setAttribute("S_IEXEC", S_IEXEC);
+
+  /// ## S_IFBLK (getter)
+  Object? get S_IFBLK => getAttribute("S_IFBLK");
+
+  /// ## S_IFBLK (setter)
+  set S_IFBLK(Object? S_IFBLK) => setAttribute("S_IFBLK", S_IFBLK);
+
+  /// ## S_IFCHR (getter)
+  Object? get S_IFCHR => getAttribute("S_IFCHR");
+
+  /// ## S_IFCHR (setter)
+  set S_IFCHR(Object? S_IFCHR) => setAttribute("S_IFCHR", S_IFCHR);
+
+  /// ## S_IFDIR (getter)
+  Object? get S_IFDIR => getAttribute("S_IFDIR");
+
+  /// ## S_IFDIR (setter)
+  set S_IFDIR(Object? S_IFDIR) => setAttribute("S_IFDIR", S_IFDIR);
+
+  /// ## S_IFDOOR (getter)
+  Object? get S_IFDOOR => getAttribute("S_IFDOOR");
+
+  /// ## S_IFDOOR (setter)
+  set S_IFDOOR(Object? S_IFDOOR) => setAttribute("S_IFDOOR", S_IFDOOR);
+
+  /// ## S_IFIFO (getter)
+  Object? get S_IFIFO => getAttribute("S_IFIFO");
+
+  /// ## S_IFIFO (setter)
+  set S_IFIFO(Object? S_IFIFO) => setAttribute("S_IFIFO", S_IFIFO);
+
+  /// ## S_IFLNK (getter)
+  Object? get S_IFLNK => getAttribute("S_IFLNK");
+
+  /// ## S_IFLNK (setter)
+  set S_IFLNK(Object? S_IFLNK) => setAttribute("S_IFLNK", S_IFLNK);
+
+  /// ## S_IFPORT (getter)
+  Object? get S_IFPORT => getAttribute("S_IFPORT");
+
+  /// ## S_IFPORT (setter)
+  set S_IFPORT(Object? S_IFPORT) => setAttribute("S_IFPORT", S_IFPORT);
+
+  /// ## S_IFREG (getter)
+  Object? get S_IFREG => getAttribute("S_IFREG");
+
+  /// ## S_IFREG (setter)
+  set S_IFREG(Object? S_IFREG) => setAttribute("S_IFREG", S_IFREG);
+
+  /// ## S_IFSOCK (getter)
+  Object? get S_IFSOCK => getAttribute("S_IFSOCK");
+
+  /// ## S_IFSOCK (setter)
+  set S_IFSOCK(Object? S_IFSOCK) => setAttribute("S_IFSOCK", S_IFSOCK);
+
+  /// ## S_IFWHT (getter)
+  Object? get S_IFWHT => getAttribute("S_IFWHT");
+
+  /// ## S_IFWHT (setter)
+  set S_IFWHT(Object? S_IFWHT) => setAttribute("S_IFWHT", S_IFWHT);
+
+  /// ## S_IREAD (getter)
+  Object? get S_IREAD => getAttribute("S_IREAD");
+
+  /// ## S_IREAD (setter)
+  set S_IREAD(Object? S_IREAD) => setAttribute("S_IREAD", S_IREAD);
+
+  /// ## S_IRGRP (getter)
+  Object? get S_IRGRP => getAttribute("S_IRGRP");
+
+  /// ## S_IRGRP (setter)
+  set S_IRGRP(Object? S_IRGRP) => setAttribute("S_IRGRP", S_IRGRP);
+
+  /// ## S_IROTH (getter)
+  Object? get S_IROTH => getAttribute("S_IROTH");
+
+  /// ## S_IROTH (setter)
+  set S_IROTH(Object? S_IROTH) => setAttribute("S_IROTH", S_IROTH);
+
+  /// ## S_IRUSR (getter)
+  Object? get S_IRUSR => getAttribute("S_IRUSR");
+
+  /// ## S_IRUSR (setter)
+  set S_IRUSR(Object? S_IRUSR) => setAttribute("S_IRUSR", S_IRUSR);
+
+  /// ## S_IRWXG (getter)
+  Object? get S_IRWXG => getAttribute("S_IRWXG");
+
+  /// ## S_IRWXG (setter)
+  set S_IRWXG(Object? S_IRWXG) => setAttribute("S_IRWXG", S_IRWXG);
+
+  /// ## S_IRWXO (getter)
+  Object? get S_IRWXO => getAttribute("S_IRWXO");
+
+  /// ## S_IRWXO (setter)
+  set S_IRWXO(Object? S_IRWXO) => setAttribute("S_IRWXO", S_IRWXO);
+
+  /// ## S_IRWXU (getter)
+  Object? get S_IRWXU => getAttribute("S_IRWXU");
+
+  /// ## S_IRWXU (setter)
+  set S_IRWXU(Object? S_IRWXU) => setAttribute("S_IRWXU", S_IRWXU);
+
+  /// ## S_ISGID (getter)
+  Object? get S_ISGID => getAttribute("S_ISGID");
+
+  /// ## S_ISGID (setter)
+  set S_ISGID(Object? S_ISGID) => setAttribute("S_ISGID", S_ISGID);
+
+  /// ## S_ISUID (getter)
+  Object? get S_ISUID => getAttribute("S_ISUID");
+
+  /// ## S_ISUID (setter)
+  set S_ISUID(Object? S_ISUID) => setAttribute("S_ISUID", S_ISUID);
+
+  /// ## S_ISVTX (getter)
+  Object? get S_ISVTX => getAttribute("S_ISVTX");
+
+  /// ## S_ISVTX (setter)
+  set S_ISVTX(Object? S_ISVTX) => setAttribute("S_ISVTX", S_ISVTX);
+
+  /// ## S_IWGRP (getter)
+  Object? get S_IWGRP => getAttribute("S_IWGRP");
+
+  /// ## S_IWGRP (setter)
+  set S_IWGRP(Object? S_IWGRP) => setAttribute("S_IWGRP", S_IWGRP);
+
+  /// ## S_IWOTH (getter)
+  Object? get S_IWOTH => getAttribute("S_IWOTH");
+
+  /// ## S_IWOTH (setter)
+  set S_IWOTH(Object? S_IWOTH) => setAttribute("S_IWOTH", S_IWOTH);
+
+  /// ## S_IWRITE (getter)
+  Object? get S_IWRITE => getAttribute("S_IWRITE");
+
+  /// ## S_IWRITE (setter)
+  set S_IWRITE(Object? S_IWRITE) => setAttribute("S_IWRITE", S_IWRITE);
+
+  /// ## S_IWUSR (getter)
+  Object? get S_IWUSR => getAttribute("S_IWUSR");
+
+  /// ## S_IWUSR (setter)
+  set S_IWUSR(Object? S_IWUSR) => setAttribute("S_IWUSR", S_IWUSR);
+
+  /// ## S_IXGRP (getter)
+  Object? get S_IXGRP => getAttribute("S_IXGRP");
+
+  /// ## S_IXGRP (setter)
+  set S_IXGRP(Object? S_IXGRP) => setAttribute("S_IXGRP", S_IXGRP);
+
+  /// ## S_IXOTH (getter)
+  Object? get S_IXOTH => getAttribute("S_IXOTH");
+
+  /// ## S_IXOTH (setter)
+  set S_IXOTH(Object? S_IXOTH) => setAttribute("S_IXOTH", S_IXOTH);
+
+  /// ## S_IXUSR (getter)
+  Object? get S_IXUSR => getAttribute("S_IXUSR");
+
+  /// ## S_IXUSR (setter)
+  set S_IXUSR(Object? S_IXUSR) => setAttribute("S_IXUSR", S_IXUSR);
+
+  /// ## UF_APPEND (getter)
+  Object? get UF_APPEND => getAttribute("UF_APPEND");
+
+  /// ## UF_APPEND (setter)
+  set UF_APPEND(Object? UF_APPEND) => setAttribute("UF_APPEND", UF_APPEND);
+
+  /// ## UF_COMPRESSED (getter)
+  Object? get UF_COMPRESSED => getAttribute("UF_COMPRESSED");
+
+  /// ## UF_COMPRESSED (setter)
+  set UF_COMPRESSED(Object? UF_COMPRESSED) =>
+      setAttribute("UF_COMPRESSED", UF_COMPRESSED);
+
+  /// ## UF_HIDDEN (getter)
+  Object? get UF_HIDDEN => getAttribute("UF_HIDDEN");
+
+  /// ## UF_HIDDEN (setter)
+  set UF_HIDDEN(Object? UF_HIDDEN) => setAttribute("UF_HIDDEN", UF_HIDDEN);
+
+  /// ## UF_IMMUTABLE (getter)
+  Object? get UF_IMMUTABLE => getAttribute("UF_IMMUTABLE");
+
+  /// ## UF_IMMUTABLE (setter)
+  set UF_IMMUTABLE(Object? UF_IMMUTABLE) =>
+      setAttribute("UF_IMMUTABLE", UF_IMMUTABLE);
+
+  /// ## UF_NODUMP (getter)
+  Object? get UF_NODUMP => getAttribute("UF_NODUMP");
+
+  /// ## UF_NODUMP (setter)
+  set UF_NODUMP(Object? UF_NODUMP) => setAttribute("UF_NODUMP", UF_NODUMP);
+
+  /// ## UF_NOUNLINK (getter)
+  Object? get UF_NOUNLINK => getAttribute("UF_NOUNLINK");
+
+  /// ## UF_NOUNLINK (setter)
+  set UF_NOUNLINK(Object? UF_NOUNLINK) =>
+      setAttribute("UF_NOUNLINK", UF_NOUNLINK);
+
+  /// ## UF_OPAQUE (getter)
+  Object? get UF_OPAQUE => getAttribute("UF_OPAQUE");
+
+  /// ## UF_OPAQUE (setter)
+  set UF_OPAQUE(Object? UF_OPAQUE) => setAttribute("UF_OPAQUE", UF_OPAQUE);
 }
 
 /// ## io
@@ -60306,6 +67480,31 @@ final class io extends PythonModule {
         "io",
         io.from,
       );
+
+  /// ## DEFAULT_BUFFER_SIZE (getter)
+  Object? get DEFAULT_BUFFER_SIZE => getAttribute("DEFAULT_BUFFER_SIZE");
+
+  /// ## DEFAULT_BUFFER_SIZE (setter)
+  set DEFAULT_BUFFER_SIZE(Object? DEFAULT_BUFFER_SIZE) =>
+      setAttribute("DEFAULT_BUFFER_SIZE", DEFAULT_BUFFER_SIZE);
+
+  /// ## SEEK_CUR (getter)
+  Object? get SEEK_CUR => getAttribute("SEEK_CUR");
+
+  /// ## SEEK_CUR (setter)
+  set SEEK_CUR(Object? SEEK_CUR) => setAttribute("SEEK_CUR", SEEK_CUR);
+
+  /// ## SEEK_END (getter)
+  Object? get SEEK_END => getAttribute("SEEK_END");
+
+  /// ## SEEK_END (setter)
+  set SEEK_END(Object? SEEK_END) => setAttribute("SEEK_END", SEEK_END);
+
+  /// ## SEEK_SET (getter)
+  Object? get SEEK_SET => getAttribute("SEEK_SET");
+
+  /// ## SEEK_SET (setter)
+  set SEEK_SET(Object? SEEK_SET) => setAttribute("SEEK_SET", SEEK_SET);
 }
 
 /// ## termios
@@ -60316,6 +67515,1063 @@ final class termios extends PythonModule {
         "termios",
         termios.from,
       );
+
+  /// ## B0 (getter)
+  Object? get B0 => getAttribute("B0");
+
+  /// ## B0 (setter)
+  set B0(Object? B0) => setAttribute("B0", B0);
+
+  /// ## B110 (getter)
+  Object? get B110 => getAttribute("B110");
+
+  /// ## B110 (setter)
+  set B110(Object? B110) => setAttribute("B110", B110);
+
+  /// ## B115200 (getter)
+  Object? get B115200 => getAttribute("B115200");
+
+  /// ## B115200 (setter)
+  set B115200(Object? B115200) => setAttribute("B115200", B115200);
+
+  /// ## B1200 (getter)
+  Object? get B1200 => getAttribute("B1200");
+
+  /// ## B1200 (setter)
+  set B1200(Object? B1200) => setAttribute("B1200", B1200);
+
+  /// ## B134 (getter)
+  Object? get B134 => getAttribute("B134");
+
+  /// ## B134 (setter)
+  set B134(Object? B134) => setAttribute("B134", B134);
+
+  /// ## B150 (getter)
+  Object? get B150 => getAttribute("B150");
+
+  /// ## B150 (setter)
+  set B150(Object? B150) => setAttribute("B150", B150);
+
+  /// ## B1800 (getter)
+  Object? get B1800 => getAttribute("B1800");
+
+  /// ## B1800 (setter)
+  set B1800(Object? B1800) => setAttribute("B1800", B1800);
+
+  /// ## B19200 (getter)
+  Object? get B19200 => getAttribute("B19200");
+
+  /// ## B19200 (setter)
+  set B19200(Object? B19200) => setAttribute("B19200", B19200);
+
+  /// ## B200 (getter)
+  Object? get B200 => getAttribute("B200");
+
+  /// ## B200 (setter)
+  set B200(Object? B200) => setAttribute("B200", B200);
+
+  /// ## B230400 (getter)
+  Object? get B230400 => getAttribute("B230400");
+
+  /// ## B230400 (setter)
+  set B230400(Object? B230400) => setAttribute("B230400", B230400);
+
+  /// ## B2400 (getter)
+  Object? get B2400 => getAttribute("B2400");
+
+  /// ## B2400 (setter)
+  set B2400(Object? B2400) => setAttribute("B2400", B2400);
+
+  /// ## B300 (getter)
+  Object? get B300 => getAttribute("B300");
+
+  /// ## B300 (setter)
+  set B300(Object? B300) => setAttribute("B300", B300);
+
+  /// ## B38400 (getter)
+  Object? get B38400 => getAttribute("B38400");
+
+  /// ## B38400 (setter)
+  set B38400(Object? B38400) => setAttribute("B38400", B38400);
+
+  /// ## B4800 (getter)
+  Object? get B4800 => getAttribute("B4800");
+
+  /// ## B4800 (setter)
+  set B4800(Object? B4800) => setAttribute("B4800", B4800);
+
+  /// ## B50 (getter)
+  Object? get B50 => getAttribute("B50");
+
+  /// ## B50 (setter)
+  set B50(Object? B50) => setAttribute("B50", B50);
+
+  /// ## B57600 (getter)
+  Object? get B57600 => getAttribute("B57600");
+
+  /// ## B57600 (setter)
+  set B57600(Object? B57600) => setAttribute("B57600", B57600);
+
+  /// ## B600 (getter)
+  Object? get B600 => getAttribute("B600");
+
+  /// ## B600 (setter)
+  set B600(Object? B600) => setAttribute("B600", B600);
+
+  /// ## B75 (getter)
+  Object? get B75 => getAttribute("B75");
+
+  /// ## B75 (setter)
+  set B75(Object? B75) => setAttribute("B75", B75);
+
+  /// ## B9600 (getter)
+  Object? get B9600 => getAttribute("B9600");
+
+  /// ## B9600 (setter)
+  set B9600(Object? B9600) => setAttribute("B9600", B9600);
+
+  /// ## BRKINT (getter)
+  Object? get BRKINT => getAttribute("BRKINT");
+
+  /// ## BRKINT (setter)
+  set BRKINT(Object? BRKINT) => setAttribute("BRKINT", BRKINT);
+
+  /// ## BS0 (getter)
+  Object? get BS0 => getAttribute("BS0");
+
+  /// ## BS0 (setter)
+  set BS0(Object? BS0) => setAttribute("BS0", BS0);
+
+  /// ## BS1 (getter)
+  Object? get BS1 => getAttribute("BS1");
+
+  /// ## BS1 (setter)
+  set BS1(Object? BS1) => setAttribute("BS1", BS1);
+
+  /// ## BSDLY (getter)
+  Object? get BSDLY => getAttribute("BSDLY");
+
+  /// ## BSDLY (setter)
+  set BSDLY(Object? BSDLY) => setAttribute("BSDLY", BSDLY);
+
+  /// ## CDSUSP (getter)
+  Object? get CDSUSP => getAttribute("CDSUSP");
+
+  /// ## CDSUSP (setter)
+  set CDSUSP(Object? CDSUSP) => setAttribute("CDSUSP", CDSUSP);
+
+  /// ## CEOF (getter)
+  Object? get CEOF => getAttribute("CEOF");
+
+  /// ## CEOF (setter)
+  set CEOF(Object? CEOF) => setAttribute("CEOF", CEOF);
+
+  /// ## CEOL (getter)
+  Object? get CEOL => getAttribute("CEOL");
+
+  /// ## CEOL (setter)
+  set CEOL(Object? CEOL) => setAttribute("CEOL", CEOL);
+
+  /// ## CEOT (getter)
+  Object? get CEOT => getAttribute("CEOT");
+
+  /// ## CEOT (setter)
+  set CEOT(Object? CEOT) => setAttribute("CEOT", CEOT);
+
+  /// ## CERASE (getter)
+  Object? get CERASE => getAttribute("CERASE");
+
+  /// ## CERASE (setter)
+  set CERASE(Object? CERASE) => setAttribute("CERASE", CERASE);
+
+  /// ## CFLUSH (getter)
+  Object? get CFLUSH => getAttribute("CFLUSH");
+
+  /// ## CFLUSH (setter)
+  set CFLUSH(Object? CFLUSH) => setAttribute("CFLUSH", CFLUSH);
+
+  /// ## CINTR (getter)
+  Object? get CINTR => getAttribute("CINTR");
+
+  /// ## CINTR (setter)
+  set CINTR(Object? CINTR) => setAttribute("CINTR", CINTR);
+
+  /// ## CKILL (getter)
+  Object? get CKILL => getAttribute("CKILL");
+
+  /// ## CKILL (setter)
+  set CKILL(Object? CKILL) => setAttribute("CKILL", CKILL);
+
+  /// ## CLNEXT (getter)
+  Object? get CLNEXT => getAttribute("CLNEXT");
+
+  /// ## CLNEXT (setter)
+  set CLNEXT(Object? CLNEXT) => setAttribute("CLNEXT", CLNEXT);
+
+  /// ## CLOCAL (getter)
+  Object? get CLOCAL => getAttribute("CLOCAL");
+
+  /// ## CLOCAL (setter)
+  set CLOCAL(Object? CLOCAL) => setAttribute("CLOCAL", CLOCAL);
+
+  /// ## CQUIT (getter)
+  Object? get CQUIT => getAttribute("CQUIT");
+
+  /// ## CQUIT (setter)
+  set CQUIT(Object? CQUIT) => setAttribute("CQUIT", CQUIT);
+
+  /// ## CR0 (getter)
+  Object? get CR0 => getAttribute("CR0");
+
+  /// ## CR0 (setter)
+  set CR0(Object? CR0) => setAttribute("CR0", CR0);
+
+  /// ## CR1 (getter)
+  Object? get CR1 => getAttribute("CR1");
+
+  /// ## CR1 (setter)
+  set CR1(Object? CR1) => setAttribute("CR1", CR1);
+
+  /// ## CR2 (getter)
+  Object? get CR2 => getAttribute("CR2");
+
+  /// ## CR2 (setter)
+  set CR2(Object? CR2) => setAttribute("CR2", CR2);
+
+  /// ## CR3 (getter)
+  Object? get CR3 => getAttribute("CR3");
+
+  /// ## CR3 (setter)
+  set CR3(Object? CR3) => setAttribute("CR3", CR3);
+
+  /// ## CRDLY (getter)
+  Object? get CRDLY => getAttribute("CRDLY");
+
+  /// ## CRDLY (setter)
+  set CRDLY(Object? CRDLY) => setAttribute("CRDLY", CRDLY);
+
+  /// ## CREAD (getter)
+  Object? get CREAD => getAttribute("CREAD");
+
+  /// ## CREAD (setter)
+  set CREAD(Object? CREAD) => setAttribute("CREAD", CREAD);
+
+  /// ## CRPRNT (getter)
+  Object? get CRPRNT => getAttribute("CRPRNT");
+
+  /// ## CRPRNT (setter)
+  set CRPRNT(Object? CRPRNT) => setAttribute("CRPRNT", CRPRNT);
+
+  /// ## CRTSCTS (getter)
+  Object? get CRTSCTS => getAttribute("CRTSCTS");
+
+  /// ## CRTSCTS (setter)
+  set CRTSCTS(Object? CRTSCTS) => setAttribute("CRTSCTS", CRTSCTS);
+
+  /// ## CS5 (getter)
+  Object? get CS5 => getAttribute("CS5");
+
+  /// ## CS5 (setter)
+  set CS5(Object? CS5) => setAttribute("CS5", CS5);
+
+  /// ## CS6 (getter)
+  Object? get CS6 => getAttribute("CS6");
+
+  /// ## CS6 (setter)
+  set CS6(Object? CS6) => setAttribute("CS6", CS6);
+
+  /// ## CS7 (getter)
+  Object? get CS7 => getAttribute("CS7");
+
+  /// ## CS7 (setter)
+  set CS7(Object? CS7) => setAttribute("CS7", CS7);
+
+  /// ## CS8 (getter)
+  Object? get CS8 => getAttribute("CS8");
+
+  /// ## CS8 (setter)
+  set CS8(Object? CS8) => setAttribute("CS8", CS8);
+
+  /// ## CSIZE (getter)
+  Object? get CSIZE => getAttribute("CSIZE");
+
+  /// ## CSIZE (setter)
+  set CSIZE(Object? CSIZE) => setAttribute("CSIZE", CSIZE);
+
+  /// ## CSTART (getter)
+  Object? get CSTART => getAttribute("CSTART");
+
+  /// ## CSTART (setter)
+  set CSTART(Object? CSTART) => setAttribute("CSTART", CSTART);
+
+  /// ## CSTOP (getter)
+  Object? get CSTOP => getAttribute("CSTOP");
+
+  /// ## CSTOP (setter)
+  set CSTOP(Object? CSTOP) => setAttribute("CSTOP", CSTOP);
+
+  /// ## CSTOPB (getter)
+  Object? get CSTOPB => getAttribute("CSTOPB");
+
+  /// ## CSTOPB (setter)
+  set CSTOPB(Object? CSTOPB) => setAttribute("CSTOPB", CSTOPB);
+
+  /// ## CSUSP (getter)
+  Object? get CSUSP => getAttribute("CSUSP");
+
+  /// ## CSUSP (setter)
+  set CSUSP(Object? CSUSP) => setAttribute("CSUSP", CSUSP);
+
+  /// ## CWERASE (getter)
+  Object? get CWERASE => getAttribute("CWERASE");
+
+  /// ## CWERASE (setter)
+  set CWERASE(Object? CWERASE) => setAttribute("CWERASE", CWERASE);
+
+  /// ## ECHO (getter)
+  Object? get ECHO => getAttribute("ECHO");
+
+  /// ## ECHO (setter)
+  set ECHO(Object? ECHO) => setAttribute("ECHO", ECHO);
+
+  /// ## ECHOCTL (getter)
+  Object? get ECHOCTL => getAttribute("ECHOCTL");
+
+  /// ## ECHOCTL (setter)
+  set ECHOCTL(Object? ECHOCTL) => setAttribute("ECHOCTL", ECHOCTL);
+
+  /// ## ECHOE (getter)
+  Object? get ECHOE => getAttribute("ECHOE");
+
+  /// ## ECHOE (setter)
+  set ECHOE(Object? ECHOE) => setAttribute("ECHOE", ECHOE);
+
+  /// ## ECHOK (getter)
+  Object? get ECHOK => getAttribute("ECHOK");
+
+  /// ## ECHOK (setter)
+  set ECHOK(Object? ECHOK) => setAttribute("ECHOK", ECHOK);
+
+  /// ## ECHOKE (getter)
+  Object? get ECHOKE => getAttribute("ECHOKE");
+
+  /// ## ECHOKE (setter)
+  set ECHOKE(Object? ECHOKE) => setAttribute("ECHOKE", ECHOKE);
+
+  /// ## ECHONL (getter)
+  Object? get ECHONL => getAttribute("ECHONL");
+
+  /// ## ECHONL (setter)
+  set ECHONL(Object? ECHONL) => setAttribute("ECHONL", ECHONL);
+
+  /// ## ECHOPRT (getter)
+  Object? get ECHOPRT => getAttribute("ECHOPRT");
+
+  /// ## ECHOPRT (setter)
+  set ECHOPRT(Object? ECHOPRT) => setAttribute("ECHOPRT", ECHOPRT);
+
+  /// ## EXTA (getter)
+  Object? get EXTA => getAttribute("EXTA");
+
+  /// ## EXTA (setter)
+  set EXTA(Object? EXTA) => setAttribute("EXTA", EXTA);
+
+  /// ## EXTB (getter)
+  Object? get EXTB => getAttribute("EXTB");
+
+  /// ## EXTB (setter)
+  set EXTB(Object? EXTB) => setAttribute("EXTB", EXTB);
+
+  /// ## FF0 (getter)
+  Object? get FF0 => getAttribute("FF0");
+
+  /// ## FF0 (setter)
+  set FF0(Object? FF0) => setAttribute("FF0", FF0);
+
+  /// ## FF1 (getter)
+  Object? get FF1 => getAttribute("FF1");
+
+  /// ## FF1 (setter)
+  set FF1(Object? FF1) => setAttribute("FF1", FF1);
+
+  /// ## FFDLY (getter)
+  Object? get FFDLY => getAttribute("FFDLY");
+
+  /// ## FFDLY (setter)
+  set FFDLY(Object? FFDLY) => setAttribute("FFDLY", FFDLY);
+
+  /// ## FIOASYNC (getter)
+  Object? get FIOASYNC => getAttribute("FIOASYNC");
+
+  /// ## FIOASYNC (setter)
+  set FIOASYNC(Object? FIOASYNC) => setAttribute("FIOASYNC", FIOASYNC);
+
+  /// ## FIOCLEX (getter)
+  Object? get FIOCLEX => getAttribute("FIOCLEX");
+
+  /// ## FIOCLEX (setter)
+  set FIOCLEX(Object? FIOCLEX) => setAttribute("FIOCLEX", FIOCLEX);
+
+  /// ## FIONBIO (getter)
+  Object? get FIONBIO => getAttribute("FIONBIO");
+
+  /// ## FIONBIO (setter)
+  set FIONBIO(Object? FIONBIO) => setAttribute("FIONBIO", FIONBIO);
+
+  /// ## FIONCLEX (getter)
+  Object? get FIONCLEX => getAttribute("FIONCLEX");
+
+  /// ## FIONCLEX (setter)
+  set FIONCLEX(Object? FIONCLEX) => setAttribute("FIONCLEX", FIONCLEX);
+
+  /// ## FIONREAD (getter)
+  Object? get FIONREAD => getAttribute("FIONREAD");
+
+  /// ## FIONREAD (setter)
+  set FIONREAD(Object? FIONREAD) => setAttribute("FIONREAD", FIONREAD);
+
+  /// ## FLUSHO (getter)
+  Object? get FLUSHO => getAttribute("FLUSHO");
+
+  /// ## FLUSHO (setter)
+  set FLUSHO(Object? FLUSHO) => setAttribute("FLUSHO", FLUSHO);
+
+  /// ## HUPCL (getter)
+  Object? get HUPCL => getAttribute("HUPCL");
+
+  /// ## HUPCL (setter)
+  set HUPCL(Object? HUPCL) => setAttribute("HUPCL", HUPCL);
+
+  /// ## ICANON (getter)
+  Object? get ICANON => getAttribute("ICANON");
+
+  /// ## ICANON (setter)
+  set ICANON(Object? ICANON) => setAttribute("ICANON", ICANON);
+
+  /// ## ICRNL (getter)
+  Object? get ICRNL => getAttribute("ICRNL");
+
+  /// ## ICRNL (setter)
+  set ICRNL(Object? ICRNL) => setAttribute("ICRNL", ICRNL);
+
+  /// ## IEXTEN (getter)
+  Object? get IEXTEN => getAttribute("IEXTEN");
+
+  /// ## IEXTEN (setter)
+  set IEXTEN(Object? IEXTEN) => setAttribute("IEXTEN", IEXTEN);
+
+  /// ## IGNBRK (getter)
+  Object? get IGNBRK => getAttribute("IGNBRK");
+
+  /// ## IGNBRK (setter)
+  set IGNBRK(Object? IGNBRK) => setAttribute("IGNBRK", IGNBRK);
+
+  /// ## IGNCR (getter)
+  Object? get IGNCR => getAttribute("IGNCR");
+
+  /// ## IGNCR (setter)
+  set IGNCR(Object? IGNCR) => setAttribute("IGNCR", IGNCR);
+
+  /// ## IGNPAR (getter)
+  Object? get IGNPAR => getAttribute("IGNPAR");
+
+  /// ## IGNPAR (setter)
+  set IGNPAR(Object? IGNPAR) => setAttribute("IGNPAR", IGNPAR);
+
+  /// ## IMAXBEL (getter)
+  Object? get IMAXBEL => getAttribute("IMAXBEL");
+
+  /// ## IMAXBEL (setter)
+  set IMAXBEL(Object? IMAXBEL) => setAttribute("IMAXBEL", IMAXBEL);
+
+  /// ## INLCR (getter)
+  Object? get INLCR => getAttribute("INLCR");
+
+  /// ## INLCR (setter)
+  set INLCR(Object? INLCR) => setAttribute("INLCR", INLCR);
+
+  /// ## INPCK (getter)
+  Object? get INPCK => getAttribute("INPCK");
+
+  /// ## INPCK (setter)
+  set INPCK(Object? INPCK) => setAttribute("INPCK", INPCK);
+
+  /// ## ISIG (getter)
+  Object? get ISIG => getAttribute("ISIG");
+
+  /// ## ISIG (setter)
+  set ISIG(Object? ISIG) => setAttribute("ISIG", ISIG);
+
+  /// ## ISTRIP (getter)
+  Object? get ISTRIP => getAttribute("ISTRIP");
+
+  /// ## ISTRIP (setter)
+  set ISTRIP(Object? ISTRIP) => setAttribute("ISTRIP", ISTRIP);
+
+  /// ## IXANY (getter)
+  Object? get IXANY => getAttribute("IXANY");
+
+  /// ## IXANY (setter)
+  set IXANY(Object? IXANY) => setAttribute("IXANY", IXANY);
+
+  /// ## IXOFF (getter)
+  Object? get IXOFF => getAttribute("IXOFF");
+
+  /// ## IXOFF (setter)
+  set IXOFF(Object? IXOFF) => setAttribute("IXOFF", IXOFF);
+
+  /// ## IXON (getter)
+  Object? get IXON => getAttribute("IXON");
+
+  /// ## IXON (setter)
+  set IXON(Object? IXON) => setAttribute("IXON", IXON);
+
+  /// ## NCCS (getter)
+  Object? get NCCS => getAttribute("NCCS");
+
+  /// ## NCCS (setter)
+  set NCCS(Object? NCCS) => setAttribute("NCCS", NCCS);
+
+  /// ## NL0 (getter)
+  Object? get NL0 => getAttribute("NL0");
+
+  /// ## NL0 (setter)
+  set NL0(Object? NL0) => setAttribute("NL0", NL0);
+
+  /// ## NL1 (getter)
+  Object? get NL1 => getAttribute("NL1");
+
+  /// ## NL1 (setter)
+  set NL1(Object? NL1) => setAttribute("NL1", NL1);
+
+  /// ## NLDLY (getter)
+  Object? get NLDLY => getAttribute("NLDLY");
+
+  /// ## NLDLY (setter)
+  set NLDLY(Object? NLDLY) => setAttribute("NLDLY", NLDLY);
+
+  /// ## NOFLSH (getter)
+  Object? get NOFLSH => getAttribute("NOFLSH");
+
+  /// ## NOFLSH (setter)
+  set NOFLSH(Object? NOFLSH) => setAttribute("NOFLSH", NOFLSH);
+
+  /// ## OCRNL (getter)
+  Object? get OCRNL => getAttribute("OCRNL");
+
+  /// ## OCRNL (setter)
+  set OCRNL(Object? OCRNL) => setAttribute("OCRNL", OCRNL);
+
+  /// ## OFDEL (getter)
+  Object? get OFDEL => getAttribute("OFDEL");
+
+  /// ## OFDEL (setter)
+  set OFDEL(Object? OFDEL) => setAttribute("OFDEL", OFDEL);
+
+  /// ## OFILL (getter)
+  Object? get OFILL => getAttribute("OFILL");
+
+  /// ## OFILL (setter)
+  set OFILL(Object? OFILL) => setAttribute("OFILL", OFILL);
+
+  /// ## ONLCR (getter)
+  Object? get ONLCR => getAttribute("ONLCR");
+
+  /// ## ONLCR (setter)
+  set ONLCR(Object? ONLCR) => setAttribute("ONLCR", ONLCR);
+
+  /// ## ONLRET (getter)
+  Object? get ONLRET => getAttribute("ONLRET");
+
+  /// ## ONLRET (setter)
+  set ONLRET(Object? ONLRET) => setAttribute("ONLRET", ONLRET);
+
+  /// ## ONOCR (getter)
+  Object? get ONOCR => getAttribute("ONOCR");
+
+  /// ## ONOCR (setter)
+  set ONOCR(Object? ONOCR) => setAttribute("ONOCR", ONOCR);
+
+  /// ## OPOST (getter)
+  Object? get OPOST => getAttribute("OPOST");
+
+  /// ## OPOST (setter)
+  set OPOST(Object? OPOST) => setAttribute("OPOST", OPOST);
+
+  /// ## PARENB (getter)
+  Object? get PARENB => getAttribute("PARENB");
+
+  /// ## PARENB (setter)
+  set PARENB(Object? PARENB) => setAttribute("PARENB", PARENB);
+
+  /// ## PARMRK (getter)
+  Object? get PARMRK => getAttribute("PARMRK");
+
+  /// ## PARMRK (setter)
+  set PARMRK(Object? PARMRK) => setAttribute("PARMRK", PARMRK);
+
+  /// ## PARODD (getter)
+  Object? get PARODD => getAttribute("PARODD");
+
+  /// ## PARODD (setter)
+  set PARODD(Object? PARODD) => setAttribute("PARODD", PARODD);
+
+  /// ## PENDIN (getter)
+  Object? get PENDIN => getAttribute("PENDIN");
+
+  /// ## PENDIN (setter)
+  set PENDIN(Object? PENDIN) => setAttribute("PENDIN", PENDIN);
+
+  /// ## TAB0 (getter)
+  Object? get TAB0 => getAttribute("TAB0");
+
+  /// ## TAB0 (setter)
+  set TAB0(Object? TAB0) => setAttribute("TAB0", TAB0);
+
+  /// ## TAB1 (getter)
+  Object? get TAB1 => getAttribute("TAB1");
+
+  /// ## TAB1 (setter)
+  set TAB1(Object? TAB1) => setAttribute("TAB1", TAB1);
+
+  /// ## TAB2 (getter)
+  Object? get TAB2 => getAttribute("TAB2");
+
+  /// ## TAB2 (setter)
+  set TAB2(Object? TAB2) => setAttribute("TAB2", TAB2);
+
+  /// ## TAB3 (getter)
+  Object? get TAB3 => getAttribute("TAB3");
+
+  /// ## TAB3 (setter)
+  set TAB3(Object? TAB3) => setAttribute("TAB3", TAB3);
+
+  /// ## TABDLY (getter)
+  Object? get TABDLY => getAttribute("TABDLY");
+
+  /// ## TABDLY (setter)
+  set TABDLY(Object? TABDLY) => setAttribute("TABDLY", TABDLY);
+
+  /// ## TCIFLUSH (getter)
+  Object? get TCIFLUSH => getAttribute("TCIFLUSH");
+
+  /// ## TCIFLUSH (setter)
+  set TCIFLUSH(Object? TCIFLUSH) => setAttribute("TCIFLUSH", TCIFLUSH);
+
+  /// ## TCIOFF (getter)
+  Object? get TCIOFF => getAttribute("TCIOFF");
+
+  /// ## TCIOFF (setter)
+  set TCIOFF(Object? TCIOFF) => setAttribute("TCIOFF", TCIOFF);
+
+  /// ## TCIOFLUSH (getter)
+  Object? get TCIOFLUSH => getAttribute("TCIOFLUSH");
+
+  /// ## TCIOFLUSH (setter)
+  set TCIOFLUSH(Object? TCIOFLUSH) => setAttribute("TCIOFLUSH", TCIOFLUSH);
+
+  /// ## TCION (getter)
+  Object? get TCION => getAttribute("TCION");
+
+  /// ## TCION (setter)
+  set TCION(Object? TCION) => setAttribute("TCION", TCION);
+
+  /// ## TCOFLUSH (getter)
+  Object? get TCOFLUSH => getAttribute("TCOFLUSH");
+
+  /// ## TCOFLUSH (setter)
+  set TCOFLUSH(Object? TCOFLUSH) => setAttribute("TCOFLUSH", TCOFLUSH);
+
+  /// ## TCOOFF (getter)
+  Object? get TCOOFF => getAttribute("TCOOFF");
+
+  /// ## TCOOFF (setter)
+  set TCOOFF(Object? TCOOFF) => setAttribute("TCOOFF", TCOOFF);
+
+  /// ## TCOON (getter)
+  Object? get TCOON => getAttribute("TCOON");
+
+  /// ## TCOON (setter)
+  set TCOON(Object? TCOON) => setAttribute("TCOON", TCOON);
+
+  /// ## TCSADRAIN (getter)
+  Object? get TCSADRAIN => getAttribute("TCSADRAIN");
+
+  /// ## TCSADRAIN (setter)
+  set TCSADRAIN(Object? TCSADRAIN) => setAttribute("TCSADRAIN", TCSADRAIN);
+
+  /// ## TCSAFLUSH (getter)
+  Object? get TCSAFLUSH => getAttribute("TCSAFLUSH");
+
+  /// ## TCSAFLUSH (setter)
+  set TCSAFLUSH(Object? TCSAFLUSH) => setAttribute("TCSAFLUSH", TCSAFLUSH);
+
+  /// ## TCSANOW (getter)
+  Object? get TCSANOW => getAttribute("TCSANOW");
+
+  /// ## TCSANOW (setter)
+  set TCSANOW(Object? TCSANOW) => setAttribute("TCSANOW", TCSANOW);
+
+  /// ## TCSASOFT (getter)
+  Object? get TCSASOFT => getAttribute("TCSASOFT");
+
+  /// ## TCSASOFT (setter)
+  set TCSASOFT(Object? TCSASOFT) => setAttribute("TCSASOFT", TCSASOFT);
+
+  /// ## TIOCCONS (getter)
+  Object? get TIOCCONS => getAttribute("TIOCCONS");
+
+  /// ## TIOCCONS (setter)
+  set TIOCCONS(Object? TIOCCONS) => setAttribute("TIOCCONS", TIOCCONS);
+
+  /// ## TIOCEXCL (getter)
+  Object? get TIOCEXCL => getAttribute("TIOCEXCL");
+
+  /// ## TIOCEXCL (setter)
+  set TIOCEXCL(Object? TIOCEXCL) => setAttribute("TIOCEXCL", TIOCEXCL);
+
+  /// ## TIOCGETD (getter)
+  Object? get TIOCGETD => getAttribute("TIOCGETD");
+
+  /// ## TIOCGETD (setter)
+  set TIOCGETD(Object? TIOCGETD) => setAttribute("TIOCGETD", TIOCGETD);
+
+  /// ## TIOCGPGRP (getter)
+  Object? get TIOCGPGRP => getAttribute("TIOCGPGRP");
+
+  /// ## TIOCGPGRP (setter)
+  set TIOCGPGRP(Object? TIOCGPGRP) => setAttribute("TIOCGPGRP", TIOCGPGRP);
+
+  /// ## TIOCGSIZE (getter)
+  Object? get TIOCGSIZE => getAttribute("TIOCGSIZE");
+
+  /// ## TIOCGSIZE (setter)
+  set TIOCGSIZE(Object? TIOCGSIZE) => setAttribute("TIOCGSIZE", TIOCGSIZE);
+
+  /// ## TIOCGWINSZ (getter)
+  Object? get TIOCGWINSZ => getAttribute("TIOCGWINSZ");
+
+  /// ## TIOCGWINSZ (setter)
+  set TIOCGWINSZ(Object? TIOCGWINSZ) => setAttribute("TIOCGWINSZ", TIOCGWINSZ);
+
+  /// ## TIOCMBIC (getter)
+  Object? get TIOCMBIC => getAttribute("TIOCMBIC");
+
+  /// ## TIOCMBIC (setter)
+  set TIOCMBIC(Object? TIOCMBIC) => setAttribute("TIOCMBIC", TIOCMBIC);
+
+  /// ## TIOCMBIS (getter)
+  Object? get TIOCMBIS => getAttribute("TIOCMBIS");
+
+  /// ## TIOCMBIS (setter)
+  set TIOCMBIS(Object? TIOCMBIS) => setAttribute("TIOCMBIS", TIOCMBIS);
+
+  /// ## TIOCMGET (getter)
+  Object? get TIOCMGET => getAttribute("TIOCMGET");
+
+  /// ## TIOCMGET (setter)
+  set TIOCMGET(Object? TIOCMGET) => setAttribute("TIOCMGET", TIOCMGET);
+
+  /// ## TIOCMSET (getter)
+  Object? get TIOCMSET => getAttribute("TIOCMSET");
+
+  /// ## TIOCMSET (setter)
+  set TIOCMSET(Object? TIOCMSET) => setAttribute("TIOCMSET", TIOCMSET);
+
+  /// ## TIOCM_CAR (getter)
+  Object? get TIOCM_CAR => getAttribute("TIOCM_CAR");
+
+  /// ## TIOCM_CAR (setter)
+  set TIOCM_CAR(Object? TIOCM_CAR) => setAttribute("TIOCM_CAR", TIOCM_CAR);
+
+  /// ## TIOCM_CD (getter)
+  Object? get TIOCM_CD => getAttribute("TIOCM_CD");
+
+  /// ## TIOCM_CD (setter)
+  set TIOCM_CD(Object? TIOCM_CD) => setAttribute("TIOCM_CD", TIOCM_CD);
+
+  /// ## TIOCM_CTS (getter)
+  Object? get TIOCM_CTS => getAttribute("TIOCM_CTS");
+
+  /// ## TIOCM_CTS (setter)
+  set TIOCM_CTS(Object? TIOCM_CTS) => setAttribute("TIOCM_CTS", TIOCM_CTS);
+
+  /// ## TIOCM_DSR (getter)
+  Object? get TIOCM_DSR => getAttribute("TIOCM_DSR");
+
+  /// ## TIOCM_DSR (setter)
+  set TIOCM_DSR(Object? TIOCM_DSR) => setAttribute("TIOCM_DSR", TIOCM_DSR);
+
+  /// ## TIOCM_DTR (getter)
+  Object? get TIOCM_DTR => getAttribute("TIOCM_DTR");
+
+  /// ## TIOCM_DTR (setter)
+  set TIOCM_DTR(Object? TIOCM_DTR) => setAttribute("TIOCM_DTR", TIOCM_DTR);
+
+  /// ## TIOCM_LE (getter)
+  Object? get TIOCM_LE => getAttribute("TIOCM_LE");
+
+  /// ## TIOCM_LE (setter)
+  set TIOCM_LE(Object? TIOCM_LE) => setAttribute("TIOCM_LE", TIOCM_LE);
+
+  /// ## TIOCM_RI (getter)
+  Object? get TIOCM_RI => getAttribute("TIOCM_RI");
+
+  /// ## TIOCM_RI (setter)
+  set TIOCM_RI(Object? TIOCM_RI) => setAttribute("TIOCM_RI", TIOCM_RI);
+
+  /// ## TIOCM_RNG (getter)
+  Object? get TIOCM_RNG => getAttribute("TIOCM_RNG");
+
+  /// ## TIOCM_RNG (setter)
+  set TIOCM_RNG(Object? TIOCM_RNG) => setAttribute("TIOCM_RNG", TIOCM_RNG);
+
+  /// ## TIOCM_RTS (getter)
+  Object? get TIOCM_RTS => getAttribute("TIOCM_RTS");
+
+  /// ## TIOCM_RTS (setter)
+  set TIOCM_RTS(Object? TIOCM_RTS) => setAttribute("TIOCM_RTS", TIOCM_RTS);
+
+  /// ## TIOCM_SR (getter)
+  Object? get TIOCM_SR => getAttribute("TIOCM_SR");
+
+  /// ## TIOCM_SR (setter)
+  set TIOCM_SR(Object? TIOCM_SR) => setAttribute("TIOCM_SR", TIOCM_SR);
+
+  /// ## TIOCM_ST (getter)
+  Object? get TIOCM_ST => getAttribute("TIOCM_ST");
+
+  /// ## TIOCM_ST (setter)
+  set TIOCM_ST(Object? TIOCM_ST) => setAttribute("TIOCM_ST", TIOCM_ST);
+
+  /// ## TIOCNOTTY (getter)
+  Object? get TIOCNOTTY => getAttribute("TIOCNOTTY");
+
+  /// ## TIOCNOTTY (setter)
+  set TIOCNOTTY(Object? TIOCNOTTY) => setAttribute("TIOCNOTTY", TIOCNOTTY);
+
+  /// ## TIOCNXCL (getter)
+  Object? get TIOCNXCL => getAttribute("TIOCNXCL");
+
+  /// ## TIOCNXCL (setter)
+  set TIOCNXCL(Object? TIOCNXCL) => setAttribute("TIOCNXCL", TIOCNXCL);
+
+  /// ## TIOCOUTQ (getter)
+  Object? get TIOCOUTQ => getAttribute("TIOCOUTQ");
+
+  /// ## TIOCOUTQ (setter)
+  set TIOCOUTQ(Object? TIOCOUTQ) => setAttribute("TIOCOUTQ", TIOCOUTQ);
+
+  /// ## TIOCPKT (getter)
+  Object? get TIOCPKT => getAttribute("TIOCPKT");
+
+  /// ## TIOCPKT (setter)
+  set TIOCPKT(Object? TIOCPKT) => setAttribute("TIOCPKT", TIOCPKT);
+
+  /// ## TIOCPKT_DATA (getter)
+  Object? get TIOCPKT_DATA => getAttribute("TIOCPKT_DATA");
+
+  /// ## TIOCPKT_DATA (setter)
+  set TIOCPKT_DATA(Object? TIOCPKT_DATA) =>
+      setAttribute("TIOCPKT_DATA", TIOCPKT_DATA);
+
+  /// ## TIOCPKT_DOSTOP (getter)
+  Object? get TIOCPKT_DOSTOP => getAttribute("TIOCPKT_DOSTOP");
+
+  /// ## TIOCPKT_DOSTOP (setter)
+  set TIOCPKT_DOSTOP(Object? TIOCPKT_DOSTOP) =>
+      setAttribute("TIOCPKT_DOSTOP", TIOCPKT_DOSTOP);
+
+  /// ## TIOCPKT_FLUSHREAD (getter)
+  Object? get TIOCPKT_FLUSHREAD => getAttribute("TIOCPKT_FLUSHREAD");
+
+  /// ## TIOCPKT_FLUSHREAD (setter)
+  set TIOCPKT_FLUSHREAD(Object? TIOCPKT_FLUSHREAD) =>
+      setAttribute("TIOCPKT_FLUSHREAD", TIOCPKT_FLUSHREAD);
+
+  /// ## TIOCPKT_FLUSHWRITE (getter)
+  Object? get TIOCPKT_FLUSHWRITE => getAttribute("TIOCPKT_FLUSHWRITE");
+
+  /// ## TIOCPKT_FLUSHWRITE (setter)
+  set TIOCPKT_FLUSHWRITE(Object? TIOCPKT_FLUSHWRITE) =>
+      setAttribute("TIOCPKT_FLUSHWRITE", TIOCPKT_FLUSHWRITE);
+
+  /// ## TIOCPKT_NOSTOP (getter)
+  Object? get TIOCPKT_NOSTOP => getAttribute("TIOCPKT_NOSTOP");
+
+  /// ## TIOCPKT_NOSTOP (setter)
+  set TIOCPKT_NOSTOP(Object? TIOCPKT_NOSTOP) =>
+      setAttribute("TIOCPKT_NOSTOP", TIOCPKT_NOSTOP);
+
+  /// ## TIOCPKT_START (getter)
+  Object? get TIOCPKT_START => getAttribute("TIOCPKT_START");
+
+  /// ## TIOCPKT_START (setter)
+  set TIOCPKT_START(Object? TIOCPKT_START) =>
+      setAttribute("TIOCPKT_START", TIOCPKT_START);
+
+  /// ## TIOCPKT_STOP (getter)
+  Object? get TIOCPKT_STOP => getAttribute("TIOCPKT_STOP");
+
+  /// ## TIOCPKT_STOP (setter)
+  set TIOCPKT_STOP(Object? TIOCPKT_STOP) =>
+      setAttribute("TIOCPKT_STOP", TIOCPKT_STOP);
+
+  /// ## TIOCSCTTY (getter)
+  Object? get TIOCSCTTY => getAttribute("TIOCSCTTY");
+
+  /// ## TIOCSCTTY (setter)
+  set TIOCSCTTY(Object? TIOCSCTTY) => setAttribute("TIOCSCTTY", TIOCSCTTY);
+
+  /// ## TIOCSETD (getter)
+  Object? get TIOCSETD => getAttribute("TIOCSETD");
+
+  /// ## TIOCSETD (setter)
+  set TIOCSETD(Object? TIOCSETD) => setAttribute("TIOCSETD", TIOCSETD);
+
+  /// ## TIOCSPGRP (getter)
+  Object? get TIOCSPGRP => getAttribute("TIOCSPGRP");
+
+  /// ## TIOCSPGRP (setter)
+  set TIOCSPGRP(Object? TIOCSPGRP) => setAttribute("TIOCSPGRP", TIOCSPGRP);
+
+  /// ## TIOCSSIZE (getter)
+  Object? get TIOCSSIZE => getAttribute("TIOCSSIZE");
+
+  /// ## TIOCSSIZE (setter)
+  set TIOCSSIZE(Object? TIOCSSIZE) => setAttribute("TIOCSSIZE", TIOCSSIZE);
+
+  /// ## TIOCSTI (getter)
+  Object? get TIOCSTI => getAttribute("TIOCSTI");
+
+  /// ## TIOCSTI (setter)
+  set TIOCSTI(Object? TIOCSTI) => setAttribute("TIOCSTI", TIOCSTI);
+
+  /// ## TIOCSWINSZ (getter)
+  Object? get TIOCSWINSZ => getAttribute("TIOCSWINSZ");
+
+  /// ## TIOCSWINSZ (setter)
+  set TIOCSWINSZ(Object? TIOCSWINSZ) => setAttribute("TIOCSWINSZ", TIOCSWINSZ);
+
+  /// ## TOSTOP (getter)
+  Object? get TOSTOP => getAttribute("TOSTOP");
+
+  /// ## TOSTOP (setter)
+  set TOSTOP(Object? TOSTOP) => setAttribute("TOSTOP", TOSTOP);
+
+  /// ## VDISCARD (getter)
+  Object? get VDISCARD => getAttribute("VDISCARD");
+
+  /// ## VDISCARD (setter)
+  set VDISCARD(Object? VDISCARD) => setAttribute("VDISCARD", VDISCARD);
+
+  /// ## VEOF (getter)
+  Object? get VEOF => getAttribute("VEOF");
+
+  /// ## VEOF (setter)
+  set VEOF(Object? VEOF) => setAttribute("VEOF", VEOF);
+
+  /// ## VEOL (getter)
+  Object? get VEOL => getAttribute("VEOL");
+
+  /// ## VEOL (setter)
+  set VEOL(Object? VEOL) => setAttribute("VEOL", VEOL);
+
+  /// ## VEOL2 (getter)
+  Object? get VEOL2 => getAttribute("VEOL2");
+
+  /// ## VEOL2 (setter)
+  set VEOL2(Object? VEOL2) => setAttribute("VEOL2", VEOL2);
+
+  /// ## VERASE (getter)
+  Object? get VERASE => getAttribute("VERASE");
+
+  /// ## VERASE (setter)
+  set VERASE(Object? VERASE) => setAttribute("VERASE", VERASE);
+
+  /// ## VINTR (getter)
+  Object? get VINTR => getAttribute("VINTR");
+
+  /// ## VINTR (setter)
+  set VINTR(Object? VINTR) => setAttribute("VINTR", VINTR);
+
+  /// ## VKILL (getter)
+  Object? get VKILL => getAttribute("VKILL");
+
+  /// ## VKILL (setter)
+  set VKILL(Object? VKILL) => setAttribute("VKILL", VKILL);
+
+  /// ## VLNEXT (getter)
+  Object? get VLNEXT => getAttribute("VLNEXT");
+
+  /// ## VLNEXT (setter)
+  set VLNEXT(Object? VLNEXT) => setAttribute("VLNEXT", VLNEXT);
+
+  /// ## VMIN (getter)
+  Object? get VMIN => getAttribute("VMIN");
+
+  /// ## VMIN (setter)
+  set VMIN(Object? VMIN) => setAttribute("VMIN", VMIN);
+
+  /// ## VQUIT (getter)
+  Object? get VQUIT => getAttribute("VQUIT");
+
+  /// ## VQUIT (setter)
+  set VQUIT(Object? VQUIT) => setAttribute("VQUIT", VQUIT);
+
+  /// ## VREPRINT (getter)
+  Object? get VREPRINT => getAttribute("VREPRINT");
+
+  /// ## VREPRINT (setter)
+  set VREPRINT(Object? VREPRINT) => setAttribute("VREPRINT", VREPRINT);
+
+  /// ## VSTART (getter)
+  Object? get VSTART => getAttribute("VSTART");
+
+  /// ## VSTART (setter)
+  set VSTART(Object? VSTART) => setAttribute("VSTART", VSTART);
+
+  /// ## VSTOP (getter)
+  Object? get VSTOP => getAttribute("VSTOP");
+
+  /// ## VSTOP (setter)
+  set VSTOP(Object? VSTOP) => setAttribute("VSTOP", VSTOP);
+
+  /// ## VSUSP (getter)
+  Object? get VSUSP => getAttribute("VSUSP");
+
+  /// ## VSUSP (setter)
+  set VSUSP(Object? VSUSP) => setAttribute("VSUSP", VSUSP);
+
+  /// ## VT0 (getter)
+  Object? get VT0 => getAttribute("VT0");
+
+  /// ## VT0 (setter)
+  set VT0(Object? VT0) => setAttribute("VT0", VT0);
+
+  /// ## VT1 (getter)
+  Object? get VT1 => getAttribute("VT1");
+
+  /// ## VT1 (setter)
+  set VT1(Object? VT1) => setAttribute("VT1", VT1);
+
+  /// ## VTDLY (getter)
+  Object? get VTDLY => getAttribute("VTDLY");
+
+  /// ## VTDLY (setter)
+  set VTDLY(Object? VTDLY) => setAttribute("VTDLY", VTDLY);
+
+  /// ## VTIME (getter)
+  Object? get VTIME => getAttribute("VTIME");
+
+  /// ## VTIME (setter)
+  set VTIME(Object? VTIME) => setAttribute("VTIME", VTIME);
+
+  /// ## VWERASE (getter)
+  Object? get VWERASE => getAttribute("VWERASE");
+
+  /// ## VWERASE (setter)
+  set VWERASE(Object? VWERASE) => setAttribute("VWERASE", VWERASE);
 }
 
 /// ## warnings
@@ -61004,7 +69260,7 @@ final class warnings extends PythonModule {
     required Object? category,
     required Object? filename,
     required Object? lineno,
-    Object? line = null,
+    Object? line,
   }) =>
       getFunction("formatwarning").call(
         <Object?>[
@@ -61053,8 +69309,8 @@ final class warnings extends PythonModule {
     required Object? category,
     required Object? filename,
     required Object? lineno,
-    Object? file = null,
-    Object? line = null,
+    Object? file,
+    Object? line,
   }) =>
       getFunction("showwarning").call(
         <Object?>[
@@ -61114,6 +69370,26 @@ final class warnings extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## defaultaction (getter)
+  Object? get defaultaction => getAttribute("defaultaction");
+
+  /// ## defaultaction (setter)
+  set defaultaction(Object? defaultaction) =>
+      setAttribute("defaultaction", defaultaction);
+
+  /// ## filters (getter)
+  Object? get filters => getAttribute("filters");
+
+  /// ## filters (setter)
+  set filters(Object? filters) => setAttribute("filters", filters);
+
+  /// ## onceregistry (getter)
+  Object? get onceregistry => getAttribute("onceregistry");
+
+  /// ## onceregistry (setter)
+  set onceregistry(Object? onceregistry) =>
+      setAttribute("onceregistry", onceregistry);
 }
 
 /// ## pickle
@@ -63131,6 +71407,491 @@ final class pickle extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## ADDITEMS (getter)
+  Object? get ADDITEMS => getAttribute("ADDITEMS");
+
+  /// ## ADDITEMS (setter)
+  set ADDITEMS(Object? ADDITEMS) => setAttribute("ADDITEMS", ADDITEMS);
+
+  /// ## APPEND (getter)
+  Object? get APPEND => getAttribute("APPEND");
+
+  /// ## APPEND (setter)
+  set APPEND(Object? APPEND) => setAttribute("APPEND", APPEND);
+
+  /// ## APPENDS (getter)
+  Object? get APPENDS => getAttribute("APPENDS");
+
+  /// ## APPENDS (setter)
+  set APPENDS(Object? APPENDS) => setAttribute("APPENDS", APPENDS);
+
+  /// ## BINBYTES (getter)
+  Object? get BINBYTES => getAttribute("BINBYTES");
+
+  /// ## BINBYTES (setter)
+  set BINBYTES(Object? BINBYTES) => setAttribute("BINBYTES", BINBYTES);
+
+  /// ## BINBYTES8 (getter)
+  Object? get BINBYTES8 => getAttribute("BINBYTES8");
+
+  /// ## BINBYTES8 (setter)
+  set BINBYTES8(Object? BINBYTES8) => setAttribute("BINBYTES8", BINBYTES8);
+
+  /// ## BINFLOAT (getter)
+  Object? get BINFLOAT => getAttribute("BINFLOAT");
+
+  /// ## BINFLOAT (setter)
+  set BINFLOAT(Object? BINFLOAT) => setAttribute("BINFLOAT", BINFLOAT);
+
+  /// ## BINGET (getter)
+  Object? get BINGET => getAttribute("BINGET");
+
+  /// ## BINGET (setter)
+  set BINGET(Object? BINGET) => setAttribute("BINGET", BINGET);
+
+  /// ## BININT (getter)
+  Object? get BININT => getAttribute("BININT");
+
+  /// ## BININT (setter)
+  set BININT(Object? BININT) => setAttribute("BININT", BININT);
+
+  /// ## BININT1 (getter)
+  Object? get BININT1 => getAttribute("BININT1");
+
+  /// ## BININT1 (setter)
+  set BININT1(Object? BININT1) => setAttribute("BININT1", BININT1);
+
+  /// ## BININT2 (getter)
+  Object? get BININT2 => getAttribute("BININT2");
+
+  /// ## BININT2 (setter)
+  set BININT2(Object? BININT2) => setAttribute("BININT2", BININT2);
+
+  /// ## BINPERSID (getter)
+  Object? get BINPERSID => getAttribute("BINPERSID");
+
+  /// ## BINPERSID (setter)
+  set BINPERSID(Object? BINPERSID) => setAttribute("BINPERSID", BINPERSID);
+
+  /// ## BINPUT (getter)
+  Object? get BINPUT => getAttribute("BINPUT");
+
+  /// ## BINPUT (setter)
+  set BINPUT(Object? BINPUT) => setAttribute("BINPUT", BINPUT);
+
+  /// ## BINSTRING (getter)
+  Object? get BINSTRING => getAttribute("BINSTRING");
+
+  /// ## BINSTRING (setter)
+  set BINSTRING(Object? BINSTRING) => setAttribute("BINSTRING", BINSTRING);
+
+  /// ## BINUNICODE (getter)
+  Object? get BINUNICODE => getAttribute("BINUNICODE");
+
+  /// ## BINUNICODE (setter)
+  set BINUNICODE(Object? BINUNICODE) => setAttribute("BINUNICODE", BINUNICODE);
+
+  /// ## BINUNICODE8 (getter)
+  Object? get BINUNICODE8 => getAttribute("BINUNICODE8");
+
+  /// ## BINUNICODE8 (setter)
+  set BINUNICODE8(Object? BINUNICODE8) =>
+      setAttribute("BINUNICODE8", BINUNICODE8);
+
+  /// ## BUILD (getter)
+  Object? get BUILD => getAttribute("BUILD");
+
+  /// ## BUILD (setter)
+  set BUILD(Object? BUILD) => setAttribute("BUILD", BUILD);
+
+  /// ## BYTEARRAY8 (getter)
+  Object? get BYTEARRAY8 => getAttribute("BYTEARRAY8");
+
+  /// ## BYTEARRAY8 (setter)
+  set BYTEARRAY8(Object? BYTEARRAY8) => setAttribute("BYTEARRAY8", BYTEARRAY8);
+
+  /// ## DEFAULT_PROTOCOL (getter)
+  Object? get DEFAULT_PROTOCOL => getAttribute("DEFAULT_PROTOCOL");
+
+  /// ## DEFAULT_PROTOCOL (setter)
+  set DEFAULT_PROTOCOL(Object? DEFAULT_PROTOCOL) =>
+      setAttribute("DEFAULT_PROTOCOL", DEFAULT_PROTOCOL);
+
+  /// ## DICT (getter)
+  Object? get DICT => getAttribute("DICT");
+
+  /// ## DICT (setter)
+  set DICT(Object? DICT) => setAttribute("DICT", DICT);
+
+  /// ## DUP (getter)
+  Object? get DUP => getAttribute("DUP");
+
+  /// ## DUP (setter)
+  set DUP(Object? DUP) => setAttribute("DUP", DUP);
+
+  /// ## EMPTY_DICT (getter)
+  Object? get EMPTY_DICT => getAttribute("EMPTY_DICT");
+
+  /// ## EMPTY_DICT (setter)
+  set EMPTY_DICT(Object? EMPTY_DICT) => setAttribute("EMPTY_DICT", EMPTY_DICT);
+
+  /// ## EMPTY_LIST (getter)
+  Object? get EMPTY_LIST => getAttribute("EMPTY_LIST");
+
+  /// ## EMPTY_LIST (setter)
+  set EMPTY_LIST(Object? EMPTY_LIST) => setAttribute("EMPTY_LIST", EMPTY_LIST);
+
+  /// ## EMPTY_SET (getter)
+  Object? get EMPTY_SET => getAttribute("EMPTY_SET");
+
+  /// ## EMPTY_SET (setter)
+  set EMPTY_SET(Object? EMPTY_SET) => setAttribute("EMPTY_SET", EMPTY_SET);
+
+  /// ## EMPTY_TUPLE (getter)
+  Object? get EMPTY_TUPLE => getAttribute("EMPTY_TUPLE");
+
+  /// ## EMPTY_TUPLE (setter)
+  set EMPTY_TUPLE(Object? EMPTY_TUPLE) =>
+      setAttribute("EMPTY_TUPLE", EMPTY_TUPLE);
+
+  /// ## EXT1 (getter)
+  Object? get EXT1 => getAttribute("EXT1");
+
+  /// ## EXT1 (setter)
+  set EXT1(Object? EXT1) => setAttribute("EXT1", EXT1);
+
+  /// ## EXT2 (getter)
+  Object? get EXT2 => getAttribute("EXT2");
+
+  /// ## EXT2 (setter)
+  set EXT2(Object? EXT2) => setAttribute("EXT2", EXT2);
+
+  /// ## EXT4 (getter)
+  Object? get EXT4 => getAttribute("EXT4");
+
+  /// ## EXT4 (setter)
+  set EXT4(Object? EXT4) => setAttribute("EXT4", EXT4);
+
+  /// ## FALSE (getter)
+  Object? get FALSE => getAttribute("FALSE");
+
+  /// ## FALSE (setter)
+  set FALSE(Object? FALSE) => setAttribute("FALSE", FALSE);
+
+  /// ## FLOAT (getter)
+  Object? get FLOAT => getAttribute("FLOAT");
+
+  /// ## FLOAT (setter)
+  set FLOAT(Object? FLOAT) => setAttribute("FLOAT", FLOAT);
+
+  /// ## FRAME (getter)
+  Object? get FRAME => getAttribute("FRAME");
+
+  /// ## FRAME (setter)
+  set FRAME(Object? FRAME) => setAttribute("FRAME", FRAME);
+
+  /// ## FROZENSET (getter)
+  Object? get FROZENSET => getAttribute("FROZENSET");
+
+  /// ## FROZENSET (setter)
+  set FROZENSET(Object? FROZENSET) => setAttribute("FROZENSET", FROZENSET);
+
+  /// ## GET (getter)
+  Object? get GET => getAttribute("GET");
+
+  /// ## GET (setter)
+  set GET(Object? GET) => setAttribute("GET", GET);
+
+  /// ## GLOBAL (getter)
+  Object? get GLOBAL => getAttribute("GLOBAL");
+
+  /// ## GLOBAL (setter)
+  set GLOBAL(Object? GLOBAL) => setAttribute("GLOBAL", GLOBAL);
+
+  /// ## HIGHEST_PROTOCOL (getter)
+  Object? get HIGHEST_PROTOCOL => getAttribute("HIGHEST_PROTOCOL");
+
+  /// ## HIGHEST_PROTOCOL (setter)
+  set HIGHEST_PROTOCOL(Object? HIGHEST_PROTOCOL) =>
+      setAttribute("HIGHEST_PROTOCOL", HIGHEST_PROTOCOL);
+
+  /// ## INST (getter)
+  Object? get INST => getAttribute("INST");
+
+  /// ## INST (setter)
+  set INST(Object? INST) => setAttribute("INST", INST);
+
+  /// ## INT (getter)
+  Object? get INT => getAttribute("INT");
+
+  /// ## INT (setter)
+  set INT(Object? INT) => setAttribute("INT", INT);
+
+  /// ## LIST (getter)
+  Object? get LIST => getAttribute("LIST");
+
+  /// ## LIST (setter)
+  set LIST(Object? LIST) => setAttribute("LIST", LIST);
+
+  /// ## LONG (getter)
+  Object? get LONG => getAttribute("LONG");
+
+  /// ## LONG (setter)
+  set LONG(Object? LONG) => setAttribute("LONG", LONG);
+
+  /// ## LONG1 (getter)
+  Object? get LONG1 => getAttribute("LONG1");
+
+  /// ## LONG1 (setter)
+  set LONG1(Object? LONG1) => setAttribute("LONG1", LONG1);
+
+  /// ## LONG4 (getter)
+  Object? get LONG4 => getAttribute("LONG4");
+
+  /// ## LONG4 (setter)
+  set LONG4(Object? LONG4) => setAttribute("LONG4", LONG4);
+
+  /// ## LONG_BINGET (getter)
+  Object? get LONG_BINGET => getAttribute("LONG_BINGET");
+
+  /// ## LONG_BINGET (setter)
+  set LONG_BINGET(Object? LONG_BINGET) =>
+      setAttribute("LONG_BINGET", LONG_BINGET);
+
+  /// ## LONG_BINPUT (getter)
+  Object? get LONG_BINPUT => getAttribute("LONG_BINPUT");
+
+  /// ## LONG_BINPUT (setter)
+  set LONG_BINPUT(Object? LONG_BINPUT) =>
+      setAttribute("LONG_BINPUT", LONG_BINPUT);
+
+  /// ## MARK (getter)
+  Object? get MARK => getAttribute("MARK");
+
+  /// ## MARK (setter)
+  set MARK(Object? MARK) => setAttribute("MARK", MARK);
+
+  /// ## MEMOIZE (getter)
+  Object? get MEMOIZE => getAttribute("MEMOIZE");
+
+  /// ## MEMOIZE (setter)
+  set MEMOIZE(Object? MEMOIZE) => setAttribute("MEMOIZE", MEMOIZE);
+
+  /// ## NEWFALSE (getter)
+  Object? get NEWFALSE => getAttribute("NEWFALSE");
+
+  /// ## NEWFALSE (setter)
+  set NEWFALSE(Object? NEWFALSE) => setAttribute("NEWFALSE", NEWFALSE);
+
+  /// ## NEWOBJ (getter)
+  Object? get NEWOBJ => getAttribute("NEWOBJ");
+
+  /// ## NEWOBJ (setter)
+  set NEWOBJ(Object? NEWOBJ) => setAttribute("NEWOBJ", NEWOBJ);
+
+  /// ## NEWOBJ_EX (getter)
+  Object? get NEWOBJ_EX => getAttribute("NEWOBJ_EX");
+
+  /// ## NEWOBJ_EX (setter)
+  set NEWOBJ_EX(Object? NEWOBJ_EX) => setAttribute("NEWOBJ_EX", NEWOBJ_EX);
+
+  /// ## NEWTRUE (getter)
+  Object? get NEWTRUE => getAttribute("NEWTRUE");
+
+  /// ## NEWTRUE (setter)
+  set NEWTRUE(Object? NEWTRUE) => setAttribute("NEWTRUE", NEWTRUE);
+
+  /// ## NEXT_BUFFER (getter)
+  Object? get NEXT_BUFFER => getAttribute("NEXT_BUFFER");
+
+  /// ## NEXT_BUFFER (setter)
+  set NEXT_BUFFER(Object? NEXT_BUFFER) =>
+      setAttribute("NEXT_BUFFER", NEXT_BUFFER);
+
+  /// ## NONE (getter)
+  Object? get NONE => getAttribute("NONE");
+
+  /// ## NONE (setter)
+  set NONE(Object? NONE) => setAttribute("NONE", NONE);
+
+  /// ## OBJ (getter)
+  Object? get OBJ => getAttribute("OBJ");
+
+  /// ## OBJ (setter)
+  set OBJ(Object? OBJ) => setAttribute("OBJ", OBJ);
+
+  /// ## PERSID (getter)
+  Object? get PERSID => getAttribute("PERSID");
+
+  /// ## PERSID (setter)
+  set PERSID(Object? PERSID) => setAttribute("PERSID", PERSID);
+
+  /// ## POP (getter)
+  Object? get POP => getAttribute("POP");
+
+  /// ## POP (setter)
+  set POP(Object? POP) => setAttribute("POP", POP);
+
+  /// ## POP_MARK (getter)
+  Object? get POP_MARK => getAttribute("POP_MARK");
+
+  /// ## POP_MARK (setter)
+  set POP_MARK(Object? POP_MARK) => setAttribute("POP_MARK", POP_MARK);
+
+  /// ## PROTO (getter)
+  Object? get PROTO => getAttribute("PROTO");
+
+  /// ## PROTO (setter)
+  set PROTO(Object? PROTO) => setAttribute("PROTO", PROTO);
+
+  /// ## PUT (getter)
+  Object? get PUT => getAttribute("PUT");
+
+  /// ## PUT (setter)
+  set PUT(Object? PUT) => setAttribute("PUT", PUT);
+
+  /// ## PyStringMap (getter)
+  Object? get PyStringMap => getAttribute("PyStringMap");
+
+  /// ## PyStringMap (setter)
+  set PyStringMap(Object? PyStringMap) =>
+      setAttribute("PyStringMap", PyStringMap);
+
+  /// ## READONLY_BUFFER (getter)
+  Object? get READONLY_BUFFER => getAttribute("READONLY_BUFFER");
+
+  /// ## READONLY_BUFFER (setter)
+  set READONLY_BUFFER(Object? READONLY_BUFFER) =>
+      setAttribute("READONLY_BUFFER", READONLY_BUFFER);
+
+  /// ## REDUCE (getter)
+  Object? get REDUCE => getAttribute("REDUCE");
+
+  /// ## REDUCE (setter)
+  set REDUCE(Object? REDUCE) => setAttribute("REDUCE", REDUCE);
+
+  /// ## SETITEM (getter)
+  Object? get SETITEM => getAttribute("SETITEM");
+
+  /// ## SETITEM (setter)
+  set SETITEM(Object? SETITEM) => setAttribute("SETITEM", SETITEM);
+
+  /// ## SETITEMS (getter)
+  Object? get SETITEMS => getAttribute("SETITEMS");
+
+  /// ## SETITEMS (setter)
+  set SETITEMS(Object? SETITEMS) => setAttribute("SETITEMS", SETITEMS);
+
+  /// ## SHORT_BINBYTES (getter)
+  Object? get SHORT_BINBYTES => getAttribute("SHORT_BINBYTES");
+
+  /// ## SHORT_BINBYTES (setter)
+  set SHORT_BINBYTES(Object? SHORT_BINBYTES) =>
+      setAttribute("SHORT_BINBYTES", SHORT_BINBYTES);
+
+  /// ## SHORT_BINSTRING (getter)
+  Object? get SHORT_BINSTRING => getAttribute("SHORT_BINSTRING");
+
+  /// ## SHORT_BINSTRING (setter)
+  set SHORT_BINSTRING(Object? SHORT_BINSTRING) =>
+      setAttribute("SHORT_BINSTRING", SHORT_BINSTRING);
+
+  /// ## SHORT_BINUNICODE (getter)
+  Object? get SHORT_BINUNICODE => getAttribute("SHORT_BINUNICODE");
+
+  /// ## SHORT_BINUNICODE (setter)
+  set SHORT_BINUNICODE(Object? SHORT_BINUNICODE) =>
+      setAttribute("SHORT_BINUNICODE", SHORT_BINUNICODE);
+
+  /// ## STACK_GLOBAL (getter)
+  Object? get STACK_GLOBAL => getAttribute("STACK_GLOBAL");
+
+  /// ## STACK_GLOBAL (setter)
+  set STACK_GLOBAL(Object? STACK_GLOBAL) =>
+      setAttribute("STACK_GLOBAL", STACK_GLOBAL);
+
+  /// ## STOP (getter)
+  Object? get STOP => getAttribute("STOP");
+
+  /// ## STOP (setter)
+  set STOP(Object? STOP) => setAttribute("STOP", STOP);
+
+  /// ## STRING (getter)
+  Object? get STRING => getAttribute("STRING");
+
+  /// ## STRING (setter)
+  set STRING(Object? STRING) => setAttribute("STRING", STRING);
+
+  /// ## TRUE (getter)
+  Object? get TRUE => getAttribute("TRUE");
+
+  /// ## TRUE (setter)
+  set TRUE(Object? TRUE) => setAttribute("TRUE", TRUE);
+
+  /// ## TUPLE (getter)
+  Object? get TUPLE => getAttribute("TUPLE");
+
+  /// ## TUPLE (setter)
+  set TUPLE(Object? TUPLE) => setAttribute("TUPLE", TUPLE);
+
+  /// ## TUPLE1 (getter)
+  Object? get TUPLE1 => getAttribute("TUPLE1");
+
+  /// ## TUPLE1 (setter)
+  set TUPLE1(Object? TUPLE1) => setAttribute("TUPLE1", TUPLE1);
+
+  /// ## TUPLE2 (getter)
+  Object? get TUPLE2 => getAttribute("TUPLE2");
+
+  /// ## TUPLE2 (setter)
+  set TUPLE2(Object? TUPLE2) => setAttribute("TUPLE2", TUPLE2);
+
+  /// ## TUPLE3 (getter)
+  Object? get TUPLE3 => getAttribute("TUPLE3");
+
+  /// ## TUPLE3 (setter)
+  set TUPLE3(Object? TUPLE3) => setAttribute("TUPLE3", TUPLE3);
+
+  /// ## UNICODE (getter)
+  Object? get UNICODE => getAttribute("UNICODE");
+
+  /// ## UNICODE (setter)
+  set UNICODE(Object? UNICODE) => setAttribute("UNICODE", UNICODE);
+
+  /// ## bytes_types (getter)
+  Object? get bytes_types => getAttribute("bytes_types");
+
+  /// ## bytes_types (setter)
+  set bytes_types(Object? bytes_types) =>
+      setAttribute("bytes_types", bytes_types);
+
+  /// ## compatible_formats (getter)
+  Object? get compatible_formats => getAttribute("compatible_formats");
+
+  /// ## compatible_formats (setter)
+  set compatible_formats(Object? compatible_formats) =>
+      setAttribute("compatible_formats", compatible_formats);
+
+  /// ## dispatch_table (getter)
+  Object? get dispatch_table => getAttribute("dispatch_table");
+
+  /// ## dispatch_table (setter)
+  set dispatch_table(Object? dispatch_table) =>
+      setAttribute("dispatch_table", dispatch_table);
+
+  /// ## format_version (getter)
+  Object? get format_version => getAttribute("format_version");
+
+  /// ## format_version (setter)
+  set format_version(Object? format_version) =>
+      setAttribute("format_version", format_version);
+
+  /// ## maxsize (getter)
+  Object? get maxsize => getAttribute("maxsize");
+
+  /// ## maxsize (setter)
+  set maxsize(Object? maxsize) => setAttribute("maxsize", maxsize);
 }
 
 /// ## codecs
@@ -64310,7 +73071,7 @@ final class codecs extends PythonModule {
   Object? EncodedFile({
     required Object? file,
     required Object? data_encoding,
-    Object? file_encoding = null,
+    Object? file_encoding,
     Object? errors = "strict",
   }) =>
       getFunction("EncodedFile").call(
@@ -64562,7 +73323,7 @@ final class codecs extends PythonModule {
   Object? open({
     required Object? filename,
     Object? mode = "r",
-    Object? encoding = null,
+    Object? encoding,
     Object? errors = "strict",
     Object? buffering = -1,
   }) =>
@@ -64576,6 +73337,94 @@ final class codecs extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## BOM (getter)
+  Object? get BOM => getAttribute("BOM");
+
+  /// ## BOM (setter)
+  set BOM(Object? BOM) => setAttribute("BOM", BOM);
+
+  /// ## BOM32_BE (getter)
+  Object? get BOM32_BE => getAttribute("BOM32_BE");
+
+  /// ## BOM32_BE (setter)
+  set BOM32_BE(Object? BOM32_BE) => setAttribute("BOM32_BE", BOM32_BE);
+
+  /// ## BOM32_LE (getter)
+  Object? get BOM32_LE => getAttribute("BOM32_LE");
+
+  /// ## BOM32_LE (setter)
+  set BOM32_LE(Object? BOM32_LE) => setAttribute("BOM32_LE", BOM32_LE);
+
+  /// ## BOM64_BE (getter)
+  Object? get BOM64_BE => getAttribute("BOM64_BE");
+
+  /// ## BOM64_BE (setter)
+  set BOM64_BE(Object? BOM64_BE) => setAttribute("BOM64_BE", BOM64_BE);
+
+  /// ## BOM64_LE (getter)
+  Object? get BOM64_LE => getAttribute("BOM64_LE");
+
+  /// ## BOM64_LE (setter)
+  set BOM64_LE(Object? BOM64_LE) => setAttribute("BOM64_LE", BOM64_LE);
+
+  /// ## BOM_BE (getter)
+  Object? get BOM_BE => getAttribute("BOM_BE");
+
+  /// ## BOM_BE (setter)
+  set BOM_BE(Object? BOM_BE) => setAttribute("BOM_BE", BOM_BE);
+
+  /// ## BOM_LE (getter)
+  Object? get BOM_LE => getAttribute("BOM_LE");
+
+  /// ## BOM_LE (setter)
+  set BOM_LE(Object? BOM_LE) => setAttribute("BOM_LE", BOM_LE);
+
+  /// ## BOM_UTF16 (getter)
+  Object? get BOM_UTF16 => getAttribute("BOM_UTF16");
+
+  /// ## BOM_UTF16 (setter)
+  set BOM_UTF16(Object? BOM_UTF16) => setAttribute("BOM_UTF16", BOM_UTF16);
+
+  /// ## BOM_UTF16_BE (getter)
+  Object? get BOM_UTF16_BE => getAttribute("BOM_UTF16_BE");
+
+  /// ## BOM_UTF16_BE (setter)
+  set BOM_UTF16_BE(Object? BOM_UTF16_BE) =>
+      setAttribute("BOM_UTF16_BE", BOM_UTF16_BE);
+
+  /// ## BOM_UTF16_LE (getter)
+  Object? get BOM_UTF16_LE => getAttribute("BOM_UTF16_LE");
+
+  /// ## BOM_UTF16_LE (setter)
+  set BOM_UTF16_LE(Object? BOM_UTF16_LE) =>
+      setAttribute("BOM_UTF16_LE", BOM_UTF16_LE);
+
+  /// ## BOM_UTF32 (getter)
+  Object? get BOM_UTF32 => getAttribute("BOM_UTF32");
+
+  /// ## BOM_UTF32 (setter)
+  set BOM_UTF32(Object? BOM_UTF32) => setAttribute("BOM_UTF32", BOM_UTF32);
+
+  /// ## BOM_UTF32_BE (getter)
+  Object? get BOM_UTF32_BE => getAttribute("BOM_UTF32_BE");
+
+  /// ## BOM_UTF32_BE (setter)
+  set BOM_UTF32_BE(Object? BOM_UTF32_BE) =>
+      setAttribute("BOM_UTF32_BE", BOM_UTF32_BE);
+
+  /// ## BOM_UTF32_LE (getter)
+  Object? get BOM_UTF32_LE => getAttribute("BOM_UTF32_LE");
+
+  /// ## BOM_UTF32_LE (setter)
+  set BOM_UTF32_LE(Object? BOM_UTF32_LE) =>
+      setAttribute("BOM_UTF32_LE", BOM_UTF32_LE);
+
+  /// ## BOM_UTF8 (getter)
+  Object? get BOM_UTF8 => getAttribute("BOM_UTF8");
+
+  /// ## BOM_UTF8 (setter)
+  set BOM_UTF8(Object? BOM_UTF8) => setAttribute("BOM_UTF8", BOM_UTF8);
 }
 
 /// ## builtins
@@ -64587,13 +73436,23 @@ final class builtins extends PythonModule {
         builtins.from,
       );
 
-  Object? get Ellipsis => getAttribute("Ellipsis");
+  /// ## False (getter)
+  Object? get False => getAttribute("False");
 
-  set Ellipsis(Object? Ellipsis) => setAttribute("Ellipsis", Ellipsis);
+  /// ## False (setter)
+  set False(Object? False) => setAttribute("False", False);
 
-  Object? get is_term => getAttribute("is_term");
+  /// ## None (getter)
+  Object? get None => getAttribute("None");
 
-  set is_term(Object? is_term) => setAttribute("is_term", is_term);
+  /// ## None (setter)
+  set None(Object? None) => setAttribute("None", None);
+
+  /// ## True (getter)
+  Object? get True => getAttribute("True");
+
+  /// ## True (setter)
+  set True(Object? True) => setAttribute("True", True);
 }
 
 /// ## re
@@ -65469,6 +74328,114 @@ final class re extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## A (getter)
+  Object? get A => getAttribute("A");
+
+  /// ## A (setter)
+  set A(Object? A) => setAttribute("A", A);
+
+  /// ## ASCII (getter)
+  Object? get ASCII => getAttribute("ASCII");
+
+  /// ## ASCII (setter)
+  set ASCII(Object? ASCII) => setAttribute("ASCII", ASCII);
+
+  /// ## DEBUG (getter)
+  Object? get DEBUG => getAttribute("DEBUG");
+
+  /// ## DEBUG (setter)
+  set DEBUG(Object? DEBUG) => setAttribute("DEBUG", DEBUG);
+
+  /// ## DOTALL (getter)
+  Object? get DOTALL => getAttribute("DOTALL");
+
+  /// ## DOTALL (setter)
+  set DOTALL(Object? DOTALL) => setAttribute("DOTALL", DOTALL);
+
+  /// ## I (getter)
+  Object? get I => getAttribute("I");
+
+  /// ## I (setter)
+  set I(Object? I) => setAttribute("I", I);
+
+  /// ## IGNORECASE (getter)
+  Object? get IGNORECASE => getAttribute("IGNORECASE");
+
+  /// ## IGNORECASE (setter)
+  set IGNORECASE(Object? IGNORECASE) => setAttribute("IGNORECASE", IGNORECASE);
+
+  /// ## L (getter)
+  Object? get L => getAttribute("L");
+
+  /// ## L (setter)
+  set L(Object? L) => setAttribute("L", L);
+
+  /// ## LOCALE (getter)
+  Object? get LOCALE => getAttribute("LOCALE");
+
+  /// ## LOCALE (setter)
+  set LOCALE(Object? LOCALE) => setAttribute("LOCALE", LOCALE);
+
+  /// ## M (getter)
+  Object? get M => getAttribute("M");
+
+  /// ## M (setter)
+  set M(Object? M) => setAttribute("M", M);
+
+  /// ## MULTILINE (getter)
+  Object? get MULTILINE => getAttribute("MULTILINE");
+
+  /// ## MULTILINE (setter)
+  set MULTILINE(Object? MULTILINE) => setAttribute("MULTILINE", MULTILINE);
+
+  /// ## NOFLAG (getter)
+  Object? get NOFLAG => getAttribute("NOFLAG");
+
+  /// ## NOFLAG (setter)
+  set NOFLAG(Object? NOFLAG) => setAttribute("NOFLAG", NOFLAG);
+
+  /// ## S (getter)
+  Object? get S => getAttribute("S");
+
+  /// ## S (setter)
+  set S(Object? S) => setAttribute("S", S);
+
+  /// ## T (getter)
+  Object? get T => getAttribute("T");
+
+  /// ## T (setter)
+  set T(Object? T) => setAttribute("T", T);
+
+  /// ## TEMPLATE (getter)
+  Object? get TEMPLATE => getAttribute("TEMPLATE");
+
+  /// ## TEMPLATE (setter)
+  set TEMPLATE(Object? TEMPLATE) => setAttribute("TEMPLATE", TEMPLATE);
+
+  /// ## U (getter)
+  Object? get U => getAttribute("U");
+
+  /// ## U (setter)
+  set U(Object? U) => setAttribute("U", U);
+
+  /// ## UNICODE (getter)
+  Object? get UNICODE => getAttribute("UNICODE");
+
+  /// ## UNICODE (setter)
+  set UNICODE(Object? UNICODE) => setAttribute("UNICODE", UNICODE);
+
+  /// ## VERBOSE (getter)
+  Object? get VERBOSE => getAttribute("VERBOSE");
+
+  /// ## VERBOSE (setter)
+  set VERBOSE(Object? VERBOSE) => setAttribute("VERBOSE", VERBOSE);
+
+  /// ## X (getter)
+  Object? get X => getAttribute("X");
+
+  /// ## X (setter)
+  set X(Object? X) => setAttribute("X", X);
 }
 
 /// ## copyreg
@@ -65801,7 +74768,7 @@ final class copyreg extends PythonModule {
   Object? pickle({
     required Object? ob_type,
     required Object? pickle_function,
-    Object? constructor_ob = null,
+    Object? constructor_ob,
   }) =>
       getFunction("pickle").call(
         <Object?>[
@@ -65880,6 +74847,13 @@ final class copyreg extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## dispatch_table (getter)
+  Object? get dispatch_table => getAttribute("dispatch_table");
+
+  /// ## dispatch_table (setter)
+  set dispatch_table(Object? dispatch_table) =>
+      setAttribute("dispatch_table", dispatch_table);
 }
 
 /// ## enum
@@ -67973,7 +76947,7 @@ final class $enum extends PythonModule {
   /// ```
   Object? bin({
     required Object? num,
-    Object? max_bits = null,
+    Object? max_bits,
   }) =>
       getFunction("bin").call(
         <Object?>[
@@ -68169,6 +77143,49 @@ final class $enum extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## CONFORM (getter)
+  Object? get CONFORM => getAttribute("CONFORM");
+
+  /// ## CONFORM (setter)
+  set CONFORM(Object? CONFORM) => setAttribute("CONFORM", CONFORM);
+
+  /// ## CONTINUOUS (getter)
+  Object? get CONTINUOUS => getAttribute("CONTINUOUS");
+
+  /// ## CONTINUOUS (setter)
+  set CONTINUOUS(Object? CONTINUOUS) => setAttribute("CONTINUOUS", CONTINUOUS);
+
+  /// ## EJECT (getter)
+  Object? get EJECT => getAttribute("EJECT");
+
+  /// ## EJECT (setter)
+  set EJECT(Object? EJECT) => setAttribute("EJECT", EJECT);
+
+  /// ## KEEP (getter)
+  Object? get KEEP => getAttribute("KEEP");
+
+  /// ## KEEP (setter)
+  set KEEP(Object? KEEP) => setAttribute("KEEP", KEEP);
+
+  /// ## NAMED_FLAGS (getter)
+  Object? get NAMED_FLAGS => getAttribute("NAMED_FLAGS");
+
+  /// ## NAMED_FLAGS (setter)
+  set NAMED_FLAGS(Object? NAMED_FLAGS) =>
+      setAttribute("NAMED_FLAGS", NAMED_FLAGS);
+
+  /// ## STRICT (getter)
+  Object? get STRICT => getAttribute("STRICT");
+
+  /// ## STRICT (setter)
+  set STRICT(Object? STRICT) => setAttribute("STRICT", STRICT);
+
+  /// ## UNIQUE (getter)
+  Object? get UNIQUE => getAttribute("UNIQUE");
+
+  /// ## UNIQUE (setter)
+  set UNIQUE(Object? UNIQUE) => setAttribute("UNIQUE", UNIQUE);
 }
 
 /// ## functools
@@ -69594,6 +78611,20 @@ final class functools extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## WRAPPER_ASSIGNMENTS (getter)
+  Object? get WRAPPER_ASSIGNMENTS => getAttribute("WRAPPER_ASSIGNMENTS");
+
+  /// ## WRAPPER_ASSIGNMENTS (setter)
+  set WRAPPER_ASSIGNMENTS(Object? WRAPPER_ASSIGNMENTS) =>
+      setAttribute("WRAPPER_ASSIGNMENTS", WRAPPER_ASSIGNMENTS);
+
+  /// ## WRAPPER_UPDATES (getter)
+  Object? get WRAPPER_UPDATES => getAttribute("WRAPPER_UPDATES");
+
+  /// ## WRAPPER_UPDATES (setter)
+  set WRAPPER_UPDATES(Object? WRAPPER_UPDATES) =>
+      setAttribute("WRAPPER_UPDATES", WRAPPER_UPDATES);
 }
 
 /// ## tempfile
@@ -70630,13 +79661,13 @@ final class tempfile extends PythonModule {
   Object? NamedTemporaryFile({
     Object? mode = "w+b",
     Object? buffering = -1,
-    Object? encoding = null,
-    Object? newline = null,
-    Object? suffix = null,
-    Object? prefix = null,
-    Object? dir = null,
+    Object? encoding,
+    Object? newline,
+    Object? suffix,
+    Object? prefix,
+    Object? dir,
     Object? delete = true,
-    Object? errors = null,
+    Object? errors,
   }) =>
       getFunction("NamedTemporaryFile").call(
         <Object?>[
@@ -70751,12 +79782,12 @@ final class tempfile extends PythonModule {
   Object? TemporaryFile({
     Object? mode = "w+b",
     Object? buffering = -1,
-    Object? encoding = null,
-    Object? newline = null,
-    Object? suffix = null,
-    Object? prefix = null,
-    Object? dir = null,
-    Object? errors = null,
+    Object? encoding,
+    Object? newline,
+    Object? suffix,
+    Object? prefix,
+    Object? dir,
+    Object? errors,
   }) =>
       getFunction("TemporaryFile").call(
         <Object?>[
@@ -70899,9 +79930,9 @@ final class tempfile extends PythonModule {
   ///                           "No usable temporary directory name found")
   /// ```
   Object? mkdtemp({
-    Object? suffix = null,
-    Object? prefix = null,
-    Object? dir = null,
+    Object? suffix,
+    Object? prefix,
+    Object? dir,
   }) =>
       getFunction("mkdtemp").call(
         <Object?>[
@@ -70984,9 +80015,9 @@ final class tempfile extends PythonModule {
   ///     return _mkstemp_inner(dir, prefix, suffix, flags, output_type)
   /// ```
   Object? mkstemp({
-    Object? suffix = null,
-    Object? prefix = null,
-    Object? dir = null,
+    Object? suffix,
+    Object? prefix,
+    Object? dir,
     Object? text = false,
   }) =>
       getFunction("mkstemp").call(
@@ -71051,7 +80082,7 @@ final class tempfile extends PythonModule {
   Object? mktemp({
     Object? suffix = "",
     Object? prefix = "tmp",
-    Object? dir = null,
+    Object? dir,
   }) =>
       getFunction("mktemp").call(
         <Object?>[
@@ -71061,6 +80092,24 @@ final class tempfile extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## TMP_MAX (getter)
+  Object? get TMP_MAX => getAttribute("TMP_MAX");
+
+  /// ## TMP_MAX (setter)
+  set TMP_MAX(Object? TMP_MAX) => setAttribute("TMP_MAX", TMP_MAX);
+
+  /// ## tempdir (getter)
+  Object? get tempdir => getAttribute("tempdir");
+
+  /// ## tempdir (setter)
+  set tempdir(Object? tempdir) => setAttribute("tempdir", tempdir);
+
+  /// ## template (getter)
+  Object? get template => getAttribute("template");
+
+  /// ## template (setter)
+  set template(Object? template) => setAttribute("template", template);
 }
 
 /// ## types
@@ -71475,8 +80524,8 @@ final class types extends PythonModule {
   Object? new_class({
     required Object? name,
     Object? bases = const [],
-    Object? kwds = null,
-    Object? exec_body = null,
+    Object? kwds,
+    Object? exec_body,
   }) =>
       getFunction("new_class").call(
         <Object?>[
@@ -71539,7 +80588,7 @@ final class types extends PythonModule {
   Object? prepare_class({
     required Object? name,
     Object? bases = const [],
-    Object? kwds = null,
+    Object? kwds,
   }) =>
       getFunction("prepare_class").call(
         <Object?>[
@@ -72205,6 +81254,20 @@ final class lexer extends PythonModule {
         "lark.lexer",
         lexer.from,
       );
+
+  /// ## TOKEN_DEFAULT_PRIORITY (getter)
+  Object? get TOKEN_DEFAULT_PRIORITY => getAttribute("TOKEN_DEFAULT_PRIORITY");
+
+  /// ## TOKEN_DEFAULT_PRIORITY (setter)
+  set TOKEN_DEFAULT_PRIORITY(Object? TOKEN_DEFAULT_PRIORITY) =>
+      setAttribute("TOKEN_DEFAULT_PRIORITY", TOKEN_DEFAULT_PRIORITY);
+
+  /// ## TYPE_CHECKING (getter)
+  Object? get TYPE_CHECKING => getAttribute("TYPE_CHECKING");
+
+  /// ## TYPE_CHECKING (setter)
+  set TYPE_CHECKING(Object? TYPE_CHECKING) =>
+      setAttribute("TYPE_CHECKING", TYPE_CHECKING);
 }
 
 /// ## load_grammar
@@ -73898,14 +82961,86 @@ final class load_grammar extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
-  Object? get logger => getAttribute("logger");
 
-  set logger(Object? logger) => setAttribute("logger", logger);
-
+  /// ## stdlib_loader (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Provides a simple way of creating custom import loaders that load from packages via ``pkgutil.get_data`` instead of using `open`.
+  /// This allows them to be compatible even from within zip files.
+  ///
+  /// Relative imports are handled, so you can just freely use them.
+  ///
+  /// pkg_name: The name of the package. You can probably provide `__name__` most of the time
+  /// search_paths: All the path that will be search on absolute imports.
   Object? get stdlib_loader => getAttribute("stdlib_loader");
 
+  /// ## stdlib_loader (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Provides a simple way of creating custom import loaders that load from packages via ``pkgutil.get_data`` instead of using `open`.
+  /// This allows them to be compatible even from within zip files.
+  ///
+  /// Relative imports are handled, so you can just freely use them.
+  ///
+  /// pkg_name: The name of the package. You can probably provide `__name__` most of the time
+  /// search_paths: All the path that will be search on absolute imports.
   set stdlib_loader(Object? stdlib_loader) =>
       setAttribute("stdlib_loader", stdlib_loader);
+
+  /// ## EXT (getter)
+  Object? get EXT => getAttribute("EXT");
+
+  /// ## EXT (setter)
+  set EXT(Object? EXT) => setAttribute("EXT", EXT);
+
+  /// ## GRAMMAR_ERRORS (getter)
+  Object? get GRAMMAR_ERRORS => getAttribute("GRAMMAR_ERRORS");
+
+  /// ## GRAMMAR_ERRORS (setter)
+  set GRAMMAR_ERRORS(Object? GRAMMAR_ERRORS) =>
+      setAttribute("GRAMMAR_ERRORS", GRAMMAR_ERRORS);
+
+  /// ## IMPORT_PATHS (getter)
+  Object? get IMPORT_PATHS => getAttribute("IMPORT_PATHS");
+
+  /// ## IMPORT_PATHS (setter)
+  set IMPORT_PATHS(Object? IMPORT_PATHS) =>
+      setAttribute("IMPORT_PATHS", IMPORT_PATHS);
+
+  /// ## REPEAT_BREAK_THRESHOLD (getter)
+  Object? get REPEAT_BREAK_THRESHOLD => getAttribute("REPEAT_BREAK_THRESHOLD");
+
+  /// ## REPEAT_BREAK_THRESHOLD (setter)
+  set REPEAT_BREAK_THRESHOLD(Object? REPEAT_BREAK_THRESHOLD) =>
+      setAttribute("REPEAT_BREAK_THRESHOLD", REPEAT_BREAK_THRESHOLD);
+
+  /// ## RULES (getter)
+  Object? get RULES => getAttribute("RULES");
+
+  /// ## RULES (setter)
+  set RULES(Object? RULES) => setAttribute("RULES", RULES);
+
+  /// ## SMALL_FACTOR_THRESHOLD (getter)
+  Object? get SMALL_FACTOR_THRESHOLD => getAttribute("SMALL_FACTOR_THRESHOLD");
+
+  /// ## SMALL_FACTOR_THRESHOLD (setter)
+  set SMALL_FACTOR_THRESHOLD(Object? SMALL_FACTOR_THRESHOLD) =>
+      setAttribute("SMALL_FACTOR_THRESHOLD", SMALL_FACTOR_THRESHOLD);
+
+  /// ## TERMINALS (getter)
+  Object? get TERMINALS => getAttribute("TERMINALS");
+
+  /// ## TERMINALS (setter)
+  set TERMINALS(Object? TERMINALS) => setAttribute("TERMINALS", TERMINALS);
+
+  /// ## TOKEN_DEFAULT_PRIORITY (getter)
+  Object? get TOKEN_DEFAULT_PRIORITY => getAttribute("TOKEN_DEFAULT_PRIORITY");
+
+  /// ## TOKEN_DEFAULT_PRIORITY (setter)
+  set TOKEN_DEFAULT_PRIORITY(Object? TOKEN_DEFAULT_PRIORITY) =>
+      setAttribute("TOKEN_DEFAULT_PRIORITY", TOKEN_DEFAULT_PRIORITY);
 }
 
 /// ## hashlib
@@ -74409,7 +83544,7 @@ final class hashlib extends PythonModule {
     required Object? password,
     required Object? salt,
     required Object? iterations,
-    Object? dklen = null,
+    Object? dklen,
   }) =>
       getFunction("pbkdf2_hmac").call(
         <Object?>[
@@ -74421,6 +83556,20 @@ final class hashlib extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## algorithms_available (getter)
+  Object? get algorithms_available => getAttribute("algorithms_available");
+
+  /// ## algorithms_available (setter)
+  set algorithms_available(Object? algorithms_available) =>
+      setAttribute("algorithms_available", algorithms_available);
+
+  /// ## algorithms_guaranteed (getter)
+  Object? get algorithms_guaranteed => getAttribute("algorithms_guaranteed");
+
+  /// ## algorithms_guaranteed (setter)
+  set algorithms_guaranteed(Object? algorithms_guaranteed) =>
+      setAttribute("algorithms_guaranteed", algorithms_guaranteed);
 }
 
 /// ## pkgutil
@@ -75631,7 +84780,7 @@ final class pkgutil extends PythonModule {
   ///                 yield ModuleInfo(i, name, ispkg)
   /// ```
   Object? iter_modules({
-    Object? path = null,
+    Object? path,
     Object? prefix = "",
   }) =>
       getFunction("iter_modules").call(
@@ -75921,9 +85070,9 @@ final class pkgutil extends PythonModule {
   ///                 yield from walk_packages(path, info.name+'.', onerror)
   /// ```
   Object? walk_packages({
-    Object? path = null,
+    Object? path,
     Object? prefix = "",
-    Object? onerror = null,
+    Object? onerror,
   }) =>
       getFunction("walk_packages").call(
         <Object?>[
@@ -76176,7 +85325,7 @@ final class importlib extends PythonModule {
   /// ```
   Object? find_loader({
     required Object? name,
-    Object? path = null,
+    Object? path,
   }) =>
       getFunction("find_loader").call(
         <Object?>[
@@ -76220,7 +85369,7 @@ final class importlib extends PythonModule {
   /// ```
   Object? import_module({
     required Object? name,
-    Object? package = null,
+    Object? package,
   }) =>
       getFunction("import_module").call(
         <Object?>[
@@ -76364,6 +85513,43 @@ final class machinery extends PythonModule {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## BYTECODE_SUFFIXES (getter)
+  Object? get BYTECODE_SUFFIXES => getAttribute("BYTECODE_SUFFIXES");
+
+  /// ## BYTECODE_SUFFIXES (setter)
+  set BYTECODE_SUFFIXES(Object? BYTECODE_SUFFIXES) =>
+      setAttribute("BYTECODE_SUFFIXES", BYTECODE_SUFFIXES);
+
+  /// ## DEBUG_BYTECODE_SUFFIXES (getter)
+  Object? get DEBUG_BYTECODE_SUFFIXES =>
+      getAttribute("DEBUG_BYTECODE_SUFFIXES");
+
+  /// ## DEBUG_BYTECODE_SUFFIXES (setter)
+  set DEBUG_BYTECODE_SUFFIXES(Object? DEBUG_BYTECODE_SUFFIXES) =>
+      setAttribute("DEBUG_BYTECODE_SUFFIXES", DEBUG_BYTECODE_SUFFIXES);
+
+  /// ## EXTENSION_SUFFIXES (getter)
+  Object? get EXTENSION_SUFFIXES => getAttribute("EXTENSION_SUFFIXES");
+
+  /// ## EXTENSION_SUFFIXES (setter)
+  set EXTENSION_SUFFIXES(Object? EXTENSION_SUFFIXES) =>
+      setAttribute("EXTENSION_SUFFIXES", EXTENSION_SUFFIXES);
+
+  /// ## OPTIMIZED_BYTECODE_SUFFIXES (getter)
+  Object? get OPTIMIZED_BYTECODE_SUFFIXES =>
+      getAttribute("OPTIMIZED_BYTECODE_SUFFIXES");
+
+  /// ## OPTIMIZED_BYTECODE_SUFFIXES (setter)
+  set OPTIMIZED_BYTECODE_SUFFIXES(Object? OPTIMIZED_BYTECODE_SUFFIXES) =>
+      setAttribute("OPTIMIZED_BYTECODE_SUFFIXES", OPTIMIZED_BYTECODE_SUFFIXES);
+
+  /// ## SOURCE_SUFFIXES (getter)
+  Object? get SOURCE_SUFFIXES => getAttribute("SOURCE_SUFFIXES");
+
+  /// ## SOURCE_SUFFIXES (setter)
+  set SOURCE_SUFFIXES(Object? SOURCE_SUFFIXES) =>
+      setAttribute("SOURCE_SUFFIXES", SOURCE_SUFFIXES);
 }
 
 /// ## util
@@ -76705,7 +85891,7 @@ final class util extends PythonModule {
   /// In other words, relative module names (with leading dots) work.
   Object? find_spec({
     required Object? name,
-    Object? package = null,
+    Object? package,
   }) =>
       getFunction("find_spec").call(
         <Object?>[
@@ -76809,6 +85995,13 @@ final class util extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## MAGIC_NUMBER (getter)
+  Object? get MAGIC_NUMBER => getAttribute("MAGIC_NUMBER");
+
+  /// ## MAGIC_NUMBER (setter)
+  set MAGIC_NUMBER(Object? MAGIC_NUMBER) =>
+      setAttribute("MAGIC_NUMBER", MAGIC_NUMBER);
 }
 
 /// ## zipimport
@@ -77616,6 +86809,47 @@ final class zipimport extends PythonModule {
         "zipimport",
         zipimport.from,
       );
+
+  /// ## END_CENTRAL_DIR_SIZE (getter)
+  Object? get END_CENTRAL_DIR_SIZE => getAttribute("END_CENTRAL_DIR_SIZE");
+
+  /// ## END_CENTRAL_DIR_SIZE (setter)
+  set END_CENTRAL_DIR_SIZE(Object? END_CENTRAL_DIR_SIZE) =>
+      setAttribute("END_CENTRAL_DIR_SIZE", END_CENTRAL_DIR_SIZE);
+
+  /// ## MAX_COMMENT_LEN (getter)
+  Object? get MAX_COMMENT_LEN => getAttribute("MAX_COMMENT_LEN");
+
+  /// ## MAX_COMMENT_LEN (setter)
+  set MAX_COMMENT_LEN(Object? MAX_COMMENT_LEN) =>
+      setAttribute("MAX_COMMENT_LEN", MAX_COMMENT_LEN);
+
+  /// ## STRING_END_ARCHIVE (getter)
+  Object? get STRING_END_ARCHIVE => getAttribute("STRING_END_ARCHIVE");
+
+  /// ## STRING_END_ARCHIVE (setter)
+  set STRING_END_ARCHIVE(Object? STRING_END_ARCHIVE) =>
+      setAttribute("STRING_END_ARCHIVE", STRING_END_ARCHIVE);
+
+  /// ## alt_path_sep (getter)
+  Object? get alt_path_sep => getAttribute("alt_path_sep");
+
+  /// ## alt_path_sep (setter)
+  set alt_path_sep(Object? alt_path_sep) =>
+      setAttribute("alt_path_sep", alt_path_sep);
+
+  /// ## cp437_table (getter)
+  Object? get cp437_table => getAttribute("cp437_table");
+
+  /// ## cp437_table (setter)
+  set cp437_table(Object? cp437_table) =>
+      setAttribute("cp437_table", cp437_table);
+
+  /// ## path_sep (getter)
+  Object? get path_sep => getAttribute("path_sep");
+
+  /// ## path_sep (setter)
+  set path_sep(Object? path_sep) => setAttribute("path_sep", path_sep);
 }
 
 /// ## marshal
@@ -77626,6 +86860,12 @@ final class marshal extends PythonModule {
         "marshal",
         marshal.from,
       );
+
+  /// ## version (getter)
+  Object? get version => getAttribute("version");
+
+  /// ## version (setter)
+  set version(Object? version) => setAttribute("version", version);
 }
 
 /// ## time
@@ -77636,6 +86876,74 @@ final class time extends PythonModule {
         "time",
         time.from,
       );
+
+  /// ## CLOCK_MONOTONIC (getter)
+  Object? get CLOCK_MONOTONIC => getAttribute("CLOCK_MONOTONIC");
+
+  /// ## CLOCK_MONOTONIC (setter)
+  set CLOCK_MONOTONIC(Object? CLOCK_MONOTONIC) =>
+      setAttribute("CLOCK_MONOTONIC", CLOCK_MONOTONIC);
+
+  /// ## CLOCK_MONOTONIC_RAW (getter)
+  Object? get CLOCK_MONOTONIC_RAW => getAttribute("CLOCK_MONOTONIC_RAW");
+
+  /// ## CLOCK_MONOTONIC_RAW (setter)
+  set CLOCK_MONOTONIC_RAW(Object? CLOCK_MONOTONIC_RAW) =>
+      setAttribute("CLOCK_MONOTONIC_RAW", CLOCK_MONOTONIC_RAW);
+
+  /// ## CLOCK_PROCESS_CPUTIME_ID (getter)
+  Object? get CLOCK_PROCESS_CPUTIME_ID =>
+      getAttribute("CLOCK_PROCESS_CPUTIME_ID");
+
+  /// ## CLOCK_PROCESS_CPUTIME_ID (setter)
+  set CLOCK_PROCESS_CPUTIME_ID(Object? CLOCK_PROCESS_CPUTIME_ID) =>
+      setAttribute("CLOCK_PROCESS_CPUTIME_ID", CLOCK_PROCESS_CPUTIME_ID);
+
+  /// ## CLOCK_REALTIME (getter)
+  Object? get CLOCK_REALTIME => getAttribute("CLOCK_REALTIME");
+
+  /// ## CLOCK_REALTIME (setter)
+  set CLOCK_REALTIME(Object? CLOCK_REALTIME) =>
+      setAttribute("CLOCK_REALTIME", CLOCK_REALTIME);
+
+  /// ## CLOCK_THREAD_CPUTIME_ID (getter)
+  Object? get CLOCK_THREAD_CPUTIME_ID =>
+      getAttribute("CLOCK_THREAD_CPUTIME_ID");
+
+  /// ## CLOCK_THREAD_CPUTIME_ID (setter)
+  set CLOCK_THREAD_CPUTIME_ID(Object? CLOCK_THREAD_CPUTIME_ID) =>
+      setAttribute("CLOCK_THREAD_CPUTIME_ID", CLOCK_THREAD_CPUTIME_ID);
+
+  /// ## CLOCK_UPTIME_RAW (getter)
+  Object? get CLOCK_UPTIME_RAW => getAttribute("CLOCK_UPTIME_RAW");
+
+  /// ## CLOCK_UPTIME_RAW (setter)
+  set CLOCK_UPTIME_RAW(Object? CLOCK_UPTIME_RAW) =>
+      setAttribute("CLOCK_UPTIME_RAW", CLOCK_UPTIME_RAW);
+
+  /// ## altzone (getter)
+  Object? get altzone => getAttribute("altzone");
+
+  /// ## altzone (setter)
+  set altzone(Object? altzone) => setAttribute("altzone", altzone);
+
+  /// ## daylight (getter)
+  Object? get daylight => getAttribute("daylight");
+
+  /// ## daylight (setter)
+  set daylight(Object? daylight) => setAttribute("daylight", daylight);
+
+  /// ## timezone (getter)
+  Object? get timezone => getAttribute("timezone");
+
+  /// ## timezone (setter)
+  set timezone(Object? timezone) => setAttribute("timezone", timezone);
+
+  /// ## tzname (getter)
+  Object? get tzname => getAttribute("tzname");
+
+  /// ## tzname (setter)
+  set tzname(Object? tzname) => setAttribute("tzname", tzname);
 }
 
 /// ## parse_tree_builder
@@ -78563,7 +87871,7 @@ final class parser_frontends extends PythonModule {
   Object? create_earley_parser__dynamic({
     required Object? lexer_conf,
     required Object? parser_conf,
-    Object? options = null,
+    Object? options,
     Map<String, Object?> kw = const <String, Object?>{},
   }) =>
       getFunction("create_earley_parser__dynamic").call(
@@ -78589,7 +87897,7 @@ final class parser_frontends extends PythonModule {
   Object? create_lalr_parser({
     required Object? lexer_conf,
     required Object? parser_conf,
-    Object? options = null,
+    Object? options,
   }) =>
       getFunction("create_lalr_parser").call(
         <Object?>[
@@ -79488,10 +88796,6 @@ final class earley extends PythonModule {
         "lark.parsers.earley",
         earley.from,
       );
-
-  Object? get logger => getAttribute("logger");
-
-  set logger(Object? logger) => setAttribute("logger", logger);
 }
 
 /// ## xearley
@@ -80605,13 +89909,6 @@ final class earley_forest extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
-  Object? get Discard => getAttribute("Discard");
-
-  set Discard(Object? Discard) => setAttribute("Discard", Discard);
-
-  Object? get logger => getAttribute("logger");
-
-  set logger(Object? logger) => setAttribute("logger", logger);
 }
 
 /// ## grammar_analysis
@@ -81319,17 +90616,18 @@ final class lalr_analysis extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## Reduce (getter)
   Object? get Reduce => getAttribute("Reduce");
 
+  /// ## Reduce (setter)
   set Reduce(Object? Reduce) => setAttribute("Reduce", Reduce);
 
+  /// ## Shift (getter)
   Object? get Shift => getAttribute("Shift");
 
+  /// ## Shift (setter)
   set Shift(Object? Shift) => setAttribute("Shift", Shift);
-
-  Object? get logger => getAttribute("logger");
-
-  set logger(Object? logger) => setAttribute("logger", logger);
 }
 
 /// ## lalr_interactive_parser
@@ -81716,14 +91014,6 @@ final class lalr_parser extends PythonModule {
         "lark.parsers.lalr_parser",
         lalr_parser.from,
       );
-
-  Object? get Reduce => getAttribute("Reduce");
-
-  set Reduce(Object? Reduce) => setAttribute("Reduce", Reduce);
-
-  Object? get Shift => getAttribute("Shift");
-
-  set Shift(Object? Shift) => setAttribute("Shift", Shift);
 }
 
 /// ## tree
@@ -82122,9 +91412,19 @@ final class tree extends PythonModule {
           ...kwargs,
         },
       );
+
+  /// ## ParseTree (getter)
   Object? get ParseTree => getAttribute("ParseTree");
 
+  /// ## ParseTree (setter)
   set ParseTree(Object? ParseTree) => setAttribute("ParseTree", ParseTree);
+
+  /// ## TYPE_CHECKING (getter)
+  Object? get TYPE_CHECKING => getAttribute("TYPE_CHECKING");
+
+  /// ## TYPE_CHECKING (setter)
+  set TYPE_CHECKING(Object? TYPE_CHECKING) =>
+      setAttribute("TYPE_CHECKING", TYPE_CHECKING);
 }
 
 /// ## utils
@@ -82551,8 +91851,8 @@ final class utils extends PythonModule {
   /// ```
   Object? classify({
     required Object? seq,
-    Object? key = null,
-    Object? value = null,
+    Object? key,
+    Object? value,
   }) =>
       getFunction("classify").call(
         <Object?>[
@@ -82840,22 +92140,100 @@ final class utils extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
-  Object? get NO_VALUE => getAttribute("NO_VALUE");
 
-  set NO_VALUE(Object? NO_VALUE) => setAttribute("NO_VALUE", NO_VALUE);
-
+  /// ## T (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Type variable.
+  ///
+  /// Usage::
+  ///
+  ///   T = TypeVar('T')  # Can be anything
+  ///   A = TypeVar('A', str, bytes)  # Must be str or bytes
+  ///
+  /// Type variables exist primarily for the benefit of static type
+  /// checkers.  They serve as the parameters for generic types as well
+  /// as for generic function definitions.  See class Generic for more
+  /// information on generic types.  Generic functions work as follows:
+  ///
+  ///   def repeat(x: T, n: int) -> List[T]:
+  ///       '''Return a list containing n references to x.'''
+  ///       return [x]*n
+  ///
+  ///   def longest(x: A, y: A) -> A:
+  ///       '''Return the longest of two strings.'''
+  ///       return x if len(x) >= len(y) else y
+  ///
+  /// The latter example's signature is essentially the overloading
+  /// of (str, str) -> str and (bytes, bytes) -> bytes.  Also note
+  /// that if the arguments are instances of some subclass of str,
+  /// the return type is still plain str.
+  ///
+  /// At runtime, isinstance(x, T) and issubclass(C, T) will raise TypeError.
+  ///
+  /// Type variables defined with covariant=True or contravariant=True
+  /// can be used to declare covariant or contravariant generic types.
+  /// See PEP 484 for more details. By default generic types are invariant
+  /// in all type variables.
+  ///
+  /// Type variables can be introspected. e.g.:
+  ///
+  ///   T.__name__ == 'T'
+  ///   T.__constraints__ == ()
+  ///   T.__covariant__ == False
+  ///   T.__contravariant__ = False
+  ///   A.__constraints__ == (str, bytes)
+  ///
+  /// Note that only type variables defined in global scope can be pickled.
   Object? get T => getAttribute("T");
 
+  /// ## T (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Type variable.
+  ///
+  /// Usage::
+  ///
+  ///   T = TypeVar('T')  # Can be anything
+  ///   A = TypeVar('A', str, bytes)  # Must be str or bytes
+  ///
+  /// Type variables exist primarily for the benefit of static type
+  /// checkers.  They serve as the parameters for generic types as well
+  /// as for generic function definitions.  See class Generic for more
+  /// information on generic types.  Generic functions work as follows:
+  ///
+  ///   def repeat(x: T, n: int) -> List[T]:
+  ///       '''Return a list containing n references to x.'''
+  ///       return [x]*n
+  ///
+  ///   def longest(x: A, y: A) -> A:
+  ///       '''Return the longest of two strings.'''
+  ///       return x if len(x) >= len(y) else y
+  ///
+  /// The latter example's signature is essentially the overloading
+  /// of (str, str) -> str and (bytes, bytes) -> bytes.  Also note
+  /// that if the arguments are instances of some subclass of str,
+  /// the return type is still plain str.
+  ///
+  /// At runtime, isinstance(x, T) and issubclass(C, T) will raise TypeError.
+  ///
+  /// Type variables defined with covariant=True or contravariant=True
+  /// can be used to declare covariant or contravariant generic types.
+  /// See PEP 484 for more details. By default generic types are invariant
+  /// in all type variables.
+  ///
+  /// Type variables can be introspected. e.g.:
+  ///
+  ///   T.__name__ == 'T'
+  ///   T.__constraints__ == ()
+  ///   T.__covariant__ == False
+  ///   T.__contravariant__ = False
+  ///   A.__constraints__ == (str, bytes)
+  ///
+  /// Note that only type variables defined in global scope can be pickled.
   set T(Object? T) => setAttribute("T", T);
-
-  Object? get categ_pattern => getAttribute("categ_pattern");
-
-  set categ_pattern(Object? categ_pattern) =>
-      setAttribute("categ_pattern", categ_pattern);
-
-  Object? get logger => getAttribute("logger");
-
-  set logger(Object? logger) => setAttribute("logger", logger);
 }
 
 /// ## logging
@@ -85620,7 +94998,7 @@ final class logging extends PythonModule {
   ///     return Logger.manager.getLogger(name)
   /// ```
   Object? getLogger({
-    Object? name = null,
+    Object? name,
   }) =>
       getFunction("getLogger").call(
         <Object?>[
@@ -85925,13 +95303,124 @@ final class logging extends PythonModule {
           ...kwargs,
         },
       );
+
+  /// ## lastResort (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// This class is like a StreamHandler using sys.stderr, but always uses
+  /// whatever sys.stderr is currently set to rather than the value of
+  /// sys.stderr at handler construction time.
   Object? get lastResort => getAttribute("lastResort");
 
+  /// ## lastResort (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// This class is like a StreamHandler using sys.stderr, but always uses
+  /// whatever sys.stderr is currently set to rather than the value of
+  /// sys.stderr at handler construction time.
   set lastResort(Object? lastResort) => setAttribute("lastResort", lastResort);
 
+  /// ## root (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A root logger is not that different to any other logger, except that
+  /// it must have a logging level and there is only one instance of it in
+  /// the hierarchy.
   Object? get root => getAttribute("root");
 
+  /// ## root (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A root logger is not that different to any other logger, except that
+  /// it must have a logging level and there is only one instance of it in
+  /// the hierarchy.
   set root(Object? root) => setAttribute("root", root);
+
+  /// ## BASIC_FORMAT (getter)
+  Object? get BASIC_FORMAT => getAttribute("BASIC_FORMAT");
+
+  /// ## BASIC_FORMAT (setter)
+  set BASIC_FORMAT(Object? BASIC_FORMAT) =>
+      setAttribute("BASIC_FORMAT", BASIC_FORMAT);
+
+  /// ## CRITICAL (getter)
+  Object? get CRITICAL => getAttribute("CRITICAL");
+
+  /// ## CRITICAL (setter)
+  set CRITICAL(Object? CRITICAL) => setAttribute("CRITICAL", CRITICAL);
+
+  /// ## DEBUG (getter)
+  Object? get DEBUG => getAttribute("DEBUG");
+
+  /// ## DEBUG (setter)
+  set DEBUG(Object? DEBUG) => setAttribute("DEBUG", DEBUG);
+
+  /// ## ERROR (getter)
+  Object? get ERROR => getAttribute("ERROR");
+
+  /// ## ERROR (setter)
+  set ERROR(Object? ERROR) => setAttribute("ERROR", ERROR);
+
+  /// ## FATAL (getter)
+  Object? get FATAL => getAttribute("FATAL");
+
+  /// ## FATAL (setter)
+  set FATAL(Object? FATAL) => setAttribute("FATAL", FATAL);
+
+  /// ## INFO (getter)
+  Object? get INFO => getAttribute("INFO");
+
+  /// ## INFO (setter)
+  set INFO(Object? INFO) => setAttribute("INFO", INFO);
+
+  /// ## NOTSET (getter)
+  Object? get NOTSET => getAttribute("NOTSET");
+
+  /// ## NOTSET (setter)
+  set NOTSET(Object? NOTSET) => setAttribute("NOTSET", NOTSET);
+
+  /// ## WARN (getter)
+  Object? get WARN => getAttribute("WARN");
+
+  /// ## WARN (setter)
+  set WARN(Object? WARN) => setAttribute("WARN", WARN);
+
+  /// ## WARNING (getter)
+  Object? get WARNING => getAttribute("WARNING");
+
+  /// ## WARNING (setter)
+  set WARNING(Object? WARNING) => setAttribute("WARNING", WARNING);
+
+  /// ## logMultiprocessing (getter)
+  Object? get logMultiprocessing => getAttribute("logMultiprocessing");
+
+  /// ## logMultiprocessing (setter)
+  set logMultiprocessing(Object? logMultiprocessing) =>
+      setAttribute("logMultiprocessing", logMultiprocessing);
+
+  /// ## logProcesses (getter)
+  Object? get logProcesses => getAttribute("logProcesses");
+
+  /// ## logProcesses (setter)
+  set logProcesses(Object? logProcesses) =>
+      setAttribute("logProcesses", logProcesses);
+
+  /// ## logThreads (getter)
+  Object? get logThreads => getAttribute("logThreads");
+
+  /// ## logThreads (setter)
+  set logThreads(Object? logThreads) => setAttribute("logThreads", logThreads);
+
+  /// ## raiseExceptions (getter)
+  Object? get raiseExceptions => getAttribute("raiseExceptions");
+
+  /// ## raiseExceptions (setter)
+  set raiseExceptions(Object? raiseExceptions) =>
+      setAttribute("raiseExceptions", raiseExceptions);
 }
 
 /// ## atexit
@@ -87748,8 +97237,8 @@ final class collections extends PythonModule {
     required Object? typename,
     required Object? field_names,
     Object? rename = false,
-    Object? defaults = null,
-    Object? module = null,
+    Object? defaults,
+    Object? module,
   }) =>
       getFunction("namedtuple").call(
         <Object?>[
@@ -89734,6 +99223,13 @@ final class threading extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## TIMEOUT_MAX (getter)
+  Object? get TIMEOUT_MAX => getAttribute("TIMEOUT_MAX");
+
+  /// ## TIMEOUT_MAX (setter)
+  set TIMEOUT_MAX(Object? TIMEOUT_MAX) =>
+      setAttribute("TIMEOUT_MAX", TIMEOUT_MAX);
 }
 
 /// ## traceback
@@ -90791,8 +100287,8 @@ final class traceback extends PythonModule {
   ///     return stack
   /// ```
   Object? extract_stack({
-    Object? f = null,
-    Object? limit = null,
+    Object? f,
+    Object? limit,
   }) =>
       getFunction("extract_stack").call(
         <Object?>[
@@ -90837,7 +100333,7 @@ final class traceback extends PythonModule {
   /// ```
   Object? extract_tb({
     required Object? tb,
-    Object? limit = null,
+    Object? limit,
   }) =>
       getFunction("extract_tb").call(
         <Object?>[
@@ -90860,7 +100356,7 @@ final class traceback extends PythonModule {
   ///     return "".join(format_exception(*sys.exc_info(), limit=limit, chain=chain))
   /// ```
   Object? format_exc({
-    Object? limit = null,
+    Object? limit,
     Object? chain = true,
   }) =>
       getFunction("format_exc").call(
@@ -90903,7 +100399,7 @@ final class traceback extends PythonModule {
     Object? exc, {
     Object? value = null,
     Object? tb = null,
-    Object? limit = null,
+    Object? limit,
     Object? chain = true,
   }) =>
       getFunction("format_exception").call(
@@ -91022,8 +100518,8 @@ final class traceback extends PythonModule {
   ///     return format_list(extract_stack(f, limit=limit))
   /// ```
   Object? format_stack({
-    Object? f = null,
-    Object? limit = null,
+    Object? f,
+    Object? limit,
   }) =>
       getFunction("format_stack").call(
         <Object?>[
@@ -91047,7 +100543,7 @@ final class traceback extends PythonModule {
   /// ```
   Object? format_tb({
     required Object? tb,
-    Object? limit = null,
+    Object? limit,
   }) =>
       getFunction("format_tb").call(
         <Object?>[
@@ -91070,8 +100566,8 @@ final class traceback extends PythonModule {
   ///     print_exception(*sys.exc_info(), limit=limit, file=file, chain=chain)
   /// ```
   Object? print_exc({
-    Object? limit = null,
-    Object? file = null,
+    Object? limit,
+    Object? file,
     Object? chain = true,
   }) =>
       getFunction("print_exc").call(
@@ -91119,8 +100615,8 @@ final class traceback extends PythonModule {
     Object? exc, {
     Object? value = null,
     Object? tb = null,
-    Object? limit = null,
-    Object? file = null,
+    Object? limit,
+    Object? file,
     Object? chain = true,
   }) =>
       getFunction("print_exception").call(
@@ -91153,8 +100649,8 @@ final class traceback extends PythonModule {
   ///                     limit, file, chain)
   /// ```
   Object? print_last({
-    Object? limit = null,
-    Object? file = null,
+    Object? limit,
+    Object? file,
     Object? chain = true,
   }) =>
       getFunction("print_last").call(
@@ -91185,7 +100681,7 @@ final class traceback extends PythonModule {
   /// ```
   Object? print_list({
     required Object? extracted_list,
-    Object? file = null,
+    Object? file,
   }) =>
       getFunction("print_list").call(
         <Object?>[
@@ -91219,9 +100715,9 @@ final class traceback extends PythonModule {
   ///     print_list(extract_stack(f, limit=limit), file=file)
   /// ```
   Object? print_stack({
-    Object? f = null,
-    Object? limit = null,
-    Object? file = null,
+    Object? f,
+    Object? limit,
+    Object? file,
   }) =>
       getFunction("print_stack").call(
         <Object?>[
@@ -91257,8 +100753,8 @@ final class traceback extends PythonModule {
   /// ```
   Object? print_tb({
     required Object? tb,
-    Object? limit = null,
-    Object? file = null,
+    Object? limit,
+    Object? file,
   }) =>
       getFunction("print_tb").call(
         <Object?>[
@@ -91574,7 +101070,7 @@ final class linecache extends PythonModule {
   ///             cache.pop(filename, None)
   /// ```
   Object? checkcache({
-    Object? filename = null,
+    Object? filename,
   }) =>
       getFunction("checkcache").call(
         <Object?>[
@@ -91621,7 +101117,7 @@ final class linecache extends PythonModule {
   Object? getline({
     required Object? filename,
     required Object? lineno,
-    Object? module_globals = null,
+    Object? module_globals,
   }) =>
       getFunction("getline").call(
         <Object?>[
@@ -91658,7 +101154,7 @@ final class linecache extends PythonModule {
   /// ```
   Object? getlines({
     required Object? filename,
-    Object? module_globals = null,
+    Object? module_globals,
   }) =>
       getFunction("getlines").call(
         <Object?>[
@@ -91813,7 +101309,7 @@ final class linecache extends PythonModule {
   /// ```
   Object? updatecache({
     required Object? filename,
-    Object? module_globals = null,
+    Object? module_globals,
   }) =>
       getFunction("updatecache").call(
         <Object?>[
@@ -91822,6 +101318,12 @@ final class linecache extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## cache (getter)
+  Object? get cache => getAttribute("cache");
+
+  /// ## cache (setter)
+  set cache(Object? cache) => setAttribute("cache", cache);
 }
 
 /// ## tokenize
@@ -92918,13 +102420,636 @@ final class tokenize extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
-  Object? get blank_re => getAttribute("blank_re");
 
-  set blank_re(Object? blank_re) => setAttribute("blank_re", blank_re);
+  /// ## AMPER (getter)
+  Object? get AMPER => getAttribute("AMPER");
 
-  Object? get cookie_re => getAttribute("cookie_re");
+  /// ## AMPER (setter)
+  set AMPER(Object? AMPER) => setAttribute("AMPER", AMPER);
 
-  set cookie_re(Object? cookie_re) => setAttribute("cookie_re", cookie_re);
+  /// ## AMPEREQUAL (getter)
+  Object? get AMPEREQUAL => getAttribute("AMPEREQUAL");
+
+  /// ## AMPEREQUAL (setter)
+  set AMPEREQUAL(Object? AMPEREQUAL) => setAttribute("AMPEREQUAL", AMPEREQUAL);
+
+  /// ## ASYNC (getter)
+  Object? get ASYNC => getAttribute("ASYNC");
+
+  /// ## ASYNC (setter)
+  set ASYNC(Object? ASYNC) => setAttribute("ASYNC", ASYNC);
+
+  /// ## AT (getter)
+  Object? get AT => getAttribute("AT");
+
+  /// ## AT (setter)
+  set AT(Object? AT) => setAttribute("AT", AT);
+
+  /// ## ATEQUAL (getter)
+  Object? get ATEQUAL => getAttribute("ATEQUAL");
+
+  /// ## ATEQUAL (setter)
+  set ATEQUAL(Object? ATEQUAL) => setAttribute("ATEQUAL", ATEQUAL);
+
+  /// ## AWAIT (getter)
+  Object? get AWAIT => getAttribute("AWAIT");
+
+  /// ## AWAIT (setter)
+  set AWAIT(Object? AWAIT) => setAttribute("AWAIT", AWAIT);
+
+  /// ## BOM_UTF8 (getter)
+  Object? get BOM_UTF8 => getAttribute("BOM_UTF8");
+
+  /// ## BOM_UTF8 (setter)
+  set BOM_UTF8(Object? BOM_UTF8) => setAttribute("BOM_UTF8", BOM_UTF8);
+
+  /// ## Binnumber (getter)
+  Object? get Binnumber => getAttribute("Binnumber");
+
+  /// ## Binnumber (setter)
+  set Binnumber(Object? Binnumber) => setAttribute("Binnumber", Binnumber);
+
+  /// ## CIRCUMFLEX (getter)
+  Object? get CIRCUMFLEX => getAttribute("CIRCUMFLEX");
+
+  /// ## CIRCUMFLEX (setter)
+  set CIRCUMFLEX(Object? CIRCUMFLEX) => setAttribute("CIRCUMFLEX", CIRCUMFLEX);
+
+  /// ## CIRCUMFLEXEQUAL (getter)
+  Object? get CIRCUMFLEXEQUAL => getAttribute("CIRCUMFLEXEQUAL");
+
+  /// ## CIRCUMFLEXEQUAL (setter)
+  set CIRCUMFLEXEQUAL(Object? CIRCUMFLEXEQUAL) =>
+      setAttribute("CIRCUMFLEXEQUAL", CIRCUMFLEXEQUAL);
+
+  /// ## COLON (getter)
+  Object? get COLON => getAttribute("COLON");
+
+  /// ## COLON (setter)
+  set COLON(Object? COLON) => setAttribute("COLON", COLON);
+
+  /// ## COLONEQUAL (getter)
+  Object? get COLONEQUAL => getAttribute("COLONEQUAL");
+
+  /// ## COLONEQUAL (setter)
+  set COLONEQUAL(Object? COLONEQUAL) => setAttribute("COLONEQUAL", COLONEQUAL);
+
+  /// ## COMMA (getter)
+  Object? get COMMA => getAttribute("COMMA");
+
+  /// ## COMMA (setter)
+  set COMMA(Object? COMMA) => setAttribute("COMMA", COMMA);
+
+  /// ## COMMENT (getter)
+  Object? get COMMENT => getAttribute("COMMENT");
+
+  /// ## COMMENT (setter)
+  set COMMENT(Object? COMMENT) => setAttribute("COMMENT", COMMENT);
+
+  /// ## Comment (getter)
+  Object? get Comment => getAttribute("Comment");
+
+  /// ## Comment (setter)
+  set Comment(Object? Comment) => setAttribute("Comment", Comment);
+
+  /// ## ContStr (getter)
+  Object? get ContStr => getAttribute("ContStr");
+
+  /// ## ContStr (setter)
+  set ContStr(Object? ContStr) => setAttribute("ContStr", ContStr);
+
+  /// ## DEDENT (getter)
+  Object? get DEDENT => getAttribute("DEDENT");
+
+  /// ## DEDENT (setter)
+  set DEDENT(Object? DEDENT) => setAttribute("DEDENT", DEDENT);
+
+  /// ## DOT (getter)
+  Object? get DOT => getAttribute("DOT");
+
+  /// ## DOT (setter)
+  set DOT(Object? DOT) => setAttribute("DOT", DOT);
+
+  /// ## DOUBLESLASH (getter)
+  Object? get DOUBLESLASH => getAttribute("DOUBLESLASH");
+
+  /// ## DOUBLESLASH (setter)
+  set DOUBLESLASH(Object? DOUBLESLASH) =>
+      setAttribute("DOUBLESLASH", DOUBLESLASH);
+
+  /// ## DOUBLESLASHEQUAL (getter)
+  Object? get DOUBLESLASHEQUAL => getAttribute("DOUBLESLASHEQUAL");
+
+  /// ## DOUBLESLASHEQUAL (setter)
+  set DOUBLESLASHEQUAL(Object? DOUBLESLASHEQUAL) =>
+      setAttribute("DOUBLESLASHEQUAL", DOUBLESLASHEQUAL);
+
+  /// ## DOUBLESTAR (getter)
+  Object? get DOUBLESTAR => getAttribute("DOUBLESTAR");
+
+  /// ## DOUBLESTAR (setter)
+  set DOUBLESTAR(Object? DOUBLESTAR) => setAttribute("DOUBLESTAR", DOUBLESTAR);
+
+  /// ## DOUBLESTAREQUAL (getter)
+  Object? get DOUBLESTAREQUAL => getAttribute("DOUBLESTAREQUAL");
+
+  /// ## DOUBLESTAREQUAL (setter)
+  set DOUBLESTAREQUAL(Object? DOUBLESTAREQUAL) =>
+      setAttribute("DOUBLESTAREQUAL", DOUBLESTAREQUAL);
+
+  /// ## Decnumber (getter)
+  Object? get Decnumber => getAttribute("Decnumber");
+
+  /// ## Decnumber (setter)
+  set Decnumber(Object? Decnumber) => setAttribute("Decnumber", Decnumber);
+
+  /// ## Double (getter)
+  Object? get Double => getAttribute("Double");
+
+  /// ## Double (setter)
+  set Double(Object? Double) => setAttribute("Double", Double);
+
+  /// ## Double3 (getter)
+  Object? get Double3 => getAttribute("Double3");
+
+  /// ## Double3 (setter)
+  set Double3(Object? Double3) => setAttribute("Double3", Double3);
+
+  /// ## ELLIPSIS (getter)
+  Object? get ELLIPSIS => getAttribute("ELLIPSIS");
+
+  /// ## ELLIPSIS (setter)
+  set ELLIPSIS(Object? ELLIPSIS) => setAttribute("ELLIPSIS", ELLIPSIS);
+
+  /// ## ENCODING (getter)
+  Object? get ENCODING => getAttribute("ENCODING");
+
+  /// ## ENCODING (setter)
+  set ENCODING(Object? ENCODING) => setAttribute("ENCODING", ENCODING);
+
+  /// ## ENDMARKER (getter)
+  Object? get ENDMARKER => getAttribute("ENDMARKER");
+
+  /// ## ENDMARKER (setter)
+  set ENDMARKER(Object? ENDMARKER) => setAttribute("ENDMARKER", ENDMARKER);
+
+  /// ## EQEQUAL (getter)
+  Object? get EQEQUAL => getAttribute("EQEQUAL");
+
+  /// ## EQEQUAL (setter)
+  set EQEQUAL(Object? EQEQUAL) => setAttribute("EQEQUAL", EQEQUAL);
+
+  /// ## EQUAL (getter)
+  Object? get EQUAL => getAttribute("EQUAL");
+
+  /// ## EQUAL (setter)
+  set EQUAL(Object? EQUAL) => setAttribute("EQUAL", EQUAL);
+
+  /// ## ERRORTOKEN (getter)
+  Object? get ERRORTOKEN => getAttribute("ERRORTOKEN");
+
+  /// ## ERRORTOKEN (setter)
+  set ERRORTOKEN(Object? ERRORTOKEN) => setAttribute("ERRORTOKEN", ERRORTOKEN);
+
+  /// ## EXACT_TOKEN_TYPES (getter)
+  Object? get EXACT_TOKEN_TYPES => getAttribute("EXACT_TOKEN_TYPES");
+
+  /// ## EXACT_TOKEN_TYPES (setter)
+  set EXACT_TOKEN_TYPES(Object? EXACT_TOKEN_TYPES) =>
+      setAttribute("EXACT_TOKEN_TYPES", EXACT_TOKEN_TYPES);
+
+  /// ## Expfloat (getter)
+  Object? get Expfloat => getAttribute("Expfloat");
+
+  /// ## Expfloat (setter)
+  set Expfloat(Object? Expfloat) => setAttribute("Expfloat", Expfloat);
+
+  /// ## Exponent (getter)
+  Object? get Exponent => getAttribute("Exponent");
+
+  /// ## Exponent (setter)
+  set Exponent(Object? Exponent) => setAttribute("Exponent", Exponent);
+
+  /// ## Floatnumber (getter)
+  Object? get Floatnumber => getAttribute("Floatnumber");
+
+  /// ## Floatnumber (setter)
+  set Floatnumber(Object? Floatnumber) =>
+      setAttribute("Floatnumber", Floatnumber);
+
+  /// ## Funny (getter)
+  Object? get Funny => getAttribute("Funny");
+
+  /// ## Funny (setter)
+  set Funny(Object? Funny) => setAttribute("Funny", Funny);
+
+  /// ## GREATER (getter)
+  Object? get GREATER => getAttribute("GREATER");
+
+  /// ## GREATER (setter)
+  set GREATER(Object? GREATER) => setAttribute("GREATER", GREATER);
+
+  /// ## GREATEREQUAL (getter)
+  Object? get GREATEREQUAL => getAttribute("GREATEREQUAL");
+
+  /// ## GREATEREQUAL (setter)
+  set GREATEREQUAL(Object? GREATEREQUAL) =>
+      setAttribute("GREATEREQUAL", GREATEREQUAL);
+
+  /// ## Hexnumber (getter)
+  Object? get Hexnumber => getAttribute("Hexnumber");
+
+  /// ## Hexnumber (setter)
+  set Hexnumber(Object? Hexnumber) => setAttribute("Hexnumber", Hexnumber);
+
+  /// ## INDENT (getter)
+  Object? get INDENT => getAttribute("INDENT");
+
+  /// ## INDENT (setter)
+  set INDENT(Object? INDENT) => setAttribute("INDENT", INDENT);
+
+  /// ## Ignore (getter)
+  Object? get Ignore => getAttribute("Ignore");
+
+  /// ## Ignore (setter)
+  set Ignore(Object? Ignore) => setAttribute("Ignore", Ignore);
+
+  /// ## Imagnumber (getter)
+  Object? get Imagnumber => getAttribute("Imagnumber");
+
+  /// ## Imagnumber (setter)
+  set Imagnumber(Object? Imagnumber) => setAttribute("Imagnumber", Imagnumber);
+
+  /// ## Intnumber (getter)
+  Object? get Intnumber => getAttribute("Intnumber");
+
+  /// ## Intnumber (setter)
+  set Intnumber(Object? Intnumber) => setAttribute("Intnumber", Intnumber);
+
+  /// ## LBRACE (getter)
+  Object? get LBRACE => getAttribute("LBRACE");
+
+  /// ## LBRACE (setter)
+  set LBRACE(Object? LBRACE) => setAttribute("LBRACE", LBRACE);
+
+  /// ## LEFTSHIFT (getter)
+  Object? get LEFTSHIFT => getAttribute("LEFTSHIFT");
+
+  /// ## LEFTSHIFT (setter)
+  set LEFTSHIFT(Object? LEFTSHIFT) => setAttribute("LEFTSHIFT", LEFTSHIFT);
+
+  /// ## LEFTSHIFTEQUAL (getter)
+  Object? get LEFTSHIFTEQUAL => getAttribute("LEFTSHIFTEQUAL");
+
+  /// ## LEFTSHIFTEQUAL (setter)
+  set LEFTSHIFTEQUAL(Object? LEFTSHIFTEQUAL) =>
+      setAttribute("LEFTSHIFTEQUAL", LEFTSHIFTEQUAL);
+
+  /// ## LESS (getter)
+  Object? get LESS => getAttribute("LESS");
+
+  /// ## LESS (setter)
+  set LESS(Object? LESS) => setAttribute("LESS", LESS);
+
+  /// ## LESSEQUAL (getter)
+  Object? get LESSEQUAL => getAttribute("LESSEQUAL");
+
+  /// ## LESSEQUAL (setter)
+  set LESSEQUAL(Object? LESSEQUAL) => setAttribute("LESSEQUAL", LESSEQUAL);
+
+  /// ## LPAR (getter)
+  Object? get LPAR => getAttribute("LPAR");
+
+  /// ## LPAR (setter)
+  set LPAR(Object? LPAR) => setAttribute("LPAR", LPAR);
+
+  /// ## LSQB (getter)
+  Object? get LSQB => getAttribute("LSQB");
+
+  /// ## LSQB (setter)
+  set LSQB(Object? LSQB) => setAttribute("LSQB", LSQB);
+
+  /// ## MINEQUAL (getter)
+  Object? get MINEQUAL => getAttribute("MINEQUAL");
+
+  /// ## MINEQUAL (setter)
+  set MINEQUAL(Object? MINEQUAL) => setAttribute("MINEQUAL", MINEQUAL);
+
+  /// ## MINUS (getter)
+  Object? get MINUS => getAttribute("MINUS");
+
+  /// ## MINUS (setter)
+  set MINUS(Object? MINUS) => setAttribute("MINUS", MINUS);
+
+  /// ## NAME (getter)
+  Object? get NAME => getAttribute("NAME");
+
+  /// ## NAME (setter)
+  set NAME(Object? NAME) => setAttribute("NAME", NAME);
+
+  /// ## NEWLINE (getter)
+  Object? get NEWLINE => getAttribute("NEWLINE");
+
+  /// ## NEWLINE (setter)
+  set NEWLINE(Object? NEWLINE) => setAttribute("NEWLINE", NEWLINE);
+
+  /// ## NL (getter)
+  Object? get NL => getAttribute("NL");
+
+  /// ## NL (setter)
+  set NL(Object? NL) => setAttribute("NL", NL);
+
+  /// ## NOTEQUAL (getter)
+  Object? get NOTEQUAL => getAttribute("NOTEQUAL");
+
+  /// ## NOTEQUAL (setter)
+  set NOTEQUAL(Object? NOTEQUAL) => setAttribute("NOTEQUAL", NOTEQUAL);
+
+  /// ## NT_OFFSET (getter)
+  Object? get NT_OFFSET => getAttribute("NT_OFFSET");
+
+  /// ## NT_OFFSET (setter)
+  set NT_OFFSET(Object? NT_OFFSET) => setAttribute("NT_OFFSET", NT_OFFSET);
+
+  /// ## NUMBER (getter)
+  Object? get NUMBER => getAttribute("NUMBER");
+
+  /// ## NUMBER (setter)
+  set NUMBER(Object? NUMBER) => setAttribute("NUMBER", NUMBER);
+
+  /// ## N_TOKENS (getter)
+  Object? get N_TOKENS => getAttribute("N_TOKENS");
+
+  /// ## N_TOKENS (setter)
+  set N_TOKENS(Object? N_TOKENS) => setAttribute("N_TOKENS", N_TOKENS);
+
+  /// ## Name (getter)
+  Object? get Name => getAttribute("Name");
+
+  /// ## Name (setter)
+  set Name(Object? Name) => setAttribute("Name", Name);
+
+  /// ## Number (getter)
+  Object? get Number => getAttribute("Number");
+
+  /// ## Number (setter)
+  set Number(Object? Number) => setAttribute("Number", Number);
+
+  /// ## OP (getter)
+  Object? get OP => getAttribute("OP");
+
+  /// ## OP (setter)
+  set OP(Object? OP) => setAttribute("OP", OP);
+
+  /// ## Octnumber (getter)
+  Object? get Octnumber => getAttribute("Octnumber");
+
+  /// ## Octnumber (setter)
+  set Octnumber(Object? Octnumber) => setAttribute("Octnumber", Octnumber);
+
+  /// ## PERCENT (getter)
+  Object? get PERCENT => getAttribute("PERCENT");
+
+  /// ## PERCENT (setter)
+  set PERCENT(Object? PERCENT) => setAttribute("PERCENT", PERCENT);
+
+  /// ## PERCENTEQUAL (getter)
+  Object? get PERCENTEQUAL => getAttribute("PERCENTEQUAL");
+
+  /// ## PERCENTEQUAL (setter)
+  set PERCENTEQUAL(Object? PERCENTEQUAL) =>
+      setAttribute("PERCENTEQUAL", PERCENTEQUAL);
+
+  /// ## PLUS (getter)
+  Object? get PLUS => getAttribute("PLUS");
+
+  /// ## PLUS (setter)
+  set PLUS(Object? PLUS) => setAttribute("PLUS", PLUS);
+
+  /// ## PLUSEQUAL (getter)
+  Object? get PLUSEQUAL => getAttribute("PLUSEQUAL");
+
+  /// ## PLUSEQUAL (setter)
+  set PLUSEQUAL(Object? PLUSEQUAL) => setAttribute("PLUSEQUAL", PLUSEQUAL);
+
+  /// ## PlainToken (getter)
+  Object? get PlainToken => getAttribute("PlainToken");
+
+  /// ## PlainToken (setter)
+  set PlainToken(Object? PlainToken) => setAttribute("PlainToken", PlainToken);
+
+  /// ## Pointfloat (getter)
+  Object? get Pointfloat => getAttribute("Pointfloat");
+
+  /// ## Pointfloat (setter)
+  set Pointfloat(Object? Pointfloat) => setAttribute("Pointfloat", Pointfloat);
+
+  /// ## PseudoExtras (getter)
+  Object? get PseudoExtras => getAttribute("PseudoExtras");
+
+  /// ## PseudoExtras (setter)
+  set PseudoExtras(Object? PseudoExtras) =>
+      setAttribute("PseudoExtras", PseudoExtras);
+
+  /// ## PseudoToken (getter)
+  Object? get PseudoToken => getAttribute("PseudoToken");
+
+  /// ## PseudoToken (setter)
+  set PseudoToken(Object? PseudoToken) =>
+      setAttribute("PseudoToken", PseudoToken);
+
+  /// ## RARROW (getter)
+  Object? get RARROW => getAttribute("RARROW");
+
+  /// ## RARROW (setter)
+  set RARROW(Object? RARROW) => setAttribute("RARROW", RARROW);
+
+  /// ## RBRACE (getter)
+  Object? get RBRACE => getAttribute("RBRACE");
+
+  /// ## RBRACE (setter)
+  set RBRACE(Object? RBRACE) => setAttribute("RBRACE", RBRACE);
+
+  /// ## RIGHTSHIFT (getter)
+  Object? get RIGHTSHIFT => getAttribute("RIGHTSHIFT");
+
+  /// ## RIGHTSHIFT (setter)
+  set RIGHTSHIFT(Object? RIGHTSHIFT) => setAttribute("RIGHTSHIFT", RIGHTSHIFT);
+
+  /// ## RIGHTSHIFTEQUAL (getter)
+  Object? get RIGHTSHIFTEQUAL => getAttribute("RIGHTSHIFTEQUAL");
+
+  /// ## RIGHTSHIFTEQUAL (setter)
+  set RIGHTSHIFTEQUAL(Object? RIGHTSHIFTEQUAL) =>
+      setAttribute("RIGHTSHIFTEQUAL", RIGHTSHIFTEQUAL);
+
+  /// ## RPAR (getter)
+  Object? get RPAR => getAttribute("RPAR");
+
+  /// ## RPAR (setter)
+  set RPAR(Object? RPAR) => setAttribute("RPAR", RPAR);
+
+  /// ## RSQB (getter)
+  Object? get RSQB => getAttribute("RSQB");
+
+  /// ## RSQB (setter)
+  set RSQB(Object? RSQB) => setAttribute("RSQB", RSQB);
+
+  /// ## SEMI (getter)
+  Object? get SEMI => getAttribute("SEMI");
+
+  /// ## SEMI (setter)
+  set SEMI(Object? SEMI) => setAttribute("SEMI", SEMI);
+
+  /// ## SLASH (getter)
+  Object? get SLASH => getAttribute("SLASH");
+
+  /// ## SLASH (setter)
+  set SLASH(Object? SLASH) => setAttribute("SLASH", SLASH);
+
+  /// ## SLASHEQUAL (getter)
+  Object? get SLASHEQUAL => getAttribute("SLASHEQUAL");
+
+  /// ## SLASHEQUAL (setter)
+  set SLASHEQUAL(Object? SLASHEQUAL) => setAttribute("SLASHEQUAL", SLASHEQUAL);
+
+  /// ## SOFT_KEYWORD (getter)
+  Object? get SOFT_KEYWORD => getAttribute("SOFT_KEYWORD");
+
+  /// ## SOFT_KEYWORD (setter)
+  set SOFT_KEYWORD(Object? SOFT_KEYWORD) =>
+      setAttribute("SOFT_KEYWORD", SOFT_KEYWORD);
+
+  /// ## STAR (getter)
+  Object? get STAR => getAttribute("STAR");
+
+  /// ## STAR (setter)
+  set STAR(Object? STAR) => setAttribute("STAR", STAR);
+
+  /// ## STAREQUAL (getter)
+  Object? get STAREQUAL => getAttribute("STAREQUAL");
+
+  /// ## STAREQUAL (setter)
+  set STAREQUAL(Object? STAREQUAL) => setAttribute("STAREQUAL", STAREQUAL);
+
+  /// ## STRING (getter)
+  Object? get STRING => getAttribute("STRING");
+
+  /// ## STRING (setter)
+  set STRING(Object? STRING) => setAttribute("STRING", STRING);
+
+  /// ## Single (getter)
+  Object? get Single => getAttribute("Single");
+
+  /// ## Single (setter)
+  set Single(Object? Single) => setAttribute("Single", Single);
+
+  /// ## Single3 (getter)
+  Object? get Single3 => getAttribute("Single3");
+
+  /// ## Single3 (setter)
+  set Single3(Object? Single3) => setAttribute("Single3", Single3);
+
+  /// ## Special (getter)
+  Object? get Special => getAttribute("Special");
+
+  /// ## Special (setter)
+  set Special(Object? Special) => setAttribute("Special", Special);
+
+  /// ## String (getter)
+  Object? get String => getAttribute("String");
+
+  /// ## String (setter)
+  set String(Object? String) => setAttribute("String", String);
+
+  /// ## StringPrefix (getter)
+  Object? get StringPrefix => getAttribute("StringPrefix");
+
+  /// ## StringPrefix (setter)
+  set StringPrefix(Object? StringPrefix) =>
+      setAttribute("StringPrefix", StringPrefix);
+
+  /// ## TILDE (getter)
+  Object? get TILDE => getAttribute("TILDE");
+
+  /// ## TILDE (setter)
+  set TILDE(Object? TILDE) => setAttribute("TILDE", TILDE);
+
+  /// ## TYPE_COMMENT (getter)
+  Object? get TYPE_COMMENT => getAttribute("TYPE_COMMENT");
+
+  /// ## TYPE_COMMENT (setter)
+  set TYPE_COMMENT(Object? TYPE_COMMENT) =>
+      setAttribute("TYPE_COMMENT", TYPE_COMMENT);
+
+  /// ## TYPE_IGNORE (getter)
+  Object? get TYPE_IGNORE => getAttribute("TYPE_IGNORE");
+
+  /// ## TYPE_IGNORE (setter)
+  set TYPE_IGNORE(Object? TYPE_IGNORE) =>
+      setAttribute("TYPE_IGNORE", TYPE_IGNORE);
+
+  /// ## Token (getter)
+  Object? get Token => getAttribute("Token");
+
+  /// ## Token (setter)
+  set Token(Object? Token) => setAttribute("Token", Token);
+
+  /// ## Triple (getter)
+  Object? get Triple => getAttribute("Triple");
+
+  /// ## Triple (setter)
+  set Triple(Object? Triple) => setAttribute("Triple", Triple);
+
+  /// ## VBAR (getter)
+  Object? get VBAR => getAttribute("VBAR");
+
+  /// ## VBAR (setter)
+  set VBAR(Object? VBAR) => setAttribute("VBAR", VBAR);
+
+  /// ## VBAREQUAL (getter)
+  Object? get VBAREQUAL => getAttribute("VBAREQUAL");
+
+  /// ## VBAREQUAL (setter)
+  set VBAREQUAL(Object? VBAREQUAL) => setAttribute("VBAREQUAL", VBAREQUAL);
+
+  /// ## Whitespace (getter)
+  Object? get Whitespace => getAttribute("Whitespace");
+
+  /// ## Whitespace (setter)
+  set Whitespace(Object? Whitespace) => setAttribute("Whitespace", Whitespace);
+
+  /// ## endpats (getter)
+  Object? get endpats => getAttribute("endpats");
+
+  /// ## endpats (setter)
+  set endpats(Object? endpats) => setAttribute("endpats", endpats);
+
+  /// ## single_quoted (getter)
+  Object? get single_quoted => getAttribute("single_quoted");
+
+  /// ## single_quoted (setter)
+  set single_quoted(Object? single_quoted) =>
+      setAttribute("single_quoted", single_quoted);
+
+  /// ## tabsize (getter)
+  Object? get tabsize => getAttribute("tabsize");
+
+  /// ## tabsize (setter)
+  set tabsize(Object? tabsize) => setAttribute("tabsize", tabsize);
+
+  /// ## tok_name (getter)
+  Object? get tok_name => getAttribute("tok_name");
+
+  /// ## tok_name (setter)
+  set tok_name(Object? tok_name) => setAttribute("tok_name", tok_name);
+
+  /// ## triple_quoted (getter)
+  Object? get triple_quoted => getAttribute("triple_quoted");
+
+  /// ## triple_quoted (setter)
+  set triple_quoted(Object? triple_quoted) =>
+      setAttribute("triple_quoted", triple_quoted);
 }
 
 /// ## textwrap
@@ -93587,7 +103712,7 @@ final class textwrap extends PythonModule {
   Object? indent({
     required Object? text,
     required Object? prefix,
-    Object? predicate = null,
+    Object? predicate,
   }) =>
       getFunction("indent").call(
         <Object?>[
@@ -94383,6 +104508,12 @@ final class weakref extends PythonModule {
         "weakref",
         weakref.from,
       );
+
+  /// ## ProxyTypes (getter)
+  Object? get ProxyTypes => getAttribute("ProxyTypes");
+
+  /// ## ProxyTypes (setter)
+  set ProxyTypes(Object? ProxyTypes) => setAttribute("ProxyTypes", ProxyTypes);
 }
 
 /// ## sre_constants
@@ -94621,6 +104752,675 @@ final class sre_constants extends PythonModule {
         "re._constants",
         sre_constants.from,
       );
+
+  /// ## ANY (getter)
+  Object? get ANY => getAttribute("ANY");
+
+  /// ## ANY (setter)
+  set ANY(Object? ANY) => setAttribute("ANY", ANY);
+
+  /// ## ANY_ALL (getter)
+  Object? get ANY_ALL => getAttribute("ANY_ALL");
+
+  /// ## ANY_ALL (setter)
+  set ANY_ALL(Object? ANY_ALL) => setAttribute("ANY_ALL", ANY_ALL);
+
+  /// ## ASSERT (getter)
+  Object? get ASSERT => getAttribute("ASSERT");
+
+  /// ## ASSERT (setter)
+  set ASSERT(Object? ASSERT) => setAttribute("ASSERT", ASSERT);
+
+  /// ## ASSERT_NOT (getter)
+  Object? get ASSERT_NOT => getAttribute("ASSERT_NOT");
+
+  /// ## ASSERT_NOT (setter)
+  set ASSERT_NOT(Object? ASSERT_NOT) => setAttribute("ASSERT_NOT", ASSERT_NOT);
+
+  /// ## AT (getter)
+  Object? get AT => getAttribute("AT");
+
+  /// ## AT (setter)
+  set AT(Object? AT) => setAttribute("AT", AT);
+
+  /// ## ATCODES (getter)
+  Object? get ATCODES => getAttribute("ATCODES");
+
+  /// ## ATCODES (setter)
+  set ATCODES(Object? ATCODES) => setAttribute("ATCODES", ATCODES);
+
+  /// ## ATOMIC_GROUP (getter)
+  Object? get ATOMIC_GROUP => getAttribute("ATOMIC_GROUP");
+
+  /// ## ATOMIC_GROUP (setter)
+  set ATOMIC_GROUP(Object? ATOMIC_GROUP) =>
+      setAttribute("ATOMIC_GROUP", ATOMIC_GROUP);
+
+  /// ## AT_BEGINNING (getter)
+  Object? get AT_BEGINNING => getAttribute("AT_BEGINNING");
+
+  /// ## AT_BEGINNING (setter)
+  set AT_BEGINNING(Object? AT_BEGINNING) =>
+      setAttribute("AT_BEGINNING", AT_BEGINNING);
+
+  /// ## AT_BEGINNING_LINE (getter)
+  Object? get AT_BEGINNING_LINE => getAttribute("AT_BEGINNING_LINE");
+
+  /// ## AT_BEGINNING_LINE (setter)
+  set AT_BEGINNING_LINE(Object? AT_BEGINNING_LINE) =>
+      setAttribute("AT_BEGINNING_LINE", AT_BEGINNING_LINE);
+
+  /// ## AT_BEGINNING_STRING (getter)
+  Object? get AT_BEGINNING_STRING => getAttribute("AT_BEGINNING_STRING");
+
+  /// ## AT_BEGINNING_STRING (setter)
+  set AT_BEGINNING_STRING(Object? AT_BEGINNING_STRING) =>
+      setAttribute("AT_BEGINNING_STRING", AT_BEGINNING_STRING);
+
+  /// ## AT_BOUNDARY (getter)
+  Object? get AT_BOUNDARY => getAttribute("AT_BOUNDARY");
+
+  /// ## AT_BOUNDARY (setter)
+  set AT_BOUNDARY(Object? AT_BOUNDARY) =>
+      setAttribute("AT_BOUNDARY", AT_BOUNDARY);
+
+  /// ## AT_END (getter)
+  Object? get AT_END => getAttribute("AT_END");
+
+  /// ## AT_END (setter)
+  set AT_END(Object? AT_END) => setAttribute("AT_END", AT_END);
+
+  /// ## AT_END_LINE (getter)
+  Object? get AT_END_LINE => getAttribute("AT_END_LINE");
+
+  /// ## AT_END_LINE (setter)
+  set AT_END_LINE(Object? AT_END_LINE) =>
+      setAttribute("AT_END_LINE", AT_END_LINE);
+
+  /// ## AT_END_STRING (getter)
+  Object? get AT_END_STRING => getAttribute("AT_END_STRING");
+
+  /// ## AT_END_STRING (setter)
+  set AT_END_STRING(Object? AT_END_STRING) =>
+      setAttribute("AT_END_STRING", AT_END_STRING);
+
+  /// ## AT_LOCALE (getter)
+  Object? get AT_LOCALE => getAttribute("AT_LOCALE");
+
+  /// ## AT_LOCALE (setter)
+  set AT_LOCALE(Object? AT_LOCALE) => setAttribute("AT_LOCALE", AT_LOCALE);
+
+  /// ## AT_LOC_BOUNDARY (getter)
+  Object? get AT_LOC_BOUNDARY => getAttribute("AT_LOC_BOUNDARY");
+
+  /// ## AT_LOC_BOUNDARY (setter)
+  set AT_LOC_BOUNDARY(Object? AT_LOC_BOUNDARY) =>
+      setAttribute("AT_LOC_BOUNDARY", AT_LOC_BOUNDARY);
+
+  /// ## AT_LOC_NON_BOUNDARY (getter)
+  Object? get AT_LOC_NON_BOUNDARY => getAttribute("AT_LOC_NON_BOUNDARY");
+
+  /// ## AT_LOC_NON_BOUNDARY (setter)
+  set AT_LOC_NON_BOUNDARY(Object? AT_LOC_NON_BOUNDARY) =>
+      setAttribute("AT_LOC_NON_BOUNDARY", AT_LOC_NON_BOUNDARY);
+
+  /// ## AT_MULTILINE (getter)
+  Object? get AT_MULTILINE => getAttribute("AT_MULTILINE");
+
+  /// ## AT_MULTILINE (setter)
+  set AT_MULTILINE(Object? AT_MULTILINE) =>
+      setAttribute("AT_MULTILINE", AT_MULTILINE);
+
+  /// ## AT_NON_BOUNDARY (getter)
+  Object? get AT_NON_BOUNDARY => getAttribute("AT_NON_BOUNDARY");
+
+  /// ## AT_NON_BOUNDARY (setter)
+  set AT_NON_BOUNDARY(Object? AT_NON_BOUNDARY) =>
+      setAttribute("AT_NON_BOUNDARY", AT_NON_BOUNDARY);
+
+  /// ## AT_UNICODE (getter)
+  Object? get AT_UNICODE => getAttribute("AT_UNICODE");
+
+  /// ## AT_UNICODE (setter)
+  set AT_UNICODE(Object? AT_UNICODE) => setAttribute("AT_UNICODE", AT_UNICODE);
+
+  /// ## AT_UNI_BOUNDARY (getter)
+  Object? get AT_UNI_BOUNDARY => getAttribute("AT_UNI_BOUNDARY");
+
+  /// ## AT_UNI_BOUNDARY (setter)
+  set AT_UNI_BOUNDARY(Object? AT_UNI_BOUNDARY) =>
+      setAttribute("AT_UNI_BOUNDARY", AT_UNI_BOUNDARY);
+
+  /// ## AT_UNI_NON_BOUNDARY (getter)
+  Object? get AT_UNI_NON_BOUNDARY => getAttribute("AT_UNI_NON_BOUNDARY");
+
+  /// ## AT_UNI_NON_BOUNDARY (setter)
+  set AT_UNI_NON_BOUNDARY(Object? AT_UNI_NON_BOUNDARY) =>
+      setAttribute("AT_UNI_NON_BOUNDARY", AT_UNI_NON_BOUNDARY);
+
+  /// ## BIGCHARSET (getter)
+  Object? get BIGCHARSET => getAttribute("BIGCHARSET");
+
+  /// ## BIGCHARSET (setter)
+  set BIGCHARSET(Object? BIGCHARSET) => setAttribute("BIGCHARSET", BIGCHARSET);
+
+  /// ## BRANCH (getter)
+  Object? get BRANCH => getAttribute("BRANCH");
+
+  /// ## BRANCH (setter)
+  set BRANCH(Object? BRANCH) => setAttribute("BRANCH", BRANCH);
+
+  /// ## CATEGORY (getter)
+  Object? get CATEGORY => getAttribute("CATEGORY");
+
+  /// ## CATEGORY (setter)
+  set CATEGORY(Object? CATEGORY) => setAttribute("CATEGORY", CATEGORY);
+
+  /// ## CATEGORY_DIGIT (getter)
+  Object? get CATEGORY_DIGIT => getAttribute("CATEGORY_DIGIT");
+
+  /// ## CATEGORY_DIGIT (setter)
+  set CATEGORY_DIGIT(Object? CATEGORY_DIGIT) =>
+      setAttribute("CATEGORY_DIGIT", CATEGORY_DIGIT);
+
+  /// ## CATEGORY_LINEBREAK (getter)
+  Object? get CATEGORY_LINEBREAK => getAttribute("CATEGORY_LINEBREAK");
+
+  /// ## CATEGORY_LINEBREAK (setter)
+  set CATEGORY_LINEBREAK(Object? CATEGORY_LINEBREAK) =>
+      setAttribute("CATEGORY_LINEBREAK", CATEGORY_LINEBREAK);
+
+  /// ## CATEGORY_LOC_NOT_WORD (getter)
+  Object? get CATEGORY_LOC_NOT_WORD => getAttribute("CATEGORY_LOC_NOT_WORD");
+
+  /// ## CATEGORY_LOC_NOT_WORD (setter)
+  set CATEGORY_LOC_NOT_WORD(Object? CATEGORY_LOC_NOT_WORD) =>
+      setAttribute("CATEGORY_LOC_NOT_WORD", CATEGORY_LOC_NOT_WORD);
+
+  /// ## CATEGORY_LOC_WORD (getter)
+  Object? get CATEGORY_LOC_WORD => getAttribute("CATEGORY_LOC_WORD");
+
+  /// ## CATEGORY_LOC_WORD (setter)
+  set CATEGORY_LOC_WORD(Object? CATEGORY_LOC_WORD) =>
+      setAttribute("CATEGORY_LOC_WORD", CATEGORY_LOC_WORD);
+
+  /// ## CATEGORY_NOT_DIGIT (getter)
+  Object? get CATEGORY_NOT_DIGIT => getAttribute("CATEGORY_NOT_DIGIT");
+
+  /// ## CATEGORY_NOT_DIGIT (setter)
+  set CATEGORY_NOT_DIGIT(Object? CATEGORY_NOT_DIGIT) =>
+      setAttribute("CATEGORY_NOT_DIGIT", CATEGORY_NOT_DIGIT);
+
+  /// ## CATEGORY_NOT_LINEBREAK (getter)
+  Object? get CATEGORY_NOT_LINEBREAK => getAttribute("CATEGORY_NOT_LINEBREAK");
+
+  /// ## CATEGORY_NOT_LINEBREAK (setter)
+  set CATEGORY_NOT_LINEBREAK(Object? CATEGORY_NOT_LINEBREAK) =>
+      setAttribute("CATEGORY_NOT_LINEBREAK", CATEGORY_NOT_LINEBREAK);
+
+  /// ## CATEGORY_NOT_SPACE (getter)
+  Object? get CATEGORY_NOT_SPACE => getAttribute("CATEGORY_NOT_SPACE");
+
+  /// ## CATEGORY_NOT_SPACE (setter)
+  set CATEGORY_NOT_SPACE(Object? CATEGORY_NOT_SPACE) =>
+      setAttribute("CATEGORY_NOT_SPACE", CATEGORY_NOT_SPACE);
+
+  /// ## CATEGORY_NOT_WORD (getter)
+  Object? get CATEGORY_NOT_WORD => getAttribute("CATEGORY_NOT_WORD");
+
+  /// ## CATEGORY_NOT_WORD (setter)
+  set CATEGORY_NOT_WORD(Object? CATEGORY_NOT_WORD) =>
+      setAttribute("CATEGORY_NOT_WORD", CATEGORY_NOT_WORD);
+
+  /// ## CATEGORY_SPACE (getter)
+  Object? get CATEGORY_SPACE => getAttribute("CATEGORY_SPACE");
+
+  /// ## CATEGORY_SPACE (setter)
+  set CATEGORY_SPACE(Object? CATEGORY_SPACE) =>
+      setAttribute("CATEGORY_SPACE", CATEGORY_SPACE);
+
+  /// ## CATEGORY_UNI_DIGIT (getter)
+  Object? get CATEGORY_UNI_DIGIT => getAttribute("CATEGORY_UNI_DIGIT");
+
+  /// ## CATEGORY_UNI_DIGIT (setter)
+  set CATEGORY_UNI_DIGIT(Object? CATEGORY_UNI_DIGIT) =>
+      setAttribute("CATEGORY_UNI_DIGIT", CATEGORY_UNI_DIGIT);
+
+  /// ## CATEGORY_UNI_LINEBREAK (getter)
+  Object? get CATEGORY_UNI_LINEBREAK => getAttribute("CATEGORY_UNI_LINEBREAK");
+
+  /// ## CATEGORY_UNI_LINEBREAK (setter)
+  set CATEGORY_UNI_LINEBREAK(Object? CATEGORY_UNI_LINEBREAK) =>
+      setAttribute("CATEGORY_UNI_LINEBREAK", CATEGORY_UNI_LINEBREAK);
+
+  /// ## CATEGORY_UNI_NOT_DIGIT (getter)
+  Object? get CATEGORY_UNI_NOT_DIGIT => getAttribute("CATEGORY_UNI_NOT_DIGIT");
+
+  /// ## CATEGORY_UNI_NOT_DIGIT (setter)
+  set CATEGORY_UNI_NOT_DIGIT(Object? CATEGORY_UNI_NOT_DIGIT) =>
+      setAttribute("CATEGORY_UNI_NOT_DIGIT", CATEGORY_UNI_NOT_DIGIT);
+
+  /// ## CATEGORY_UNI_NOT_LINEBREAK (getter)
+  Object? get CATEGORY_UNI_NOT_LINEBREAK =>
+      getAttribute("CATEGORY_UNI_NOT_LINEBREAK");
+
+  /// ## CATEGORY_UNI_NOT_LINEBREAK (setter)
+  set CATEGORY_UNI_NOT_LINEBREAK(Object? CATEGORY_UNI_NOT_LINEBREAK) =>
+      setAttribute("CATEGORY_UNI_NOT_LINEBREAK", CATEGORY_UNI_NOT_LINEBREAK);
+
+  /// ## CATEGORY_UNI_NOT_SPACE (getter)
+  Object? get CATEGORY_UNI_NOT_SPACE => getAttribute("CATEGORY_UNI_NOT_SPACE");
+
+  /// ## CATEGORY_UNI_NOT_SPACE (setter)
+  set CATEGORY_UNI_NOT_SPACE(Object? CATEGORY_UNI_NOT_SPACE) =>
+      setAttribute("CATEGORY_UNI_NOT_SPACE", CATEGORY_UNI_NOT_SPACE);
+
+  /// ## CATEGORY_UNI_NOT_WORD (getter)
+  Object? get CATEGORY_UNI_NOT_WORD => getAttribute("CATEGORY_UNI_NOT_WORD");
+
+  /// ## CATEGORY_UNI_NOT_WORD (setter)
+  set CATEGORY_UNI_NOT_WORD(Object? CATEGORY_UNI_NOT_WORD) =>
+      setAttribute("CATEGORY_UNI_NOT_WORD", CATEGORY_UNI_NOT_WORD);
+
+  /// ## CATEGORY_UNI_SPACE (getter)
+  Object? get CATEGORY_UNI_SPACE => getAttribute("CATEGORY_UNI_SPACE");
+
+  /// ## CATEGORY_UNI_SPACE (setter)
+  set CATEGORY_UNI_SPACE(Object? CATEGORY_UNI_SPACE) =>
+      setAttribute("CATEGORY_UNI_SPACE", CATEGORY_UNI_SPACE);
+
+  /// ## CATEGORY_UNI_WORD (getter)
+  Object? get CATEGORY_UNI_WORD => getAttribute("CATEGORY_UNI_WORD");
+
+  /// ## CATEGORY_UNI_WORD (setter)
+  set CATEGORY_UNI_WORD(Object? CATEGORY_UNI_WORD) =>
+      setAttribute("CATEGORY_UNI_WORD", CATEGORY_UNI_WORD);
+
+  /// ## CATEGORY_WORD (getter)
+  Object? get CATEGORY_WORD => getAttribute("CATEGORY_WORD");
+
+  /// ## CATEGORY_WORD (setter)
+  set CATEGORY_WORD(Object? CATEGORY_WORD) =>
+      setAttribute("CATEGORY_WORD", CATEGORY_WORD);
+
+  /// ## CHARSET (getter)
+  Object? get CHARSET => getAttribute("CHARSET");
+
+  /// ## CHARSET (setter)
+  set CHARSET(Object? CHARSET) => setAttribute("CHARSET", CHARSET);
+
+  /// ## CHCODES (getter)
+  Object? get CHCODES => getAttribute("CHCODES");
+
+  /// ## CHCODES (setter)
+  set CHCODES(Object? CHCODES) => setAttribute("CHCODES", CHCODES);
+
+  /// ## CH_LOCALE (getter)
+  Object? get CH_LOCALE => getAttribute("CH_LOCALE");
+
+  /// ## CH_LOCALE (setter)
+  set CH_LOCALE(Object? CH_LOCALE) => setAttribute("CH_LOCALE", CH_LOCALE);
+
+  /// ## CH_UNICODE (getter)
+  Object? get CH_UNICODE => getAttribute("CH_UNICODE");
+
+  /// ## CH_UNICODE (setter)
+  set CH_UNICODE(Object? CH_UNICODE) => setAttribute("CH_UNICODE", CH_UNICODE);
+
+  /// ## FAILURE (getter)
+  Object? get FAILURE => getAttribute("FAILURE");
+
+  /// ## FAILURE (setter)
+  set FAILURE(Object? FAILURE) => setAttribute("FAILURE", FAILURE);
+
+  /// ## GROUPREF (getter)
+  Object? get GROUPREF => getAttribute("GROUPREF");
+
+  /// ## GROUPREF (setter)
+  set GROUPREF(Object? GROUPREF) => setAttribute("GROUPREF", GROUPREF);
+
+  /// ## GROUPREF_EXISTS (getter)
+  Object? get GROUPREF_EXISTS => getAttribute("GROUPREF_EXISTS");
+
+  /// ## GROUPREF_EXISTS (setter)
+  set GROUPREF_EXISTS(Object? GROUPREF_EXISTS) =>
+      setAttribute("GROUPREF_EXISTS", GROUPREF_EXISTS);
+
+  /// ## GROUPREF_IGNORE (getter)
+  Object? get GROUPREF_IGNORE => getAttribute("GROUPREF_IGNORE");
+
+  /// ## GROUPREF_IGNORE (setter)
+  set GROUPREF_IGNORE(Object? GROUPREF_IGNORE) =>
+      setAttribute("GROUPREF_IGNORE", GROUPREF_IGNORE);
+
+  /// ## GROUPREF_LOC_IGNORE (getter)
+  Object? get GROUPREF_LOC_IGNORE => getAttribute("GROUPREF_LOC_IGNORE");
+
+  /// ## GROUPREF_LOC_IGNORE (setter)
+  set GROUPREF_LOC_IGNORE(Object? GROUPREF_LOC_IGNORE) =>
+      setAttribute("GROUPREF_LOC_IGNORE", GROUPREF_LOC_IGNORE);
+
+  /// ## GROUPREF_UNI_IGNORE (getter)
+  Object? get GROUPREF_UNI_IGNORE => getAttribute("GROUPREF_UNI_IGNORE");
+
+  /// ## GROUPREF_UNI_IGNORE (setter)
+  set GROUPREF_UNI_IGNORE(Object? GROUPREF_UNI_IGNORE) =>
+      setAttribute("GROUPREF_UNI_IGNORE", GROUPREF_UNI_IGNORE);
+
+  /// ## IN (getter)
+  Object? get IN => getAttribute("IN");
+
+  /// ## IN (setter)
+  set IN(Object? IN) => setAttribute("IN", IN);
+
+  /// ## INFO (getter)
+  Object? get INFO => getAttribute("INFO");
+
+  /// ## INFO (setter)
+  set INFO(Object? INFO) => setAttribute("INFO", INFO);
+
+  /// ## IN_IGNORE (getter)
+  Object? get IN_IGNORE => getAttribute("IN_IGNORE");
+
+  /// ## IN_IGNORE (setter)
+  set IN_IGNORE(Object? IN_IGNORE) => setAttribute("IN_IGNORE", IN_IGNORE);
+
+  /// ## IN_LOC_IGNORE (getter)
+  Object? get IN_LOC_IGNORE => getAttribute("IN_LOC_IGNORE");
+
+  /// ## IN_LOC_IGNORE (setter)
+  set IN_LOC_IGNORE(Object? IN_LOC_IGNORE) =>
+      setAttribute("IN_LOC_IGNORE", IN_LOC_IGNORE);
+
+  /// ## IN_UNI_IGNORE (getter)
+  Object? get IN_UNI_IGNORE => getAttribute("IN_UNI_IGNORE");
+
+  /// ## IN_UNI_IGNORE (setter)
+  set IN_UNI_IGNORE(Object? IN_UNI_IGNORE) =>
+      setAttribute("IN_UNI_IGNORE", IN_UNI_IGNORE);
+
+  /// ## JUMP (getter)
+  Object? get JUMP => getAttribute("JUMP");
+
+  /// ## JUMP (setter)
+  set JUMP(Object? JUMP) => setAttribute("JUMP", JUMP);
+
+  /// ## LITERAL (getter)
+  Object? get LITERAL => getAttribute("LITERAL");
+
+  /// ## LITERAL (setter)
+  set LITERAL(Object? LITERAL) => setAttribute("LITERAL", LITERAL);
+
+  /// ## LITERAL_IGNORE (getter)
+  Object? get LITERAL_IGNORE => getAttribute("LITERAL_IGNORE");
+
+  /// ## LITERAL_IGNORE (setter)
+  set LITERAL_IGNORE(Object? LITERAL_IGNORE) =>
+      setAttribute("LITERAL_IGNORE", LITERAL_IGNORE);
+
+  /// ## LITERAL_LOC_IGNORE (getter)
+  Object? get LITERAL_LOC_IGNORE => getAttribute("LITERAL_LOC_IGNORE");
+
+  /// ## LITERAL_LOC_IGNORE (setter)
+  set LITERAL_LOC_IGNORE(Object? LITERAL_LOC_IGNORE) =>
+      setAttribute("LITERAL_LOC_IGNORE", LITERAL_LOC_IGNORE);
+
+  /// ## LITERAL_UNI_IGNORE (getter)
+  Object? get LITERAL_UNI_IGNORE => getAttribute("LITERAL_UNI_IGNORE");
+
+  /// ## LITERAL_UNI_IGNORE (setter)
+  set LITERAL_UNI_IGNORE(Object? LITERAL_UNI_IGNORE) =>
+      setAttribute("LITERAL_UNI_IGNORE", LITERAL_UNI_IGNORE);
+
+  /// ## MAGIC (getter)
+  Object? get MAGIC => getAttribute("MAGIC");
+
+  /// ## MAGIC (setter)
+  set MAGIC(Object? MAGIC) => setAttribute("MAGIC", MAGIC);
+
+  /// ## MARK (getter)
+  Object? get MARK => getAttribute("MARK");
+
+  /// ## MARK (setter)
+  set MARK(Object? MARK) => setAttribute("MARK", MARK);
+
+  /// ## MAXGROUPS (getter)
+  Object? get MAXGROUPS => getAttribute("MAXGROUPS");
+
+  /// ## MAXGROUPS (setter)
+  set MAXGROUPS(Object? MAXGROUPS) => setAttribute("MAXGROUPS", MAXGROUPS);
+
+  /// ## MAXREPEAT (getter)
+  Object? get MAXREPEAT => getAttribute("MAXREPEAT");
+
+  /// ## MAXREPEAT (setter)
+  set MAXREPEAT(Object? MAXREPEAT) => setAttribute("MAXREPEAT", MAXREPEAT);
+
+  /// ## MAX_REPEAT (getter)
+  Object? get MAX_REPEAT => getAttribute("MAX_REPEAT");
+
+  /// ## MAX_REPEAT (setter)
+  set MAX_REPEAT(Object? MAX_REPEAT) => setAttribute("MAX_REPEAT", MAX_REPEAT);
+
+  /// ## MAX_UNTIL (getter)
+  Object? get MAX_UNTIL => getAttribute("MAX_UNTIL");
+
+  /// ## MAX_UNTIL (setter)
+  set MAX_UNTIL(Object? MAX_UNTIL) => setAttribute("MAX_UNTIL", MAX_UNTIL);
+
+  /// ## MIN_REPEAT (getter)
+  Object? get MIN_REPEAT => getAttribute("MIN_REPEAT");
+
+  /// ## MIN_REPEAT (setter)
+  set MIN_REPEAT(Object? MIN_REPEAT) => setAttribute("MIN_REPEAT", MIN_REPEAT);
+
+  /// ## MIN_REPEAT_ONE (getter)
+  Object? get MIN_REPEAT_ONE => getAttribute("MIN_REPEAT_ONE");
+
+  /// ## MIN_REPEAT_ONE (setter)
+  set MIN_REPEAT_ONE(Object? MIN_REPEAT_ONE) =>
+      setAttribute("MIN_REPEAT_ONE", MIN_REPEAT_ONE);
+
+  /// ## MIN_UNTIL (getter)
+  Object? get MIN_UNTIL => getAttribute("MIN_UNTIL");
+
+  /// ## MIN_UNTIL (setter)
+  set MIN_UNTIL(Object? MIN_UNTIL) => setAttribute("MIN_UNTIL", MIN_UNTIL);
+
+  /// ## NEGATE (getter)
+  Object? get NEGATE => getAttribute("NEGATE");
+
+  /// ## NEGATE (setter)
+  set NEGATE(Object? NEGATE) => setAttribute("NEGATE", NEGATE);
+
+  /// ## NOT_LITERAL (getter)
+  Object? get NOT_LITERAL => getAttribute("NOT_LITERAL");
+
+  /// ## NOT_LITERAL (setter)
+  set NOT_LITERAL(Object? NOT_LITERAL) =>
+      setAttribute("NOT_LITERAL", NOT_LITERAL);
+
+  /// ## NOT_LITERAL_IGNORE (getter)
+  Object? get NOT_LITERAL_IGNORE => getAttribute("NOT_LITERAL_IGNORE");
+
+  /// ## NOT_LITERAL_IGNORE (setter)
+  set NOT_LITERAL_IGNORE(Object? NOT_LITERAL_IGNORE) =>
+      setAttribute("NOT_LITERAL_IGNORE", NOT_LITERAL_IGNORE);
+
+  /// ## NOT_LITERAL_LOC_IGNORE (getter)
+  Object? get NOT_LITERAL_LOC_IGNORE => getAttribute("NOT_LITERAL_LOC_IGNORE");
+
+  /// ## NOT_LITERAL_LOC_IGNORE (setter)
+  set NOT_LITERAL_LOC_IGNORE(Object? NOT_LITERAL_LOC_IGNORE) =>
+      setAttribute("NOT_LITERAL_LOC_IGNORE", NOT_LITERAL_LOC_IGNORE);
+
+  /// ## NOT_LITERAL_UNI_IGNORE (getter)
+  Object? get NOT_LITERAL_UNI_IGNORE => getAttribute("NOT_LITERAL_UNI_IGNORE");
+
+  /// ## NOT_LITERAL_UNI_IGNORE (setter)
+  set NOT_LITERAL_UNI_IGNORE(Object? NOT_LITERAL_UNI_IGNORE) =>
+      setAttribute("NOT_LITERAL_UNI_IGNORE", NOT_LITERAL_UNI_IGNORE);
+
+  /// ## OPCODES (getter)
+  Object? get OPCODES => getAttribute("OPCODES");
+
+  /// ## OPCODES (setter)
+  set OPCODES(Object? OPCODES) => setAttribute("OPCODES", OPCODES);
+
+  /// ## OP_IGNORE (getter)
+  Object? get OP_IGNORE => getAttribute("OP_IGNORE");
+
+  /// ## OP_IGNORE (setter)
+  set OP_IGNORE(Object? OP_IGNORE) => setAttribute("OP_IGNORE", OP_IGNORE);
+
+  /// ## OP_LOCALE_IGNORE (getter)
+  Object? get OP_LOCALE_IGNORE => getAttribute("OP_LOCALE_IGNORE");
+
+  /// ## OP_LOCALE_IGNORE (setter)
+  set OP_LOCALE_IGNORE(Object? OP_LOCALE_IGNORE) =>
+      setAttribute("OP_LOCALE_IGNORE", OP_LOCALE_IGNORE);
+
+  /// ## OP_UNICODE_IGNORE (getter)
+  Object? get OP_UNICODE_IGNORE => getAttribute("OP_UNICODE_IGNORE");
+
+  /// ## OP_UNICODE_IGNORE (setter)
+  set OP_UNICODE_IGNORE(Object? OP_UNICODE_IGNORE) =>
+      setAttribute("OP_UNICODE_IGNORE", OP_UNICODE_IGNORE);
+
+  /// ## POSSESSIVE_REPEAT (getter)
+  Object? get POSSESSIVE_REPEAT => getAttribute("POSSESSIVE_REPEAT");
+
+  /// ## POSSESSIVE_REPEAT (setter)
+  set POSSESSIVE_REPEAT(Object? POSSESSIVE_REPEAT) =>
+      setAttribute("POSSESSIVE_REPEAT", POSSESSIVE_REPEAT);
+
+  /// ## POSSESSIVE_REPEAT_ONE (getter)
+  Object? get POSSESSIVE_REPEAT_ONE => getAttribute("POSSESSIVE_REPEAT_ONE");
+
+  /// ## POSSESSIVE_REPEAT_ONE (setter)
+  set POSSESSIVE_REPEAT_ONE(Object? POSSESSIVE_REPEAT_ONE) =>
+      setAttribute("POSSESSIVE_REPEAT_ONE", POSSESSIVE_REPEAT_ONE);
+
+  /// ## RANGE (getter)
+  Object? get RANGE => getAttribute("RANGE");
+
+  /// ## RANGE (setter)
+  set RANGE(Object? RANGE) => setAttribute("RANGE", RANGE);
+
+  /// ## RANGE_UNI_IGNORE (getter)
+  Object? get RANGE_UNI_IGNORE => getAttribute("RANGE_UNI_IGNORE");
+
+  /// ## RANGE_UNI_IGNORE (setter)
+  set RANGE_UNI_IGNORE(Object? RANGE_UNI_IGNORE) =>
+      setAttribute("RANGE_UNI_IGNORE", RANGE_UNI_IGNORE);
+
+  /// ## REPEAT (getter)
+  Object? get REPEAT => getAttribute("REPEAT");
+
+  /// ## REPEAT (setter)
+  set REPEAT(Object? REPEAT) => setAttribute("REPEAT", REPEAT);
+
+  /// ## REPEAT_ONE (getter)
+  Object? get REPEAT_ONE => getAttribute("REPEAT_ONE");
+
+  /// ## REPEAT_ONE (setter)
+  set REPEAT_ONE(Object? REPEAT_ONE) => setAttribute("REPEAT_ONE", REPEAT_ONE);
+
+  /// ## SRE_FLAG_ASCII (getter)
+  Object? get SRE_FLAG_ASCII => getAttribute("SRE_FLAG_ASCII");
+
+  /// ## SRE_FLAG_ASCII (setter)
+  set SRE_FLAG_ASCII(Object? SRE_FLAG_ASCII) =>
+      setAttribute("SRE_FLAG_ASCII", SRE_FLAG_ASCII);
+
+  /// ## SRE_FLAG_DEBUG (getter)
+  Object? get SRE_FLAG_DEBUG => getAttribute("SRE_FLAG_DEBUG");
+
+  /// ## SRE_FLAG_DEBUG (setter)
+  set SRE_FLAG_DEBUG(Object? SRE_FLAG_DEBUG) =>
+      setAttribute("SRE_FLAG_DEBUG", SRE_FLAG_DEBUG);
+
+  /// ## SRE_FLAG_DOTALL (getter)
+  Object? get SRE_FLAG_DOTALL => getAttribute("SRE_FLAG_DOTALL");
+
+  /// ## SRE_FLAG_DOTALL (setter)
+  set SRE_FLAG_DOTALL(Object? SRE_FLAG_DOTALL) =>
+      setAttribute("SRE_FLAG_DOTALL", SRE_FLAG_DOTALL);
+
+  /// ## SRE_FLAG_IGNORECASE (getter)
+  Object? get SRE_FLAG_IGNORECASE => getAttribute("SRE_FLAG_IGNORECASE");
+
+  /// ## SRE_FLAG_IGNORECASE (setter)
+  set SRE_FLAG_IGNORECASE(Object? SRE_FLAG_IGNORECASE) =>
+      setAttribute("SRE_FLAG_IGNORECASE", SRE_FLAG_IGNORECASE);
+
+  /// ## SRE_FLAG_LOCALE (getter)
+  Object? get SRE_FLAG_LOCALE => getAttribute("SRE_FLAG_LOCALE");
+
+  /// ## SRE_FLAG_LOCALE (setter)
+  set SRE_FLAG_LOCALE(Object? SRE_FLAG_LOCALE) =>
+      setAttribute("SRE_FLAG_LOCALE", SRE_FLAG_LOCALE);
+
+  /// ## SRE_FLAG_MULTILINE (getter)
+  Object? get SRE_FLAG_MULTILINE => getAttribute("SRE_FLAG_MULTILINE");
+
+  /// ## SRE_FLAG_MULTILINE (setter)
+  set SRE_FLAG_MULTILINE(Object? SRE_FLAG_MULTILINE) =>
+      setAttribute("SRE_FLAG_MULTILINE", SRE_FLAG_MULTILINE);
+
+  /// ## SRE_FLAG_TEMPLATE (getter)
+  Object? get SRE_FLAG_TEMPLATE => getAttribute("SRE_FLAG_TEMPLATE");
+
+  /// ## SRE_FLAG_TEMPLATE (setter)
+  set SRE_FLAG_TEMPLATE(Object? SRE_FLAG_TEMPLATE) =>
+      setAttribute("SRE_FLAG_TEMPLATE", SRE_FLAG_TEMPLATE);
+
+  /// ## SRE_FLAG_UNICODE (getter)
+  Object? get SRE_FLAG_UNICODE => getAttribute("SRE_FLAG_UNICODE");
+
+  /// ## SRE_FLAG_UNICODE (setter)
+  set SRE_FLAG_UNICODE(Object? SRE_FLAG_UNICODE) =>
+      setAttribute("SRE_FLAG_UNICODE", SRE_FLAG_UNICODE);
+
+  /// ## SRE_FLAG_VERBOSE (getter)
+  Object? get SRE_FLAG_VERBOSE => getAttribute("SRE_FLAG_VERBOSE");
+
+  /// ## SRE_FLAG_VERBOSE (setter)
+  set SRE_FLAG_VERBOSE(Object? SRE_FLAG_VERBOSE) =>
+      setAttribute("SRE_FLAG_VERBOSE", SRE_FLAG_VERBOSE);
+
+  /// ## SRE_INFO_CHARSET (getter)
+  Object? get SRE_INFO_CHARSET => getAttribute("SRE_INFO_CHARSET");
+
+  /// ## SRE_INFO_CHARSET (setter)
+  set SRE_INFO_CHARSET(Object? SRE_INFO_CHARSET) =>
+      setAttribute("SRE_INFO_CHARSET", SRE_INFO_CHARSET);
+
+  /// ## SRE_INFO_LITERAL (getter)
+  Object? get SRE_INFO_LITERAL => getAttribute("SRE_INFO_LITERAL");
+
+  /// ## SRE_INFO_LITERAL (setter)
+  set SRE_INFO_LITERAL(Object? SRE_INFO_LITERAL) =>
+      setAttribute("SRE_INFO_LITERAL", SRE_INFO_LITERAL);
+
+  /// ## SRE_INFO_PREFIX (getter)
+  Object? get SRE_INFO_PREFIX => getAttribute("SRE_INFO_PREFIX");
+
+  /// ## SRE_INFO_PREFIX (setter)
+  set SRE_INFO_PREFIX(Object? SRE_INFO_PREFIX) =>
+      setAttribute("SRE_INFO_PREFIX", SRE_INFO_PREFIX);
+
+  /// ## SUBPATTERN (getter)
+  Object? get SUBPATTERN => getAttribute("SUBPATTERN");
+
+  /// ## SUBPATTERN (setter)
+  set SUBPATTERN(Object? SUBPATTERN) => setAttribute("SUBPATTERN", SUBPATTERN);
+
+  /// ## SUCCESS (getter)
+  Object? get SUCCESS => getAttribute("SUCCESS");
+
+  /// ## SUCCESS (setter)
+  set SUCCESS(Object? SUCCESS) => setAttribute("SUCCESS", SUCCESS);
 }
 
 /// ## sre_parse
@@ -95834,7 +106634,7 @@ final class sre_parse extends PythonModule {
   Object? parse({
     required Object? str,
     Object? flags = 0,
-    Object? state = null,
+    Object? state,
   }) =>
       getFunction("parse").call(
         <Object?>[
@@ -95953,26 +106753,720 @@ final class sre_parse extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
-  Object? get ASCIILETTERS => getAttribute("ASCIILETTERS");
 
-  set ASCIILETTERS(Object? ASCIILETTERS) =>
-      setAttribute("ASCIILETTERS", ASCIILETTERS);
+  /// ## ANY (getter)
+  Object? get ANY => getAttribute("ANY");
 
-  Object? get DIGITS => getAttribute("DIGITS");
+  /// ## ANY (setter)
+  set ANY(Object? ANY) => setAttribute("ANY", ANY);
 
-  set DIGITS(Object? DIGITS) => setAttribute("DIGITS", DIGITS);
+  /// ## ANY_ALL (getter)
+  Object? get ANY_ALL => getAttribute("ANY_ALL");
 
-  Object? get HEXDIGITS => getAttribute("HEXDIGITS");
+  /// ## ANY_ALL (setter)
+  set ANY_ALL(Object? ANY_ALL) => setAttribute("ANY_ALL", ANY_ALL);
 
-  set HEXDIGITS(Object? HEXDIGITS) => setAttribute("HEXDIGITS", HEXDIGITS);
+  /// ## ASSERT (getter)
+  Object? get ASSERT => getAttribute("ASSERT");
 
-  Object? get OCTDIGITS => getAttribute("OCTDIGITS");
+  /// ## ASSERT (setter)
+  set ASSERT(Object? ASSERT) => setAttribute("ASSERT", ASSERT);
 
-  set OCTDIGITS(Object? OCTDIGITS) => setAttribute("OCTDIGITS", OCTDIGITS);
+  /// ## ASSERT_NOT (getter)
+  Object? get ASSERT_NOT => getAttribute("ASSERT_NOT");
 
-  Object? get WHITESPACE => getAttribute("WHITESPACE");
+  /// ## ASSERT_NOT (setter)
+  set ASSERT_NOT(Object? ASSERT_NOT) => setAttribute("ASSERT_NOT", ASSERT_NOT);
 
-  set WHITESPACE(Object? WHITESPACE) => setAttribute("WHITESPACE", WHITESPACE);
+  /// ## AT (getter)
+  Object? get AT => getAttribute("AT");
+
+  /// ## AT (setter)
+  set AT(Object? AT) => setAttribute("AT", AT);
+
+  /// ## ATCODES (getter)
+  Object? get ATCODES => getAttribute("ATCODES");
+
+  /// ## ATCODES (setter)
+  set ATCODES(Object? ATCODES) => setAttribute("ATCODES", ATCODES);
+
+  /// ## ATOMIC_GROUP (getter)
+  Object? get ATOMIC_GROUP => getAttribute("ATOMIC_GROUP");
+
+  /// ## ATOMIC_GROUP (setter)
+  set ATOMIC_GROUP(Object? ATOMIC_GROUP) =>
+      setAttribute("ATOMIC_GROUP", ATOMIC_GROUP);
+
+  /// ## AT_BEGINNING (getter)
+  Object? get AT_BEGINNING => getAttribute("AT_BEGINNING");
+
+  /// ## AT_BEGINNING (setter)
+  set AT_BEGINNING(Object? AT_BEGINNING) =>
+      setAttribute("AT_BEGINNING", AT_BEGINNING);
+
+  /// ## AT_BEGINNING_LINE (getter)
+  Object? get AT_BEGINNING_LINE => getAttribute("AT_BEGINNING_LINE");
+
+  /// ## AT_BEGINNING_LINE (setter)
+  set AT_BEGINNING_LINE(Object? AT_BEGINNING_LINE) =>
+      setAttribute("AT_BEGINNING_LINE", AT_BEGINNING_LINE);
+
+  /// ## AT_BEGINNING_STRING (getter)
+  Object? get AT_BEGINNING_STRING => getAttribute("AT_BEGINNING_STRING");
+
+  /// ## AT_BEGINNING_STRING (setter)
+  set AT_BEGINNING_STRING(Object? AT_BEGINNING_STRING) =>
+      setAttribute("AT_BEGINNING_STRING", AT_BEGINNING_STRING);
+
+  /// ## AT_BOUNDARY (getter)
+  Object? get AT_BOUNDARY => getAttribute("AT_BOUNDARY");
+
+  /// ## AT_BOUNDARY (setter)
+  set AT_BOUNDARY(Object? AT_BOUNDARY) =>
+      setAttribute("AT_BOUNDARY", AT_BOUNDARY);
+
+  /// ## AT_END (getter)
+  Object? get AT_END => getAttribute("AT_END");
+
+  /// ## AT_END (setter)
+  set AT_END(Object? AT_END) => setAttribute("AT_END", AT_END);
+
+  /// ## AT_END_LINE (getter)
+  Object? get AT_END_LINE => getAttribute("AT_END_LINE");
+
+  /// ## AT_END_LINE (setter)
+  set AT_END_LINE(Object? AT_END_LINE) =>
+      setAttribute("AT_END_LINE", AT_END_LINE);
+
+  /// ## AT_END_STRING (getter)
+  Object? get AT_END_STRING => getAttribute("AT_END_STRING");
+
+  /// ## AT_END_STRING (setter)
+  set AT_END_STRING(Object? AT_END_STRING) =>
+      setAttribute("AT_END_STRING", AT_END_STRING);
+
+  /// ## AT_LOCALE (getter)
+  Object? get AT_LOCALE => getAttribute("AT_LOCALE");
+
+  /// ## AT_LOCALE (setter)
+  set AT_LOCALE(Object? AT_LOCALE) => setAttribute("AT_LOCALE", AT_LOCALE);
+
+  /// ## AT_LOC_BOUNDARY (getter)
+  Object? get AT_LOC_BOUNDARY => getAttribute("AT_LOC_BOUNDARY");
+
+  /// ## AT_LOC_BOUNDARY (setter)
+  set AT_LOC_BOUNDARY(Object? AT_LOC_BOUNDARY) =>
+      setAttribute("AT_LOC_BOUNDARY", AT_LOC_BOUNDARY);
+
+  /// ## AT_LOC_NON_BOUNDARY (getter)
+  Object? get AT_LOC_NON_BOUNDARY => getAttribute("AT_LOC_NON_BOUNDARY");
+
+  /// ## AT_LOC_NON_BOUNDARY (setter)
+  set AT_LOC_NON_BOUNDARY(Object? AT_LOC_NON_BOUNDARY) =>
+      setAttribute("AT_LOC_NON_BOUNDARY", AT_LOC_NON_BOUNDARY);
+
+  /// ## AT_MULTILINE (getter)
+  Object? get AT_MULTILINE => getAttribute("AT_MULTILINE");
+
+  /// ## AT_MULTILINE (setter)
+  set AT_MULTILINE(Object? AT_MULTILINE) =>
+      setAttribute("AT_MULTILINE", AT_MULTILINE);
+
+  /// ## AT_NON_BOUNDARY (getter)
+  Object? get AT_NON_BOUNDARY => getAttribute("AT_NON_BOUNDARY");
+
+  /// ## AT_NON_BOUNDARY (setter)
+  set AT_NON_BOUNDARY(Object? AT_NON_BOUNDARY) =>
+      setAttribute("AT_NON_BOUNDARY", AT_NON_BOUNDARY);
+
+  /// ## AT_UNICODE (getter)
+  Object? get AT_UNICODE => getAttribute("AT_UNICODE");
+
+  /// ## AT_UNICODE (setter)
+  set AT_UNICODE(Object? AT_UNICODE) => setAttribute("AT_UNICODE", AT_UNICODE);
+
+  /// ## AT_UNI_BOUNDARY (getter)
+  Object? get AT_UNI_BOUNDARY => getAttribute("AT_UNI_BOUNDARY");
+
+  /// ## AT_UNI_BOUNDARY (setter)
+  set AT_UNI_BOUNDARY(Object? AT_UNI_BOUNDARY) =>
+      setAttribute("AT_UNI_BOUNDARY", AT_UNI_BOUNDARY);
+
+  /// ## AT_UNI_NON_BOUNDARY (getter)
+  Object? get AT_UNI_NON_BOUNDARY => getAttribute("AT_UNI_NON_BOUNDARY");
+
+  /// ## AT_UNI_NON_BOUNDARY (setter)
+  set AT_UNI_NON_BOUNDARY(Object? AT_UNI_NON_BOUNDARY) =>
+      setAttribute("AT_UNI_NON_BOUNDARY", AT_UNI_NON_BOUNDARY);
+
+  /// ## BIGCHARSET (getter)
+  Object? get BIGCHARSET => getAttribute("BIGCHARSET");
+
+  /// ## BIGCHARSET (setter)
+  set BIGCHARSET(Object? BIGCHARSET) => setAttribute("BIGCHARSET", BIGCHARSET);
+
+  /// ## BRANCH (getter)
+  Object? get BRANCH => getAttribute("BRANCH");
+
+  /// ## BRANCH (setter)
+  set BRANCH(Object? BRANCH) => setAttribute("BRANCH", BRANCH);
+
+  /// ## CATEGORIES (getter)
+  Object? get CATEGORIES => getAttribute("CATEGORIES");
+
+  /// ## CATEGORIES (setter)
+  set CATEGORIES(Object? CATEGORIES) => setAttribute("CATEGORIES", CATEGORIES);
+
+  /// ## CATEGORY (getter)
+  Object? get CATEGORY => getAttribute("CATEGORY");
+
+  /// ## CATEGORY (setter)
+  set CATEGORY(Object? CATEGORY) => setAttribute("CATEGORY", CATEGORY);
+
+  /// ## CATEGORY_DIGIT (getter)
+  Object? get CATEGORY_DIGIT => getAttribute("CATEGORY_DIGIT");
+
+  /// ## CATEGORY_DIGIT (setter)
+  set CATEGORY_DIGIT(Object? CATEGORY_DIGIT) =>
+      setAttribute("CATEGORY_DIGIT", CATEGORY_DIGIT);
+
+  /// ## CATEGORY_LINEBREAK (getter)
+  Object? get CATEGORY_LINEBREAK => getAttribute("CATEGORY_LINEBREAK");
+
+  /// ## CATEGORY_LINEBREAK (setter)
+  set CATEGORY_LINEBREAK(Object? CATEGORY_LINEBREAK) =>
+      setAttribute("CATEGORY_LINEBREAK", CATEGORY_LINEBREAK);
+
+  /// ## CATEGORY_LOC_NOT_WORD (getter)
+  Object? get CATEGORY_LOC_NOT_WORD => getAttribute("CATEGORY_LOC_NOT_WORD");
+
+  /// ## CATEGORY_LOC_NOT_WORD (setter)
+  set CATEGORY_LOC_NOT_WORD(Object? CATEGORY_LOC_NOT_WORD) =>
+      setAttribute("CATEGORY_LOC_NOT_WORD", CATEGORY_LOC_NOT_WORD);
+
+  /// ## CATEGORY_LOC_WORD (getter)
+  Object? get CATEGORY_LOC_WORD => getAttribute("CATEGORY_LOC_WORD");
+
+  /// ## CATEGORY_LOC_WORD (setter)
+  set CATEGORY_LOC_WORD(Object? CATEGORY_LOC_WORD) =>
+      setAttribute("CATEGORY_LOC_WORD", CATEGORY_LOC_WORD);
+
+  /// ## CATEGORY_NOT_DIGIT (getter)
+  Object? get CATEGORY_NOT_DIGIT => getAttribute("CATEGORY_NOT_DIGIT");
+
+  /// ## CATEGORY_NOT_DIGIT (setter)
+  set CATEGORY_NOT_DIGIT(Object? CATEGORY_NOT_DIGIT) =>
+      setAttribute("CATEGORY_NOT_DIGIT", CATEGORY_NOT_DIGIT);
+
+  /// ## CATEGORY_NOT_LINEBREAK (getter)
+  Object? get CATEGORY_NOT_LINEBREAK => getAttribute("CATEGORY_NOT_LINEBREAK");
+
+  /// ## CATEGORY_NOT_LINEBREAK (setter)
+  set CATEGORY_NOT_LINEBREAK(Object? CATEGORY_NOT_LINEBREAK) =>
+      setAttribute("CATEGORY_NOT_LINEBREAK", CATEGORY_NOT_LINEBREAK);
+
+  /// ## CATEGORY_NOT_SPACE (getter)
+  Object? get CATEGORY_NOT_SPACE => getAttribute("CATEGORY_NOT_SPACE");
+
+  /// ## CATEGORY_NOT_SPACE (setter)
+  set CATEGORY_NOT_SPACE(Object? CATEGORY_NOT_SPACE) =>
+      setAttribute("CATEGORY_NOT_SPACE", CATEGORY_NOT_SPACE);
+
+  /// ## CATEGORY_NOT_WORD (getter)
+  Object? get CATEGORY_NOT_WORD => getAttribute("CATEGORY_NOT_WORD");
+
+  /// ## CATEGORY_NOT_WORD (setter)
+  set CATEGORY_NOT_WORD(Object? CATEGORY_NOT_WORD) =>
+      setAttribute("CATEGORY_NOT_WORD", CATEGORY_NOT_WORD);
+
+  /// ## CATEGORY_SPACE (getter)
+  Object? get CATEGORY_SPACE => getAttribute("CATEGORY_SPACE");
+
+  /// ## CATEGORY_SPACE (setter)
+  set CATEGORY_SPACE(Object? CATEGORY_SPACE) =>
+      setAttribute("CATEGORY_SPACE", CATEGORY_SPACE);
+
+  /// ## CATEGORY_UNI_DIGIT (getter)
+  Object? get CATEGORY_UNI_DIGIT => getAttribute("CATEGORY_UNI_DIGIT");
+
+  /// ## CATEGORY_UNI_DIGIT (setter)
+  set CATEGORY_UNI_DIGIT(Object? CATEGORY_UNI_DIGIT) =>
+      setAttribute("CATEGORY_UNI_DIGIT", CATEGORY_UNI_DIGIT);
+
+  /// ## CATEGORY_UNI_LINEBREAK (getter)
+  Object? get CATEGORY_UNI_LINEBREAK => getAttribute("CATEGORY_UNI_LINEBREAK");
+
+  /// ## CATEGORY_UNI_LINEBREAK (setter)
+  set CATEGORY_UNI_LINEBREAK(Object? CATEGORY_UNI_LINEBREAK) =>
+      setAttribute("CATEGORY_UNI_LINEBREAK", CATEGORY_UNI_LINEBREAK);
+
+  /// ## CATEGORY_UNI_NOT_DIGIT (getter)
+  Object? get CATEGORY_UNI_NOT_DIGIT => getAttribute("CATEGORY_UNI_NOT_DIGIT");
+
+  /// ## CATEGORY_UNI_NOT_DIGIT (setter)
+  set CATEGORY_UNI_NOT_DIGIT(Object? CATEGORY_UNI_NOT_DIGIT) =>
+      setAttribute("CATEGORY_UNI_NOT_DIGIT", CATEGORY_UNI_NOT_DIGIT);
+
+  /// ## CATEGORY_UNI_NOT_LINEBREAK (getter)
+  Object? get CATEGORY_UNI_NOT_LINEBREAK =>
+      getAttribute("CATEGORY_UNI_NOT_LINEBREAK");
+
+  /// ## CATEGORY_UNI_NOT_LINEBREAK (setter)
+  set CATEGORY_UNI_NOT_LINEBREAK(Object? CATEGORY_UNI_NOT_LINEBREAK) =>
+      setAttribute("CATEGORY_UNI_NOT_LINEBREAK", CATEGORY_UNI_NOT_LINEBREAK);
+
+  /// ## CATEGORY_UNI_NOT_SPACE (getter)
+  Object? get CATEGORY_UNI_NOT_SPACE => getAttribute("CATEGORY_UNI_NOT_SPACE");
+
+  /// ## CATEGORY_UNI_NOT_SPACE (setter)
+  set CATEGORY_UNI_NOT_SPACE(Object? CATEGORY_UNI_NOT_SPACE) =>
+      setAttribute("CATEGORY_UNI_NOT_SPACE", CATEGORY_UNI_NOT_SPACE);
+
+  /// ## CATEGORY_UNI_NOT_WORD (getter)
+  Object? get CATEGORY_UNI_NOT_WORD => getAttribute("CATEGORY_UNI_NOT_WORD");
+
+  /// ## CATEGORY_UNI_NOT_WORD (setter)
+  set CATEGORY_UNI_NOT_WORD(Object? CATEGORY_UNI_NOT_WORD) =>
+      setAttribute("CATEGORY_UNI_NOT_WORD", CATEGORY_UNI_NOT_WORD);
+
+  /// ## CATEGORY_UNI_SPACE (getter)
+  Object? get CATEGORY_UNI_SPACE => getAttribute("CATEGORY_UNI_SPACE");
+
+  /// ## CATEGORY_UNI_SPACE (setter)
+  set CATEGORY_UNI_SPACE(Object? CATEGORY_UNI_SPACE) =>
+      setAttribute("CATEGORY_UNI_SPACE", CATEGORY_UNI_SPACE);
+
+  /// ## CATEGORY_UNI_WORD (getter)
+  Object? get CATEGORY_UNI_WORD => getAttribute("CATEGORY_UNI_WORD");
+
+  /// ## CATEGORY_UNI_WORD (setter)
+  set CATEGORY_UNI_WORD(Object? CATEGORY_UNI_WORD) =>
+      setAttribute("CATEGORY_UNI_WORD", CATEGORY_UNI_WORD);
+
+  /// ## CATEGORY_WORD (getter)
+  Object? get CATEGORY_WORD => getAttribute("CATEGORY_WORD");
+
+  /// ## CATEGORY_WORD (setter)
+  set CATEGORY_WORD(Object? CATEGORY_WORD) =>
+      setAttribute("CATEGORY_WORD", CATEGORY_WORD);
+
+  /// ## CHARSET (getter)
+  Object? get CHARSET => getAttribute("CHARSET");
+
+  /// ## CHARSET (setter)
+  set CHARSET(Object? CHARSET) => setAttribute("CHARSET", CHARSET);
+
+  /// ## CHCODES (getter)
+  Object? get CHCODES => getAttribute("CHCODES");
+
+  /// ## CHCODES (setter)
+  set CHCODES(Object? CHCODES) => setAttribute("CHCODES", CHCODES);
+
+  /// ## CH_LOCALE (getter)
+  Object? get CH_LOCALE => getAttribute("CH_LOCALE");
+
+  /// ## CH_LOCALE (setter)
+  set CH_LOCALE(Object? CH_LOCALE) => setAttribute("CH_LOCALE", CH_LOCALE);
+
+  /// ## CH_UNICODE (getter)
+  Object? get CH_UNICODE => getAttribute("CH_UNICODE");
+
+  /// ## CH_UNICODE (setter)
+  set CH_UNICODE(Object? CH_UNICODE) => setAttribute("CH_UNICODE", CH_UNICODE);
+
+  /// ## ESCAPES (getter)
+  Object? get ESCAPES => getAttribute("ESCAPES");
+
+  /// ## ESCAPES (setter)
+  set ESCAPES(Object? ESCAPES) => setAttribute("ESCAPES", ESCAPES);
+
+  /// ## FAILURE (getter)
+  Object? get FAILURE => getAttribute("FAILURE");
+
+  /// ## FAILURE (setter)
+  set FAILURE(Object? FAILURE) => setAttribute("FAILURE", FAILURE);
+
+  /// ## FLAGS (getter)
+  Object? get FLAGS => getAttribute("FLAGS");
+
+  /// ## FLAGS (setter)
+  set FLAGS(Object? FLAGS) => setAttribute("FLAGS", FLAGS);
+
+  /// ## GLOBAL_FLAGS (getter)
+  Object? get GLOBAL_FLAGS => getAttribute("GLOBAL_FLAGS");
+
+  /// ## GLOBAL_FLAGS (setter)
+  set GLOBAL_FLAGS(Object? GLOBAL_FLAGS) =>
+      setAttribute("GLOBAL_FLAGS", GLOBAL_FLAGS);
+
+  /// ## GROUPREF (getter)
+  Object? get GROUPREF => getAttribute("GROUPREF");
+
+  /// ## GROUPREF (setter)
+  set GROUPREF(Object? GROUPREF) => setAttribute("GROUPREF", GROUPREF);
+
+  /// ## GROUPREF_EXISTS (getter)
+  Object? get GROUPREF_EXISTS => getAttribute("GROUPREF_EXISTS");
+
+  /// ## GROUPREF_EXISTS (setter)
+  set GROUPREF_EXISTS(Object? GROUPREF_EXISTS) =>
+      setAttribute("GROUPREF_EXISTS", GROUPREF_EXISTS);
+
+  /// ## GROUPREF_IGNORE (getter)
+  Object? get GROUPREF_IGNORE => getAttribute("GROUPREF_IGNORE");
+
+  /// ## GROUPREF_IGNORE (setter)
+  set GROUPREF_IGNORE(Object? GROUPREF_IGNORE) =>
+      setAttribute("GROUPREF_IGNORE", GROUPREF_IGNORE);
+
+  /// ## GROUPREF_LOC_IGNORE (getter)
+  Object? get GROUPREF_LOC_IGNORE => getAttribute("GROUPREF_LOC_IGNORE");
+
+  /// ## GROUPREF_LOC_IGNORE (setter)
+  set GROUPREF_LOC_IGNORE(Object? GROUPREF_LOC_IGNORE) =>
+      setAttribute("GROUPREF_LOC_IGNORE", GROUPREF_LOC_IGNORE);
+
+  /// ## GROUPREF_UNI_IGNORE (getter)
+  Object? get GROUPREF_UNI_IGNORE => getAttribute("GROUPREF_UNI_IGNORE");
+
+  /// ## GROUPREF_UNI_IGNORE (setter)
+  set GROUPREF_UNI_IGNORE(Object? GROUPREF_UNI_IGNORE) =>
+      setAttribute("GROUPREF_UNI_IGNORE", GROUPREF_UNI_IGNORE);
+
+  /// ## IN (getter)
+  Object? get IN => getAttribute("IN");
+
+  /// ## IN (setter)
+  set IN(Object? IN) => setAttribute("IN", IN);
+
+  /// ## INFO (getter)
+  Object? get INFO => getAttribute("INFO");
+
+  /// ## INFO (setter)
+  set INFO(Object? INFO) => setAttribute("INFO", INFO);
+
+  /// ## IN_IGNORE (getter)
+  Object? get IN_IGNORE => getAttribute("IN_IGNORE");
+
+  /// ## IN_IGNORE (setter)
+  set IN_IGNORE(Object? IN_IGNORE) => setAttribute("IN_IGNORE", IN_IGNORE);
+
+  /// ## IN_LOC_IGNORE (getter)
+  Object? get IN_LOC_IGNORE => getAttribute("IN_LOC_IGNORE");
+
+  /// ## IN_LOC_IGNORE (setter)
+  set IN_LOC_IGNORE(Object? IN_LOC_IGNORE) =>
+      setAttribute("IN_LOC_IGNORE", IN_LOC_IGNORE);
+
+  /// ## IN_UNI_IGNORE (getter)
+  Object? get IN_UNI_IGNORE => getAttribute("IN_UNI_IGNORE");
+
+  /// ## IN_UNI_IGNORE (setter)
+  set IN_UNI_IGNORE(Object? IN_UNI_IGNORE) =>
+      setAttribute("IN_UNI_IGNORE", IN_UNI_IGNORE);
+
+  /// ## JUMP (getter)
+  Object? get JUMP => getAttribute("JUMP");
+
+  /// ## JUMP (setter)
+  set JUMP(Object? JUMP) => setAttribute("JUMP", JUMP);
+
+  /// ## LITERAL (getter)
+  Object? get LITERAL => getAttribute("LITERAL");
+
+  /// ## LITERAL (setter)
+  set LITERAL(Object? LITERAL) => setAttribute("LITERAL", LITERAL);
+
+  /// ## LITERAL_IGNORE (getter)
+  Object? get LITERAL_IGNORE => getAttribute("LITERAL_IGNORE");
+
+  /// ## LITERAL_IGNORE (setter)
+  set LITERAL_IGNORE(Object? LITERAL_IGNORE) =>
+      setAttribute("LITERAL_IGNORE", LITERAL_IGNORE);
+
+  /// ## LITERAL_LOC_IGNORE (getter)
+  Object? get LITERAL_LOC_IGNORE => getAttribute("LITERAL_LOC_IGNORE");
+
+  /// ## LITERAL_LOC_IGNORE (setter)
+  set LITERAL_LOC_IGNORE(Object? LITERAL_LOC_IGNORE) =>
+      setAttribute("LITERAL_LOC_IGNORE", LITERAL_LOC_IGNORE);
+
+  /// ## LITERAL_UNI_IGNORE (getter)
+  Object? get LITERAL_UNI_IGNORE => getAttribute("LITERAL_UNI_IGNORE");
+
+  /// ## LITERAL_UNI_IGNORE (setter)
+  set LITERAL_UNI_IGNORE(Object? LITERAL_UNI_IGNORE) =>
+      setAttribute("LITERAL_UNI_IGNORE", LITERAL_UNI_IGNORE);
+
+  /// ## MAGIC (getter)
+  Object? get MAGIC => getAttribute("MAGIC");
+
+  /// ## MAGIC (setter)
+  set MAGIC(Object? MAGIC) => setAttribute("MAGIC", MAGIC);
+
+  /// ## MARK (getter)
+  Object? get MARK => getAttribute("MARK");
+
+  /// ## MARK (setter)
+  set MARK(Object? MARK) => setAttribute("MARK", MARK);
+
+  /// ## MAXGROUPS (getter)
+  Object? get MAXGROUPS => getAttribute("MAXGROUPS");
+
+  /// ## MAXGROUPS (setter)
+  set MAXGROUPS(Object? MAXGROUPS) => setAttribute("MAXGROUPS", MAXGROUPS);
+
+  /// ## MAXREPEAT (getter)
+  Object? get MAXREPEAT => getAttribute("MAXREPEAT");
+
+  /// ## MAXREPEAT (setter)
+  set MAXREPEAT(Object? MAXREPEAT) => setAttribute("MAXREPEAT", MAXREPEAT);
+
+  /// ## MAX_REPEAT (getter)
+  Object? get MAX_REPEAT => getAttribute("MAX_REPEAT");
+
+  /// ## MAX_REPEAT (setter)
+  set MAX_REPEAT(Object? MAX_REPEAT) => setAttribute("MAX_REPEAT", MAX_REPEAT);
+
+  /// ## MAX_UNTIL (getter)
+  Object? get MAX_UNTIL => getAttribute("MAX_UNTIL");
+
+  /// ## MAX_UNTIL (setter)
+  set MAX_UNTIL(Object? MAX_UNTIL) => setAttribute("MAX_UNTIL", MAX_UNTIL);
+
+  /// ## MIN_REPEAT (getter)
+  Object? get MIN_REPEAT => getAttribute("MIN_REPEAT");
+
+  /// ## MIN_REPEAT (setter)
+  set MIN_REPEAT(Object? MIN_REPEAT) => setAttribute("MIN_REPEAT", MIN_REPEAT);
+
+  /// ## MIN_REPEAT_ONE (getter)
+  Object? get MIN_REPEAT_ONE => getAttribute("MIN_REPEAT_ONE");
+
+  /// ## MIN_REPEAT_ONE (setter)
+  set MIN_REPEAT_ONE(Object? MIN_REPEAT_ONE) =>
+      setAttribute("MIN_REPEAT_ONE", MIN_REPEAT_ONE);
+
+  /// ## MIN_UNTIL (getter)
+  Object? get MIN_UNTIL => getAttribute("MIN_UNTIL");
+
+  /// ## MIN_UNTIL (setter)
+  set MIN_UNTIL(Object? MIN_UNTIL) => setAttribute("MIN_UNTIL", MIN_UNTIL);
+
+  /// ## NEGATE (getter)
+  Object? get NEGATE => getAttribute("NEGATE");
+
+  /// ## NEGATE (setter)
+  set NEGATE(Object? NEGATE) => setAttribute("NEGATE", NEGATE);
+
+  /// ## NOT_LITERAL (getter)
+  Object? get NOT_LITERAL => getAttribute("NOT_LITERAL");
+
+  /// ## NOT_LITERAL (setter)
+  set NOT_LITERAL(Object? NOT_LITERAL) =>
+      setAttribute("NOT_LITERAL", NOT_LITERAL);
+
+  /// ## NOT_LITERAL_IGNORE (getter)
+  Object? get NOT_LITERAL_IGNORE => getAttribute("NOT_LITERAL_IGNORE");
+
+  /// ## NOT_LITERAL_IGNORE (setter)
+  set NOT_LITERAL_IGNORE(Object? NOT_LITERAL_IGNORE) =>
+      setAttribute("NOT_LITERAL_IGNORE", NOT_LITERAL_IGNORE);
+
+  /// ## NOT_LITERAL_LOC_IGNORE (getter)
+  Object? get NOT_LITERAL_LOC_IGNORE => getAttribute("NOT_LITERAL_LOC_IGNORE");
+
+  /// ## NOT_LITERAL_LOC_IGNORE (setter)
+  set NOT_LITERAL_LOC_IGNORE(Object? NOT_LITERAL_LOC_IGNORE) =>
+      setAttribute("NOT_LITERAL_LOC_IGNORE", NOT_LITERAL_LOC_IGNORE);
+
+  /// ## NOT_LITERAL_UNI_IGNORE (getter)
+  Object? get NOT_LITERAL_UNI_IGNORE => getAttribute("NOT_LITERAL_UNI_IGNORE");
+
+  /// ## NOT_LITERAL_UNI_IGNORE (setter)
+  set NOT_LITERAL_UNI_IGNORE(Object? NOT_LITERAL_UNI_IGNORE) =>
+      setAttribute("NOT_LITERAL_UNI_IGNORE", NOT_LITERAL_UNI_IGNORE);
+
+  /// ## OPCODES (getter)
+  Object? get OPCODES => getAttribute("OPCODES");
+
+  /// ## OPCODES (setter)
+  set OPCODES(Object? OPCODES) => setAttribute("OPCODES", OPCODES);
+
+  /// ## OP_IGNORE (getter)
+  Object? get OP_IGNORE => getAttribute("OP_IGNORE");
+
+  /// ## OP_IGNORE (setter)
+  set OP_IGNORE(Object? OP_IGNORE) => setAttribute("OP_IGNORE", OP_IGNORE);
+
+  /// ## OP_LOCALE_IGNORE (getter)
+  Object? get OP_LOCALE_IGNORE => getAttribute("OP_LOCALE_IGNORE");
+
+  /// ## OP_LOCALE_IGNORE (setter)
+  set OP_LOCALE_IGNORE(Object? OP_LOCALE_IGNORE) =>
+      setAttribute("OP_LOCALE_IGNORE", OP_LOCALE_IGNORE);
+
+  /// ## OP_UNICODE_IGNORE (getter)
+  Object? get OP_UNICODE_IGNORE => getAttribute("OP_UNICODE_IGNORE");
+
+  /// ## OP_UNICODE_IGNORE (setter)
+  set OP_UNICODE_IGNORE(Object? OP_UNICODE_IGNORE) =>
+      setAttribute("OP_UNICODE_IGNORE", OP_UNICODE_IGNORE);
+
+  /// ## POSSESSIVE_REPEAT (getter)
+  Object? get POSSESSIVE_REPEAT => getAttribute("POSSESSIVE_REPEAT");
+
+  /// ## POSSESSIVE_REPEAT (setter)
+  set POSSESSIVE_REPEAT(Object? POSSESSIVE_REPEAT) =>
+      setAttribute("POSSESSIVE_REPEAT", POSSESSIVE_REPEAT);
+
+  /// ## POSSESSIVE_REPEAT_ONE (getter)
+  Object? get POSSESSIVE_REPEAT_ONE => getAttribute("POSSESSIVE_REPEAT_ONE");
+
+  /// ## POSSESSIVE_REPEAT_ONE (setter)
+  set POSSESSIVE_REPEAT_ONE(Object? POSSESSIVE_REPEAT_ONE) =>
+      setAttribute("POSSESSIVE_REPEAT_ONE", POSSESSIVE_REPEAT_ONE);
+
+  /// ## RANGE (getter)
+  Object? get RANGE => getAttribute("RANGE");
+
+  /// ## RANGE (setter)
+  set RANGE(Object? RANGE) => setAttribute("RANGE", RANGE);
+
+  /// ## RANGE_UNI_IGNORE (getter)
+  Object? get RANGE_UNI_IGNORE => getAttribute("RANGE_UNI_IGNORE");
+
+  /// ## RANGE_UNI_IGNORE (setter)
+  set RANGE_UNI_IGNORE(Object? RANGE_UNI_IGNORE) =>
+      setAttribute("RANGE_UNI_IGNORE", RANGE_UNI_IGNORE);
+
+  /// ## REPEAT (getter)
+  Object? get REPEAT => getAttribute("REPEAT");
+
+  /// ## REPEAT (setter)
+  set REPEAT(Object? REPEAT) => setAttribute("REPEAT", REPEAT);
+
+  /// ## REPEAT_CHARS (getter)
+  Object? get REPEAT_CHARS => getAttribute("REPEAT_CHARS");
+
+  /// ## REPEAT_CHARS (setter)
+  set REPEAT_CHARS(Object? REPEAT_CHARS) =>
+      setAttribute("REPEAT_CHARS", REPEAT_CHARS);
+
+  /// ## REPEAT_ONE (getter)
+  Object? get REPEAT_ONE => getAttribute("REPEAT_ONE");
+
+  /// ## REPEAT_ONE (setter)
+  set REPEAT_ONE(Object? REPEAT_ONE) => setAttribute("REPEAT_ONE", REPEAT_ONE);
+
+  /// ## SPECIAL_CHARS (getter)
+  Object? get SPECIAL_CHARS => getAttribute("SPECIAL_CHARS");
+
+  /// ## SPECIAL_CHARS (setter)
+  set SPECIAL_CHARS(Object? SPECIAL_CHARS) =>
+      setAttribute("SPECIAL_CHARS", SPECIAL_CHARS);
+
+  /// ## SRE_FLAG_ASCII (getter)
+  Object? get SRE_FLAG_ASCII => getAttribute("SRE_FLAG_ASCII");
+
+  /// ## SRE_FLAG_ASCII (setter)
+  set SRE_FLAG_ASCII(Object? SRE_FLAG_ASCII) =>
+      setAttribute("SRE_FLAG_ASCII", SRE_FLAG_ASCII);
+
+  /// ## SRE_FLAG_DEBUG (getter)
+  Object? get SRE_FLAG_DEBUG => getAttribute("SRE_FLAG_DEBUG");
+
+  /// ## SRE_FLAG_DEBUG (setter)
+  set SRE_FLAG_DEBUG(Object? SRE_FLAG_DEBUG) =>
+      setAttribute("SRE_FLAG_DEBUG", SRE_FLAG_DEBUG);
+
+  /// ## SRE_FLAG_DOTALL (getter)
+  Object? get SRE_FLAG_DOTALL => getAttribute("SRE_FLAG_DOTALL");
+
+  /// ## SRE_FLAG_DOTALL (setter)
+  set SRE_FLAG_DOTALL(Object? SRE_FLAG_DOTALL) =>
+      setAttribute("SRE_FLAG_DOTALL", SRE_FLAG_DOTALL);
+
+  /// ## SRE_FLAG_IGNORECASE (getter)
+  Object? get SRE_FLAG_IGNORECASE => getAttribute("SRE_FLAG_IGNORECASE");
+
+  /// ## SRE_FLAG_IGNORECASE (setter)
+  set SRE_FLAG_IGNORECASE(Object? SRE_FLAG_IGNORECASE) =>
+      setAttribute("SRE_FLAG_IGNORECASE", SRE_FLAG_IGNORECASE);
+
+  /// ## SRE_FLAG_LOCALE (getter)
+  Object? get SRE_FLAG_LOCALE => getAttribute("SRE_FLAG_LOCALE");
+
+  /// ## SRE_FLAG_LOCALE (setter)
+  set SRE_FLAG_LOCALE(Object? SRE_FLAG_LOCALE) =>
+      setAttribute("SRE_FLAG_LOCALE", SRE_FLAG_LOCALE);
+
+  /// ## SRE_FLAG_MULTILINE (getter)
+  Object? get SRE_FLAG_MULTILINE => getAttribute("SRE_FLAG_MULTILINE");
+
+  /// ## SRE_FLAG_MULTILINE (setter)
+  set SRE_FLAG_MULTILINE(Object? SRE_FLAG_MULTILINE) =>
+      setAttribute("SRE_FLAG_MULTILINE", SRE_FLAG_MULTILINE);
+
+  /// ## SRE_FLAG_TEMPLATE (getter)
+  Object? get SRE_FLAG_TEMPLATE => getAttribute("SRE_FLAG_TEMPLATE");
+
+  /// ## SRE_FLAG_TEMPLATE (setter)
+  set SRE_FLAG_TEMPLATE(Object? SRE_FLAG_TEMPLATE) =>
+      setAttribute("SRE_FLAG_TEMPLATE", SRE_FLAG_TEMPLATE);
+
+  /// ## SRE_FLAG_UNICODE (getter)
+  Object? get SRE_FLAG_UNICODE => getAttribute("SRE_FLAG_UNICODE");
+
+  /// ## SRE_FLAG_UNICODE (setter)
+  set SRE_FLAG_UNICODE(Object? SRE_FLAG_UNICODE) =>
+      setAttribute("SRE_FLAG_UNICODE", SRE_FLAG_UNICODE);
+
+  /// ## SRE_FLAG_VERBOSE (getter)
+  Object? get SRE_FLAG_VERBOSE => getAttribute("SRE_FLAG_VERBOSE");
+
+  /// ## SRE_FLAG_VERBOSE (setter)
+  set SRE_FLAG_VERBOSE(Object? SRE_FLAG_VERBOSE) =>
+      setAttribute("SRE_FLAG_VERBOSE", SRE_FLAG_VERBOSE);
+
+  /// ## SRE_INFO_CHARSET (getter)
+  Object? get SRE_INFO_CHARSET => getAttribute("SRE_INFO_CHARSET");
+
+  /// ## SRE_INFO_CHARSET (setter)
+  set SRE_INFO_CHARSET(Object? SRE_INFO_CHARSET) =>
+      setAttribute("SRE_INFO_CHARSET", SRE_INFO_CHARSET);
+
+  /// ## SRE_INFO_LITERAL (getter)
+  Object? get SRE_INFO_LITERAL => getAttribute("SRE_INFO_LITERAL");
+
+  /// ## SRE_INFO_LITERAL (setter)
+  set SRE_INFO_LITERAL(Object? SRE_INFO_LITERAL) =>
+      setAttribute("SRE_INFO_LITERAL", SRE_INFO_LITERAL);
+
+  /// ## SRE_INFO_PREFIX (getter)
+  Object? get SRE_INFO_PREFIX => getAttribute("SRE_INFO_PREFIX");
+
+  /// ## SRE_INFO_PREFIX (setter)
+  set SRE_INFO_PREFIX(Object? SRE_INFO_PREFIX) =>
+      setAttribute("SRE_INFO_PREFIX", SRE_INFO_PREFIX);
+
+  /// ## SUBPATTERN (getter)
+  Object? get SUBPATTERN => getAttribute("SUBPATTERN");
+
+  /// ## SUBPATTERN (setter)
+  set SUBPATTERN(Object? SUBPATTERN) => setAttribute("SUBPATTERN", SUBPATTERN);
+
+  /// ## SUCCESS (getter)
+  Object? get SUCCESS => getAttribute("SUCCESS");
+
+  /// ## SUCCESS (setter)
+  set SUCCESS(Object? SUCCESS) => setAttribute("SUCCESS", SUCCESS);
+
+  /// ## TYPE_FLAGS (getter)
+  Object? get TYPE_FLAGS => getAttribute("TYPE_FLAGS");
+
+  /// ## TYPE_FLAGS (setter)
+  set TYPE_FLAGS(Object? TYPE_FLAGS) => setAttribute("TYPE_FLAGS", TYPE_FLAGS);
 }
 
 /// ## unicodedata
@@ -95984,9 +107478,18 @@ final class unicodedata extends PythonModule {
         unicodedata.from,
       );
 
+  /// ## ucd_3_2_0 (getter)
   Object? get ucd_3_2_0 => getAttribute("ucd_3_2_0");
 
+  /// ## ucd_3_2_0 (setter)
   set ucd_3_2_0(Object? ucd_3_2_0) => setAttribute("ucd_3_2_0", ucd_3_2_0);
+
+  /// ## unidata_version (getter)
+  Object? get unidata_version => getAttribute("unidata_version");
+
+  /// ## unidata_version (setter)
+  set unidata_version(Object? unidata_version) =>
+      setAttribute("unidata_version", unidata_version);
 }
 
 /// ## visitors
@@ -96681,7 +108184,7 @@ final class visitors extends PythonModule {
   ///     return base_transformer
   /// ```
   Object? merge_transformers({
-    Object? base_transformer = null,
+    Object? base_transformer,
     Map<String, Object?> transformers_to_merge = const <String, Object?>{},
   }) =>
       getFunction("merge_transformers").call(
@@ -96787,7 +108290,7 @@ final class visitors extends PythonModule {
     Object? inline = false,
     Object? meta = false,
     Object? tree = false,
-    Object? wrapper = null,
+    Object? wrapper,
   }) =>
       getFunction("v_args").call(
         <Object?>[
@@ -96824,7 +108327,48 @@ final class visitors extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## Discard (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// When the Discard value is returned from a transformer callback,
+  /// that node is discarded and won't appear in the parent.
+  ///
+  /// Note:
+  ///     This feature is disabled when the transformer is provided to Lark
+  ///     using the ``transformer`` keyword (aka Tree-less LALR mode).
+  ///
+  /// Example:
+  ///     ::
+  ///
+  ///         class T(Transformer):
+  ///             def ignore_tree(self, children):
+  ///                 return Discard
+  ///
+  ///             def IGNORE_TOKEN(self, token):
+  ///                 return Discard
   Object? get Discard => getAttribute("Discard");
 
+  /// ## Discard (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// When the Discard value is returned from a transformer callback,
+  /// that node is discarded and won't appear in the parent.
+  ///
+  /// Note:
+  ///     This feature is disabled when the transformer is provided to Lark
+  ///     using the ``transformer`` keyword (aka Tree-less LALR mode).
+  ///
+  /// Example:
+  ///     ::
+  ///
+  ///         class T(Transformer):
+  ///             def ignore_tree(self, children):
+  ///                 return Discard
+  ///
+  ///             def IGNORE_TOKEN(self, token):
+  ///                 return Discard
   set Discard(Object? Discard) => setAttribute("Discard", Discard);
 }
