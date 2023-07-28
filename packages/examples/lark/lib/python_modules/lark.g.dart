@@ -9040,7 +9040,7 @@ final class MutableMapping extends PythonClass {
   /// If key is not found, d is returned if given, otherwise KeyError is raised.
   Object? pop({
     required Object? key,
-    Object? $default = null,
+    Object? $default,
   }) =>
       getFunction("pop").call(
         <Object?>[
@@ -12415,7 +12415,7 @@ final class catch_warnings extends PythonClass {
     Object? record = false,
     Object? module,
     Object? action,
-    Object? category = null,
+    Object? category,
     Object? lineno = 0,
     Object? append = false,
   }) =>
@@ -22439,7 +22439,7 @@ final class StrEnum extends PythonClass {
 /// ```
 final class auto extends PythonClass {
   factory auto({
-    Object? value = null,
+    Object? value,
   }) =>
       PythonFfiDart.instance.importClass(
         "enum",
@@ -32114,7 +32114,7 @@ final class zipimporter extends PythonClass {
   /// or None otherwise. The optional 'path' argument is ignored -- it's
   /// there for compatibility with the importer protocol.
   ///
-  /// Deprecated since Python 3.10. Use find_spec() instead.
+  /// Deprecated since Python 3.10. Use find_spec() instead.!
   Object? find_loader({
     required Object? fullname,
     Object? path,
@@ -34503,9 +34503,9 @@ final class ForestSumVisitor extends PythonClass {
 /// ```
 final class ForestToParseTree extends PythonClass {
   factory ForestToParseTree({
-    Object? tree_class = null,
+    Object? tree_class,
     Object? callbacks = const {},
-    Object? prioritizer = null,
+    Object? prioritizer,
     Object? resolve_ambiguity = true,
     Object? use_cache = true,
   }) =>
@@ -37234,8 +37234,8 @@ final class PackedNode extends PythonClass {
 /// ```
 final class TreeForestTransformer extends PythonClass {
   factory TreeForestTransformer({
-    Object? tree_class = null,
-    Object? prioritizer = null,
+    Object? tree_class,
+    Object? prioritizer,
     Object? resolve_ambiguity = true,
     Object? use_cache = false,
   }) =>
@@ -49175,7 +49175,7 @@ final class UserDict extends PythonClass {
   /// If key is not found, d is returned if given, otherwise KeyError is raised.
   Object? pop({
     required Object? key,
-    Object? $default = null,
+    Object? $default,
   }) =>
       getFunction("pop").call(
         <Object?>[
@@ -60723,10 +60723,10 @@ final class sys extends PythonModule {
       setAttribute("path_importer_cache", path_importer_cache);
 
   /// ## platform (getter)
-  Object? get platform => getAttribute("platform");
+  Object? get $platform => getAttribute("platform");
 
   /// ## platform (setter)
-  set platform(Object? platform) => setAttribute("platform", platform);
+  set $platform(Object? $platform) => setAttribute("platform", $platform);
 
   /// ## platlibdir (getter)
   Object? get platlibdir => getAttribute("platlibdir");
@@ -69225,7 +69225,7 @@ final class warnings extends PythonModule {
   Object? filterwarnings({
     required Object? action,
     Object? message = "",
-    Object? category = null,
+    Object? category,
     Object? module = "",
     Object? lineno = 0,
     Object? append = false,
@@ -69357,7 +69357,7 @@ final class warnings extends PythonModule {
   /// ```
   Object? simplefilter({
     required Object? action,
-    Object? category = null,
+    Object? category,
     Object? lineno = 0,
     Object? append = false,
   }) =>
@@ -100397,8 +100397,8 @@ final class traceback extends PythonModule {
   /// ```
   Object? format_exception(
     Object? exc, {
-    Object? value = null,
-    Object? tb = null,
+    Object? value,
+    Object? tb,
     Object? limit,
     Object? chain = true,
   }) =>
@@ -100452,7 +100452,7 @@ final class traceback extends PythonModule {
   /// ```
   Object? format_exception_only(
     Object? exc, {
-    Object? value = null,
+    Object? value,
   }) =>
       getFunction("format_exception_only").call(
         <Object?>[
@@ -100613,8 +100613,8 @@ final class traceback extends PythonModule {
   /// ```
   Object? print_exception(
     Object? exc, {
-    Object? value = null,
-    Object? tb = null,
+    Object? value,
+    Object? tb,
     Object? limit,
     Object? file,
     Object? chain = true,
@@ -102957,10 +102957,10 @@ final class tokenize extends PythonModule {
   set Special(Object? Special) => setAttribute("Special", Special);
 
   /// ## String (getter)
-  Object? get String => getAttribute("String");
+  Object? get $String => getAttribute("String");
 
   /// ## String (setter)
-  set String(Object? String) => setAttribute("String", String);
+  set $String(Object? $String) => setAttribute("String", $String);
 
   /// ## StringPrefix (getter)
   Object? get StringPrefix => getAttribute("StringPrefix");
