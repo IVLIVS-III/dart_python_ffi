@@ -35,11 +35,9 @@ sealed class InspectEntry {
 
   InspectEntryType get type;
 
-  int? get id;
-
   Iterable<(String, InspectEntry)> get children;
 
-  void collectChildren();
+  void collectChildren(InspectionCache cache);
 
   void emit(StringBuffer buffer);
 
@@ -47,5 +45,8 @@ sealed class InspectEntry {
 
   void emitSource(StringBuffer buffer);
 
-  Map<String, Object?> debugDump({bool expandChildren = true});
+  Map<String, Object?> debugDump({
+    InspectionCache? cache,
+    bool expandChildren = true,
+  });
 }

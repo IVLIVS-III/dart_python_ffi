@@ -1,15 +1,13 @@
 name: interface_gen_test
-description: A sample command-line application.
-version: 1.0.0
-# repository: https://github.com/my_org/my_repo
+description: A collection of python modules for testing the interface generator.
+version: 0.0.1
+repository: https://github.com/IVLIVS-III/dart_python_ffi
 
 environment:
   sdk: ^3.0.6
 
-# Add regular dependencies here.
 dependencies:
   python_ffi_dart: ^0.3.1
-  # path: ^1.8.0
 
 dev_dependencies:
   lints: ^2.0.0
@@ -18,5 +16,15 @@ dev_dependencies:
 
 python_ffi:
   modules:
+    empty_module:
+      path: python_modules/empty_module.py
+    module_field:
+      path: python_modules/module_field.py
+    module_function:
+      path: python_modules/module_function.py
+    dataclass:
+      path: python_modules/dataclass.py
+    # submodule:
+    #   path: python_modules/submodule
     class_init_adds_field:
       path: python_modules/class_init_adds_field.py

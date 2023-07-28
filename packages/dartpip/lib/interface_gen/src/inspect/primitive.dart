@@ -13,14 +13,11 @@ final class Primitive implements InspectEntry {
   InspectEntryType get type => InspectEntryType.primitive;
 
   @override
-  int? get id => InspectionCache.instance.id(value);
-
-  @override
   Iterable<(String, InspectEntry)> get children =>
       const <(String, InspectEntry)>[];
 
   @override
-  void collectChildren() {}
+  void collectChildren(InspectionCache cache) {}
 
   @override
   void emit(StringBuffer buffer) {
@@ -34,7 +31,10 @@ final class Primitive implements InspectEntry {
   void emitSource(StringBuffer buffer) {}
 
   @override
-  Map<String, Object?> debugDump({bool expandChildren = true}) =>
+  Map<String, Object?> debugDump({
+    InspectionCache? cache,
+    bool expandChildren = true,
+  }) =>
       <String, Object?>{
         "name": name,
         "sanitizedName": sanitizedName,

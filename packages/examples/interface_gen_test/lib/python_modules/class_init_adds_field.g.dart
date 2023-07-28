@@ -1,5 +1,7 @@
 // ignore_for_file: camel_case_types, non_constant_identifier_names
 
+library class_init_adds_field;
+
 import "package:python_ffi_dart/python_ffi_dart.dart";
 
 /// ## ClassInitAddsField
@@ -21,8 +23,10 @@ final class ClassInitAddsField extends PythonClass {
 
   ClassInitAddsField.from(super.pythonClass) : super.from();
 
+  /// ## field (getter)
   Object? get field => getAttribute("field");
 
+  /// ## field (setter)
   set field(Object? field) => setAttribute("field", field);
 }
 

@@ -79,6 +79,7 @@ String sanitizeName(String name) {
 Future<String> doInspection(
   PythonModuleDefinition moduleDefinition, {
   required String appType,
+  required InspectionCache cache,
 }) async {
   print(
     "Generating Dart interface for ${moduleDefinition.name} via inspect...",
@@ -88,7 +89,7 @@ Future<String> doInspection(
     moduleDefinition.name,
     (PythonModuleInterface<PythonFfiDelegate<Object?>, Object?> m) =>
         Module.from(moduleDefinition.name, m),
-  )..collectChildren();
+  )..collectChildren(cache);
 
   Object? toEncodable(Object? o) {
     switch (o) {
@@ -124,7 +125,7 @@ Future<String> doInspection(
   final String json = jsonEncode(
     <String, Object?>{
       "_module": interface.debugDump(),
-      "_entries": InspectionCache.instance.entries
+      "_entries": cache.entries
           .whereNot(
             ((int, InspectEntry) e) => e.$2.type == InspectEntryType.primitive,
           )
@@ -141,8 +142,7 @@ Future<String> doInspection(
   return json;
 }
 
-String emitInspection({bool primaryModuleOnly = true}) {
-  final InspectionCache cache = InspectionCache.instance;
+String emitInspection(InspectionCache cache, {bool primaryModuleOnly = true}) {
   final Module? primaryModule = cache.modules.firstOrNull;
   if (primaryModule == null) {
     primaryModuleOnly = false;
@@ -150,8 +150,11 @@ String emitInspection({bool primaryModuleOnly = true}) {
   final StringBuffer buffer = StringBuffer("""
 // ignore_for_file: camel_case_types, non_constant_identifier_names
 
-import "package:python_ffi_dart/python_ffi_dart.dart";
 """);
+  if (primaryModule != null) {
+    buffer.writeln("library ${primaryModule.sanitizedName};");
+  }
+  buffer.writeln("import \"package:python_ffi_dart/python_ffi_dart.dart\";");
   final Set<String> topLevelNames = <String>{};
   for (final ClassInstance typedef in cache.typedefs) {
     final String typedefName = typedef.sanitizedName;

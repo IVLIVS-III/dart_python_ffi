@@ -1,7 +1,7 @@
 part of interface_gen;
 
 final class ClassDefinition extends PythonClassDefinition
-    with InspectMixin
+    with InspectMixin, FunctionFieldMixin, GetterSetterMixin
     implements InspectEntry {
   ClassDefinition.from(this.name, super.classDefinitionDelegate)
       : value = classDefinitionDelegate,
@@ -25,6 +25,18 @@ final class ClassDefinition extends PythonClassDefinition
   Method? get __init__ {
     final InspectEntry? init = _children["__init__"];
     return init is Method ? init : null;
+  }
+
+  Set<String> get __dataclass_fields__ {
+    const String attributeName = "__dataclass_fields__";
+    if (!value.hasAttribute(attributeName)) {
+      return const <String>{};
+    }
+    return value
+        .getAttribute<Map<Object?, Object?>>(attributeName)
+        .keys
+        .whereType<String>()
+        .toSet();
   }
 
   Set<String> _getAssignmentsFromInit({
@@ -110,10 +122,19 @@ final class ClassDefinition extends PythonClassDefinition
     }
   }
 
+  void _extractFieldsFromDataclassFields() {
+    final Set<String> dataclassFields = __dataclass_fields__;
+    for (final String field in dataclassFields) {
+      final InspectEntry child = Primitive(field, null);
+      _setChild(field, child);
+    }
+  }
+
   @override
-  void collectChildren() {
-    super.collectChildren();
+  void collectChildren(InspectionCache cache) {
+    super.collectChildren(cache);
     _extractFieldsFromInit();
+    _extractFieldsFromDataclassFields();
   }
 
   @override
@@ -148,61 +169,9 @@ final class $sanitizedName extends PythonClass {
 
   $sanitizedName.from(super.pythonClass) : super.from();
 """);
-    final Set<String> memberNames = <String>{"__init__"};
-    for (final Function_ child in _children.values.whereType<Function_>()) {
-      final String functionName = child.sanitizedName;
-      if (memberNames.contains(functionName)) {
-        continue;
-      }
-      if (functionName == name) {
-        continue;
-      }
-      memberNames.add(functionName);
-      child.emit(buffer);
-    }
-    for (final ClassInstance child
-        in _children.values.whereType<ClassInstance>()) {
-      if (types.isType(child)) {
-        continue;
-      }
-      final String className = child.sanitizedName;
-      if (memberNames.contains(className)) {
-        continue;
-      }
-      memberNames.add(className);
-      buffer.writeln("""
-Object? get $className => getAttribute("${child.name}");
-
-set $className(Object? $className)
-  => setAttribute("${child.name}", $className);
-""");
-    }
-    for (final Object_ child in _children.values.whereType<Object_>()) {
-      final String objectName = child.sanitizedName;
-      if (memberNames.contains(objectName)) {
-        continue;
-      }
-      memberNames.add(objectName);
-      buffer.writeln("""
-Object? get $objectName => getAttribute("${child.name}");
-
-set $objectName(Object? $objectName)
-  => setAttribute("${child.name}", $objectName);
-""");
-    }
-    for (final Primitive child in _children.values.whereType<Primitive>()) {
-      final String primitiveName = child.sanitizedName;
-      if (memberNames.contains(primitiveName)) {
-        continue;
-      }
-      memberNames.add(primitiveName);
-      buffer.writeln("""
-Object? get $primitiveName => getAttribute("${child.name}");
-
-set $primitiveName(Object? $primitiveName)
-  => setAttribute("${child.name}", $primitiveName);
-""");
-    }
+    final Set<String> memberNames = <String>{name, "__init__"};
+    _emitFunctionFields(buffer, memberNames: memberNames);
+    _emitGettersSetters(buffer, memberNames: memberNames);
     buffer.writeln("}");
   }
 }

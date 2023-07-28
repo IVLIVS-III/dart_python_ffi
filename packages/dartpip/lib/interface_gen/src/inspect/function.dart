@@ -111,8 +111,12 @@ final class Function_ extends PythonFunction
   }
 
   @override
-  debugDump({bool expandChildren = true}) => <String, Object?>{
-        ...super.debugDump(expandChildren: expandChildren),
+  debugDump({
+    InspectionCache? cache,
+    bool expandChildren = true,
+  }) =>
+      <String, Object?>{
+        ...super.debugDump(cache: cache, expandChildren: expandChildren),
         "signature": signature.debugDump(),
       };
 }

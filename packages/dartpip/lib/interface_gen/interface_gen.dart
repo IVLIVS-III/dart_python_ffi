@@ -13,6 +13,8 @@ part "src/extensions.dart";
 part "src/inspect/class_definition.dart";
 part "src/inspect/class_instance.dart";
 part "src/inspect/function.dart";
+part "src/inspect/function_field_mixin.dart";
+part "src/inspect/getter_setter_mixin.dart";
 part "src/inspect/inspect_entry.dart";
 part "src/inspect/inspect_mixin.dart";
 part "src/inspect/method.dart";

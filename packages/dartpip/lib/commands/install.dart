@@ -164,6 +164,21 @@ class InstallCommand extends Command<void> {
       modulesJsonFile.deleteSync();
     }
 
+    // Remove previously generated files.
+    final Directory pythonModulesDir = Directory(
+      <String>[appRoot, "lib", "python_modules"].join(Platform.pathSeparator),
+    );
+    if (pythonModulesDir.existsSync()) {
+      await pythonModulesDir
+          .list()
+          .where(
+            (FileSystemEntity e) =>
+                e is File &&
+                (e.name.endsWith(".g.dart") || e.name.endsWith(".g.json")),
+          )
+          .forEach((FileSystemEntity e) async => e.delete());
+    }
+
     // resets the pubspec.yaml generated assets
     _removeGeneratedAssetDeclarations(appType, appRoot);
 

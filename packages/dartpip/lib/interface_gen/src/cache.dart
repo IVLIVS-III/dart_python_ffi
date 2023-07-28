@@ -1,14 +1,10 @@
 part of interface_gen;
 
 final class InspectionCache {
-  InspectionCache._();
+  InspectionCache();
 
-  static final Map<Object?, (int, InspectEntry)> _cache =
+  final Map<Object?, (int, InspectEntry)> _cache =
       <Object?, (int, InspectEntry)>{};
-
-  static InspectionCache? _instance;
-
-  static InspectionCache get instance => _instance ??= InspectionCache._();
 
   Object? _effectiveKey(Object? key) => switch (key) {
         PythonObjectInterface() => key.reference ?? key,

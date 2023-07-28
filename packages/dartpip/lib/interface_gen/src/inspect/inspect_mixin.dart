@@ -25,20 +25,17 @@ base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
 
   Object? get parentModule => inspectModule.getmodule(value);
 
-  @override
-  int? get id => InspectionCache.instance.id(value);
-
   Iterable<(String, InspectEntry)> get children => _children.entries
       .map((MapEntry<String, InspectEntry> e) => (e.key, e.value));
 
   static const Set<String> _explicitlyAllowedChildNames = <String>{"__init__"};
 
   @override
-  void collectChildren() {
+  void collectChildren(InspectionCache cache) {
     final inspect inspectModule = inspect.import();
-    final InspectEntry? selfCached = InspectionCache.instance[value];
+    final InspectEntry? selfCached = cache[value];
     if (selfCached == null) {
-      InspectionCache.instance[value] = this;
+      cache[value] = this;
     }
     for (final (String name, Object? value) in _members) {
       if (name.startsWith("_") &&
@@ -59,7 +56,7 @@ base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
       } on PythonExceptionInterface catch (_) {
         // ignore
       }
-      final InspectEntry? cached = InspectionCache.instance[value];
+      final InspectEntry? cached = cache[value];
       if (cached != null) {
         _setChild(name, cached);
         continue;
@@ -79,9 +76,9 @@ base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
         PythonObjectInterface() => Object_.from(name, value),
         _ => Primitive(name, value),
       } as InspectEntry;
-      InspectionCache.instance[value] = child;
+      cache[value] = child;
       _setChild(name, child);
-      child.collectChildren();
+      child.collectChildren(cache);
     }
   }
 
@@ -128,24 +125,29 @@ base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
   }
 
   @override
-  Map<String, Object?> debugDump({bool expandChildren = true}) =>
-      <String, Object?>{
-        "_id": id,
-        "name": name,
-        "sanitizedName": sanitizedName,
-        "value": value,
-        "type": type.displayName,
-        "parentModule": parentModule,
-        "doc": inspectModule.getdoc(value),
-        if (expandChildren)
-          "children": Map<String, Map<String, Object?>>.fromEntries(
-            children.map(
-              ((String, InspectEntry) e) =>
-                  MapEntry<String, Map<String, Object?>>(
-                e.$1,
-                e.$2.debugDump(expandChildren: id == null),
-              ),
+  Map<String, Object?> debugDump({
+    InspectionCache? cache,
+    bool expandChildren = true,
+  }) {
+    final int? id = cache?.id(value);
+    return <String, Object?>{
+      if (id != null) "_id": id,
+      "name": name,
+      "sanitizedName": sanitizedName,
+      "value": value,
+      "type": type.displayName,
+      "parentModule": parentModule,
+      "doc": inspectModule.getdoc(value),
+      if (expandChildren)
+        "children": Map<String, Map<String, Object?>>.fromEntries(
+          children.map(
+            ((String, InspectEntry) e) =>
+                MapEntry<String, Map<String, Object?>>(
+              e.$1,
+              e.$2.debugDump(expandChildren: id == null),
             ),
           ),
-      };
+        ),
+    };
+  }
 }

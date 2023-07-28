@@ -6,6 +6,9 @@ sealed class PythonDependency {
 
   /// TODO: Document.
   final String name;
+
+  @override
+  String toString() => name;
 }
 
 /// TODO: Document.
@@ -18,6 +21,9 @@ final class PyPiDependency extends PythonDependency {
 
   /// TODO: Document.
   final String version;
+
+  @override
+  String toString() => "$name: $version";
 }
 
 /// TODO: Document.
@@ -34,6 +40,9 @@ final class GitDependency extends PythonDependency {
 
   /// TODO: Document.
   final String ref;
+
+  @override
+  String toString() => "$name: $url@$ref";
 }
 
 /// TODO: Document.
@@ -46,4 +55,7 @@ final class PathDependency extends PythonDependency {
 
   /// TODO: Document.
   final String path;
+
+  @override
+  String toString() => "$name: $path";
 }

@@ -88,9 +88,11 @@ Future<void> _generateTypeDefs(
   PythonModuleDefinition moduleDefinition, {
   required String appType,
 }) async {
+  final InspectionCache cache = InspectionCache();
   final String json = await doInspection(
     moduleDefinition,
     appType: appType,
+    cache: cache,
   );
   /*
   final result = await generateInterface(
@@ -107,9 +109,10 @@ Future<void> _generateTypeDefs(
   if (!outfile.existsSync()) {
     outfile.createSync();
   }
-  await outfile.writeAsString(emitInspection());
+  await outfile.writeAsString(emitInspection(cache));
   Process.runSync("dart", <String>["format", outfile.absolute.path]);
   return;
+  /*
   print("Generating type definitions for ${moduleDefinition.name}...");
   await PythonFfiDart.instance.prepareModule(moduleDefinition);
   final TypeGenerationModule pythonModuleHandle = PythonFfiDart.instance
@@ -125,4 +128,5 @@ Future<void> _generateTypeDefs(
   print(pythonModuleHandle.toJsonRaw);
   print(jsonEncode(pythonModuleHandle.toJsonHydrated(<Object, int>{})));
   print("Generated type definitions for ${moduleDefinition.name}.");
+  */
 }
