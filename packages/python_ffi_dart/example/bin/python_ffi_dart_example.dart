@@ -17,11 +17,26 @@ class TypeMappingsCommand extends Command<void> {
   }
 }
 
+class EqTestCommand extends Command<void> {
+  @override
+  final String name = "eq-test";
+
+  @override
+  final String description = "Tests the equality operator.";
+
+  @override
+  Future<void> run() async {
+    await python_ffi_dart_example.eqTest();
+  }
+}
+
 Future<void> main(List<String> arguments) async {
   final CommandRunner<void> runner = CommandRunner<void>(
     "python_ffi_dart_example",
     "The example command line application showcasing the python_ffi_dart package, a Python-FFI for Dart.",
-  )..addCommand(TypeMappingsCommand());
+  )
+    ..addCommand(TypeMappingsCommand())
+    ..addCommand(EqTestCommand());
 
   await PythonFfiDart.instance.initialize(kPythonModules);
 

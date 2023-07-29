@@ -53,12 +53,4 @@ abstract base class PythonClass extends PythonObject {
     String functionName,
   ) =>
       _classDelegate.getMethod(functionName);
-
-  @override
-  String toString() {
-    if (hasAttribute("__str__")) {
-      return getFunction("__str__").call(<Object?>[]);
-    }
-    return super.toString();
-  }
 }

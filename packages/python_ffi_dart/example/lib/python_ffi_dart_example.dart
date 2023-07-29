@@ -2,6 +2,7 @@ import "dart:typed_data";
 
 import "package:collection/collection.dart";
 import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:python_ffi_dart_example/python_modules/eq_test.dart";
 import "package:python_ffi_dart_example/python_modules/type_mappings.dart";
 
 typedef SendTyPythonCallback<T> = void Function(T value);
@@ -214,4 +215,58 @@ Future<void> typeMappings() async {
     receiveFromPython: module.request_callable,
     equals: (int Function(int) a, int Function(int) b) => a(1) == b(1),
   ).run();
+}
+
+void _expectEqTest(Object? a, Object? b, {required bool expected}) {
+  try {
+    print("\ntesting $a == $b, expecting $expected");
+    final bool result = a == b;
+    if (result == expected) {
+      print("└── successful ✅");
+    } else {
+      print("└── ❌ failed");
+    }
+  } on Exception catch (e) {
+    print("└── ❌ error: $e");
+  }
+}
+
+Future<void> eqTest() async {
+  final HasEq hasEq1 = HasEq(a: 0);
+  final HasEq hasEq2 = HasEq(a: 0);
+  final HasEq hasEq3 = HasEq(a: 1);
+  final NoEq noEq1 = NoEq(a: 0);
+  final NoEq noEq2 = NoEq(a: 0);
+  final NoEq noEq3 = NoEq(a: 1);
+
+  _expectEqTest(hasEq1, hasEq1, expected: true);
+  _expectEqTest(hasEq2, hasEq2, expected: true);
+  _expectEqTest(hasEq3, hasEq3, expected: true);
+
+  _expectEqTest(hasEq1, hasEq2, expected: true);
+  _expectEqTest(hasEq2, hasEq1, expected: true);
+
+  _expectEqTest(hasEq1, hasEq3, expected: false);
+  _expectEqTest(hasEq3, hasEq1, expected: false);
+  _expectEqTest(hasEq2, hasEq3, expected: false);
+  _expectEqTest(hasEq3, hasEq2, expected: false);
+
+  _expectEqTest(noEq1, noEq1, expected: true);
+  _expectEqTest(noEq2, noEq2, expected: true);
+  _expectEqTest(noEq3, noEq3, expected: true);
+
+  _expectEqTest(noEq1, noEq2, expected: false);
+  _expectEqTest(noEq2, noEq1, expected: false);
+
+  _expectEqTest(noEq1, noEq3, expected: false);
+  _expectEqTest(noEq3, noEq1, expected: false);
+  _expectEqTest(noEq2, noEq3, expected: false);
+  _expectEqTest(noEq3, noEq2, expected: false);
+
+  _expectEqTest(hasEq1, noEq1, expected: false);
+  _expectEqTest(noEq1, hasEq1, expected: false);
+  _expectEqTest(hasEq2, noEq2, expected: false);
+  _expectEqTest(noEq2, hasEq2, expected: false);
+  _expectEqTest(hasEq3, noEq3, expected: false);
+  _expectEqTest(noEq3, hasEq3, expected: false);
 }

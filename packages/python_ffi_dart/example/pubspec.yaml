@@ -25,3 +25,4 @@ dev_dependencies:
 python_ffi:
   modules:
     type_mappings: any
+    eq_test: any

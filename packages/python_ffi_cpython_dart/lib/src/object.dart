@@ -204,23 +204,70 @@ base mixin _PythonObjectCPythonMixin
   }
 
   @override
+  bool operator ==(Object? other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other is! PythonObjectInterface<PythonFfiDelegate<Pointer<PyObject>>,
+        Pointer<PyObject>>) {
+      return false;
+    }
+    final String kEqAttributeName = "__eq__";
+    try {
+      if (hasAttribute(kEqAttributeName)) {
+        final _PythonFunctionCPython eqFunction = getFunction(kEqAttributeName);
+        final Object? result = eqFunction.call(<Object?>[other]);
+        if (result is bool) {
+          return result;
+        }
+      }
+    } on PythonExceptionInterface<PythonFfiDelegate<Object?>, Object?> {
+      // ignore
+    }
+    return reference == other.reference;
+  }
+
+  @override
+  int get hashCode {
+    try {
+      return BuiltinsModule.import().hash(<Object?>[this]);
+    } on PythonExceptionInterface<PythonFfiDelegate<Object?>, Object?> {
+      // ignore
+    }
+    try {
+      const String kHashAttributeName = "__hash__";
+      if (hasAttribute(kHashAttributeName)) {
+        final Object? hashAttribute = getAttribute(kHashAttributeName);
+        if (hashAttribute != null) {
+          return getFunction(kHashAttributeName).call(<Object?>[]);
+        }
+      }
+    } on PythonExceptionInterface<PythonFfiDelegate<Object?>, Object?> {
+      // ignore
+    }
+    return super.hashCode;
+  }
+
+  @override
   String toString() {
     final BuiltinsModule builtins = BuiltinsModule.import();
-    final Object? strResult = builtins.str.call(<Object?>[this]);
-    if (strResult is String) {
-      return strResult;
+    try {
+      return builtins.str(<Object?>[this]);
+    } on PythonExceptionInterface<PythonFfiDelegate<Object?>, Object?> {
+      // ignore
     }
-    final Object? reprResult = builtins.repr.call(<Object?>[this]);
-    if (reprResult is String) {
-      return reprResult;
+    try {
+      return builtins.repr(<Object?>[this]);
+    } on PythonExceptionInterface<PythonFfiDelegate<Object?>, Object?> {
+      // ignore
     }
     try {
       const String kStrAttributeName = "__str__";
       const String kReprAttributeName = "__repr__";
       if (hasAttribute(kStrAttributeName)) {
-        return getFunction(kStrAttributeName).call<String>(<Object?>[]);
+        return getFunction(kStrAttributeName).call(<Object?>[]);
       } else if (hasAttribute(kReprAttributeName)) {
-        return getFunction(kReprAttributeName).call<String>(<Object?>[]);
+        return getFunction(kReprAttributeName).call(<Object?>[]);
       }
     } on PythonExceptionInterface<PythonFfiDelegate<Object?>, Object?> {
       // ignore

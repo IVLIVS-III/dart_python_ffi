@@ -13,7 +13,9 @@ final class BuiltinsModule extends _PythonModuleCPython {
 
   Object? dir(Object? object) => getFunction("dir").call(<Object?>[object]);
 
-  String? str(Object? object) => getFunction("str").call(<Object?>[object]);
+  String str(Object? object) => getFunction("str").call(<Object?>[object]);
 
-  Object? repr(Object? object) => getFunction("repr").call(<Object?>[object]);
+  String repr(Object? object) => getFunction("repr").call(<Object?>[object]);
+
+  int hash(Object? object) => getFunction("hash").call(<Object?>[object]);
 }

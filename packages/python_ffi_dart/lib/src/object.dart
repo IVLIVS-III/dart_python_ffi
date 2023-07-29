@@ -50,6 +50,17 @@ abstract base class PythonObject
       _delegate.setAttribute(attributeName, value);
 
   @override
+  String toString() => _delegate.toString();
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PythonObject && _delegate == other._delegate;
+
+  @override
+  int get hashCode => _delegate.hashCode;
+
+  @override
   Object? noSuchMethod(Invocation invocation) {
     try {
       return _delegate.noSuchMethod(invocation);
