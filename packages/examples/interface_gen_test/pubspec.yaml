@@ -24,6 +24,8 @@ python_ffi:
       path: python_modules/module_function.py
     dataclass:
       path: python_modules/dataclass.py
+    inherited_fields_rename:
+      path: python_modules/inherited_fields_rename.py
     # submodule:
     #   path: python_modules/submodule
     class_init_adds_field:

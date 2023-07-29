@@ -3,11 +3,20 @@ part of interface_gen;
 final class Function_ extends PythonFunction
     with InspectMixin
     implements InspectEntry {
-  Function_.from(this.name, super.functionDelegate)
+  Function_.from(this.name, this.sanitizedName, super.functionDelegate)
       : value = functionDelegate,
         super.from();
 
   final String name;
+
+  final String sanitizedName;
+
+  @override
+  Set<String> get _sanitizationExtraKeywords => const <String>{
+        "call",
+        "asFunction",
+        ...Object_.sanitizationExtraKeywords,
+      };
 
   final PythonFunctionInterface value;
 
@@ -99,7 +108,10 @@ final class Function_ extends PythonFunction
   }
 
   @override
-  void emit(StringBuffer buffer) {
+  void emit(
+    StringBuffer buffer, {
+    Set<String> extraKeywords = const <String>{},
+  }) {
     buffer.writeln("/// ## $name");
     emitDoc(buffer);
     emitSource(buffer);

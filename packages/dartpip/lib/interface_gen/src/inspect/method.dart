@@ -1,7 +1,8 @@
 part of interface_gen;
 
 final class Method extends Function_ {
-  Method.from(super.name, super.functionDelegate) : super.from();
+  Method.from(super.name, super.sanitizedName, super.functionDelegate)
+      : super.from();
 
   @override
   Iterable<Parameter> get parameters sync* {

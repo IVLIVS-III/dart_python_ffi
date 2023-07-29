@@ -3,11 +3,24 @@ part of interface_gen;
 final class ClassDefinition extends PythonClassDefinition
     with InspectMixin, FunctionFieldMixin, GetterSetterMixin
     implements InspectEntry {
-  ClassDefinition.from(this.name, super.classDefinitionDelegate)
-      : value = classDefinitionDelegate,
+  ClassDefinition.from(
+    this.name,
+    this.sanitizedName,
+    super.classDefinitionDelegate,
+  )   : value = classDefinitionDelegate,
         super.from();
 
   final String name;
+
+  final String sanitizedName;
+
+  @override
+  Set<String> get _sanitizationExtraKeywords => const <String>{
+        "newInstance",
+        "call",
+        "rawCall",
+        ...Object_.sanitizationExtraKeywords,
+      };
 
   final PythonClassDefinitionInterface value;
 
@@ -17,7 +30,7 @@ final class ClassDefinition extends PythonClassDefinition
   @override
   void _setChild(String name, InspectEntry child) {
     if (child is Function_) {
-      child = Method.from(child.name, child.value);
+      child = Method.from(child.name, child.sanitizedName, child.value);
     }
     super._setChild(name, child);
   }
@@ -117,7 +130,11 @@ final class ClassDefinition extends PythonClassDefinition
     for (final String field in names
         .intersection(assignments)
         .whereNot((String element) => element.startsWith("_"))) {
-      final InspectEntry child = Primitive(field, null);
+      final InspectEntry child = Primitive(
+        field,
+        sanitizeName(field, extraKeywords: _sanitizationExtraKeywords),
+        null,
+      );
       _setChild(field, child);
     }
   }
@@ -125,7 +142,11 @@ final class ClassDefinition extends PythonClassDefinition
   void _extractFieldsFromDataclassFields() {
     final Set<String> dataclassFields = __dataclass_fields__;
     for (final String field in dataclassFields) {
-      final InspectEntry child = Primitive(field, null);
+      final InspectEntry child = Primitive(
+        field,
+        sanitizeName(field, extraKeywords: _sanitizationExtraKeywords),
+        null,
+      );
       _setChild(field, child);
     }
   }

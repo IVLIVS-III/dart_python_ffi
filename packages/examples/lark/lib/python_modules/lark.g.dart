@@ -22629,21 +22629,21 @@ final class nonmember extends PythonClass {
 ///                             )
 ///         return enumeration
 /// ```
-final class verify extends PythonClass {
-  factory verify({
+final class $verify extends PythonClass {
+  factory $verify({
     List<Object?> checks = const <Object?>[],
   }) =>
       PythonFfiDart.instance.importClass(
         "enum",
         "verify",
-        verify.from,
+        $verify.from,
         <Object?>[
           ...checks,
         ],
         <String, Object?>{},
       );
 
-  verify.from(super.pythonClass) : super.from();
+  $verify.from(super.pythonClass) : super.from();
 
   /// ## checks (getter)
   Object? get checks => getAttribute("checks");

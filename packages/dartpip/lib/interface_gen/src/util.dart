@@ -1,6 +1,9 @@
 part of interface_gen;
 
-String sanitizeName(String name) {
+String sanitizeName(
+  String name, {
+  Set<String> extraKeywords = const <String>{},
+}) {
   /// Reference: https://dart.dev/language/keywords
   const Set<String> dartKeywords = <String>{
     "abstract",
@@ -70,7 +73,7 @@ String sanitizeName(String name) {
     "with",
     "yield",
   };
-  if (dartKeywords.contains(name)) {
+  if (dartKeywords.contains(name) || extraKeywords.contains(name)) {
     return "\$$name";
   }
   return name;
@@ -81,14 +84,13 @@ Future<String> doInspection(
   required String appType,
   required InspectionCache cache,
 }) async {
-  print(
-    "Generating Dart interface for ${moduleDefinition.name} via inspect...",
-  );
+  final String moduleName = moduleDefinition.name;
+  print("Generating Dart interface for $moduleName via inspect...");
   await PythonFfiDart.instance.prepareModule(moduleDefinition);
   final Module interface = PythonFfiDart.instance.importModule(
-    moduleDefinition.name,
+    moduleName,
     (PythonModuleInterface<PythonFfiDelegate<Object?>, Object?> m) =>
-        Module.from(moduleDefinition.name, m),
+        Module.from(moduleName, sanitizeName(moduleName), m),
   )..collectChildren(cache);
 
   Object? toEncodable(Object? o) {

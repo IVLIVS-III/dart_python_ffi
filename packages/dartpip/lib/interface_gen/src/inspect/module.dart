@@ -3,11 +3,20 @@ part of interface_gen;
 final class Module extends PythonModule
     with InspectMixin, FunctionFieldMixin, GetterSetterMixin
     implements InspectEntry {
-  Module.from(this.name, super.moduleDelegate)
+  Module.from(this.name, this.sanitizedName, super.moduleDelegate)
       : value = moduleDelegate,
         super.from();
 
   final String name;
+
+  final String sanitizedName;
+
+  @override
+  Set<String> get _sanitizationExtraKeywords => const <String>{
+        "import",
+        "getClass",
+        ...Object_.sanitizationExtraKeywords,
+      };
 
   String get qualifiedName {
     try {

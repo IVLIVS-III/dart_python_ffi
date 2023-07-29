@@ -21,7 +21,12 @@ base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
     );
   }
 
-  String get sanitizedName => sanitizeName(name);
+  Set<String> get _sanitizationExtraKeywords => const <String>{};
+
+  /*
+  String sanitizedName({Set<String> extraKeywords = const <String>{}}) =>
+      sanitizeName(name, extraKeywords: extraKeywords);
+  */
 
   Object? get parentModule => inspectModule.getmodule(value);
 
@@ -61,20 +66,23 @@ base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
         _setChild(name, cached);
         continue;
       }
+      final String sanitizedName =
+          sanitizeName(name, extraKeywords: _sanitizationExtraKeywords);
       final InspectEntry child = switch (value) {
         PythonModuleInterface() when inspectModule.ismodule(value) =>
-          Module.from(name, value),
+          Module.from(name, sanitizedName, value),
         PythonModuleInterface() =>
           throw Exception("'$name' is not a module: $value"),
         PythonClassDefinitionInterface() when inspectModule.isclass(value) =>
-          ClassDefinition.from(name, value),
-        PythonClassInterface() => ClassInstance.from(name, value),
+          ClassDefinition.from(name, sanitizedName, value),
+        PythonClassInterface() =>
+          ClassInstance.from(name, sanitizedName, value),
         PythonFunctionInterface() when inspectModule.isfunction(value) =>
-          Function_.from(name, value),
+          Function_.from(name, sanitizedName, value),
         PythonFunctionInterface() =>
           throw Exception("'$name' is not a function: $value"),
-        PythonObjectInterface() => Object_.from(name, value),
-        _ => Primitive(name, value),
+        PythonObjectInterface() => Object_.from(name, sanitizedName, value),
+        _ => Primitive(name, sanitizedName, value),
       } as InspectEntry;
       cache[value] = child;
       _setChild(name, child);

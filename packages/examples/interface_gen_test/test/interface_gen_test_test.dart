@@ -5,6 +5,8 @@ import 'package:interface_gen_test/python_modules/dataclass.g.dart'
     as dataclass;
 import 'package:interface_gen_test/python_modules/empty_module.g.dart'
     as empty_module;
+import 'package:interface_gen_test/python_modules/inherited_fields_rename.g.dart'
+    as inherited_fields_rename;
 import 'package:interface_gen_test/python_modules/module_field.g.dart'
     as module_field;
 import 'package:interface_gen_test/python_modules/module_function.g.dart'
@@ -74,6 +76,43 @@ void main() {
       final dataClass = dataclass.DataClass(field0: 0);
       dataClass.field2 = 3;
       expect(dataClass.field2, 3);
+    });
+  });
+
+  group("inherited_fields_rename", () {
+    test("module can be imported", () {
+      expect(
+          inherited_fields_rename.inherited_fields_rename.import(), anything);
+    });
+    test("module function can be called", () {
+      expect(
+          inherited_fields_rename.inherited_fields_rename
+              .import()
+              .$noSuchMethod(),
+          1);
+    });
+    test("module field can be read", () {
+      expect(inherited_fields_rename.inherited_fields_rename.import().$getClass,
+          1);
+    });
+    test("module field can be written", () {
+      final module = inherited_fields_rename.inherited_fields_rename.import();
+      module.$getClass = 2;
+      expect(module.$getClass, 2);
+    });
+    test("class can be instantiated", () {
+      expect(inherited_fields_rename.Class(), anything);
+    });
+    test("class field can be read", () {
+      expect(inherited_fields_rename.Class().$initializer, 1);
+    });
+    test("class field can be written", () {
+      final class_ = inherited_fields_rename.Class();
+      class_.$initializer = 2;
+      expect(class_.$initializer, 2);
+    });
+    test("class method can be called", () {
+      expect(inherited_fields_rename.Class().$newInstance(), 1);
     });
   });
 

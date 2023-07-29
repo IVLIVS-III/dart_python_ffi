@@ -1,11 +1,11 @@
 part of interface_gen;
 
 final class Primitive implements InspectEntry {
-  const Primitive(this.name, this.value);
+  const Primitive(this.name, this.sanitizedName, this.value);
 
   final String name;
 
-  String get sanitizedName => sanitizeName(name);
+  final String sanitizedName;
 
   final Object? value;
 

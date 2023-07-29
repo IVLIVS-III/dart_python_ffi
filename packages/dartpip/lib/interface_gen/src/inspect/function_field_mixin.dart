@@ -18,7 +18,7 @@ base mixin FunctionFieldMixin on InspectMixin {
         continue;
       }
       memberNames.add(functionName);
-      field.emit(buffer);
+      field.emit(buffer, extraKeywords: _sanitizationExtraKeywords);
     }
   }
 }
