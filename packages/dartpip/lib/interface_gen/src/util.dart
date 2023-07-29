@@ -73,7 +73,33 @@ String sanitizeName(
     "with",
     "yield",
   };
-  if (dartKeywords.contains(name) || extraKeywords.contains(name)) {
+
+  /// Reference: https://dart.dev/language/built-in-types
+  const Set<String> dartBuiltInTypes = <String>{
+    "int",
+    "double",
+    "num",
+    "String",
+    "bool",
+    "List",
+    "Map",
+    "Set",
+    "Runes",
+    "Symbol",
+    "DateTime",
+    "Duration",
+    "Object",
+    "Null",
+    "Enum",
+    "Future",
+    "Stream",
+    "Iterable",
+    "Iterator",
+    "Never",
+  };
+  if (dartKeywords.contains(name) ||
+      dartBuiltInTypes.contains(name) ||
+      extraKeywords.contains(name)) {
     return "\$$name";
   }
   return name;

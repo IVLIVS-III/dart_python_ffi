@@ -5,7 +5,7 @@ library basic_cli_adder;
 import "package:python_ffi_dart/python_ffi_dart.dart";
 
 /// ## num
-typedef num = Object?;
+typedef $num = Object?;
 
 /// ## basic_cli_adder
 ///

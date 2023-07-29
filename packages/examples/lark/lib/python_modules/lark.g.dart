@@ -5034,21 +5034,21 @@ final class RuleOptions extends PythonClass {
 ///     def renamed(self, f):
 ///         return type(self)(f(self.name))
 /// ```
-final class Symbol extends PythonClass {
-  factory Symbol({
+final class $Symbol extends PythonClass {
+  factory $Symbol({
     required Object? name,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.grammar",
         "Symbol",
-        Symbol.from,
+        $Symbol.from,
         <Object?>[
           name,
         ],
         <String, Object?>{},
       );
 
-  Symbol.from(super.pythonClass) : super.from();
+  $Symbol.from(super.pythonClass) : super.from();
 
   /// ## memo_serialize
   ///
@@ -17659,15 +17659,15 @@ final class ZeroDivisionError extends PythonClass {
 }
 
 /// ## bool
-final class bool extends PythonClass {
-  factory bool() => PythonFfiDart.instance.importClass(
+final class $bool extends PythonClass {
+  factory $bool() => PythonFfiDart.instance.importClass(
         "builtins",
         "bool",
-        bool.from,
+        $bool.from,
         <Object?>[],
       );
 
-  bool.from(super.pythonClass) : super.from();
+  $bool.from(super.pythonClass) : super.from();
 
   /// ## denominator (getter)
   ///
@@ -18350,15 +18350,15 @@ final class frozenset extends PythonClass {
 }
 
 /// ## int
-final class int extends PythonClass {
-  factory int() => PythonFfiDart.instance.importClass(
+final class $int extends PythonClass {
+  factory $int() => PythonFfiDart.instance.importClass(
         "builtins",
         "int",
-        int.from,
+        $int.from,
         <Object?>[],
       );
 
-  int.from(super.pythonClass) : super.from();
+  $int.from(super.pythonClass) : super.from();
 
   /// ## denominator (getter)
   ///
@@ -20150,15 +20150,15 @@ final class DynamicClassAttribute extends PythonClass {
 ///         """The value of the Enum member."""
 ///         return self._value_
 /// ```
-final class Enum extends PythonClass {
-  factory Enum() => PythonFfiDart.instance.importClass(
+final class $Enum extends PythonClass {
+  factory $Enum() => PythonFfiDart.instance.importClass(
         "enum",
         "Enum",
-        Enum.from,
+        $Enum.from,
         <Object?>[],
       );
 
-  Enum.from(super.pythonClass) : super.from();
+  $Enum.from(super.pythonClass) : super.from();
 }
 
 /// ## EnumCheck
@@ -32114,7 +32114,7 @@ final class zipimporter extends PythonClass {
   /// or None otherwise. The optional 'path' argument is ignored -- it's
   /// there for compatibility with the importer protocol.
   ///
-  /// Deprecated since Python 3.10. Use find_spec() instead.!
+  /// Deprecated since Python 3.10. Use find_spec() instead.
   Object? find_loader({
     required Object? fullname,
     Object? path,
@@ -51047,27 +51047,27 @@ final class ItemsView extends PythonClass {
 }
 
 /// ## Iterable
-final class Iterable extends PythonClass {
-  factory Iterable() => PythonFfiDart.instance.importClass(
+final class $Iterable extends PythonClass {
+  factory $Iterable() => PythonFfiDart.instance.importClass(
         "collections.abc",
         "Iterable",
-        Iterable.from,
+        $Iterable.from,
         <Object?>[],
       );
 
-  Iterable.from(super.pythonClass) : super.from();
+  $Iterable.from(super.pythonClass) : super.from();
 }
 
 /// ## Iterator
-final class Iterator extends PythonClass {
-  factory Iterator() => PythonFfiDart.instance.importClass(
+final class $Iterator extends PythonClass {
+  factory $Iterator() => PythonFfiDart.instance.importClass(
         "collections.abc",
         "Iterator",
-        Iterator.from,
+        $Iterator.from,
         <Object?>[],
       );
 
-  Iterator.from(super.pythonClass) : super.from();
+  $Iterator.from(super.pythonClass) : super.from();
 }
 
 /// ## KeysView
@@ -51473,15 +51473,15 @@ final class Sequence extends PythonClass {
 /// To override the comparisons (presumably for speed, as the
 /// semantics are fixed), redefine __le__ and __ge__,
 /// then the other operations will automatically follow suit.
-final class Set extends PythonClass {
-  factory Set() => PythonFfiDart.instance.importClass(
+final class $Set extends PythonClass {
+  factory $Set() => PythonFfiDart.instance.importClass(
         "collections.abc",
         "Set",
-        Set.from,
+        $Set.from,
         <Object?>[],
       );
 
-  Set.from(super.pythonClass) : super.from();
+  $Set.from(super.pythonClass) : super.from();
 
   /// ## isdisjoint
   ///
@@ -76946,12 +76946,12 @@ final class $enum extends PythonModule {
   ///     return "%s %s" % (sign, digits)
   /// ```
   Object? bin({
-    required Object? num,
+    required Object? $num,
     Object? max_bits,
   }) =>
       getFunction("bin").call(
         <Object?>[
-          num,
+          $num,
           max_bits,
         ],
         kwargs: <String, Object?>{},
