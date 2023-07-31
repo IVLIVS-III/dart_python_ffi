@@ -1,7 +1,11 @@
 part of interface_gen;
 
 final class Module extends PythonModule
-    with InspectMixin, FunctionFieldMixin, GetterSetterMixin
+    with
+        InspectMixin,
+        FunctionFieldMixin,
+        GetterSetterMixin,
+        GettersSettersMixin
     implements InspectEntry {
   Module.from(this.name, this.sanitizedName, super.moduleDelegate)
       : value = moduleDelegate,

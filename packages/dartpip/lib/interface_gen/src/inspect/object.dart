@@ -1,7 +1,7 @@
 part of interface_gen;
 
 final class Object_ extends PythonObject
-    with InspectMixin
+    with InspectMixin, GetterSetterMixin
     implements InspectEntry {
   Object_.from(this.name, this.sanitizedName, super.objectDelegate)
       : value = objectDelegate,
@@ -40,10 +40,5 @@ final class Object_ extends PythonObject
   InspectEntryType get type => InspectEntryType.object;
 
   @override
-  void emit(StringBuffer buffer) {
-    buffer.writeln("""
-    Object? get $name => getAttribute("$name");
-    set $name(Object? $name) => setAttribute("$name", $name);
-""");
-  }
+  void emit(StringBuffer buffer) => _emitGetterSetter(buffer, entry: this);
 }

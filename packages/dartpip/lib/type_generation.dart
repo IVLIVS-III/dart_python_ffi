@@ -7,6 +7,8 @@ final class BuiltinsModule extends PythonModule {
       PythonFfiDart.instance.importModule("builtins", BuiltinsModule.from);
 
   Object? dir(Object? object) => getFunction("dir").call(<Object?>[object]);
+
+  Object? type(Object? object) => getFunction("type").call(<Object?>[object]);
 }
 
 class TypeDefinitionsCache {

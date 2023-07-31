@@ -39,7 +39,8 @@ final class Function_ extends PythonFunction
   void emitArguments(StringBuffer buffer) {
     for (final Parameter parameter
         in _parametersOfKind(ParameterKind.positional_only)) {
-      buffer.writeln("Object? ${parameter.sanitizedName},");
+      buffer
+          .writeln("${_getTypeString(parameter)} ${parameter.sanitizedName},");
     }
     if (_hasKeywordParameters()) {
       buffer.write("{");
@@ -52,13 +53,13 @@ final class Function_ extends PythonFunction
       for (final Parameter parameter
           in _parametersOfKind(ParameterKind.positional_or_keyword)) {
         buffer.writeln(
-          "${parameter.requiredString} Object? ${parameter.sanitizedName} ${parameter.defaultString},",
+          "${parameter.requiredString} ${_getTypeString(parameter)} ${parameter.sanitizedName} ${parameter.defaultString},",
         );
       }
       for (final Parameter parameter
           in _parametersOfKind(ParameterKind.keyword_only)) {
         buffer.writeln(
-          "${parameter.requiredString} Object? ${parameter.sanitizedName} ${parameter.defaultString},",
+          "${parameter.requiredString} ${_getTypeString(parameter)} ${parameter.sanitizedName} ${parameter.defaultString},",
         );
       }
       for (final Parameter parameter
@@ -115,11 +116,19 @@ final class Function_ extends PythonFunction
     buffer.writeln("/// ## $name");
     emitDoc(buffer);
     emitSource(buffer);
-    buffer.writeln("Object? $sanitizedName(");
+    final (String returnType, _ReturnTransform transform) =
+        _getTypeStringWithTransform(
+      signature.return_annotation,
+      isReturnString: true,
+    );
+    buffer.writeln("$returnType $sanitizedName(");
     emitArguments(buffer);
-    buffer.writeln(") => getFunction(\"$name\").call(");
-    emitCall(buffer);
-    buffer.writeln(");");
+    buffer.writeln(") => ");
+    final StringBuffer callBuffer = StringBuffer()
+      ..writeln("getFunction(\"$name\").call(");
+    emitCall(callBuffer);
+    callBuffer.writeln(")");
+    buffer.write("${transform(callBuffer.toString())};");
   }
 
   @override

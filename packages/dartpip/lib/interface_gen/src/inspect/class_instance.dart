@@ -21,6 +21,6 @@ final class ClassInstance extends PythonClass
     buffer.writeln("/// ## $name");
     emitDoc(buffer);
     emitSource(buffer);
-    buffer.writeln("typedef $sanitizedName = Object?;");
+    buffer.writeln("typedef $sanitizedName = ${_getTypeString(this)};");
   }
 }

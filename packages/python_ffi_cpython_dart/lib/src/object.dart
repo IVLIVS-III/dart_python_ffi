@@ -337,7 +337,10 @@ base mixin _PythonObjectCPythonMixin
       }
     } on _PythonExceptionCPython catch (e) {
       // ignore: avoid_print
-      print("Error: $e");
+      print("Error(_PythonExceptionCPython): $e");
+    } on PythonFfiException catch (e) {
+      // ignore: avoid_print
+      print("Error(PythonFfiException): $e");
     } finally {
       // ignore: avoid_print
       print("========================================");

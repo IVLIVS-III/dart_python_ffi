@@ -42,3 +42,8 @@ final class Primitive implements InspectEntry {
         "type": type.displayName,
       };
 }
+
+final class AnyTypePrimitive extends Primitive {
+  const AnyTypePrimitive(String name, String sanitizedName)
+      : super(name, sanitizedName, null);
+}

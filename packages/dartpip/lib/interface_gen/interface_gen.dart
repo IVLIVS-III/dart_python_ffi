@@ -3,6 +3,7 @@ library interface_gen;
 import "dart:convert";
 
 import "package:collection/collection.dart";
+import "package:dartpip/dartpip.dart";
 import "package:dartpip/interface_gen/modules/ast/ast.dart";
 import "package:dartpip/interface_gen/modules/inspect/inspect.dart";
 import "package:dartpip/interface_gen/modules/types/types.dart";
@@ -21,4 +22,5 @@ part "src/inspect/method.dart";
 part "src/inspect/module.dart";
 part "src/inspect/object.dart";
 part "src/inspect/primitive.dart";
+part "src/inspect/type_string.dart";
 part "src/util.dart";

@@ -69,6 +69,19 @@ abstract base class PythonObjectInterface<P extends PythonFfiDelegate<R>,
   /// Gets the attribute with the given name.
   T getAttribute<T extends Object?>(String attributeName);
 
+  /// Gets the attribute with the given name or null if it does not exist.
+  ///
+  /// Note: A null value does not necessarily mean that the attribute does not
+  ///       exist. It could also mean that the attribute exists but has a null
+  ///       value. To distinguish between these two cases, use [hasAttribute]
+  ///       instead.
+  T? getAttributeOrNull<T extends Object?>(String attributeName) {
+    if (hasAttribute(attributeName)) {
+      return getAttribute<T>(attributeName);
+    }
+    return null;
+  }
+
   /// Sets the attribute with the given name.
   void setAttributeRaw<T extends PythonObjectInterface<P, R>>(
     String attributeName,

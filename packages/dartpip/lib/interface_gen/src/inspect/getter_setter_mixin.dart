@@ -1,6 +1,30 @@
 part of interface_gen;
 
 base mixin GetterSetterMixin on InspectMixin {
+  void _emitGetterSetter(
+    StringBuffer buffer, {
+    required InspectEntry entry,
+  }) {
+    final String name = entry.name;
+    final String sanitizedName = entry.sanitizedName;
+    buffer.writeln("/// ## $name (getter)");
+    emitDoc(buffer);
+    final (String returnType, _ReturnTransform transform) =
+        _getTypeStringWithTransform(entry, isReturnString: true);
+    buffer.writeln("""
+$returnType get $sanitizedName => 
+${transform("getAttribute(\"$name\")")};
+
+/// ## $name (setter)""");
+    emitDoc(buffer);
+    buffer.writeln("""
+set $sanitizedName(${_getTypeString(entry)} $sanitizedName)
+  => setAttribute("$name", $sanitizedName);
+""");
+  }
+}
+
+base mixin GettersSettersMixin on GetterSetterMixin {
   void _emitGettersSetters(
     StringBuffer buffer, {
     required Set<String> memberNames,
@@ -21,18 +45,7 @@ base mixin GetterSetterMixin on InspectMixin {
         continue;
       }
       memberNames.add(sanitizedName);
-      final String fieldName = field.name;
-      buffer.writeln("/// ## $fieldName (getter)");
-      field.emitDoc(buffer);
-      buffer.writeln("""
-Object? get $sanitizedName => getAttribute("$fieldName");
-
-/// ## $fieldName (setter)""");
-      field.emitDoc(buffer);
-      buffer.writeln("""
-set $sanitizedName(Object? $sanitizedName)
-  => setAttribute("$fieldName", $sanitizedName);
-""");
+      _emitGetterSetter(buffer, entry: field);
     }
   }
 }

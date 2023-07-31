@@ -177,13 +177,17 @@ String emitInspection(InspectionCache cache, {bool primaryModuleOnly = true}) {
     primaryModuleOnly = false;
   }
   final StringBuffer buffer = StringBuffer("""
-// ignore_for_file: camel_case_types, non_constant_identifier_names
+// ignore_for_file: camel_case_types, non_constant_identifier_names, prefer_void_to_null
 
 """);
   if (primaryModule != null) {
     buffer.writeln("library ${primaryModule.sanitizedName};");
   }
-  buffer.writeln("import \"package:python_ffi_dart/python_ffi_dart.dart\";");
+  buffer.writeln("""
+import "dart:typed_data";
+
+import "package:python_ffi_dart/python_ffi_dart.dart";
+""");
   final Set<String> topLevelNames = <String>{};
   for (final ClassInstance typedef in cache.typedefs) {
     final String typedefName = typedef.sanitizedName;

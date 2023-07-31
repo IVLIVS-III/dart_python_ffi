@@ -1,7 +1,11 @@
 part of interface_gen;
 
 final class ClassDefinition extends PythonClassDefinition
-    with InspectMixin, FunctionFieldMixin, GetterSetterMixin
+    with
+        InspectMixin,
+        FunctionFieldMixin,
+        GetterSetterMixin,
+        GettersSettersMixin
     implements InspectEntry {
   ClassDefinition.from(
     this.name,
@@ -130,10 +134,9 @@ final class ClassDefinition extends PythonClassDefinition
     for (final String field in names
         .intersection(assignments)
         .whereNot((String element) => element.startsWith("_"))) {
-      final InspectEntry child = Primitive(
+      final InspectEntry child = AnyTypePrimitive(
         field,
         sanitizeName(field, extraKeywords: _sanitizationExtraKeywords),
-        null,
       );
       _setChild(field, child);
     }
@@ -142,10 +145,9 @@ final class ClassDefinition extends PythonClassDefinition
   void _extractFieldsFromDataclassFields() {
     final Set<String> dataclassFields = __dataclass_fields__;
     for (final String field in dataclassFields) {
-      final InspectEntry child = Primitive(
+      final InspectEntry child = AnyTypePrimitive(
         field,
         sanitizeName(field, extraKeywords: _sanitizationExtraKeywords),
-        null,
       );
       _setChild(field, child);
     }
