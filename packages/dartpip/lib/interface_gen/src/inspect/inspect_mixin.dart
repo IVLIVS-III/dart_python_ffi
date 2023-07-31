@@ -84,7 +84,7 @@ base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
         PythonObjectInterface() => Object_.from(name, sanitizedName, value),
         _ => Primitive(name, sanitizedName, value),
       } as InspectEntry;
-      if (child is Module && _isStdlibModule(child, stdlibPath: stdlibPath)) {
+      if (!_isTypedef(child) && _isStdlibEntry(child, stdlibPath: stdlibPath)) {
         continue;
       }
       cache[value] = child;
@@ -93,12 +93,20 @@ base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
     }
   }
 
-  bool _isStdlibModule(Module module, {required String stdlibPath}) {
-    if (inspectModule.isbuiltin(module.value)) {
+  bool _isTypedef(InspectEntry entry) {
+    if (entry is ClassInstance) {
+      // TODO: check if it's a typedef
+      return true;
+    }
+    return false;
+  }
+
+  bool _isStdlibEntry(InspectEntry entry, {required String stdlibPath}) {
+    if (inspectModule.isbuiltin(entry.value)) {
       return true;
     }
     try {
-      final String? filename = inspectModule.getfile(module.value);
+      final String? filename = inspectModule.getfile(entry.value);
       if (filename == null) {
         return false;
       }
