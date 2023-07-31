@@ -15,6 +15,9 @@ abstract base class PythonFfiCPythonBase
   /// Used to find a suitable location for the Python source files.
   FutureOr<Directory> getApplicationSupportDirectory();
 
+  /// Directory for the Python standard library.
+  FutureOr<Directory> get stdlibDir;
+
   /// Loads a Python module from either the embedded Python source files (in
   /// pure Dart apps) or from Flutter assets.
   FutureOr<ByteData> loadPythonFile(PythonSourceFileEntity sourceFile);
@@ -238,39 +241,45 @@ base mixin PythonFfiCPythonMixin on PythonFfiCPythonBase {
 
   Directory? _supportDir;
 
-  /// Directory for application support files
+  /// Directory for application support files.
   FutureOr<Directory> get supportDir async =>
       _supportDir ??= await getApplicationSupportDirectory();
 
   Directory? _pythonFfiDir;
 
-  /// Directory for all Python ffi related files
+  /// Directory for all Python ffi related files.
   FutureOr<Directory> get pythonFfiDir async => _pythonFfiDir ??= Directory(
         p.join((await supportDir).path, "python_ffi"),
       );
 
   Directory? _packagesDir;
 
-  /// Directory for all bundled Python packages
+  /// Directory for all bundled Python packages.
   FutureOr<Directory> get packagesDir async => _packagesDir ??= Directory(
         p.join((await pythonFfiDir).path, "packages"),
       );
 
-  /// Checks whether the Python C-bindings are available
+  Directory? _stdlibDir;
+
+  /// Directory for the Python standard library.
+  @override
+  FutureOr<Directory> get stdlibDir async => _stdlibDir ??= Directory(
+        p.join((await pythonFfiDir).path, "lib"),
+      );
+
+  /// Checks whether the Python C-bindings are available.
   bool get areBindingsInitialized => _bindings != null;
 
-  /// Checks whether the Python runtime was initialized
+  /// Checks whether the Python runtime was initialized.
   @override
   bool get isInitialized =>
       areBindingsInitialized && bindings.Py_IsInitialized() != 0;
 
   @override
   Future<void> extractPythonStdLibZip(File zipFile) async {
-    final Directory libDir =
-        Directory(p.join((await pythonFfiDir).path, "lib"));
     final InputFileStream inputStream = InputFileStream(zipFile.path);
     final Archive archive = ZipDecoder().decodeBuffer(inputStream);
-    extractArchiveToDisk(archive, libDir.path);
+    extractArchiveToDisk(archive, (await stdlibDir).path);
     await inputStream.close();
   }
 

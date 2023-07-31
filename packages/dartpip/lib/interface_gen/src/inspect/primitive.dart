@@ -17,7 +17,7 @@ final class Primitive implements InspectEntry {
       const <(String, InspectEntry)>[];
 
   @override
-  void collectChildren(InspectionCache cache) {}
+  void collectChildren(InspectionCache cache, {required String stdlibPath}) {}
 
   @override
   void emit(StringBuffer buffer) {

@@ -37,7 +37,7 @@ sealed class InspectEntry {
 
   Iterable<(String, InspectEntry)> get children;
 
-  void collectChildren(InspectionCache cache);
+  void collectChildren(InspectionCache cache, {required String stdlibPath});
 
   void emit(StringBuffer buffer);
 

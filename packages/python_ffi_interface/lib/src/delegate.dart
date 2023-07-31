@@ -35,6 +35,9 @@ abstract base class PythonFfiDelegate<R extends Object?> extends BaseInterface {
     await FutureOrExtension.wait<void>(modules.map(prepareModule));
   }
 
+  /// Directory for the Python standard library.
+  FutureOr<Directory> get stdlibDir;
+
   /// Discovers all Python modules bundled with the app by dartpip.
   FutureOr<Set<PythonModuleDefinition>> discoverPythonModules({
     required String? package,

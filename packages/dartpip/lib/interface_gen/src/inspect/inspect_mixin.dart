@@ -36,7 +36,7 @@ base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
   static const Set<String> _explicitlyAllowedChildNames = <String>{"__init__"};
 
   @override
-  void collectChildren(InspectionCache cache) {
+  void collectChildren(InspectionCache cache, {required String stdlibPath}) {
     final inspect inspectModule = inspect.import();
     final InspectEntry? selfCached = cache[value];
     if (selfCached == null) {
@@ -84,10 +84,29 @@ base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
         PythonObjectInterface() => Object_.from(name, sanitizedName, value),
         _ => Primitive(name, sanitizedName, value),
       } as InspectEntry;
+      if (child is Module && _isStdlibModule(child, stdlibPath: stdlibPath)) {
+        continue;
+      }
       cache[value] = child;
       _setChild(name, child);
-      child.collectChildren(cache);
+      child.collectChildren(cache, stdlibPath: stdlibPath);
     }
+  }
+
+  bool _isStdlibModule(Module module, {required String stdlibPath}) {
+    if (inspectModule.isbuiltin(module.value)) {
+      return true;
+    }
+    try {
+      final String? filename = inspectModule.getfile(module.value);
+      if (filename == null) {
+        return false;
+      }
+      return filename.startsWith(stdlibPath);
+    } on PythonExceptionInterface catch (_) {
+      // ignore
+    }
+    return false;
   }
 
   @override

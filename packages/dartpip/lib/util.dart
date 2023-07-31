@@ -88,11 +88,13 @@ Future<void> _generateTypeDefs(
   PythonModuleDefinition moduleDefinition, {
   required String appType,
 }) async {
+  final String stdlibPath = (await PythonFfiDart.instance.stdlibDir).path;
   final InspectionCache cache = InspectionCache();
   final String json = await doInspection(
     moduleDefinition,
     appType: appType,
     cache: cache,
+    stdlibPath: stdlibPath,
   );
   /*
   final result = await generateInterface(

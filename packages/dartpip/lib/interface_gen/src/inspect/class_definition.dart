@@ -152,8 +152,8 @@ final class ClassDefinition extends PythonClassDefinition
   }
 
   @override
-  void collectChildren(InspectionCache cache) {
-    super.collectChildren(cache);
+  void collectChildren(InspectionCache cache, {required String stdlibPath}) {
+    super.collectChildren(cache, stdlibPath: stdlibPath);
     _extractFieldsFromInit();
     _extractFieldsFromDataclassFields();
   }

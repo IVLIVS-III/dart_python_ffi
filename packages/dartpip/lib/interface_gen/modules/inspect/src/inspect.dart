@@ -98,6 +98,12 @@ final class inspect extends PythonModule {
   String? getdoc(Object? object) =>
       getFunction("getdoc").call(<Object?>[object]);
 
+  /// Return the name of the (text or binary) file in which an object was
+  /// defined. This will fail with a TypeError if the object is a built-in
+  /// module, class, or function.
+  String? getfile(Object? object) =>
+      getFunction("getfile").call(<Object?>[object]);
+
   /// Try to guess which module an object was defined in. Return `null` if the
   /// module cannot be determined.
   PythonModuleInterface? getmodule(Object? object) =>

@@ -11,6 +11,9 @@ abstract class PythonFfiBase {
   PythonFfiDelegate<Object?> get delegate;
 
   set delegate(PythonFfiDelegate<Object?> delegate);
+
+  /// Directory for the Python standard library.
+  FutureOr<Directory> get stdlibDir;
 }
 
 /// An implementation of the python ffi for dart apps.
@@ -98,4 +101,8 @@ mixin PythonFfiMixin on PythonFfiBase {
     _ensureInitialized();
     await delegate.appendToPath(path);
   }
+
+  /// Directory for the Python standard library.
+  @override
+  FutureOr<Directory> get stdlibDir => delegate.stdlibDir;
 }

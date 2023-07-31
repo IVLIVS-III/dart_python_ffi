@@ -109,6 +109,7 @@ Future<String> doInspection(
   PythonModuleDefinition moduleDefinition, {
   required String appType,
   required InspectionCache cache,
+  required String stdlibPath,
 }) async {
   final String moduleName = moduleDefinition.name;
   print("Generating Dart interface for $moduleName via inspect...");
@@ -117,7 +118,7 @@ Future<String> doInspection(
     moduleName,
     (PythonModuleInterface<PythonFfiDelegate<Object?>, Object?> m) =>
         Module.from(moduleName, sanitizeName(moduleName), m),
-  )..collectChildren(cache);
+  )..collectChildren(cache, stdlibPath: stdlibPath);
 
   Object? toEncodable(Object? o) {
     switch (o) {
