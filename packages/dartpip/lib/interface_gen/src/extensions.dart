@@ -1,10 +1,8 @@
 part of interface_gen;
 
 extension MergeExtension<E> on Iterable<E> {
-  Iterable<E> sortedMerge(
-    Iterable<E> other,
-    int Function(E a, E b) compareTo,
-  ) sync* {
+  Iterable<E> sortedMerge(Iterable<E> other,
+      int Function(E a, E b) compareTo,) sync* {
     final Iterator<E> iterator = this.iterator;
     final Iterator<E> otherIterator = other.iterator;
     bool hasNext = iterator.moveNext();
@@ -39,4 +37,25 @@ extension MergeExtension<E> on Iterable<E> {
 extension IntersectExtension<E> on Set<E> {
   Set<E> intersection(Set<E> other) =>
       where((E element) => other.contains(element)).toSet();
+}
+
+extension Extension<E> on Iterable<E> {
+  Iterable<E> skipLast(int count) sync* {
+    final Iterator<E> iterator = this.iterator;
+    final Queue<E> buffer = Queue<E>();
+    while (iterator.moveNext()) {
+      buffer.add(iterator.current);
+      if (buffer.length > count) {
+        yield buffer.removeFirst();
+      }
+    }
+  }
+
+  Iterable<(int, E)> enumerate() sync* {
+    final Iterator<E> iterator = this.iterator;
+    int index = 0;
+    while (iterator.moveNext()) {
+      yield (index++, iterator.current);
+    }
+  }
 }

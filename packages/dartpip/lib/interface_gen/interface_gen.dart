@@ -1,5 +1,6 @@
 library interface_gen;
 
+import "dart:collection";
 import "dart:convert";
 
 import "package:collection/collection.dart";

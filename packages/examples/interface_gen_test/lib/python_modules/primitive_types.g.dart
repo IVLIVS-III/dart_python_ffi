@@ -36,9 +36,11 @@ typedef $num = Object?;
 /// def get_set() -> set[int]: return {1, 2, 3}
 /// def get_container_nested() -> list[list[set[int]]]: return [[{1, 2}, {3, 4}], [{5, 6}, {7, 8}]]
 /// def get_Iterator() -> Iterator[int]: return iter([1, 2, 3])
+/// def get_Iterator_nested() -> Iterator[list[int]]: return iter([[1, 2], [3, 4]])
 /// def get_Generator() -> Generator[int, None, None]: return (i for i in [1, 2, 3])
 /// def get_Iterable() -> Iterable[int]: return [1, 2, 3]
-/// def get_Callable() -> Callable[[T], T]: return lambda x: x
+/// def get_Callable() -> Callable[[int], str]: return lambda x: str(x)
+/// def get_Callable_generic() -> Callable[[T], T]: return lambda x: x
 /// def get_Any() -> Any: return 1
 /// def get_Any_implicit(): return 1
 ///
@@ -58,9 +60,11 @@ typedef $num = Object?;
 /// def set_set(_: set[int]) -> bool: return _ == get_set()
 /// def set_container_nested(_: list[list[set[int]]]) -> bool: return _ == get_container_nested()
 /// def set_Iterator(_: Iterator[int]) -> bool: return list(_) == list(get_Iterator())
+/// def set_Iterator_nested(_: Iterator[list[int]]) -> bool: return list(_) == list(get_Iterator_nested())
 /// def set_Generator(_: Generator[int, None, None]) -> bool: return list(_) == list(get_Generator())
 /// def set_Iterable(_: Iterable[int]) -> bool: return list(_) == list(get_Iterable())
-/// def set_Callable(_: Callable[[T], T]) -> bool: return _(1) == get_Callable()(1)
+/// def set_Callable(_: Callable[[int], str]) -> bool: return _(1) == get_Callable()(1)
+/// def set_Callable_generic(_: Callable[[T], T]) -> bool: return _(1) == get_Callable_generic()(1)
 /// def set_Any(_: Any) -> bool: return _ == get_Any()
 /// def set_Any_implicit(_) -> bool: return _ == get_Any_implicit()
 /// ```
@@ -98,11 +102,32 @@ final class primitive_types extends PythonModule {
   ///
   /// ### python source
   /// ```py
-  /// def get_Callable() -> Callable[[T], T]: return lambda x: x
+  /// def get_Callable() -> Callable[[int], str]: return lambda x: str(x)
   /// ```
-  Object? get_Callable() => getFunction("get_Callable").call(
-        <Object?>[],
-        kwargs: <String, Object?>{},
+  String Function(int) get_Callable() => PythonFunction.from(
+        getFunction("get_Callable").call(
+          <Object?>[],
+          kwargs: <String, Object?>{},
+        ),
+      ).asFunction(
+        (PythonFunctionInterface<PythonFfiDelegate<Object?>, Object?> f) =>
+            (int x0) => f.call(<Object?>[x0]),
+      );
+
+  /// ## get_Callable_generic
+  ///
+  /// ### python source
+  /// ```py
+  /// def get_Callable_generic() -> Callable[[T], T]: return lambda x: x
+  /// ```
+  Object? Function(Object?) get_Callable_generic() => PythonFunction.from(
+        getFunction("get_Callable_generic").call(
+          <Object?>[],
+          kwargs: <String, Object?>{},
+        ),
+      ).asFunction(
+        (PythonFunctionInterface<PythonFfiDelegate<Object?>, Object?> f) =>
+            (Object? x0) => f.call(<Object?>[x0]),
       );
 
   /// ## get_Generator
@@ -111,10 +136,14 @@ final class primitive_types extends PythonModule {
   /// ```py
   /// def get_Generator() -> Generator[int, None, None]: return (i for i in [1, 2, 3])
   /// ```
-  Object? get_Generator() => getFunction("get_Generator").call(
-        <Object?>[],
-        kwargs: <String, Object?>{},
-      );
+  Iterator<int> get_Generator() => TypedIterator.from(
+        PythonIterator.from<Object?, PythonFfiDelegate<Object?>, Object?>(
+          getFunction("get_Generator").call(
+            <Object?>[],
+            kwargs: <String, Object?>{},
+          ),
+        ),
+      ).transform((e) => e).cast<int>();
 
   /// ## get_Iterable
   ///
@@ -122,10 +151,14 @@ final class primitive_types extends PythonModule {
   /// ```py
   /// def get_Iterable() -> Iterable[int]: return [1, 2, 3]
   /// ```
-  Object? get_Iterable() => getFunction("get_Iterable").call(
-        <Object?>[],
-        kwargs: <String, Object?>{},
-      );
+  Iterable<int> get_Iterable() => TypedIterable.from(
+        PythonIterable.from<Object?, PythonFfiDelegate<Object?>, Object?>(
+          getFunction("get_Iterable").call(
+            <Object?>[],
+            kwargs: <String, Object?>{},
+          ),
+        ),
+      ).transform((e) => e).cast<int>();
 
   /// ## get_Iterator
   ///
@@ -133,10 +166,37 @@ final class primitive_types extends PythonModule {
   /// ```py
   /// def get_Iterator() -> Iterator[int]: return iter([1, 2, 3])
   /// ```
-  Object? get_Iterator() => getFunction("get_Iterator").call(
-        <Object?>[],
-        kwargs: <String, Object?>{},
-      );
+  Iterator<int> get_Iterator() => TypedIterator.from(
+        PythonIterator.from<Object?, PythonFfiDelegate<Object?>, Object?>(
+          getFunction("get_Iterator").call(
+            <Object?>[],
+            kwargs: <String, Object?>{},
+          ),
+        ),
+      ).transform((e) => e).cast<int>();
+
+  /// ## get_Iterator_nested
+  ///
+  /// ### python source
+  /// ```py
+  /// def get_Iterator_nested() -> Iterator[list[int]]: return iter([[1, 2], [3, 4]])
+  /// ```
+  Iterator<List<int>> get_Iterator_nested() => TypedIterator.from(
+        PythonIterator.from<Object?, PythonFfiDelegate<Object?>, Object?>(
+          getFunction("get_Iterator_nested").call(
+            <Object?>[],
+            kwargs: <String, Object?>{},
+          ),
+        ),
+      )
+          .transform((e) => List<int>.from(
+                List.from(
+                  e,
+                ).map(
+                  (e) => e,
+                ),
+              ))
+          .cast<List<int>>();
 
   /// ## get_None
   ///
@@ -415,14 +475,30 @@ final class primitive_types extends PythonModule {
   ///
   /// ### python source
   /// ```py
-  /// def set_Callable(_: Callable[[T], T]) -> bool: return _(1) == get_Callable()(1)
+  /// def set_Callable(_: Callable[[int], str]) -> bool: return _(1) == get_Callable()(1)
   /// ```
   bool set_Callable({
-    required Object? $_,
+    required String Function(int) $_,
   }) =>
       getFunction("set_Callable").call(
         <Object?>[
-          $_,
+          $_.generic1,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## set_Callable_generic
+  ///
+  /// ### python source
+  /// ```py
+  /// def set_Callable_generic(_: Callable[[T], T]) -> bool: return _(1) == get_Callable_generic()(1)
+  /// ```
+  bool set_Callable_generic({
+    required Object? Function(Object?) $_,
+  }) =>
+      getFunction("set_Callable_generic").call(
+        <Object?>[
+          $_.generic1,
         ],
         kwargs: <String, Object?>{},
       );
@@ -434,7 +510,7 @@ final class primitive_types extends PythonModule {
   /// def set_Generator(_: Generator[int, None, None]) -> bool: return list(_) == list(get_Generator())
   /// ```
   bool set_Generator({
-    required Object? $_,
+    required Iterator<int> $_,
   }) =>
       getFunction("set_Generator").call(
         <Object?>[
@@ -450,7 +526,7 @@ final class primitive_types extends PythonModule {
   /// def set_Iterable(_: Iterable[int]) -> bool: return list(_) == list(get_Iterable())
   /// ```
   bool set_Iterable({
-    required Object? $_,
+    required Iterable<int> $_,
   }) =>
       getFunction("set_Iterable").call(
         <Object?>[
@@ -466,9 +542,25 @@ final class primitive_types extends PythonModule {
   /// def set_Iterator(_: Iterator[int]) -> bool: return list(_) == list(get_Iterator())
   /// ```
   bool set_Iterator({
-    required Object? $_,
+    required Iterator<int> $_,
   }) =>
       getFunction("set_Iterator").call(
+        <Object?>[
+          $_,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## set_Iterator_nested
+  ///
+  /// ### python source
+  /// ```py
+  /// def set_Iterator_nested(_: Iterator[list[int]]) -> bool: return list(_) == list(get_Iterator_nested())
+  /// ```
+  bool set_Iterator_nested({
+    required Iterator<List<int>> $_,
+  }) =>
+      getFunction("set_Iterator_nested").call(
         <Object?>[
           $_,
         ],

@@ -14,6 +14,22 @@ final class PythonIterable<T extends Object?, P extends PythonFfiDelegate<R>,
           finalizer: _iterable.finalizer,
         );
 
+  static Iterable<T> from<T extends Object?, P extends PythonFfiDelegate<R>,
+      R extends Object?>(
+    Object? iterable,
+  ) {
+    if (iterable is Iterable) {
+      return TypedIterable<T>.from(iterable);
+    } else if (iterable is PythonObjectInterface<P, R>) {
+      return PythonIterable<T, P, R>(iterable);
+    }
+    throw ArgumentError.value(
+      iterable,
+      "iterable",
+      "Must be a Python object or a Dart list.",
+    );
+  }
+
   final PythonObjectInterface<P, R> _iterable;
 
   @override
@@ -78,7 +94,7 @@ class TypedIterable<T> with IterableMixin<T> implements Iterable<T> {
 class TransformIterable<T, T_in> with IterableMixin<T> implements Iterable<T> {
   TransformIterable.from(this._iterable, this._transformer);
 
-  final TypedIterable<T_in> _iterable;
+  final Iterable<T_in> _iterable;
   final T Function(T_in) _transformer;
 
   @override
@@ -86,4 +102,7 @@ class TransformIterable<T, T_in> with IterableMixin<T> implements Iterable<T> {
         TypedIterator<T_in>.from(_iterable.iterator),
         _transformer,
       );
+
+  TransformIterable<T_out, T> cast<T_out>() =>
+      TransformIterable<T_out, T>.from(this, (T e) => e as T_out);
 }

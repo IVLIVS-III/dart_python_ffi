@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:typed_data';
 
 import 'package:interface_gen_test/interface_gen_test.dart';
@@ -226,10 +227,62 @@ void main() {
         ]
       ]);
     });
-    test("get Iterator", () {}, skip: true);
-    test("get Generator", () {}, skip: true);
-    test("get Iterable", () {}, skip: true);
-    test("get Callable", () {}, skip: true);
+    test("get Iterator", () {
+      final Iterator<int> result =
+          primitive_types.primitive_types.import().get_Iterator();
+      expect(result, isA<Iterator<int>>());
+      expect(result.moveNext(), true);
+      expect(result.current, 1);
+      expect(result.moveNext(), true);
+      expect(result.current, 2);
+      expect(result.moveNext(), true);
+      expect(result.current, 3);
+      expect(result.moveNext(), false);
+    });
+    test("get Iterator nested", () {
+      final Iterator<List<int>> result =
+          primitive_types.primitive_types.import().get_Iterator_nested();
+      expect(result, isA<Iterator<List<int>>>());
+      expect(result.moveNext(), true);
+      expect(result.current, [1, 2]);
+      expect(result.moveNext(), true);
+      expect(result.current, [3, 4]);
+      expect(result.moveNext(), false);
+    });
+    test("get Generator", () {
+      final Iterator<int> result =
+          primitive_types.primitive_types.import().get_Generator();
+      expect(result, isA<Iterator<int>>());
+      expect(result.moveNext(), true);
+      expect(result.current, 1);
+      expect(result.moveNext(), true);
+      expect(result.current, 2);
+      expect(result.moveNext(), true);
+      expect(result.current, 3);
+      expect(result.moveNext(), false);
+    });
+    test("get Iterable", () {
+      final Iterable<int> result =
+          primitive_types.primitive_types.import().get_Iterable();
+      expect(result, isA<Iterable<int>>());
+      expect(result, [1, 2, 3]);
+    });
+    test("get Callable", () {
+      final String Function(int) result =
+          primitive_types.primitive_types.import().get_Callable();
+      expect(result, isA<String Function(int)>());
+      expect(result(1), "1");
+    });
+    test("get Callable generic", () {
+      // TODO: implement generics
+      // final T Function<T>(T) result = primitive_types.primitive_types.import().get_Callable_generic();
+      final Object? Function(Object?) result =
+          primitive_types.primitive_types.import().get_Callable_generic();
+      // TODO: implement generics
+      // expect(result, isA<T Function<T>(T)>());
+      expect(result, isA<Object? Function(Object?)>());
+      expect(result(1), 1);
+    });
     test("get Any", () {
       final Object? result = primitive_types.primitive_types.import().get_Any();
       expect(result, 1);
@@ -362,10 +415,60 @@ void main() {
         true,
       );
     });
-    test("set Iterator", () {}, skip: true);
-    test("set Generator", () {}, skip: true);
-    test("set Iterable", () {}, skip: true);
-    test("set Callable", () {}, skip: true);
+    test("set Iterator", () {
+      expect(
+        primitive_types.primitive_types
+            .import()
+            .set_Iterator($_: <int>[1, 2, 3].iterator),
+        true,
+      );
+    });
+    test("set Iterator nested", () {
+      expect(
+        primitive_types.primitive_types.import().set_Iterator_nested(
+                $_: <List<int>>[
+              [1, 2],
+              [3, 4]
+            ].iterator),
+        true,
+      );
+    });
+    test("set Generator", () {
+      expect(
+        primitive_types.primitive_types
+            .import()
+            .set_Generator($_: <int>[1, 2, 3].iterator),
+        true,
+      );
+    });
+    test("set Iterable", () {
+      expect(
+        primitive_types.primitive_types
+            .import()
+            .set_Iterable($_: _BasicIterable(<int>[1, 2, 3].iterator)),
+        true,
+      );
+      expect(
+        primitive_types.primitive_types.import().set_Iterable($_: [1, 2, 3]),
+        true,
+      );
+    });
+    test("set Callable", () {
+      expect(
+        primitive_types.primitive_types
+            .import()
+            .set_Callable($_: (int a) => "$a"),
+        true,
+      );
+    });
+    test("set Callable generic", () {
+      expect(
+        primitive_types.primitive_types
+            .import()
+            .set_Callable_generic($_: <T>(T a) => a),
+        true,
+      );
+    });
     test("set Any", () {
       expect(
         primitive_types.primitive_types.import().set_Any($_: 1),
@@ -379,4 +482,11 @@ void main() {
       );
     });
   });
+}
+
+final class _BasicIterable<E> with IterableMixin<E> implements Iterable<E> {
+  _BasicIterable(this.iterator);
+
+  @override
+  final Iterator<E> iterator;
 }

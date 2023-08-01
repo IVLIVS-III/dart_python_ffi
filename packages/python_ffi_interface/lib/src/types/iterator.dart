@@ -13,6 +13,22 @@ final class PythonIterator<T extends Object?, P extends PythonFfiDelegate<R>,
           finalizer: _iterator.finalizer,
         );
 
+  static Iterator<T> from<T extends Object?, P extends PythonFfiDelegate<R>,
+      R extends Object?>(
+    Object? iterator,
+  ) {
+    if (iterator is Iterator) {
+      return TypedIterator<T>.from(iterator);
+    } else if (iterator is PythonObjectInterface<P, R>) {
+      return PythonIterator<T, P, R>(iterator);
+    }
+    throw ArgumentError.value(
+      iterator,
+      "iterator",
+      "Must be a Python object or a Dart list.",
+    );
+  }
+
   final PythonObjectInterface<P, R> _iterator;
 
   T? _current;
@@ -94,7 +110,7 @@ class TypedIterator<T> implements Iterator<T> {
 class TransformIterator<T, T_in> implements Iterator<T> {
   TransformIterator.from(this._iterator, this._transformer);
 
-  final TypedIterator<T_in> _iterator;
+  final Iterator<T_in> _iterator;
   final T Function(T_in) _transformer;
 
   @override
@@ -102,4 +118,7 @@ class TransformIterator<T, T_in> implements Iterator<T> {
 
   @override
   bool moveNext() => _iterator.moveNext();
+
+  TransformIterator<T_out, T> cast<T_out>() =>
+      TransformIterator<T_out, T>.from(this, (T e) => e as T_out);
 }
