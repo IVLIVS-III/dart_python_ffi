@@ -174,7 +174,8 @@ final class ClassDefinition extends PythonClassDefinition
     buffer.writeln("""
 final class $sanitizedName extends PythonClass {
   factory $sanitizedName(""");
-    initMethod?.emitArguments(buffer);
+    final List<_ReturnTransform> argumentsTransforms =
+        initMethod?.emitArguments(buffer).toList() ?? <_ReturnTransform>[];
     buffer.writeln("""
     ) =>
       PythonFfiDart.instance.importClass(
@@ -182,11 +183,11 @@ final class $sanitizedName extends PythonClass {
         "$name",
         $sanitizedName.from,""");
     if (initMethod != null) {
-      initMethod.emitCallArgs(buffer);
+      initMethod._emitCallArgs(buffer, transforms: argumentsTransforms);
     } else {
       buffer.writeln("<Object?>[],");
     }
-    initMethod?.emitCallKwargs(buffer);
+    initMethod?._emitCallKwargs(buffer, transforms: argumentsTransforms);
     buffer.writeln("""
       );
 

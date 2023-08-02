@@ -36,11 +36,14 @@ final class Function_ extends PythonFunction
       _parametersOfKind(ParameterKind.keyword_only).isNotEmpty ||
       _parametersOfKind(ParameterKind.var_keyword).isNotEmpty;
 
-  void emitArguments(StringBuffer buffer) {
+  Iterable<_ReturnTransform> emitArguments(StringBuffer buffer) {
+    final List<_ReturnTransform> transforms = <_ReturnTransform>[];
     for (final Parameter parameter
         in _parametersOfKind(ParameterKind.positional_only)) {
-      buffer
-          .writeln("${_getTypeString(parameter)} ${parameter.sanitizedName},");
+      final (String typeString, _ReturnTransform transform) =
+          _getTypeStringWithTransform(parameter);
+      buffer.writeln("$typeString ${parameter.sanitizedName},");
+      transforms.add(transform);
     }
     if (_hasKeywordParameters()) {
       buffer.write("{");
@@ -52,15 +55,21 @@ final class Function_ extends PythonFunction
       }
       for (final Parameter parameter
           in _parametersOfKind(ParameterKind.positional_or_keyword)) {
+        final (String typeString, _ReturnTransform transform) =
+            _getTypeStringWithTransform(parameter);
         buffer.writeln(
-          "${parameter.requiredString} ${_getTypeString(parameter)} ${parameter.sanitizedName} ${parameter.defaultString},",
+          "${parameter.requiredString} $typeString ${parameter.sanitizedName} ${parameter.defaultString},",
         );
+        transforms.add(transform);
       }
       for (final Parameter parameter
           in _parametersOfKind(ParameterKind.keyword_only)) {
+        final (String typeString, _ReturnTransform transform) =
+            _getTypeStringWithTransform(parameter);
         buffer.writeln(
-          "${parameter.requiredString} ${_getTypeString(parameter)} ${parameter.sanitizedName} ${parameter.defaultString},",
+          "${parameter.requiredString} $typeString ${parameter.sanitizedName} ${parameter.defaultString},",
         );
+        transforms.add(transform);
       }
       for (final Parameter parameter
           in _parametersOfKind(ParameterKind.var_keyword)) {
@@ -70,17 +79,24 @@ final class Function_ extends PythonFunction
       }
       buffer.write("}");
     }
+    return transforms;
   }
 
-  void emitCallArgs(StringBuffer buffer) {
+  void _emitCallArgs(
+    StringBuffer buffer, {
+    required List<_ReturnTransform> transforms,
+  }) {
     buffer.writeln("<Object?>[");
+    int idx = 0;
     for (final Parameter parameter
         in _parametersOfKind(ParameterKind.positional_only)) {
-      buffer.writeln("${parameter.sanitizedName},");
+      buffer.writeln("${transforms[idx](parameter.sanitizedName)},");
+      idx++;
     }
     for (final Parameter parameter
         in _parametersOfKind(ParameterKind.positional_or_keyword)) {
-      buffer.writeln("${parameter.sanitizedName},");
+      buffer.writeln("${transforms[idx](parameter.sanitizedName)},");
+      idx++;
     }
     for (final Parameter parameter
         in _parametersOfKind(ParameterKind.var_positional)) {
@@ -89,11 +105,18 @@ final class Function_ extends PythonFunction
     buffer.writeln("],");
   }
 
-  void emitCallKwargs(StringBuffer buffer) {
+  void _emitCallKwargs(
+    StringBuffer buffer, {
+    required List<_ReturnTransform> transforms,
+  }) {
     buffer.writeln("<String, Object?>{");
+    int idx = 0;
     for (final Parameter parameter
         in _parametersOfKind(ParameterKind.keyword_only)) {
-      buffer.writeln("\"${parameter.name}\": ${parameter.sanitizedName},");
+      buffer.writeln(
+        "\"${parameter.name}\": ${transforms[idx](parameter.sanitizedName)},",
+      );
+      idx++;
     }
     for (final Parameter parameter
         in _parametersOfKind(ParameterKind.var_keyword)) {
@@ -102,10 +125,13 @@ final class Function_ extends PythonFunction
     buffer.writeln("},");
   }
 
-  void emitCall(StringBuffer buffer) {
-    emitCallArgs(buffer);
+  void _emitCall(
+    StringBuffer buffer, {
+    required List<_ReturnTransform> transforms,
+  }) {
+    _emitCallArgs(buffer, transforms: transforms);
     buffer.write("kwargs: ");
-    emitCallKwargs(buffer);
+    _emitCallKwargs(buffer, transforms: transforms);
   }
 
   @override
@@ -122,11 +148,12 @@ final class Function_ extends PythonFunction
       isReturnString: true,
     );
     buffer.writeln("$returnType $sanitizedName(");
-    emitArguments(buffer);
+    final Iterable<_ReturnTransform> argumentsTransforms =
+        emitArguments(buffer);
     buffer.writeln(") => ");
     final StringBuffer callBuffer = StringBuffer()
       ..writeln("getFunction(\"$name\").call(");
-    emitCall(callBuffer);
+    _emitCall(callBuffer, transforms: argumentsTransforms.toList());
     callBuffer.writeln(")");
     buffer.write("${transform(callBuffer.toString())};");
   }
