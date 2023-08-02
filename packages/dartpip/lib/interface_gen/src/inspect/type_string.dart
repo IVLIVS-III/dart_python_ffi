@@ -237,7 +237,6 @@ PythonFunction.from($call,)
   bool isReturnString = false,
 }) {
   // TODO: implement typedef
-  print("determining type of (<${object.runtimeType}>) $object:");
   switch (object) {
     case null:
       return ("Null", _idTransform);

@@ -1,7 +1,6 @@
-from typing import Any, Callable, Generator, Iterable, Iterator, TypeVar
+from typing import Any, Callable, Generator, Iterable, Iterator
 
 
-T = TypeVar("T")
 num = int | float
 
 
@@ -25,7 +24,6 @@ def get_Iterator_nested() -> Iterator[list[int]]: return iter([[1, 2], [3, 4]])
 def get_Generator() -> Generator[int, None, None]: return (i for i in [1, 2, 3])
 def get_Iterable() -> Iterable[int]: return [1, 2, 3]
 def get_Callable() -> Callable[[int], str]: return lambda x: str(x)
-def get_Callable_generic() -> Callable[[T], T]: return lambda x: x
 def get_Any() -> Any: return 1
 def get_Any_implicit(): return 1
 
@@ -49,6 +47,5 @@ def set_Iterator_nested(_: Iterator[list[int]]) -> bool: return list(_) == list(
 def set_Generator(_: Generator[int, None, None]) -> bool: return list(_) == list(get_Generator())
 def set_Iterable(_: Iterable[int]) -> bool: return list(_) == list(get_Iterable())
 def set_Callable(_: Callable[[int], str]) -> bool: return _(1) == get_Callable()(1)
-def set_Callable_generic(_: Callable[[T], T]) -> bool: return _(1) == get_Callable_generic()(1)
 def set_Any(_: Any) -> bool: return _ == get_Any()
 def set_Any_implicit(_) -> bool: return _ == get_Any_implicit()

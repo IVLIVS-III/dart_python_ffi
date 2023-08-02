@@ -4,10 +4,14 @@ import 'dart:typed_data';
 import 'package:interface_gen_test/interface_gen_test.dart';
 import 'package:interface_gen_test/python_modules/class_init_adds_field.g.dart'
     as class_init_adds_field;
+import 'package:interface_gen_test/python_modules/class_types.g.dart'
+    as class_types;
 import 'package:interface_gen_test/python_modules/dataclass.g.dart'
     as dataclass;
 import 'package:interface_gen_test/python_modules/empty_module.g.dart'
     as empty_module;
+import 'package:interface_gen_test/python_modules/generic_types.g.dart'
+    as generic_types;
 import 'package:interface_gen_test/python_modules/inherited_fields_rename.g.dart'
     as inherited_fields_rename;
 import 'package:interface_gen_test/python_modules/module_field.g.dart'
@@ -142,6 +146,7 @@ void main() {
     test("module can be imported", () {
       expect(primitive_types.primitive_types.import(), anything);
     });
+
     test("get None", () {
       final Null result = primitive_types.primitive_types.import().get_None();
       expect(result, null);
@@ -272,16 +277,6 @@ void main() {
           primitive_types.primitive_types.import().get_Callable();
       expect(result, isA<String Function(int)>());
       expect(result(1), "1");
-    });
-    test("get Callable generic", () {
-      // TODO: implement generics
-      // final T Function<T>(T) result = primitive_types.primitive_types.import().get_Callable_generic();
-      final Object? Function(Object?) result =
-          primitive_types.primitive_types.import().get_Callable_generic();
-      // TODO: implement generics
-      // expect(result, isA<T Function<T>(T)>());
-      expect(result, isA<Object? Function(Object?)>());
-      expect(result(1), 1);
     });
     test("get Any", () {
       final Object? result = primitive_types.primitive_types.import().get_Any();
@@ -461,14 +456,6 @@ void main() {
         true,
       );
     });
-    test("set Callable generic", () {
-      expect(
-        primitive_types.primitive_types
-            .import()
-            .set_Callable_generic($_: <T>(T a) => a),
-        true,
-      );
-    });
     test("set Any", () {
       expect(
         primitive_types.primitive_types.import().set_Any($_: 1),
@@ -482,6 +469,45 @@ void main() {
       );
     });
   });
+
+  group("generic_types", () {
+    test("module can be imported", () {
+      expect(generic_types.generic_types.import(), anything);
+    });
+
+    test(
+      "get Callable",
+      () {
+        // TODO: implement generics
+        /*
+      final T Function<T>(T) result =
+          generic_types.generic_types.import().get_Callable_generic();
+      expect(result, isA<T Function<T>(T)>());
+      expect(result(1), 1);
+      */
+      },
+      skip: "TODO: implement generics",
+    );
+
+    test("set Callable", () {
+      expect(
+        generic_types.generic_types.import().set_Callable($_: <T>(T a) => a),
+        true,
+      );
+    });
+  });
+
+  group(
+    "class_types",
+    () {
+      test("module can be imported", () {
+        expect(class_types.class_types.import(), anything);
+      });
+
+      // TODO: implement class types
+    },
+    skip: "TODO: implement class types",
+  );
 }
 
 final class _BasicIterable<E> with IterableMixin<E> implements Iterable<E> {

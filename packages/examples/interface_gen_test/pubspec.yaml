@@ -32,3 +32,7 @@ python_ffi:
       path: python_modules/class_init_adds_field.py
     primitive_types:
       path: python_modules/primitive_types.py
+    generic_types:
+      path: python_modules/generic_types.py
+    class_types:
+      path: python_modules/class_types.py
