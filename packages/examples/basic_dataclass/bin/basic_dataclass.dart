@@ -2,7 +2,6 @@ import "dart:io";
 
 import "package:args/args.dart";
 import "package:basic_dataclass/basic_dataclass.dart";
-import "package:basic_dataclass/python_modules/src/python_modules.g.dart";
 import "package:python_ffi_dart/python_ffi_dart.dart";
 
 void main(List<String> arguments) async {
@@ -41,7 +40,7 @@ void main(List<String> arguments) async {
 
   await PythonFfiDart.instance.initialize(kPythonModules, libPath: libPath);
 
-  final Person person = Person(argResults.rest.first);
+  final Person person = Person(name: argResults.rest.first);
   print("<use W,A,S,D to move, press q to quit>");
   String? input;
   do {
@@ -50,13 +49,13 @@ void main(List<String> arguments) async {
     input = stdin.readLineSync();
     switch (input) {
       case "w":
-        person.move(0, -1);
+        person.move(dx: 0, dy: -1);
       case "a":
-        person.move(-1, 0);
+        person.move(dx: -1, dy: 0);
       case "s":
-        person.move(0, 1);
+        person.move(dx: 0, dy: 1);
       case "d":
-        person.move(1, 0);
+        person.move(dx: 1, dy: 0);
     }
   } while (input != "q");
 }

@@ -248,31 +248,39 @@ base mixin _PythonObjectCPythonMixin
     return super.hashCode;
   }
 
-  @override
-  String toString() {
-    final BuiltinsModule builtins = BuiltinsModule.import();
+  String? _repr() {
     try {
-      return builtins.str(<Object?>[this]);
-    } on PythonExceptionInterface<PythonFfiDelegate<Object?>, Object?> {
-      // ignore
-    }
-    try {
-      return builtins.repr(<Object?>[this]);
-    } on PythonExceptionInterface<PythonFfiDelegate<Object?>, Object?> {
-      // ignore
-    }
-    try {
-      const String kStrAttributeName = "__str__";
       const String kReprAttributeName = "__repr__";
-      if (hasAttribute(kStrAttributeName)) {
-        return getFunction(kStrAttributeName).call(<Object?>[]);
-      } else if (hasAttribute(kReprAttributeName)) {
+      if (hasAttribute(kReprAttributeName)) {
         return getFunction(kReprAttributeName).call(<Object?>[]);
       }
     } on PythonExceptionInterface<PythonFfiDelegate<Object?>, Object?> {
       // ignore
     }
-    return super.toString();
+    try {
+      return BuiltinsModule.import().repr(<Object?>[this]);
+    } on PythonExceptionInterface<PythonFfiDelegate<Object?>, Object?> {
+      // ignore
+    }
+    return null;
+  }
+
+  @override
+  String toString() {
+    try {
+      const String kStrAttributeName = "__str__";
+      if (hasAttribute(kStrAttributeName)) {
+        return getFunction(kStrAttributeName).call(<Object?>[]);
+      }
+    } on PythonExceptionInterface<PythonFfiDelegate<Object?>, Object?> {
+      // ignore
+    }
+    try {
+      return BuiltinsModule.import().str(<Object?>[this]);
+    } on PythonExceptionInterface<PythonFfiDelegate<Object?>, Object?> {
+      // ignore
+    }
+    return _repr() ?? super.toString();
   }
 
   @override

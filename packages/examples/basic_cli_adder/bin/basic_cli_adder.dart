@@ -2,7 +2,6 @@ import "dart:io";
 
 import "package:args/args.dart";
 import "package:basic_cli_adder/basic_cli_adder.dart";
-import "package:basic_cli_adder/python_modules/src/python_modules.g.dart";
 import "package:python_ffi_dart/python_ffi_dart.dart";
 
 void main(List<String> arguments) async {
@@ -50,7 +49,7 @@ void main(List<String> arguments) async {
 
   await PythonFfiDart.instance.initialize(kPythonModules, libPath: libPath);
 
-  final BasicCliAdder basicCliAdder = BasicCliAdder.import();
-  final num result = basicCliAdder.add(x, y);
+  final basic_cli_adder basicCliAdder = basic_cli_adder.import();
+  final Object? result = basicCliAdder.add(x: x, y: y);
   print("$x + $y = $result");
 }
