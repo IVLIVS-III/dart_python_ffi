@@ -39,7 +39,10 @@ class ObjInfo {
       "ObjInfo(name: $name, qualname: $qualname, module: $module)";
 }
 
-String _getTypeStringFromCollection(List<Object?> types) {
+String _getTypeStringFromCollection(
+  List<Object?> types, {
+  required InspectionCache cache,
+}) {
   if (types.isEmpty) {
     return "Object?";
   }
@@ -57,13 +60,14 @@ String _getTypeStringFromCollection(List<Object?> types) {
     }
   }
   return typesCopy
-      .map(_getTypeString)
+      .map((e) => _getTypeString(e, cache: cache))
       .toSet()
       .reduce((String value, String element) => "Object?");
 }
 
 (String, _ReturnTransform) _getTypeStringFromClassDefWithTransform(
   PythonClassDefinitionInterface object, {
+  required InspectionCache cache,
   bool isReturnString = false,
 }) {
   final ObjInfo info = ObjInfo(object);
@@ -87,18 +91,22 @@ String _getTypeStringFromCollection(List<Object?> types) {
         (() {
           final String container = switch (info.qualname) {
             "tuple" when isReturnString => "List",
-            _ => _getTypeString(object.getAttribute("__origin__")),
+            _ => _getTypeString(
+                object.getAttribute("__origin__"),
+                cache: cache,
+              ),
           };
 
           final List<Object?> args = object.getAttribute("__args__");
           final Iterable<(String, _ReturnTransform)> typeArgs = args.map(
             (Object? e) => _getTypeStringWithTransform(
               e,
+              cache: cache,
               isReturnString: isReturnString,
             ),
           );
           final String typeArguments = switch (info.qualname) {
-            "tuple" => _getTypeStringFromCollection(args),
+            "tuple" => _getTypeStringFromCollection(args, cache: cache),
             _ =>
               typeArgs.map(((String, _ReturnTransform) e) => e.$1).join(", "),
           };
@@ -159,6 +167,7 @@ $typeString.from(
           final Iterable<(String, _ReturnTransform)> typeArgs = args.map(
             (Object? e) => _getTypeStringWithTransform(
               e,
+              cache: cache,
               isReturnString: isReturnString,
             ),
           );
@@ -186,6 +195,7 @@ Typed$container.from(
           final Iterable<(String, _ReturnTransform)> typeArgs = args.map(
             (Object? e) => _getTypeStringWithTransform(
               e,
+              cache: cache,
               isReturnString: isReturnString,
             ),
           );
@@ -214,7 +224,6 @@ PythonFunction.from($call,)
     => ($typedArgString) => f.call(<Object?>[$argString]),
 )
 """,
-            // TODO: use this transform
             false => (String call) => "$call.generic${parameterTypes.length}",
           };
           return (
@@ -229,12 +238,25 @@ PythonFunction.from($call,)
       return result;
     }
   }
+  final InspectEntry? cacheEntry = cache[object];
+  if (cacheEntry != null) {
+    final _ReturnTransform transform =
+        switch ((isReturnString, cacheEntry.value)) {
+      (false, _) => _idTransform,
+      (_, PythonClassDefinitionInterface()) => (String call) =>
+          "${cacheEntry.sanitizedName}.from($call,)",
+      _ => _idTransform,
+    };
+    return (cacheEntry.sanitizedName, transform);
+  }
   return ("Object?", _idTransform);
 }
 
 (String, _ReturnTransform) _getTypeStringWithTransform(
   Object? object, {
+  required InspectionCache cache,
   bool isReturnString = false,
+  InspectEntry? parentEntry,
 }) {
   // TODO: implement typedef
   switch (object) {
@@ -243,16 +265,31 @@ PythonFunction.from($call,)
     case PythonClassDefinitionInterface():
       return _getTypeStringFromClassDefWithTransform(
         object,
+        cache: cache,
         isReturnString: isReturnString,
       );
     case Parameter():
-      return _getTypeStringWithTransform(object.annotation);
+      return _getTypeStringWithTransform(
+        object.annotation,
+        cache: cache,
+        parentEntry: parentEntry,
+      );
     case ClassInstance():
       return ("Object?", _idTransform);
     case AnyTypePrimitive():
       return ("Object?", _idTransform);
     case InspectEntry():
-      return _getTypeStringWithTransform(object.value);
+      return _getTypeStringWithTransform(
+        object.value,
+        cache: cache,
+        parentEntry: parentEntry,
+      );
+    case String() when object == parentEntry?.sanitizedName:
+      return _getTypeStringWithTransform(
+        parentEntry?.value,
+        cache: cache,
+        isReturnString: isReturnString,
+      );
     case _:
       return ("Object?", _idTransform);
   }
@@ -260,6 +297,11 @@ PythonFunction.from($call,)
 
 String _getTypeString(
   Object? object, {
+  required InspectionCache cache,
   bool isReturnString = false,
 }) =>
-    _getTypeStringWithTransform(object, isReturnString: isReturnString).$1;
+    _getTypeStringWithTransform(
+      object,
+      cache: cache,
+      isReturnString: isReturnString,
+    ).$1;

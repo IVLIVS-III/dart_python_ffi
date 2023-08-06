@@ -17,10 +17,12 @@ final class ClassInstance extends PythonClass
   InspectEntryType get type => InspectEntryType.class_;
 
   @override
-  void emit(StringBuffer buffer) {
+  void emit(StringBuffer buffer, {required InspectionCache cache}) {
     buffer.writeln("/// ## $name");
     emitDoc(buffer);
     emitSource(buffer);
-    buffer.writeln("typedef $sanitizedName = ${_getTypeString(this)};");
+    buffer.writeln(
+      "typedef $sanitizedName = ${_getTypeString(this, cache: cache)};",
+    );
   }
 }

@@ -36,12 +36,20 @@ final class Function_ extends PythonFunction
       _parametersOfKind(ParameterKind.keyword_only).isNotEmpty ||
       _parametersOfKind(ParameterKind.var_keyword).isNotEmpty;
 
-  Iterable<_ReturnTransform> emitArguments(StringBuffer buffer) {
+  Iterable<_ReturnTransform> emitArguments(
+    StringBuffer buffer, {
+    required InspectionCache cache,
+    InspectEntry? parentEntry,
+  }) {
     final List<_ReturnTransform> transforms = <_ReturnTransform>[];
     for (final Parameter parameter
         in _parametersOfKind(ParameterKind.positional_only)) {
       final (String typeString, _ReturnTransform transform) =
-          _getTypeStringWithTransform(parameter);
+          _getTypeStringWithTransform(
+        parameter,
+        cache: cache,
+        parentEntry: parentEntry,
+      );
       buffer.writeln("$typeString ${parameter.sanitizedName},");
       transforms.add(transform);
     }
@@ -56,7 +64,11 @@ final class Function_ extends PythonFunction
       for (final Parameter parameter
           in _parametersOfKind(ParameterKind.positional_or_keyword)) {
         final (String typeString, _ReturnTransform transform) =
-            _getTypeStringWithTransform(parameter);
+            _getTypeStringWithTransform(
+          parameter,
+          cache: cache,
+          parentEntry: parentEntry,
+        );
         buffer.writeln(
           "${parameter.requiredString} $typeString ${parameter.sanitizedName} ${parameter.defaultString},",
         );
@@ -65,7 +77,11 @@ final class Function_ extends PythonFunction
       for (final Parameter parameter
           in _parametersOfKind(ParameterKind.keyword_only)) {
         final (String typeString, _ReturnTransform transform) =
-            _getTypeStringWithTransform(parameter);
+            _getTypeStringWithTransform(
+          parameter,
+          cache: cache,
+          parentEntry: parentEntry,
+        );
         buffer.writeln(
           "${parameter.requiredString} $typeString ${parameter.sanitizedName} ${parameter.defaultString},",
         );
@@ -137,7 +153,9 @@ final class Function_ extends PythonFunction
   @override
   void emit(
     StringBuffer buffer, {
+    required InspectionCache cache,
     Set<String> extraKeywords = const <String>{},
+    InspectEntry? parentEntry,
   }) {
     buffer.writeln("/// ## $name");
     emitDoc(buffer);
@@ -145,11 +163,13 @@ final class Function_ extends PythonFunction
     final (String returnType, _ReturnTransform transform) =
         _getTypeStringWithTransform(
       signature.return_annotation,
+      cache: cache,
       isReturnString: true,
+      parentEntry: parentEntry,
     );
     buffer.writeln("$returnType $sanitizedName(");
     final Iterable<_ReturnTransform> argumentsTransforms =
-        emitArguments(buffer);
+        emitArguments(buffer, cache: cache, parentEntry: parentEntry);
     buffer.writeln(") => ");
     final StringBuffer callBuffer = StringBuffer()
       ..writeln("getFunction(\"$name\").call(");

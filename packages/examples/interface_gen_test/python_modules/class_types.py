@@ -1,8 +1,14 @@
 from dataclasses import dataclass
+from typing import Self
 
 
 @dataclass
-class A: pass
+class A:
+    def get(self: Self) -> 'A':
+        return A()
+    
+    def set(self: Self, _: 'A') -> bool:
+        return _ == A()
 
 
 def get_A() -> A: return A()

@@ -39,7 +39,7 @@ sealed class InspectEntry {
 
   void collectChildren(InspectionCache cache, {required String stdlibPath});
 
-  void emit(StringBuffer buffer);
+  void emit(StringBuffer buffer, {required InspectionCache cache});
 
   void emitDoc(StringBuffer buffer);
 

@@ -161,7 +161,7 @@ final class ClassDefinition extends PythonClassDefinition
   }
 
   @override
-  void emit(StringBuffer buffer) {
+  void emit(StringBuffer buffer, {required InspectionCache cache}) {
     final Object? parentModule = this.parentModule;
     final String moduleName = switch (parentModule) {
       PythonModuleInterface() => (parentModule as dynamic).__name__ as String,
@@ -175,7 +175,8 @@ final class ClassDefinition extends PythonClassDefinition
 final class $sanitizedName extends PythonClass {
   factory $sanitizedName(""");
     final List<_ReturnTransform> argumentsTransforms =
-        initMethod?.emitArguments(buffer).toList() ?? <_ReturnTransform>[];
+        initMethod?.emitArguments(buffer, cache: cache).toList() ??
+            <_ReturnTransform>[];
     buffer.writeln("""
     ) =>
       PythonFfiDart.instance.importClass(
@@ -194,8 +195,18 @@ final class $sanitizedName extends PythonClass {
   $sanitizedName.from(super.pythonClass) : super.from();
 """);
     final Set<String> memberNames = <String>{name, "__init__"};
-    _emitFunctionFields(buffer, memberNames: memberNames);
-    _emitGettersSetters(buffer, memberNames: memberNames);
+    _emitFunctionFields(
+      buffer,
+      memberNames: memberNames,
+      cache: cache,
+      parentEntry: this,
+    );
+    _emitGettersSetters(
+      buffer,
+      memberNames: memberNames,
+      cache: cache,
+      parentEntry: this,
+    );
     buffer.writeln("}");
   }
 }

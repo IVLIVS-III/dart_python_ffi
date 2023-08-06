@@ -51,7 +51,7 @@ final class Module extends PythonModule
   }
 
   @override
-  void emit(StringBuffer buffer) {
+  void emit(StringBuffer buffer, {required InspectionCache cache}) {
     buffer.writeln("/// ## $name");
     emitDoc(buffer);
     emitSource(buffer);
@@ -63,7 +63,12 @@ final class $sanitizedName extends PythonModule {
       .importModule("$qualifiedName", $sanitizedName.from,);
 """);
     final Set<String> memberNames = <String>{name};
-    _emitFunctionFields(buffer, memberNames: memberNames, filter: _isMyChild);
+    _emitFunctionFields(
+      buffer,
+      memberNames: memberNames,
+      cache: cache,
+      filter: _isMyChild,
+    );
     for (final Module child
         in _children.values.whereType<Module>().where(_isMyChild)) {
       final String moduleName = child.sanitizedName;
@@ -76,7 +81,12 @@ final class $sanitizedName extends PythonModule {
       child.emitDoc(buffer);
       buffer.writeln("$moduleName get $fieldName => $moduleName.import();");
     }
-    _emitGettersSetters(buffer, memberNames: memberNames, filter: _isMyChild);
+    _emitGettersSetters(
+      buffer,
+      memberNames: memberNames,
+      cache: cache,
+      filter: _isMyChild,
+    );
     buffer.writeln("}");
   }
 }

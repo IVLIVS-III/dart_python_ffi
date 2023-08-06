@@ -118,7 +118,7 @@ base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
   }
 
   @override
-  void emit(StringBuffer buffer) {
+  void emit(StringBuffer buffer, {required InspectionCache cache}) {
     throw UnimplementedError("$runtimeType.emit");
   }
 

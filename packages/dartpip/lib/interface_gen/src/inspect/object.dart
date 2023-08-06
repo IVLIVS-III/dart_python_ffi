@@ -40,5 +40,6 @@ final class Object_ extends PythonObject
   InspectEntryType get type => InspectEntryType.object;
 
   @override
-  void emit(StringBuffer buffer) => _emitGetterSetter(buffer, entry: this);
+  void emit(StringBuffer buffer, {required InspectionCache cache}) =>
+      _emitGetterSetter(buffer, entry: this, cache: cache);
 }

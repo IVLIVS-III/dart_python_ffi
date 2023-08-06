@@ -4,13 +4,14 @@ base mixin GetterSetterMixin on InspectMixin {
   void _emitGetterSetter(
     StringBuffer buffer, {
     required InspectEntry entry,
+    required InspectionCache cache,
   }) {
     final String name = entry.name;
     final String sanitizedName = entry.sanitizedName;
     buffer.writeln("/// ## $name (getter)");
     emitDoc(buffer);
     final (String returnType, _ReturnTransform transform) =
-        _getTypeStringWithTransform(entry, isReturnString: true);
+        _getTypeStringWithTransform(entry, cache: cache, isReturnString: true);
     buffer.writeln("""
 $returnType get $sanitizedName => 
 ${transform("getAttribute(\"$name\")")};
@@ -18,7 +19,7 @@ ${transform("getAttribute(\"$name\")")};
 /// ## $name (setter)""");
     emitDoc(buffer);
     buffer.writeln("""
-set $sanitizedName(${_getTypeString(entry)} $sanitizedName)
+set $sanitizedName(${_getTypeString(entry, cache: cache)} $sanitizedName)
   => setAttribute("$name", $sanitizedName);
 """);
   }
@@ -28,7 +29,9 @@ base mixin GettersSettersMixin on GetterSetterMixin {
   void _emitGettersSetters(
     StringBuffer buffer, {
     required Set<String> memberNames,
+    required InspectionCache cache,
     bool Function(InspectEntry child)? filter,
+    InspectEntry? parentEntry,
   }) {
     final Iterable<InspectEntry> fields = _children.values
         .whereType<ClassInstance>()
@@ -45,7 +48,8 @@ base mixin GettersSettersMixin on GetterSetterMixin {
         continue;
       }
       memberNames.add(sanitizedName);
-      _emitGetterSetter(buffer, entry: field);
+      // TODO: use parentEntry
+      _emitGetterSetter(buffer, entry: field, cache: cache);
     }
   }
 }

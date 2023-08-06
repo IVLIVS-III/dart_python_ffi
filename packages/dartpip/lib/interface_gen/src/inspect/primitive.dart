@@ -20,7 +20,7 @@ final class Primitive implements InspectEntry {
   void collectChildren(InspectionCache cache, {required String stdlibPath}) {}
 
   @override
-  void emit(StringBuffer buffer) {
+  void emit(StringBuffer buffer, {required InspectionCache cache}) {
     throw UnimplementedError("$runtimeType.emit");
   }
 

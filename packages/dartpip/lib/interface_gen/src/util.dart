@@ -195,7 +195,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
       continue;
     }
     topLevelNames.add(typedefName);
-    typedef.emit(buffer);
+    typedef.emit(buffer, cache: cache);
   }
   for (final ClassDefinition classDefinition in cache.classDefinitions) {
     final String className = classDefinition.sanitizedName;
@@ -203,7 +203,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
       continue;
     }
     topLevelNames.add(className);
-    classDefinition.emit(buffer);
+    classDefinition.emit(buffer, cache: cache);
   }
   for (final Module module in cache.modules) {
     final String moduleName = module.sanitizedName;
@@ -211,7 +211,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
       continue;
     }
     topLevelNames.add(moduleName);
-    module.emit(buffer);
+    module.emit(buffer, cache: cache);
   }
   return buffer.toString();
 }
