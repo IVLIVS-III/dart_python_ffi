@@ -13,6 +13,7 @@ final class PythonIterator<T extends Object?, P extends PythonFfiDelegate<R>,
           finalizer: _iterator.finalizer,
         );
 
+  /// TODO: Document.
   static Iterator<T> from<T extends Object?, P extends PythonFfiDelegate<R>,
       R extends Object?>(
     Object? iterator,
@@ -102,12 +103,14 @@ class TypedIterator<T> implements Iterator<T> {
   @override
   bool moveNext() => _iterator.moveNext();
 
+  /// TODO: Document.
   TransformIterator<T_out, T> transform<T_out>(T_out Function(T) transformer) =>
       TransformIterator<T_out, T>.from(this, transformer);
 }
 
 /// Transforms the elements of an iterator.
 class TransformIterator<T, T_in> implements Iterator<T> {
+  /// TODO: Document.
   TransformIterator.from(this._iterator, this._transformer);
 
   final Iterator<T_in> _iterator;
@@ -119,6 +122,7 @@ class TransformIterator<T, T_in> implements Iterator<T> {
   @override
   bool moveNext() => _iterator.moveNext();
 
+  /// TODO: Document.
   TransformIterator<T_out, T> cast<T_out>() =>
       TransformIterator<T_out, T>.from(this, (T e) => e as T_out);
 }

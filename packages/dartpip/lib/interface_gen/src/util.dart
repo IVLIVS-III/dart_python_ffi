@@ -1,5 +1,6 @@
 part of interface_gen;
 
+/// TODO: Document.
 String sanitizeName(
   String name, {
   Set<String> extraKeywords = const <String>{},
@@ -105,6 +106,7 @@ String sanitizeName(
   return name;
 }
 
+/// TODO: Document.
 Future<String> doInspection(
   PythonModuleDefinition moduleDefinition, {
   required String appType,
@@ -121,34 +123,41 @@ Future<String> doInspection(
   )..collectChildren(cache, stdlibPath: stdlibPath);
 
   Object? toEncodable(Object? o) {
-    switch (o) {
-      case Module():
-      case ClassDefinition():
-      case ClassInstance():
-      case Function_():
-      case Object_():
-        final InspectEntry entry = o as InspectEntry;
-        return <String, Object?>{
-          "type": o.runtimeType.toString(),
-          "value": jsonEncode(entry.value, toEncodable: toEncodable),
-          "string": o.toString(),
-        };
-      case PythonIterable():
-      case PythonIterator():
-        final PythonObjectInterface object = o as PythonObjectInterface;
-        return <String, Object?>{
-          "type": o.runtimeType.toString(),
+    final Object? object = o;
+    return switch (object) {
+      null => o.toString(),
+      Module() ||
+      ClassDefinition() ||
+      ClassInstance() ||
+      Function_() ||
+      Object_() =>
+        <String, Object?>{
+          "type": object.runtimeType.toString(),
+          "value": jsonEncode(
+            (object as InspectEntry).value,
+            toEncodable: toEncodable,
+          ),
+          "string": object.toString(),
+        },
+      PythonIterable<Object?, PythonFfiDelegate<Object?>, Object?>() ||
+      PythonIterator<Object?, PythonFfiDelegate<Object?>, Object?>() =>
+        <String, Object?>{
+          "type": object.runtimeType.toString(),
+          "value": jsonEncode(
+            (object as PythonObjectInterface<PythonFfiDelegate<Object?>,
+                    Object?>)
+                .reference,
+            toEncodable: toEncodable,
+          ),
+        },
+      PythonObjectInterface<PythonFfiDelegate<Object?>, Object?>() =>
+        <String, Object?>{
+          "type": object.runtimeType.toString(),
           "value": jsonEncode(object.reference, toEncodable: toEncodable),
-        };
-      case PythonObjectInterface():
-        return <String, Object?>{
-          "type": o.runtimeType.toString(),
-          "value": jsonEncode(o.reference, toEncodable: toEncodable),
-          "string": o.toString(),
-        };
-      default:
-        return o.toString();
-    }
+          "string": object.toString(),
+        },
+      _ => o.toString(),
+    };
   }
 
   final String json = jsonEncode(
@@ -171,6 +180,7 @@ Future<String> doInspection(
   return json;
 }
 
+/// TODO: Document.
 String emitInspection(InspectionCache cache, {bool primaryModuleOnly = true}) {
   final Module? primaryModule = cache.modules.firstOrNull;
   if (primaryModule == null) {
@@ -183,8 +193,9 @@ String emitInspection(InspectionCache cache, {bool primaryModuleOnly = true}) {
   if (primaryModule != null) {
     buffer.writeln("library ${primaryModule.sanitizedName};");
   }
+  const String typedDataImportLine = 'import "dart:typed_data";';
   buffer.writeln("""
-import "dart:typed_data";
+$typedDataImportLine
 
 import "package:python_ffi_dart/python_ffi_dart.dart";
 """);
@@ -213,5 +224,9 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
     topLevelNames.add(moduleName);
     module.emit(buffer, cache: cache);
   }
-  return buffer.toString();
+  final String result = buffer.toString();
+  if (!result.contains("Uint8List")) {
+    return result.replaceAll(typedDataImportLine, "");
+  }
+  return result;
 }

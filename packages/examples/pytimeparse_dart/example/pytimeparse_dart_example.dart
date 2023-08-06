@@ -12,7 +12,7 @@ void main(List<String> arguments) async {
       defaultsTo: null,
       mandatory: Platform.isWindows || Platform.isLinux,
       help:
-      "Path to the Python dynamic library. Specify this option on Windows, Linux, or if you want to use a custom Python version.",
+          "Path to the Python dynamic library. Specify this option on Windows, Linux, or if you want to use a custom Python version.",
     )
     ..addFlag(
       "help",

@@ -3,23 +3,23 @@ import 'dart:typed_data';
 
 import 'package:interface_gen_test/interface_gen_test.dart';
 import 'package:interface_gen_test/python_modules/class_init_adds_field.g.dart'
-as class_init_adds_field;
+    as class_init_adds_field;
 import 'package:interface_gen_test/python_modules/class_types.g.dart'
-as class_types;
+    as class_types;
 import 'package:interface_gen_test/python_modules/dataclass.g.dart'
-as dataclass;
+    as dataclass;
 import 'package:interface_gen_test/python_modules/empty_module.g.dart'
-as empty_module;
+    as empty_module;
 import 'package:interface_gen_test/python_modules/generic_types.g.dart'
-as generic_types;
+    as generic_types;
 import 'package:interface_gen_test/python_modules/inherited_fields_rename.g.dart'
-as inherited_fields_rename;
+    as inherited_fields_rename;
 import 'package:interface_gen_test/python_modules/module_field.g.dart'
-as module_field;
+    as module_field;
 import 'package:interface_gen_test/python_modules/module_function.g.dart'
-as module_function;
+    as module_function;
 import 'package:interface_gen_test/python_modules/primitive_types.g.dart'
-as primitive_types;
+    as primitive_types;
 import 'package:python_ffi_dart/python_ffi_dart.dart';
 import 'package:test/test.dart';
 
@@ -37,9 +37,7 @@ void main() {
       expect(module_field.module_field.import(), anything);
     });
     test("field can be read", () {
-      expect(module_field.module_field
-          .import()
-          .field, 1);
+      expect(module_field.module_field.import().field, 1);
     });
     test("field can be written", () {
       final moduleField = module_field.module_field.import();
@@ -65,9 +63,7 @@ void main() {
       expect(dataclass.DataClass(field0: 0), anything);
     });
     test("required field can be read", () {
-      expect(dataclass
-          .DataClass(field0: 0)
-          .field0, 0);
+      expect(dataclass.DataClass(field0: 0).field0, 0);
     });
     test("required field can be written", () {
       final dataClass = dataclass.DataClass(field0: 0);
@@ -75,9 +71,7 @@ void main() {
       expect(dataClass.field0, 1);
     });
     test("field with default can be read", () {
-      expect(dataclass
-          .DataClass(field0: 0)
-          .field1, 1);
+      expect(dataclass.DataClass(field0: 0).field1, 1);
     });
     test("field with default can be written", () {
       final dataClass = dataclass.DataClass(field0: 0);
@@ -85,9 +79,7 @@ void main() {
       expect(dataClass.field1, 2);
     });
     test("non-init field can be read", () {
-      expect(dataclass
-          .DataClass(field0: 0)
-          .field2, 2);
+      expect(dataclass.DataClass(field0: 0).field2, 2);
     });
     test("non-init field can be written", () {
       final dataClass = dataclass.DataClass(field0: 0);
@@ -109,9 +101,7 @@ void main() {
           1);
     });
     test("module field can be read", () {
-      expect(inherited_fields_rename.inherited_fields_rename
-          .import()
-          .$getClass,
+      expect(inherited_fields_rename.inherited_fields_rename.import().$getClass,
           1);
     });
     test("module field can be written", () {
@@ -123,9 +113,7 @@ void main() {
       expect(inherited_fields_rename.Class(), anything);
     });
     test("class field can be read", () {
-      expect(inherited_fields_rename
-          .Class()
-          .$initializer, 1);
+      expect(inherited_fields_rename.Class().$initializer, 1);
     });
     test("class field can be written", () {
       final class_ = inherited_fields_rename.Class();
@@ -145,9 +133,7 @@ void main() {
       expect(class_init_adds_field.ClassInitAddsField(), anything);
     });
     test("field can be read", () {
-      expect(class_init_adds_field
-          .ClassInitAddsField()
-          .field, 1);
+      expect(class_init_adds_field.ClassInitAddsField().field, 1);
     });
     test("field can be written", () {
       final classInitAddsField = class_init_adds_field.ClassInitAddsField();
@@ -175,12 +161,12 @@ void main() {
     });
     test("get float", () {
       final double result =
-      primitive_types.primitive_types.import().get_float();
+          primitive_types.primitive_types.import().get_float();
       expect(result, 3.14);
     });
     test("get num", () {
       final primitive_types.$num result =
-      primitive_types.primitive_types.import().get_num();
+          primitive_types.primitive_types.import().get_num();
       expect(result, 3.14);
     });
     test("get str", () {
@@ -189,34 +175,34 @@ void main() {
     });
     test("get bytes", () {
       final Uint8List result =
-      primitive_types.primitive_types.import().get_bytes();
+          primitive_types.primitive_types.import().get_bytes();
       expect(result, Uint8List.fromList("lorem ipsum".codeUnits));
     });
     test("get dict", () {
       final Map<String, int> result =
-      primitive_types.primitive_types.import().get_dict();
+          primitive_types.primitive_types.import().get_dict();
       expect(result, {"a": 1, "b": 2});
     });
     test("get dict nested", () {
       final Map<String, Map<String, int>> result =
-      primitive_types.primitive_types.import().get_dict_nested();
+          primitive_types.primitive_types.import().get_dict_nested();
       expect(result, {
         "a": {"b": 1}
       });
     });
     test("get list", () {
       final List<int> result =
-      primitive_types.primitive_types.import().get_list();
+          primitive_types.primitive_types.import().get_list();
       expect(result, [1, 2, 3]);
     });
     test("get list implicit", () {
       final List<Object?> result =
-      primitive_types.primitive_types.import().get_list_implicit();
+          primitive_types.primitive_types.import().get_list_implicit();
       expect(result, [1, "a", false]);
     });
     test("get list nested", () {
       final List<List<int>> result =
-      primitive_types.primitive_types.import().get_list_nested();
+          primitive_types.primitive_types.import().get_list_nested();
       expect(result, [
         [1, 2],
         [3, 4]
@@ -224,17 +210,17 @@ void main() {
     });
     test("get tuple", () {
       final List<int> result =
-      primitive_types.primitive_types.import().get_tuple();
+          primitive_types.primitive_types.import().get_tuple();
       expect(result, [1, 2, 3]);
     });
     test("get set", () {
       final Set<int> result =
-      primitive_types.primitive_types.import().get_set();
+          primitive_types.primitive_types.import().get_set();
       expect(result, {1, 2, 3});
     });
     test("get container nested", () {
       final List<List<Set<int>>> result =
-      primitive_types.primitive_types.import().get_container_nested();
+          primitive_types.primitive_types.import().get_container_nested();
       expect(result, [
         [
           {1, 2},
@@ -248,7 +234,7 @@ void main() {
     });
     test("get Iterator", () {
       final Iterator<int> result =
-      primitive_types.primitive_types.import().get_Iterator();
+          primitive_types.primitive_types.import().get_Iterator();
       expect(result, isA<Iterator<int>>());
       expect(result.moveNext(), true);
       expect(result.current, 1);
@@ -260,7 +246,7 @@ void main() {
     });
     test("get Iterator nested", () {
       final Iterator<List<int>> result =
-      primitive_types.primitive_types.import().get_Iterator_nested();
+          primitive_types.primitive_types.import().get_Iterator_nested();
       expect(result, isA<Iterator<List<int>>>());
       expect(result.moveNext(), true);
       expect(result.current, [1, 2]);
@@ -270,7 +256,7 @@ void main() {
     });
     test("get Generator", () {
       final Iterator<int> result =
-      primitive_types.primitive_types.import().get_Generator();
+          primitive_types.primitive_types.import().get_Generator();
       expect(result, isA<Iterator<int>>());
       expect(result.moveNext(), true);
       expect(result.current, 1);
@@ -282,13 +268,13 @@ void main() {
     });
     test("get Iterable", () {
       final Iterable<int> result =
-      primitive_types.primitive_types.import().get_Iterable();
+          primitive_types.primitive_types.import().get_Iterable();
       expect(result, isA<Iterable<int>>());
       expect(result, [1, 2, 3]);
     });
     test("get Callable", () {
       final String Function(int) result =
-      primitive_types.primitive_types.import().get_Callable();
+          primitive_types.primitive_types.import().get_Callable();
       expect(result, isA<String Function(int)>());
       expect(result(1), "1");
     });
@@ -298,7 +284,7 @@ void main() {
     });
     test("get Any implicit", () {
       final Object? result =
-      primitive_types.primitive_types.import().get_Any_implicit();
+          primitive_types.primitive_types.import().get_Any_implicit();
       expect(result, 1);
     });
 
@@ -435,7 +421,7 @@ void main() {
     test("set Iterator nested", () {
       expect(
         primitive_types.primitive_types.import().set_Iterator_nested(
-            $_: <List<int>>[
+                $_: <List<int>>[
               [1, 2],
               [3, 4]
             ].iterator),
@@ -491,7 +477,7 @@ void main() {
 
     test(
       "get Callable",
-          () {
+      () {
         // TODO: implement generics
         /*
       final T Function<T>(T) result =
@@ -538,13 +524,13 @@ void main() {
     });
     test("get list", () {
       final List<class_types.A> result =
-      class_types.class_types.import().get_list_A();
+          class_types.class_types.import().get_list_A();
       expect(result, isA<List<class_types.A>>());
       expect(result, <class_types.A>[class_types.A()]);
     });
     test("get map", () {
       final Map<String, class_types.A> result =
-      class_types.class_types.import().get_map_A();
+          class_types.class_types.import().get_map_A();
       expect(result, isA<Map<String, class_types.A>>());
       expect(result, <String, class_types.A>{"a": class_types.A()});
     });

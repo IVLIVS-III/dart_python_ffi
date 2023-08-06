@@ -1,12 +1,17 @@
 part of interface_gen;
 
+/// TODO: Document.
 final class Primitive implements InspectEntry {
+  /// TODO: Document.
   const Primitive(this.name, this.sanitizedName, this.value);
 
+  @override
   final String name;
 
+  @override
   final String sanitizedName;
 
+  @override
   final Object? value;
 
   @override
@@ -43,7 +48,9 @@ final class Primitive implements InspectEntry {
       };
 }
 
+/// TODO: Document.
 final class AnyTypePrimitive extends Primitive {
+  /// TODO: Document.
   const AnyTypePrimitive(String name, String sanitizedName)
       : super(name, sanitizedName, null);
 }

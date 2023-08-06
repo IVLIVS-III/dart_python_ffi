@@ -1,7 +1,6 @@
 library dartpip;
 
 import "dart:async";
-import "dart:collection";
 import "dart:convert";
 import "dart:io";
 import "dart:typed_data";
@@ -33,7 +32,6 @@ part "pypi/client.dart";
 part "pypi/pypi.dart";
 part "python_module.dart";
 part "source_file.dart";
-part "type_generation.dart";
 part "util.dart";
 part "util/lazy_future.dart";
 part "util/pubspec_editor.dart";
@@ -42,5 +40,8 @@ part "util/python_dependency.dart";
 /// The version of dartpip.
 const String kDartpipVersion = "0.1.0";
 
+/// TODO: Document.
 const String kAppTypeFlutter = _kAppTypeFlutter;
+
+/// TODO: Document.
 const String kAppTypeConsole = _kAppTypeConsole;

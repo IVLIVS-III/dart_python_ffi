@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, constant_identifier_names
 
 part of inspect;
 
@@ -6,16 +6,27 @@ final class _ParameterClassDefinition extends PythonClassDefinition {
   _ParameterClassDefinition.from(super.classDefinitionDelegate) : super.from();
 }
 
+/// TODO: Document.
 enum ParameterKind {
+  /// TODO: Document.
   positional_only,
+
+  /// TODO: Document.
   positional_or_keyword,
+
+  /// TODO: Document.
   var_positional,
+
+  /// TODO: Document.
   keyword_only,
+
+  /// TODO: Document.
   var_keyword,
 }
 
 /// Reference: https://docs.python.org/3/library/inspect.html#inspect.Parameter
 final class Parameter extends PythonClass {
+  /// TODO: Document.
   Parameter.from(super.classDelegate) : super.from();
 
   /// A special class-level marker to specify absence of default values and
@@ -78,6 +89,7 @@ final class Parameter extends PythonClass {
   /// identifier.
   String get name => getAttribute("name");
 
+  /// TODO: Document.
   String get sanitizedName {
     final String name = sanitizeName(this.name);
     if (name.startsWith("_")) {
@@ -127,6 +139,7 @@ final class Parameter extends PythonClass {
     throw UnimplementedError();
   }
 
+  /// TODO: Document.
   String get requiredString {
     switch (kind) {
       case ParameterKind.positional_only:
@@ -140,20 +153,21 @@ final class Parameter extends PythonClass {
   }
 
   String _encode(Object? source) => switch (source) {
-        List() when source.isEmpty => "const []",
-        List() => "const ${source.map(_encode).toList()}",
-        Map() when source.isEmpty => "const {}",
-        Map() => "const ${source.map(
+        List<Object?>() when source.isEmpty => "const []",
+        List<Object?>() => "const ${source.map(_encode).toList()}",
+        Map<Object?, Object?>() when source.isEmpty => "const {}",
+        Map<Object?, Object?>() => "const ${source.map(
             (Object? key, Object? value) =>
                 MapEntry<Object?, Object?>(_encode(key), _encode(value)),
           )}",
-        Set() when source.isEmpty => "const {}",
-        Set() => "const ${source.map(_encode).toSet()}",
+        Set<Object?>() when source.isEmpty => "const {}",
+        Set<Object?>() => "const ${source.map(_encode).toSet()}",
         String() => jsonEncode(source),
-        PythonObjectInterface() => "null",
+        PythonObjectInterface<PythonFfiDelegate<Object?>, Object?>() => "null",
         _ => source.toString(),
       };
 
+  /// TODO: Document.
   String get defaultString {
     switch (kind) {
       case ParameterKind.positional_only:
@@ -173,6 +187,7 @@ final class Parameter extends PythonClass {
     }
   }
 
+  @override
   Map<String, Object?> debugDump() => <String, Object?>{
         "name": name,
         "default": default_,

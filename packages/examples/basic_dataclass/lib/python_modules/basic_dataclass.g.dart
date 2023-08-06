@@ -1,4 +1,4 @@
-// ignore_for_file: camel_case_types, non_constant_identifier_names
+// ignore_for_file: camel_case_types, non_constant_identifier_names, prefer_void_to_null
 
 library basic_dataclass;
 
@@ -27,9 +27,9 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 /// ```
 final class Person extends PythonClass {
   factory Person({
-    required Object? name,
-    Object? x = 0,
-    Object? y = 0,
+    required String name,
+    int x = 0,
+    int y = 0,
   }) =>
       PythonFfiDart.instance.importClass(
         "basic_dataclass",
@@ -53,9 +53,9 @@ final class Person extends PythonClass {
   ///         self.x += dx
   ///         self.y += dy
   /// ```
-  Object? move({
-    required Object? dx,
-    required Object? dy,
+  Null move({
+    required int dx,
+    required int dy,
   }) =>
       getFunction("move").call(
         <Object?>[
@@ -66,21 +66,45 @@ final class Person extends PythonClass {
       );
 
   /// ## x (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Person(name: str, x: int = 0, y: int = 0)
   Object? get x => getAttribute("x");
 
   /// ## x (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Person(name: str, x: int = 0, y: int = 0)
   set x(Object? x) => setAttribute("x", x);
 
   /// ## y (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Person(name: str, x: int = 0, y: int = 0)
   Object? get y => getAttribute("y");
 
   /// ## y (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Person(name: str, x: int = 0, y: int = 0)
   set y(Object? y) => setAttribute("y", y);
 
   /// ## name (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Person(name: str, x: int = 0, y: int = 0)
   Object? get name => getAttribute("name");
 
   /// ## name (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Person(name: str, x: int = 0, y: int = 0)
   set name(Object? name) => setAttribute("name", name);
 }
 

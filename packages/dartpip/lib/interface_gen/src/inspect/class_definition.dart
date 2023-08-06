@@ -1,5 +1,8 @@
+// ignore_for_file: non_constant_identifier_names
+
 part of interface_gen;
 
+/// TODO: Document.
 final class ClassDefinition extends PythonClassDefinition
     with
         InspectMixin,
@@ -7,6 +10,7 @@ final class ClassDefinition extends PythonClassDefinition
         GetterSetterMixin,
         GettersSettersMixin
     implements InspectEntry {
+  /// TODO: Document.
   ClassDefinition.from(
     this.name,
     this.sanitizedName,
@@ -14,8 +18,10 @@ final class ClassDefinition extends PythonClassDefinition
   )   : value = classDefinitionDelegate,
         super.from();
 
+  @override
   final String name;
 
+  @override
   final String sanitizedName;
 
   @override
@@ -26,7 +32,9 @@ final class ClassDefinition extends PythonClassDefinition
         ...Object_.sanitizationExtraKeywords,
       };
 
-  final PythonClassDefinitionInterface value;
+  @override
+  final PythonClassDefinitionInterface<PythonFfiDelegate<Object?>, Object?>
+      value;
 
   @override
   InspectEntryType get type => InspectEntryType.classDefinition;
@@ -82,9 +90,12 @@ final class ClassDefinition extends PythonClassDefinition
     for (final Assign assign in assigns) {
       for (final Attribute attribute in assign.attributes.where(
         (Attribute element) =>
+            // ignore: avoid_dynamic_calls
             (element.value as dynamic).__class__.__name__ == "Name",
       )) {
+        // ignore: avoid_dynamic_calls
         if ((attribute.value as dynamic).id == selfParameterName) {
+          // ignore: avoid_dynamic_calls
           assignments.add((attribute as dynamic).attr as String);
         }
       }
@@ -95,6 +106,7 @@ final class ClassDefinition extends PythonClassDefinition
   Set<String> _getNamesFromInit({
     required Method initMethod,
   }) {
+    // ignore: avoid_dynamic_calls
     final Object? codeObject = (initMethod.value as dynamic).__code__;
     if (codeObject == null) {
       return const <String>{};
@@ -164,7 +176,9 @@ final class ClassDefinition extends PythonClassDefinition
   void emit(StringBuffer buffer, {required InspectionCache cache}) {
     final Object? parentModule = this.parentModule;
     final String moduleName = switch (parentModule) {
-      PythonModuleInterface() => (parentModule as dynamic).__name__ as String,
+      PythonModuleInterface<PythonFfiDelegate<Object?>, Object?>() =>
+        // ignore: avoid_dynamic_calls
+        (parentModule as dynamic).__name__ as String,
       _ => throw Exception("parentModule is not a module: $parentModule"),
     };
     final Method? initMethod = __init__;
@@ -174,9 +188,9 @@ final class ClassDefinition extends PythonClassDefinition
     buffer.writeln("""
 final class $sanitizedName extends PythonClass {
   factory $sanitizedName(""");
-    final List<_ReturnTransform> argumentsTransforms =
+    final List<Transform> argumentsTransforms =
         initMethod?.emitArguments(buffer, cache: cache).toList() ??
-            <_ReturnTransform>[];
+            <Transform>[];
     buffer.writeln("""
     ) =>
       PythonFfiDart.instance.importClass(

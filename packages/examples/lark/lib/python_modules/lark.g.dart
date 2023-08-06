@@ -1,4 +1,4 @@
-// ignore_for_file: camel_case_types, non_constant_identifier_names
+// ignore_for_file: camel_case_types, non_constant_identifier_names, prefer_void_to_null
 
 library lark;
 
@@ -571,14 +571,16 @@ final class Lark extends PythonClass {
   ///         """Get information about a terminal"""
   ///         return self._terminals_dict[name]
   /// ```
-  Object? get_terminal({
-    required Object? name,
+  TerminalDef get_terminal({
+    required String name,
   }) =>
-      getFunction("get_terminal").call(
-        <Object?>[
-          name,
-        ],
-        kwargs: <String, Object?>{},
+      TerminalDef.from(
+        getFunction("get_terminal").call(
+          <Object?>[
+            name,
+          ],
+          kwargs: <String, Object?>{},
+        ),
       );
 
   /// ## lex
@@ -611,17 +613,25 @@ final class Lark extends PythonClass {
   ///             return self.options.postlex.process(stream)
   ///         return stream
   /// ```
-  Object? lex({
-    required Object? text,
-    Object? dont_ignore = false,
+  Iterator<Token> lex({
+    required String text,
+    bool dont_ignore = false,
   }) =>
-      getFunction("lex").call(
-        <Object?>[
-          text,
-          dont_ignore,
-        ],
-        kwargs: <String, Object?>{},
-      );
+      TypedIterator.from(
+        PythonIterator.from<Object?, PythonFfiDelegate<Object?>, Object?>(
+          getFunction("lex").call(
+            <Object?>[
+              text,
+              dont_ignore,
+            ],
+            kwargs: <String, Object?>{},
+          ),
+        ),
+      )
+          .transform((e) => Token.from(
+                e,
+              ))
+          .cast<Token>();
 
   /// ## memo_serialize
   ///
@@ -684,7 +694,7 @@ final class Lark extends PythonClass {
   ///         return self.parser.parse(text, start=start, on_error=on_error)
   /// ```
   Object? parse({
-    required Object? text,
+    required String text,
     Object? start,
     Object? on_error,
   }) =>
@@ -760,7 +770,7 @@ final class Lark extends PythonClass {
   ///             data["options"] = {n: v for n, v in data["options"].items() if n not in exclude_options}
   ///         pickle.dump({'data': data, 'memo': m}, f, protocol=pickle.HIGHEST_PROTOCOL)
   /// ```
-  Object? save({
+  Null save({
     required Object? f,
     Object? exclude_options = const [],
   }) =>
@@ -798,9 +808,181 @@ final class Lark extends PythonClass {
       );
 
   /// ## deserialize (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Main interface for the library.
+  ///
+  /// It's mostly a thin wrapper for the many different parsers, and for the tree constructor.
+  ///
+  /// Parameters:
+  ///     grammar: a string or file-object containing the grammar spec (using Lark's ebnf syntax)
+  ///     options: a dictionary controlling various aspects of Lark.
+  ///
+  /// Example:
+  ///     >>> Lark(r'''start: "foo" ''')
+  ///     Lark(...)
+  ///
+  ///
+  ///
+  /// **===  General Options  ===**
+  ///
+  /// start
+  ///         The start symbol. Either a string, or a list of strings for multiple possible starts (Default: "start")
+  /// debug
+  ///         Display debug information and extra warnings. Use only when debugging (Default: ``False``)
+  ///         When used with Earley, it generates a forest graph as "sppf.png", if 'dot' is installed.
+  /// transformer
+  ///         Applies the transformer to every parse tree (equivalent to applying it after the parse, but faster)
+  /// propagate_positions
+  ///         Propagates (line, column, end_line, end_column) attributes into all tree branches.
+  ///         Accepts ``False``, ``True``, or a callable, which will filter which nodes to ignore when propagating.
+  /// maybe_placeholders
+  ///         When ``True``, the ``[]`` operator returns ``None`` when not matched.
+  ///         When ``False``,  ``[]`` behaves like the ``?`` operator, and returns no value at all.
+  ///         (default= ``True``)
+  /// cache
+  ///         Cache the results of the Lark grammar analysis, for x2 to x3 faster loading. LALR only for now.
+  ///
+  ///         - When ``False``, does nothing (default)
+  ///         - When ``True``, caches to a temporary file in the local directory
+  ///         - When given a string, caches to the path pointed by the string
+  /// regex
+  ///         When True, uses the ``regex`` module instead of the stdlib ``re``.
+  /// g_regex_flags
+  ///         Flags that are applied to all terminals (both regex and strings)
+  /// keep_all_tokens
+  ///         Prevent the tree builder from automagically removing "punctuation" tokens (Default: ``False``)
+  /// tree_class
+  ///         Lark will produce trees comprised of instances of this class instead of the default ``lark.Tree``.
+  ///
+  /// **=== Algorithm Options ===**
+  ///
+  /// parser
+  ///         Decides which parser engine to use. Accepts "earley" or "lalr". (Default: "earley").
+  ///         (there is also a "cyk" option for legacy)
+  /// lexer
+  ///         Decides whether or not to use a lexer stage
+  ///
+  ///         - "auto" (default): Choose for me based on the parser
+  ///         - "basic": Use a basic lexer
+  ///         - "contextual": Stronger lexer (only works with parser="lalr")
+  ///         - "dynamic": Flexible and powerful (only with parser="earley")
+  ///         - "dynamic_complete": Same as dynamic, but tries *every* variation of tokenizing possible.
+  /// ambiguity
+  ///         Decides how to handle ambiguity in the parse. Only relevant if parser="earley"
+  ///
+  ///         - "resolve": The parser will automatically choose the simplest derivation
+  ///           (it chooses consistently: greedy for tokens, non-greedy for rules)
+  ///         - "explicit": The parser will return all derivations wrapped in "_ambig" tree nodes (i.e. a forest).
+  ///         - "forest": The parser will return the root of the shared packed parse forest.
+  ///
+  /// **=== Misc. / Domain Specific Options ===**
+  ///
+  /// postlex
+  ///         Lexer post-processing (Default: ``None``) Only works with the basic and contextual lexers.
+  /// priority
+  ///         How priorities should be evaluated - "auto", ``None``, "normal", "invert" (Default: "auto")
+  /// lexer_callbacks
+  ///         Dictionary of callbacks for the lexer. May alter tokens during lexing. Use with caution.
+  /// use_bytes
+  ///         Accept an input of type ``bytes`` instead of ``str``.
+  /// edit_terminals
+  ///         A callback for editing the terminals before parse.
+  /// import_paths
+  ///         A List of either paths or loader functions to specify from where grammars are imported
+  /// source_path
+  ///         Override the source of from where the grammar was loaded. Useful for relative imports and unconventional grammar loading
+  /// **=== End of Options ===**
   Object? get deserialize => getAttribute("deserialize");
 
   /// ## deserialize (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Main interface for the library.
+  ///
+  /// It's mostly a thin wrapper for the many different parsers, and for the tree constructor.
+  ///
+  /// Parameters:
+  ///     grammar: a string or file-object containing the grammar spec (using Lark's ebnf syntax)
+  ///     options: a dictionary controlling various aspects of Lark.
+  ///
+  /// Example:
+  ///     >>> Lark(r'''start: "foo" ''')
+  ///     Lark(...)
+  ///
+  ///
+  ///
+  /// **===  General Options  ===**
+  ///
+  /// start
+  ///         The start symbol. Either a string, or a list of strings for multiple possible starts (Default: "start")
+  /// debug
+  ///         Display debug information and extra warnings. Use only when debugging (Default: ``False``)
+  ///         When used with Earley, it generates a forest graph as "sppf.png", if 'dot' is installed.
+  /// transformer
+  ///         Applies the transformer to every parse tree (equivalent to applying it after the parse, but faster)
+  /// propagate_positions
+  ///         Propagates (line, column, end_line, end_column) attributes into all tree branches.
+  ///         Accepts ``False``, ``True``, or a callable, which will filter which nodes to ignore when propagating.
+  /// maybe_placeholders
+  ///         When ``True``, the ``[]`` operator returns ``None`` when not matched.
+  ///         When ``False``,  ``[]`` behaves like the ``?`` operator, and returns no value at all.
+  ///         (default= ``True``)
+  /// cache
+  ///         Cache the results of the Lark grammar analysis, for x2 to x3 faster loading. LALR only for now.
+  ///
+  ///         - When ``False``, does nothing (default)
+  ///         - When ``True``, caches to a temporary file in the local directory
+  ///         - When given a string, caches to the path pointed by the string
+  /// regex
+  ///         When True, uses the ``regex`` module instead of the stdlib ``re``.
+  /// g_regex_flags
+  ///         Flags that are applied to all terminals (both regex and strings)
+  /// keep_all_tokens
+  ///         Prevent the tree builder from automagically removing "punctuation" tokens (Default: ``False``)
+  /// tree_class
+  ///         Lark will produce trees comprised of instances of this class instead of the default ``lark.Tree``.
+  ///
+  /// **=== Algorithm Options ===**
+  ///
+  /// parser
+  ///         Decides which parser engine to use. Accepts "earley" or "lalr". (Default: "earley").
+  ///         (there is also a "cyk" option for legacy)
+  /// lexer
+  ///         Decides whether or not to use a lexer stage
+  ///
+  ///         - "auto" (default): Choose for me based on the parser
+  ///         - "basic": Use a basic lexer
+  ///         - "contextual": Stronger lexer (only works with parser="lalr")
+  ///         - "dynamic": Flexible and powerful (only with parser="earley")
+  ///         - "dynamic_complete": Same as dynamic, but tries *every* variation of tokenizing possible.
+  /// ambiguity
+  ///         Decides how to handle ambiguity in the parse. Only relevant if parser="earley"
+  ///
+  ///         - "resolve": The parser will automatically choose the simplest derivation
+  ///           (it chooses consistently: greedy for tokens, non-greedy for rules)
+  ///         - "explicit": The parser will return all derivations wrapped in "_ambig" tree nodes (i.e. a forest).
+  ///         - "forest": The parser will return the root of the shared packed parse forest.
+  ///
+  /// **=== Misc. / Domain Specific Options ===**
+  ///
+  /// postlex
+  ///         Lexer post-processing (Default: ``None``) Only works with the basic and contextual lexers.
+  /// priority
+  ///         How priorities should be evaluated - "auto", ``None``, "normal", "invert" (Default: "auto")
+  /// lexer_callbacks
+  ///         Dictionary of callbacks for the lexer. May alter tokens during lexing. Use with caution.
+  /// use_bytes
+  ///         Accept an input of type ``bytes`` instead of ``str``.
+  /// edit_terminals
+  ///         A callback for editing the terminals before parse.
+  /// import_paths
+  ///         A List of either paths or loader functions to specify from where grammars are imported
+  /// source_path
+  ///         Override the source of from where the grammar was loaded. Useful for relative imports and unconventional grammar loading
+  /// **=== End of Options ===**
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
@@ -808,119 +990,1783 @@ final class Lark extends PythonClass {
   ///
   /// ### python docstring
   ///
-  /// Loads an instance from the given file object
+  /// Main interface for the library.
   ///
-  /// Useful for caching and multiprocessing.
+  /// It's mostly a thin wrapper for the many different parsers, and for the tree constructor.
+  ///
+  /// Parameters:
+  ///     grammar: a string or file-object containing the grammar spec (using Lark's ebnf syntax)
+  ///     options: a dictionary controlling various aspects of Lark.
+  ///
+  /// Example:
+  ///     >>> Lark(r'''start: "foo" ''')
+  ///     Lark(...)
+  ///
+  ///
+  ///
+  /// **===  General Options  ===**
+  ///
+  /// start
+  ///         The start symbol. Either a string, or a list of strings for multiple possible starts (Default: "start")
+  /// debug
+  ///         Display debug information and extra warnings. Use only when debugging (Default: ``False``)
+  ///         When used with Earley, it generates a forest graph as "sppf.png", if 'dot' is installed.
+  /// transformer
+  ///         Applies the transformer to every parse tree (equivalent to applying it after the parse, but faster)
+  /// propagate_positions
+  ///         Propagates (line, column, end_line, end_column) attributes into all tree branches.
+  ///         Accepts ``False``, ``True``, or a callable, which will filter which nodes to ignore when propagating.
+  /// maybe_placeholders
+  ///         When ``True``, the ``[]`` operator returns ``None`` when not matched.
+  ///         When ``False``,  ``[]`` behaves like the ``?`` operator, and returns no value at all.
+  ///         (default= ``True``)
+  /// cache
+  ///         Cache the results of the Lark grammar analysis, for x2 to x3 faster loading. LALR only for now.
+  ///
+  ///         - When ``False``, does nothing (default)
+  ///         - When ``True``, caches to a temporary file in the local directory
+  ///         - When given a string, caches to the path pointed by the string
+  /// regex
+  ///         When True, uses the ``regex`` module instead of the stdlib ``re``.
+  /// g_regex_flags
+  ///         Flags that are applied to all terminals (both regex and strings)
+  /// keep_all_tokens
+  ///         Prevent the tree builder from automagically removing "punctuation" tokens (Default: ``False``)
+  /// tree_class
+  ///         Lark will produce trees comprised of instances of this class instead of the default ``lark.Tree``.
+  ///
+  /// **=== Algorithm Options ===**
+  ///
+  /// parser
+  ///         Decides which parser engine to use. Accepts "earley" or "lalr". (Default: "earley").
+  ///         (there is also a "cyk" option for legacy)
+  /// lexer
+  ///         Decides whether or not to use a lexer stage
+  ///
+  ///         - "auto" (default): Choose for me based on the parser
+  ///         - "basic": Use a basic lexer
+  ///         - "contextual": Stronger lexer (only works with parser="lalr")
+  ///         - "dynamic": Flexible and powerful (only with parser="earley")
+  ///         - "dynamic_complete": Same as dynamic, but tries *every* variation of tokenizing possible.
+  /// ambiguity
+  ///         Decides how to handle ambiguity in the parse. Only relevant if parser="earley"
+  ///
+  ///         - "resolve": The parser will automatically choose the simplest derivation
+  ///           (it chooses consistently: greedy for tokens, non-greedy for rules)
+  ///         - "explicit": The parser will return all derivations wrapped in "_ambig" tree nodes (i.e. a forest).
+  ///         - "forest": The parser will return the root of the shared packed parse forest.
+  ///
+  /// **=== Misc. / Domain Specific Options ===**
+  ///
+  /// postlex
+  ///         Lexer post-processing (Default: ``None``) Only works with the basic and contextual lexers.
+  /// priority
+  ///         How priorities should be evaluated - "auto", ``None``, "normal", "invert" (Default: "auto")
+  /// lexer_callbacks
+  ///         Dictionary of callbacks for the lexer. May alter tokens during lexing. Use with caution.
+  /// use_bytes
+  ///         Accept an input of type ``bytes`` instead of ``str``.
+  /// edit_terminals
+  ///         A callback for editing the terminals before parse.
+  /// import_paths
+  ///         A List of either paths or loader functions to specify from where grammars are imported
+  /// source_path
+  ///         Override the source of from where the grammar was loaded. Useful for relative imports and unconventional grammar loading
+  /// **=== End of Options ===**
   Object? get load => getAttribute("load");
 
   /// ## load (setter)
   ///
   /// ### python docstring
   ///
-  /// Loads an instance from the given file object
+  /// Main interface for the library.
   ///
-  /// Useful for caching and multiprocessing.
+  /// It's mostly a thin wrapper for the many different parsers, and for the tree constructor.
+  ///
+  /// Parameters:
+  ///     grammar: a string or file-object containing the grammar spec (using Lark's ebnf syntax)
+  ///     options: a dictionary controlling various aspects of Lark.
+  ///
+  /// Example:
+  ///     >>> Lark(r'''start: "foo" ''')
+  ///     Lark(...)
+  ///
+  ///
+  ///
+  /// **===  General Options  ===**
+  ///
+  /// start
+  ///         The start symbol. Either a string, or a list of strings for multiple possible starts (Default: "start")
+  /// debug
+  ///         Display debug information and extra warnings. Use only when debugging (Default: ``False``)
+  ///         When used with Earley, it generates a forest graph as "sppf.png", if 'dot' is installed.
+  /// transformer
+  ///         Applies the transformer to every parse tree (equivalent to applying it after the parse, but faster)
+  /// propagate_positions
+  ///         Propagates (line, column, end_line, end_column) attributes into all tree branches.
+  ///         Accepts ``False``, ``True``, or a callable, which will filter which nodes to ignore when propagating.
+  /// maybe_placeholders
+  ///         When ``True``, the ``[]`` operator returns ``None`` when not matched.
+  ///         When ``False``,  ``[]`` behaves like the ``?`` operator, and returns no value at all.
+  ///         (default= ``True``)
+  /// cache
+  ///         Cache the results of the Lark grammar analysis, for x2 to x3 faster loading. LALR only for now.
+  ///
+  ///         - When ``False``, does nothing (default)
+  ///         - When ``True``, caches to a temporary file in the local directory
+  ///         - When given a string, caches to the path pointed by the string
+  /// regex
+  ///         When True, uses the ``regex`` module instead of the stdlib ``re``.
+  /// g_regex_flags
+  ///         Flags that are applied to all terminals (both regex and strings)
+  /// keep_all_tokens
+  ///         Prevent the tree builder from automagically removing "punctuation" tokens (Default: ``False``)
+  /// tree_class
+  ///         Lark will produce trees comprised of instances of this class instead of the default ``lark.Tree``.
+  ///
+  /// **=== Algorithm Options ===**
+  ///
+  /// parser
+  ///         Decides which parser engine to use. Accepts "earley" or "lalr". (Default: "earley").
+  ///         (there is also a "cyk" option for legacy)
+  /// lexer
+  ///         Decides whether or not to use a lexer stage
+  ///
+  ///         - "auto" (default): Choose for me based on the parser
+  ///         - "basic": Use a basic lexer
+  ///         - "contextual": Stronger lexer (only works with parser="lalr")
+  ///         - "dynamic": Flexible and powerful (only with parser="earley")
+  ///         - "dynamic_complete": Same as dynamic, but tries *every* variation of tokenizing possible.
+  /// ambiguity
+  ///         Decides how to handle ambiguity in the parse. Only relevant if parser="earley"
+  ///
+  ///         - "resolve": The parser will automatically choose the simplest derivation
+  ///           (it chooses consistently: greedy for tokens, non-greedy for rules)
+  ///         - "explicit": The parser will return all derivations wrapped in "_ambig" tree nodes (i.e. a forest).
+  ///         - "forest": The parser will return the root of the shared packed parse forest.
+  ///
+  /// **=== Misc. / Domain Specific Options ===**
+  ///
+  /// postlex
+  ///         Lexer post-processing (Default: ``None``) Only works with the basic and contextual lexers.
+  /// priority
+  ///         How priorities should be evaluated - "auto", ``None``, "normal", "invert" (Default: "auto")
+  /// lexer_callbacks
+  ///         Dictionary of callbacks for the lexer. May alter tokens during lexing. Use with caution.
+  /// use_bytes
+  ///         Accept an input of type ``bytes`` instead of ``str``.
+  /// edit_terminals
+  ///         A callback for editing the terminals before parse.
+  /// import_paths
+  ///         A List of either paths or loader functions to specify from where grammars are imported
+  /// source_path
+  ///         Override the source of from where the grammar was loaded. Useful for relative imports and unconventional grammar loading
+  /// **=== End of Options ===**
   set load(Object? load) => setAttribute("load", load);
 
   /// ## open (getter)
   ///
   /// ### python docstring
   ///
-  /// Create an instance of Lark with the grammar given by its filename
+  /// Main interface for the library.
   ///
-  /// If ``rel_to`` is provided, the function will find the grammar filename in relation to it.
+  /// It's mostly a thin wrapper for the many different parsers, and for the tree constructor.
+  ///
+  /// Parameters:
+  ///     grammar: a string or file-object containing the grammar spec (using Lark's ebnf syntax)
+  ///     options: a dictionary controlling various aspects of Lark.
   ///
   /// Example:
-  ///
-  ///     >>> Lark.open("grammar_file.lark", rel_to=__file__, parser="lalr")
+  ///     >>> Lark(r'''start: "foo" ''')
   ///     Lark(...)
+  ///
+  ///
+  ///
+  /// **===  General Options  ===**
+  ///
+  /// start
+  ///         The start symbol. Either a string, or a list of strings for multiple possible starts (Default: "start")
+  /// debug
+  ///         Display debug information and extra warnings. Use only when debugging (Default: ``False``)
+  ///         When used with Earley, it generates a forest graph as "sppf.png", if 'dot' is installed.
+  /// transformer
+  ///         Applies the transformer to every parse tree (equivalent to applying it after the parse, but faster)
+  /// propagate_positions
+  ///         Propagates (line, column, end_line, end_column) attributes into all tree branches.
+  ///         Accepts ``False``, ``True``, or a callable, which will filter which nodes to ignore when propagating.
+  /// maybe_placeholders
+  ///         When ``True``, the ``[]`` operator returns ``None`` when not matched.
+  ///         When ``False``,  ``[]`` behaves like the ``?`` operator, and returns no value at all.
+  ///         (default= ``True``)
+  /// cache
+  ///         Cache the results of the Lark grammar analysis, for x2 to x3 faster loading. LALR only for now.
+  ///
+  ///         - When ``False``, does nothing (default)
+  ///         - When ``True``, caches to a temporary file in the local directory
+  ///         - When given a string, caches to the path pointed by the string
+  /// regex
+  ///         When True, uses the ``regex`` module instead of the stdlib ``re``.
+  /// g_regex_flags
+  ///         Flags that are applied to all terminals (both regex and strings)
+  /// keep_all_tokens
+  ///         Prevent the tree builder from automagically removing "punctuation" tokens (Default: ``False``)
+  /// tree_class
+  ///         Lark will produce trees comprised of instances of this class instead of the default ``lark.Tree``.
+  ///
+  /// **=== Algorithm Options ===**
+  ///
+  /// parser
+  ///         Decides which parser engine to use. Accepts "earley" or "lalr". (Default: "earley").
+  ///         (there is also a "cyk" option for legacy)
+  /// lexer
+  ///         Decides whether or not to use a lexer stage
+  ///
+  ///         - "auto" (default): Choose for me based on the parser
+  ///         - "basic": Use a basic lexer
+  ///         - "contextual": Stronger lexer (only works with parser="lalr")
+  ///         - "dynamic": Flexible and powerful (only with parser="earley")
+  ///         - "dynamic_complete": Same as dynamic, but tries *every* variation of tokenizing possible.
+  /// ambiguity
+  ///         Decides how to handle ambiguity in the parse. Only relevant if parser="earley"
+  ///
+  ///         - "resolve": The parser will automatically choose the simplest derivation
+  ///           (it chooses consistently: greedy for tokens, non-greedy for rules)
+  ///         - "explicit": The parser will return all derivations wrapped in "_ambig" tree nodes (i.e. a forest).
+  ///         - "forest": The parser will return the root of the shared packed parse forest.
+  ///
+  /// **=== Misc. / Domain Specific Options ===**
+  ///
+  /// postlex
+  ///         Lexer post-processing (Default: ``None``) Only works with the basic and contextual lexers.
+  /// priority
+  ///         How priorities should be evaluated - "auto", ``None``, "normal", "invert" (Default: "auto")
+  /// lexer_callbacks
+  ///         Dictionary of callbacks for the lexer. May alter tokens during lexing. Use with caution.
+  /// use_bytes
+  ///         Accept an input of type ``bytes`` instead of ``str``.
+  /// edit_terminals
+  ///         A callback for editing the terminals before parse.
+  /// import_paths
+  ///         A List of either paths or loader functions to specify from where grammars are imported
+  /// source_path
+  ///         Override the source of from where the grammar was loaded. Useful for relative imports and unconventional grammar loading
+  /// **=== End of Options ===**
   Object? get open => getAttribute("open");
 
   /// ## open (setter)
   ///
   /// ### python docstring
   ///
-  /// Create an instance of Lark with the grammar given by its filename
+  /// Main interface for the library.
   ///
-  /// If ``rel_to`` is provided, the function will find the grammar filename in relation to it.
+  /// It's mostly a thin wrapper for the many different parsers, and for the tree constructor.
+  ///
+  /// Parameters:
+  ///     grammar: a string or file-object containing the grammar spec (using Lark's ebnf syntax)
+  ///     options: a dictionary controlling various aspects of Lark.
   ///
   /// Example:
-  ///
-  ///     >>> Lark.open("grammar_file.lark", rel_to=__file__, parser="lalr")
+  ///     >>> Lark(r'''start: "foo" ''')
   ///     Lark(...)
+  ///
+  ///
+  ///
+  /// **===  General Options  ===**
+  ///
+  /// start
+  ///         The start symbol. Either a string, or a list of strings for multiple possible starts (Default: "start")
+  /// debug
+  ///         Display debug information and extra warnings. Use only when debugging (Default: ``False``)
+  ///         When used with Earley, it generates a forest graph as "sppf.png", if 'dot' is installed.
+  /// transformer
+  ///         Applies the transformer to every parse tree (equivalent to applying it after the parse, but faster)
+  /// propagate_positions
+  ///         Propagates (line, column, end_line, end_column) attributes into all tree branches.
+  ///         Accepts ``False``, ``True``, or a callable, which will filter which nodes to ignore when propagating.
+  /// maybe_placeholders
+  ///         When ``True``, the ``[]`` operator returns ``None`` when not matched.
+  ///         When ``False``,  ``[]`` behaves like the ``?`` operator, and returns no value at all.
+  ///         (default= ``True``)
+  /// cache
+  ///         Cache the results of the Lark grammar analysis, for x2 to x3 faster loading. LALR only for now.
+  ///
+  ///         - When ``False``, does nothing (default)
+  ///         - When ``True``, caches to a temporary file in the local directory
+  ///         - When given a string, caches to the path pointed by the string
+  /// regex
+  ///         When True, uses the ``regex`` module instead of the stdlib ``re``.
+  /// g_regex_flags
+  ///         Flags that are applied to all terminals (both regex and strings)
+  /// keep_all_tokens
+  ///         Prevent the tree builder from automagically removing "punctuation" tokens (Default: ``False``)
+  /// tree_class
+  ///         Lark will produce trees comprised of instances of this class instead of the default ``lark.Tree``.
+  ///
+  /// **=== Algorithm Options ===**
+  ///
+  /// parser
+  ///         Decides which parser engine to use. Accepts "earley" or "lalr". (Default: "earley").
+  ///         (there is also a "cyk" option for legacy)
+  /// lexer
+  ///         Decides whether or not to use a lexer stage
+  ///
+  ///         - "auto" (default): Choose for me based on the parser
+  ///         - "basic": Use a basic lexer
+  ///         - "contextual": Stronger lexer (only works with parser="lalr")
+  ///         - "dynamic": Flexible and powerful (only with parser="earley")
+  ///         - "dynamic_complete": Same as dynamic, but tries *every* variation of tokenizing possible.
+  /// ambiguity
+  ///         Decides how to handle ambiguity in the parse. Only relevant if parser="earley"
+  ///
+  ///         - "resolve": The parser will automatically choose the simplest derivation
+  ///           (it chooses consistently: greedy for tokens, non-greedy for rules)
+  ///         - "explicit": The parser will return all derivations wrapped in "_ambig" tree nodes (i.e. a forest).
+  ///         - "forest": The parser will return the root of the shared packed parse forest.
+  ///
+  /// **=== Misc. / Domain Specific Options ===**
+  ///
+  /// postlex
+  ///         Lexer post-processing (Default: ``None``) Only works with the basic and contextual lexers.
+  /// priority
+  ///         How priorities should be evaluated - "auto", ``None``, "normal", "invert" (Default: "auto")
+  /// lexer_callbacks
+  ///         Dictionary of callbacks for the lexer. May alter tokens during lexing. Use with caution.
+  /// use_bytes
+  ///         Accept an input of type ``bytes`` instead of ``str``.
+  /// edit_terminals
+  ///         A callback for editing the terminals before parse.
+  /// import_paths
+  ///         A List of either paths or loader functions to specify from where grammars are imported
+  /// source_path
+  ///         Override the source of from where the grammar was loaded. Useful for relative imports and unconventional grammar loading
+  /// **=== End of Options ===**
   set open(Object? open) => setAttribute("open", open);
 
   /// ## open_from_package (getter)
   ///
   /// ### python docstring
   ///
-  /// Create an instance of Lark with the grammar loaded from within the package `package`.
-  /// This allows grammar loading from zipapps.
+  /// Main interface for the library.
   ///
-  /// Imports in the grammar will use the `package` and `search_paths` provided, through `FromPackageLoader`
+  /// It's mostly a thin wrapper for the many different parsers, and for the tree constructor.
+  ///
+  /// Parameters:
+  ///     grammar: a string or file-object containing the grammar spec (using Lark's ebnf syntax)
+  ///     options: a dictionary controlling various aspects of Lark.
   ///
   /// Example:
+  ///     >>> Lark(r'''start: "foo" ''')
+  ///     Lark(...)
   ///
-  ///     Lark.open_from_package(__name__, "example.lark", ("grammars",), parser=...)
+  ///
+  ///
+  /// **===  General Options  ===**
+  ///
+  /// start
+  ///         The start symbol. Either a string, or a list of strings for multiple possible starts (Default: "start")
+  /// debug
+  ///         Display debug information and extra warnings. Use only when debugging (Default: ``False``)
+  ///         When used with Earley, it generates a forest graph as "sppf.png", if 'dot' is installed.
+  /// transformer
+  ///         Applies the transformer to every parse tree (equivalent to applying it after the parse, but faster)
+  /// propagate_positions
+  ///         Propagates (line, column, end_line, end_column) attributes into all tree branches.
+  ///         Accepts ``False``, ``True``, or a callable, which will filter which nodes to ignore when propagating.
+  /// maybe_placeholders
+  ///         When ``True``, the ``[]`` operator returns ``None`` when not matched.
+  ///         When ``False``,  ``[]`` behaves like the ``?`` operator, and returns no value at all.
+  ///         (default= ``True``)
+  /// cache
+  ///         Cache the results of the Lark grammar analysis, for x2 to x3 faster loading. LALR only for now.
+  ///
+  ///         - When ``False``, does nothing (default)
+  ///         - When ``True``, caches to a temporary file in the local directory
+  ///         - When given a string, caches to the path pointed by the string
+  /// regex
+  ///         When True, uses the ``regex`` module instead of the stdlib ``re``.
+  /// g_regex_flags
+  ///         Flags that are applied to all terminals (both regex and strings)
+  /// keep_all_tokens
+  ///         Prevent the tree builder from automagically removing "punctuation" tokens (Default: ``False``)
+  /// tree_class
+  ///         Lark will produce trees comprised of instances of this class instead of the default ``lark.Tree``.
+  ///
+  /// **=== Algorithm Options ===**
+  ///
+  /// parser
+  ///         Decides which parser engine to use. Accepts "earley" or "lalr". (Default: "earley").
+  ///         (there is also a "cyk" option for legacy)
+  /// lexer
+  ///         Decides whether or not to use a lexer stage
+  ///
+  ///         - "auto" (default): Choose for me based on the parser
+  ///         - "basic": Use a basic lexer
+  ///         - "contextual": Stronger lexer (only works with parser="lalr")
+  ///         - "dynamic": Flexible and powerful (only with parser="earley")
+  ///         - "dynamic_complete": Same as dynamic, but tries *every* variation of tokenizing possible.
+  /// ambiguity
+  ///         Decides how to handle ambiguity in the parse. Only relevant if parser="earley"
+  ///
+  ///         - "resolve": The parser will automatically choose the simplest derivation
+  ///           (it chooses consistently: greedy for tokens, non-greedy for rules)
+  ///         - "explicit": The parser will return all derivations wrapped in "_ambig" tree nodes (i.e. a forest).
+  ///         - "forest": The parser will return the root of the shared packed parse forest.
+  ///
+  /// **=== Misc. / Domain Specific Options ===**
+  ///
+  /// postlex
+  ///         Lexer post-processing (Default: ``None``) Only works with the basic and contextual lexers.
+  /// priority
+  ///         How priorities should be evaluated - "auto", ``None``, "normal", "invert" (Default: "auto")
+  /// lexer_callbacks
+  ///         Dictionary of callbacks for the lexer. May alter tokens during lexing. Use with caution.
+  /// use_bytes
+  ///         Accept an input of type ``bytes`` instead of ``str``.
+  /// edit_terminals
+  ///         A callback for editing the terminals before parse.
+  /// import_paths
+  ///         A List of either paths or loader functions to specify from where grammars are imported
+  /// source_path
+  ///         Override the source of from where the grammar was loaded. Useful for relative imports and unconventional grammar loading
+  /// **=== End of Options ===**
   Object? get open_from_package => getAttribute("open_from_package");
 
   /// ## open_from_package (setter)
   ///
   /// ### python docstring
   ///
-  /// Create an instance of Lark with the grammar loaded from within the package `package`.
-  /// This allows grammar loading from zipapps.
+  /// Main interface for the library.
   ///
-  /// Imports in the grammar will use the `package` and `search_paths` provided, through `FromPackageLoader`
+  /// It's mostly a thin wrapper for the many different parsers, and for the tree constructor.
+  ///
+  /// Parameters:
+  ///     grammar: a string or file-object containing the grammar spec (using Lark's ebnf syntax)
+  ///     options: a dictionary controlling various aspects of Lark.
   ///
   /// Example:
+  ///     >>> Lark(r'''start: "foo" ''')
+  ///     Lark(...)
   ///
-  ///     Lark.open_from_package(__name__, "example.lark", ("grammars",), parser=...)
+  ///
+  ///
+  /// **===  General Options  ===**
+  ///
+  /// start
+  ///         The start symbol. Either a string, or a list of strings for multiple possible starts (Default: "start")
+  /// debug
+  ///         Display debug information and extra warnings. Use only when debugging (Default: ``False``)
+  ///         When used with Earley, it generates a forest graph as "sppf.png", if 'dot' is installed.
+  /// transformer
+  ///         Applies the transformer to every parse tree (equivalent to applying it after the parse, but faster)
+  /// propagate_positions
+  ///         Propagates (line, column, end_line, end_column) attributes into all tree branches.
+  ///         Accepts ``False``, ``True``, or a callable, which will filter which nodes to ignore when propagating.
+  /// maybe_placeholders
+  ///         When ``True``, the ``[]`` operator returns ``None`` when not matched.
+  ///         When ``False``,  ``[]`` behaves like the ``?`` operator, and returns no value at all.
+  ///         (default= ``True``)
+  /// cache
+  ///         Cache the results of the Lark grammar analysis, for x2 to x3 faster loading. LALR only for now.
+  ///
+  ///         - When ``False``, does nothing (default)
+  ///         - When ``True``, caches to a temporary file in the local directory
+  ///         - When given a string, caches to the path pointed by the string
+  /// regex
+  ///         When True, uses the ``regex`` module instead of the stdlib ``re``.
+  /// g_regex_flags
+  ///         Flags that are applied to all terminals (both regex and strings)
+  /// keep_all_tokens
+  ///         Prevent the tree builder from automagically removing "punctuation" tokens (Default: ``False``)
+  /// tree_class
+  ///         Lark will produce trees comprised of instances of this class instead of the default ``lark.Tree``.
+  ///
+  /// **=== Algorithm Options ===**
+  ///
+  /// parser
+  ///         Decides which parser engine to use. Accepts "earley" or "lalr". (Default: "earley").
+  ///         (there is also a "cyk" option for legacy)
+  /// lexer
+  ///         Decides whether or not to use a lexer stage
+  ///
+  ///         - "auto" (default): Choose for me based on the parser
+  ///         - "basic": Use a basic lexer
+  ///         - "contextual": Stronger lexer (only works with parser="lalr")
+  ///         - "dynamic": Flexible and powerful (only with parser="earley")
+  ///         - "dynamic_complete": Same as dynamic, but tries *every* variation of tokenizing possible.
+  /// ambiguity
+  ///         Decides how to handle ambiguity in the parse. Only relevant if parser="earley"
+  ///
+  ///         - "resolve": The parser will automatically choose the simplest derivation
+  ///           (it chooses consistently: greedy for tokens, non-greedy for rules)
+  ///         - "explicit": The parser will return all derivations wrapped in "_ambig" tree nodes (i.e. a forest).
+  ///         - "forest": The parser will return the root of the shared packed parse forest.
+  ///
+  /// **=== Misc. / Domain Specific Options ===**
+  ///
+  /// postlex
+  ///         Lexer post-processing (Default: ``None``) Only works with the basic and contextual lexers.
+  /// priority
+  ///         How priorities should be evaluated - "auto", ``None``, "normal", "invert" (Default: "auto")
+  /// lexer_callbacks
+  ///         Dictionary of callbacks for the lexer. May alter tokens during lexing. Use with caution.
+  /// use_bytes
+  ///         Accept an input of type ``bytes`` instead of ``str``.
+  /// edit_terminals
+  ///         A callback for editing the terminals before parse.
+  /// import_paths
+  ///         A List of either paths or loader functions to specify from where grammars are imported
+  /// source_path
+  ///         Override the source of from where the grammar was loaded. Useful for relative imports and unconventional grammar loading
+  /// **=== End of Options ===**
   set open_from_package(Object? open_from_package) =>
       setAttribute("open_from_package", open_from_package);
 
   /// ## options (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Main interface for the library.
+  ///
+  /// It's mostly a thin wrapper for the many different parsers, and for the tree constructor.
+  ///
+  /// Parameters:
+  ///     grammar: a string or file-object containing the grammar spec (using Lark's ebnf syntax)
+  ///     options: a dictionary controlling various aspects of Lark.
+  ///
+  /// Example:
+  ///     >>> Lark(r'''start: "foo" ''')
+  ///     Lark(...)
+  ///
+  ///
+  ///
+  /// **===  General Options  ===**
+  ///
+  /// start
+  ///         The start symbol. Either a string, or a list of strings for multiple possible starts (Default: "start")
+  /// debug
+  ///         Display debug information and extra warnings. Use only when debugging (Default: ``False``)
+  ///         When used with Earley, it generates a forest graph as "sppf.png", if 'dot' is installed.
+  /// transformer
+  ///         Applies the transformer to every parse tree (equivalent to applying it after the parse, but faster)
+  /// propagate_positions
+  ///         Propagates (line, column, end_line, end_column) attributes into all tree branches.
+  ///         Accepts ``False``, ``True``, or a callable, which will filter which nodes to ignore when propagating.
+  /// maybe_placeholders
+  ///         When ``True``, the ``[]`` operator returns ``None`` when not matched.
+  ///         When ``False``,  ``[]`` behaves like the ``?`` operator, and returns no value at all.
+  ///         (default= ``True``)
+  /// cache
+  ///         Cache the results of the Lark grammar analysis, for x2 to x3 faster loading. LALR only for now.
+  ///
+  ///         - When ``False``, does nothing (default)
+  ///         - When ``True``, caches to a temporary file in the local directory
+  ///         - When given a string, caches to the path pointed by the string
+  /// regex
+  ///         When True, uses the ``regex`` module instead of the stdlib ``re``.
+  /// g_regex_flags
+  ///         Flags that are applied to all terminals (both regex and strings)
+  /// keep_all_tokens
+  ///         Prevent the tree builder from automagically removing "punctuation" tokens (Default: ``False``)
+  /// tree_class
+  ///         Lark will produce trees comprised of instances of this class instead of the default ``lark.Tree``.
+  ///
+  /// **=== Algorithm Options ===**
+  ///
+  /// parser
+  ///         Decides which parser engine to use. Accepts "earley" or "lalr". (Default: "earley").
+  ///         (there is also a "cyk" option for legacy)
+  /// lexer
+  ///         Decides whether or not to use a lexer stage
+  ///
+  ///         - "auto" (default): Choose for me based on the parser
+  ///         - "basic": Use a basic lexer
+  ///         - "contextual": Stronger lexer (only works with parser="lalr")
+  ///         - "dynamic": Flexible and powerful (only with parser="earley")
+  ///         - "dynamic_complete": Same as dynamic, but tries *every* variation of tokenizing possible.
+  /// ambiguity
+  ///         Decides how to handle ambiguity in the parse. Only relevant if parser="earley"
+  ///
+  ///         - "resolve": The parser will automatically choose the simplest derivation
+  ///           (it chooses consistently: greedy for tokens, non-greedy for rules)
+  ///         - "explicit": The parser will return all derivations wrapped in "_ambig" tree nodes (i.e. a forest).
+  ///         - "forest": The parser will return the root of the shared packed parse forest.
+  ///
+  /// **=== Misc. / Domain Specific Options ===**
+  ///
+  /// postlex
+  ///         Lexer post-processing (Default: ``None``) Only works with the basic and contextual lexers.
+  /// priority
+  ///         How priorities should be evaluated - "auto", ``None``, "normal", "invert" (Default: "auto")
+  /// lexer_callbacks
+  ///         Dictionary of callbacks for the lexer. May alter tokens during lexing. Use with caution.
+  /// use_bytes
+  ///         Accept an input of type ``bytes`` instead of ``str``.
+  /// edit_terminals
+  ///         A callback for editing the terminals before parse.
+  /// import_paths
+  ///         A List of either paths or loader functions to specify from where grammars are imported
+  /// source_path
+  ///         Override the source of from where the grammar was loaded. Useful for relative imports and unconventional grammar loading
+  /// **=== End of Options ===**
   Object? get options => getAttribute("options");
 
   /// ## options (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Main interface for the library.
+  ///
+  /// It's mostly a thin wrapper for the many different parsers, and for the tree constructor.
+  ///
+  /// Parameters:
+  ///     grammar: a string or file-object containing the grammar spec (using Lark's ebnf syntax)
+  ///     options: a dictionary controlling various aspects of Lark.
+  ///
+  /// Example:
+  ///     >>> Lark(r'''start: "foo" ''')
+  ///     Lark(...)
+  ///
+  ///
+  ///
+  /// **===  General Options  ===**
+  ///
+  /// start
+  ///         The start symbol. Either a string, or a list of strings for multiple possible starts (Default: "start")
+  /// debug
+  ///         Display debug information and extra warnings. Use only when debugging (Default: ``False``)
+  ///         When used with Earley, it generates a forest graph as "sppf.png", if 'dot' is installed.
+  /// transformer
+  ///         Applies the transformer to every parse tree (equivalent to applying it after the parse, but faster)
+  /// propagate_positions
+  ///         Propagates (line, column, end_line, end_column) attributes into all tree branches.
+  ///         Accepts ``False``, ``True``, or a callable, which will filter which nodes to ignore when propagating.
+  /// maybe_placeholders
+  ///         When ``True``, the ``[]`` operator returns ``None`` when not matched.
+  ///         When ``False``,  ``[]`` behaves like the ``?`` operator, and returns no value at all.
+  ///         (default= ``True``)
+  /// cache
+  ///         Cache the results of the Lark grammar analysis, for x2 to x3 faster loading. LALR only for now.
+  ///
+  ///         - When ``False``, does nothing (default)
+  ///         - When ``True``, caches to a temporary file in the local directory
+  ///         - When given a string, caches to the path pointed by the string
+  /// regex
+  ///         When True, uses the ``regex`` module instead of the stdlib ``re``.
+  /// g_regex_flags
+  ///         Flags that are applied to all terminals (both regex and strings)
+  /// keep_all_tokens
+  ///         Prevent the tree builder from automagically removing "punctuation" tokens (Default: ``False``)
+  /// tree_class
+  ///         Lark will produce trees comprised of instances of this class instead of the default ``lark.Tree``.
+  ///
+  /// **=== Algorithm Options ===**
+  ///
+  /// parser
+  ///         Decides which parser engine to use. Accepts "earley" or "lalr". (Default: "earley").
+  ///         (there is also a "cyk" option for legacy)
+  /// lexer
+  ///         Decides whether or not to use a lexer stage
+  ///
+  ///         - "auto" (default): Choose for me based on the parser
+  ///         - "basic": Use a basic lexer
+  ///         - "contextual": Stronger lexer (only works with parser="lalr")
+  ///         - "dynamic": Flexible and powerful (only with parser="earley")
+  ///         - "dynamic_complete": Same as dynamic, but tries *every* variation of tokenizing possible.
+  /// ambiguity
+  ///         Decides how to handle ambiguity in the parse. Only relevant if parser="earley"
+  ///
+  ///         - "resolve": The parser will automatically choose the simplest derivation
+  ///           (it chooses consistently: greedy for tokens, non-greedy for rules)
+  ///         - "explicit": The parser will return all derivations wrapped in "_ambig" tree nodes (i.e. a forest).
+  ///         - "forest": The parser will return the root of the shared packed parse forest.
+  ///
+  /// **=== Misc. / Domain Specific Options ===**
+  ///
+  /// postlex
+  ///         Lexer post-processing (Default: ``None``) Only works with the basic and contextual lexers.
+  /// priority
+  ///         How priorities should be evaluated - "auto", ``None``, "normal", "invert" (Default: "auto")
+  /// lexer_callbacks
+  ///         Dictionary of callbacks for the lexer. May alter tokens during lexing. Use with caution.
+  /// use_bytes
+  ///         Accept an input of type ``bytes`` instead of ``str``.
+  /// edit_terminals
+  ///         A callback for editing the terminals before parse.
+  /// import_paths
+  ///         A List of either paths or loader functions to specify from where grammars are imported
+  /// source_path
+  ///         Override the source of from where the grammar was loaded. Useful for relative imports and unconventional grammar loading
+  /// **=== End of Options ===**
   set options(Object? options) => setAttribute("options", options);
 
   /// ## source_path (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Main interface for the library.
+  ///
+  /// It's mostly a thin wrapper for the many different parsers, and for the tree constructor.
+  ///
+  /// Parameters:
+  ///     grammar: a string or file-object containing the grammar spec (using Lark's ebnf syntax)
+  ///     options: a dictionary controlling various aspects of Lark.
+  ///
+  /// Example:
+  ///     >>> Lark(r'''start: "foo" ''')
+  ///     Lark(...)
+  ///
+  ///
+  ///
+  /// **===  General Options  ===**
+  ///
+  /// start
+  ///         The start symbol. Either a string, or a list of strings for multiple possible starts (Default: "start")
+  /// debug
+  ///         Display debug information and extra warnings. Use only when debugging (Default: ``False``)
+  ///         When used with Earley, it generates a forest graph as "sppf.png", if 'dot' is installed.
+  /// transformer
+  ///         Applies the transformer to every parse tree (equivalent to applying it after the parse, but faster)
+  /// propagate_positions
+  ///         Propagates (line, column, end_line, end_column) attributes into all tree branches.
+  ///         Accepts ``False``, ``True``, or a callable, which will filter which nodes to ignore when propagating.
+  /// maybe_placeholders
+  ///         When ``True``, the ``[]`` operator returns ``None`` when not matched.
+  ///         When ``False``,  ``[]`` behaves like the ``?`` operator, and returns no value at all.
+  ///         (default= ``True``)
+  /// cache
+  ///         Cache the results of the Lark grammar analysis, for x2 to x3 faster loading. LALR only for now.
+  ///
+  ///         - When ``False``, does nothing (default)
+  ///         - When ``True``, caches to a temporary file in the local directory
+  ///         - When given a string, caches to the path pointed by the string
+  /// regex
+  ///         When True, uses the ``regex`` module instead of the stdlib ``re``.
+  /// g_regex_flags
+  ///         Flags that are applied to all terminals (both regex and strings)
+  /// keep_all_tokens
+  ///         Prevent the tree builder from automagically removing "punctuation" tokens (Default: ``False``)
+  /// tree_class
+  ///         Lark will produce trees comprised of instances of this class instead of the default ``lark.Tree``.
+  ///
+  /// **=== Algorithm Options ===**
+  ///
+  /// parser
+  ///         Decides which parser engine to use. Accepts "earley" or "lalr". (Default: "earley").
+  ///         (there is also a "cyk" option for legacy)
+  /// lexer
+  ///         Decides whether or not to use a lexer stage
+  ///
+  ///         - "auto" (default): Choose for me based on the parser
+  ///         - "basic": Use a basic lexer
+  ///         - "contextual": Stronger lexer (only works with parser="lalr")
+  ///         - "dynamic": Flexible and powerful (only with parser="earley")
+  ///         - "dynamic_complete": Same as dynamic, but tries *every* variation of tokenizing possible.
+  /// ambiguity
+  ///         Decides how to handle ambiguity in the parse. Only relevant if parser="earley"
+  ///
+  ///         - "resolve": The parser will automatically choose the simplest derivation
+  ///           (it chooses consistently: greedy for tokens, non-greedy for rules)
+  ///         - "explicit": The parser will return all derivations wrapped in "_ambig" tree nodes (i.e. a forest).
+  ///         - "forest": The parser will return the root of the shared packed parse forest.
+  ///
+  /// **=== Misc. / Domain Specific Options ===**
+  ///
+  /// postlex
+  ///         Lexer post-processing (Default: ``None``) Only works with the basic and contextual lexers.
+  /// priority
+  ///         How priorities should be evaluated - "auto", ``None``, "normal", "invert" (Default: "auto")
+  /// lexer_callbacks
+  ///         Dictionary of callbacks for the lexer. May alter tokens during lexing. Use with caution.
+  /// use_bytes
+  ///         Accept an input of type ``bytes`` instead of ``str``.
+  /// edit_terminals
+  ///         A callback for editing the terminals before parse.
+  /// import_paths
+  ///         A List of either paths or loader functions to specify from where grammars are imported
+  /// source_path
+  ///         Override the source of from where the grammar was loaded. Useful for relative imports and unconventional grammar loading
+  /// **=== End of Options ===**
   Object? get source_path => getAttribute("source_path");
 
   /// ## source_path (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Main interface for the library.
+  ///
+  /// It's mostly a thin wrapper for the many different parsers, and for the tree constructor.
+  ///
+  /// Parameters:
+  ///     grammar: a string or file-object containing the grammar spec (using Lark's ebnf syntax)
+  ///     options: a dictionary controlling various aspects of Lark.
+  ///
+  /// Example:
+  ///     >>> Lark(r'''start: "foo" ''')
+  ///     Lark(...)
+  ///
+  ///
+  ///
+  /// **===  General Options  ===**
+  ///
+  /// start
+  ///         The start symbol. Either a string, or a list of strings for multiple possible starts (Default: "start")
+  /// debug
+  ///         Display debug information and extra warnings. Use only when debugging (Default: ``False``)
+  ///         When used with Earley, it generates a forest graph as "sppf.png", if 'dot' is installed.
+  /// transformer
+  ///         Applies the transformer to every parse tree (equivalent to applying it after the parse, but faster)
+  /// propagate_positions
+  ///         Propagates (line, column, end_line, end_column) attributes into all tree branches.
+  ///         Accepts ``False``, ``True``, or a callable, which will filter which nodes to ignore when propagating.
+  /// maybe_placeholders
+  ///         When ``True``, the ``[]`` operator returns ``None`` when not matched.
+  ///         When ``False``,  ``[]`` behaves like the ``?`` operator, and returns no value at all.
+  ///         (default= ``True``)
+  /// cache
+  ///         Cache the results of the Lark grammar analysis, for x2 to x3 faster loading. LALR only for now.
+  ///
+  ///         - When ``False``, does nothing (default)
+  ///         - When ``True``, caches to a temporary file in the local directory
+  ///         - When given a string, caches to the path pointed by the string
+  /// regex
+  ///         When True, uses the ``regex`` module instead of the stdlib ``re``.
+  /// g_regex_flags
+  ///         Flags that are applied to all terminals (both regex and strings)
+  /// keep_all_tokens
+  ///         Prevent the tree builder from automagically removing "punctuation" tokens (Default: ``False``)
+  /// tree_class
+  ///         Lark will produce trees comprised of instances of this class instead of the default ``lark.Tree``.
+  ///
+  /// **=== Algorithm Options ===**
+  ///
+  /// parser
+  ///         Decides which parser engine to use. Accepts "earley" or "lalr". (Default: "earley").
+  ///         (there is also a "cyk" option for legacy)
+  /// lexer
+  ///         Decides whether or not to use a lexer stage
+  ///
+  ///         - "auto" (default): Choose for me based on the parser
+  ///         - "basic": Use a basic lexer
+  ///         - "contextual": Stronger lexer (only works with parser="lalr")
+  ///         - "dynamic": Flexible and powerful (only with parser="earley")
+  ///         - "dynamic_complete": Same as dynamic, but tries *every* variation of tokenizing possible.
+  /// ambiguity
+  ///         Decides how to handle ambiguity in the parse. Only relevant if parser="earley"
+  ///
+  ///         - "resolve": The parser will automatically choose the simplest derivation
+  ///           (it chooses consistently: greedy for tokens, non-greedy for rules)
+  ///         - "explicit": The parser will return all derivations wrapped in "_ambig" tree nodes (i.e. a forest).
+  ///         - "forest": The parser will return the root of the shared packed parse forest.
+  ///
+  /// **=== Misc. / Domain Specific Options ===**
+  ///
+  /// postlex
+  ///         Lexer post-processing (Default: ``None``) Only works with the basic and contextual lexers.
+  /// priority
+  ///         How priorities should be evaluated - "auto", ``None``, "normal", "invert" (Default: "auto")
+  /// lexer_callbacks
+  ///         Dictionary of callbacks for the lexer. May alter tokens during lexing. Use with caution.
+  /// use_bytes
+  ///         Accept an input of type ``bytes`` instead of ``str``.
+  /// edit_terminals
+  ///         A callback for editing the terminals before parse.
+  /// import_paths
+  ///         A List of either paths or loader functions to specify from where grammars are imported
+  /// source_path
+  ///         Override the source of from where the grammar was loaded. Useful for relative imports and unconventional grammar loading
+  /// **=== End of Options ===**
   set source_path(Object? source_path) =>
       setAttribute("source_path", source_path);
 
   /// ## source_grammar (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Main interface for the library.
+  ///
+  /// It's mostly a thin wrapper for the many different parsers, and for the tree constructor.
+  ///
+  /// Parameters:
+  ///     grammar: a string or file-object containing the grammar spec (using Lark's ebnf syntax)
+  ///     options: a dictionary controlling various aspects of Lark.
+  ///
+  /// Example:
+  ///     >>> Lark(r'''start: "foo" ''')
+  ///     Lark(...)
+  ///
+  ///
+  ///
+  /// **===  General Options  ===**
+  ///
+  /// start
+  ///         The start symbol. Either a string, or a list of strings for multiple possible starts (Default: "start")
+  /// debug
+  ///         Display debug information and extra warnings. Use only when debugging (Default: ``False``)
+  ///         When used with Earley, it generates a forest graph as "sppf.png", if 'dot' is installed.
+  /// transformer
+  ///         Applies the transformer to every parse tree (equivalent to applying it after the parse, but faster)
+  /// propagate_positions
+  ///         Propagates (line, column, end_line, end_column) attributes into all tree branches.
+  ///         Accepts ``False``, ``True``, or a callable, which will filter which nodes to ignore when propagating.
+  /// maybe_placeholders
+  ///         When ``True``, the ``[]`` operator returns ``None`` when not matched.
+  ///         When ``False``,  ``[]`` behaves like the ``?`` operator, and returns no value at all.
+  ///         (default= ``True``)
+  /// cache
+  ///         Cache the results of the Lark grammar analysis, for x2 to x3 faster loading. LALR only for now.
+  ///
+  ///         - When ``False``, does nothing (default)
+  ///         - When ``True``, caches to a temporary file in the local directory
+  ///         - When given a string, caches to the path pointed by the string
+  /// regex
+  ///         When True, uses the ``regex`` module instead of the stdlib ``re``.
+  /// g_regex_flags
+  ///         Flags that are applied to all terminals (both regex and strings)
+  /// keep_all_tokens
+  ///         Prevent the tree builder from automagically removing "punctuation" tokens (Default: ``False``)
+  /// tree_class
+  ///         Lark will produce trees comprised of instances of this class instead of the default ``lark.Tree``.
+  ///
+  /// **=== Algorithm Options ===**
+  ///
+  /// parser
+  ///         Decides which parser engine to use. Accepts "earley" or "lalr". (Default: "earley").
+  ///         (there is also a "cyk" option for legacy)
+  /// lexer
+  ///         Decides whether or not to use a lexer stage
+  ///
+  ///         - "auto" (default): Choose for me based on the parser
+  ///         - "basic": Use a basic lexer
+  ///         - "contextual": Stronger lexer (only works with parser="lalr")
+  ///         - "dynamic": Flexible and powerful (only with parser="earley")
+  ///         - "dynamic_complete": Same as dynamic, but tries *every* variation of tokenizing possible.
+  /// ambiguity
+  ///         Decides how to handle ambiguity in the parse. Only relevant if parser="earley"
+  ///
+  ///         - "resolve": The parser will automatically choose the simplest derivation
+  ///           (it chooses consistently: greedy for tokens, non-greedy for rules)
+  ///         - "explicit": The parser will return all derivations wrapped in "_ambig" tree nodes (i.e. a forest).
+  ///         - "forest": The parser will return the root of the shared packed parse forest.
+  ///
+  /// **=== Misc. / Domain Specific Options ===**
+  ///
+  /// postlex
+  ///         Lexer post-processing (Default: ``None``) Only works with the basic and contextual lexers.
+  /// priority
+  ///         How priorities should be evaluated - "auto", ``None``, "normal", "invert" (Default: "auto")
+  /// lexer_callbacks
+  ///         Dictionary of callbacks for the lexer. May alter tokens during lexing. Use with caution.
+  /// use_bytes
+  ///         Accept an input of type ``bytes`` instead of ``str``.
+  /// edit_terminals
+  ///         A callback for editing the terminals before parse.
+  /// import_paths
+  ///         A List of either paths or loader functions to specify from where grammars are imported
+  /// source_path
+  ///         Override the source of from where the grammar was loaded. Useful for relative imports and unconventional grammar loading
+  /// **=== End of Options ===**
   Object? get source_grammar => getAttribute("source_grammar");
 
   /// ## source_grammar (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Main interface for the library.
+  ///
+  /// It's mostly a thin wrapper for the many different parsers, and for the tree constructor.
+  ///
+  /// Parameters:
+  ///     grammar: a string or file-object containing the grammar spec (using Lark's ebnf syntax)
+  ///     options: a dictionary controlling various aspects of Lark.
+  ///
+  /// Example:
+  ///     >>> Lark(r'''start: "foo" ''')
+  ///     Lark(...)
+  ///
+  ///
+  ///
+  /// **===  General Options  ===**
+  ///
+  /// start
+  ///         The start symbol. Either a string, or a list of strings for multiple possible starts (Default: "start")
+  /// debug
+  ///         Display debug information and extra warnings. Use only when debugging (Default: ``False``)
+  ///         When used with Earley, it generates a forest graph as "sppf.png", if 'dot' is installed.
+  /// transformer
+  ///         Applies the transformer to every parse tree (equivalent to applying it after the parse, but faster)
+  /// propagate_positions
+  ///         Propagates (line, column, end_line, end_column) attributes into all tree branches.
+  ///         Accepts ``False``, ``True``, or a callable, which will filter which nodes to ignore when propagating.
+  /// maybe_placeholders
+  ///         When ``True``, the ``[]`` operator returns ``None`` when not matched.
+  ///         When ``False``,  ``[]`` behaves like the ``?`` operator, and returns no value at all.
+  ///         (default= ``True``)
+  /// cache
+  ///         Cache the results of the Lark grammar analysis, for x2 to x3 faster loading. LALR only for now.
+  ///
+  ///         - When ``False``, does nothing (default)
+  ///         - When ``True``, caches to a temporary file in the local directory
+  ///         - When given a string, caches to the path pointed by the string
+  /// regex
+  ///         When True, uses the ``regex`` module instead of the stdlib ``re``.
+  /// g_regex_flags
+  ///         Flags that are applied to all terminals (both regex and strings)
+  /// keep_all_tokens
+  ///         Prevent the tree builder from automagically removing "punctuation" tokens (Default: ``False``)
+  /// tree_class
+  ///         Lark will produce trees comprised of instances of this class instead of the default ``lark.Tree``.
+  ///
+  /// **=== Algorithm Options ===**
+  ///
+  /// parser
+  ///         Decides which parser engine to use. Accepts "earley" or "lalr". (Default: "earley").
+  ///         (there is also a "cyk" option for legacy)
+  /// lexer
+  ///         Decides whether or not to use a lexer stage
+  ///
+  ///         - "auto" (default): Choose for me based on the parser
+  ///         - "basic": Use a basic lexer
+  ///         - "contextual": Stronger lexer (only works with parser="lalr")
+  ///         - "dynamic": Flexible and powerful (only with parser="earley")
+  ///         - "dynamic_complete": Same as dynamic, but tries *every* variation of tokenizing possible.
+  /// ambiguity
+  ///         Decides how to handle ambiguity in the parse. Only relevant if parser="earley"
+  ///
+  ///         - "resolve": The parser will automatically choose the simplest derivation
+  ///           (it chooses consistently: greedy for tokens, non-greedy for rules)
+  ///         - "explicit": The parser will return all derivations wrapped in "_ambig" tree nodes (i.e. a forest).
+  ///         - "forest": The parser will return the root of the shared packed parse forest.
+  ///
+  /// **=== Misc. / Domain Specific Options ===**
+  ///
+  /// postlex
+  ///         Lexer post-processing (Default: ``None``) Only works with the basic and contextual lexers.
+  /// priority
+  ///         How priorities should be evaluated - "auto", ``None``, "normal", "invert" (Default: "auto")
+  /// lexer_callbacks
+  ///         Dictionary of callbacks for the lexer. May alter tokens during lexing. Use with caution.
+  /// use_bytes
+  ///         Accept an input of type ``bytes`` instead of ``str``.
+  /// edit_terminals
+  ///         A callback for editing the terminals before parse.
+  /// import_paths
+  ///         A List of either paths or loader functions to specify from where grammars are imported
+  /// source_path
+  ///         Override the source of from where the grammar was loaded. Useful for relative imports and unconventional grammar loading
+  /// **=== End of Options ===**
   set source_grammar(Object? source_grammar) =>
       setAttribute("source_grammar", source_grammar);
 
   /// ## parser (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Main interface for the library.
+  ///
+  /// It's mostly a thin wrapper for the many different parsers, and for the tree constructor.
+  ///
+  /// Parameters:
+  ///     grammar: a string or file-object containing the grammar spec (using Lark's ebnf syntax)
+  ///     options: a dictionary controlling various aspects of Lark.
+  ///
+  /// Example:
+  ///     >>> Lark(r'''start: "foo" ''')
+  ///     Lark(...)
+  ///
+  ///
+  ///
+  /// **===  General Options  ===**
+  ///
+  /// start
+  ///         The start symbol. Either a string, or a list of strings for multiple possible starts (Default: "start")
+  /// debug
+  ///         Display debug information and extra warnings. Use only when debugging (Default: ``False``)
+  ///         When used with Earley, it generates a forest graph as "sppf.png", if 'dot' is installed.
+  /// transformer
+  ///         Applies the transformer to every parse tree (equivalent to applying it after the parse, but faster)
+  /// propagate_positions
+  ///         Propagates (line, column, end_line, end_column) attributes into all tree branches.
+  ///         Accepts ``False``, ``True``, or a callable, which will filter which nodes to ignore when propagating.
+  /// maybe_placeholders
+  ///         When ``True``, the ``[]`` operator returns ``None`` when not matched.
+  ///         When ``False``,  ``[]`` behaves like the ``?`` operator, and returns no value at all.
+  ///         (default= ``True``)
+  /// cache
+  ///         Cache the results of the Lark grammar analysis, for x2 to x3 faster loading. LALR only for now.
+  ///
+  ///         - When ``False``, does nothing (default)
+  ///         - When ``True``, caches to a temporary file in the local directory
+  ///         - When given a string, caches to the path pointed by the string
+  /// regex
+  ///         When True, uses the ``regex`` module instead of the stdlib ``re``.
+  /// g_regex_flags
+  ///         Flags that are applied to all terminals (both regex and strings)
+  /// keep_all_tokens
+  ///         Prevent the tree builder from automagically removing "punctuation" tokens (Default: ``False``)
+  /// tree_class
+  ///         Lark will produce trees comprised of instances of this class instead of the default ``lark.Tree``.
+  ///
+  /// **=== Algorithm Options ===**
+  ///
+  /// parser
+  ///         Decides which parser engine to use. Accepts "earley" or "lalr". (Default: "earley").
+  ///         (there is also a "cyk" option for legacy)
+  /// lexer
+  ///         Decides whether or not to use a lexer stage
+  ///
+  ///         - "auto" (default): Choose for me based on the parser
+  ///         - "basic": Use a basic lexer
+  ///         - "contextual": Stronger lexer (only works with parser="lalr")
+  ///         - "dynamic": Flexible and powerful (only with parser="earley")
+  ///         - "dynamic_complete": Same as dynamic, but tries *every* variation of tokenizing possible.
+  /// ambiguity
+  ///         Decides how to handle ambiguity in the parse. Only relevant if parser="earley"
+  ///
+  ///         - "resolve": The parser will automatically choose the simplest derivation
+  ///           (it chooses consistently: greedy for tokens, non-greedy for rules)
+  ///         - "explicit": The parser will return all derivations wrapped in "_ambig" tree nodes (i.e. a forest).
+  ///         - "forest": The parser will return the root of the shared packed parse forest.
+  ///
+  /// **=== Misc. / Domain Specific Options ===**
+  ///
+  /// postlex
+  ///         Lexer post-processing (Default: ``None``) Only works with the basic and contextual lexers.
+  /// priority
+  ///         How priorities should be evaluated - "auto", ``None``, "normal", "invert" (Default: "auto")
+  /// lexer_callbacks
+  ///         Dictionary of callbacks for the lexer. May alter tokens during lexing. Use with caution.
+  /// use_bytes
+  ///         Accept an input of type ``bytes`` instead of ``str``.
+  /// edit_terminals
+  ///         A callback for editing the terminals before parse.
+  /// import_paths
+  ///         A List of either paths or loader functions to specify from where grammars are imported
+  /// source_path
+  ///         Override the source of from where the grammar was loaded. Useful for relative imports and unconventional grammar loading
+  /// **=== End of Options ===**
   Object? get parser => getAttribute("parser");
 
   /// ## parser (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Main interface for the library.
+  ///
+  /// It's mostly a thin wrapper for the many different parsers, and for the tree constructor.
+  ///
+  /// Parameters:
+  ///     grammar: a string or file-object containing the grammar spec (using Lark's ebnf syntax)
+  ///     options: a dictionary controlling various aspects of Lark.
+  ///
+  /// Example:
+  ///     >>> Lark(r'''start: "foo" ''')
+  ///     Lark(...)
+  ///
+  ///
+  ///
+  /// **===  General Options  ===**
+  ///
+  /// start
+  ///         The start symbol. Either a string, or a list of strings for multiple possible starts (Default: "start")
+  /// debug
+  ///         Display debug information and extra warnings. Use only when debugging (Default: ``False``)
+  ///         When used with Earley, it generates a forest graph as "sppf.png", if 'dot' is installed.
+  /// transformer
+  ///         Applies the transformer to every parse tree (equivalent to applying it after the parse, but faster)
+  /// propagate_positions
+  ///         Propagates (line, column, end_line, end_column) attributes into all tree branches.
+  ///         Accepts ``False``, ``True``, or a callable, which will filter which nodes to ignore when propagating.
+  /// maybe_placeholders
+  ///         When ``True``, the ``[]`` operator returns ``None`` when not matched.
+  ///         When ``False``,  ``[]`` behaves like the ``?`` operator, and returns no value at all.
+  ///         (default= ``True``)
+  /// cache
+  ///         Cache the results of the Lark grammar analysis, for x2 to x3 faster loading. LALR only for now.
+  ///
+  ///         - When ``False``, does nothing (default)
+  ///         - When ``True``, caches to a temporary file in the local directory
+  ///         - When given a string, caches to the path pointed by the string
+  /// regex
+  ///         When True, uses the ``regex`` module instead of the stdlib ``re``.
+  /// g_regex_flags
+  ///         Flags that are applied to all terminals (both regex and strings)
+  /// keep_all_tokens
+  ///         Prevent the tree builder from automagically removing "punctuation" tokens (Default: ``False``)
+  /// tree_class
+  ///         Lark will produce trees comprised of instances of this class instead of the default ``lark.Tree``.
+  ///
+  /// **=== Algorithm Options ===**
+  ///
+  /// parser
+  ///         Decides which parser engine to use. Accepts "earley" or "lalr". (Default: "earley").
+  ///         (there is also a "cyk" option for legacy)
+  /// lexer
+  ///         Decides whether or not to use a lexer stage
+  ///
+  ///         - "auto" (default): Choose for me based on the parser
+  ///         - "basic": Use a basic lexer
+  ///         - "contextual": Stronger lexer (only works with parser="lalr")
+  ///         - "dynamic": Flexible and powerful (only with parser="earley")
+  ///         - "dynamic_complete": Same as dynamic, but tries *every* variation of tokenizing possible.
+  /// ambiguity
+  ///         Decides how to handle ambiguity in the parse. Only relevant if parser="earley"
+  ///
+  ///         - "resolve": The parser will automatically choose the simplest derivation
+  ///           (it chooses consistently: greedy for tokens, non-greedy for rules)
+  ///         - "explicit": The parser will return all derivations wrapped in "_ambig" tree nodes (i.e. a forest).
+  ///         - "forest": The parser will return the root of the shared packed parse forest.
+  ///
+  /// **=== Misc. / Domain Specific Options ===**
+  ///
+  /// postlex
+  ///         Lexer post-processing (Default: ``None``) Only works with the basic and contextual lexers.
+  /// priority
+  ///         How priorities should be evaluated - "auto", ``None``, "normal", "invert" (Default: "auto")
+  /// lexer_callbacks
+  ///         Dictionary of callbacks for the lexer. May alter tokens during lexing. Use with caution.
+  /// use_bytes
+  ///         Accept an input of type ``bytes`` instead of ``str``.
+  /// edit_terminals
+  ///         A callback for editing the terminals before parse.
+  /// import_paths
+  ///         A List of either paths or loader functions to specify from where grammars are imported
+  /// source_path
+  ///         Override the source of from where the grammar was loaded. Useful for relative imports and unconventional grammar loading
+  /// **=== End of Options ===**
   set parser(Object? parser) => setAttribute("parser", parser);
 
   /// ## grammar (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Main interface for the library.
+  ///
+  /// It's mostly a thin wrapper for the many different parsers, and for the tree constructor.
+  ///
+  /// Parameters:
+  ///     grammar: a string or file-object containing the grammar spec (using Lark's ebnf syntax)
+  ///     options: a dictionary controlling various aspects of Lark.
+  ///
+  /// Example:
+  ///     >>> Lark(r'''start: "foo" ''')
+  ///     Lark(...)
+  ///
+  ///
+  ///
+  /// **===  General Options  ===**
+  ///
+  /// start
+  ///         The start symbol. Either a string, or a list of strings for multiple possible starts (Default: "start")
+  /// debug
+  ///         Display debug information and extra warnings. Use only when debugging (Default: ``False``)
+  ///         When used with Earley, it generates a forest graph as "sppf.png", if 'dot' is installed.
+  /// transformer
+  ///         Applies the transformer to every parse tree (equivalent to applying it after the parse, but faster)
+  /// propagate_positions
+  ///         Propagates (line, column, end_line, end_column) attributes into all tree branches.
+  ///         Accepts ``False``, ``True``, or a callable, which will filter which nodes to ignore when propagating.
+  /// maybe_placeholders
+  ///         When ``True``, the ``[]`` operator returns ``None`` when not matched.
+  ///         When ``False``,  ``[]`` behaves like the ``?`` operator, and returns no value at all.
+  ///         (default= ``True``)
+  /// cache
+  ///         Cache the results of the Lark grammar analysis, for x2 to x3 faster loading. LALR only for now.
+  ///
+  ///         - When ``False``, does nothing (default)
+  ///         - When ``True``, caches to a temporary file in the local directory
+  ///         - When given a string, caches to the path pointed by the string
+  /// regex
+  ///         When True, uses the ``regex`` module instead of the stdlib ``re``.
+  /// g_regex_flags
+  ///         Flags that are applied to all terminals (both regex and strings)
+  /// keep_all_tokens
+  ///         Prevent the tree builder from automagically removing "punctuation" tokens (Default: ``False``)
+  /// tree_class
+  ///         Lark will produce trees comprised of instances of this class instead of the default ``lark.Tree``.
+  ///
+  /// **=== Algorithm Options ===**
+  ///
+  /// parser
+  ///         Decides which parser engine to use. Accepts "earley" or "lalr". (Default: "earley").
+  ///         (there is also a "cyk" option for legacy)
+  /// lexer
+  ///         Decides whether or not to use a lexer stage
+  ///
+  ///         - "auto" (default): Choose for me based on the parser
+  ///         - "basic": Use a basic lexer
+  ///         - "contextual": Stronger lexer (only works with parser="lalr")
+  ///         - "dynamic": Flexible and powerful (only with parser="earley")
+  ///         - "dynamic_complete": Same as dynamic, but tries *every* variation of tokenizing possible.
+  /// ambiguity
+  ///         Decides how to handle ambiguity in the parse. Only relevant if parser="earley"
+  ///
+  ///         - "resolve": The parser will automatically choose the simplest derivation
+  ///           (it chooses consistently: greedy for tokens, non-greedy for rules)
+  ///         - "explicit": The parser will return all derivations wrapped in "_ambig" tree nodes (i.e. a forest).
+  ///         - "forest": The parser will return the root of the shared packed parse forest.
+  ///
+  /// **=== Misc. / Domain Specific Options ===**
+  ///
+  /// postlex
+  ///         Lexer post-processing (Default: ``None``) Only works with the basic and contextual lexers.
+  /// priority
+  ///         How priorities should be evaluated - "auto", ``None``, "normal", "invert" (Default: "auto")
+  /// lexer_callbacks
+  ///         Dictionary of callbacks for the lexer. May alter tokens during lexing. Use with caution.
+  /// use_bytes
+  ///         Accept an input of type ``bytes`` instead of ``str``.
+  /// edit_terminals
+  ///         A callback for editing the terminals before parse.
+  /// import_paths
+  ///         A List of either paths or loader functions to specify from where grammars are imported
+  /// source_path
+  ///         Override the source of from where the grammar was loaded. Useful for relative imports and unconventional grammar loading
+  /// **=== End of Options ===**
   Object? get grammar => getAttribute("grammar");
 
   /// ## grammar (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Main interface for the library.
+  ///
+  /// It's mostly a thin wrapper for the many different parsers, and for the tree constructor.
+  ///
+  /// Parameters:
+  ///     grammar: a string or file-object containing the grammar spec (using Lark's ebnf syntax)
+  ///     options: a dictionary controlling various aspects of Lark.
+  ///
+  /// Example:
+  ///     >>> Lark(r'''start: "foo" ''')
+  ///     Lark(...)
+  ///
+  ///
+  ///
+  /// **===  General Options  ===**
+  ///
+  /// start
+  ///         The start symbol. Either a string, or a list of strings for multiple possible starts (Default: "start")
+  /// debug
+  ///         Display debug information and extra warnings. Use only when debugging (Default: ``False``)
+  ///         When used with Earley, it generates a forest graph as "sppf.png", if 'dot' is installed.
+  /// transformer
+  ///         Applies the transformer to every parse tree (equivalent to applying it after the parse, but faster)
+  /// propagate_positions
+  ///         Propagates (line, column, end_line, end_column) attributes into all tree branches.
+  ///         Accepts ``False``, ``True``, or a callable, which will filter which nodes to ignore when propagating.
+  /// maybe_placeholders
+  ///         When ``True``, the ``[]`` operator returns ``None`` when not matched.
+  ///         When ``False``,  ``[]`` behaves like the ``?`` operator, and returns no value at all.
+  ///         (default= ``True``)
+  /// cache
+  ///         Cache the results of the Lark grammar analysis, for x2 to x3 faster loading. LALR only for now.
+  ///
+  ///         - When ``False``, does nothing (default)
+  ///         - When ``True``, caches to a temporary file in the local directory
+  ///         - When given a string, caches to the path pointed by the string
+  /// regex
+  ///         When True, uses the ``regex`` module instead of the stdlib ``re``.
+  /// g_regex_flags
+  ///         Flags that are applied to all terminals (both regex and strings)
+  /// keep_all_tokens
+  ///         Prevent the tree builder from automagically removing "punctuation" tokens (Default: ``False``)
+  /// tree_class
+  ///         Lark will produce trees comprised of instances of this class instead of the default ``lark.Tree``.
+  ///
+  /// **=== Algorithm Options ===**
+  ///
+  /// parser
+  ///         Decides which parser engine to use. Accepts "earley" or "lalr". (Default: "earley").
+  ///         (there is also a "cyk" option for legacy)
+  /// lexer
+  ///         Decides whether or not to use a lexer stage
+  ///
+  ///         - "auto" (default): Choose for me based on the parser
+  ///         - "basic": Use a basic lexer
+  ///         - "contextual": Stronger lexer (only works with parser="lalr")
+  ///         - "dynamic": Flexible and powerful (only with parser="earley")
+  ///         - "dynamic_complete": Same as dynamic, but tries *every* variation of tokenizing possible.
+  /// ambiguity
+  ///         Decides how to handle ambiguity in the parse. Only relevant if parser="earley"
+  ///
+  ///         - "resolve": The parser will automatically choose the simplest derivation
+  ///           (it chooses consistently: greedy for tokens, non-greedy for rules)
+  ///         - "explicit": The parser will return all derivations wrapped in "_ambig" tree nodes (i.e. a forest).
+  ///         - "forest": The parser will return the root of the shared packed parse forest.
+  ///
+  /// **=== Misc. / Domain Specific Options ===**
+  ///
+  /// postlex
+  ///         Lexer post-processing (Default: ``None``) Only works with the basic and contextual lexers.
+  /// priority
+  ///         How priorities should be evaluated - "auto", ``None``, "normal", "invert" (Default: "auto")
+  /// lexer_callbacks
+  ///         Dictionary of callbacks for the lexer. May alter tokens during lexing. Use with caution.
+  /// use_bytes
+  ///         Accept an input of type ``bytes`` instead of ``str``.
+  /// edit_terminals
+  ///         A callback for editing the terminals before parse.
+  /// import_paths
+  ///         A List of either paths or loader functions to specify from where grammars are imported
+  /// source_path
+  ///         Override the source of from where the grammar was loaded. Useful for relative imports and unconventional grammar loading
+  /// **=== End of Options ===**
   set grammar(Object? grammar) => setAttribute("grammar", grammar);
 
   /// ## lexer (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Main interface for the library.
+  ///
+  /// It's mostly a thin wrapper for the many different parsers, and for the tree constructor.
+  ///
+  /// Parameters:
+  ///     grammar: a string or file-object containing the grammar spec (using Lark's ebnf syntax)
+  ///     options: a dictionary controlling various aspects of Lark.
+  ///
+  /// Example:
+  ///     >>> Lark(r'''start: "foo" ''')
+  ///     Lark(...)
+  ///
+  ///
+  ///
+  /// **===  General Options  ===**
+  ///
+  /// start
+  ///         The start symbol. Either a string, or a list of strings for multiple possible starts (Default: "start")
+  /// debug
+  ///         Display debug information and extra warnings. Use only when debugging (Default: ``False``)
+  ///         When used with Earley, it generates a forest graph as "sppf.png", if 'dot' is installed.
+  /// transformer
+  ///         Applies the transformer to every parse tree (equivalent to applying it after the parse, but faster)
+  /// propagate_positions
+  ///         Propagates (line, column, end_line, end_column) attributes into all tree branches.
+  ///         Accepts ``False``, ``True``, or a callable, which will filter which nodes to ignore when propagating.
+  /// maybe_placeholders
+  ///         When ``True``, the ``[]`` operator returns ``None`` when not matched.
+  ///         When ``False``,  ``[]`` behaves like the ``?`` operator, and returns no value at all.
+  ///         (default= ``True``)
+  /// cache
+  ///         Cache the results of the Lark grammar analysis, for x2 to x3 faster loading. LALR only for now.
+  ///
+  ///         - When ``False``, does nothing (default)
+  ///         - When ``True``, caches to a temporary file in the local directory
+  ///         - When given a string, caches to the path pointed by the string
+  /// regex
+  ///         When True, uses the ``regex`` module instead of the stdlib ``re``.
+  /// g_regex_flags
+  ///         Flags that are applied to all terminals (both regex and strings)
+  /// keep_all_tokens
+  ///         Prevent the tree builder from automagically removing "punctuation" tokens (Default: ``False``)
+  /// tree_class
+  ///         Lark will produce trees comprised of instances of this class instead of the default ``lark.Tree``.
+  ///
+  /// **=== Algorithm Options ===**
+  ///
+  /// parser
+  ///         Decides which parser engine to use. Accepts "earley" or "lalr". (Default: "earley").
+  ///         (there is also a "cyk" option for legacy)
+  /// lexer
+  ///         Decides whether or not to use a lexer stage
+  ///
+  ///         - "auto" (default): Choose for me based on the parser
+  ///         - "basic": Use a basic lexer
+  ///         - "contextual": Stronger lexer (only works with parser="lalr")
+  ///         - "dynamic": Flexible and powerful (only with parser="earley")
+  ///         - "dynamic_complete": Same as dynamic, but tries *every* variation of tokenizing possible.
+  /// ambiguity
+  ///         Decides how to handle ambiguity in the parse. Only relevant if parser="earley"
+  ///
+  ///         - "resolve": The parser will automatically choose the simplest derivation
+  ///           (it chooses consistently: greedy for tokens, non-greedy for rules)
+  ///         - "explicit": The parser will return all derivations wrapped in "_ambig" tree nodes (i.e. a forest).
+  ///         - "forest": The parser will return the root of the shared packed parse forest.
+  ///
+  /// **=== Misc. / Domain Specific Options ===**
+  ///
+  /// postlex
+  ///         Lexer post-processing (Default: ``None``) Only works with the basic and contextual lexers.
+  /// priority
+  ///         How priorities should be evaluated - "auto", ``None``, "normal", "invert" (Default: "auto")
+  /// lexer_callbacks
+  ///         Dictionary of callbacks for the lexer. May alter tokens during lexing. Use with caution.
+  /// use_bytes
+  ///         Accept an input of type ``bytes`` instead of ``str``.
+  /// edit_terminals
+  ///         A callback for editing the terminals before parse.
+  /// import_paths
+  ///         A List of either paths or loader functions to specify from where grammars are imported
+  /// source_path
+  ///         Override the source of from where the grammar was loaded. Useful for relative imports and unconventional grammar loading
+  /// **=== End of Options ===**
   Object? get lexer => getAttribute("lexer");
 
   /// ## lexer (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Main interface for the library.
+  ///
+  /// It's mostly a thin wrapper for the many different parsers, and for the tree constructor.
+  ///
+  /// Parameters:
+  ///     grammar: a string or file-object containing the grammar spec (using Lark's ebnf syntax)
+  ///     options: a dictionary controlling various aspects of Lark.
+  ///
+  /// Example:
+  ///     >>> Lark(r'''start: "foo" ''')
+  ///     Lark(...)
+  ///
+  ///
+  ///
+  /// **===  General Options  ===**
+  ///
+  /// start
+  ///         The start symbol. Either a string, or a list of strings for multiple possible starts (Default: "start")
+  /// debug
+  ///         Display debug information and extra warnings. Use only when debugging (Default: ``False``)
+  ///         When used with Earley, it generates a forest graph as "sppf.png", if 'dot' is installed.
+  /// transformer
+  ///         Applies the transformer to every parse tree (equivalent to applying it after the parse, but faster)
+  /// propagate_positions
+  ///         Propagates (line, column, end_line, end_column) attributes into all tree branches.
+  ///         Accepts ``False``, ``True``, or a callable, which will filter which nodes to ignore when propagating.
+  /// maybe_placeholders
+  ///         When ``True``, the ``[]`` operator returns ``None`` when not matched.
+  ///         When ``False``,  ``[]`` behaves like the ``?`` operator, and returns no value at all.
+  ///         (default= ``True``)
+  /// cache
+  ///         Cache the results of the Lark grammar analysis, for x2 to x3 faster loading. LALR only for now.
+  ///
+  ///         - When ``False``, does nothing (default)
+  ///         - When ``True``, caches to a temporary file in the local directory
+  ///         - When given a string, caches to the path pointed by the string
+  /// regex
+  ///         When True, uses the ``regex`` module instead of the stdlib ``re``.
+  /// g_regex_flags
+  ///         Flags that are applied to all terminals (both regex and strings)
+  /// keep_all_tokens
+  ///         Prevent the tree builder from automagically removing "punctuation" tokens (Default: ``False``)
+  /// tree_class
+  ///         Lark will produce trees comprised of instances of this class instead of the default ``lark.Tree``.
+  ///
+  /// **=== Algorithm Options ===**
+  ///
+  /// parser
+  ///         Decides which parser engine to use. Accepts "earley" or "lalr". (Default: "earley").
+  ///         (there is also a "cyk" option for legacy)
+  /// lexer
+  ///         Decides whether or not to use a lexer stage
+  ///
+  ///         - "auto" (default): Choose for me based on the parser
+  ///         - "basic": Use a basic lexer
+  ///         - "contextual": Stronger lexer (only works with parser="lalr")
+  ///         - "dynamic": Flexible and powerful (only with parser="earley")
+  ///         - "dynamic_complete": Same as dynamic, but tries *every* variation of tokenizing possible.
+  /// ambiguity
+  ///         Decides how to handle ambiguity in the parse. Only relevant if parser="earley"
+  ///
+  ///         - "resolve": The parser will automatically choose the simplest derivation
+  ///           (it chooses consistently: greedy for tokens, non-greedy for rules)
+  ///         - "explicit": The parser will return all derivations wrapped in "_ambig" tree nodes (i.e. a forest).
+  ///         - "forest": The parser will return the root of the shared packed parse forest.
+  ///
+  /// **=== Misc. / Domain Specific Options ===**
+  ///
+  /// postlex
+  ///         Lexer post-processing (Default: ``None``) Only works with the basic and contextual lexers.
+  /// priority
+  ///         How priorities should be evaluated - "auto", ``None``, "normal", "invert" (Default: "auto")
+  /// lexer_callbacks
+  ///         Dictionary of callbacks for the lexer. May alter tokens during lexing. Use with caution.
+  /// use_bytes
+  ///         Accept an input of type ``bytes`` instead of ``str``.
+  /// edit_terminals
+  ///         A callback for editing the terminals before parse.
+  /// import_paths
+  ///         A List of either paths or loader functions to specify from where grammars are imported
+  /// source_path
+  ///         Override the source of from where the grammar was loaded. Useful for relative imports and unconventional grammar loading
+  /// **=== End of Options ===**
   set lexer(Object? lexer) => setAttribute("lexer", lexer);
 
   /// ## lexer_conf (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Main interface for the library.
+  ///
+  /// It's mostly a thin wrapper for the many different parsers, and for the tree constructor.
+  ///
+  /// Parameters:
+  ///     grammar: a string or file-object containing the grammar spec (using Lark's ebnf syntax)
+  ///     options: a dictionary controlling various aspects of Lark.
+  ///
+  /// Example:
+  ///     >>> Lark(r'''start: "foo" ''')
+  ///     Lark(...)
+  ///
+  ///
+  ///
+  /// **===  General Options  ===**
+  ///
+  /// start
+  ///         The start symbol. Either a string, or a list of strings for multiple possible starts (Default: "start")
+  /// debug
+  ///         Display debug information and extra warnings. Use only when debugging (Default: ``False``)
+  ///         When used with Earley, it generates a forest graph as "sppf.png", if 'dot' is installed.
+  /// transformer
+  ///         Applies the transformer to every parse tree (equivalent to applying it after the parse, but faster)
+  /// propagate_positions
+  ///         Propagates (line, column, end_line, end_column) attributes into all tree branches.
+  ///         Accepts ``False``, ``True``, or a callable, which will filter which nodes to ignore when propagating.
+  /// maybe_placeholders
+  ///         When ``True``, the ``[]`` operator returns ``None`` when not matched.
+  ///         When ``False``,  ``[]`` behaves like the ``?`` operator, and returns no value at all.
+  ///         (default= ``True``)
+  /// cache
+  ///         Cache the results of the Lark grammar analysis, for x2 to x3 faster loading. LALR only for now.
+  ///
+  ///         - When ``False``, does nothing (default)
+  ///         - When ``True``, caches to a temporary file in the local directory
+  ///         - When given a string, caches to the path pointed by the string
+  /// regex
+  ///         When True, uses the ``regex`` module instead of the stdlib ``re``.
+  /// g_regex_flags
+  ///         Flags that are applied to all terminals (both regex and strings)
+  /// keep_all_tokens
+  ///         Prevent the tree builder from automagically removing "punctuation" tokens (Default: ``False``)
+  /// tree_class
+  ///         Lark will produce trees comprised of instances of this class instead of the default ``lark.Tree``.
+  ///
+  /// **=== Algorithm Options ===**
+  ///
+  /// parser
+  ///         Decides which parser engine to use. Accepts "earley" or "lalr". (Default: "earley").
+  ///         (there is also a "cyk" option for legacy)
+  /// lexer
+  ///         Decides whether or not to use a lexer stage
+  ///
+  ///         - "auto" (default): Choose for me based on the parser
+  ///         - "basic": Use a basic lexer
+  ///         - "contextual": Stronger lexer (only works with parser="lalr")
+  ///         - "dynamic": Flexible and powerful (only with parser="earley")
+  ///         - "dynamic_complete": Same as dynamic, but tries *every* variation of tokenizing possible.
+  /// ambiguity
+  ///         Decides how to handle ambiguity in the parse. Only relevant if parser="earley"
+  ///
+  ///         - "resolve": The parser will automatically choose the simplest derivation
+  ///           (it chooses consistently: greedy for tokens, non-greedy for rules)
+  ///         - "explicit": The parser will return all derivations wrapped in "_ambig" tree nodes (i.e. a forest).
+  ///         - "forest": The parser will return the root of the shared packed parse forest.
+  ///
+  /// **=== Misc. / Domain Specific Options ===**
+  ///
+  /// postlex
+  ///         Lexer post-processing (Default: ``None``) Only works with the basic and contextual lexers.
+  /// priority
+  ///         How priorities should be evaluated - "auto", ``None``, "normal", "invert" (Default: "auto")
+  /// lexer_callbacks
+  ///         Dictionary of callbacks for the lexer. May alter tokens during lexing. Use with caution.
+  /// use_bytes
+  ///         Accept an input of type ``bytes`` instead of ``str``.
+  /// edit_terminals
+  ///         A callback for editing the terminals before parse.
+  /// import_paths
+  ///         A List of either paths or loader functions to specify from where grammars are imported
+  /// source_path
+  ///         Override the source of from where the grammar was loaded. Useful for relative imports and unconventional grammar loading
+  /// **=== End of Options ===**
   Object? get lexer_conf => getAttribute("lexer_conf");
 
   /// ## lexer_conf (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Main interface for the library.
+  ///
+  /// It's mostly a thin wrapper for the many different parsers, and for the tree constructor.
+  ///
+  /// Parameters:
+  ///     grammar: a string or file-object containing the grammar spec (using Lark's ebnf syntax)
+  ///     options: a dictionary controlling various aspects of Lark.
+  ///
+  /// Example:
+  ///     >>> Lark(r'''start: "foo" ''')
+  ///     Lark(...)
+  ///
+  ///
+  ///
+  /// **===  General Options  ===**
+  ///
+  /// start
+  ///         The start symbol. Either a string, or a list of strings for multiple possible starts (Default: "start")
+  /// debug
+  ///         Display debug information and extra warnings. Use only when debugging (Default: ``False``)
+  ///         When used with Earley, it generates a forest graph as "sppf.png", if 'dot' is installed.
+  /// transformer
+  ///         Applies the transformer to every parse tree (equivalent to applying it after the parse, but faster)
+  /// propagate_positions
+  ///         Propagates (line, column, end_line, end_column) attributes into all tree branches.
+  ///         Accepts ``False``, ``True``, or a callable, which will filter which nodes to ignore when propagating.
+  /// maybe_placeholders
+  ///         When ``True``, the ``[]`` operator returns ``None`` when not matched.
+  ///         When ``False``,  ``[]`` behaves like the ``?`` operator, and returns no value at all.
+  ///         (default= ``True``)
+  /// cache
+  ///         Cache the results of the Lark grammar analysis, for x2 to x3 faster loading. LALR only for now.
+  ///
+  ///         - When ``False``, does nothing (default)
+  ///         - When ``True``, caches to a temporary file in the local directory
+  ///         - When given a string, caches to the path pointed by the string
+  /// regex
+  ///         When True, uses the ``regex`` module instead of the stdlib ``re``.
+  /// g_regex_flags
+  ///         Flags that are applied to all terminals (both regex and strings)
+  /// keep_all_tokens
+  ///         Prevent the tree builder from automagically removing "punctuation" tokens (Default: ``False``)
+  /// tree_class
+  ///         Lark will produce trees comprised of instances of this class instead of the default ``lark.Tree``.
+  ///
+  /// **=== Algorithm Options ===**
+  ///
+  /// parser
+  ///         Decides which parser engine to use. Accepts "earley" or "lalr". (Default: "earley").
+  ///         (there is also a "cyk" option for legacy)
+  /// lexer
+  ///         Decides whether or not to use a lexer stage
+  ///
+  ///         - "auto" (default): Choose for me based on the parser
+  ///         - "basic": Use a basic lexer
+  ///         - "contextual": Stronger lexer (only works with parser="lalr")
+  ///         - "dynamic": Flexible and powerful (only with parser="earley")
+  ///         - "dynamic_complete": Same as dynamic, but tries *every* variation of tokenizing possible.
+  /// ambiguity
+  ///         Decides how to handle ambiguity in the parse. Only relevant if parser="earley"
+  ///
+  ///         - "resolve": The parser will automatically choose the simplest derivation
+  ///           (it chooses consistently: greedy for tokens, non-greedy for rules)
+  ///         - "explicit": The parser will return all derivations wrapped in "_ambig" tree nodes (i.e. a forest).
+  ///         - "forest": The parser will return the root of the shared packed parse forest.
+  ///
+  /// **=== Misc. / Domain Specific Options ===**
+  ///
+  /// postlex
+  ///         Lexer post-processing (Default: ``None``) Only works with the basic and contextual lexers.
+  /// priority
+  ///         How priorities should be evaluated - "auto", ``None``, "normal", "invert" (Default: "auto")
+  /// lexer_callbacks
+  ///         Dictionary of callbacks for the lexer. May alter tokens during lexing. Use with caution.
+  /// use_bytes
+  ///         Accept an input of type ``bytes`` instead of ``str``.
+  /// edit_terminals
+  ///         A callback for editing the terminals before parse.
+  /// import_paths
+  ///         A List of either paths or loader functions to specify from where grammars are imported
+  /// source_path
+  ///         Override the source of from where the grammar was loaded. Useful for relative imports and unconventional grammar loading
+  /// **=== End of Options ===**
   set lexer_conf(Object? lexer_conf) => setAttribute("lexer_conf", lexer_conf);
 }
 
@@ -1228,338 +3074,2538 @@ final class Token extends PythonClass {
       );
 
   /// ## column (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get column => getAttribute("column");
 
   /// ## column (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set column(Object? column) => setAttribute("column", column);
 
   /// ## end_column (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get end_column => getAttribute("end_column");
 
   /// ## end_column (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set end_column(Object? end_column) => setAttribute("end_column", end_column);
 
   /// ## end_line (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get end_line => getAttribute("end_line");
 
   /// ## end_line (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set end_line(Object? end_line) => setAttribute("end_line", end_line);
 
   /// ## end_pos (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get end_pos => getAttribute("end_pos");
 
   /// ## end_pos (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set end_pos(Object? end_pos) => setAttribute("end_pos", end_pos);
 
   /// ## line (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get line => getAttribute("line");
 
   /// ## line (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set line(Object? line) => setAttribute("line", line);
 
   /// ## start_pos (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get start_pos => getAttribute("start_pos");
 
   /// ## start_pos (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set start_pos(Object? start_pos) => setAttribute("start_pos", start_pos);
 
   /// ## type (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get type => getAttribute("type");
 
   /// ## type (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set type(Object? type) => setAttribute("type", type);
 
   /// ## value (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get value => getAttribute("value");
 
   /// ## value (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set value(Object? value) => setAttribute("value", value);
 
   /// ## capitalize (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get capitalize => getAttribute("capitalize");
 
   /// ## capitalize (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set capitalize(Object? capitalize) => setAttribute("capitalize", capitalize);
 
   /// ## casefold (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get casefold => getAttribute("casefold");
 
   /// ## casefold (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set casefold(Object? casefold) => setAttribute("casefold", casefold);
 
   /// ## center (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get center => getAttribute("center");
 
   /// ## center (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set center(Object? center) => setAttribute("center", center);
 
   /// ## count (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get count => getAttribute("count");
 
   /// ## count (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set count(Object? count) => setAttribute("count", count);
 
   /// ## encode (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get encode => getAttribute("encode");
 
   /// ## encode (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set encode(Object? encode) => setAttribute("encode", encode);
 
   /// ## endswith (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get endswith => getAttribute("endswith");
 
   /// ## endswith (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set endswith(Object? endswith) => setAttribute("endswith", endswith);
 
   /// ## expandtabs (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get expandtabs => getAttribute("expandtabs");
 
   /// ## expandtabs (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set expandtabs(Object? expandtabs) => setAttribute("expandtabs", expandtabs);
 
   /// ## find (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get find => getAttribute("find");
 
   /// ## find (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set find(Object? find) => setAttribute("find", find);
 
   /// ## format (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get format => getAttribute("format");
 
   /// ## format (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set format(Object? format) => setAttribute("format", format);
 
   /// ## format_map (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get format_map => getAttribute("format_map");
 
   /// ## format_map (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set format_map(Object? format_map) => setAttribute("format_map", format_map);
 
   /// ## index (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get index => getAttribute("index");
 
   /// ## index (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set index(Object? index) => setAttribute("index", index);
 
   /// ## isalnum (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get isalnum => getAttribute("isalnum");
 
   /// ## isalnum (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set isalnum(Object? isalnum) => setAttribute("isalnum", isalnum);
 
   /// ## isalpha (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get isalpha => getAttribute("isalpha");
 
   /// ## isalpha (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set isalpha(Object? isalpha) => setAttribute("isalpha", isalpha);
 
   /// ## isascii (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get isascii => getAttribute("isascii");
 
   /// ## isascii (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set isascii(Object? isascii) => setAttribute("isascii", isascii);
 
   /// ## isdecimal (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get isdecimal => getAttribute("isdecimal");
 
   /// ## isdecimal (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set isdecimal(Object? isdecimal) => setAttribute("isdecimal", isdecimal);
 
   /// ## isdigit (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get isdigit => getAttribute("isdigit");
 
   /// ## isdigit (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set isdigit(Object? isdigit) => setAttribute("isdigit", isdigit);
 
   /// ## isidentifier (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get isidentifier => getAttribute("isidentifier");
 
   /// ## isidentifier (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set isidentifier(Object? isidentifier) =>
       setAttribute("isidentifier", isidentifier);
 
   /// ## islower (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get islower => getAttribute("islower");
 
   /// ## islower (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set islower(Object? islower) => setAttribute("islower", islower);
 
   /// ## isnumeric (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get isnumeric => getAttribute("isnumeric");
 
   /// ## isnumeric (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set isnumeric(Object? isnumeric) => setAttribute("isnumeric", isnumeric);
 
   /// ## isprintable (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get isprintable => getAttribute("isprintable");
 
   /// ## isprintable (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set isprintable(Object? isprintable) =>
       setAttribute("isprintable", isprintable);
 
   /// ## isspace (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get isspace => getAttribute("isspace");
 
   /// ## isspace (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set isspace(Object? isspace) => setAttribute("isspace", isspace);
 
   /// ## istitle (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get istitle => getAttribute("istitle");
 
   /// ## istitle (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set istitle(Object? istitle) => setAttribute("istitle", istitle);
 
   /// ## isupper (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get isupper => getAttribute("isupper");
 
   /// ## isupper (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set isupper(Object? isupper) => setAttribute("isupper", isupper);
 
   /// ## join (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get join => getAttribute("join");
 
   /// ## join (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set join(Object? join) => setAttribute("join", join);
 
   /// ## ljust (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get ljust => getAttribute("ljust");
 
   /// ## ljust (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set ljust(Object? ljust) => setAttribute("ljust", ljust);
 
   /// ## lower (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get lower => getAttribute("lower");
 
   /// ## lower (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set lower(Object? lower) => setAttribute("lower", lower);
 
   /// ## lstrip (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get lstrip => getAttribute("lstrip");
 
   /// ## lstrip (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set lstrip(Object? lstrip) => setAttribute("lstrip", lstrip);
 
   /// ## new_borrow_pos (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get new_borrow_pos => getAttribute("new_borrow_pos");
 
   /// ## new_borrow_pos (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set new_borrow_pos(Object? new_borrow_pos) =>
       setAttribute("new_borrow_pos", new_borrow_pos);
 
   /// ## partition (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get partition => getAttribute("partition");
 
   /// ## partition (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set partition(Object? partition) => setAttribute("partition", partition);
 
   /// ## removeprefix (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get removeprefix => getAttribute("removeprefix");
 
   /// ## removeprefix (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set removeprefix(Object? removeprefix) =>
       setAttribute("removeprefix", removeprefix);
 
   /// ## removesuffix (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get removesuffix => getAttribute("removesuffix");
 
   /// ## removesuffix (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set removesuffix(Object? removesuffix) =>
       setAttribute("removesuffix", removesuffix);
 
   /// ## replace (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get replace => getAttribute("replace");
 
   /// ## replace (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set replace(Object? replace) => setAttribute("replace", replace);
 
   /// ## rfind (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get rfind => getAttribute("rfind");
 
   /// ## rfind (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set rfind(Object? rfind) => setAttribute("rfind", rfind);
 
   /// ## rindex (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get rindex => getAttribute("rindex");
 
   /// ## rindex (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set rindex(Object? rindex) => setAttribute("rindex", rindex);
 
   /// ## rjust (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get rjust => getAttribute("rjust");
 
   /// ## rjust (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set rjust(Object? rjust) => setAttribute("rjust", rjust);
 
   /// ## rpartition (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get rpartition => getAttribute("rpartition");
 
   /// ## rpartition (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set rpartition(Object? rpartition) => setAttribute("rpartition", rpartition);
 
   /// ## rsplit (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get rsplit => getAttribute("rsplit");
 
   /// ## rsplit (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set rsplit(Object? rsplit) => setAttribute("rsplit", rsplit);
 
   /// ## rstrip (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get rstrip => getAttribute("rstrip");
 
   /// ## rstrip (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set rstrip(Object? rstrip) => setAttribute("rstrip", rstrip);
 
   /// ## split (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get split => getAttribute("split");
 
   /// ## split (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set split(Object? split) => setAttribute("split", split);
 
   /// ## splitlines (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get splitlines => getAttribute("splitlines");
 
   /// ## splitlines (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set splitlines(Object? splitlines) => setAttribute("splitlines", splitlines);
 
   /// ## startswith (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get startswith => getAttribute("startswith");
 
   /// ## startswith (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set startswith(Object? startswith) => setAttribute("startswith", startswith);
 
   /// ## strip (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get strip => getAttribute("strip");
 
   /// ## strip (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set strip(Object? strip) => setAttribute("strip", strip);
 
   /// ## swapcase (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get swapcase => getAttribute("swapcase");
 
   /// ## swapcase (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set swapcase(Object? swapcase) => setAttribute("swapcase", swapcase);
 
   /// ## title (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get title => getAttribute("title");
 
   /// ## title (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set title(Object? title) => setAttribute("title", title);
 
   /// ## translate (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get translate => getAttribute("translate");
 
   /// ## translate (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set translate(Object? translate) => setAttribute("translate", translate);
 
   /// ## upper (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get upper => getAttribute("upper");
 
   /// ## upper (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set upper(Object? upper) => setAttribute("upper", upper);
 
   /// ## zfill (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   Object? get zfill => getAttribute("zfill");
 
   /// ## zfill (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A string with meta-information, that is produced by the lexer.
+  ///
+  /// When parsing text, the resulting chunks of the input that haven't been discarded,
+  /// will end up in the tree as Token instances. The Token class inherits from Python's ``str``,
+  /// so normal string comparisons and operations will work as expected.
+  ///
+  /// Attributes:
+  ///     type: Name of the token (as specified in grammar)
+  ///     value: Value of the token (redundant, as ``token.value == token`` will always be true)
+  ///     start_pos: The index of the token in the text
+  ///     line: The line of the token in the text (starting with 1)
+  ///     column: The column of the token in the text (starting with 1)
+  ///     end_line: The line where the token ends
+  ///     end_column: The next column after the end of the token. For example,
+  ///         if the token is a single character with a column value of 4,
+  ///         end_column will be 5.
+  ///     end_pos: the index where the token ends (basically ``start_pos + len(token)``)
   set zfill(Object? zfill) => setAttribute("zfill", zfill);
 }
 
@@ -1712,7 +5758,7 @@ final class Token extends PythonClass {
 /// ```
 final class Transformer extends PythonClass {
   factory Transformer({
-    Object? visit_tokens = true,
+    bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.visitors",
@@ -1809,7 +5855,7 @@ final class Transformer extends PythonClass {
 /// ```
 final class Transformer_NonRecursive extends PythonClass {
   factory Transformer_NonRecursive({
-    Object? visit_tokens = true,
+    bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.visitors",
@@ -2070,7 +6116,7 @@ final class Transformer_NonRecursive extends PythonClass {
 /// ```
 final class Tree extends PythonClass {
   factory Tree({
-    required Object? data,
+    required String data,
     required Object? children,
     Object? meta,
   }) =>
@@ -2141,7 +6187,7 @@ final class Tree extends PythonClass {
   ///         return self.find_pred(lambda t: t.data == data)
   /// ```
   Object? find_data({
-    required Object? data,
+    required String data,
   }) =>
       getFunction("find_data").call(
         <Object?>[
@@ -2251,8 +6297,8 @@ final class Tree extends PythonClass {
   ///         """
   ///         return ''.join(self._pretty(0, indent_str))
   /// ```
-  Object? pretty({
-    Object? indent_str = "  ",
+  String pretty({
+    String indent_str = "  ",
   }) =>
       getFunction("pretty").call(
         <Object?>[
@@ -2290,15 +6336,19 @@ final class Tree extends PythonClass {
   ///                 if pred(c):
   ///                     yield c
   /// ```
-  Object? scan_values({
+  Iterator<Object?> scan_values({
     required Object? pred,
   }) =>
-      getFunction("scan_values").call(
-        <Object?>[
-          pred,
-        ],
-        kwargs: <String, Object?>{},
-      );
+      TypedIterator.from(
+        PythonIterator.from<Object?, PythonFfiDelegate<Object?>, Object?>(
+          getFunction("scan_values").call(
+            <Object?>[
+              pred,
+            ],
+            kwargs: <String, Object?>{},
+          ),
+        ),
+      ).transform((e) => e).cast<Object?>();
 
   /// ## set
   ///
@@ -2308,8 +6358,8 @@ final class Tree extends PythonClass {
   ///         self.data = data
   ///         self.children = children
   /// ```
-  Object? $set({
-    required Object? data,
+  Null $set({
+    required String data,
     required Object? children,
   }) =>
       getFunction("set").call(
@@ -2321,21 +6371,99 @@ final class Tree extends PythonClass {
       );
 
   /// ## meta (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// The main tree class.
+  ///
+  /// Creates a new tree, and stores "data" and "children" in attributes of the same name.
+  /// Trees can be hashed and compared.
+  ///
+  /// Parameters:
+  ///     data: The name of the rule or alias
+  ///     children: List of matched sub-rules and terminals
+  ///     meta: Line & Column numbers (if ``propagate_positions`` is enabled).
+  ///         meta attributes: line, column, start_pos, end_line, end_column, end_pos
   Object? get meta => getAttribute("meta");
 
   /// ## meta (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// The main tree class.
+  ///
+  /// Creates a new tree, and stores "data" and "children" in attributes of the same name.
+  /// Trees can be hashed and compared.
+  ///
+  /// Parameters:
+  ///     data: The name of the rule or alias
+  ///     children: List of matched sub-rules and terminals
+  ///     meta: Line & Column numbers (if ``propagate_positions`` is enabled).
+  ///         meta attributes: line, column, start_pos, end_line, end_column, end_pos
   set meta(Object? meta) => setAttribute("meta", meta);
 
   /// ## data (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// The main tree class.
+  ///
+  /// Creates a new tree, and stores "data" and "children" in attributes of the same name.
+  /// Trees can be hashed and compared.
+  ///
+  /// Parameters:
+  ///     data: The name of the rule or alias
+  ///     children: List of matched sub-rules and terminals
+  ///     meta: Line & Column numbers (if ``propagate_positions`` is enabled).
+  ///         meta attributes: line, column, start_pos, end_line, end_column, end_pos
   Object? get data => getAttribute("data");
 
   /// ## data (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// The main tree class.
+  ///
+  /// Creates a new tree, and stores "data" and "children" in attributes of the same name.
+  /// Trees can be hashed and compared.
+  ///
+  /// Parameters:
+  ///     data: The name of the rule or alias
+  ///     children: List of matched sub-rules and terminals
+  ///     meta: Line & Column numbers (if ``propagate_positions`` is enabled).
+  ///         meta attributes: line, column, start_pos, end_line, end_column, end_pos
   set data(Object? data) => setAttribute("data", data);
 
   /// ## children (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// The main tree class.
+  ///
+  /// Creates a new tree, and stores "data" and "children" in attributes of the same name.
+  /// Trees can be hashed and compared.
+  ///
+  /// Parameters:
+  ///     data: The name of the rule or alias
+  ///     children: List of matched sub-rules and terminals
+  ///     meta: Line & Column numbers (if ``propagate_positions`` is enabled).
+  ///         meta attributes: line, column, start_pos, end_line, end_column, end_pos
   Object? get children => getAttribute("children");
 
   /// ## children (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// The main tree class.
+  ///
+  /// Creates a new tree, and stores "data" and "children" in attributes of the same name.
+  /// Trees can be hashed and compared.
+  ///
+  /// Parameters:
+  ///     data: The name of the rule or alias
+  ///     children: List of matched sub-rules and terminals
+  ///     meta: Line & Column numbers (if ``propagate_positions`` is enabled).
+  ///         meta attributes: line, column, start_pos, end_line, end_column, end_pos
   set children(Object? children) => setAttribute("children", children);
 }
 
@@ -2456,9 +6584,9 @@ final class UnexpectedCharacters extends PythonClass {
   ///             after = text[pos:end].split(b'\n', 1)[0]
   ///             return (before + after + b'\n' + b' ' * len(before.expandtabs()) + b'^\n').decode("ascii", "backslashreplace")
   /// ```
-  Object? get_context({
-    required Object? text,
-    Object? span = 40,
+  String get_context({
+    required String text,
+    int span = 40,
   }) =>
       getFunction("get_context").call(
         <Object?>[
@@ -2557,8 +6685,8 @@ final class UnexpectedCharacters extends PythonClass {
   Object? match_examples({
     required Object? parse_fn,
     required Object? examples,
-    Object? token_type_match_fallback = false,
-    Object? use_accepts = true,
+    bool token_type_match_fallback = false,
+    bool use_accepts = true,
   }) =>
       getFunction("match_examples").call(
         <Object?>[
@@ -2571,80 +6699,200 @@ final class UnexpectedCharacters extends PythonClass {
       );
 
   /// ## args (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the lexer, when it cannot match the next
+  /// string of characters to any of its terminals.
   Object? get args => getAttribute("args");
 
   /// ## args (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the lexer, when it cannot match the next
+  /// string of characters to any of its terminals.
   set args(Object? args) => setAttribute("args", args);
 
   /// ## add_note (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the lexer, when it cannot match the next
+  /// string of characters to any of its terminals.
   Object? get add_note => getAttribute("add_note");
 
   /// ## add_note (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the lexer, when it cannot match the next
+  /// string of characters to any of its terminals.
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
   /// ## with_traceback (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the lexer, when it cannot match the next
+  /// string of characters to any of its terminals.
   Object? get with_traceback => getAttribute("with_traceback");
 
   /// ## with_traceback (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the lexer, when it cannot match the next
+  /// string of characters to any of its terminals.
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 
   /// ## pos_in_stream (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the lexer, when it cannot match the next
+  /// string of characters to any of its terminals.
   Object? get pos_in_stream => getAttribute("pos_in_stream");
 
   /// ## pos_in_stream (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the lexer, when it cannot match the next
+  /// string of characters to any of its terminals.
   set pos_in_stream(Object? pos_in_stream) =>
       setAttribute("pos_in_stream", pos_in_stream);
 
   /// ## line (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the lexer, when it cannot match the next
+  /// string of characters to any of its terminals.
   Object? get line => getAttribute("line");
 
   /// ## line (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the lexer, when it cannot match the next
+  /// string of characters to any of its terminals.
   set line(Object? line) => setAttribute("line", line);
 
   /// ## column (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the lexer, when it cannot match the next
+  /// string of characters to any of its terminals.
   Object? get column => getAttribute("column");
 
   /// ## column (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the lexer, when it cannot match the next
+  /// string of characters to any of its terminals.
   set column(Object? column) => setAttribute("column", column);
 
   /// ## state (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the lexer, when it cannot match the next
+  /// string of characters to any of its terminals.
   Object? get state => getAttribute("state");
 
   /// ## state (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the lexer, when it cannot match the next
+  /// string of characters to any of its terminals.
   set state(Object? state) => setAttribute("state", state);
 
   /// ## allowed (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the lexer, when it cannot match the next
+  /// string of characters to any of its terminals.
   Object? get allowed => getAttribute("allowed");
 
   /// ## allowed (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the lexer, when it cannot match the next
+  /// string of characters to any of its terminals.
   set allowed(Object? allowed) => setAttribute("allowed", allowed);
 
   /// ## considered_tokens (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the lexer, when it cannot match the next
+  /// string of characters to any of its terminals.
   Object? get considered_tokens => getAttribute("considered_tokens");
 
   /// ## considered_tokens (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the lexer, when it cannot match the next
+  /// string of characters to any of its terminals.
   set considered_tokens(Object? considered_tokens) =>
       setAttribute("considered_tokens", considered_tokens);
 
   /// ## considered_rules (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the lexer, when it cannot match the next
+  /// string of characters to any of its terminals.
   Object? get considered_rules => getAttribute("considered_rules");
 
   /// ## considered_rules (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the lexer, when it cannot match the next
+  /// string of characters to any of its terminals.
   set considered_rules(Object? considered_rules) =>
       setAttribute("considered_rules", considered_rules);
 
   /// ## token_history (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the lexer, when it cannot match the next
+  /// string of characters to any of its terminals.
   Object? get token_history => getAttribute("token_history");
 
   /// ## token_history (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the lexer, when it cannot match the next
+  /// string of characters to any of its terminals.
   set token_history(Object? token_history) =>
       setAttribute("token_history", token_history);
 
   /// ## char (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the lexer, when it cannot match the next
+  /// string of characters to any of its terminals.
   Object? get char => getAttribute("char");
 
   /// ## char (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the lexer, when it cannot match the next
+  /// string of characters to any of its terminals.
   set char(Object? char) => setAttribute("char", char);
 }
 
@@ -2733,9 +6981,9 @@ final class UnexpectedEOF extends PythonClass {
   ///             after = text[pos:end].split(b'\n', 1)[0]
   ///             return (before + after + b'\n' + b' ' * len(before.expandtabs()) + b'^\n').decode("ascii", "backslashreplace")
   /// ```
-  Object? get_context({
-    required Object? text,
-    Object? span = 40,
+  String get_context({
+    required String text,
+    int span = 40,
   }) =>
       getFunction("get_context").call(
         <Object?>[
@@ -2834,8 +7082,8 @@ final class UnexpectedEOF extends PythonClass {
   Object? match_examples({
     required Object? parse_fn,
     required Object? examples,
-    Object? token_type_match_fallback = false,
-    Object? use_accepts = true,
+    bool token_type_match_fallback = false,
+    bool use_accepts = true,
   }) =>
       getFunction("match_examples").call(
         <Object?>[
@@ -2848,59 +7096,131 @@ final class UnexpectedEOF extends PythonClass {
       );
 
   /// ## args (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the input ends while it still expects a token.
   Object? get args => getAttribute("args");
 
   /// ## args (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the input ends while it still expects a token.
   set args(Object? args) => setAttribute("args", args);
 
   /// ## add_note (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the input ends while it still expects a token.
   Object? get add_note => getAttribute("add_note");
 
   /// ## add_note (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the input ends while it still expects a token.
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
   /// ## with_traceback (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the input ends while it still expects a token.
   Object? get with_traceback => getAttribute("with_traceback");
 
   /// ## with_traceback (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the input ends while it still expects a token.
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 
   /// ## pos_in_stream (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the input ends while it still expects a token.
   Object? get pos_in_stream => getAttribute("pos_in_stream");
 
   /// ## pos_in_stream (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the input ends while it still expects a token.
   set pos_in_stream(Object? pos_in_stream) =>
       setAttribute("pos_in_stream", pos_in_stream);
 
   /// ## expected (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the input ends while it still expects a token.
   Object? get expected => getAttribute("expected");
 
   /// ## expected (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the input ends while it still expects a token.
   set expected(Object? expected) => setAttribute("expected", expected);
 
   /// ## state (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the input ends while it still expects a token.
   Object? get state => getAttribute("state");
 
   /// ## state (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the input ends while it still expects a token.
   set state(Object? state) => setAttribute("state", state);
 
   /// ## token (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the input ends while it still expects a token.
   Object? get token => getAttribute("token");
 
   /// ## token (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the input ends while it still expects a token.
   set token(Object? token) => setAttribute("token", token);
 
   /// ## line (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the input ends while it still expects a token.
   Object? get line => getAttribute("line");
 
   /// ## line (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the input ends while it still expects a token.
   set line(Object? line) => setAttribute("line", line);
 
   /// ## column (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the input ends while it still expects a token.
   Object? get column => getAttribute("column");
 
   /// ## column (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the input ends while it still expects a token.
   set column(Object? column) => setAttribute("column", column);
 }
 
@@ -3072,9 +7392,9 @@ final class UnexpectedInput extends PythonClass {
   ///             after = text[pos:end].split(b'\n', 1)[0]
   ///             return (before + after + b'\n' + b' ' * len(before.expandtabs()) + b'^\n').decode("ascii", "backslashreplace")
   /// ```
-  Object? get_context({
-    required Object? text,
-    Object? span = 40,
+  String get_context({
+    required String text,
+    int span = 40,
   }) =>
       getFunction("get_context").call(
         <Object?>[
@@ -3173,8 +7493,8 @@ final class UnexpectedInput extends PythonClass {
   Object? match_examples({
     required Object? parse_fn,
     required Object? examples,
-    Object? token_type_match_fallback = false,
-    Object? use_accepts = true,
+    bool token_type_match_fallback = false,
+    bool use_accepts = true,
   }) =>
       getFunction("match_examples").call(
         <Object?>[
@@ -3187,29 +7507,125 @@ final class UnexpectedInput extends PythonClass {
       );
 
   /// ## args (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// UnexpectedInput Error.
+  ///
+  /// Used as a base class for the following exceptions:
+  ///
+  /// - ``UnexpectedCharacters``: The lexer encountered an unexpected string
+  /// - ``UnexpectedToken``: The parser received an unexpected token
+  /// - ``UnexpectedEOF``: The parser expected a token, but the input ended
+  ///
+  /// After catching one of these exceptions, you may call the following helper methods to create a nicer error message.
   Object? get args => getAttribute("args");
 
   /// ## args (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// UnexpectedInput Error.
+  ///
+  /// Used as a base class for the following exceptions:
+  ///
+  /// - ``UnexpectedCharacters``: The lexer encountered an unexpected string
+  /// - ``UnexpectedToken``: The parser received an unexpected token
+  /// - ``UnexpectedEOF``: The parser expected a token, but the input ended
+  ///
+  /// After catching one of these exceptions, you may call the following helper methods to create a nicer error message.
   set args(Object? args) => setAttribute("args", args);
 
   /// ## add_note (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// UnexpectedInput Error.
+  ///
+  /// Used as a base class for the following exceptions:
+  ///
+  /// - ``UnexpectedCharacters``: The lexer encountered an unexpected string
+  /// - ``UnexpectedToken``: The parser received an unexpected token
+  /// - ``UnexpectedEOF``: The parser expected a token, but the input ended
+  ///
+  /// After catching one of these exceptions, you may call the following helper methods to create a nicer error message.
   Object? get add_note => getAttribute("add_note");
 
   /// ## add_note (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// UnexpectedInput Error.
+  ///
+  /// Used as a base class for the following exceptions:
+  ///
+  /// - ``UnexpectedCharacters``: The lexer encountered an unexpected string
+  /// - ``UnexpectedToken``: The parser received an unexpected token
+  /// - ``UnexpectedEOF``: The parser expected a token, but the input ended
+  ///
+  /// After catching one of these exceptions, you may call the following helper methods to create a nicer error message.
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
   /// ## with_traceback (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// UnexpectedInput Error.
+  ///
+  /// Used as a base class for the following exceptions:
+  ///
+  /// - ``UnexpectedCharacters``: The lexer encountered an unexpected string
+  /// - ``UnexpectedToken``: The parser received an unexpected token
+  /// - ``UnexpectedEOF``: The parser expected a token, but the input ended
+  ///
+  /// After catching one of these exceptions, you may call the following helper methods to create a nicer error message.
   Object? get with_traceback => getAttribute("with_traceback");
 
   /// ## with_traceback (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// UnexpectedInput Error.
+  ///
+  /// Used as a base class for the following exceptions:
+  ///
+  /// - ``UnexpectedCharacters``: The lexer encountered an unexpected string
+  /// - ``UnexpectedToken``: The parser received an unexpected token
+  /// - ``UnexpectedEOF``: The parser expected a token, but the input ended
+  ///
+  /// After catching one of these exceptions, you may call the following helper methods to create a nicer error message.
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 
   /// ## pos_in_stream (getter)
-  Object? get pos_in_stream => getAttribute("pos_in_stream");
+  ///
+  /// ### python docstring
+  ///
+  /// UnexpectedInput Error.
+  ///
+  /// Used as a base class for the following exceptions:
+  ///
+  /// - ``UnexpectedCharacters``: The lexer encountered an unexpected string
+  /// - ``UnexpectedToken``: The parser received an unexpected token
+  /// - ``UnexpectedEOF``: The parser expected a token, but the input ended
+  ///
+  /// After catching one of these exceptions, you may call the following helper methods to create a nicer error message.
+  Null get pos_in_stream => getAttribute("pos_in_stream");
 
   /// ## pos_in_stream (setter)
-  set pos_in_stream(Object? pos_in_stream) =>
+  ///
+  /// ### python docstring
+  ///
+  /// UnexpectedInput Error.
+  ///
+  /// Used as a base class for the following exceptions:
+  ///
+  /// - ``UnexpectedCharacters``: The lexer encountered an unexpected string
+  /// - ``UnexpectedToken``: The parser received an unexpected token
+  /// - ``UnexpectedEOF``: The parser expected a token, but the input ended
+  ///
+  /// After catching one of these exceptions, you may call the following helper methods to create a nicer error message.
+  set pos_in_stream(Null pos_in_stream) =>
       setAttribute("pos_in_stream", pos_in_stream);
 }
 
@@ -3345,9 +7761,9 @@ final class UnexpectedToken extends PythonClass {
   ///             after = text[pos:end].split(b'\n', 1)[0]
   ///             return (before + after + b'\n' + b' ' * len(before.expandtabs()) + b'^\n').decode("ascii", "backslashreplace")
   /// ```
-  Object? get_context({
-    required Object? text,
-    Object? span = 40,
+  String get_context({
+    required String text,
+    int span = 40,
   }) =>
       getFunction("get_context").call(
         <Object?>[
@@ -3446,8 +7862,8 @@ final class UnexpectedToken extends PythonClass {
   Object? match_examples({
     required Object? parse_fn,
     required Object? examples,
-    Object? token_type_match_fallback = false,
-    Object? use_accepts = true,
+    bool token_type_match_fallback = false,
+    bool use_accepts = true,
   }) =>
       getFunction("match_examples").call(
         <Object?>[
@@ -3460,85 +7876,475 @@ final class UnexpectedToken extends PythonClass {
       );
 
   /// ## accepts (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the token it received
+  /// doesn't match any valid step forward.
+  ///
+  /// Parameters:
+  ///     token: The mismatched token
+  ///     expected: The set of expected tokens
+  ///     considered_rules: Which rules were considered, to deduce the expected tokens
+  ///     state: A value representing the parser state. Do not rely on its value or type.
+  ///     interactive_parser: An instance of ``InteractiveParser``, that is initialized to the point of failture,
+  ///                         and can be used for debugging and error handling.
+  ///
+  /// Note: These parameters are available as attributes of the instance.
   Object? get accepts => getAttribute("accepts");
 
   /// ## accepts (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the token it received
+  /// doesn't match any valid step forward.
+  ///
+  /// Parameters:
+  ///     token: The mismatched token
+  ///     expected: The set of expected tokens
+  ///     considered_rules: Which rules were considered, to deduce the expected tokens
+  ///     state: A value representing the parser state. Do not rely on its value or type.
+  ///     interactive_parser: An instance of ``InteractiveParser``, that is initialized to the point of failture,
+  ///                         and can be used for debugging and error handling.
+  ///
+  /// Note: These parameters are available as attributes of the instance.
   set accepts(Object? accepts) => setAttribute("accepts", accepts);
 
   /// ## args (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the token it received
+  /// doesn't match any valid step forward.
+  ///
+  /// Parameters:
+  ///     token: The mismatched token
+  ///     expected: The set of expected tokens
+  ///     considered_rules: Which rules were considered, to deduce the expected tokens
+  ///     state: A value representing the parser state. Do not rely on its value or type.
+  ///     interactive_parser: An instance of ``InteractiveParser``, that is initialized to the point of failture,
+  ///                         and can be used for debugging and error handling.
+  ///
+  /// Note: These parameters are available as attributes of the instance.
   Object? get args => getAttribute("args");
 
   /// ## args (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the token it received
+  /// doesn't match any valid step forward.
+  ///
+  /// Parameters:
+  ///     token: The mismatched token
+  ///     expected: The set of expected tokens
+  ///     considered_rules: Which rules were considered, to deduce the expected tokens
+  ///     state: A value representing the parser state. Do not rely on its value or type.
+  ///     interactive_parser: An instance of ``InteractiveParser``, that is initialized to the point of failture,
+  ///                         and can be used for debugging and error handling.
+  ///
+  /// Note: These parameters are available as attributes of the instance.
   set args(Object? args) => setAttribute("args", args);
 
   /// ## add_note (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the token it received
+  /// doesn't match any valid step forward.
+  ///
+  /// Parameters:
+  ///     token: The mismatched token
+  ///     expected: The set of expected tokens
+  ///     considered_rules: Which rules were considered, to deduce the expected tokens
+  ///     state: A value representing the parser state. Do not rely on its value or type.
+  ///     interactive_parser: An instance of ``InteractiveParser``, that is initialized to the point of failture,
+  ///                         and can be used for debugging and error handling.
+  ///
+  /// Note: These parameters are available as attributes of the instance.
   Object? get add_note => getAttribute("add_note");
 
   /// ## add_note (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the token it received
+  /// doesn't match any valid step forward.
+  ///
+  /// Parameters:
+  ///     token: The mismatched token
+  ///     expected: The set of expected tokens
+  ///     considered_rules: Which rules were considered, to deduce the expected tokens
+  ///     state: A value representing the parser state. Do not rely on its value or type.
+  ///     interactive_parser: An instance of ``InteractiveParser``, that is initialized to the point of failture,
+  ///                         and can be used for debugging and error handling.
+  ///
+  /// Note: These parameters are available as attributes of the instance.
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
   /// ## with_traceback (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the token it received
+  /// doesn't match any valid step forward.
+  ///
+  /// Parameters:
+  ///     token: The mismatched token
+  ///     expected: The set of expected tokens
+  ///     considered_rules: Which rules were considered, to deduce the expected tokens
+  ///     state: A value representing the parser state. Do not rely on its value or type.
+  ///     interactive_parser: An instance of ``InteractiveParser``, that is initialized to the point of failture,
+  ///                         and can be used for debugging and error handling.
+  ///
+  /// Note: These parameters are available as attributes of the instance.
   Object? get with_traceback => getAttribute("with_traceback");
 
   /// ## with_traceback (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the token it received
+  /// doesn't match any valid step forward.
+  ///
+  /// Parameters:
+  ///     token: The mismatched token
+  ///     expected: The set of expected tokens
+  ///     considered_rules: Which rules were considered, to deduce the expected tokens
+  ///     state: A value representing the parser state. Do not rely on its value or type.
+  ///     interactive_parser: An instance of ``InteractiveParser``, that is initialized to the point of failture,
+  ///                         and can be used for debugging and error handling.
+  ///
+  /// Note: These parameters are available as attributes of the instance.
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 
   /// ## pos_in_stream (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the token it received
+  /// doesn't match any valid step forward.
+  ///
+  /// Parameters:
+  ///     token: The mismatched token
+  ///     expected: The set of expected tokens
+  ///     considered_rules: Which rules were considered, to deduce the expected tokens
+  ///     state: A value representing the parser state. Do not rely on its value or type.
+  ///     interactive_parser: An instance of ``InteractiveParser``, that is initialized to the point of failture,
+  ///                         and can be used for debugging and error handling.
+  ///
+  /// Note: These parameters are available as attributes of the instance.
   Object? get pos_in_stream => getAttribute("pos_in_stream");
 
   /// ## pos_in_stream (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the token it received
+  /// doesn't match any valid step forward.
+  ///
+  /// Parameters:
+  ///     token: The mismatched token
+  ///     expected: The set of expected tokens
+  ///     considered_rules: Which rules were considered, to deduce the expected tokens
+  ///     state: A value representing the parser state. Do not rely on its value or type.
+  ///     interactive_parser: An instance of ``InteractiveParser``, that is initialized to the point of failture,
+  ///                         and can be used for debugging and error handling.
+  ///
+  /// Note: These parameters are available as attributes of the instance.
   set pos_in_stream(Object? pos_in_stream) =>
       setAttribute("pos_in_stream", pos_in_stream);
 
   /// ## line (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the token it received
+  /// doesn't match any valid step forward.
+  ///
+  /// Parameters:
+  ///     token: The mismatched token
+  ///     expected: The set of expected tokens
+  ///     considered_rules: Which rules were considered, to deduce the expected tokens
+  ///     state: A value representing the parser state. Do not rely on its value or type.
+  ///     interactive_parser: An instance of ``InteractiveParser``, that is initialized to the point of failture,
+  ///                         and can be used for debugging and error handling.
+  ///
+  /// Note: These parameters are available as attributes of the instance.
   Object? get line => getAttribute("line");
 
   /// ## line (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the token it received
+  /// doesn't match any valid step forward.
+  ///
+  /// Parameters:
+  ///     token: The mismatched token
+  ///     expected: The set of expected tokens
+  ///     considered_rules: Which rules were considered, to deduce the expected tokens
+  ///     state: A value representing the parser state. Do not rely on its value or type.
+  ///     interactive_parser: An instance of ``InteractiveParser``, that is initialized to the point of failture,
+  ///                         and can be used for debugging and error handling.
+  ///
+  /// Note: These parameters are available as attributes of the instance.
   set line(Object? line) => setAttribute("line", line);
 
   /// ## column (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the token it received
+  /// doesn't match any valid step forward.
+  ///
+  /// Parameters:
+  ///     token: The mismatched token
+  ///     expected: The set of expected tokens
+  ///     considered_rules: Which rules were considered, to deduce the expected tokens
+  ///     state: A value representing the parser state. Do not rely on its value or type.
+  ///     interactive_parser: An instance of ``InteractiveParser``, that is initialized to the point of failture,
+  ///                         and can be used for debugging and error handling.
+  ///
+  /// Note: These parameters are available as attributes of the instance.
   Object? get column => getAttribute("column");
 
   /// ## column (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the token it received
+  /// doesn't match any valid step forward.
+  ///
+  /// Parameters:
+  ///     token: The mismatched token
+  ///     expected: The set of expected tokens
+  ///     considered_rules: Which rules were considered, to deduce the expected tokens
+  ///     state: A value representing the parser state. Do not rely on its value or type.
+  ///     interactive_parser: An instance of ``InteractiveParser``, that is initialized to the point of failture,
+  ///                         and can be used for debugging and error handling.
+  ///
+  /// Note: These parameters are available as attributes of the instance.
   set column(Object? column) => setAttribute("column", column);
 
   /// ## state (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the token it received
+  /// doesn't match any valid step forward.
+  ///
+  /// Parameters:
+  ///     token: The mismatched token
+  ///     expected: The set of expected tokens
+  ///     considered_rules: Which rules were considered, to deduce the expected tokens
+  ///     state: A value representing the parser state. Do not rely on its value or type.
+  ///     interactive_parser: An instance of ``InteractiveParser``, that is initialized to the point of failture,
+  ///                         and can be used for debugging and error handling.
+  ///
+  /// Note: These parameters are available as attributes of the instance.
   Object? get state => getAttribute("state");
 
   /// ## state (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the token it received
+  /// doesn't match any valid step forward.
+  ///
+  /// Parameters:
+  ///     token: The mismatched token
+  ///     expected: The set of expected tokens
+  ///     considered_rules: Which rules were considered, to deduce the expected tokens
+  ///     state: A value representing the parser state. Do not rely on its value or type.
+  ///     interactive_parser: An instance of ``InteractiveParser``, that is initialized to the point of failture,
+  ///                         and can be used for debugging and error handling.
+  ///
+  /// Note: These parameters are available as attributes of the instance.
   set state(Object? state) => setAttribute("state", state);
 
   /// ## token (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the token it received
+  /// doesn't match any valid step forward.
+  ///
+  /// Parameters:
+  ///     token: The mismatched token
+  ///     expected: The set of expected tokens
+  ///     considered_rules: Which rules were considered, to deduce the expected tokens
+  ///     state: A value representing the parser state. Do not rely on its value or type.
+  ///     interactive_parser: An instance of ``InteractiveParser``, that is initialized to the point of failture,
+  ///                         and can be used for debugging and error handling.
+  ///
+  /// Note: These parameters are available as attributes of the instance.
   Object? get token => getAttribute("token");
 
   /// ## token (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the token it received
+  /// doesn't match any valid step forward.
+  ///
+  /// Parameters:
+  ///     token: The mismatched token
+  ///     expected: The set of expected tokens
+  ///     considered_rules: Which rules were considered, to deduce the expected tokens
+  ///     state: A value representing the parser state. Do not rely on its value or type.
+  ///     interactive_parser: An instance of ``InteractiveParser``, that is initialized to the point of failture,
+  ///                         and can be used for debugging and error handling.
+  ///
+  /// Note: These parameters are available as attributes of the instance.
   set token(Object? token) => setAttribute("token", token);
 
   /// ## expected (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the token it received
+  /// doesn't match any valid step forward.
+  ///
+  /// Parameters:
+  ///     token: The mismatched token
+  ///     expected: The set of expected tokens
+  ///     considered_rules: Which rules were considered, to deduce the expected tokens
+  ///     state: A value representing the parser state. Do not rely on its value or type.
+  ///     interactive_parser: An instance of ``InteractiveParser``, that is initialized to the point of failture,
+  ///                         and can be used for debugging and error handling.
+  ///
+  /// Note: These parameters are available as attributes of the instance.
   Object? get expected => getAttribute("expected");
 
   /// ## expected (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the token it received
+  /// doesn't match any valid step forward.
+  ///
+  /// Parameters:
+  ///     token: The mismatched token
+  ///     expected: The set of expected tokens
+  ///     considered_rules: Which rules were considered, to deduce the expected tokens
+  ///     state: A value representing the parser state. Do not rely on its value or type.
+  ///     interactive_parser: An instance of ``InteractiveParser``, that is initialized to the point of failture,
+  ///                         and can be used for debugging and error handling.
+  ///
+  /// Note: These parameters are available as attributes of the instance.
   set expected(Object? expected) => setAttribute("expected", expected);
 
   /// ## considered_rules (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the token it received
+  /// doesn't match any valid step forward.
+  ///
+  /// Parameters:
+  ///     token: The mismatched token
+  ///     expected: The set of expected tokens
+  ///     considered_rules: Which rules were considered, to deduce the expected tokens
+  ///     state: A value representing the parser state. Do not rely on its value or type.
+  ///     interactive_parser: An instance of ``InteractiveParser``, that is initialized to the point of failture,
+  ///                         and can be used for debugging and error handling.
+  ///
+  /// Note: These parameters are available as attributes of the instance.
   Object? get considered_rules => getAttribute("considered_rules");
 
   /// ## considered_rules (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the token it received
+  /// doesn't match any valid step forward.
+  ///
+  /// Parameters:
+  ///     token: The mismatched token
+  ///     expected: The set of expected tokens
+  ///     considered_rules: Which rules were considered, to deduce the expected tokens
+  ///     state: A value representing the parser state. Do not rely on its value or type.
+  ///     interactive_parser: An instance of ``InteractiveParser``, that is initialized to the point of failture,
+  ///                         and can be used for debugging and error handling.
+  ///
+  /// Note: These parameters are available as attributes of the instance.
   set considered_rules(Object? considered_rules) =>
       setAttribute("considered_rules", considered_rules);
 
   /// ## interactive_parser (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the token it received
+  /// doesn't match any valid step forward.
+  ///
+  /// Parameters:
+  ///     token: The mismatched token
+  ///     expected: The set of expected tokens
+  ///     considered_rules: Which rules were considered, to deduce the expected tokens
+  ///     state: A value representing the parser state. Do not rely on its value or type.
+  ///     interactive_parser: An instance of ``InteractiveParser``, that is initialized to the point of failture,
+  ///                         and can be used for debugging and error handling.
+  ///
+  /// Note: These parameters are available as attributes of the instance.
   Object? get interactive_parser => getAttribute("interactive_parser");
 
   /// ## interactive_parser (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the token it received
+  /// doesn't match any valid step forward.
+  ///
+  /// Parameters:
+  ///     token: The mismatched token
+  ///     expected: The set of expected tokens
+  ///     considered_rules: Which rules were considered, to deduce the expected tokens
+  ///     state: A value representing the parser state. Do not rely on its value or type.
+  ///     interactive_parser: An instance of ``InteractiveParser``, that is initialized to the point of failture,
+  ///                         and can be used for debugging and error handling.
+  ///
+  /// Note: These parameters are available as attributes of the instance.
   set interactive_parser(Object? interactive_parser) =>
       setAttribute("interactive_parser", interactive_parser);
 
   /// ## token_history (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the token it received
+  /// doesn't match any valid step forward.
+  ///
+  /// Parameters:
+  ///     token: The mismatched token
+  ///     expected: The set of expected tokens
+  ///     considered_rules: Which rules were considered, to deduce the expected tokens
+  ///     state: A value representing the parser state. Do not rely on its value or type.
+  ///     interactive_parser: An instance of ``InteractiveParser``, that is initialized to the point of failture,
+  ///                         and can be used for debugging and error handling.
+  ///
+  /// Note: These parameters are available as attributes of the instance.
   Object? get token_history => getAttribute("token_history");
 
   /// ## token_history (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An exception that is raised by the parser, when the token it received
+  /// doesn't match any valid step forward.
+  ///
+  /// Parameters:
+  ///     token: The mismatched token
+  ///     expected: The set of expected tokens
+  ///     considered_rules: Which rules were considered, to deduce the expected tokens
+  ///     state: A value representing the parser state. Do not rely on its value or type.
+  ///     interactive_parser: An instance of ``InteractiveParser``, that is initialized to the point of failture,
+  ///                         and can be used for debugging and error handling.
+  ///
+  /// Note: These parameters are available as attributes of the instance.
   set token_history(Object? token_history) =>
       setAttribute("token_history", token_history);
 }
@@ -3688,13 +8494,13 @@ final class Visitor extends PythonClass {
 final class LexerConf extends PythonClass {
   factory LexerConf({
     required Object? terminals,
-    required Object? re_module,
+    required ModuleType re_module,
     Object? ignore = const [],
     Object? postlex,
     Object? callbacks,
-    Object? g_regex_flags = 0,
-    Object? skip_validation = false,
-    Object? use_bytes = false,
+    int g_regex_flags = 0,
+    bool skip_validation = false,
+    bool use_bytes = false,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.common",
@@ -3759,73 +8565,271 @@ final class LexerConf extends PythonClass {
       );
 
   /// ## deserialize (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get deserialize => getAttribute("deserialize");
 
   /// ## deserialize (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
   /// ## terminals (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get terminals => getAttribute("terminals");
 
   /// ## terminals (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set terminals(Object? terminals) => setAttribute("terminals", terminals);
 
   /// ## terminals_by_name (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get terminals_by_name => getAttribute("terminals_by_name");
 
   /// ## terminals_by_name (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set terminals_by_name(Object? terminals_by_name) =>
       setAttribute("terminals_by_name", terminals_by_name);
 
   /// ## ignore (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get ignore => getAttribute("ignore");
 
   /// ## ignore (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set ignore(Object? ignore) => setAttribute("ignore", ignore);
 
   /// ## postlex (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get postlex => getAttribute("postlex");
 
   /// ## postlex (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set postlex(Object? postlex) => setAttribute("postlex", postlex);
 
   /// ## callbacks (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get callbacks => getAttribute("callbacks");
 
   /// ## callbacks (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set callbacks(Object? callbacks) => setAttribute("callbacks", callbacks);
 
   /// ## g_regex_flags (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get g_regex_flags => getAttribute("g_regex_flags");
 
   /// ## g_regex_flags (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set g_regex_flags(Object? g_regex_flags) =>
       setAttribute("g_regex_flags", g_regex_flags);
 
   /// ## re_module (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get re_module => getAttribute("re_module");
 
   /// ## re_module (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set re_module(Object? re_module) => setAttribute("re_module", re_module);
 
   /// ## skip_validation (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get skip_validation => getAttribute("skip_validation");
 
   /// ## skip_validation (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set skip_validation(Object? skip_validation) =>
       setAttribute("skip_validation", skip_validation);
 
   /// ## use_bytes (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get use_bytes => getAttribute("use_bytes");
 
   /// ## use_bytes (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set use_bytes(Object? use_bytes) => setAttribute("use_bytes", use_bytes);
 
   /// ## lexer_type (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get lexer_type => getAttribute("lexer_type");
 
   /// ## lexer_type (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set lexer_type(Object? lexer_type) => setAttribute("lexer_type", lexer_type);
 }
 
@@ -3929,34 +8933,124 @@ final class ParserConf extends PythonClass {
       );
 
   /// ## deserialize (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get deserialize => getAttribute("deserialize");
 
   /// ## deserialize (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
   /// ## rules (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get rules => getAttribute("rules");
 
   /// ## rules (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set rules(Object? rules) => setAttribute("rules", rules);
 
   /// ## callbacks (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get callbacks => getAttribute("callbacks");
 
   /// ## callbacks (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set callbacks(Object? callbacks) => setAttribute("callbacks", callbacks);
 
   /// ## start (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get start => getAttribute("start");
 
   /// ## start (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set start(Object? start) => setAttribute("start", start);
 
   /// ## parser_type (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get parser_type => getAttribute("parser_type");
 
   /// ## parser_type (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set parser_type(Object? parser_type) =>
       setAttribute("parser_type", parser_type);
 }
@@ -4074,9 +9168,27 @@ final class Serialize extends PythonClass {
       );
 
   /// ## deserialize (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get deserialize => getAttribute("deserialize");
 
   /// ## deserialize (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 }
@@ -4119,9 +9231,9 @@ final class Serialize extends PythonClass {
 /// ```
 final class TerminalDef extends PythonClass {
   factory TerminalDef({
-    required Object? name,
-    required Object? pattern,
-    Object? priority = 0,
+    required String name,
+    required Pattern pattern,
+    int priority = 0,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.lexer",
@@ -4190,34 +9302,106 @@ final class TerminalDef extends PythonClass {
   ///         else:
   ///             return self.name
   /// ```
-  Object? user_repr() => getFunction("user_repr").call(
+  String user_repr() => getFunction("user_repr").call(
         <Object?>[],
         kwargs: <String, Object?>{},
       );
 
   /// ## deserialize (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get deserialize => getAttribute("deserialize");
 
   /// ## deserialize (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
   /// ## name (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get name => getAttribute("name");
 
   /// ## name (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set name(Object? name) => setAttribute("name", name);
 
   /// ## pattern (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get pattern => getAttribute("pattern");
 
   /// ## pattern (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set pattern(Object? pattern) => setAttribute("pattern", pattern);
 
   /// ## priority (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get priority => getAttribute("priority");
 
   /// ## priority (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set priority(Object? priority) => setAttribute("priority", priority);
 }
 
@@ -4357,40 +9541,196 @@ final class VisitError extends PythonClass {
   VisitError.from(super.pythonClass) : super.from();
 
   /// ## args (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// VisitError is raised when visitors are interrupted by an exception
+  ///
+  /// It provides the following attributes for inspection:
+  ///
+  /// Parameters:
+  ///     rule: the name of the visit rule that failed
+  ///     obj: the tree-node or token that was being processed
+  ///     orig_exc: the exception that cause it to fail
+  ///
+  /// Note: These parameters are available as attributes
   Object? get args => getAttribute("args");
 
   /// ## args (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// VisitError is raised when visitors are interrupted by an exception
+  ///
+  /// It provides the following attributes for inspection:
+  ///
+  /// Parameters:
+  ///     rule: the name of the visit rule that failed
+  ///     obj: the tree-node or token that was being processed
+  ///     orig_exc: the exception that cause it to fail
+  ///
+  /// Note: These parameters are available as attributes
   set args(Object? args) => setAttribute("args", args);
 
   /// ## add_note (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// VisitError is raised when visitors are interrupted by an exception
+  ///
+  /// It provides the following attributes for inspection:
+  ///
+  /// Parameters:
+  ///     rule: the name of the visit rule that failed
+  ///     obj: the tree-node or token that was being processed
+  ///     orig_exc: the exception that cause it to fail
+  ///
+  /// Note: These parameters are available as attributes
   Object? get add_note => getAttribute("add_note");
 
   /// ## add_note (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// VisitError is raised when visitors are interrupted by an exception
+  ///
+  /// It provides the following attributes for inspection:
+  ///
+  /// Parameters:
+  ///     rule: the name of the visit rule that failed
+  ///     obj: the tree-node or token that was being processed
+  ///     orig_exc: the exception that cause it to fail
+  ///
+  /// Note: These parameters are available as attributes
   set add_note(Object? add_note) => setAttribute("add_note", add_note);
 
   /// ## with_traceback (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// VisitError is raised when visitors are interrupted by an exception
+  ///
+  /// It provides the following attributes for inspection:
+  ///
+  /// Parameters:
+  ///     rule: the name of the visit rule that failed
+  ///     obj: the tree-node or token that was being processed
+  ///     orig_exc: the exception that cause it to fail
+  ///
+  /// Note: These parameters are available as attributes
   Object? get with_traceback => getAttribute("with_traceback");
 
   /// ## with_traceback (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// VisitError is raised when visitors are interrupted by an exception
+  ///
+  /// It provides the following attributes for inspection:
+  ///
+  /// Parameters:
+  ///     rule: the name of the visit rule that failed
+  ///     obj: the tree-node or token that was being processed
+  ///     orig_exc: the exception that cause it to fail
+  ///
+  /// Note: These parameters are available as attributes
   set with_traceback(Object? with_traceback) =>
       setAttribute("with_traceback", with_traceback);
 
   /// ## rule (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// VisitError is raised when visitors are interrupted by an exception
+  ///
+  /// It provides the following attributes for inspection:
+  ///
+  /// Parameters:
+  ///     rule: the name of the visit rule that failed
+  ///     obj: the tree-node or token that was being processed
+  ///     orig_exc: the exception that cause it to fail
+  ///
+  /// Note: These parameters are available as attributes
   Object? get rule => getAttribute("rule");
 
   /// ## rule (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// VisitError is raised when visitors are interrupted by an exception
+  ///
+  /// It provides the following attributes for inspection:
+  ///
+  /// Parameters:
+  ///     rule: the name of the visit rule that failed
+  ///     obj: the tree-node or token that was being processed
+  ///     orig_exc: the exception that cause it to fail
+  ///
+  /// Note: These parameters are available as attributes
   set rule(Object? rule) => setAttribute("rule", rule);
 
   /// ## obj (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// VisitError is raised when visitors are interrupted by an exception
+  ///
+  /// It provides the following attributes for inspection:
+  ///
+  /// Parameters:
+  ///     rule: the name of the visit rule that failed
+  ///     obj: the tree-node or token that was being processed
+  ///     orig_exc: the exception that cause it to fail
+  ///
+  /// Note: These parameters are available as attributes
   Object? get obj => getAttribute("obj");
 
   /// ## obj (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// VisitError is raised when visitors are interrupted by an exception
+  ///
+  /// It provides the following attributes for inspection:
+  ///
+  /// Parameters:
+  ///     rule: the name of the visit rule that failed
+  ///     obj: the tree-node or token that was being processed
+  ///     orig_exc: the exception that cause it to fail
+  ///
+  /// Note: These parameters are available as attributes
   set obj(Object? obj) => setAttribute("obj", obj);
 
   /// ## orig_exc (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// VisitError is raised when visitors are interrupted by an exception
+  ///
+  /// It provides the following attributes for inspection:
+  ///
+  /// Parameters:
+  ///     rule: the name of the visit rule that failed
+  ///     obj: the tree-node or token that was being processed
+  ///     orig_exc: the exception that cause it to fail
+  ///
+  /// Note: These parameters are available as attributes
   Object? get orig_exc => getAttribute("orig_exc");
 
   /// ## orig_exc (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// VisitError is raised when visitors are interrupted by an exception
+  ///
+  /// It provides the following attributes for inspection:
+  ///
+  /// Parameters:
+  ///     rule: the name of the visit rule that failed
+  ///     obj: the tree-node or token that was being processed
+  ///     orig_exc: the exception that cause it to fail
+  ///
+  /// Note: These parameters are available as attributes
   set orig_exc(Object? orig_exc) => setAttribute("orig_exc", orig_exc);
 }
 
@@ -4414,7 +9754,7 @@ final class VisitError extends PythonClass {
 /// ```
 final class NonTerminal extends PythonClass {
   factory NonTerminal({
-    required Object? name,
+    required String name,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.grammar",
@@ -4489,28 +9829,100 @@ final class NonTerminal extends PythonClass {
       );
 
   /// ## fullrepr (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get fullrepr => getAttribute("fullrepr");
 
   /// ## fullrepr (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set fullrepr(Object? fullrepr) => setAttribute("fullrepr", fullrepr);
 
   /// ## deserialize (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get deserialize => getAttribute("deserialize");
 
   /// ## deserialize (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
   /// ## is_term (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get is_term => getAttribute("is_term");
 
   /// ## is_term (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set is_term(Object? is_term) => setAttribute("is_term", is_term);
 
   /// ## name (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get name => getAttribute("name");
 
   /// ## name (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set name(Object? name) => setAttribute("name", name);
 }
 
@@ -4628,40 +10040,112 @@ final class Rule extends PythonClass {
       );
 
   /// ## deserialize (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// origin : a symbol
+  /// expansion : a list of symbols
+  /// order : index of this expansion amongst all rules of the same name
   Object? get deserialize => getAttribute("deserialize");
 
   /// ## deserialize (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// origin : a symbol
+  /// expansion : a list of symbols
+  /// order : index of this expansion amongst all rules of the same name
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
   /// ## alias (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// origin : a symbol
+  /// expansion : a list of symbols
+  /// order : index of this expansion amongst all rules of the same name
   Object? get alias => getAttribute("alias");
 
   /// ## alias (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// origin : a symbol
+  /// expansion : a list of symbols
+  /// order : index of this expansion amongst all rules of the same name
   set alias(Object? alias) => setAttribute("alias", alias);
 
   /// ## expansion (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// origin : a symbol
+  /// expansion : a list of symbols
+  /// order : index of this expansion amongst all rules of the same name
   Object? get expansion => getAttribute("expansion");
 
   /// ## expansion (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// origin : a symbol
+  /// expansion : a list of symbols
+  /// order : index of this expansion amongst all rules of the same name
   set expansion(Object? expansion) => setAttribute("expansion", expansion);
 
   /// ## options (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// origin : a symbol
+  /// expansion : a list of symbols
+  /// order : index of this expansion amongst all rules of the same name
   Object? get options => getAttribute("options");
 
   /// ## options (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// origin : a symbol
+  /// expansion : a list of symbols
+  /// order : index of this expansion amongst all rules of the same name
   set options(Object? options) => setAttribute("options", options);
 
   /// ## order (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// origin : a symbol
+  /// expansion : a list of symbols
+  /// order : index of this expansion amongst all rules of the same name
   Object? get order => getAttribute("order");
 
   /// ## order (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// origin : a symbol
+  /// expansion : a list of symbols
+  /// order : index of this expansion amongst all rules of the same name
   set order(Object? order) => setAttribute("order", order);
 
   /// ## origin (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// origin : a symbol
+  /// expansion : a list of symbols
+  /// order : index of this expansion amongst all rules of the same name
   Object? get origin => getAttribute("origin");
 
   /// ## origin (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// origin : a symbol
+  /// expansion : a list of symbols
+  /// order : index of this expansion amongst all rules of the same name
   set origin(Object? origin) => setAttribute("origin", origin);
 }
 
@@ -4704,8 +10188,8 @@ final class Rule extends PythonClass {
 /// ```
 final class RuleOptions extends PythonClass {
   factory RuleOptions({
-    Object? keep_all_tokens = false,
-    Object? expand1 = false,
+    bool keep_all_tokens = false,
+    bool expand1 = false,
     Object? priority,
     Object? template_source,
     Object? empty_indices = const [],
@@ -4770,42 +10254,150 @@ final class RuleOptions extends PythonClass {
       );
 
   /// ## deserialize (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get deserialize => getAttribute("deserialize");
 
   /// ## deserialize (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
   /// ## keep_all_tokens (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get keep_all_tokens => getAttribute("keep_all_tokens");
 
   /// ## keep_all_tokens (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set keep_all_tokens(Object? keep_all_tokens) =>
       setAttribute("keep_all_tokens", keep_all_tokens);
 
   /// ## expand1 (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get expand1 => getAttribute("expand1");
 
   /// ## expand1 (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set expand1(Object? expand1) => setAttribute("expand1", expand1);
 
   /// ## priority (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get priority => getAttribute("priority");
 
   /// ## priority (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set priority(Object? priority) => setAttribute("priority", priority);
 
   /// ## template_source (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get template_source => getAttribute("template_source");
 
   /// ## template_source (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set template_source(Object? template_source) =>
       setAttribute("template_source", template_source);
 
   /// ## empty_indices (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get empty_indices => getAttribute("empty_indices");
 
   /// ## empty_indices (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set empty_indices(Object? empty_indices) =>
       setAttribute("empty_indices", empty_indices);
 }
@@ -4852,7 +10444,7 @@ final class RuleOptions extends PythonClass {
 /// ```
 final class $Symbol extends PythonClass {
   factory $Symbol({
-    required Object? name,
+    required String name,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.grammar",
@@ -4927,28 +10519,100 @@ final class $Symbol extends PythonClass {
       );
 
   /// ## fullrepr (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get fullrepr => getAttribute("fullrepr");
 
   /// ## fullrepr (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set fullrepr(Object? fullrepr) => setAttribute("fullrepr", fullrepr);
 
   /// ## is_term (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get is_term => getAttribute("is_term");
 
   /// ## is_term (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set is_term(Object? is_term) => setAttribute("is_term", is_term);
 
   /// ## deserialize (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get deserialize => getAttribute("deserialize");
 
   /// ## deserialize (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
   /// ## name (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get name => getAttribute("name");
 
   /// ## name (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set name(Object? name) => setAttribute("name", name);
 }
 
@@ -5060,34 +10724,124 @@ final class Terminal extends PythonClass {
       );
 
   /// ## fullrepr (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get fullrepr => getAttribute("fullrepr");
 
   /// ## fullrepr (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set fullrepr(Object? fullrepr) => setAttribute("fullrepr", fullrepr);
 
   /// ## deserialize (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get deserialize => getAttribute("deserialize");
 
   /// ## deserialize (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
   /// ## is_term (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get is_term => getAttribute("is_term");
 
   /// ## is_term (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set is_term(Object? is_term) => setAttribute("is_term", is_term);
 
   /// ## name (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get name => getAttribute("name");
 
   /// ## name (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set name(Object? name) => setAttribute("name", name);
 
   /// ## filter_out (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get filter_out => getAttribute("filter_out");
 
   /// ## filter_out (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set filter_out(Object? filter_out) => setAttribute("filter_out", filter_out);
 }
 
@@ -5231,17 +10985,25 @@ final class BasicLexer extends PythonClass {
   ///             while True:
   ///                 yield self.next_token(state, parser_state)
   /// ```
-  Object? lex({
-    required Object? state,
+  Iterator<Token> lex({
+    required LexerState state,
     required Object? parser_state,
   }) =>
-      getFunction("lex").call(
-        <Object?>[
-          state,
-          parser_state,
-        ],
-        kwargs: <String, Object?>{},
-      );
+      TypedIterator.from(
+        PythonIterator.from<Object?, PythonFfiDelegate<Object?>, Object?>(
+          getFunction("lex").call(
+            <Object?>[
+              state,
+              parser_state,
+            ],
+            kwargs: <String, Object?>{},
+          ),
+        ),
+      )
+          .transform((e) => Token.from(
+                e,
+              ))
+          .cast<Token>();
 
   /// ## make_lexer_state
   ///
@@ -5323,74 +11085,202 @@ final class BasicLexer extends PythonClass {
   ///         # EOF
   ///         raise EOFError(self)
   /// ```
-  Object? next_token({
-    required Object? lex_state,
+  Token next_token({
+    required LexerState lex_state,
     Object? parser_state,
   }) =>
-      getFunction("next_token").call(
-        <Object?>[
-          lex_state,
-          parser_state,
-        ],
-        kwargs: <String, Object?>{},
+      Token.from(
+        getFunction("next_token").call(
+          <Object?>[
+            lex_state,
+            parser_state,
+          ],
+          kwargs: <String, Object?>{},
+        ),
       );
 
   /// ## scanner (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Lexer interface
+  ///
+  /// Method Signatures:
+  ///     lex(self, lexer_state, parser_state) -> Iterator[Token]
   Object? get scanner => getAttribute("scanner");
 
   /// ## scanner (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Lexer interface
+  ///
+  /// Method Signatures:
+  ///     lex(self, lexer_state, parser_state) -> Iterator[Token]
   set scanner(Object? scanner) => setAttribute("scanner", scanner);
 
   /// ## terminals (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Lexer interface
+  ///
+  /// Method Signatures:
+  ///     lex(self, lexer_state, parser_state) -> Iterator[Token]
   Object? get terminals => getAttribute("terminals");
 
   /// ## terminals (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Lexer interface
+  ///
+  /// Method Signatures:
+  ///     lex(self, lexer_state, parser_state) -> Iterator[Token]
   set terminals(Object? terminals) => setAttribute("terminals", terminals);
 
   /// ## re (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Lexer interface
+  ///
+  /// Method Signatures:
+  ///     lex(self, lexer_state, parser_state) -> Iterator[Token]
   Object? get re => getAttribute("re");
 
   /// ## re (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Lexer interface
+  ///
+  /// Method Signatures:
+  ///     lex(self, lexer_state, parser_state) -> Iterator[Token]
   set re(Object? re) => setAttribute("re", re);
 
   /// ## g_regex_flags (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Lexer interface
+  ///
+  /// Method Signatures:
+  ///     lex(self, lexer_state, parser_state) -> Iterator[Token]
   Object? get g_regex_flags => getAttribute("g_regex_flags");
 
   /// ## g_regex_flags (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Lexer interface
+  ///
+  /// Method Signatures:
+  ///     lex(self, lexer_state, parser_state) -> Iterator[Token]
   set g_regex_flags(Object? g_regex_flags) =>
       setAttribute("g_regex_flags", g_regex_flags);
 
   /// ## newline_types (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Lexer interface
+  ///
+  /// Method Signatures:
+  ///     lex(self, lexer_state, parser_state) -> Iterator[Token]
   Object? get newline_types => getAttribute("newline_types");
 
   /// ## newline_types (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Lexer interface
+  ///
+  /// Method Signatures:
+  ///     lex(self, lexer_state, parser_state) -> Iterator[Token]
   set newline_types(Object? newline_types) =>
       setAttribute("newline_types", newline_types);
 
   /// ## ignore_types (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Lexer interface
+  ///
+  /// Method Signatures:
+  ///     lex(self, lexer_state, parser_state) -> Iterator[Token]
   Object? get ignore_types => getAttribute("ignore_types");
 
   /// ## ignore_types (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Lexer interface
+  ///
+  /// Method Signatures:
+  ///     lex(self, lexer_state, parser_state) -> Iterator[Token]
   set ignore_types(Object? ignore_types) =>
       setAttribute("ignore_types", ignore_types);
 
   /// ## user_callbacks (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Lexer interface
+  ///
+  /// Method Signatures:
+  ///     lex(self, lexer_state, parser_state) -> Iterator[Token]
   Object? get user_callbacks => getAttribute("user_callbacks");
 
   /// ## user_callbacks (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Lexer interface
+  ///
+  /// Method Signatures:
+  ///     lex(self, lexer_state, parser_state) -> Iterator[Token]
   set user_callbacks(Object? user_callbacks) =>
       setAttribute("user_callbacks", user_callbacks);
 
   /// ## use_bytes (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Lexer interface
+  ///
+  /// Method Signatures:
+  ///     lex(self, lexer_state, parser_state) -> Iterator[Token]
   Object? get use_bytes => getAttribute("use_bytes");
 
   /// ## use_bytes (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Lexer interface
+  ///
+  /// Method Signatures:
+  ///     lex(self, lexer_state, parser_state) -> Iterator[Token]
   set use_bytes(Object? use_bytes) => setAttribute("use_bytes", use_bytes);
 
   /// ## terminals_by_name (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Lexer interface
+  ///
+  /// Method Signatures:
+  ///     lex(self, lexer_state, parser_state) -> Iterator[Token]
   Object? get terminals_by_name => getAttribute("terminals_by_name");
 
   /// ## terminals_by_name (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Lexer interface
+  ///
+  /// Method Signatures:
+  ///     lex(self, lexer_state, parser_state) -> Iterator[Token]
   set terminals_by_name(Object? terminals_by_name) =>
       setAttribute("terminals_by_name", terminals_by_name);
 }
@@ -5514,7 +11404,7 @@ final class FS extends PythonClass {
 /// ```
 final class FromPackageLoader extends PythonClass {
   factory FromPackageLoader({
-    required Object? pkg_name,
+    required String pkg_name,
     Object? search_paths = const [""],
   }) =>
       PythonFfiDart.instance.importClass(
@@ -5531,15 +11421,55 @@ final class FromPackageLoader extends PythonClass {
   FromPackageLoader.from(super.pythonClass) : super.from();
 
   /// ## pkg_name (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Provides a simple way of creating custom import loaders that load from packages via ``pkgutil.get_data`` instead of using `open`.
+  /// This allows them to be compatible even from within zip files.
+  ///
+  /// Relative imports are handled, so you can just freely use them.
+  ///
+  /// pkg_name: The name of the package. You can probably provide `__name__` most of the time
+  /// search_paths: All the path that will be search on absolute imports.
   Object? get pkg_name => getAttribute("pkg_name");
 
   /// ## pkg_name (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Provides a simple way of creating custom import loaders that load from packages via ``pkgutil.get_data`` instead of using `open`.
+  /// This allows them to be compatible even from within zip files.
+  ///
+  /// Relative imports are handled, so you can just freely use them.
+  ///
+  /// pkg_name: The name of the package. You can probably provide `__name__` most of the time
+  /// search_paths: All the path that will be search on absolute imports.
   set pkg_name(Object? pkg_name) => setAttribute("pkg_name", pkg_name);
 
   /// ## search_paths (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Provides a simple way of creating custom import loaders that load from packages via ``pkgutil.get_data`` instead of using `open`.
+  /// This allows them to be compatible even from within zip files.
+  ///
+  /// Relative imports are handled, so you can just freely use them.
+  ///
+  /// pkg_name: The name of the package. You can probably provide `__name__` most of the time
+  /// search_paths: All the path that will be search on absolute imports.
   Object? get search_paths => getAttribute("search_paths");
 
   /// ## search_paths (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Provides a simple way of creating custom import loaders that load from packages via ``pkgutil.get_data`` instead of using `open`.
+  /// This allows them to be compatible even from within zip files.
+  ///
+  /// Relative imports are handled, so you can just freely use them.
+  ///
+  /// pkg_name: The name of the package. You can probably provide `__name__` most of the time
+  /// search_paths: All the path that will be search on absolute imports.
   set search_paths(Object? search_paths) =>
       setAttribute("search_paths", search_paths);
 }
@@ -6170,16 +12100,316 @@ final class LarkOptions extends PythonClass {
       );
 
   /// ## deserialize (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Specifies the options for Lark
+  ///
+  ///
+  /// **===  General Options  ===**
+  ///
+  /// start
+  ///         The start symbol. Either a string, or a list of strings for multiple possible starts (Default: "start")
+  /// debug
+  ///         Display debug information and extra warnings. Use only when debugging (Default: ``False``)
+  ///         When used with Earley, it generates a forest graph as "sppf.png", if 'dot' is installed.
+  /// transformer
+  ///         Applies the transformer to every parse tree (equivalent to applying it after the parse, but faster)
+  /// propagate_positions
+  ///         Propagates (line, column, end_line, end_column) attributes into all tree branches.
+  ///         Accepts ``False``, ``True``, or a callable, which will filter which nodes to ignore when propagating.
+  /// maybe_placeholders
+  ///         When ``True``, the ``[]`` operator returns ``None`` when not matched.
+  ///         When ``False``,  ``[]`` behaves like the ``?`` operator, and returns no value at all.
+  ///         (default= ``True``)
+  /// cache
+  ///         Cache the results of the Lark grammar analysis, for x2 to x3 faster loading. LALR only for now.
+  ///
+  ///         - When ``False``, does nothing (default)
+  ///         - When ``True``, caches to a temporary file in the local directory
+  ///         - When given a string, caches to the path pointed by the string
+  /// regex
+  ///         When True, uses the ``regex`` module instead of the stdlib ``re``.
+  /// g_regex_flags
+  ///         Flags that are applied to all terminals (both regex and strings)
+  /// keep_all_tokens
+  ///         Prevent the tree builder from automagically removing "punctuation" tokens (Default: ``False``)
+  /// tree_class
+  ///         Lark will produce trees comprised of instances of this class instead of the default ``lark.Tree``.
+  ///
+  /// **=== Algorithm Options ===**
+  ///
+  /// parser
+  ///         Decides which parser engine to use. Accepts "earley" or "lalr". (Default: "earley").
+  ///         (there is also a "cyk" option for legacy)
+  /// lexer
+  ///         Decides whether or not to use a lexer stage
+  ///
+  ///         - "auto" (default): Choose for me based on the parser
+  ///         - "basic": Use a basic lexer
+  ///         - "contextual": Stronger lexer (only works with parser="lalr")
+  ///         - "dynamic": Flexible and powerful (only with parser="earley")
+  ///         - "dynamic_complete": Same as dynamic, but tries *every* variation of tokenizing possible.
+  /// ambiguity
+  ///         Decides how to handle ambiguity in the parse. Only relevant if parser="earley"
+  ///
+  ///         - "resolve": The parser will automatically choose the simplest derivation
+  ///           (it chooses consistently: greedy for tokens, non-greedy for rules)
+  ///         - "explicit": The parser will return all derivations wrapped in "_ambig" tree nodes (i.e. a forest).
+  ///         - "forest": The parser will return the root of the shared packed parse forest.
+  ///
+  /// **=== Misc. / Domain Specific Options ===**
+  ///
+  /// postlex
+  ///         Lexer post-processing (Default: ``None``) Only works with the basic and contextual lexers.
+  /// priority
+  ///         How priorities should be evaluated - "auto", ``None``, "normal", "invert" (Default: "auto")
+  /// lexer_callbacks
+  ///         Dictionary of callbacks for the lexer. May alter tokens during lexing. Use with caution.
+  /// use_bytes
+  ///         Accept an input of type ``bytes`` instead of ``str``.
+  /// edit_terminals
+  ///         A callback for editing the terminals before parse.
+  /// import_paths
+  ///         A List of either paths or loader functions to specify from where grammars are imported
+  /// source_path
+  ///         Override the source of from where the grammar was loaded. Useful for relative imports and unconventional grammar loading
+  /// **=== End of Options ===**
   Object? get deserialize => getAttribute("deserialize");
 
   /// ## deserialize (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Specifies the options for Lark
+  ///
+  ///
+  /// **===  General Options  ===**
+  ///
+  /// start
+  ///         The start symbol. Either a string, or a list of strings for multiple possible starts (Default: "start")
+  /// debug
+  ///         Display debug information and extra warnings. Use only when debugging (Default: ``False``)
+  ///         When used with Earley, it generates a forest graph as "sppf.png", if 'dot' is installed.
+  /// transformer
+  ///         Applies the transformer to every parse tree (equivalent to applying it after the parse, but faster)
+  /// propagate_positions
+  ///         Propagates (line, column, end_line, end_column) attributes into all tree branches.
+  ///         Accepts ``False``, ``True``, or a callable, which will filter which nodes to ignore when propagating.
+  /// maybe_placeholders
+  ///         When ``True``, the ``[]`` operator returns ``None`` when not matched.
+  ///         When ``False``,  ``[]`` behaves like the ``?`` operator, and returns no value at all.
+  ///         (default= ``True``)
+  /// cache
+  ///         Cache the results of the Lark grammar analysis, for x2 to x3 faster loading. LALR only for now.
+  ///
+  ///         - When ``False``, does nothing (default)
+  ///         - When ``True``, caches to a temporary file in the local directory
+  ///         - When given a string, caches to the path pointed by the string
+  /// regex
+  ///         When True, uses the ``regex`` module instead of the stdlib ``re``.
+  /// g_regex_flags
+  ///         Flags that are applied to all terminals (both regex and strings)
+  /// keep_all_tokens
+  ///         Prevent the tree builder from automagically removing "punctuation" tokens (Default: ``False``)
+  /// tree_class
+  ///         Lark will produce trees comprised of instances of this class instead of the default ``lark.Tree``.
+  ///
+  /// **=== Algorithm Options ===**
+  ///
+  /// parser
+  ///         Decides which parser engine to use. Accepts "earley" or "lalr". (Default: "earley").
+  ///         (there is also a "cyk" option for legacy)
+  /// lexer
+  ///         Decides whether or not to use a lexer stage
+  ///
+  ///         - "auto" (default): Choose for me based on the parser
+  ///         - "basic": Use a basic lexer
+  ///         - "contextual": Stronger lexer (only works with parser="lalr")
+  ///         - "dynamic": Flexible and powerful (only with parser="earley")
+  ///         - "dynamic_complete": Same as dynamic, but tries *every* variation of tokenizing possible.
+  /// ambiguity
+  ///         Decides how to handle ambiguity in the parse. Only relevant if parser="earley"
+  ///
+  ///         - "resolve": The parser will automatically choose the simplest derivation
+  ///           (it chooses consistently: greedy for tokens, non-greedy for rules)
+  ///         - "explicit": The parser will return all derivations wrapped in "_ambig" tree nodes (i.e. a forest).
+  ///         - "forest": The parser will return the root of the shared packed parse forest.
+  ///
+  /// **=== Misc. / Domain Specific Options ===**
+  ///
+  /// postlex
+  ///         Lexer post-processing (Default: ``None``) Only works with the basic and contextual lexers.
+  /// priority
+  ///         How priorities should be evaluated - "auto", ``None``, "normal", "invert" (Default: "auto")
+  /// lexer_callbacks
+  ///         Dictionary of callbacks for the lexer. May alter tokens during lexing. Use with caution.
+  /// use_bytes
+  ///         Accept an input of type ``bytes`` instead of ``str``.
+  /// edit_terminals
+  ///         A callback for editing the terminals before parse.
+  /// import_paths
+  ///         A List of either paths or loader functions to specify from where grammars are imported
+  /// source_path
+  ///         Override the source of from where the grammar was loaded. Useful for relative imports and unconventional grammar loading
+  /// **=== End of Options ===**
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
   /// ## OPTIONS_DOC (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Specifies the options for Lark
+  ///
+  ///
+  /// **===  General Options  ===**
+  ///
+  /// start
+  ///         The start symbol. Either a string, or a list of strings for multiple possible starts (Default: "start")
+  /// debug
+  ///         Display debug information and extra warnings. Use only when debugging (Default: ``False``)
+  ///         When used with Earley, it generates a forest graph as "sppf.png", if 'dot' is installed.
+  /// transformer
+  ///         Applies the transformer to every parse tree (equivalent to applying it after the parse, but faster)
+  /// propagate_positions
+  ///         Propagates (line, column, end_line, end_column) attributes into all tree branches.
+  ///         Accepts ``False``, ``True``, or a callable, which will filter which nodes to ignore when propagating.
+  /// maybe_placeholders
+  ///         When ``True``, the ``[]`` operator returns ``None`` when not matched.
+  ///         When ``False``,  ``[]`` behaves like the ``?`` operator, and returns no value at all.
+  ///         (default= ``True``)
+  /// cache
+  ///         Cache the results of the Lark grammar analysis, for x2 to x3 faster loading. LALR only for now.
+  ///
+  ///         - When ``False``, does nothing (default)
+  ///         - When ``True``, caches to a temporary file in the local directory
+  ///         - When given a string, caches to the path pointed by the string
+  /// regex
+  ///         When True, uses the ``regex`` module instead of the stdlib ``re``.
+  /// g_regex_flags
+  ///         Flags that are applied to all terminals (both regex and strings)
+  /// keep_all_tokens
+  ///         Prevent the tree builder from automagically removing "punctuation" tokens (Default: ``False``)
+  /// tree_class
+  ///         Lark will produce trees comprised of instances of this class instead of the default ``lark.Tree``.
+  ///
+  /// **=== Algorithm Options ===**
+  ///
+  /// parser
+  ///         Decides which parser engine to use. Accepts "earley" or "lalr". (Default: "earley").
+  ///         (there is also a "cyk" option for legacy)
+  /// lexer
+  ///         Decides whether or not to use a lexer stage
+  ///
+  ///         - "auto" (default): Choose for me based on the parser
+  ///         - "basic": Use a basic lexer
+  ///         - "contextual": Stronger lexer (only works with parser="lalr")
+  ///         - "dynamic": Flexible and powerful (only with parser="earley")
+  ///         - "dynamic_complete": Same as dynamic, but tries *every* variation of tokenizing possible.
+  /// ambiguity
+  ///         Decides how to handle ambiguity in the parse. Only relevant if parser="earley"
+  ///
+  ///         - "resolve": The parser will automatically choose the simplest derivation
+  ///           (it chooses consistently: greedy for tokens, non-greedy for rules)
+  ///         - "explicit": The parser will return all derivations wrapped in "_ambig" tree nodes (i.e. a forest).
+  ///         - "forest": The parser will return the root of the shared packed parse forest.
+  ///
+  /// **=== Misc. / Domain Specific Options ===**
+  ///
+  /// postlex
+  ///         Lexer post-processing (Default: ``None``) Only works with the basic and contextual lexers.
+  /// priority
+  ///         How priorities should be evaluated - "auto", ``None``, "normal", "invert" (Default: "auto")
+  /// lexer_callbacks
+  ///         Dictionary of callbacks for the lexer. May alter tokens during lexing. Use with caution.
+  /// use_bytes
+  ///         Accept an input of type ``bytes`` instead of ``str``.
+  /// edit_terminals
+  ///         A callback for editing the terminals before parse.
+  /// import_paths
+  ///         A List of either paths or loader functions to specify from where grammars are imported
+  /// source_path
+  ///         Override the source of from where the grammar was loaded. Useful for relative imports and unconventional grammar loading
+  /// **=== End of Options ===**
   Object? get OPTIONS_DOC => getAttribute("OPTIONS_DOC");
 
   /// ## OPTIONS_DOC (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Specifies the options for Lark
+  ///
+  ///
+  /// **===  General Options  ===**
+  ///
+  /// start
+  ///         The start symbol. Either a string, or a list of strings for multiple possible starts (Default: "start")
+  /// debug
+  ///         Display debug information and extra warnings. Use only when debugging (Default: ``False``)
+  ///         When used with Earley, it generates a forest graph as "sppf.png", if 'dot' is installed.
+  /// transformer
+  ///         Applies the transformer to every parse tree (equivalent to applying it after the parse, but faster)
+  /// propagate_positions
+  ///         Propagates (line, column, end_line, end_column) attributes into all tree branches.
+  ///         Accepts ``False``, ``True``, or a callable, which will filter which nodes to ignore when propagating.
+  /// maybe_placeholders
+  ///         When ``True``, the ``[]`` operator returns ``None`` when not matched.
+  ///         When ``False``,  ``[]`` behaves like the ``?`` operator, and returns no value at all.
+  ///         (default= ``True``)
+  /// cache
+  ///         Cache the results of the Lark grammar analysis, for x2 to x3 faster loading. LALR only for now.
+  ///
+  ///         - When ``False``, does nothing (default)
+  ///         - When ``True``, caches to a temporary file in the local directory
+  ///         - When given a string, caches to the path pointed by the string
+  /// regex
+  ///         When True, uses the ``regex`` module instead of the stdlib ``re``.
+  /// g_regex_flags
+  ///         Flags that are applied to all terminals (both regex and strings)
+  /// keep_all_tokens
+  ///         Prevent the tree builder from automagically removing "punctuation" tokens (Default: ``False``)
+  /// tree_class
+  ///         Lark will produce trees comprised of instances of this class instead of the default ``lark.Tree``.
+  ///
+  /// **=== Algorithm Options ===**
+  ///
+  /// parser
+  ///         Decides which parser engine to use. Accepts "earley" or "lalr". (Default: "earley").
+  ///         (there is also a "cyk" option for legacy)
+  /// lexer
+  ///         Decides whether or not to use a lexer stage
+  ///
+  ///         - "auto" (default): Choose for me based on the parser
+  ///         - "basic": Use a basic lexer
+  ///         - "contextual": Stronger lexer (only works with parser="lalr")
+  ///         - "dynamic": Flexible and powerful (only with parser="earley")
+  ///         - "dynamic_complete": Same as dynamic, but tries *every* variation of tokenizing possible.
+  /// ambiguity
+  ///         Decides how to handle ambiguity in the parse. Only relevant if parser="earley"
+  ///
+  ///         - "resolve": The parser will automatically choose the simplest derivation
+  ///           (it chooses consistently: greedy for tokens, non-greedy for rules)
+  ///         - "explicit": The parser will return all derivations wrapped in "_ambig" tree nodes (i.e. a forest).
+  ///         - "forest": The parser will return the root of the shared packed parse forest.
+  ///
+  /// **=== Misc. / Domain Specific Options ===**
+  ///
+  /// postlex
+  ///         Lexer post-processing (Default: ``None``) Only works with the basic and contextual lexers.
+  /// priority
+  ///         How priorities should be evaluated - "auto", ``None``, "normal", "invert" (Default: "auto")
+  /// lexer_callbacks
+  ///         Dictionary of callbacks for the lexer. May alter tokens during lexing. Use with caution.
+  /// use_bytes
+  ///         Accept an input of type ``bytes`` instead of ``str``.
+  /// edit_terminals
+  ///         A callback for editing the terminals before parse.
+  /// import_paths
+  ///         A List of either paths or loader functions to specify from where grammars are imported
+  /// source_path
+  ///         Override the source of from where the grammar was loaded. Useful for relative imports and unconventional grammar loading
+  /// **=== End of Options ===**
   set OPTIONS_DOC(Object? OPTIONS_DOC) =>
       setAttribute("OPTIONS_DOC", OPTIONS_DOC);
 }
@@ -6227,17 +12457,25 @@ final class Lexer extends PythonClass {
   ///     def lex(self, lexer_state: LexerState, parser_state: Any) -> Iterator[Token]:
   ///         return NotImplemented
   /// ```
-  Object? lex({
-    required Object? lexer_state,
+  Iterator<Token> lex({
+    required LexerState lexer_state,
     required Object? parser_state,
   }) =>
-      getFunction("lex").call(
-        <Object?>[
-          lexer_state,
-          parser_state,
-        ],
-        kwargs: <String, Object?>{},
-      );
+      TypedIterator.from(
+        PythonIterator.from<Object?, PythonFfiDelegate<Object?>, Object?>(
+          getFunction("lex").call(
+            <Object?>[
+              lexer_state,
+              parser_state,
+            ],
+            kwargs: <String, Object?>{},
+          ),
+        ),
+      )
+          .transform((e) => Token.from(
+                e,
+              ))
+          .cast<Token>();
 
   /// ## make_lexer_state
   ///
@@ -6293,7 +12531,7 @@ final class Lexer extends PythonClass {
 final class LexerThread extends PythonClass {
   factory LexerThread({
     required Object? lexer,
-    required Object? lexer_state,
+    required LexerState lexer_state,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.lexer",
@@ -6326,21 +12564,45 @@ final class LexerThread extends PythonClass {
       );
 
   /// ## from_text (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A thread that ties a lexer instance and a lexer state, to be used by the parser
   Object? get from_text => getAttribute("from_text");
 
   /// ## from_text (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A thread that ties a lexer instance and a lexer state, to be used by the parser
   set from_text(Object? from_text) => setAttribute("from_text", from_text);
 
   /// ## lexer (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A thread that ties a lexer instance and a lexer state, to be used by the parser
   Object? get lexer => getAttribute("lexer");
 
   /// ## lexer (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A thread that ties a lexer instance and a lexer state, to be used by the parser
   set lexer(Object? lexer) => setAttribute("lexer", lexer);
 
   /// ## state (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A thread that ties a lexer instance and a lexer state, to be used by the parser
   Object? get state => getAttribute("state");
 
   /// ## state (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A thread that ties a lexer instance and a lexer state, to be used by the parser
   set state(Object? state) => setAttribute("state", state);
 }
 
@@ -6363,40 +12625,56 @@ final class PackageResource extends PythonClass {
   ///
   /// ### python docstring
   ///
-  /// Alias for field number 1
+  /// PackageResource(pkg_name, path)
   Object? get path => getAttribute("path");
 
   /// ## path (setter)
   ///
   /// ### python docstring
   ///
-  /// Alias for field number 1
+  /// PackageResource(pkg_name, path)
   set path(Object? path) => setAttribute("path", path);
 
   /// ## pkg_name (getter)
   ///
   /// ### python docstring
   ///
-  /// Alias for field number 0
+  /// PackageResource(pkg_name, path)
   Object? get pkg_name => getAttribute("pkg_name");
 
   /// ## pkg_name (setter)
   ///
   /// ### python docstring
   ///
-  /// Alias for field number 0
+  /// PackageResource(pkg_name, path)
   set pkg_name(Object? pkg_name) => setAttribute("pkg_name", pkg_name);
 
   /// ## count (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// PackageResource(pkg_name, path)
   Object? get count => getAttribute("count");
 
   /// ## count (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// PackageResource(pkg_name, path)
   set count(Object? count) => setAttribute("count", count);
 
   /// ## index (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// PackageResource(pkg_name, path)
   Object? get index => getAttribute("index");
 
   /// ## index (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// PackageResource(pkg_name, path)
   set index(Object? index) => setAttribute("index", index);
 }
 
@@ -6603,20 +12881,38 @@ final class PostLex extends PythonClass {
   ///     def process(self, stream: Iterator[Token]) -> Iterator[Token]:
   ///         return stream
   /// ```
-  Object? process({
-    required Object? stream,
+  Iterator<Token> process({
+    required Iterator<Token> stream,
   }) =>
-      getFunction("process").call(
-        <Object?>[
-          stream,
-        ],
-        kwargs: <String, Object?>{},
-      );
+      TypedIterator.from(
+        PythonIterator.from<Object?, PythonFfiDelegate<Object?>, Object?>(
+          getFunction("process").call(
+            <Object?>[
+              stream,
+            ],
+            kwargs: <String, Object?>{},
+          ),
+        ),
+      )
+          .transform((e) => Token.from(
+                e,
+              ))
+          .cast<Token>();
 
   /// ## always_accept (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
   Object? get always_accept => getAttribute("always_accept");
 
   /// ## always_accept (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
   set always_accept(Object? always_accept) =>
       setAttribute("always_accept", always_accept);
 }
@@ -6671,8 +12967,8 @@ final class SerializeMemoizer extends PythonClass {
   /// def in_types(self, value: Serialize) -> bool:
   ///         return isinstance(value, self.types_to_memoize)
   /// ```
-  Object? in_types({
-    required Object? value,
+  bool in_types({
+    required Serialize value,
   }) =>
       getFunction("in_types").call(
         <Object?>[
@@ -6712,23 +13008,47 @@ final class SerializeMemoizer extends PythonClass {
       );
 
   /// ## deserialize (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A version of serialize that memoizes objects to reduce space
   Object? get deserialize => getAttribute("deserialize");
 
   /// ## deserialize (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A version of serialize that memoizes objects to reduce space
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
   /// ## types_to_memoize (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A version of serialize that memoizes objects to reduce space
   Object? get types_to_memoize => getAttribute("types_to_memoize");
 
   /// ## types_to_memoize (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A version of serialize that memoizes objects to reduce space
   set types_to_memoize(Object? types_to_memoize) =>
       setAttribute("types_to_memoize", types_to_memoize);
 
   /// ## memoized (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A version of serialize that memoizes objects to reduce space
   Object? get memoized => getAttribute("memoized");
 
   /// ## memoized (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A version of serialize that memoizes objects to reduce space
   set memoized(Object? memoized) => setAttribute("memoized", memoized);
 }
 
@@ -6884,17 +13204,25 @@ final class ContextualLexer extends PythonClass {
   ///             except UnexpectedCharacters:
   ///                 raise e  # Raise the original UnexpectedCharacters. The root lexer raises it with the wrong expected set.
   /// ```
-  Object? lex({
-    required Object? lexer_state,
+  Iterator<Token> lex({
+    required LexerState lexer_state,
     required Object? parser_state,
   }) =>
-      getFunction("lex").call(
-        <Object?>[
-          lexer_state,
-          parser_state,
-        ],
-        kwargs: <String, Object?>{},
-      );
+      TypedIterator.from(
+        PythonIterator.from<Object?, PythonFfiDelegate<Object?>, Object?>(
+          getFunction("lex").call(
+            <Object?>[
+              lexer_state,
+              parser_state,
+            ],
+            kwargs: <String, Object?>{},
+          ),
+        ),
+      )
+          .transform((e) => Token.from(
+                e,
+              ))
+          .cast<Token>();
 
   /// ## make_lexer_state
   ///
@@ -6919,15 +13247,43 @@ final class ContextualLexer extends PythonClass {
       );
 
   /// ## lexers (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Lexer interface
+  ///
+  /// Method Signatures:
+  ///     lex(self, lexer_state, parser_state) -> Iterator[Token]
   Object? get lexers => getAttribute("lexers");
 
   /// ## lexers (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Lexer interface
+  ///
+  /// Method Signatures:
+  ///     lex(self, lexer_state, parser_state) -> Iterator[Token]
   set lexers(Object? lexers) => setAttribute("lexers", lexers);
 
   /// ## root_lexer (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Lexer interface
+  ///
+  /// Method Signatures:
+  ///     lex(self, lexer_state, parser_state) -> Iterator[Token]
   Object? get root_lexer => getAttribute("root_lexer");
 
   /// ## root_lexer (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Lexer interface
+  ///
+  /// Method Signatures:
+  ///     lex(self, lexer_state, parser_state) -> Iterator[Token]
   set root_lexer(Object? root_lexer) => setAttribute("root_lexer", root_lexer);
 }
 
@@ -6982,21 +13338,51 @@ final class LexerState extends PythonClass {
   LexerState.from(super.pythonClass) : super.from();
 
   /// ## last_token (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Represents the current state of the lexer as it scans the text
+  /// (Lexer objects are only instanciated per grammar, not per text)
   Object? get last_token => getAttribute("last_token");
 
   /// ## last_token (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Represents the current state of the lexer as it scans the text
+  /// (Lexer objects are only instanciated per grammar, not per text)
   set last_token(Object? last_token) => setAttribute("last_token", last_token);
 
   /// ## line_ctr (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Represents the current state of the lexer as it scans the text
+  /// (Lexer objects are only instanciated per grammar, not per text)
   Object? get line_ctr => getAttribute("line_ctr");
 
   /// ## line_ctr (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Represents the current state of the lexer as it scans the text
+  /// (Lexer objects are only instanciated per grammar, not per text)
   set line_ctr(Object? line_ctr) => setAttribute("line_ctr", line_ctr);
 
   /// ## text (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Represents the current state of the lexer as it scans the text
+  /// (Lexer objects are only instanciated per grammar, not per text)
   Object? get text => getAttribute("text");
 
   /// ## text (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Represents the current state of the lexer as it scans the text
+  /// (Lexer objects are only instanciated per grammar, not per text)
   set text(Object? text) => setAttribute("text", text);
 }
 
@@ -7075,7 +13461,7 @@ final class LineCounter extends PythonClass {
   ///         self.column = self.char_pos - self.line_start_pos + 1
   /// ```
   Object? feed({
-    required Object? token,
+    required Token token,
     Object? test_newline = true,
   }) =>
       getFunction("feed").call(
@@ -7175,7 +13561,7 @@ final class LineCounter extends PythonClass {
 /// ```
 final class Pattern extends PythonClass {
   factory Pattern({
-    required Object? value,
+    required String value,
     Object? flags = const [],
     Object? raw,
   }) =>
@@ -7244,46 +13630,154 @@ final class Pattern extends PythonClass {
   ///     def to_regexp(self) -> str:
   ///         raise NotImplementedError()
   /// ```
-  Object? to_regexp() => getFunction("to_regexp").call(
+  String to_regexp() => getFunction("to_regexp").call(
         <Object?>[],
         kwargs: <String, Object?>{},
       );
 
   /// ## max_width (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get max_width => getAttribute("max_width");
 
   /// ## max_width (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set max_width(Object? max_width) => setAttribute("max_width", max_width);
 
   /// ## min_width (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get min_width => getAttribute("min_width");
 
   /// ## min_width (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set min_width(Object? min_width) => setAttribute("min_width", min_width);
 
   /// ## deserialize (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get deserialize => getAttribute("deserialize");
 
   /// ## deserialize (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
   /// ## value (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get value => getAttribute("value");
 
   /// ## value (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set value(Object? value) => setAttribute("value", value);
 
   /// ## flags (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get flags => getAttribute("flags");
 
   /// ## flags (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set flags(Object? flags) => setAttribute("flags", flags);
 
   /// ## raw (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get raw => getAttribute("raw");
 
   /// ## raw (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set raw(Object? raw) => setAttribute("raw", raw);
 }
 
@@ -7324,7 +13818,7 @@ final class Pattern extends PythonClass {
 /// ```
 final class PatternRE extends PythonClass {
   factory PatternRE({
-    required Object? value,
+    required String value,
     Object? flags = const [],
     Object? raw,
   }) =>
@@ -7392,52 +13886,178 @@ final class PatternRE extends PythonClass {
   /// def to_regexp(self) -> str:
   ///         return self._get_flags(self.value)
   /// ```
-  Object? to_regexp() => getFunction("to_regexp").call(
+  String to_regexp() => getFunction("to_regexp").call(
         <Object?>[],
         kwargs: <String, Object?>{},
       );
 
   /// ## max_width (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get max_width => getAttribute("max_width");
 
   /// ## max_width (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set max_width(Object? max_width) => setAttribute("max_width", max_width);
 
   /// ## min_width (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get min_width => getAttribute("min_width");
 
   /// ## min_width (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set min_width(Object? min_width) => setAttribute("min_width", min_width);
 
   /// ## deserialize (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get deserialize => getAttribute("deserialize");
 
   /// ## deserialize (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
   /// ## type (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get type => getAttribute("type");
 
   /// ## type (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set type(Object? type) => setAttribute("type", type);
 
   /// ## value (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get value => getAttribute("value");
 
   /// ## value (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set value(Object? value) => setAttribute("value", value);
 
   /// ## flags (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get flags => getAttribute("flags");
 
   /// ## flags (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set flags(Object? flags) => setAttribute("flags", flags);
 
   /// ## raw (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get raw => getAttribute("raw");
 
   /// ## raw (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set raw(Object? raw) => setAttribute("raw", raw);
 }
 
@@ -7472,7 +14092,7 @@ final class PatternRE extends PythonClass {
 /// ```
 final class PatternStr extends PythonClass {
   factory PatternStr({
-    required Object? value,
+    required String value,
     Object? flags = const [],
     Object? raw,
   }) =>
@@ -7540,52 +14160,178 @@ final class PatternStr extends PythonClass {
   /// def to_regexp(self) -> str:
   ///         return self._get_flags(re.escape(self.value))
   /// ```
-  Object? to_regexp() => getFunction("to_regexp").call(
+  String to_regexp() => getFunction("to_regexp").call(
         <Object?>[],
         kwargs: <String, Object?>{},
       );
 
   /// ## max_width (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get max_width => getAttribute("max_width");
 
   /// ## max_width (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set max_width(Object? max_width) => setAttribute("max_width", max_width);
 
   /// ## min_width (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get min_width => getAttribute("min_width");
 
   /// ## min_width (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set min_width(Object? min_width) => setAttribute("min_width", min_width);
 
   /// ## deserialize (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get deserialize => getAttribute("deserialize");
 
   /// ## deserialize (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
   /// ## type (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get type => getAttribute("type");
 
   /// ## type (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set type(Object? type) => setAttribute("type", type);
 
   /// ## value (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get value => getAttribute("value");
 
   /// ## value (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set value(Object? value) => setAttribute("value", value);
 
   /// ## flags (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get flags => getAttribute("flags");
 
   /// ## flags (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set flags(Object? flags) => setAttribute("flags", flags);
 
   /// ## raw (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get raw => getAttribute("raw");
 
   /// ## raw (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set raw(Object? raw) => setAttribute("raw", raw);
 }
 
@@ -7852,21 +14598,45 @@ final class ApplyTemplates extends PythonClass {
       );
 
   /// ## rule_defs (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Apply the templates, creating new rules that represent the used templates
   Object? get rule_defs => getAttribute("rule_defs");
 
   /// ## rule_defs (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Apply the templates, creating new rules that represent the used templates
   set rule_defs(Object? rule_defs) => setAttribute("rule_defs", rule_defs);
 
   /// ## replacer (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Apply the templates, creating new rules that represent the used templates
   Object? get replacer => getAttribute("replacer");
 
   /// ## replacer (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Apply the templates, creating new rules that represent the used templates
   set replacer(Object? replacer) => setAttribute("replacer", replacer);
 
   /// ## created_templates (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Apply the templates, creating new rules that represent the used templates
   Object? get created_templates => getAttribute("created_templates");
 
   /// ## created_templates (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Apply the templates, creating new rules that represent the used templates
   set created_templates(Object? created_templates) =>
       setAttribute("created_templates", created_templates);
 }
@@ -8130,46 +14900,130 @@ final class EBNF_to_BNF extends PythonClass {
       );
 
   /// ## expr (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as Transformer, but non-recursive, and changes the tree in-place instead of returning new instances
+  ///
+  /// Useful for huge trees. Conservative in memory.
   Object? get expr => getAttribute("expr");
 
   /// ## expr (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as Transformer, but non-recursive, and changes the tree in-place instead of returning new instances
+  ///
+  /// Useful for huge trees. Conservative in memory.
   set expr(Object? expr) => setAttribute("expr", expr);
 
   /// ## maybe (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as Transformer, but non-recursive, and changes the tree in-place instead of returning new instances
+  ///
+  /// Useful for huge trees. Conservative in memory.
   Object? get maybe => getAttribute("maybe");
 
   /// ## maybe (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as Transformer, but non-recursive, and changes the tree in-place instead of returning new instances
+  ///
+  /// Useful for huge trees. Conservative in memory.
   set maybe(Object? maybe) => setAttribute("maybe", maybe);
 
   /// ## new_rules (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as Transformer, but non-recursive, and changes the tree in-place instead of returning new instances
+  ///
+  /// Useful for huge trees. Conservative in memory.
   Object? get new_rules => getAttribute("new_rules");
 
   /// ## new_rules (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as Transformer, but non-recursive, and changes the tree in-place instead of returning new instances
+  ///
+  /// Useful for huge trees. Conservative in memory.
   set new_rules(Object? new_rules) => setAttribute("new_rules", new_rules);
 
   /// ## rules_cache (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as Transformer, but non-recursive, and changes the tree in-place instead of returning new instances
+  ///
+  /// Useful for huge trees. Conservative in memory.
   Object? get rules_cache => getAttribute("rules_cache");
 
   /// ## rules_cache (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as Transformer, but non-recursive, and changes the tree in-place instead of returning new instances
+  ///
+  /// Useful for huge trees. Conservative in memory.
   set rules_cache(Object? rules_cache) =>
       setAttribute("rules_cache", rules_cache);
 
   /// ## prefix (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as Transformer, but non-recursive, and changes the tree in-place instead of returning new instances
+  ///
+  /// Useful for huge trees. Conservative in memory.
   Object? get prefix => getAttribute("prefix");
 
   /// ## prefix (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as Transformer, but non-recursive, and changes the tree in-place instead of returning new instances
+  ///
+  /// Useful for huge trees. Conservative in memory.
   set prefix(Object? prefix) => setAttribute("prefix", prefix);
 
   /// ## i (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as Transformer, but non-recursive, and changes the tree in-place instead of returning new instances
+  ///
+  /// Useful for huge trees. Conservative in memory.
   Object? get i => getAttribute("i");
 
   /// ## i (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as Transformer, but non-recursive, and changes the tree in-place instead of returning new instances
+  ///
+  /// Useful for huge trees. Conservative in memory.
   set i(Object? i) => setAttribute("i", i);
 
   /// ## rule_options (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as Transformer, but non-recursive, and changes the tree in-place instead of returning new instances
+  ///
+  /// Useful for huge trees. Conservative in memory.
   Object? get rule_options => getAttribute("rule_options");
 
   /// ## rule_options (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as Transformer, but non-recursive, and changes the tree in-place instead of returning new instances
+  ///
+  /// Useful for huge trees. Conservative in memory.
   set rule_options(Object? rule_options) =>
       setAttribute("rule_options", rule_options);
 }
@@ -8311,9 +15165,73 @@ final class FindRuleSize extends PythonClass {
       );
 
   /// ## keep_all_tokens (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Transformers work bottom-up (or depth-first), starting with visiting the leaves and working
+  /// their way up until ending at the root of the tree.
+  ///
+  /// For each node visited, the transformer will call the appropriate method (callbacks), according to the
+  /// node's ``data``, and use the returned value to replace the node, thereby creating a new tree structure.
+  ///
+  /// Transformers can be used to implement map & reduce patterns. Because nodes are reduced from leaf to root,
+  /// at any point the callbacks may assume the children have already been transformed (if applicable).
+  ///
+  /// If the transformer cannot find a method with the right name, it will instead call ``__default__``, which by
+  /// default creates a copy of the node.
+  ///
+  /// To discard a node, return Discard (``lark.visitors.Discard``).
+  ///
+  /// ``Transformer`` can do anything ``Visitor`` can do, but because it reconstructs the tree,
+  /// it is slightly less efficient.
+  ///
+  /// A transformer without methods essentially performs a non-memoized partial deepcopy.
+  ///
+  /// All these classes implement the transformer interface:
+  ///
+  /// - ``Transformer`` - Recursively transforms the tree. This is the one you probably want.
+  /// - ``Transformer_InPlace`` - Non-recursive. Changes the tree in-place instead of returning new instances
+  /// - ``Transformer_InPlaceRecursive`` - Recursive. Changes the tree in-place instead of returning new instances
+  ///
+  /// Parameters:
+  ///     visit_tokens (bool, optional): Should the transformer visit tokens in addition to rules.
+  ///                                    Setting this to ``False`` is slightly faster. Defaults to ``True``.
+  ///                                    (For processing ignored tokens, use the ``lexer_callbacks`` options)
   Object? get keep_all_tokens => getAttribute("keep_all_tokens");
 
   /// ## keep_all_tokens (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Transformers work bottom-up (or depth-first), starting with visiting the leaves and working
+  /// their way up until ending at the root of the tree.
+  ///
+  /// For each node visited, the transformer will call the appropriate method (callbacks), according to the
+  /// node's ``data``, and use the returned value to replace the node, thereby creating a new tree structure.
+  ///
+  /// Transformers can be used to implement map & reduce patterns. Because nodes are reduced from leaf to root,
+  /// at any point the callbacks may assume the children have already been transformed (if applicable).
+  ///
+  /// If the transformer cannot find a method with the right name, it will instead call ``__default__``, which by
+  /// default creates a copy of the node.
+  ///
+  /// To discard a node, return Discard (``lark.visitors.Discard``).
+  ///
+  /// ``Transformer`` can do anything ``Visitor`` can do, but because it reconstructs the tree,
+  /// it is slightly less efficient.
+  ///
+  /// A transformer without methods essentially performs a non-memoized partial deepcopy.
+  ///
+  /// All these classes implement the transformer interface:
+  ///
+  /// - ``Transformer`` - Recursively transforms the tree. This is the one you probably want.
+  /// - ``Transformer_InPlace`` - Non-recursive. Changes the tree in-place instead of returning new instances
+  /// - ``Transformer_InPlaceRecursive`` - Recursive. Changes the tree in-place instead of returning new instances
+  ///
+  /// Parameters:
+  ///     visit_tokens (bool, optional): Should the transformer visit tokens in addition to rules.
+  ///                                    Setting this to ``False`` is slightly faster. Defaults to ``True``.
+  ///                                    (For processing ignored tokens, use the ``lexer_callbacks`` options)
   set keep_all_tokens(Object? keep_all_tokens) =>
       setAttribute("keep_all_tokens", keep_all_tokens);
 }
@@ -8627,7 +15545,7 @@ final class FindRuleSize extends PythonClass {
 /// ```
 final class GrammarBuilder extends PythonClass {
   factory GrammarBuilder({
-    Object? global_keep_all_tokens = false,
+    bool global_keep_all_tokens = false,
     Object? import_paths,
     Object? used_files,
   }) =>
@@ -8663,9 +15581,11 @@ final class GrammarBuilder extends PythonClass {
   ///         # resolve_term_references(term_defs)
   ///         return Grammar(rule_defs, term_defs, self._ignore_names)
   /// ```
-  Object? build() => getFunction("build").call(
-        <Object?>[],
-        kwargs: <String, Object?>{},
+  Grammar build() => Grammar.from(
+        getFunction("build").call(
+          <Object?>[],
+          kwargs: <String, Object?>{},
+        ),
       );
 
   /// ## do_import
@@ -8707,7 +15627,7 @@ final class GrammarBuilder extends PythonClass {
   ///             open(grammar_path, encoding='utf8')
   ///             assert False, "Couldn't import grammar %s, but a corresponding file was found at a place where lark doesn't search for it" % (dotted_path,)
   /// ```
-  Object? do_import({
+  Null do_import({
     required Object? dotted_path,
     required Object? base_path,
     required Object? aliases,
@@ -8779,9 +15699,9 @@ final class GrammarBuilder extends PythonClass {
   ///         }
   ///         resolve_term_references(term_defs)
   /// ```
-  Object? load_grammar({
-    required Object? grammar_text,
-    Object? grammar_name = "<?>",
+  Null load_grammar({
+    required String grammar_text,
+    String grammar_name = "<?>",
     Object? mangle,
   }) =>
       getFunction("load_grammar").call(
@@ -8829,7 +15749,7 @@ final class GrammarBuilder extends PythonClass {
   ///         if not set(self._definitions).issuperset(self._ignore_names):
   ///             raise GrammarError("Terminals %s were marked to ignore but were not defined!" % (set(self._ignore_names) - set(self._definitions)))
   /// ```
-  Object? validate() => getFunction("validate").call(
+  Null validate() => getFunction("validate").call(
         <Object?>[],
         kwargs: <String, Object?>{},
       );
@@ -9048,47 +15968,173 @@ final class ParsingFrontend extends PythonClass {
       );
 
   /// ## deserialize (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get deserialize => getAttribute("deserialize");
 
   /// ## deserialize (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
   /// ## parser_conf (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get parser_conf => getAttribute("parser_conf");
 
   /// ## parser_conf (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set parser_conf(Object? parser_conf) =>
       setAttribute("parser_conf", parser_conf);
 
   /// ## lexer_conf (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get lexer_conf => getAttribute("lexer_conf");
 
   /// ## lexer_conf (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set lexer_conf(Object? lexer_conf) => setAttribute("lexer_conf", lexer_conf);
 
   /// ## options (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get options => getAttribute("options");
 
   /// ## options (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set options(Object? options) => setAttribute("options", options);
 
   /// ## parser (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get parser => getAttribute("parser");
 
   /// ## parser (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set parser(Object? parser) => setAttribute("parser", parser);
 
   /// ## skip_lexer (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get skip_lexer => getAttribute("skip_lexer");
 
   /// ## skip_lexer (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set skip_lexer(Object? skip_lexer) => setAttribute("skip_lexer", skip_lexer);
 
   /// ## lexer (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get lexer => getAttribute("lexer");
 
   /// ## lexer (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set lexer(Object? lexer) => setAttribute("lexer", lexer);
 }
 
@@ -9195,40 +16241,88 @@ final class PrepareAnonTerminals extends PythonClass {
       );
 
   /// ## pattern (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Create a unique list of anonymous terminals. Attempt to give meaningful names to them when we add them
   Object? get pattern => getAttribute("pattern");
 
   /// ## pattern (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Create a unique list of anonymous terminals. Attempt to give meaningful names to them when we add them
   set pattern(Object? pattern) => setAttribute("pattern", pattern);
 
   /// ## terminals (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Create a unique list of anonymous terminals. Attempt to give meaningful names to them when we add them
   Object? get terminals => getAttribute("terminals");
 
   /// ## terminals (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Create a unique list of anonymous terminals. Attempt to give meaningful names to them when we add them
   set terminals(Object? terminals) => setAttribute("terminals", terminals);
 
   /// ## term_set (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Create a unique list of anonymous terminals. Attempt to give meaningful names to them when we add them
   Object? get term_set => getAttribute("term_set");
 
   /// ## term_set (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Create a unique list of anonymous terminals. Attempt to give meaningful names to them when we add them
   set term_set(Object? term_set) => setAttribute("term_set", term_set);
 
   /// ## term_reverse (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Create a unique list of anonymous terminals. Attempt to give meaningful names to them when we add them
   Object? get term_reverse => getAttribute("term_reverse");
 
   /// ## term_reverse (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Create a unique list of anonymous terminals. Attempt to give meaningful names to them when we add them
   set term_reverse(Object? term_reverse) =>
       setAttribute("term_reverse", term_reverse);
 
   /// ## i (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Create a unique list of anonymous terminals. Attempt to give meaningful names to them when we add them
   Object? get i => getAttribute("i");
 
   /// ## i (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Create a unique list of anonymous terminals. Attempt to give meaningful names to them when we add them
   set i(Object? i) => setAttribute("i", i);
 
   /// ## rule_options (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Create a unique list of anonymous terminals. Attempt to give meaningful names to them when we add them
   Object? get rule_options => getAttribute("rule_options");
 
   /// ## rule_options (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Create a unique list of anonymous terminals. Attempt to give meaningful names to them when we add them
   set rule_options(Object? rule_options) =>
       setAttribute("rule_options", rule_options);
 }
@@ -9253,7 +16347,7 @@ final class PrepareAnonTerminals extends PythonClass {
 /// ```
 final class PrepareGrammar extends PythonClass {
   factory PrepareGrammar({
-    Object? visit_tokens = true,
+    bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.load_grammar",
@@ -9292,16 +16386,40 @@ final class PrepareGrammar extends PythonClass {
       );
 
   /// ## nonterminal (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as Transformer, but non-recursive, and changes the tree in-place instead of returning new instances
+  ///
+  /// Useful for huge trees. Conservative in memory.
   Object? get nonterminal => getAttribute("nonterminal");
 
   /// ## nonterminal (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as Transformer, but non-recursive, and changes the tree in-place instead of returning new instances
+  ///
+  /// Useful for huge trees. Conservative in memory.
   set nonterminal(Object? nonterminal) =>
       setAttribute("nonterminal", nonterminal);
 
   /// ## terminal (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as Transformer, but non-recursive, and changes the tree in-place instead of returning new instances
+  ///
+  /// Useful for huge trees. Conservative in memory.
   Object? get terminal => getAttribute("terminal");
 
   /// ## terminal (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as Transformer, but non-recursive, and changes the tree in-place instead of returning new instances
+  ///
+  /// Useful for huge trees. Conservative in memory.
   set terminal(Object? terminal) => setAttribute("terminal", terminal);
 }
 
@@ -9330,7 +16448,7 @@ final class PrepareGrammar extends PythonClass {
 /// ```
 final class PrepareLiterals extends PythonClass {
   factory PrepareLiterals({
-    Object? visit_tokens = true,
+    bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.load_grammar",
@@ -9369,15 +16487,39 @@ final class PrepareLiterals extends PythonClass {
       );
 
   /// ## literal (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as Transformer, but non-recursive, and changes the tree in-place instead of returning new instances
+  ///
+  /// Useful for huge trees. Conservative in memory.
   Object? get literal => getAttribute("literal");
 
   /// ## literal (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as Transformer, but non-recursive, and changes the tree in-place instead of returning new instances
+  ///
+  /// Useful for huge trees. Conservative in memory.
   set literal(Object? literal) => setAttribute("literal", literal);
 
   /// ## range (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as Transformer, but non-recursive, and changes the tree in-place instead of returning new instances
+  ///
+  /// Useful for huge trees. Conservative in memory.
   Object? get range => getAttribute("range");
 
   /// ## range (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as Transformer, but non-recursive, and changes the tree in-place instead of returning new instances
+  ///
+  /// Useful for huge trees. Conservative in memory.
   set range(Object? range) => setAttribute("range", range);
 }
 
@@ -9431,7 +16573,7 @@ final class PrepareLiterals extends PythonClass {
 /// ```
 final class RuleTreeToText extends PythonClass {
   factory RuleTreeToText({
-    Object? visit_tokens = true,
+    bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.load_grammar",
@@ -9543,7 +16685,7 @@ final class RuleTreeToText extends PythonClass {
 /// ```
 final class ST extends PythonClass {
   factory ST({
-    required Object? data,
+    required String data,
     required Object? children,
     Object? meta,
   }) =>
@@ -9614,7 +16756,7 @@ final class ST extends PythonClass {
   ///         return self.find_pred(lambda t: t.data == data)
   /// ```
   Object? find_data({
-    required Object? data,
+    required String data,
   }) =>
       getFunction("find_data").call(
         <Object?>[
@@ -9724,8 +16866,8 @@ final class ST extends PythonClass {
   ///         """
   ///         return ''.join(self._pretty(0, indent_str))
   /// ```
-  Object? pretty({
-    Object? indent_str = "  ",
+  String pretty({
+    String indent_str = "  ",
   }) =>
       getFunction("pretty").call(
         <Object?>[
@@ -9763,15 +16905,19 @@ final class ST extends PythonClass {
   ///                 if pred(c):
   ///                     yield c
   /// ```
-  Object? scan_values({
+  Iterator<Object?> scan_values({
     required Object? pred,
   }) =>
-      getFunction("scan_values").call(
-        <Object?>[
-          pred,
-        ],
-        kwargs: <String, Object?>{},
-      );
+      TypedIterator.from(
+        PythonIterator.from<Object?, PythonFfiDelegate<Object?>, Object?>(
+          getFunction("scan_values").call(
+            <Object?>[
+              pred,
+            ],
+            kwargs: <String, Object?>{},
+          ),
+        ),
+      ).transform((e) => e).cast<Object?>();
 
   /// ## set
   ///
@@ -9781,8 +16927,8 @@ final class ST extends PythonClass {
   ///         self.data = data
   ///         self.children = children
   /// ```
-  Object? $set({
-    required Object? data,
+  Null $set({
+    required String data,
     required Object? children,
   }) =>
       getFunction("set").call(
@@ -9794,27 +16940,131 @@ final class ST extends PythonClass {
       );
 
   /// ## meta (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// The main tree class.
+  ///
+  /// Creates a new tree, and stores "data" and "children" in attributes of the same name.
+  /// Trees can be hashed and compared.
+  ///
+  /// Parameters:
+  ///     data: The name of the rule or alias
+  ///     children: List of matched sub-rules and terminals
+  ///     meta: Line & Column numbers (if ``propagate_positions`` is enabled).
+  ///         meta attributes: line, column, start_pos, end_line, end_column, end_pos
   Object? get meta => getAttribute("meta");
 
   /// ## meta (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// The main tree class.
+  ///
+  /// Creates a new tree, and stores "data" and "children" in attributes of the same name.
+  /// Trees can be hashed and compared.
+  ///
+  /// Parameters:
+  ///     data: The name of the rule or alias
+  ///     children: List of matched sub-rules and terminals
+  ///     meta: Line & Column numbers (if ``propagate_positions`` is enabled).
+  ///         meta attributes: line, column, start_pos, end_line, end_column, end_pos
   set meta(Object? meta) => setAttribute("meta", meta);
 
   /// ## rule (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// The main tree class.
+  ///
+  /// Creates a new tree, and stores "data" and "children" in attributes of the same name.
+  /// Trees can be hashed and compared.
+  ///
+  /// Parameters:
+  ///     data: The name of the rule or alias
+  ///     children: List of matched sub-rules and terminals
+  ///     meta: Line & Column numbers (if ``propagate_positions`` is enabled).
+  ///         meta attributes: line, column, start_pos, end_line, end_column, end_pos
   Object? get rule => getAttribute("rule");
 
   /// ## rule (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// The main tree class.
+  ///
+  /// Creates a new tree, and stores "data" and "children" in attributes of the same name.
+  /// Trees can be hashed and compared.
+  ///
+  /// Parameters:
+  ///     data: The name of the rule or alias
+  ///     children: List of matched sub-rules and terminals
+  ///     meta: Line & Column numbers (if ``propagate_positions`` is enabled).
+  ///         meta attributes: line, column, start_pos, end_line, end_column, end_pos
   set rule(Object? rule) => setAttribute("rule", rule);
 
   /// ## children (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// The main tree class.
+  ///
+  /// Creates a new tree, and stores "data" and "children" in attributes of the same name.
+  /// Trees can be hashed and compared.
+  ///
+  /// Parameters:
+  ///     data: The name of the rule or alias
+  ///     children: List of matched sub-rules and terminals
+  ///     meta: Line & Column numbers (if ``propagate_positions`` is enabled).
+  ///         meta attributes: line, column, start_pos, end_line, end_column, end_pos
   Object? get children => getAttribute("children");
 
   /// ## children (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// The main tree class.
+  ///
+  /// Creates a new tree, and stores "data" and "children" in attributes of the same name.
+  /// Trees can be hashed and compared.
+  ///
+  /// Parameters:
+  ///     data: The name of the rule or alias
+  ///     children: List of matched sub-rules and terminals
+  ///     meta: Line & Column numbers (if ``propagate_positions`` is enabled).
+  ///         meta attributes: line, column, start_pos, end_line, end_column, end_pos
   set children(Object? children) => setAttribute("children", children);
 
   /// ## data (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// The main tree class.
+  ///
+  /// Creates a new tree, and stores "data" and "children" in attributes of the same name.
+  /// Trees can be hashed and compared.
+  ///
+  /// Parameters:
+  ///     data: The name of the rule or alias
+  ///     children: List of matched sub-rules and terminals
+  ///     meta: Line & Column numbers (if ``propagate_positions`` is enabled).
+  ///         meta attributes: line, column, start_pos, end_line, end_column, end_pos
   Object? get data => getAttribute("data");
 
   /// ## data (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// The main tree class.
+  ///
+  /// Creates a new tree, and stores "data" and "children" in attributes of the same name.
+  /// Trees can be hashed and compared.
+  ///
+  /// Parameters:
+  ///     data: The name of the rule or alias
+  ///     children: List of matched sub-rules and terminals
+  ///     meta: Line & Column numbers (if ``propagate_positions`` is enabled).
+  ///         meta attributes: line, column, start_pos, end_line, end_column, end_pos
   set data(Object? data) => setAttribute("data", data);
 }
 
@@ -10071,7 +17321,7 @@ final class SimplifyRule_Visitor extends PythonClass {
 /// ```
 final class TerminalTreeToPattern extends PythonClass {
   factory TerminalTreeToPattern({
-    Object? visit_tokens = true,
+    bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.load_grammar",
@@ -10312,7 +17562,7 @@ final class TerminalTreeToPattern extends PythonClass {
 /// ```
 final class Transformer_InPlace extends PythonClass {
   factory Transformer_InPlace({
-    Object? visit_tokens = true,
+    bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.visitors",
@@ -10369,7 +17619,7 @@ final class Transformer_InPlace extends PythonClass {
 /// ```
 final class ValidateSymbols extends PythonClass {
   factory ValidateSymbols({
-    Object? visit_tokens = true,
+    bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.load_grammar",
@@ -10491,22 +17741,64 @@ final class AmbiguousExpander extends PythonClass {
   AmbiguousExpander.from(super.pythonClass) : super.from();
 
   /// ## node_builder (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Deal with the case where we're expanding children ('_rule') into a parent but the children
+  /// are ambiguous. i.e. (parent->_ambig->_expand_this_rule). In this case, make the parent itself
+  /// ambiguous with as many copies as there are ambiguous children, and then copy the ambiguous children
+  /// into the right parents in the right places, essentially shifting the ambiguity up the tree.
   Object? get node_builder => getAttribute("node_builder");
 
   /// ## node_builder (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Deal with the case where we're expanding children ('_rule') into a parent but the children
+  /// are ambiguous. i.e. (parent->_ambig->_expand_this_rule). In this case, make the parent itself
+  /// ambiguous with as many copies as there are ambiguous children, and then copy the ambiguous children
+  /// into the right parents in the right places, essentially shifting the ambiguity up the tree.
   set node_builder(Object? node_builder) =>
       setAttribute("node_builder", node_builder);
 
   /// ## tree_class (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Deal with the case where we're expanding children ('_rule') into a parent but the children
+  /// are ambiguous. i.e. (parent->_ambig->_expand_this_rule). In this case, make the parent itself
+  /// ambiguous with as many copies as there are ambiguous children, and then copy the ambiguous children
+  /// into the right parents in the right places, essentially shifting the ambiguity up the tree.
   Object? get tree_class => getAttribute("tree_class");
 
   /// ## tree_class (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Deal with the case where we're expanding children ('_rule') into a parent but the children
+  /// are ambiguous. i.e. (parent->_ambig->_expand_this_rule). In this case, make the parent itself
+  /// ambiguous with as many copies as there are ambiguous children, and then copy the ambiguous children
+  /// into the right parents in the right places, essentially shifting the ambiguity up the tree.
   set tree_class(Object? tree_class) => setAttribute("tree_class", tree_class);
 
   /// ## to_expand (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Deal with the case where we're expanding children ('_rule') into a parent but the children
+  /// are ambiguous. i.e. (parent->_ambig->_expand_this_rule). In this case, make the parent itself
+  /// ambiguous with as many copies as there are ambiguous children, and then copy the ambiguous children
+  /// into the right parents in the right places, essentially shifting the ambiguity up the tree.
   Object? get to_expand => getAttribute("to_expand");
 
   /// ## to_expand (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Deal with the case where we're expanding children ('_rule') into a parent but the children
+  /// are ambiguous. i.e. (parent->_ambig->_expand_this_rule). In this case, make the parent itself
+  /// ambiguous with as many copies as there are ambiguous children, and then copy the ambiguous children
+  /// into the right parents in the right places, essentially shifting the ambiguity up the tree.
   set to_expand(Object? to_expand) => setAttribute("to_expand", to_expand);
 }
 
@@ -10653,16 +17945,176 @@ final class AmbiguousIntermediateExpander extends PythonClass {
   AmbiguousIntermediateExpander.from(super.pythonClass) : super.from();
 
   /// ## node_builder (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Propagate ambiguous intermediate nodes and their derivations up to the
+  /// current rule.
+  ///
+  /// In general, converts
+  ///
+  /// rule
+  ///   _iambig
+  ///     _inter
+  ///       someChildren1
+  ///       ...
+  ///     _inter
+  ///       someChildren2
+  ///       ...
+  ///   someChildren3
+  ///   ...
+  ///
+  /// to
+  ///
+  /// _ambig
+  ///   rule
+  ///     someChildren1
+  ///     ...
+  ///     someChildren3
+  ///     ...
+  ///   rule
+  ///     someChildren2
+  ///     ...
+  ///     someChildren3
+  ///     ...
+  ///   rule
+  ///     childrenFromNestedIambigs
+  ///     ...
+  ///     someChildren3
+  ///     ...
+  ///   ...
+  ///
+  /// propagating up any nested '_iambig' nodes along the way.
   Object? get node_builder => getAttribute("node_builder");
 
   /// ## node_builder (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Propagate ambiguous intermediate nodes and their derivations up to the
+  /// current rule.
+  ///
+  /// In general, converts
+  ///
+  /// rule
+  ///   _iambig
+  ///     _inter
+  ///       someChildren1
+  ///       ...
+  ///     _inter
+  ///       someChildren2
+  ///       ...
+  ///   someChildren3
+  ///   ...
+  ///
+  /// to
+  ///
+  /// _ambig
+  ///   rule
+  ///     someChildren1
+  ///     ...
+  ///     someChildren3
+  ///     ...
+  ///   rule
+  ///     someChildren2
+  ///     ...
+  ///     someChildren3
+  ///     ...
+  ///   rule
+  ///     childrenFromNestedIambigs
+  ///     ...
+  ///     someChildren3
+  ///     ...
+  ///   ...
+  ///
+  /// propagating up any nested '_iambig' nodes along the way.
   set node_builder(Object? node_builder) =>
       setAttribute("node_builder", node_builder);
 
   /// ## tree_class (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Propagate ambiguous intermediate nodes and their derivations up to the
+  /// current rule.
+  ///
+  /// In general, converts
+  ///
+  /// rule
+  ///   _iambig
+  ///     _inter
+  ///       someChildren1
+  ///       ...
+  ///     _inter
+  ///       someChildren2
+  ///       ...
+  ///   someChildren3
+  ///   ...
+  ///
+  /// to
+  ///
+  /// _ambig
+  ///   rule
+  ///     someChildren1
+  ///     ...
+  ///     someChildren3
+  ///     ...
+  ///   rule
+  ///     someChildren2
+  ///     ...
+  ///     someChildren3
+  ///     ...
+  ///   rule
+  ///     childrenFromNestedIambigs
+  ///     ...
+  ///     someChildren3
+  ///     ...
+  ///   ...
+  ///
+  /// propagating up any nested '_iambig' nodes along the way.
   Object? get tree_class => getAttribute("tree_class");
 
   /// ## tree_class (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Propagate ambiguous intermediate nodes and their derivations up to the
+  /// current rule.
+  ///
+  /// In general, converts
+  ///
+  /// rule
+  ///   _iambig
+  ///     _inter
+  ///       someChildren1
+  ///       ...
+  ///     _inter
+  ///       someChildren2
+  ///       ...
+  ///   someChildren3
+  ///   ...
+  ///
+  /// to
+  ///
+  /// _ambig
+  ///   rule
+  ///     someChildren1
+  ///     ...
+  ///     someChildren3
+  ///     ...
+  ///   rule
+  ///     someChildren2
+  ///     ...
+  ///     someChildren3
+  ///     ...
+  ///   rule
+  ///     childrenFromNestedIambigs
+  ///     ...
+  ///     someChildren3
+  ///     ...
+  ///   ...
+  ///
+  /// propagating up any nested '_iambig' nodes along the way.
   set tree_class(Object? tree_class) => setAttribute("tree_class", tree_class);
 }
 
@@ -10783,22 +18235,46 @@ final class ChildFilterLALR extends PythonClass {
   ChildFilterLALR.from(super.pythonClass) : super.from();
 
   /// ## node_builder (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Optimized childfilter for LALR (assumes no duplication in parse tree, so it's safe to change it)
   Object? get node_builder => getAttribute("node_builder");
 
   /// ## node_builder (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Optimized childfilter for LALR (assumes no duplication in parse tree, so it's safe to change it)
   set node_builder(Object? node_builder) =>
       setAttribute("node_builder", node_builder);
 
   /// ## to_include (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Optimized childfilter for LALR (assumes no duplication in parse tree, so it's safe to change it)
   Object? get to_include => getAttribute("to_include");
 
   /// ## to_include (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Optimized childfilter for LALR (assumes no duplication in parse tree, so it's safe to change it)
   set to_include(Object? to_include) => setAttribute("to_include", to_include);
 
   /// ## append_none (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Optimized childfilter for LALR (assumes no duplication in parse tree, so it's safe to change it)
   Object? get append_none => getAttribute("append_none");
 
   /// ## append_none (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Optimized childfilter for LALR (assumes no duplication in parse tree, so it's safe to change it)
   set append_none(Object? append_none) =>
       setAttribute("append_none", append_none);
 }
@@ -10848,16 +18324,32 @@ final class ChildFilterLALR_NoPlaceholders extends PythonClass {
   ChildFilterLALR_NoPlaceholders.from(super.pythonClass) : super.from();
 
   /// ## node_builder (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Optimized childfilter for LALR (assumes no duplication in parse tree, so it's safe to change it)
   Object? get node_builder => getAttribute("node_builder");
 
   /// ## node_builder (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Optimized childfilter for LALR (assumes no duplication in parse tree, so it's safe to change it)
   set node_builder(Object? node_builder) =>
       setAttribute("node_builder", node_builder);
 
   /// ## to_include (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Optimized childfilter for LALR (assumes no duplication in parse tree, so it's safe to change it)
   Object? get to_include => getAttribute("to_include");
 
   /// ## to_include (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Optimized childfilter for LALR (assumes no duplication in parse tree, so it's safe to change it)
   set to_include(Object? to_include) => setAttribute("to_include", to_include);
 }
 
@@ -11510,23 +19002,77 @@ final class LALR_Parser extends PythonClass {
       );
 
   /// ## deserialize (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get deserialize => getAttribute("deserialize");
 
   /// ## deserialize (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 
   /// ## parser_conf (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get parser_conf => getAttribute("parser_conf");
 
   /// ## parser_conf (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set parser_conf(Object? parser_conf) =>
       setAttribute("parser_conf", parser_conf);
 
   /// ## parser (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get parser => getAttribute("parser");
 
   /// ## parser (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set parser(Object? parser) => setAttribute("parser", parser);
 }
 
@@ -11651,28 +19197,76 @@ final class CnfWrapper extends PythonClass {
   CnfWrapper.from(super.pythonClass) : super.from();
 
   /// ## grammar (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// CNF wrapper for grammar.
+  ///
+  /// Validates that the input grammar is CNF and provides helper data structures.
   Object? get grammar => getAttribute("grammar");
 
   /// ## grammar (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// CNF wrapper for grammar.
+  ///
+  /// Validates that the input grammar is CNF and provides helper data structures.
   set grammar(Object? grammar) => setAttribute("grammar", grammar);
 
   /// ## rules (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// CNF wrapper for grammar.
+  ///
+  /// Validates that the input grammar is CNF and provides helper data structures.
   Object? get rules => getAttribute("rules");
 
   /// ## rules (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// CNF wrapper for grammar.
+  ///
+  /// Validates that the input grammar is CNF and provides helper data structures.
   set rules(Object? rules) => setAttribute("rules", rules);
 
   /// ## terminal_rules (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// CNF wrapper for grammar.
+  ///
+  /// Validates that the input grammar is CNF and provides helper data structures.
   Object? get terminal_rules => getAttribute("terminal_rules");
 
   /// ## terminal_rules (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// CNF wrapper for grammar.
+  ///
+  /// Validates that the input grammar is CNF and provides helper data structures.
   set terminal_rules(Object? terminal_rules) =>
       setAttribute("terminal_rules", terminal_rules);
 
   /// ## nonterminal_rules (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// CNF wrapper for grammar.
+  ///
+  /// Validates that the input grammar is CNF and provides helper data structures.
   Object? get nonterminal_rules => getAttribute("nonterminal_rules");
 
   /// ## nonterminal_rules (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// CNF wrapper for grammar.
+  ///
+  /// Validates that the input grammar is CNF and provides helper data structures.
   set nonterminal_rules(Object? nonterminal_rules) =>
       setAttribute("nonterminal_rules", nonterminal_rules);
 }
@@ -11778,15 +19372,31 @@ final class Parser extends PythonClass {
       );
 
   /// ## orig_rules (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parser wrapper.
   Object? get orig_rules => getAttribute("orig_rules");
 
   /// ## orig_rules (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parser wrapper.
   set orig_rules(Object? orig_rules) => setAttribute("orig_rules", orig_rules);
 
   /// ## grammar (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parser wrapper.
   Object? get grammar => getAttribute("grammar");
 
   /// ## grammar (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parser wrapper.
   set grammar(Object? grammar) => setAttribute("grammar", grammar);
 }
 
@@ -11830,21 +19440,45 @@ final class RuleNode extends PythonClass {
   RuleNode.from(super.pythonClass) : super.from();
 
   /// ## rule (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A node in the parse tree, which also contains the full rhs rule.
   Object? get rule => getAttribute("rule");
 
   /// ## rule (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A node in the parse tree, which also contains the full rhs rule.
   set rule(Object? rule) => setAttribute("rule", rule);
 
   /// ## children (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A node in the parse tree, which also contains the full rhs rule.
   Object? get children => getAttribute("children");
 
   /// ## children (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A node in the parse tree, which also contains the full rhs rule.
   set children(Object? children) => setAttribute("children", children);
 
   /// ## weight (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A node in the parse tree, which also contains the full rhs rule.
   Object? get weight => getAttribute("weight");
 
   /// ## weight (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A node in the parse tree, which also contains the full rhs rule.
   set weight(Object? weight) => setAttribute("weight", weight);
 }
 
@@ -11893,9 +19527,17 @@ final class UnitSkipRule extends PythonClass {
   UnitSkipRule.from(super.pythonClass) : super.from();
 
   /// ## skipped_rules (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A rule that records NTs that were skipped during transformation.
   Object? get skipped_rules => getAttribute("skipped_rules");
 
   /// ## skipped_rules (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A rule that records NTs that were skipped during transformation.
   set skipped_rules(Object? skipped_rules) =>
       setAttribute("skipped_rules", skipped_rules);
 }
@@ -13055,28 +20697,132 @@ final class ForestToParseTree extends PythonClass {
       );
 
   /// ## tree_class (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Used by the earley parser when ambiguity equals 'resolve' or
+  /// 'explicit'. Transforms an SPPF into an (ambiguous) parse tree.
+  ///
+  /// Parameters:
+  ///     tree_class: The tree class to use for construction
+  ///     callbacks: A dictionary of rules to functions that output a tree
+  ///     prioritizer: A ``ForestVisitor`` that manipulates the priorities of ForestNodes
+  ///     resolve_ambiguity: If True, ambiguities will be resolved based on
+  ///                     priorities. Otherwise, `_ambig` nodes will be in the resulting tree.
+  ///     use_cache: If True, the results of packed node transformations will be cached.
   Object? get tree_class => getAttribute("tree_class");
 
   /// ## tree_class (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Used by the earley parser when ambiguity equals 'resolve' or
+  /// 'explicit'. Transforms an SPPF into an (ambiguous) parse tree.
+  ///
+  /// Parameters:
+  ///     tree_class: The tree class to use for construction
+  ///     callbacks: A dictionary of rules to functions that output a tree
+  ///     prioritizer: A ``ForestVisitor`` that manipulates the priorities of ForestNodes
+  ///     resolve_ambiguity: If True, ambiguities will be resolved based on
+  ///                     priorities. Otherwise, `_ambig` nodes will be in the resulting tree.
+  ///     use_cache: If True, the results of packed node transformations will be cached.
   set tree_class(Object? tree_class) => setAttribute("tree_class", tree_class);
 
   /// ## callbacks (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Used by the earley parser when ambiguity equals 'resolve' or
+  /// 'explicit'. Transforms an SPPF into an (ambiguous) parse tree.
+  ///
+  /// Parameters:
+  ///     tree_class: The tree class to use for construction
+  ///     callbacks: A dictionary of rules to functions that output a tree
+  ///     prioritizer: A ``ForestVisitor`` that manipulates the priorities of ForestNodes
+  ///     resolve_ambiguity: If True, ambiguities will be resolved based on
+  ///                     priorities. Otherwise, `_ambig` nodes will be in the resulting tree.
+  ///     use_cache: If True, the results of packed node transformations will be cached.
   Object? get callbacks => getAttribute("callbacks");
 
   /// ## callbacks (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Used by the earley parser when ambiguity equals 'resolve' or
+  /// 'explicit'. Transforms an SPPF into an (ambiguous) parse tree.
+  ///
+  /// Parameters:
+  ///     tree_class: The tree class to use for construction
+  ///     callbacks: A dictionary of rules to functions that output a tree
+  ///     prioritizer: A ``ForestVisitor`` that manipulates the priorities of ForestNodes
+  ///     resolve_ambiguity: If True, ambiguities will be resolved based on
+  ///                     priorities. Otherwise, `_ambig` nodes will be in the resulting tree.
+  ///     use_cache: If True, the results of packed node transformations will be cached.
   set callbacks(Object? callbacks) => setAttribute("callbacks", callbacks);
 
   /// ## prioritizer (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Used by the earley parser when ambiguity equals 'resolve' or
+  /// 'explicit'. Transforms an SPPF into an (ambiguous) parse tree.
+  ///
+  /// Parameters:
+  ///     tree_class: The tree class to use for construction
+  ///     callbacks: A dictionary of rules to functions that output a tree
+  ///     prioritizer: A ``ForestVisitor`` that manipulates the priorities of ForestNodes
+  ///     resolve_ambiguity: If True, ambiguities will be resolved based on
+  ///                     priorities. Otherwise, `_ambig` nodes will be in the resulting tree.
+  ///     use_cache: If True, the results of packed node transformations will be cached.
   Object? get prioritizer => getAttribute("prioritizer");
 
   /// ## prioritizer (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Used by the earley parser when ambiguity equals 'resolve' or
+  /// 'explicit'. Transforms an SPPF into an (ambiguous) parse tree.
+  ///
+  /// Parameters:
+  ///     tree_class: The tree class to use for construction
+  ///     callbacks: A dictionary of rules to functions that output a tree
+  ///     prioritizer: A ``ForestVisitor`` that manipulates the priorities of ForestNodes
+  ///     resolve_ambiguity: If True, ambiguities will be resolved based on
+  ///                     priorities. Otherwise, `_ambig` nodes will be in the resulting tree.
+  ///     use_cache: If True, the results of packed node transformations will be cached.
   set prioritizer(Object? prioritizer) =>
       setAttribute("prioritizer", prioritizer);
 
   /// ## resolve_ambiguity (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Used by the earley parser when ambiguity equals 'resolve' or
+  /// 'explicit'. Transforms an SPPF into an (ambiguous) parse tree.
+  ///
+  /// Parameters:
+  ///     tree_class: The tree class to use for construction
+  ///     callbacks: A dictionary of rules to functions that output a tree
+  ///     prioritizer: A ``ForestVisitor`` that manipulates the priorities of ForestNodes
+  ///     resolve_ambiguity: If True, ambiguities will be resolved based on
+  ///                     priorities. Otherwise, `_ambig` nodes will be in the resulting tree.
+  ///     use_cache: If True, the results of packed node transformations will be cached.
   Object? get resolve_ambiguity => getAttribute("resolve_ambiguity");
 
   /// ## resolve_ambiguity (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Used by the earley parser when ambiguity equals 'resolve' or
+  /// 'explicit'. Transforms an SPPF into an (ambiguous) parse tree.
+  ///
+  /// Parameters:
+  ///     tree_class: The tree class to use for construction
+  ///     callbacks: A dictionary of rules to functions that output a tree
+  ///     prioritizer: A ``ForestVisitor`` that manipulates the priorities of ForestNodes
+  ///     resolve_ambiguity: If True, ambiguities will be resolved based on
+  ///                     priorities. Otherwise, `_ambig` nodes will be in the resulting tree.
+  ///     use_cache: If True, the results of packed node transformations will be cached.
   set resolve_ambiguity(Object? resolve_ambiguity) =>
       setAttribute("resolve_ambiguity", resolve_ambiguity);
 }
@@ -13157,52 +20903,116 @@ final class Item extends PythonClass {
       );
 
   /// ## expect (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An Earley Item, the atom of the algorithm.
   Object? get expect => getAttribute("expect");
 
   /// ## expect (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An Earley Item, the atom of the algorithm.
   set expect(Object? expect) => setAttribute("expect", expect);
 
   /// ## is_complete (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An Earley Item, the atom of the algorithm.
   Object? get is_complete => getAttribute("is_complete");
 
   /// ## is_complete (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An Earley Item, the atom of the algorithm.
   set is_complete(Object? is_complete) =>
       setAttribute("is_complete", is_complete);
 
   /// ## node (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An Earley Item, the atom of the algorithm.
   Object? get node => getAttribute("node");
 
   /// ## node (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An Earley Item, the atom of the algorithm.
   set node(Object? node) => setAttribute("node", node);
 
   /// ## previous (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An Earley Item, the atom of the algorithm.
   Object? get previous => getAttribute("previous");
 
   /// ## previous (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An Earley Item, the atom of the algorithm.
   set previous(Object? previous) => setAttribute("previous", previous);
 
   /// ## ptr (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An Earley Item, the atom of the algorithm.
   Object? get ptr => getAttribute("ptr");
 
   /// ## ptr (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An Earley Item, the atom of the algorithm.
   set ptr(Object? ptr) => setAttribute("ptr", ptr);
 
   /// ## rule (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An Earley Item, the atom of the algorithm.
   Object? get rule => getAttribute("rule");
 
   /// ## rule (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An Earley Item, the atom of the algorithm.
   set rule(Object? rule) => setAttribute("rule", rule);
 
   /// ## s (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An Earley Item, the atom of the algorithm.
   Object? get s => getAttribute("s");
 
   /// ## s (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An Earley Item, the atom of the algorithm.
   set s(Object? s) => setAttribute("s", s);
 
   /// ## start (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An Earley Item, the atom of the algorithm.
   Object? get start => getAttribute("start");
 
   /// ## start (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An Earley Item, the atom of the algorithm.
   set start(Object? start) => setAttribute("start", start);
 }
 
@@ -13408,75 +21218,471 @@ final class SymbolNode extends PythonClass {
   ///
   /// ### python docstring
   ///
-  /// Returns a list of this node's children sorted from greatest to
-  /// least priority.
+  /// A Symbol Node represents a symbol (or Intermediate LR0).
+  ///
+  /// Symbol nodes are keyed by the symbol (s). For intermediate nodes
+  /// s will be an LR0, stored as a tuple of (rule, ptr). For completed symbol
+  /// nodes, s will be a string representing the non-terminal origin (i.e.
+  /// the left hand side of the rule).
+  ///
+  /// The children of a Symbol or Intermediate Node will always be Packed Nodes;
+  /// with each Packed Node child representing a single derivation of a production.
+  ///
+  /// Hence a Symbol Node with a single child is unambiguous.
+  ///
+  /// Parameters:
+  ///     s: A Symbol, or a tuple of (rule, ptr) for an intermediate node.
+  ///     start: The index of the start of the substring matched by this symbol (inclusive).
+  ///     end: The index of the end of the substring matched by this symbol (exclusive).
+  ///
+  /// Properties:
+  ///     is_intermediate: True if this node is an intermediate node.
+  ///     priority: The priority of the node's symbol.
   Object? get children => getAttribute("children");
 
   /// ## children (setter)
   ///
   /// ### python docstring
   ///
-  /// Returns a list of this node's children sorted from greatest to
-  /// least priority.
+  /// A Symbol Node represents a symbol (or Intermediate LR0).
+  ///
+  /// Symbol nodes are keyed by the symbol (s). For intermediate nodes
+  /// s will be an LR0, stored as a tuple of (rule, ptr). For completed symbol
+  /// nodes, s will be a string representing the non-terminal origin (i.e.
+  /// the left hand side of the rule).
+  ///
+  /// The children of a Symbol or Intermediate Node will always be Packed Nodes;
+  /// with each Packed Node child representing a single derivation of a production.
+  ///
+  /// Hence a Symbol Node with a single child is unambiguous.
+  ///
+  /// Parameters:
+  ///     s: A Symbol, or a tuple of (rule, ptr) for an intermediate node.
+  ///     start: The index of the start of the substring matched by this symbol (inclusive).
+  ///     end: The index of the end of the substring matched by this symbol (exclusive).
+  ///
+  /// Properties:
+  ///     is_intermediate: True if this node is an intermediate node.
+  ///     priority: The priority of the node's symbol.
   set children(Object? children) => setAttribute("children", children);
 
   /// ## is_ambiguous (getter)
   ///
   /// ### python docstring
   ///
-  /// Returns True if this node is ambiguous.
+  /// A Symbol Node represents a symbol (or Intermediate LR0).
+  ///
+  /// Symbol nodes are keyed by the symbol (s). For intermediate nodes
+  /// s will be an LR0, stored as a tuple of (rule, ptr). For completed symbol
+  /// nodes, s will be a string representing the non-terminal origin (i.e.
+  /// the left hand side of the rule).
+  ///
+  /// The children of a Symbol or Intermediate Node will always be Packed Nodes;
+  /// with each Packed Node child representing a single derivation of a production.
+  ///
+  /// Hence a Symbol Node with a single child is unambiguous.
+  ///
+  /// Parameters:
+  ///     s: A Symbol, or a tuple of (rule, ptr) for an intermediate node.
+  ///     start: The index of the start of the substring matched by this symbol (inclusive).
+  ///     end: The index of the end of the substring matched by this symbol (exclusive).
+  ///
+  /// Properties:
+  ///     is_intermediate: True if this node is an intermediate node.
+  ///     priority: The priority of the node's symbol.
   Object? get is_ambiguous => getAttribute("is_ambiguous");
 
   /// ## is_ambiguous (setter)
   ///
   /// ### python docstring
   ///
-  /// Returns True if this node is ambiguous.
+  /// A Symbol Node represents a symbol (or Intermediate LR0).
+  ///
+  /// Symbol nodes are keyed by the symbol (s). For intermediate nodes
+  /// s will be an LR0, stored as a tuple of (rule, ptr). For completed symbol
+  /// nodes, s will be a string representing the non-terminal origin (i.e.
+  /// the left hand side of the rule).
+  ///
+  /// The children of a Symbol or Intermediate Node will always be Packed Nodes;
+  /// with each Packed Node child representing a single derivation of a production.
+  ///
+  /// Hence a Symbol Node with a single child is unambiguous.
+  ///
+  /// Parameters:
+  ///     s: A Symbol, or a tuple of (rule, ptr) for an intermediate node.
+  ///     start: The index of the start of the substring matched by this symbol (inclusive).
+  ///     end: The index of the end of the substring matched by this symbol (exclusive).
+  ///
+  /// Properties:
+  ///     is_intermediate: True if this node is an intermediate node.
+  ///     priority: The priority of the node's symbol.
   set is_ambiguous(Object? is_ambiguous) =>
       setAttribute("is_ambiguous", is_ambiguous);
 
   /// ## end (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Symbol Node represents a symbol (or Intermediate LR0).
+  ///
+  /// Symbol nodes are keyed by the symbol (s). For intermediate nodes
+  /// s will be an LR0, stored as a tuple of (rule, ptr). For completed symbol
+  /// nodes, s will be a string representing the non-terminal origin (i.e.
+  /// the left hand side of the rule).
+  ///
+  /// The children of a Symbol or Intermediate Node will always be Packed Nodes;
+  /// with each Packed Node child representing a single derivation of a production.
+  ///
+  /// Hence a Symbol Node with a single child is unambiguous.
+  ///
+  /// Parameters:
+  ///     s: A Symbol, or a tuple of (rule, ptr) for an intermediate node.
+  ///     start: The index of the start of the substring matched by this symbol (inclusive).
+  ///     end: The index of the end of the substring matched by this symbol (exclusive).
+  ///
+  /// Properties:
+  ///     is_intermediate: True if this node is an intermediate node.
+  ///     priority: The priority of the node's symbol.
   Object? get end => getAttribute("end");
 
   /// ## end (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Symbol Node represents a symbol (or Intermediate LR0).
+  ///
+  /// Symbol nodes are keyed by the symbol (s). For intermediate nodes
+  /// s will be an LR0, stored as a tuple of (rule, ptr). For completed symbol
+  /// nodes, s will be a string representing the non-terminal origin (i.e.
+  /// the left hand side of the rule).
+  ///
+  /// The children of a Symbol or Intermediate Node will always be Packed Nodes;
+  /// with each Packed Node child representing a single derivation of a production.
+  ///
+  /// Hence a Symbol Node with a single child is unambiguous.
+  ///
+  /// Parameters:
+  ///     s: A Symbol, or a tuple of (rule, ptr) for an intermediate node.
+  ///     start: The index of the start of the substring matched by this symbol (inclusive).
+  ///     end: The index of the end of the substring matched by this symbol (exclusive).
+  ///
+  /// Properties:
+  ///     is_intermediate: True if this node is an intermediate node.
+  ///     priority: The priority of the node's symbol.
   set end(Object? end) => setAttribute("end", end);
 
   /// ## is_intermediate (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Symbol Node represents a symbol (or Intermediate LR0).
+  ///
+  /// Symbol nodes are keyed by the symbol (s). For intermediate nodes
+  /// s will be an LR0, stored as a tuple of (rule, ptr). For completed symbol
+  /// nodes, s will be a string representing the non-terminal origin (i.e.
+  /// the left hand side of the rule).
+  ///
+  /// The children of a Symbol or Intermediate Node will always be Packed Nodes;
+  /// with each Packed Node child representing a single derivation of a production.
+  ///
+  /// Hence a Symbol Node with a single child is unambiguous.
+  ///
+  /// Parameters:
+  ///     s: A Symbol, or a tuple of (rule, ptr) for an intermediate node.
+  ///     start: The index of the start of the substring matched by this symbol (inclusive).
+  ///     end: The index of the end of the substring matched by this symbol (exclusive).
+  ///
+  /// Properties:
+  ///     is_intermediate: True if this node is an intermediate node.
+  ///     priority: The priority of the node's symbol.
   Object? get is_intermediate => getAttribute("is_intermediate");
 
   /// ## is_intermediate (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Symbol Node represents a symbol (or Intermediate LR0).
+  ///
+  /// Symbol nodes are keyed by the symbol (s). For intermediate nodes
+  /// s will be an LR0, stored as a tuple of (rule, ptr). For completed symbol
+  /// nodes, s will be a string representing the non-terminal origin (i.e.
+  /// the left hand side of the rule).
+  ///
+  /// The children of a Symbol or Intermediate Node will always be Packed Nodes;
+  /// with each Packed Node child representing a single derivation of a production.
+  ///
+  /// Hence a Symbol Node with a single child is unambiguous.
+  ///
+  /// Parameters:
+  ///     s: A Symbol, or a tuple of (rule, ptr) for an intermediate node.
+  ///     start: The index of the start of the substring matched by this symbol (inclusive).
+  ///     end: The index of the end of the substring matched by this symbol (exclusive).
+  ///
+  /// Properties:
+  ///     is_intermediate: True if this node is an intermediate node.
+  ///     priority: The priority of the node's symbol.
   set is_intermediate(Object? is_intermediate) =>
       setAttribute("is_intermediate", is_intermediate);
 
   /// ## paths (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Symbol Node represents a symbol (or Intermediate LR0).
+  ///
+  /// Symbol nodes are keyed by the symbol (s). For intermediate nodes
+  /// s will be an LR0, stored as a tuple of (rule, ptr). For completed symbol
+  /// nodes, s will be a string representing the non-terminal origin (i.e.
+  /// the left hand side of the rule).
+  ///
+  /// The children of a Symbol or Intermediate Node will always be Packed Nodes;
+  /// with each Packed Node child representing a single derivation of a production.
+  ///
+  /// Hence a Symbol Node with a single child is unambiguous.
+  ///
+  /// Parameters:
+  ///     s: A Symbol, or a tuple of (rule, ptr) for an intermediate node.
+  ///     start: The index of the start of the substring matched by this symbol (inclusive).
+  ///     end: The index of the end of the substring matched by this symbol (exclusive).
+  ///
+  /// Properties:
+  ///     is_intermediate: True if this node is an intermediate node.
+  ///     priority: The priority of the node's symbol.
   Object? get paths => getAttribute("paths");
 
   /// ## paths (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Symbol Node represents a symbol (or Intermediate LR0).
+  ///
+  /// Symbol nodes are keyed by the symbol (s). For intermediate nodes
+  /// s will be an LR0, stored as a tuple of (rule, ptr). For completed symbol
+  /// nodes, s will be a string representing the non-terminal origin (i.e.
+  /// the left hand side of the rule).
+  ///
+  /// The children of a Symbol or Intermediate Node will always be Packed Nodes;
+  /// with each Packed Node child representing a single derivation of a production.
+  ///
+  /// Hence a Symbol Node with a single child is unambiguous.
+  ///
+  /// Parameters:
+  ///     s: A Symbol, or a tuple of (rule, ptr) for an intermediate node.
+  ///     start: The index of the start of the substring matched by this symbol (inclusive).
+  ///     end: The index of the end of the substring matched by this symbol (exclusive).
+  ///
+  /// Properties:
+  ///     is_intermediate: True if this node is an intermediate node.
+  ///     priority: The priority of the node's symbol.
   set paths(Object? paths) => setAttribute("paths", paths);
 
   /// ## paths_loaded (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Symbol Node represents a symbol (or Intermediate LR0).
+  ///
+  /// Symbol nodes are keyed by the symbol (s). For intermediate nodes
+  /// s will be an LR0, stored as a tuple of (rule, ptr). For completed symbol
+  /// nodes, s will be a string representing the non-terminal origin (i.e.
+  /// the left hand side of the rule).
+  ///
+  /// The children of a Symbol or Intermediate Node will always be Packed Nodes;
+  /// with each Packed Node child representing a single derivation of a production.
+  ///
+  /// Hence a Symbol Node with a single child is unambiguous.
+  ///
+  /// Parameters:
+  ///     s: A Symbol, or a tuple of (rule, ptr) for an intermediate node.
+  ///     start: The index of the start of the substring matched by this symbol (inclusive).
+  ///     end: The index of the end of the substring matched by this symbol (exclusive).
+  ///
+  /// Properties:
+  ///     is_intermediate: True if this node is an intermediate node.
+  ///     priority: The priority of the node's symbol.
   Object? get paths_loaded => getAttribute("paths_loaded");
 
   /// ## paths_loaded (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Symbol Node represents a symbol (or Intermediate LR0).
+  ///
+  /// Symbol nodes are keyed by the symbol (s). For intermediate nodes
+  /// s will be an LR0, stored as a tuple of (rule, ptr). For completed symbol
+  /// nodes, s will be a string representing the non-terminal origin (i.e.
+  /// the left hand side of the rule).
+  ///
+  /// The children of a Symbol or Intermediate Node will always be Packed Nodes;
+  /// with each Packed Node child representing a single derivation of a production.
+  ///
+  /// Hence a Symbol Node with a single child is unambiguous.
+  ///
+  /// Parameters:
+  ///     s: A Symbol, or a tuple of (rule, ptr) for an intermediate node.
+  ///     start: The index of the start of the substring matched by this symbol (inclusive).
+  ///     end: The index of the end of the substring matched by this symbol (exclusive).
+  ///
+  /// Properties:
+  ///     is_intermediate: True if this node is an intermediate node.
+  ///     priority: The priority of the node's symbol.
   set paths_loaded(Object? paths_loaded) =>
       setAttribute("paths_loaded", paths_loaded);
 
   /// ## priority (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Symbol Node represents a symbol (or Intermediate LR0).
+  ///
+  /// Symbol nodes are keyed by the symbol (s). For intermediate nodes
+  /// s will be an LR0, stored as a tuple of (rule, ptr). For completed symbol
+  /// nodes, s will be a string representing the non-terminal origin (i.e.
+  /// the left hand side of the rule).
+  ///
+  /// The children of a Symbol or Intermediate Node will always be Packed Nodes;
+  /// with each Packed Node child representing a single derivation of a production.
+  ///
+  /// Hence a Symbol Node with a single child is unambiguous.
+  ///
+  /// Parameters:
+  ///     s: A Symbol, or a tuple of (rule, ptr) for an intermediate node.
+  ///     start: The index of the start of the substring matched by this symbol (inclusive).
+  ///     end: The index of the end of the substring matched by this symbol (exclusive).
+  ///
+  /// Properties:
+  ///     is_intermediate: True if this node is an intermediate node.
+  ///     priority: The priority of the node's symbol.
   Object? get priority => getAttribute("priority");
 
   /// ## priority (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Symbol Node represents a symbol (or Intermediate LR0).
+  ///
+  /// Symbol nodes are keyed by the symbol (s). For intermediate nodes
+  /// s will be an LR0, stored as a tuple of (rule, ptr). For completed symbol
+  /// nodes, s will be a string representing the non-terminal origin (i.e.
+  /// the left hand side of the rule).
+  ///
+  /// The children of a Symbol or Intermediate Node will always be Packed Nodes;
+  /// with each Packed Node child representing a single derivation of a production.
+  ///
+  /// Hence a Symbol Node with a single child is unambiguous.
+  ///
+  /// Parameters:
+  ///     s: A Symbol, or a tuple of (rule, ptr) for an intermediate node.
+  ///     start: The index of the start of the substring matched by this symbol (inclusive).
+  ///     end: The index of the end of the substring matched by this symbol (exclusive).
+  ///
+  /// Properties:
+  ///     is_intermediate: True if this node is an intermediate node.
+  ///     priority: The priority of the node's symbol.
   set priority(Object? priority) => setAttribute("priority", priority);
 
   /// ## s (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Symbol Node represents a symbol (or Intermediate LR0).
+  ///
+  /// Symbol nodes are keyed by the symbol (s). For intermediate nodes
+  /// s will be an LR0, stored as a tuple of (rule, ptr). For completed symbol
+  /// nodes, s will be a string representing the non-terminal origin (i.e.
+  /// the left hand side of the rule).
+  ///
+  /// The children of a Symbol or Intermediate Node will always be Packed Nodes;
+  /// with each Packed Node child representing a single derivation of a production.
+  ///
+  /// Hence a Symbol Node with a single child is unambiguous.
+  ///
+  /// Parameters:
+  ///     s: A Symbol, or a tuple of (rule, ptr) for an intermediate node.
+  ///     start: The index of the start of the substring matched by this symbol (inclusive).
+  ///     end: The index of the end of the substring matched by this symbol (exclusive).
+  ///
+  /// Properties:
+  ///     is_intermediate: True if this node is an intermediate node.
+  ///     priority: The priority of the node's symbol.
   Object? get s => getAttribute("s");
 
   /// ## s (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Symbol Node represents a symbol (or Intermediate LR0).
+  ///
+  /// Symbol nodes are keyed by the symbol (s). For intermediate nodes
+  /// s will be an LR0, stored as a tuple of (rule, ptr). For completed symbol
+  /// nodes, s will be a string representing the non-terminal origin (i.e.
+  /// the left hand side of the rule).
+  ///
+  /// The children of a Symbol or Intermediate Node will always be Packed Nodes;
+  /// with each Packed Node child representing a single derivation of a production.
+  ///
+  /// Hence a Symbol Node with a single child is unambiguous.
+  ///
+  /// Parameters:
+  ///     s: A Symbol, or a tuple of (rule, ptr) for an intermediate node.
+  ///     start: The index of the start of the substring matched by this symbol (inclusive).
+  ///     end: The index of the end of the substring matched by this symbol (exclusive).
+  ///
+  /// Properties:
+  ///     is_intermediate: True if this node is an intermediate node.
+  ///     priority: The priority of the node's symbol.
   set s(Object? s) => setAttribute("s", s);
 
   /// ## start (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Symbol Node represents a symbol (or Intermediate LR0).
+  ///
+  /// Symbol nodes are keyed by the symbol (s). For intermediate nodes
+  /// s will be an LR0, stored as a tuple of (rule, ptr). For completed symbol
+  /// nodes, s will be a string representing the non-terminal origin (i.e.
+  /// the left hand side of the rule).
+  ///
+  /// The children of a Symbol or Intermediate Node will always be Packed Nodes;
+  /// with each Packed Node child representing a single derivation of a production.
+  ///
+  /// Hence a Symbol Node with a single child is unambiguous.
+  ///
+  /// Parameters:
+  ///     s: A Symbol, or a tuple of (rule, ptr) for an intermediate node.
+  ///     start: The index of the start of the substring matched by this symbol (inclusive).
+  ///     end: The index of the end of the substring matched by this symbol (exclusive).
+  ///
+  /// Properties:
+  ///     is_intermediate: True if this node is an intermediate node.
+  ///     priority: The priority of the node's symbol.
   Object? get start => getAttribute("start");
 
   /// ## start (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Symbol Node represents a symbol (or Intermediate LR0).
+  ///
+  /// Symbol nodes are keyed by the symbol (s). For intermediate nodes
+  /// s will be an LR0, stored as a tuple of (rule, ptr). For completed symbol
+  /// nodes, s will be a string representing the non-terminal origin (i.e.
+  /// the left hand side of the rule).
+  ///
+  /// The children of a Symbol or Intermediate Node will always be Packed Nodes;
+  /// with each Packed Node child representing a single derivation of a production.
+  ///
+  /// Hence a Symbol Node with a single child is unambiguous.
+  ///
+  /// Parameters:
+  ///     s: A Symbol, or a tuple of (rule, ptr) for an intermediate node.
+  ///     start: The index of the start of the substring matched by this symbol (inclusive).
+  ///     end: The index of the end of the substring matched by this symbol (exclusive).
+  ///
+  /// Properties:
+  ///     is_intermediate: True if this node is an intermediate node.
+  ///     priority: The priority of the node's symbol.
   set start(Object? start) => setAttribute("start", start);
 }
 
@@ -13544,21 +21750,75 @@ final class TokenNode extends PythonClass {
   TokenNode.from(super.pythonClass) : super.from();
 
   /// ## priority (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Token Node represents a matched terminal and is always a leaf node.
+  ///
+  /// Parameters:
+  ///     token: The Token associated with this node.
+  ///     term: The TerminalDef matched by the token.
+  ///     priority: The priority of this node.
   Object? get priority => getAttribute("priority");
 
   /// ## priority (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Token Node represents a matched terminal and is always a leaf node.
+  ///
+  /// Parameters:
+  ///     token: The Token associated with this node.
+  ///     term: The TerminalDef matched by the token.
+  ///     priority: The priority of this node.
   set priority(Object? priority) => setAttribute("priority", priority);
 
   /// ## term (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Token Node represents a matched terminal and is always a leaf node.
+  ///
+  /// Parameters:
+  ///     token: The Token associated with this node.
+  ///     term: The TerminalDef matched by the token.
+  ///     priority: The priority of this node.
   Object? get term => getAttribute("term");
 
   /// ## term (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Token Node represents a matched terminal and is always a leaf node.
+  ///
+  /// Parameters:
+  ///     token: The Token associated with this node.
+  ///     term: The TerminalDef matched by the token.
+  ///     priority: The priority of this node.
   set term(Object? term) => setAttribute("term", term);
 
   /// ## token (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Token Node represents a matched terminal and is always a leaf node.
+  ///
+  /// Parameters:
+  ///     token: The Token associated with this node.
+  ///     term: The TerminalDef matched by the token.
+  ///     priority: The priority of this node.
   Object? get token => getAttribute("token");
 
   /// ## token (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Token Node represents a matched terminal and is always a leaf node.
+  ///
+  /// Parameters:
+  ///     token: The Token associated with this node.
+  ///     term: The TerminalDef matched by the token.
+  ///     priority: The priority of this node.
   set token(Object? token) => setAttribute("token", token);
 }
 
@@ -13936,15 +22196,51 @@ final class ForestToPyDotVisitor extends PythonClass {
       );
 
   /// ## pydot (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Forest visitor which writes the SPPF to a PNG.
+  ///
+  /// The SPPF can get really large, really quickly because
+  /// of the amount of meta-data it stores, so this is probably
+  /// only useful for trivial trees and learning how the SPPF
+  /// is structured.
   Object? get pydot => getAttribute("pydot");
 
   /// ## pydot (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Forest visitor which writes the SPPF to a PNG.
+  ///
+  /// The SPPF can get really large, really quickly because
+  /// of the amount of meta-data it stores, so this is probably
+  /// only useful for trivial trees and learning how the SPPF
+  /// is structured.
   set pydot(Object? pydot) => setAttribute("pydot", pydot);
 
   /// ## graph (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Forest visitor which writes the SPPF to a PNG.
+  ///
+  /// The SPPF can get really large, really quickly because
+  /// of the amount of meta-data it stores, so this is probably
+  /// only useful for trivial trees and learning how the SPPF
+  /// is structured.
   Object? get graph => getAttribute("graph");
 
   /// ## graph (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Forest visitor which writes the SPPF to a PNG.
+  ///
+  /// The SPPF can get really large, really quickly because
+  /// of the amount of meta-data it stores, so this is probably
+  /// only useful for trivial trees and learning how the SPPF
+  /// is structured.
   set graph(Object? graph) => setAttribute("graph", graph);
 }
 
@@ -14490,15 +22786,83 @@ final class ForestTransformer extends PythonClass {
       );
 
   /// ## data (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// The base class for a bottom-up forest transformation. Most users will
+  /// want to use ``TreeForestTransformer`` instead as it has a friendlier
+  /// interface and covers most use cases.
+  ///
+  /// Transformations are applied via inheritance and overriding of the
+  /// ``transform*node`` methods.
+  ///
+  /// ``transform_token_node`` receives a ``Token`` as an argument.
+  /// All other methods receive the node that is being transformed and
+  /// a list of the results of the transformations of that node's children.
+  /// The return value of these methods are the resulting transformations.
+  ///
+  /// If ``Discard`` is raised in a node's transformation, no data from that node
+  /// will be passed to its parent's transformation.
   Object? get data => getAttribute("data");
 
   /// ## data (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// The base class for a bottom-up forest transformation. Most users will
+  /// want to use ``TreeForestTransformer`` instead as it has a friendlier
+  /// interface and covers most use cases.
+  ///
+  /// Transformations are applied via inheritance and overriding of the
+  /// ``transform*node`` methods.
+  ///
+  /// ``transform_token_node`` receives a ``Token`` as an argument.
+  /// All other methods receive the node that is being transformed and
+  /// a list of the results of the transformations of that node's children.
+  /// The return value of these methods are the resulting transformations.
+  ///
+  /// If ``Discard`` is raised in a node's transformation, no data from that node
+  /// will be passed to its parent's transformation.
   set data(Object? data) => setAttribute("data", data);
 
   /// ## node_stack (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// The base class for a bottom-up forest transformation. Most users will
+  /// want to use ``TreeForestTransformer`` instead as it has a friendlier
+  /// interface and covers most use cases.
+  ///
+  /// Transformations are applied via inheritance and overriding of the
+  /// ``transform*node`` methods.
+  ///
+  /// ``transform_token_node`` receives a ``Token`` as an argument.
+  /// All other methods receive the node that is being transformed and
+  /// a list of the results of the transformations of that node's children.
+  /// The return value of these methods are the resulting transformations.
+  ///
+  /// If ``Discard`` is raised in a node's transformation, no data from that node
+  /// will be passed to its parent's transformation.
   Object? get node_stack => getAttribute("node_stack");
 
   /// ## node_stack (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// The base class for a bottom-up forest transformation. Most users will
+  /// want to use ``TreeForestTransformer`` instead as it has a friendlier
+  /// interface and covers most use cases.
+  ///
+  /// Transformations are applied via inheritance and overriding of the
+  /// ``transform*node`` methods.
+  ///
+  /// ``transform_token_node`` receives a ``Token`` as an argument.
+  /// All other methods receive the node that is being transformed and
+  /// a list of the results of the transformations of that node's children.
+  /// The return value of these methods are the resulting transformations.
+  ///
+  /// If ``Discard`` is raised in a node's transformation, no data from that node
+  /// will be passed to its parent's transformation.
   set node_stack(Object? node_stack) => setAttribute("node_stack", node_stack);
 }
 
@@ -14999,9 +23363,45 @@ final class ForestVisitor extends PythonClass {
       );
 
   /// ## single_visit (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// An abstract base class for building forest visitors.
+  ///
+  /// This class performs a controllable depth-first walk of an SPPF.
+  /// The visitor will not enter cycles and will backtrack if one is encountered.
+  /// Subclasses are notified of cycles through the ``on_cycle`` method.
+  ///
+  /// Behavior for visit events is defined by overriding the
+  /// ``visit*node*`` functions.
+  ///
+  /// The walk is controlled by the return values of the ``visit*node_in``
+  /// methods. Returning a node(s) will schedule them to be visited. The visitor
+  /// will begin to backtrack if no nodes are returned.
+  ///
+  /// Parameters:
+  ///     single_visit: If ``True``, non-Token nodes will only be visited once.
   Object? get single_visit => getAttribute("single_visit");
 
   /// ## single_visit (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// An abstract base class for building forest visitors.
+  ///
+  /// This class performs a controllable depth-first walk of an SPPF.
+  /// The visitor will not enter cycles and will backtrack if one is encountered.
+  /// Subclasses are notified of cycles through the ``on_cycle`` method.
+  ///
+  /// Behavior for visit events is defined by overriding the
+  /// ``visit*node*`` functions.
+  ///
+  /// The walk is controlled by the return values of the ``visit*node_in``
+  /// methods. Returning a node(s) will schedule them to be visited. The visitor
+  /// will begin to backtrack if no nodes are returned.
+  ///
+  /// Parameters:
+  ///     single_visit: If ``True``, non-Token nodes will only be visited once.
   set single_visit(Object? single_visit) =>
       setAttribute("single_visit", single_visit);
 }
@@ -15055,21 +23455,51 @@ final class PackedData extends PythonClass {
   PackedData.from(super.pythonClass) : super.from();
 
   /// ## NO_DATA (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Used in transformationss of packed nodes to distinguish the data
+  /// that comes from the left child and the right child.
   Object? get NO_DATA => getAttribute("NO_DATA");
 
   /// ## NO_DATA (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Used in transformationss of packed nodes to distinguish the data
+  /// that comes from the left child and the right child.
   set NO_DATA(Object? NO_DATA) => setAttribute("NO_DATA", NO_DATA);
 
   /// ## left (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Used in transformationss of packed nodes to distinguish the data
+  /// that comes from the left child and the right child.
   Object? get left => getAttribute("left");
 
   /// ## left (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Used in transformationss of packed nodes to distinguish the data
+  /// that comes from the left child and the right child.
   set left(Object? left) => setAttribute("left", left);
 
   /// ## right (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Used in transformationss of packed nodes to distinguish the data
+  /// that comes from the left child and the right child.
   Object? get right => getAttribute("right");
 
   /// ## right (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Used in transformationss of packed nodes to distinguish the data
+  /// that comes from the left child and the right child.
   set right(Object? right) => setAttribute("right", right);
 }
 
@@ -15182,82 +23612,280 @@ final class PackedNode extends PythonClass {
   ///
   /// ### python docstring
   ///
-  /// Returns a list of this node's children.
+  /// A Packed Node represents a single derivation in a symbol node.
+  ///
+  /// Parameters:
+  ///     rule: The rule associated with this node.
+  ///     parent: The parent of this node.
+  ///     left: The left child of this node. ``None`` if one does not exist.
+  ///     right: The right child of this node. ``None`` if one does not exist.
+  ///     priority: The priority of this node.
   Object? get children => getAttribute("children");
 
   /// ## children (setter)
   ///
   /// ### python docstring
   ///
-  /// Returns a list of this node's children.
+  /// A Packed Node represents a single derivation in a symbol node.
+  ///
+  /// Parameters:
+  ///     rule: The rule associated with this node.
+  ///     parent: The parent of this node.
+  ///     left: The left child of this node. ``None`` if one does not exist.
+  ///     right: The right child of this node. ``None`` if one does not exist.
+  ///     priority: The priority of this node.
   set children(Object? children) => setAttribute("children", children);
 
   /// ## is_empty (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Packed Node represents a single derivation in a symbol node.
+  ///
+  /// Parameters:
+  ///     rule: The rule associated with this node.
+  ///     parent: The parent of this node.
+  ///     left: The left child of this node. ``None`` if one does not exist.
+  ///     right: The right child of this node. ``None`` if one does not exist.
+  ///     priority: The priority of this node.
   Object? get is_empty => getAttribute("is_empty");
 
   /// ## is_empty (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Packed Node represents a single derivation in a symbol node.
+  ///
+  /// Parameters:
+  ///     rule: The rule associated with this node.
+  ///     parent: The parent of this node.
+  ///     left: The left child of this node. ``None`` if one does not exist.
+  ///     right: The right child of this node. ``None`` if one does not exist.
+  ///     priority: The priority of this node.
   set is_empty(Object? is_empty) => setAttribute("is_empty", is_empty);
 
   /// ## sort_key (getter)
   ///
   /// ### python docstring
   ///
-  /// Used to sort PackedNode children of SymbolNodes.
-  /// A SymbolNode has multiple PackedNodes if it matched
-  /// ambiguously. Hence, we use the sort order to identify
-  /// the order in which ambiguous children should be considered.
+  /// A Packed Node represents a single derivation in a symbol node.
+  ///
+  /// Parameters:
+  ///     rule: The rule associated with this node.
+  ///     parent: The parent of this node.
+  ///     left: The left child of this node. ``None`` if one does not exist.
+  ///     right: The right child of this node. ``None`` if one does not exist.
+  ///     priority: The priority of this node.
   Object? get sort_key => getAttribute("sort_key");
 
   /// ## sort_key (setter)
   ///
   /// ### python docstring
   ///
-  /// Used to sort PackedNode children of SymbolNodes.
-  /// A SymbolNode has multiple PackedNodes if it matched
-  /// ambiguously. Hence, we use the sort order to identify
-  /// the order in which ambiguous children should be considered.
+  /// A Packed Node represents a single derivation in a symbol node.
+  ///
+  /// Parameters:
+  ///     rule: The rule associated with this node.
+  ///     parent: The parent of this node.
+  ///     left: The left child of this node. ``None`` if one does not exist.
+  ///     right: The right child of this node. ``None`` if one does not exist.
+  ///     priority: The priority of this node.
   set sort_key(Object? sort_key) => setAttribute("sort_key", sort_key);
 
   /// ## left (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Packed Node represents a single derivation in a symbol node.
+  ///
+  /// Parameters:
+  ///     rule: The rule associated with this node.
+  ///     parent: The parent of this node.
+  ///     left: The left child of this node. ``None`` if one does not exist.
+  ///     right: The right child of this node. ``None`` if one does not exist.
+  ///     priority: The priority of this node.
   Object? get left => getAttribute("left");
 
   /// ## left (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Packed Node represents a single derivation in a symbol node.
+  ///
+  /// Parameters:
+  ///     rule: The rule associated with this node.
+  ///     parent: The parent of this node.
+  ///     left: The left child of this node. ``None`` if one does not exist.
+  ///     right: The right child of this node. ``None`` if one does not exist.
+  ///     priority: The priority of this node.
   set left(Object? left) => setAttribute("left", left);
 
   /// ## parent (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Packed Node represents a single derivation in a symbol node.
+  ///
+  /// Parameters:
+  ///     rule: The rule associated with this node.
+  ///     parent: The parent of this node.
+  ///     left: The left child of this node. ``None`` if one does not exist.
+  ///     right: The right child of this node. ``None`` if one does not exist.
+  ///     priority: The priority of this node.
   Object? get parent => getAttribute("parent");
 
   /// ## parent (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Packed Node represents a single derivation in a symbol node.
+  ///
+  /// Parameters:
+  ///     rule: The rule associated with this node.
+  ///     parent: The parent of this node.
+  ///     left: The left child of this node. ``None`` if one does not exist.
+  ///     right: The right child of this node. ``None`` if one does not exist.
+  ///     priority: The priority of this node.
   set parent(Object? parent) => setAttribute("parent", parent);
 
   /// ## priority (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Packed Node represents a single derivation in a symbol node.
+  ///
+  /// Parameters:
+  ///     rule: The rule associated with this node.
+  ///     parent: The parent of this node.
+  ///     left: The left child of this node. ``None`` if one does not exist.
+  ///     right: The right child of this node. ``None`` if one does not exist.
+  ///     priority: The priority of this node.
   Object? get priority => getAttribute("priority");
 
   /// ## priority (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Packed Node represents a single derivation in a symbol node.
+  ///
+  /// Parameters:
+  ///     rule: The rule associated with this node.
+  ///     parent: The parent of this node.
+  ///     left: The left child of this node. ``None`` if one does not exist.
+  ///     right: The right child of this node. ``None`` if one does not exist.
+  ///     priority: The priority of this node.
   set priority(Object? priority) => setAttribute("priority", priority);
 
   /// ## right (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Packed Node represents a single derivation in a symbol node.
+  ///
+  /// Parameters:
+  ///     rule: The rule associated with this node.
+  ///     parent: The parent of this node.
+  ///     left: The left child of this node. ``None`` if one does not exist.
+  ///     right: The right child of this node. ``None`` if one does not exist.
+  ///     priority: The priority of this node.
   Object? get right => getAttribute("right");
 
   /// ## right (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Packed Node represents a single derivation in a symbol node.
+  ///
+  /// Parameters:
+  ///     rule: The rule associated with this node.
+  ///     parent: The parent of this node.
+  ///     left: The left child of this node. ``None`` if one does not exist.
+  ///     right: The right child of this node. ``None`` if one does not exist.
+  ///     priority: The priority of this node.
   set right(Object? right) => setAttribute("right", right);
 
   /// ## rule (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Packed Node represents a single derivation in a symbol node.
+  ///
+  /// Parameters:
+  ///     rule: The rule associated with this node.
+  ///     parent: The parent of this node.
+  ///     left: The left child of this node. ``None`` if one does not exist.
+  ///     right: The right child of this node. ``None`` if one does not exist.
+  ///     priority: The priority of this node.
   Object? get rule => getAttribute("rule");
 
   /// ## rule (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Packed Node represents a single derivation in a symbol node.
+  ///
+  /// Parameters:
+  ///     rule: The rule associated with this node.
+  ///     parent: The parent of this node.
+  ///     left: The left child of this node. ``None`` if one does not exist.
+  ///     right: The right child of this node. ``None`` if one does not exist.
+  ///     priority: The priority of this node.
   set rule(Object? rule) => setAttribute("rule", rule);
 
   /// ## s (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Packed Node represents a single derivation in a symbol node.
+  ///
+  /// Parameters:
+  ///     rule: The rule associated with this node.
+  ///     parent: The parent of this node.
+  ///     left: The left child of this node. ``None`` if one does not exist.
+  ///     right: The right child of this node. ``None`` if one does not exist.
+  ///     priority: The priority of this node.
   Object? get s => getAttribute("s");
 
   /// ## s (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Packed Node represents a single derivation in a symbol node.
+  ///
+  /// Parameters:
+  ///     rule: The rule associated with this node.
+  ///     parent: The parent of this node.
+  ///     left: The left child of this node. ``None`` if one does not exist.
+  ///     right: The right child of this node. ``None`` if one does not exist.
+  ///     priority: The priority of this node.
   set s(Object? s) => setAttribute("s", s);
 
   /// ## start (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Packed Node represents a single derivation in a symbol node.
+  ///
+  /// Parameters:
+  ///     rule: The rule associated with this node.
+  ///     parent: The parent of this node.
+  ///     left: The left child of this node. ``None`` if one does not exist.
+  ///     right: The right child of this node. ``None`` if one does not exist.
+  ///     priority: The priority of this node.
   Object? get start => getAttribute("start");
 
   /// ## start (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Packed Node represents a single derivation in a symbol node.
+  ///
+  /// Parameters:
+  ///     rule: The rule associated with this node.
+  ///     parent: The parent of this node.
+  ///     left: The left child of this node. ``None`` if one does not exist.
+  ///     right: The right child of this node. ``None`` if one does not exist.
+  ///     priority: The priority of this node.
   set start(Object? start) => setAttribute("start", start);
 }
 
@@ -16094,7 +24722,7 @@ final class Enumerator extends PythonClass {
   ///             self.enums[item] = len(self.enums)
   ///         return self.enums[item]
   /// ```
-  Object? $get({
+  int $get({
     required Object? item,
   }) =>
       getFunction("get").call(
@@ -16162,9 +24790,27 @@ final class Enumerator extends PythonClass {
       );
 
   /// ## deserialize (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   Object? get deserialize => getAttribute("deserialize");
 
   /// ## deserialize (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
 }
@@ -16915,7 +25561,7 @@ final class ImmutableInteractiveParser extends PythonClass {
   factory ImmutableInteractiveParser({
     required Object? parser,
     required Object? parser_state,
-    required Object? lexer_thread,
+    required LexerThread lexer_thread,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.parsers.lalr_interactive_parser",
@@ -17128,10 +25774,18 @@ final class ImmutableInteractiveParser extends PythonClass {
   ///             yield token
   ///             self.result = self.feed_token(token)
   /// ```
-  Object? iter_parse() => getFunction("iter_parse").call(
-        <Object?>[],
-        kwargs: <String, Object?>{},
-      );
+  Iterator<Token> iter_parse() => TypedIterator.from(
+        PythonIterator.from<Object?, PythonFfiDelegate<Object?>, Object?>(
+          getFunction("iter_parse").call(
+            <Object?>[],
+            kwargs: <String, Object?>{},
+          ),
+        ),
+      )
+          .transform((e) => Token.from(
+                e,
+              ))
+          .cast<Token>();
 
   /// ## pretty
   ///
@@ -17173,35 +25827,85 @@ final class ImmutableInteractiveParser extends PythonClass {
       );
 
   /// ## lexer_state (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as ``InteractiveParser``, but operations create a new instance instead
+  /// of changing it in-place.
   Object? get lexer_state => getAttribute("lexer_state");
 
   /// ## lexer_state (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as ``InteractiveParser``, but operations create a new instance instead
+  /// of changing it in-place.
   set lexer_state(Object? lexer_state) =>
       setAttribute("lexer_state", lexer_state);
 
   /// ## result (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as ``InteractiveParser``, but operations create a new instance instead
+  /// of changing it in-place.
   Object? get result => getAttribute("result");
 
   /// ## result (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as ``InteractiveParser``, but operations create a new instance instead
+  /// of changing it in-place.
   set result(Object? result) => setAttribute("result", result);
 
   /// ## parser (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as ``InteractiveParser``, but operations create a new instance instead
+  /// of changing it in-place.
   Object? get parser => getAttribute("parser");
 
   /// ## parser (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as ``InteractiveParser``, but operations create a new instance instead
+  /// of changing it in-place.
   set parser(Object? parser) => setAttribute("parser", parser);
 
   /// ## parser_state (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as ``InteractiveParser``, but operations create a new instance instead
+  /// of changing it in-place.
   Object? get parser_state => getAttribute("parser_state");
 
   /// ## parser_state (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as ``InteractiveParser``, but operations create a new instance instead
+  /// of changing it in-place.
   set parser_state(Object? parser_state) =>
       setAttribute("parser_state", parser_state);
 
   /// ## lexer_thread (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as ``InteractiveParser``, but operations create a new instance instead
+  /// of changing it in-place.
   Object? get lexer_thread => getAttribute("lexer_thread");
 
   /// ## lexer_thread (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Same as ``InteractiveParser``, but operations create a new instance instead
+  /// of changing it in-place.
   set lexer_thread(Object? lexer_thread) =>
       setAttribute("lexer_thread", lexer_thread);
 }
@@ -17330,7 +26034,7 @@ final class InteractiveParser extends PythonClass {
   factory InteractiveParser({
     required Object? parser,
     required Object? parser_state,
-    required Object? lexer_thread,
+    required LexerThread lexer_thread,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.parsers.lalr_interactive_parser",
@@ -17492,7 +26196,7 @@ final class InteractiveParser extends PythonClass {
   ///         return self.parser_state.feed_token(token, token.type == '$END')
   /// ```
   Object? feed_token({
-    required Object? token,
+    required Token token,
   }) =>
       getFunction("feed_token").call(
         <Object?>[
@@ -17526,10 +26230,18 @@ final class InteractiveParser extends PythonClass {
   ///             yield token
   ///             self.result = self.feed_token(token)
   /// ```
-  Object? iter_parse() => getFunction("iter_parse").call(
-        <Object?>[],
-        kwargs: <String, Object?>{},
-      );
+  Iterator<Token> iter_parse() => TypedIterator.from(
+        PythonIterator.from<Object?, PythonFfiDelegate<Object?>, Object?>(
+          getFunction("iter_parse").call(
+            <Object?>[],
+            kwargs: <String, Object?>{},
+          ),
+        ),
+      )
+          .transform((e) => Token.from(
+                e,
+              ))
+          .cast<Token>();
 
   /// ## pretty
   ///
@@ -17571,36 +26283,96 @@ final class InteractiveParser extends PythonClass {
       );
 
   /// ## lexer_state (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// InteractiveParser gives you advanced control over parsing and error handling when parsing with LALR.
+  ///
+  /// For a simpler interface, see the ``on_error`` argument to ``Lark.parse()``.
   Object? get lexer_state => getAttribute("lexer_state");
 
   /// ## lexer_state (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// InteractiveParser gives you advanced control over parsing and error handling when parsing with LALR.
+  ///
+  /// For a simpler interface, see the ``on_error`` argument to ``Lark.parse()``.
   set lexer_state(Object? lexer_state) =>
       setAttribute("lexer_state", lexer_state);
 
   /// ## parser (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// InteractiveParser gives you advanced control over parsing and error handling when parsing with LALR.
+  ///
+  /// For a simpler interface, see the ``on_error`` argument to ``Lark.parse()``.
   Object? get parser => getAttribute("parser");
 
   /// ## parser (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// InteractiveParser gives you advanced control over parsing and error handling when parsing with LALR.
+  ///
+  /// For a simpler interface, see the ``on_error`` argument to ``Lark.parse()``.
   set parser(Object? parser) => setAttribute("parser", parser);
 
   /// ## parser_state (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// InteractiveParser gives you advanced control over parsing and error handling when parsing with LALR.
+  ///
+  /// For a simpler interface, see the ``on_error`` argument to ``Lark.parse()``.
   Object? get parser_state => getAttribute("parser_state");
 
   /// ## parser_state (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// InteractiveParser gives you advanced control over parsing and error handling when parsing with LALR.
+  ///
+  /// For a simpler interface, see the ``on_error`` argument to ``Lark.parse()``.
   set parser_state(Object? parser_state) =>
       setAttribute("parser_state", parser_state);
 
   /// ## lexer_thread (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// InteractiveParser gives you advanced control over parsing and error handling when parsing with LALR.
+  ///
+  /// For a simpler interface, see the ``on_error`` argument to ``Lark.parse()``.
   Object? get lexer_thread => getAttribute("lexer_thread");
 
   /// ## lexer_thread (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// InteractiveParser gives you advanced control over parsing and error handling when parsing with LALR.
+  ///
+  /// For a simpler interface, see the ``on_error`` argument to ``Lark.parse()``.
   set lexer_thread(Object? lexer_thread) =>
       setAttribute("lexer_thread", lexer_thread);
 
   /// ## result (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// InteractiveParser gives you advanced control over parsing and error handling when parsing with LALR.
+  ///
+  /// For a simpler interface, see the ``on_error`` argument to ``Lark.parse()``.
   Object? get result => getAttribute("result");
 
   /// ## result (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// InteractiveParser gives you advanced control over parsing and error handling when parsing with LALR.
+  ///
+  /// For a simpler interface, see the ``on_error`` argument to ``Lark.parse()``.
   set result(Object? result) => setAttribute("result", result);
 }
 
@@ -18057,7 +26829,7 @@ final class UCD extends PythonClass {
 /// ```
 final class CollapseAmbiguities extends PythonClass {
   factory CollapseAmbiguities({
-    Object? visit_tokens = true,
+    bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.visitors",
@@ -18143,7 +26915,7 @@ final class CollapseAmbiguities extends PythonClass {
 /// ```
 final class InlineTransformer extends PythonClass {
   factory InlineTransformer({
-    Object? visit_tokens = true,
+    bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.visitors",
@@ -18360,9 +27132,51 @@ final class TransformerChain extends PythonClass {
       );
 
   /// ## transformers (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Abstract base class for generic types.
+  ///
+  /// A generic type is typically declared by inheriting from
+  /// this class parameterized with one or more type variables.
+  /// For example, a generic mapping type might be defined as::
+  ///
+  ///   class Mapping(Generic[KT, VT]):
+  ///       def __getitem__(self, key: KT) -> VT:
+  ///           ...
+  ///       # Etc.
+  ///
+  /// This class can then be used as follows::
+  ///
+  ///   def lookup_name(mapping: Mapping[KT, VT], key: KT, default: VT) -> VT:
+  ///       try:
+  ///           return mapping[key]
+  ///       except KeyError:
+  ///           return default
   Object? get transformers => getAttribute("transformers");
 
   /// ## transformers (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Abstract base class for generic types.
+  ///
+  /// A generic type is typically declared by inheriting from
+  /// this class parameterized with one or more type variables.
+  /// For example, a generic mapping type might be defined as::
+  ///
+  ///   class Mapping(Generic[KT, VT]):
+  ///       def __getitem__(self, key: KT) -> VT:
+  ///           ...
+  ///       # Etc.
+  ///
+  /// This class can then be used as follows::
+  ///
+  ///   def lookup_name(mapping: Mapping[KT, VT], key: KT, default: VT) -> VT:
+  ///       try:
+  ///           return mapping[key]
+  ///       except KeyError:
+  ///           return default
   set transformers(Object? transformers) =>
       setAttribute("transformers", transformers);
 }
@@ -18383,7 +27197,7 @@ final class TransformerChain extends PythonClass {
 /// ```
 final class Transformer_InPlaceRecursive extends PythonClass {
   factory Transformer_InPlaceRecursive({
-    Object? visit_tokens = true,
+    bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
         "lark.visitors",
@@ -18895,10 +27709,10 @@ final class sys extends PythonModule {
   set prefix(Object? prefix) => setAttribute("prefix", prefix);
 
   /// ## pycache_prefix (getter)
-  Object? get pycache_prefix => getAttribute("pycache_prefix");
+  Null get pycache_prefix => getAttribute("pycache_prefix");
 
   /// ## pycache_prefix (setter)
-  set pycache_prefix(Object? pycache_prefix) =>
+  set pycache_prefix(Null pycache_prefix) =>
       setAttribute("pycache_prefix", pycache_prefix);
 
   /// ## thread_info (getter)
@@ -19257,97 +28071,9 @@ final class exceptions extends PythonModule {
       );
 
   /// ## T (getter)
-  ///
-  /// ### python docstring
-  ///
-  /// Type variable.
-  ///
-  /// Usage::
-  ///
-  ///   T = TypeVar('T')  # Can be anything
-  ///   A = TypeVar('A', str, bytes)  # Must be str or bytes
-  ///
-  /// Type variables exist primarily for the benefit of static type
-  /// checkers.  They serve as the parameters for generic types as well
-  /// as for generic function definitions.  See class Generic for more
-  /// information on generic types.  Generic functions work as follows:
-  ///
-  ///   def repeat(x: T, n: int) -> List[T]:
-  ///       '''Return a list containing n references to x.'''
-  ///       return [x]*n
-  ///
-  ///   def longest(x: A, y: A) -> A:
-  ///       '''Return the longest of two strings.'''
-  ///       return x if len(x) >= len(y) else y
-  ///
-  /// The latter example's signature is essentially the overloading
-  /// of (str, str) -> str and (bytes, bytes) -> bytes.  Also note
-  /// that if the arguments are instances of some subclass of str,
-  /// the return type is still plain str.
-  ///
-  /// At runtime, isinstance(x, T) and issubclass(C, T) will raise TypeError.
-  ///
-  /// Type variables defined with covariant=True or contravariant=True
-  /// can be used to declare covariant or contravariant generic types.
-  /// See PEP 484 for more details. By default generic types are invariant
-  /// in all type variables.
-  ///
-  /// Type variables can be introspected. e.g.:
-  ///
-  ///   T.__name__ == 'T'
-  ///   T.__constraints__ == ()
-  ///   T.__covariant__ == False
-  ///   T.__contravariant__ = False
-  ///   A.__constraints__ == (str, bytes)
-  ///
-  /// Note that only type variables defined in global scope can be pickled.
   Object? get T => getAttribute("T");
 
   /// ## T (setter)
-  ///
-  /// ### python docstring
-  ///
-  /// Type variable.
-  ///
-  /// Usage::
-  ///
-  ///   T = TypeVar('T')  # Can be anything
-  ///   A = TypeVar('A', str, bytes)  # Must be str or bytes
-  ///
-  /// Type variables exist primarily for the benefit of static type
-  /// checkers.  They serve as the parameters for generic types as well
-  /// as for generic function definitions.  See class Generic for more
-  /// information on generic types.  Generic functions work as follows:
-  ///
-  ///   def repeat(x: T, n: int) -> List[T]:
-  ///       '''Return a list containing n references to x.'''
-  ///       return [x]*n
-  ///
-  ///   def longest(x: A, y: A) -> A:
-  ///       '''Return the longest of two strings.'''
-  ///       return x if len(x) >= len(y) else y
-  ///
-  /// The latter example's signature is essentially the overloading
-  /// of (str, str) -> str and (bytes, bytes) -> bytes.  Also note
-  /// that if the arguments are instances of some subclass of str,
-  /// the return type is still plain str.
-  ///
-  /// At runtime, isinstance(x, T) and issubclass(C, T) will raise TypeError.
-  ///
-  /// Type variables defined with covariant=True or contravariant=True
-  /// can be used to declare covariant or contravariant generic types.
-  /// See PEP 484 for more details. By default generic types are invariant
-  /// in all type variables.
-  ///
-  /// Type variables can be introspected. e.g.:
-  ///
-  ///   T.__name__ == 'T'
-  ///   T.__constraints__ == ()
-  ///   T.__covariant__ == False
-  ///   T.__contravariant__ = False
-  ///   A.__constraints__ == (str, bytes)
-  ///
-  /// Note that only type variables defined in global scope can be pickled.
   set T(Object? T) => setAttribute("T", T);
 
   /// ## TYPE_CHECKING (getter)
@@ -21637,8 +30363,8 @@ final class load_grammar extends PythonModule {
   ///     return errors
   /// ```
   Object? find_grammar_errors({
-    required Object? text,
-    Object? start = "start",
+    required String text,
+    String start = "start",
   }) =>
       getFunction("find_grammar_errors").call(
         <Object?>[
@@ -21696,8 +30422,8 @@ final class load_grammar extends PythonModule {
   ///     else:
   ///         return hashlib.md5(s.encode('utf8')).hexdigest()
   /// ```
-  Object? md5_digest({
-    required Object? s,
+  String md5_digest({
+    required String s,
   }) =>
       getFunction("md5_digest").call(
         <Object?>[
@@ -21828,79 +30554,131 @@ final class load_grammar extends PythonModule {
   ///
   /// ### python docstring
   ///
-  /// Provides a simple way of creating custom import loaders that load from packages via ``pkgutil.get_data`` instead of using `open`.
-  /// This allows them to be compatible even from within zip files.
-  ///
-  /// Relative imports are handled, so you can just freely use them.
-  ///
-  /// pkg_name: The name of the package. You can probably provide `__name__` most of the time
-  /// search_paths: All the path that will be search on absolute imports.
+  /// Parses and creates Grammar objects
   Object? get stdlib_loader => getAttribute("stdlib_loader");
 
   /// ## stdlib_loader (setter)
   ///
   /// ### python docstring
   ///
-  /// Provides a simple way of creating custom import loaders that load from packages via ``pkgutil.get_data`` instead of using `open`.
-  /// This allows them to be compatible even from within zip files.
-  ///
-  /// Relative imports are handled, so you can just freely use them.
-  ///
-  /// pkg_name: The name of the package. You can probably provide `__name__` most of the time
-  /// search_paths: All the path that will be search on absolute imports.
+  /// Parses and creates Grammar objects
   set stdlib_loader(Object? stdlib_loader) =>
       setAttribute("stdlib_loader", stdlib_loader);
 
   /// ## EXT (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
   Object? get EXT => getAttribute("EXT");
 
   /// ## EXT (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
   set EXT(Object? EXT) => setAttribute("EXT", EXT);
 
   /// ## GRAMMAR_ERRORS (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
   Object? get GRAMMAR_ERRORS => getAttribute("GRAMMAR_ERRORS");
 
   /// ## GRAMMAR_ERRORS (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
   set GRAMMAR_ERRORS(Object? GRAMMAR_ERRORS) =>
       setAttribute("GRAMMAR_ERRORS", GRAMMAR_ERRORS);
 
   /// ## IMPORT_PATHS (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
   Object? get IMPORT_PATHS => getAttribute("IMPORT_PATHS");
 
   /// ## IMPORT_PATHS (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
   set IMPORT_PATHS(Object? IMPORT_PATHS) =>
       setAttribute("IMPORT_PATHS", IMPORT_PATHS);
 
   /// ## REPEAT_BREAK_THRESHOLD (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
   Object? get REPEAT_BREAK_THRESHOLD => getAttribute("REPEAT_BREAK_THRESHOLD");
 
   /// ## REPEAT_BREAK_THRESHOLD (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
   set REPEAT_BREAK_THRESHOLD(Object? REPEAT_BREAK_THRESHOLD) =>
       setAttribute("REPEAT_BREAK_THRESHOLD", REPEAT_BREAK_THRESHOLD);
 
   /// ## RULES (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
   Object? get RULES => getAttribute("RULES");
 
   /// ## RULES (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
   set RULES(Object? RULES) => setAttribute("RULES", RULES);
 
   /// ## SMALL_FACTOR_THRESHOLD (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
   Object? get SMALL_FACTOR_THRESHOLD => getAttribute("SMALL_FACTOR_THRESHOLD");
 
   /// ## SMALL_FACTOR_THRESHOLD (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
   set SMALL_FACTOR_THRESHOLD(Object? SMALL_FACTOR_THRESHOLD) =>
       setAttribute("SMALL_FACTOR_THRESHOLD", SMALL_FACTOR_THRESHOLD);
 
   /// ## TERMINALS (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
   Object? get TERMINALS => getAttribute("TERMINALS");
 
   /// ## TERMINALS (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
   set TERMINALS(Object? TERMINALS) => setAttribute("TERMINALS", TERMINALS);
 
   /// ## TOKEN_DEFAULT_PRIORITY (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
   Object? get TOKEN_DEFAULT_PRIORITY => getAttribute("TOKEN_DEFAULT_PRIORITY");
 
   /// ## TOKEN_DEFAULT_PRIORITY (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
   set TOKEN_DEFAULT_PRIORITY(Object? TOKEN_DEFAULT_PRIORITY) =>
       setAttribute("TOKEN_DEFAULT_PRIORITY", TOKEN_DEFAULT_PRIORITY);
 }
@@ -25577,15 +34355,39 @@ final class lalr_analysis extends PythonModule {
       );
 
   /// ## Reduce (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// This module builds a LALR(1) transition-table for lalr_parser.py
+  ///
+  /// For now, shift/reduce conflicts are automatically resolved as shifts.
   Object? get Reduce => getAttribute("Reduce");
 
   /// ## Reduce (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// This module builds a LALR(1) transition-table for lalr_parser.py
+  ///
+  /// For now, shift/reduce conflicts are automatically resolved as shifts.
   set Reduce(Object? Reduce) => setAttribute("Reduce", Reduce);
 
   /// ## Shift (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// This module builds a LALR(1) transition-table for lalr_parser.py
+  ///
+  /// For now, shift/reduce conflicts are automatically resolved as shifts.
   Object? get Shift => getAttribute("Shift");
 
   /// ## Shift (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// This module builds a LALR(1) transition-table for lalr_parser.py
+  ///
+  /// For now, shift/reduce conflicts are automatically resolved as shifts.
   set Shift(Object? Shift) => setAttribute("Shift", Shift);
 }
 
@@ -26261,7 +35063,7 @@ final class tree extends PythonModule {
   ///     graph.write(filename)
   /// ```
   Object? pydot__tree_to_dot({
-    required Object? tree,
+    required Tree tree,
     required Object? filename,
     Object? rankdir = "LR",
     Map<String, Object?> kwargs = const <String, Object?>{},
@@ -26333,7 +35135,7 @@ final class tree extends PythonModule {
   ///     return graph
   /// ```
   Object? pydot__tree_to_graph({
-    required Object? tree,
+    required Tree tree,
     Object? rankdir = "LR",
     Map<String, Object?> kwargs = const <String, Object?>{},
   }) =>
@@ -26355,9 +35157,9 @@ final class tree extends PythonModule {
   ///     graph = pydot__tree_to_graph(tree, rankdir, **kwargs)
   ///     graph.write_png(filename)
   /// ```
-  Object? pydot__tree_to_png({
-    required Object? tree,
-    required Object? filename,
+  Null pydot__tree_to_png({
+    required Tree tree,
+    required String filename,
     Object? rankdir = "LR",
     Map<String, Object?> kwargs = const <String, Object?>{},
   }) =>
@@ -26753,9 +35555,9 @@ final class utils extends PythonModule {
   ///                 visited.add(next_node)
   ///                 open_q.append(next_node)
   /// ```
-  Object? bfs({
+  Iterator bfs({
     required Object? initial,
-    required Object? expand,
+    required Function expand,
   }) =>
       getFunction("bfs").call(
         <Object?>[
@@ -26840,7 +35642,7 @@ final class utils extends PythonModule {
   /// ```
   Object? classify_bool({
     required Object? seq,
-    required Object? pred,
+    required Function pred,
   }) =>
       getFunction("classify_bool").call(
         <Object?>[
@@ -26959,7 +35761,7 @@ final class utils extends PythonModule {
   ///                 return 0, int(sre_constants.MAXREPEAT)
   /// ```
   Object? get_regexp_width({
-    required Object? expr,
+    required String expr,
   }) =>
       getFunction("get_regexp_width").call(
         <Object?>[
@@ -26984,8 +35786,8 @@ final class utils extends PythonModule {
   ///     """
   ///     return _test_unicode_category(s, _ID_CONTINUE)
   /// ```
-  Object? is_id_continue({
-    required Object? s,
+  bool is_id_continue({
+    required String s,
   }) =>
       getFunction("is_id_continue").call(
         <Object?>[
@@ -27010,8 +35812,8 @@ final class utils extends PythonModule {
   ///     """
   ///     return _test_unicode_category(s, _ID_START)
   /// ```
-  Object? is_id_start({
-    required Object? s,
+  bool is_id_start({
+    required String s,
   }) =>
       getFunction("is_id_start").call(
         <Object?>[
@@ -27039,8 +35841,8 @@ final class utils extends PythonModule {
   ///         except (UnicodeDecodeError, UnicodeEncodeError):
   ///             return False
   /// ```
-  Object? isascii({
-    required Object? s,
+  bool isascii({
+    required String s,
   }) =>
       getFunction("isascii").call(
         <Object?>[
@@ -27089,8 +35891,8 @@ final class utils extends PythonModule {
   ///     assert False, "Failed to factorize %s" % n
   /// ```
   Object? small_factors({
-    required Object? n,
-    required Object? max_factor,
+    required int n,
+    required int max_factor,
   }) =>
       getFunction("small_factors").call(
         <Object?>[
@@ -27101,97 +35903,9 @@ final class utils extends PythonModule {
       );
 
   /// ## T (getter)
-  ///
-  /// ### python docstring
-  ///
-  /// Type variable.
-  ///
-  /// Usage::
-  ///
-  ///   T = TypeVar('T')  # Can be anything
-  ///   A = TypeVar('A', str, bytes)  # Must be str or bytes
-  ///
-  /// Type variables exist primarily for the benefit of static type
-  /// checkers.  They serve as the parameters for generic types as well
-  /// as for generic function definitions.  See class Generic for more
-  /// information on generic types.  Generic functions work as follows:
-  ///
-  ///   def repeat(x: T, n: int) -> List[T]:
-  ///       '''Return a list containing n references to x.'''
-  ///       return [x]*n
-  ///
-  ///   def longest(x: A, y: A) -> A:
-  ///       '''Return the longest of two strings.'''
-  ///       return x if len(x) >= len(y) else y
-  ///
-  /// The latter example's signature is essentially the overloading
-  /// of (str, str) -> str and (bytes, bytes) -> bytes.  Also note
-  /// that if the arguments are instances of some subclass of str,
-  /// the return type is still plain str.
-  ///
-  /// At runtime, isinstance(x, T) and issubclass(C, T) will raise TypeError.
-  ///
-  /// Type variables defined with covariant=True or contravariant=True
-  /// can be used to declare covariant or contravariant generic types.
-  /// See PEP 484 for more details. By default generic types are invariant
-  /// in all type variables.
-  ///
-  /// Type variables can be introspected. e.g.:
-  ///
-  ///   T.__name__ == 'T'
-  ///   T.__constraints__ == ()
-  ///   T.__covariant__ == False
-  ///   T.__contravariant__ = False
-  ///   A.__constraints__ == (str, bytes)
-  ///
-  /// Note that only type variables defined in global scope can be pickled.
   Object? get T => getAttribute("T");
 
   /// ## T (setter)
-  ///
-  /// ### python docstring
-  ///
-  /// Type variable.
-  ///
-  /// Usage::
-  ///
-  ///   T = TypeVar('T')  # Can be anything
-  ///   A = TypeVar('A', str, bytes)  # Must be str or bytes
-  ///
-  /// Type variables exist primarily for the benefit of static type
-  /// checkers.  They serve as the parameters for generic types as well
-  /// as for generic function definitions.  See class Generic for more
-  /// information on generic types.  Generic functions work as follows:
-  ///
-  ///   def repeat(x: T, n: int) -> List[T]:
-  ///       '''Return a list containing n references to x.'''
-  ///       return [x]*n
-  ///
-  ///   def longest(x: A, y: A) -> A:
-  ///       '''Return the longest of two strings.'''
-  ///       return x if len(x) >= len(y) else y
-  ///
-  /// The latter example's signature is essentially the overloading
-  /// of (str, str) -> str and (bytes, bytes) -> bytes.  Also note
-  /// that if the arguments are instances of some subclass of str,
-  /// the return type is still plain str.
-  ///
-  /// At runtime, isinstance(x, T) and issubclass(C, T) will raise TypeError.
-  ///
-  /// Type variables defined with covariant=True or contravariant=True
-  /// can be used to declare covariant or contravariant generic types.
-  /// See PEP 484 for more details. By default generic types are invariant
-  /// in all type variables.
-  ///
-  /// Type variables can be introspected. e.g.:
-  ///
-  ///   T.__name__ == 'T'
-  ///   T.__constraints__ == ()
-  ///   T.__covariant__ == False
-  ///   T.__contravariant__ = False
-  ///   A.__constraints__ == (str, bytes)
-  ///
-  /// Note that only type variables defined in global scope can be pickled.
   set T(Object? T) => setAttribute("T", T);
 }
 
@@ -28012,20 +36726,25 @@ final class visitors extends PythonModule {
   ///         return _apply_v_args(obj, func)
   ///     return _visitor_args_dec
   /// ```
-  Object? v_args({
-    Object? inline = false,
-    Object? meta = false,
-    Object? tree = false,
+  Object? Function(Object?) v_args({
+    bool inline = false,
+    bool meta = false,
+    bool tree = false,
     Object? wrapper,
   }) =>
-      getFunction("v_args").call(
-        <Object?>[
-          inline,
-          meta,
-          tree,
-          wrapper,
-        ],
-        kwargs: <String, Object?>{},
+      PythonFunction.from(
+        getFunction("v_args").call(
+          <Object?>[
+            inline,
+            meta,
+            tree,
+            wrapper,
+          ],
+          kwargs: <String, Object?>{},
+        ),
+      ).asFunction(
+        (PythonFunctionInterface<PythonFfiDelegate<Object?>, Object?> f) =>
+            (Object? x0) => f.call(<Object?>[x0]),
       );
 
   /// ## visit_children_decor
@@ -28044,57 +36763,24 @@ final class visitors extends PythonModule {
   ///         return func(cls, values)
   ///     return inner
   /// ```
-  Object? visit_children_decor({
-    required Object? func,
+  Object? Function(Object?, Object?) visit_children_decor({
+    required Object? Function(Object?, Object?) func,
   }) =>
-      getFunction("visit_children_decor").call(
-        <Object?>[
-          func,
-        ],
-        kwargs: <String, Object?>{},
+      PythonFunction.from(
+        getFunction("visit_children_decor").call(
+          <Object?>[
+            func.generic2,
+          ],
+          kwargs: <String, Object?>{},
+        ),
+      ).asFunction(
+        (PythonFunctionInterface<PythonFfiDelegate<Object?>, Object?> f) =>
+            (Object? x0, Object? x1) => f.call(<Object?>[x0, x1]),
       );
 
   /// ## Discard (getter)
-  ///
-  /// ### python docstring
-  ///
-  /// When the Discard value is returned from a transformer callback,
-  /// that node is discarded and won't appear in the parent.
-  ///
-  /// Note:
-  ///     This feature is disabled when the transformer is provided to Lark
-  ///     using the ``transformer`` keyword (aka Tree-less LALR mode).
-  ///
-  /// Example:
-  ///     ::
-  ///
-  ///         class T(Transformer):
-  ///             def ignore_tree(self, children):
-  ///                 return Discard
-  ///
-  ///             def IGNORE_TOKEN(self, token):
-  ///                 return Discard
   Object? get Discard => getAttribute("Discard");
 
   /// ## Discard (setter)
-  ///
-  /// ### python docstring
-  ///
-  /// When the Discard value is returned from a transformer callback,
-  /// that node is discarded and won't appear in the parent.
-  ///
-  /// Note:
-  ///     This feature is disabled when the transformer is provided to Lark
-  ///     using the ``transformer`` keyword (aka Tree-less LALR mode).
-  ///
-  /// Example:
-  ///     ::
-  ///
-  ///         class T(Transformer):
-  ///             def ignore_tree(self, children):
-  ///                 return Discard
-  ///
-  ///             def IGNORE_TOKEN(self, token):
-  ///                 return Discard
   set Discard(Object? Discard) => setAttribute("Discard", Discard);
 }

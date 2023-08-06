@@ -53,11 +53,13 @@ abstract base class PythonObject
   String toString() => _delegate.toString();
 
   @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is PythonObject && _delegate == other._delegate;
 
   @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
   int get hashCode => _delegate.hashCode;
 
   @override

@@ -14,6 +14,7 @@ final class PythonIterable<T extends Object?, P extends PythonFfiDelegate<R>,
           finalizer: _iterable.finalizer,
         );
 
+  /// TODO: Document.
   static Iterable<T> from<T extends Object?, P extends PythonFfiDelegate<R>,
       R extends Object?>(
     Object? iterable,
@@ -86,12 +87,14 @@ class TypedIterable<T> with IterableMixin<T> implements Iterable<T> {
   @override
   Iterator<T> get iterator => TypedIterator<T>.from(_iterable.iterator);
 
+  /// TODO: Document.
   TransformIterable<T_out, T> transform<T_out>(T_out Function(T) transformer) =>
       TransformIterable<T_out, T>.from(this, transformer);
 }
 
 /// Transforms the elements of an iterable.
 class TransformIterable<T, T_in> with IterableMixin<T> implements Iterable<T> {
+  /// TODO: Document.
   TransformIterable.from(this._iterable, this._transformer);
 
   final Iterable<T_in> _iterable;
@@ -103,6 +106,7 @@ class TransformIterable<T, T_in> with IterableMixin<T> implements Iterable<T> {
         _transformer,
       );
 
+  @override
   TransformIterable<T_out, T> cast<T_out>() =>
       TransformIterable<T_out, T>.from(this, (T e) => e as T_out);
 }

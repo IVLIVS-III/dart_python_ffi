@@ -99,7 +99,9 @@ final class PubspecEditor {
           yield PyPiDependency(name: key, version: value);
         case YamlMap() when value.keys.contains("git"):
           final Object? git = value["git"];
-          throw UnimplementedError("Git dependencies are not yet supported.");
+          throw UnimplementedError(
+            "Git dependencies are not yet supported, cannot parse $git.",
+          );
         case YamlMap() when value.keys.contains("path"):
           final Object? path = value["path"];
           final PythonDependency? pythonDependency = switch (path) {
@@ -115,10 +117,15 @@ final class PubspecEditor {
     }
   }
 
+  bool _contains(String dependency) {
+    _ensureOpen();
+    return dependencies.any((PythonDependency e) => e.name == dependency);
+  }
+
   /// TODO: Document.
   void addDependency(String dependency, {String? version}) {
     _ensureOpen();
-    if (dependencies.contains(dependency)) {
+    if (_contains(dependency)) {
       return;
     }
     final List<String> parentPath = <String>["python_ffi", "modules"];
@@ -128,7 +135,7 @@ final class PubspecEditor {
   /// TODO: Document.
   void removeDependency(String dependency) {
     _ensureOpen();
-    if (!dependencies.contains(dependency)) {
+    if (!_contains(dependency)) {
       return;
     }
     _yamlEditor.remove(<Object?>["python_ffi", "modules", dependency]);

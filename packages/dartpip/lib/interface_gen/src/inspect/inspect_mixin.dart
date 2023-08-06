@@ -1,12 +1,16 @@
 part of interface_gen;
 
-base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
+/// TODO: Document.
+base mixin InspectMixin
+    on PythonObjectInterface<PythonFfiDelegate<Object?>, Object?>
+    implements InspectEntry {
   final Map<String, InspectEntry> _children = <String, InspectEntry>{};
 
   void _setChild(String name, InspectEntry child) {
     _children[name] = child;
   }
 
+  /// TODO: Document.
   final inspect inspectModule = inspect.import();
 
   Iterable<(String, Object?)> get _members {
@@ -23,13 +27,10 @@ base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
 
   Set<String> get _sanitizationExtraKeywords => const <String>{};
 
-  /*
-  String sanitizedName({Set<String> extraKeywords = const <String>{}}) =>
-      sanitizeName(name, extraKeywords: extraKeywords);
-  */
-
+  /// TODO: Document.
   Object? get parentModule => inspectModule.getmodule(value);
 
+  @override
   Iterable<(String, InspectEntry)> get children => _children.entries
       .map((MapEntry<String, InspectEntry> e) => (e.key, e.value));
 
@@ -51,14 +52,16 @@ base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
         if (inspectModule.isbuiltin(value)) {
           continue;
         }
-      } on PythonExceptionInterface catch (_) {
+      } on PythonExceptionInterface<PythonFfiDelegate<Object?>,
+          Object?> catch (_) {
         // ignore
       }
       try {
         if (inspectModule.ismethodwrapper(value)) {
           continue;
         }
-      } on PythonExceptionInterface catch (_) {
+      } on PythonExceptionInterface<PythonFfiDelegate<Object?>,
+          Object?> catch (_) {
         // ignore
       }
       final InspectEntry? cached = cache[value];
@@ -69,21 +72,25 @@ base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
       final String sanitizedName =
           sanitizeName(name, extraKeywords: _sanitizationExtraKeywords);
       final InspectEntry child = switch (value) {
-        PythonModuleInterface() when inspectModule.ismodule(value) =>
+        PythonModuleInterface<PythonFfiDelegate<Object?>, Object?>()
+            when inspectModule.ismodule(value) =>
           Module.from(name, sanitizedName, value),
-        PythonModuleInterface() =>
+        PythonModuleInterface<PythonFfiDelegate<Object?>, Object?>() =>
           throw Exception("'$name' is not a module: $value"),
-        PythonClassDefinitionInterface() when inspectModule.isclass(value) =>
+        PythonClassDefinitionInterface<PythonFfiDelegate<Object?>, Object?>()
+            when inspectModule.isclass(value) =>
           ClassDefinition.from(name, sanitizedName, value),
-        PythonClassInterface() =>
+        PythonClassInterface<PythonFfiDelegate<Object?>, Object?>() =>
           ClassInstance.from(name, sanitizedName, value),
-        PythonFunctionInterface() when inspectModule.isfunction(value) =>
+        PythonFunctionInterface<PythonFfiDelegate<Object?>, Object?>()
+            when inspectModule.isfunction(value) =>
           Function_.from(name, sanitizedName, value),
-        PythonFunctionInterface() =>
+        PythonFunctionInterface<PythonFfiDelegate<Object?>, Object?>() =>
           throw Exception("'$name' is not a function: $value"),
-        PythonObjectInterface() => Object_.from(name, sanitizedName, value),
+        PythonObjectInterface<PythonFfiDelegate<Object?>, Object?>() =>
+          Object_.from(name, sanitizedName, value),
         _ => Primitive(name, sanitizedName, value),
-      } as InspectEntry;
+      };
       if (!_isTypedef(child) && _isStdlibEntry(child, stdlibPath: stdlibPath)) {
         continue;
       }
@@ -111,7 +118,8 @@ base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
         return false;
       }
       return filename.startsWith(stdlibPath);
-    } on PythonExceptionInterface catch (_) {
+    } on PythonExceptionInterface<PythonFfiDelegate<Object?>,
+        Object?> catch (_) {
       // ignore
     }
     return false;
@@ -122,6 +130,7 @@ base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
     throw UnimplementedError("$runtimeType.emit");
   }
 
+  @override
   void emitDoc(StringBuffer buffer) {
     final String? doc = inspectModule.getdoc(value)?.trim();
     if (doc == null) {
@@ -139,6 +148,7 @@ base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
     }
   }
 
+  @override
   void emitSource(StringBuffer buffer) {
     try {
       final String? source = inspectModule.getsource(value)?.trim();
@@ -154,7 +164,8 @@ base mixin InspectMixin on PythonObjectInterface implements InspectEntry {
       }
       buffer.writeln("""
 /// ```""");
-    } on PythonExceptionInterface catch (_) {
+    } on PythonExceptionInterface<PythonFfiDelegate<Object?>,
+        Object?> catch (_) {
       // ignore
     }
   }

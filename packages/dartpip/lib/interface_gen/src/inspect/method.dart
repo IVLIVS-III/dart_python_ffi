@@ -1,6 +1,8 @@
 part of interface_gen;
 
+/// TODO: Document.
 final class Method extends Function_ {
+  /// TODO: Document.
   Method.from(super.name, super.sanitizedName, super.functionDelegate)
       : super.from();
 
@@ -19,6 +21,7 @@ final class Method extends Function_ {
     }
   }
 
+  /// TODO: Document.
   Parameter? get selfParameter => super.parameters.firstWhereOrNull(
         (Parameter element) =>
             element.kind == ParameterKind.positional_only ||

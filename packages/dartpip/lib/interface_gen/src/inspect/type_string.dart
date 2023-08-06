@@ -1,14 +1,20 @@
 part of interface_gen;
 
-typedef _ReturnTransform = String Function(String);
+/// TODO: Document.
+typedef Transform = String Function(String);
 
-_ReturnTransform _idTransform = (String input) => input;
+Transform _idTransform = (String input) => input;
 
+/// TODO: Document.
 class ObjInfo {
-  factory ObjInfo(PythonObjectInterface? _source) => ObjInfo._(
-        name: _source?.getAttributeOrNull("__name__"),
-        qualname: _source?.getAttributeOrNull("__qualname__"),
-        module: _source?.getAttributeOrNull("__module__"),
+  /// TODO: Document.
+  factory ObjInfo(
+    PythonObjectInterface<PythonFfiDelegate<Object?>, Object?>? source,
+  ) =>
+      ObjInfo._(
+        name: source?.getAttributeOrNull("__name__"),
+        qualname: source?.getAttributeOrNull("__qualname__"),
+        module: source?.getAttributeOrNull("__module__"),
       );
 
   ObjInfo._({
@@ -17,6 +23,7 @@ class ObjInfo {
     required this.module,
   });
 
+  /// TODO: Document.
   ObjInfo copyWith({
     String? name,
     String? qualname,
@@ -28,10 +35,13 @@ class ObjInfo {
         module: module ?? this.module,
       );
 
+  /// TODO: Document.
   final String? name;
 
+  /// TODO: Document.
   final String? qualname;
 
+  /// TODO: Document.
   final String? module;
 
   @override
@@ -60,13 +70,13 @@ String _getTypeStringFromCollection(
     }
   }
   return typesCopy
-      .map((e) => _getTypeString(e, cache: cache))
+      .map((Object? e) => _getTypeString(e, cache: cache))
       .toSet()
       .reduce((String value, String element) => "Object?");
 }
 
-(String, _ReturnTransform) _getTypeStringFromClassDefWithTransform(
-  PythonClassDefinitionInterface object, {
+(String, Transform) _getTypeStringFromClassDefWithTransform(
+  PythonClassDefinitionInterface<PythonFfiDelegate<Object?>, Object?> object, {
   required InspectionCache cache,
   bool isReturnString = false,
 }) {
@@ -77,7 +87,7 @@ String _getTypeStringFromCollection(
   if (info.module == "builtins" &&
       info.name == info.qualname &&
       info.qualname != null) {
-    final (String, _ReturnTransform)? result = switch (info.qualname) {
+    final (String, Transform)? result = switch (info.qualname) {
       "bool" => ("bool", _idTransform),
       "int" => ("int", _idTransform),
       "float" => ("double", _idTransform),
@@ -98,7 +108,7 @@ String _getTypeStringFromCollection(
           };
 
           final List<Object?> args = object.getAttribute("__args__");
-          final Iterable<(String, _ReturnTransform)> typeArgs = args.map(
+          final Iterable<(String, Transform)> typeArgs = args.map(
             (Object? e) => _getTypeStringWithTransform(
               e,
               cache: cache,
@@ -107,11 +117,10 @@ String _getTypeStringFromCollection(
           );
           final String typeArguments = switch (info.qualname) {
             "tuple" => _getTypeStringFromCollection(args, cache: cache),
-            _ =>
-              typeArgs.map(((String, _ReturnTransform) e) => e.$1).join(", "),
+            _ => typeArgs.map(((String, Transform) e) => e.$1).join(", "),
           };
           final String typeString = "$container<$typeArguments>";
-          final _ReturnTransform transform = isReturnString
+          final Transform transform = isReturnString
               ? switch (info.qualname) {
                   "tuple" when typeArguments == "Object?" => (String call) =>
                       "$container.from($call,)",
@@ -151,7 +160,7 @@ $typeString.from(
   if (info.module == "typing" &&
       info.name == info.qualname &&
       info.qualname != null) {
-    final (String, _ReturnTransform)? result = switch (info.qualname) {
+    final (String, Transform)? result = switch (info.qualname) {
       ("Iterator" || "Generator" || "Iterable")
           when typeInfo != null &&
               typeInfo.module == "typing" &&
@@ -164,7 +173,7 @@ $typeString.from(
             _ => throw UnimplementedError(info.qualname),
           };
           final List<Object?> args = object.getAttribute("__args__");
-          final Iterable<(String, _ReturnTransform)> typeArgs = args.map(
+          final Iterable<(String, Transform)> typeArgs = args.map(
             (Object? e) => _getTypeStringWithTransform(
               e,
               cache: cache,
@@ -172,8 +181,8 @@ $typeString.from(
             ),
           );
           final String typeArguments =
-              typeArgs.map(((String, _ReturnTransform) e) => e.$1).first;
-          final _ReturnTransform transform = isReturnString
+              typeArgs.map(((String, Transform) e) => e.$1).first;
+          final Transform transform = isReturnString
               ? (String call) => """
 Typed$container.from(
   Python$container.from<Object?, PythonFfiDelegate<Object?>, Object?>($call,),
@@ -192,31 +201,29 @@ Typed$container.from(
               typeInfo.qualname == "_CallableGenericAlias" =>
         (() {
           final List<Object?> args = object.getAttribute("__args__");
-          final Iterable<(String, _ReturnTransform)> typeArgs = args.map(
+          final Iterable<(String, Transform)> typeArgs = args.map(
             (Object? e) => _getTypeStringWithTransform(
               e,
               cache: cache,
               isReturnString: isReturnString,
             ),
           );
-          final Iterable<(String, _ReturnTransform)> parameterTypes =
+          final Iterable<(String, Transform)> parameterTypes =
               typeArgs.skipLast(1);
-          final String parameterTypesString = parameterTypes
-              .map(((String, _ReturnTransform) e) => e.$1)
-              .join(", ");
+          final String parameterTypesString =
+              parameterTypes.map(((String, Transform) e) => e.$1).join(", ");
           final Iterable<(String, String)> parameterArgs =
               parameterTypes.enumerate().map(
-                    ((int, (String, _ReturnTransform)) e) =>
-                        (e.$2.$1, "x${e.$1}"),
+                    ((int, (String, Transform)) e) => (e.$2.$1, "x${e.$1}"),
                   );
           final String typedArgString = parameterArgs
               .map(((String, String) e) => "${e.$1} ${e.$2}")
               .join(", ");
           final String argString =
               parameterArgs.map(((String, String) e) => e.$2).join(", ");
-          final (String, _ReturnTransform) returnType = typeArgs.last;
+          final (String, Transform) returnType = typeArgs.last;
           final String returnTypeString = returnType.$1;
-          final _ReturnTransform transform = switch (isReturnString) {
+          final Transform transform = switch (isReturnString) {
             true => (String call) => """
 PythonFunction.from($call,)
 .asFunction(
@@ -239,12 +246,14 @@ PythonFunction.from($call,)
     }
   }
   final InspectEntry? cacheEntry = cache[object];
-  if (cacheEntry != null) {
-    final _ReturnTransform transform =
-        switch ((isReturnString, cacheEntry.value)) {
+  if (cacheEntry != null && inspect.import().isclass(cacheEntry.value)) {
+    final Transform transform = switch ((isReturnString, cacheEntry.value)) {
       (false, _) => _idTransform,
-      (_, PythonClassDefinitionInterface()) => (String call) =>
-          "${cacheEntry.sanitizedName}.from($call,)",
+      (
+        _,
+        PythonClassDefinitionInterface<PythonFfiDelegate<Object?>, Object?>()
+      ) =>
+        (String call) => "${cacheEntry.sanitizedName}.from($call,)",
       _ => _idTransform,
     };
     return (cacheEntry.sanitizedName, transform);
@@ -252,7 +261,7 @@ PythonFunction.from($call,)
   return ("Object?", _idTransform);
 }
 
-(String, _ReturnTransform) _getTypeStringWithTransform(
+(String, Transform) _getTypeStringWithTransform(
   Object? object, {
   required InspectionCache cache,
   bool isReturnString = false,
@@ -262,7 +271,7 @@ PythonFunction.from($call,)
   switch (object) {
     case null:
       return ("Null", _idTransform);
-    case PythonClassDefinitionInterface():
+    case PythonClassDefinitionInterface<PythonFfiDelegate<Object?>, Object?>():
       return _getTypeStringFromClassDefWithTransform(
         object,
         cache: cache,

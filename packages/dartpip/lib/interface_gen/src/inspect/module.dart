@@ -1,5 +1,6 @@
 part of interface_gen;
 
+/// TODO: Document.
 final class Module extends PythonModule
     with
         InspectMixin,
@@ -7,12 +8,15 @@ final class Module extends PythonModule
         GetterSetterMixin,
         GettersSettersMixin
     implements InspectEntry {
+  /// TODO: Document.
   Module.from(this.name, this.sanitizedName, super.moduleDelegate)
       : value = moduleDelegate,
         super.from();
 
+  @override
   final String name;
 
+  @override
   final String sanitizedName;
 
   @override
@@ -22,8 +26,10 @@ final class Module extends PythonModule
         ...Object_.sanitizationExtraKeywords,
       };
 
+  /// TODO: Document.
   String get qualifiedName {
     try {
+      // ignore: avoid_dynamic_calls
       return (value as dynamic).__name__ as String;
       // ignore: avoid_catches_without_on_clauses
     } catch (_) {
@@ -31,7 +37,8 @@ final class Module extends PythonModule
     }
   }
 
-  final PythonModuleInterface value;
+  @override
+  final PythonModuleInterface<PythonFfiDelegate<Object?>, Object?> value;
 
   @override
   InspectEntryType get type => InspectEntryType.module;

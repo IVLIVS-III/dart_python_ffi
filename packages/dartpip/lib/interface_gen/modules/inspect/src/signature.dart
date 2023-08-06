@@ -12,6 +12,7 @@ final class _SignatureClassDefinition extends PythonClassDefinition {
 ///
 /// Reference: https://docs.python.org/3/library/inspect.html#inspect.Signature
 final class Signature extends PythonClass {
+  /// TODO: Document.
   Signature.from(super.classDelegate) : super.from();
 
   /// A special class-level marker to specify absence of a return annotation.
@@ -36,8 +37,8 @@ final class Signature extends PythonClass {
   UnmodifiableMapView<String, Parameter> get parameters {
     final PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>>
         parameters = getAttributeRaw("parameters");
-    final PythonFunctionInterface<PythonFfiCPythonBase, Pointer> itemGetter =
-        parameters.getFunction("__getitem__");
+    final PythonFunctionInterface<PythonFfiCPythonBase, Pointer<PyObject>>
+        itemGetter = parameters.getFunction("__getitem__");
     return UnmodifiableMapView<String, Parameter>(
       Map<String, Parameter>.fromEntries(
         _parameterNames.map(
@@ -63,6 +64,7 @@ final class Signature extends PythonClass {
     return result;
   }
 
+  @override
   Map<String, Object?> debugDump({InspectionCache? cache}) => <String, Object?>{
         "parameters": parameters.map(
           (String key, Parameter value) =>

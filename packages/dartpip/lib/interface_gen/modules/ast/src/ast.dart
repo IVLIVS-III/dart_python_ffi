@@ -1,30 +1,35 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, camel_case_types
 
 part of ast;
 
+/// TODO: Document.
 final class AST extends PythonClass {
-  factory AST() =>
-      PythonFfiDart.instance.importClass(
+  /// TODO: Document.
+  factory AST() => PythonFfiDart.instance.importClass(
         "ast",
         "ASTNode",
         AST.from,
         <Object?>[],
-        {},
+        <String, Object?>{},
       );
 
+  /// TODO: Document.
   AST.from(this._classDelegate) : super.from(_classDelegate);
 
-  final PythonClassInterface _classDelegate;
+  final PythonClassInterface<PythonFfiDelegate<Object?>, Object?>
+      _classDelegate;
 
-  bool Function(AST) _isOfType(String name) =>
-          (AST node) {
+  bool Function(AST) _isOfType(String name) => (AST node) {
+        // ignore: avoid_dynamic_calls
         final String className = (node as dynamic).__class__.__name__ as String;
         return className == name;
       };
 
   Iterable<T> _getTypedChildren<T extends AST>({
     required String name,
-    required T Function(PythonClassInterface) constructor,
+    required T Function(
+      PythonClassInterface<PythonFfiDelegate<Object?>, Object?>,
+    ) constructor,
   }) sync* {
     final Iterator<AST> nodes = ast.import().walk(this);
     final bool Function(AST) isOfType = _isOfType(name);
@@ -36,82 +41,97 @@ final class AST extends PythonClass {
     }
   }
 
-  Iterable<FunctionDef> get functionDefs =>
-      _getTypedChildren(
+  /// TODO: Document.
+  Iterable<FunctionDef> get functionDefs => _getTypedChildren(
         name: "FunctionDef",
         constructor: FunctionDef.from,
       );
 
-  Iterable<Assign> get assigns =>
-      _getTypedChildren(
+  /// TODO: Document.
+  Iterable<Assign> get assigns => _getTypedChildren(
         name: "Assign",
         constructor: Assign.from,
       );
 }
 
+/// TODO: Document.
 final class FunctionDef extends AST {
-  factory FunctionDef() =>
-      PythonFfiDart.instance.importClass(
+  /// TODO: Document.
+  factory FunctionDef() => PythonFfiDart.instance.importClass(
         "ast",
         "FunctionDef",
         FunctionDef.from,
         <Object?>[],
-        {},
+        <String, Object?>{},
       );
 
+  /// TODO: Document.
   FunctionDef.from(super.classDelegate) : super.from();
 
+  /// TODO: Document.
   String get name => getAttribute("name");
 }
 
+/// TODO: Document.
 final class Assign extends AST {
-  factory Assign() =>
-      PythonFfiDart.instance.importClass(
+  /// TODO: Document.
+  factory Assign() => PythonFfiDart.instance.importClass(
         "ast",
         "Assign",
         Assign.from,
         <Object?>[],
-        {},
+        <String, Object?>{},
       );
 
+  /// TODO: Document.
   Assign.from(super.classDelegate) : super.from();
 
-  Iterable<AST> get targets =>
-      List<Object?>.from(
+  /// TODO: Document.
+  Iterable<AST> get targets => List<Object?>.from(
         getAttribute("targets"),
-      ).cast<PythonClassInterface>().map(AST.from);
+      )
+          .cast<PythonClassInterface<PythonFfiDelegate<Object?>, Object?>>()
+          .map(AST.from);
 
-  Iterable<Attribute> get attributes =>
-      targets
-          .where(_isOfType("Attribute"))
-          .map((AST e) => Attribute.from(e._classDelegate));
+  /// TODO: Document.
+  Iterable<Attribute> get attributes => targets
+      .where(_isOfType("Attribute"))
+      .map((AST e) => Attribute.from(e._classDelegate));
 }
 
+/// TODO: Document.
 final class Attribute extends AST {
-  factory Attribute() =>
-      PythonFfiDart.instance.importClass(
+  /// TODO: Document.
+  factory Attribute() => PythonFfiDart.instance.importClass(
         "ast",
         "Attribute",
         Attribute.from,
         <Object?>[],
-        {},
+        <String, Object?>{},
       );
 
+  /// TODO: Document.
   Attribute.from(super.classDelegate) : super.from();
 
+  /// TODO: Document.
   AST get value => AST.from(getAttribute("value"));
 }
 
+/// TODO: Document.
 final class ast extends PythonModule {
+  /// TODO: Document.
   ast.from(super.moduleDelegate) : super.from();
 
+  /// TODO: Document.
   static ast import() => PythonFfiDart.instance.importModule("ast", ast.from);
 
+  /// TODO: Document.
   AST parse(String source) =>
       AST.from(getFunction("parse").call(<Object?>[source]));
 
-  Iterator<AST> walk(AST node) =>
-      TypedIterator<PythonClassInterface>.from(
+  /// TODO: Document.
+  Iterator<AST> walk(AST node) => TypedIterator<
+          PythonClassInterface<PythonFfiDelegate<Object?>, Object?>>.from(
         getFunction("walk").call(<Object?>[node]),
       ).transform(AST.from);
 }

@@ -1,7 +1,10 @@
 part of inspect;
 
+/// TODO: Document.
 @immutable
-final class ReferenceEqualityWrapper extends PythonObjectInterface {
+final class ReferenceEqualityWrapper
+    extends PythonObjectInterface<PythonFfiDelegate<Object?>, Object?> {
+  /// TODO: Document.
   ReferenceEqualityWrapper(this._source)
       : super(
           _source.platform,
@@ -10,7 +13,7 @@ final class ReferenceEqualityWrapper extends PythonObjectInterface {
           finalizer: _source.finalizer,
         );
 
-  final PythonObjectInterface _source;
+  final PythonObjectInterface<PythonFfiDelegate<Object?>, Object?> _source;
 
   @override
   bool operator ==(Object? other) {

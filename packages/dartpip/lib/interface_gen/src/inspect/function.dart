@@ -1,14 +1,20 @@
+// ignore_for_file: camel_case_types
+
 part of interface_gen;
 
+/// TODO: Document.
 final class Function_ extends PythonFunction
     with InspectMixin
     implements InspectEntry {
+  /// TODO: Document.
   Function_.from(this.name, this.sanitizedName, super.functionDelegate)
       : value = functionDelegate,
         super.from();
 
+  @override
   final String name;
 
+  @override
   final String sanitizedName;
 
   @override
@@ -18,13 +24,16 @@ final class Function_ extends PythonFunction
         ...Object_.sanitizationExtraKeywords,
       };
 
-  final PythonFunctionInterface value;
+  @override
+  final PythonFunctionInterface<PythonFfiDelegate<Object?>, Object?> value;
 
   @override
   InspectEntryType get type => InspectEntryType.function;
 
+  /// TODO: Document.
   Signature get signature => inspectModule.signature(value);
 
+  /// TODO: Document.
   Iterable<Parameter> get parameters => signature.parameters.values;
 
   Iterable<Parameter> _parametersOfKind(ParameterKind kind) =>
@@ -36,15 +45,16 @@ final class Function_ extends PythonFunction
       _parametersOfKind(ParameterKind.keyword_only).isNotEmpty ||
       _parametersOfKind(ParameterKind.var_keyword).isNotEmpty;
 
-  Iterable<_ReturnTransform> emitArguments(
+  /// TODO: Document.
+  Iterable<Transform> emitArguments(
     StringBuffer buffer, {
     required InspectionCache cache,
     InspectEntry? parentEntry,
   }) {
-    final List<_ReturnTransform> transforms = <_ReturnTransform>[];
+    final List<Transform> transforms = <Transform>[];
     for (final Parameter parameter
         in _parametersOfKind(ParameterKind.positional_only)) {
-      final (String typeString, _ReturnTransform transform) =
+      final (String typeString, Transform transform) =
           _getTypeStringWithTransform(
         parameter,
         cache: cache,
@@ -63,7 +73,7 @@ final class Function_ extends PythonFunction
       }
       for (final Parameter parameter
           in _parametersOfKind(ParameterKind.positional_or_keyword)) {
-        final (String typeString, _ReturnTransform transform) =
+        final (String typeString, Transform transform) =
             _getTypeStringWithTransform(
           parameter,
           cache: cache,
@@ -76,7 +86,7 @@ final class Function_ extends PythonFunction
       }
       for (final Parameter parameter
           in _parametersOfKind(ParameterKind.keyword_only)) {
-        final (String typeString, _ReturnTransform transform) =
+        final (String typeString, Transform transform) =
             _getTypeStringWithTransform(
           parameter,
           cache: cache,
@@ -100,7 +110,7 @@ final class Function_ extends PythonFunction
 
   void _emitCallArgs(
     StringBuffer buffer, {
-    required List<_ReturnTransform> transforms,
+    required List<Transform> transforms,
   }) {
     buffer.writeln("<Object?>[");
     int idx = 0;
@@ -123,7 +133,7 @@ final class Function_ extends PythonFunction
 
   void _emitCallKwargs(
     StringBuffer buffer, {
-    required List<_ReturnTransform> transforms,
+    required List<Transform> transforms,
   }) {
     buffer.writeln("<String, Object?>{");
     int idx = 0;
@@ -143,7 +153,7 @@ final class Function_ extends PythonFunction
 
   void _emitCall(
     StringBuffer buffer, {
-    required List<_ReturnTransform> transforms,
+    required List<Transform> transforms,
   }) {
     _emitCallArgs(buffer, transforms: transforms);
     buffer.write("kwargs: ");
@@ -160,7 +170,7 @@ final class Function_ extends PythonFunction
     buffer.writeln("/// ## $name");
     emitDoc(buffer);
     emitSource(buffer);
-    final (String returnType, _ReturnTransform transform) =
+    final (String returnType, Transform transform) =
         _getTypeStringWithTransform(
       signature.return_annotation,
       cache: cache,
@@ -168,7 +178,7 @@ final class Function_ extends PythonFunction
       parentEntry: parentEntry,
     );
     buffer.writeln("$returnType $sanitizedName(");
-    final Iterable<_ReturnTransform> argumentsTransforms =
+    final Iterable<Transform> argumentsTransforms =
         emitArguments(buffer, cache: cache, parentEntry: parentEntry);
     buffer.writeln(") => ");
     final StringBuffer callBuffer = StringBuffer()
@@ -179,7 +189,7 @@ final class Function_ extends PythonFunction
   }
 
   @override
-  debugDump({
+  Map<String, Object?> debugDump({
     InspectionCache? cache,
     bool expandChildren = true,
   }) =>

@@ -1,17 +1,22 @@
 part of interface_gen;
 
+/// TODO: Document.
 final class ClassInstance extends PythonClass
     with InspectMixin
     implements InspectEntry {
+  /// TODO: Document.
   ClassInstance.from(this.name, this.sanitizedName, super.classDelegate)
       : value = classDelegate,
         super.from();
 
+  @override
   final String name;
 
+  @override
   final String sanitizedName;
 
-  final PythonClassInterface value;
+  @override
+  final PythonClassInterface<PythonFfiDelegate<Object?>, Object?> value;
 
   @override
   InspectEntryType get type => InspectEntryType.class_;

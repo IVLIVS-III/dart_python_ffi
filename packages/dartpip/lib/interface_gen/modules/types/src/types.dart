@@ -1,15 +1,19 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, camel_case_types
 
 part of types;
 
+/// TODO: Document.
 final class types extends PythonModule {
+  /// TODO: Document.
   types.from(super.moduleDelegate) : super.from();
 
+  /// TODO: Document.
   static types import() => PythonFfiDart.instance.importModule(
         "types",
         types.from,
       );
 
+  /// TODO: Document.
   static bool isType(ClassInstance class_) {
     final types typesModule = types.import();
     final ReferenceEqualityWrapper typesModuleWrapper =

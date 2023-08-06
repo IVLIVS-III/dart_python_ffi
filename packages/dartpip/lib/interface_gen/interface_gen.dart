@@ -4,10 +4,10 @@ import "dart:collection";
 import "dart:convert";
 
 import "package:collection/collection.dart";
-import "package:dartpip/dartpip.dart";
 import "package:dartpip/interface_gen/modules/ast/ast.dart";
 import "package:dartpip/interface_gen/modules/inspect/inspect.dart";
 import "package:dartpip/interface_gen/modules/types/types.dart";
+import "package:python_ffi_cpython_dart/python_ffi_cpython_dart.dart";
 import "package:python_ffi_dart/python_ffi_dart.dart";
 
 part "src/cache.dart";

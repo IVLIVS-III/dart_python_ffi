@@ -1,10 +1,13 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, camel_case_types
 
 part of inspect;
 
+/// TODO: Document.
 final class inspect extends PythonModule {
+  /// TODO: Document.
   inspect.from(super.moduleDelegate) : super.from();
 
+  /// TODO: Document.
   static inspect import() => PythonFfiDart.instance.importModule(
         "inspect",
         inspect.from,
@@ -106,7 +109,9 @@ final class inspect extends PythonModule {
 
   /// Try to guess which module an object was defined in. Return `null` if the
   /// module cannot be determined.
-  PythonModuleInterface? getmodule(Object? object) =>
+  PythonModuleInterface<PythonFfiDelegate<Object?>, Object?>? getmodule(
+    Object? object,
+  ) =>
       getFunction("getmodule").call(<Object?>[object]);
 
   /// Return the text of the source code for an object. The argument may be a
@@ -117,7 +122,8 @@ final class inspect extends PythonModule {
   String? getsource(Object? object) {
     try {
       return getFunction("getsource").call(<Object?>[object]);
-    } on PythonExceptionInterface catch (e) {
+    } on PythonExceptionInterface<PythonFfiDelegate<Object?>,
+        Object?> catch (e) {
       if (e.type == "TypeError") {
         print(
           "Cannot get source for built-in module, class, or function: $object",
@@ -166,7 +172,7 @@ final class inspect extends PythonModule {
   ///
   /// Reference: https://docs.python.org/3/library/inspect.html#inspect.signature
   Signature signature(
-    PythonFunctionInterface callable, {
+    PythonFunctionInterface<PythonFfiDelegate<Object?>, Object?> callable, {
     bool follow_wrapped = true,
     Object? globals,
     Object? locals,

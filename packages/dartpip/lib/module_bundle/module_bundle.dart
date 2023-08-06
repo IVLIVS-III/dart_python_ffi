@@ -19,8 +19,7 @@ sealed class _ModuleBundle<T extends _PythonModule<Object>> {
 
   String _transformSourceFileName(String fileName) => fileName;
 
-  _SourceFile _sourceFile(String fileName) =>
-      _SourceFile(
+  _SourceFile _sourceFile(String fileName) => _SourceFile(
         <String>[
           _pythonModuleDestinationDirectory.path,
           _transformSourceFileName(fileName)
@@ -50,7 +49,7 @@ sealed class _ModuleBundle<T extends _PythonModule<Object>> {
       moduleInfo
         ..update(
           pythonModule.moduleName,
-              (Object? _) => pythonModule.moduleInfo,
+          (Object? _) => pythonModule.moduleInfo,
           ifAbsent: () => pythonModule.moduleInfo,
         );
 
@@ -84,7 +83,7 @@ sealed class _ModuleBundle<T extends _PythonModule<Object>> {
         pythonModule.data
             .mapKeys(
               (List<String> key) => <String>[pythonModule.moduleName, ...key],
-        )
+            )
             .mapValues(_transformSourceData),
       );
       await _postExport(
@@ -97,14 +96,14 @@ sealed class _ModuleBundle<T extends _PythonModule<Object>> {
 
   PythonSourceEntity get _sourceTree {
     final Map<String, dynamic> data =
-    moduleInfo[pythonModule.moduleName]["root"] as Map<String, dynamic>;
+        // ignore: avoid_dynamic_calls
+        moduleInfo[pythonModule.moduleName]["root"] as Map<String, dynamic>;
     final (PythonSourceEntity root, _) =
-    PythonFfiCPythonDart.decodePythonSourceEntity(data);
+        PythonFfiCPythonDart.decodePythonSourceEntity(data);
     return root;
   }
 
-  PythonModuleDefinition get definition =>
-      PythonModuleDefinition(
+  PythonModuleDefinition get definition => PythonModuleDefinition(
         name: pythonModule.moduleName,
         root: _sourceTree,
       );

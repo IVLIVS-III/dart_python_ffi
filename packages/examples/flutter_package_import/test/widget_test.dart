@@ -76,8 +76,11 @@ void main() {
 }
 
 class FakePathProviderPlatform extends Fake
-    with MockPlatformInterfaceMixin
-    implements PathProviderPlatform {
+    with
+        // ignore: prefer_mixin
+        MockPlatformInterfaceMixin
+    implements
+        PathProviderPlatform {
   @override
   Future<String?> getTemporaryPath() async => kTemporaryPath;
 

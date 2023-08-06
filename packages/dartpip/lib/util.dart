@@ -96,12 +96,14 @@ Future<void> _generateTypeDefs(
     cache: cache,
     stdlibPath: stdlibPath,
   );
-  final jsonfile = File("lib/python_modules/${moduleDefinition.name}.g.json");
+  final File jsonfile =
+      File("lib/python_modules/${moduleDefinition.name}.g.json");
   if (!jsonfile.existsSync()) {
     jsonfile.createSync();
   }
   await jsonfile.writeAsString(json);
-  final outfile = File("lib/python_modules/${moduleDefinition.name}.g.dart");
+  final File outfile =
+      File("lib/python_modules/${moduleDefinition.name}.g.dart");
   if (!outfile.existsSync()) {
     outfile.createSync();
   }

@@ -99,12 +99,12 @@ base class _PythonExceptionCPython
 
   @override
   String toString() {
-    final String? nativeException = null; // _nativelyFormattedException();
+    final String? nativeException = _nativelyFormattedException();
     if (nativeException != null) {
       return "PythonExceptionCPython: $nativeException";
     }
 
-    final String? nativeTraceback = null; // _nativelyFormattedTraceback();
+    final String? nativeTraceback = _nativelyFormattedTraceback();
     return _fallbackFormattedException(nativeTraceback);
   }
 }

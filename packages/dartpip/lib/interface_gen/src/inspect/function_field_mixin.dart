@@ -1,5 +1,6 @@
 part of interface_gen;
 
+/// TODO: Document.
 base mixin FunctionFieldMixin on InspectMixin {
   void _emitFunctionFields(
     StringBuffer buffer, {

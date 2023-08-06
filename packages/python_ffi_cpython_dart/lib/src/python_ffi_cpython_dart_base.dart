@@ -16,6 +16,7 @@ abstract base class PythonFfiCPythonBase
   FutureOr<Directory> getApplicationSupportDirectory();
 
   /// Directory for the Python standard library.
+  @override
   FutureOr<Directory> get stdlibDir;
 
   /// Loads a Python module from either the embedded Python source files (in

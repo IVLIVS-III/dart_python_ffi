@@ -1,5 +1,6 @@
 part of interface_gen;
 
+/// TODO: Document.
 base mixin GetterSetterMixin on InspectMixin {
   void _emitGetterSetter(
     StringBuffer buffer, {
@@ -10,7 +11,7 @@ base mixin GetterSetterMixin on InspectMixin {
     final String sanitizedName = entry.sanitizedName;
     buffer.writeln("/// ## $name (getter)");
     emitDoc(buffer);
-    final (String returnType, _ReturnTransform transform) =
+    final (String returnType, Transform transform) =
         _getTypeStringWithTransform(entry, cache: cache, isReturnString: true);
     buffer.writeln("""
 $returnType get $sanitizedName => 
@@ -25,6 +26,7 @@ set $sanitizedName(${_getTypeString(entry, cache: cache)} $sanitizedName)
   }
 }
 
+/// TODO: Document.
 base mixin GettersSettersMixin on GetterSetterMixin {
   void _emitGettersSetters(
     StringBuffer buffer, {

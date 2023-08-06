@@ -2,8 +2,6 @@
 
 library generic_types;
 
-import "dart:typed_data";
-
 import "package:python_ffi_dart/python_ffi_dart.dart";
 
 /// ## generic_types
