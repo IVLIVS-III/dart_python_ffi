@@ -20,6 +20,9 @@ import 'package:interface_gen_test/python_modules/module_function.g.dart'
     as module_function;
 import 'package:interface_gen_test/python_modules/primitive_types.g.dart'
     as primitive_types;
+import 'package:interface_gen_test/python_modules/submodule.g.dart'
+    as submodule;
+import 'package:interface_gen_test/python_modules/submodule/sub.g.dart' as sub;
 import 'package:python_ffi_dart/python_ffi_dart.dart';
 import 'package:test/test.dart';
 
@@ -122,6 +125,15 @@ void main() {
     });
     test("class method can be called", () {
       expect(inherited_fields_rename.Class().$newInstance(), 1);
+    });
+  });
+
+  group("submodule", () {
+    test("module can be imported", () {
+      expect(submodule.submodule.import(), anything);
+    });
+    test("submodule can be imported", () {
+      expect(sub.sub.import(), anything);
     });
   });
 

@@ -85,9 +85,11 @@ Future<_ModuleBundle<_PythonModule<Object>>> _bundleCacheModule({
 }
 
 Future<void> _generateTypeDefs(
-  PythonModuleDefinition moduleDefinition, {
+  _ModuleBundle<_PythonModule<Object>> moduleBundle, {
   required String appType,
+  required String subPath,
 }) async {
+  final PythonModuleDefinition moduleDefinition = moduleBundle.definition;
   final String stdlibPath = (await PythonFfiDart.instance.stdlibDir).path;
   final InspectionCache cache = InspectionCache();
   final String json = await doInspection(
@@ -96,18 +98,54 @@ Future<void> _generateTypeDefs(
     cache: cache,
     stdlibPath: stdlibPath,
   );
-  final File jsonfile =
-      File("lib/python_modules/${moduleDefinition.name}.g.json");
+  final String parentPath = "lib/python_modules$subPath/";
+  final File jsonfile = File("$parentPath${moduleDefinition.name}.g.json");
   if (!jsonfile.existsSync()) {
-    jsonfile.createSync();
+    jsonfile.createSync(recursive: true);
   }
   await jsonfile.writeAsString(json);
-  final File outfile =
-      File("lib/python_modules/${moduleDefinition.name}.g.dart");
+  final File outfile = File("$parentPath${moduleDefinition.name}.g.dart");
   if (!outfile.existsSync()) {
-    outfile.createSync();
+    outfile.createSync(recursive: true);
   }
   await outfile.writeAsString(emitInspection(cache));
   Process.runSync("dart", <String>["format", outfile.absolute.path]);
   return;
+}
+
+Future<void> _bundleAndGenerate({
+  required Future<_ModuleBundle<_PythonModule<Object>>> bundleTask,
+  required String appType,
+  required String appRoot,
+  String subPath = "",
+}) async {
+  final _ModuleBundle<_PythonModule<Object>> moduleBundle = await bundleTask;
+  if (moduleBundle.isBuiltin) {
+    return;
+  }
+  await _generateTypeDefs(moduleBundle, appType: appType, subPath: subPath);
+
+  // find hidden submodules
+  final _PythonModule<Object> pythonModule = moduleBundle.pythonModule;
+  final List<Future<void>> nestedFutures = <Future<void>>[];
+  if (pythonModule is _MultiFilePythonModule) {
+    final Directory searchDirectory = Directory(pythonModule.path);
+    for (final FileSystemEntity child in searchDirectory.listSync().whereNot(
+          (FileSystemEntity element) => element.name.startsWith("_"),
+        )) {
+      print("found hidden submodule: '${child.path}'");
+      nestedFutures.add(
+        _bundleAndGenerate(
+          bundleTask: _bundleModule(
+            appRoot: appRoot,
+            pythonModulePath: child.path,
+            appType: appType,
+          ),
+          appType: appType,
+          appRoot: appRoot,
+          subPath: "$subPath/${pythonModule.moduleName}",
+        ),
+      );
+    }
+  }
 }

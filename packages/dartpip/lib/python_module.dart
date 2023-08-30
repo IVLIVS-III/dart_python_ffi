@@ -1,10 +1,5 @@
 part of dartpip;
 
-extension _FileSystemEntityNameExtension on FileSystemEntity {
-  String get name =>
-      path.substring(path.lastIndexOf(Platform.pathSeparator) + 1);
-}
-
 sealed class _PythonModule<T extends Object> {
   _PythonModule._(this.path);
 
@@ -33,7 +28,7 @@ sealed class _PythonModule<T extends Object> {
   }) async {
     final String cachePath =
         "${(await PyPIService().cacheDir).path}/$projectName-$version";
-    return _MultiFileCachePythonModule._(
+    return _MultiFileCachePythonModule._findPath(
       projectName: projectName,
       projectVersion: version,
       projectCacheDirectory: Directory(cachePath),
@@ -215,7 +210,29 @@ final class _MultiFileCachePythonModule extends _MultiFilePythonModule {
     required this.projectName,
     required this.projectVersion,
     required this.projectCacheDirectory,
-  }) : super("${projectCacheDirectory.path}/$projectName");
+    required String path,
+  }) : super(path);
+
+  factory _MultiFileCachePythonModule._findPath({
+    required String projectName,
+    required String projectVersion,
+    required Directory projectCacheDirectory,
+  }) {
+    final String defaultPath = "${projectCacheDirectory.path}/$projectName";
+    final String defaultSrcPath =
+        "${projectCacheDirectory.path}/src/$projectName";
+    final String path = switch (true) {
+      _ when Directory(defaultPath).existsSync() => defaultPath,
+      _ when Directory(defaultSrcPath).existsSync() => defaultSrcPath,
+      _ => projectCacheDirectory.path,
+    };
+    return _MultiFileCachePythonModule._(
+      projectName: projectName,
+      projectVersion: projectVersion,
+      projectCacheDirectory: projectCacheDirectory,
+      path: path,
+    );
+  }
 
   final String projectName;
   final String projectVersion;
@@ -245,7 +262,7 @@ final class _MultiFileCachePythonModule extends _MultiFilePythonModule {
       _fileTree.insert(<String>[licenseFileName]);
     }
     print(
-      "Loaded $projectName-$projectVersion from cache with file tree: $_fileTree.",
+      "Loaded $projectName-$projectVersion from cache at '$path' with file tree: $_fileTree.",
     );
     if (result.isEmpty) {
       return null;

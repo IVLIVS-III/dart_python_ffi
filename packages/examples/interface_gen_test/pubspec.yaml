@@ -26,8 +26,8 @@ python_ffi:
       path: python_modules/dataclass.py
     inherited_fields_rename:
       path: python_modules/inherited_fields_rename.py
-    # submodule:
-    #   path: python_modules/submodule
+    submodule:
+      path: python_modules/submodule
     class_init_adds_field:
       path: python_modules/class_init_adds_field.py
     primitive_types:

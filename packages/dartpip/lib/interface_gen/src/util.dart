@@ -114,7 +114,7 @@ Future<String> doInspection(
   required String stdlibPath,
 }) async {
   final String moduleName = moduleDefinition.name;
-  print("Generating Dart interface for $moduleName via inspect...");
+  print("Generating Dart interface for '$moduleName' via inspect...");
   await PythonFfiDart.instance.prepareModule(moduleDefinition);
   final Module interface = PythonFfiDart.instance.importModule(
     moduleName,

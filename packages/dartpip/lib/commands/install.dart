@@ -211,13 +211,10 @@ class InstallCommand extends Command<void> {
           ),
       };
       futures.add(
-        bundleTask.then(
-          (_ModuleBundle<_PythonModule<Object>> moduleBundle) async {
-            if (moduleBundle.isBuiltin) {
-              return;
-            }
-            return _generateTypeDefs(moduleBundle.definition, appType: appType);
-          },
+        _bundleAndGenerate(
+          bundleTask: bundleTask,
+          appType: appType,
+          appRoot: appRoot,
         ),
       );
     }
