@@ -31,3 +31,4 @@ dev_dependencies:
 
 python_ffi:
   modules:
+    packaging: any
