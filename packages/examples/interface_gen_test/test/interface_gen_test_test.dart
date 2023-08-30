@@ -152,6 +152,14 @@ void main() {
       classInitAddsField.field = 2;
       expect(classInitAddsField.field, 2);
     });
+    test("typed field can be read", () {
+      expect(class_init_adds_field.ClassInitAddsField().typed_field, 2);
+    });
+    test("typed field can be written", () {
+      final classInitAddsField = class_init_adds_field.ClassInitAddsField();
+      classInitAddsField.typed_field = 1;
+      expect(classInitAddsField.typed_field, 1);
+    });
   });
 
   group("primitive_types", () {

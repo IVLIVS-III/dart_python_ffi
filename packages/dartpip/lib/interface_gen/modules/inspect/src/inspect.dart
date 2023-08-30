@@ -135,6 +135,9 @@ final class inspect extends PythonModule {
         return null;
       }
       rethrow;
+    } on PythonFfiException catch (e) {
+      print("Cannot get source for $object: $e");
+      return null;
     }
   }
 

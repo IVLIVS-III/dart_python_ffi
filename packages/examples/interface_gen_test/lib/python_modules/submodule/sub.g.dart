@@ -9,7 +9,7 @@ final class sub extends PythonModule {
   sub.from(super.pythonModule) : super.from();
 
   static sub import() => PythonFfiDart.instance.importModule(
-        "sub",
+        "submodule.sub",
         sub.from,
       );
 }

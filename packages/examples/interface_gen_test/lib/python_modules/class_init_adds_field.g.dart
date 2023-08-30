@@ -11,6 +11,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 /// class ClassInitAddsField:
 ///     def __init__(self):
 ///         self.field = 1
+///         self.typed_field: int = 2
 /// ```
 final class ClassInitAddsField extends PythonClass {
   factory ClassInitAddsField() => PythonFfiDart.instance.importClass(
@@ -28,6 +29,13 @@ final class ClassInitAddsField extends PythonClass {
 
   /// ## field (setter)
   set field(Object? field) => setAttribute("field", field);
+
+  /// ## typed_field (getter)
+  Object? get typed_field => getAttribute("typed_field");
+
+  /// ## typed_field (setter)
+  set typed_field(Object? typed_field) =>
+      setAttribute("typed_field", typed_field);
 }
 
 /// ## class_init_adds_field
@@ -37,6 +45,7 @@ final class ClassInitAddsField extends PythonClass {
 /// class ClassInitAddsField:
 ///     def __init__(self):
 ///         self.field = 1
+///         self.typed_field: int = 2
 /// ```
 final class class_init_adds_field extends PythonModule {
   class_init_adds_field.from(super.pythonModule) : super.from();

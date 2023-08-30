@@ -52,6 +52,25 @@ final class AST extends PythonClass {
         name: "Assign",
         constructor: Assign.from,
       );
+
+  /// TODO: Document.
+  Iterable<AugAssign> get augAssigns => _getTypedChildren(
+        name: "AugAssign",
+        constructor: AugAssign.from,
+      );
+
+  /// TODO: Document.
+  Iterable<AnnAssign> get annAssigns => _getTypedChildren(
+        name: "AnnAssign",
+        constructor: AnnAssign.from,
+      );
+
+  /// TODO: Document.
+  Iterable<AssignBase> get allAssigns sync* {
+    yield* assigns;
+    yield* augAssigns;
+    yield* annAssigns;
+  }
 }
 
 /// TODO: Document.
@@ -73,7 +92,13 @@ final class FunctionDef extends AST {
 }
 
 /// TODO: Document.
-final class Assign extends AST {
+abstract interface class AssignBase {
+  /// TODO: Document.
+  Iterable<Attribute> get attributes;
+}
+
+/// TODO: Document.
+final class Assign extends AST implements AssignBase {
   /// TODO: Document.
   factory Assign() => PythonFfiDart.instance.importClass(
         "ast",
@@ -95,6 +120,55 @@ final class Assign extends AST {
 
   /// TODO: Document.
   Iterable<Attribute> get attributes => targets
+      .where(_isOfType("Attribute"))
+      .map((AST e) => Attribute.from(e._classDelegate));
+}
+
+/// TODO: Document.
+final class AugAssign extends AST implements AssignBase {
+  /// TODO: Document.
+  factory AugAssign() => PythonFfiDart.instance.importClass(
+        "ast",
+        "AugAssign",
+        AugAssign.from,
+        <Object?>[],
+        <String, Object?>{},
+      );
+
+  /// TODO: Document.
+  AugAssign.from(super.classDelegate) : super.from();
+
+  /// TODO: Document.
+  AST get target => AST.from(getAttribute("target"));
+
+  /// TODO: Document.
+  Iterable<Attribute> get attributes => [target]
+      .where(_isOfType("Attribute"))
+      .map((AST e) => Attribute.from(e._classDelegate));
+}
+
+/// TODO: Document.
+final class AnnAssign extends AST implements AssignBase {
+  /// TODO: Document.
+  factory AnnAssign() => PythonFfiDart.instance.importClass(
+        "ast",
+        "AnnAssign",
+        AnnAssign.from,
+        <Object?>[],
+        <String, Object?>{},
+      );
+
+  /// TODO: Document.
+  AnnAssign.from(super.classDelegate) : super.from();
+
+  /// TODO: Document.
+  AST get target => AST.from(getAttribute("target"));
+
+  /// TODO: Document.
+  AST get annotation => AST.from(getAttribute("annotation"));
+
+  /// TODO: Document.
+  Iterable<Attribute> get attributes => [target]
       .where(_isOfType("Attribute"))
       .map((AST e) => Attribute.from(e._classDelegate));
 }

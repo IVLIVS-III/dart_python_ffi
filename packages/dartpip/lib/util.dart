@@ -35,6 +35,7 @@ Future<_ModuleBundle<_PythonModule<Object>>> _bundleModule({
   required String appRoot,
   required String pythonModulePath,
   required String appType,
+  bool isSubmodule = false,
 }) async {
   final _PythonModule<Object> pythonModule =
       _PythonModule.fromPath(pythonModulePath);
@@ -51,7 +52,9 @@ Future<_ModuleBundle<_PythonModule<Object>>> _bundleModule({
     _ => throw StateError("Invalid app type: $appType"),
   };
 
-  await moduleBundle.export();
+  if (!isSubmodule) {
+    await moduleBundle.export();
+  }
   return moduleBundle;
 }
 
@@ -89,22 +92,26 @@ Future<void> _generateTypeDefs(
   required String appType,
   required String subPath,
 }) async {
-  final PythonModuleDefinition moduleDefinition = moduleBundle.definition;
+  final String parentModulePrefix =
+      subPath.replaceAll(Platform.pathSeparator, ".");
+  final String moduleName = moduleBundle.pythonModule.moduleName;
   final String stdlibPath = (await PythonFfiDart.instance.stdlibDir).path;
   final InspectionCache cache = InspectionCache();
   final String json = await doInspection(
-    moduleDefinition,
+    parentModulePrefix.isNotEmpty ? null : moduleBundle.definition,
+    moduleName: moduleName,
     appType: appType,
     cache: cache,
     stdlibPath: stdlibPath,
+    parentModulePrefix: parentModulePrefix,
   );
-  final String parentPath = "lib/python_modules$subPath/";
-  final File jsonfile = File("$parentPath${moduleDefinition.name}.g.json");
+  final String parentPath = "lib/python_modules/$subPath";
+  final File jsonfile = File("$parentPath$moduleName.g.json");
   if (!jsonfile.existsSync()) {
     jsonfile.createSync(recursive: true);
   }
   await jsonfile.writeAsString(json);
-  final File outfile = File("$parentPath${moduleDefinition.name}.g.dart");
+  final File outfile = File("$parentPath$moduleName.g.dart");
   if (!outfile.existsSync()) {
     outfile.createSync(recursive: true);
   }
@@ -119,33 +126,44 @@ Future<void> _bundleAndGenerate({
   required String appRoot,
   String subPath = "",
 }) async {
-  final _ModuleBundle<_PythonModule<Object>> moduleBundle = await bundleTask;
-  if (moduleBundle.isBuiltin) {
-    return;
-  }
-  await _generateTypeDefs(moduleBundle, appType: appType, subPath: subPath);
-
-  // find hidden submodules
-  final _PythonModule<Object> pythonModule = moduleBundle.pythonModule;
-  final List<Future<void>> nestedFutures = <Future<void>>[];
-  if (pythonModule is _MultiFilePythonModule) {
-    final Directory searchDirectory = Directory(pythonModule.path);
-    for (final FileSystemEntity child in searchDirectory.listSync().whereNot(
-          (FileSystemEntity element) => element.name.startsWith("_"),
-        )) {
-      print("found hidden submodule: '${child.path}'");
-      nestedFutures.add(
-        _bundleAndGenerate(
-          bundleTask: _bundleModule(
-            appRoot: appRoot,
-            pythonModulePath: child.path,
-            appType: appType,
-          ),
-          appType: appType,
-          appRoot: appRoot,
-          subPath: "$subPath/${pythonModule.moduleName}",
-        ),
-      );
+  try {
+    final _ModuleBundle<_PythonModule<Object>> moduleBundle = await bundleTask;
+    if (moduleBundle.isBuiltin) {
+      return;
     }
+    await _generateTypeDefs(moduleBundle, appType: appType, subPath: subPath);
+
+    // find hidden submodules
+    final _PythonModule<Object> pythonModule = moduleBundle.pythonModule;
+    final List<Future<void>> nestedFutures = <Future<void>>[];
+    if (pythonModule is _MultiFilePythonModule) {
+      try {
+        final Directory searchDirectory = Directory(pythonModule.path);
+        for (final FileSystemEntity child
+            in searchDirectory.listSync().whereNot(
+                  (FileSystemEntity element) => element.name.startsWith("_"),
+                )) {
+          print("found hidden submodule: '${child.path}'");
+          nestedFutures.add(
+            _bundleAndGenerate(
+              bundleTask: _bundleModule(
+                appRoot: appRoot,
+                pythonModulePath: child.path,
+                appType: appType,
+                isSubmodule: true,
+              ),
+              appType: appType,
+              appRoot: appRoot,
+              subPath: "$subPath${pythonModule.moduleName}/",
+            ),
+          );
+        }
+      } on FileSystemException {
+        // ignore
+      }
+    }
+    // ignore: avoid_catching_errors
+  } on StateError {
+    return;
   }
 }

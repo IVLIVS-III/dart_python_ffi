@@ -78,16 +78,17 @@ final class ClassDefinition extends PythonClassDefinition
         .map((String line) => line.substring(indent).trimRight())
         .join("\n");
 
-    // TODO: make more robust
-    final Iterable<Assign> assigns = ast
+    final FunctionDef init = ast
         .import()
         .parse(dedentedSourceCode)
         .functionDefs
-        .singleWhere((FunctionDef element) => element.name == "__init__")
-        .assigns;
+        .singleWhere((FunctionDef element) => element.name == "__init__");
+
+    // TODO: make more robust
+    final Iterable<AssignBase> assigns = init.allAssigns;
 
     final Set<String> assignments = <String>{};
-    for (final Assign assign in assigns) {
+    for (final AssignBase assign in assigns) {
       for (final Attribute attribute in assign.attributes.where(
         (Attribute element) =>
             // ignore: avoid_dynamic_calls

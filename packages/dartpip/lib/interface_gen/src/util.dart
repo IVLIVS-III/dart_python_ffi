@@ -108,80 +108,99 @@ String sanitizeName(
 
 /// TODO: Document.
 Future<String> doInspection(
-  PythonModuleDefinition moduleDefinition, {
+  PythonModuleDefinition? moduleDefinition, {
+  required String moduleName,
   required String appType,
   required InspectionCache cache,
   required String stdlibPath,
+  String parentModulePrefix = "",
 }) async {
-  final String moduleName = moduleDefinition.name;
-  print("Generating Dart interface for '$moduleName' via inspect...");
-  await PythonFfiDart.instance.prepareModule(moduleDefinition);
-  final Module interface = PythonFfiDart.instance.importModule(
-    moduleName,
-    (PythonModuleInterface<PythonFfiDelegate<Object?>, Object?> m) =>
-        Module.from(moduleName, sanitizeName(moduleName), m),
-  )..collectChildren(cache, stdlibPath: stdlibPath);
+  try {
+    print(
+      "Generating Dart interface for '$parentModulePrefix$moduleName' via inspect...",
+    );
+    if (parentModulePrefix.isEmpty) {
+      if (moduleDefinition != null) {
+        await PythonFfiDart.instance.prepareModule(moduleDefinition);
+      } else {
+        return "null";
+      }
+    }
+    final Module interface = PythonFfiDart.instance.importModule(
+      "$parentModulePrefix$moduleName",
+      (PythonModuleInterface<PythonFfiDelegate<Object?>, Object?> m) =>
+          Module.from(moduleName, sanitizeName(moduleName), m),
+    )..collectChildren(cache, stdlibPath: stdlibPath);
 
-  Object? toEncodable(Object? o) {
-    final Object? object = o;
-    return switch (object) {
-      null => o.toString(),
-      Module() ||
-      ClassDefinition() ||
-      ClassInstance() ||
-      Function_() ||
-      Object_() =>
-        <String, Object?>{
-          "type": object.runtimeType.toString(),
-          "value": jsonEncode(
-            (object as InspectEntry).value,
-            toEncodable: toEncodable,
-          ),
-          "string": object.toString(),
-        },
-      PythonIterable<Object?, PythonFfiDelegate<Object?>, Object?>() ||
-      PythonIterator<Object?, PythonFfiDelegate<Object?>, Object?>() =>
-        <String, Object?>{
-          "type": object.runtimeType.toString(),
-          "value": jsonEncode(
-            (object as PythonObjectInterface<PythonFfiDelegate<Object?>,
-                    Object?>)
-                .reference,
-            toEncodable: toEncodable,
-          ),
-        },
-      PythonObjectInterface<PythonFfiDelegate<Object?>, Object?>() =>
-        <String, Object?>{
-          "type": object.runtimeType.toString(),
-          "value": jsonEncode(object.reference, toEncodable: toEncodable),
-          "string": object.toString(),
-        },
-      _ => o.toString(),
-    };
+    Object? toEncodable(Object? o) {
+      final Object? object = o;
+      return switch (object) {
+        null => o.toString(),
+        Module() ||
+        ClassDefinition() ||
+        ClassInstance() ||
+        Function_() ||
+        Object_() =>
+          <String, Object?>{
+            "type": object.runtimeType.toString(),
+            "value": jsonEncode(
+              (object as InspectEntry).value,
+              toEncodable: toEncodable,
+            ),
+            "string": object.toString(),
+          },
+        PythonIterable<Object?, PythonFfiDelegate<Object?>, Object?>() ||
+        PythonIterator<Object?, PythonFfiDelegate<Object?>, Object?>() =>
+          <String, Object?>{
+            "type": object.runtimeType.toString(),
+            "value": jsonEncode(
+              (object as PythonObjectInterface<PythonFfiDelegate<Object?>,
+                      Object?>)
+                  .reference,
+              toEncodable: toEncodable,
+            ),
+          },
+        PythonObjectInterface<PythonFfiDelegate<Object?>, Object?>() =>
+          <String, Object?>{
+            "type": object.runtimeType.toString(),
+            "value": jsonEncode(object.reference, toEncodable: toEncodable),
+            "string": object.toString(),
+          },
+        _ => o.toString(),
+      };
+    }
+
+    final String json = jsonEncode(
+      <String, Object?>{
+        "_module": interface.debugDump(cache: cache),
+        "_entries": cache.entries
+            .whereNot(
+              ((int, InspectEntry) e) =>
+                  e.$2.type == InspectEntryType.primitive,
+            )
+            .map(
+              ((int, InspectEntry) e) => <String, Object?>{
+                "id": e.$1,
+                "entry": e.$2.debugDump(cache: cache),
+              },
+            )
+            .toList(),
+      },
+      toEncodable: toEncodable,
+    );
+    return json;
+  } on PythonFfiException catch (e) {
+    print(e);
   }
-
-  final String json = jsonEncode(
-    <String, Object?>{
-      "_module": interface.debugDump(cache: cache),
-      "_entries": cache.entries
-          .whereNot(
-            ((int, InspectEntry) e) => e.$2.type == InspectEntryType.primitive,
-          )
-          .map(
-            ((int, InspectEntry) e) => <String, Object?>{
-              "id": e.$1,
-              "entry": e.$2.debugDump(cache: cache),
-            },
-          )
-          .toList(),
-    },
-    toEncodable: toEncodable,
-  );
-  return json;
+  return "null";
 }
 
 /// TODO: Document.
-String emitInspection(InspectionCache cache, {bool primaryModuleOnly = true}) {
+String emitInspection(
+  InspectionCache cache, {
+  bool primaryModuleOnly = true,
+  String moduleParentPrefix = "",
+}) {
   final Module? primaryModule = cache.modules.firstOrNull;
   if (primaryModule == null) {
     primaryModuleOnly = false;
@@ -222,7 +241,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
       continue;
     }
     topLevelNames.add(moduleName);
-    module.emit(buffer, cache: cache);
+    module.emit(buffer, cache: cache, moduleParentPrefix: moduleParentPrefix);
   }
   final String result = buffer.toString();
   if (!result.contains("Uint8List")) {

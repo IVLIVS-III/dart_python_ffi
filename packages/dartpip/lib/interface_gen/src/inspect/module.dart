@@ -58,7 +58,11 @@ final class Module extends PythonModule
   }
 
   @override
-  void emit(StringBuffer buffer, {required InspectionCache cache}) {
+  void emit(
+    StringBuffer buffer, {
+    required InspectionCache cache,
+    String moduleParentPrefix = "",
+  }) {
     buffer.writeln("/// ## $name");
     emitDoc(buffer);
     emitSource(buffer);
@@ -67,7 +71,7 @@ final class $sanitizedName extends PythonModule {
   $sanitizedName.from(super.pythonModule) : super.from();
   
   static $sanitizedName import() => PythonFfiDart.instance
-      .importModule("$qualifiedName", $sanitizedName.from,);
+      .importModule("$moduleParentPrefix$qualifiedName", $sanitizedName.from,);
 """);
     final Set<String> memberNames = <String>{name};
     _emitFunctionFields(
