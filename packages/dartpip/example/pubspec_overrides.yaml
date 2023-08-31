@@ -1,7 +1,9 @@
-# melos_managed_dependency_overrides: dartpip,python_ffi_lint_dart,python_ffi_cpython_dart,python_ffi_dart,python_ffi_interface
+# melos_managed_dependency_overrides: dartpip,python_ffi_lint_dart,python_ffi_cpython_dart,python_ffi_dart,python_ffi_interface,dartpip_solver
 dependency_overrides:
   dartpip:
     path: ..
+  dartpip_solver:
+    path: ../../dartpip_solver
   python_ffi_cpython_dart:
     path: ../../python_ffi_cpython_dart
   python_ffi_dart:

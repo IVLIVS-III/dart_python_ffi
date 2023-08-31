@@ -88,15 +88,13 @@ class InstallCommand extends Command<void> {
       throw StateError("Options must be provided.");
     }
 
-    await PythonFfiDart.instance.initialize(kPythonModules);
-
     final String appRoot = Directory.current.path;
     final PubspecEditor pubspecEditor = PubspecEditor("$appRoot/pubspec.yaml");
     final List<PythonDependency> existingPythonModules =
         pubspecEditor.dependencies.toList();
     final List<String> existingPythonModulesNames =
         existingPythonModules.map((PythonDependency e) => e.name).toList();
-    final List<PythonDependency> pythonModules = argResults.rest
+    final List<PyPiDependency> pythonModules = argResults.rest
         .whereNot(existingPythonModulesNames.contains)
         .map((String e) => PyPiDependency(name: e, version: "any"))
         .toList();
@@ -107,14 +105,31 @@ class InstallCommand extends Command<void> {
       "Adding python modules to pubspec.yaml: ${pythonModules.join(", ")}",
     );
 
+    final List<PythonDependency> directDependencies = <PythonDependency>[
+      ...existingPythonModules,
+      ...pythonModules,
+    ];
+
+    final Iterable<PythonDependency> nonPyPiDependencies = directDependencies
+        .where((PythonDependency element) => element is! PyPiDependency);
+    final Iterable<PyPiDependency> allPyPiDependencies = await solve(
+      directDependencies.whereType<PyPiDependency>().map(
+            (PyPiDependency e) =>
+                Constraint(name: e.name, constraint: e.version),
+          ),
+    ).then(
+      (Set<Dependency> value) => value.map(
+        (Dependency e) => PyPiDependency(name: e.name, version: e.version),
+      ),
+    );
+
+    // moduleName -> (pythonDependency, version)
     final Map<String, (PythonDependency, String)> projects =
         <String, (PythonDependency, String)>{};
 
     final List<Future<void>> downloadTasks = <Future<void>>[];
-    for (final PythonDependency pythonModule in <PythonDependency>[
-      ...existingPythonModules,
-      ...pythonModules
-    ]) {
+    for (final PythonDependency pythonModule
+        in nonPyPiDependencies.followedBy(allPyPiDependencies)) {
       print("Installing $pythonModule");
       switch (pythonModule) {
         case PyPiDependency(
@@ -125,7 +140,10 @@ class InstallCommand extends Command<void> {
             PyPIService()
                 .fetch(projectName: moduleName, version: specifiedVersion)
                 .then(
-              (String version) {
+              (String? version) {
+                if (version == null) {
+                  return;
+                }
                 pubspecEditor.addDependency(moduleName, version: "^$version");
                 projects[moduleName] = (pythonModule, version);
               },

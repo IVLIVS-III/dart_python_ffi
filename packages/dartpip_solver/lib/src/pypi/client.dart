@@ -1,4 +1,4 @@
-part of dartpip;
+part of dartpip_solver;
 
 /// A client for interacting with the the PyPI-API.
 final class PyPIClient with http.BaseClient implements http.Client {
@@ -8,7 +8,7 @@ final class PyPIClient with http.BaseClient implements http.Client {
 
   // HttpHeaders are all lowercase
   static const Map<String, String> _overwrittenHeaders = <String, String>{
-    HttpHeaders.userAgentHeader: "dartpip/$kDartpipVersion",
+    HttpHeaders.userAgentHeader: "dartpip/$kDartpipSolverVersion",
   };
 
   void _sanitizeHeaders(http.BaseRequest request) => request.headers
@@ -30,8 +30,17 @@ final class PyPIClient with http.BaseClient implements http.Client {
     return projectResponse.info.version;
   }
 
+  /// Returns the requirements of a project.
+  Future<List<String>> requirements(String projectName, String version) async {
+    final ReleaseResponse releaseResponse = await _api.release(
+      projectName,
+      version,
+    );
+    return releaseResponse.info.requiresDist ?? <String>[];
+  }
+
   /// Returns the download URL for a project.
-  Future<String> downloadUrl({
+  Future<String?> downloadUrl({
     required String projectName,
     required String version,
     required PackageType packageType,
@@ -39,9 +48,9 @@ final class PyPIClient with http.BaseClient implements http.Client {
     final ReleaseResponse releaseResponse =
         await _api.release(projectName, version);
     return releaseResponse.urls
-        .firstWhere(
+        .firstWhereOrNull(
           (ReleaseResponseUrl url) => url.packageType == packageType,
         )
-        .url;
+        ?.url;
   }
 }

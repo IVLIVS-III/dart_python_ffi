@@ -29,6 +29,7 @@ Map<String, dynamic> _$ProjectResponseInfoToJson(
 
 ReleaseResponse _$ReleaseResponseFromJson(Map<String, dynamic> json) =>
     ReleaseResponse(
+      info: ReleaseResponseInfo.fromJson(json['info'] as Map<String, dynamic>),
       urls: (json['urls'] as List<dynamic>)
           .map((e) => const _ReleaseResponseUrlsConverter()
               .fromJson(e as Map<String, dynamic>))
@@ -37,9 +38,23 @@ ReleaseResponse _$ReleaseResponseFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$ReleaseResponseToJson(ReleaseResponse instance) =>
     <String, dynamic>{
+      'info': instance.info,
       'urls': instance.urls
           .map(const _ReleaseResponseUrlsConverter().toJson)
           .toList(),
+    };
+
+ReleaseResponseInfo _$ReleaseResponseInfoFromJson(Map<String, dynamic> json) =>
+    ReleaseResponseInfo(
+      requiresDist: (json['requires_dist'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+    );
+
+Map<String, dynamic> _$ReleaseResponseInfoToJson(
+        ReleaseResponseInfo instance) =>
+    <String, dynamic>{
+      'requires_dist': instance.requiresDist,
     };
 
 ReleaseResponseUrl _$ReleaseResponseUrlFromJson(Map<String, dynamic> json) =>

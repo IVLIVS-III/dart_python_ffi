@@ -1,6 +1,6 @@
 import "dart:convert";
 
-import "package:dartpip/dartpip.dart";
+import "package:dartpip_solver/dartpip_solver.dart";
 import "package:http/http.dart" as http;
 import "package:json_annotation/json_annotation.dart";
 
@@ -59,11 +59,17 @@ final class ProjectResponseInfo {
 @JsonSerializable()
 final class ReleaseResponse {
   /// Default constructor for [ReleaseResponse], required by build_runner.
-  ReleaseResponse({required this.urls});
+  ReleaseResponse({
+    required this.info,
+    required this.urls,
+  });
 
   /// Factory constructor for [ReleaseResponse], required by json_serializable.
   factory ReleaseResponse.fromJson(Map<String, dynamic> json) =>
       _$ReleaseResponseFromJson(json);
+
+  /// Field path: {release}.info
+  final ReleaseResponseInfo info;
 
   /// Field path: {release}.urls
   @_ReleaseResponseUrlsConverter()
@@ -71,6 +77,31 @@ final class ReleaseResponse {
 
   /// Required by json_serializable.
   Map<String, dynamic> toJson() => _$ReleaseResponseToJson(this);
+}
+
+/// Models part of the response object returned from the PyPI-API 'release'
+/// endpoint.
+/// Field path: {release}.info
+///
+/// Reference: https://warehouse.pypa.io/api-reference/json.html#release
+@JsonSerializable()
+final class ReleaseResponseInfo {
+  /// Default constructor for [ReleaseResponseInfo], required by build_runner.
+  ReleaseResponseInfo({
+    required this.requiresDist,
+  });
+
+  /// Factory constructor for [ReleaseResponseInfo], required by
+  /// json_serializable.
+  factory ReleaseResponseInfo.fromJson(Map<String, dynamic> json) =>
+      _$ReleaseResponseInfoFromJson(json);
+
+  /// Field path: {release}.info.requires_dist
+  @JsonKey(name: "requires_dist")
+  final List<String>? requiresDist;
+
+  /// Required by json_serializable.
+  Map<String, dynamic> toJson() => _$ReleaseResponseInfoToJson(this);
 }
 
 /// Models part of the response object returned from the PyPI-API 'release'

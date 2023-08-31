@@ -1,4 +1,4 @@
-part of dartpip;
+part of dartpip_solver;
 
 /// A [Future] that is only evaluated once.
 class LazyFuture<T> implements Future<T> {

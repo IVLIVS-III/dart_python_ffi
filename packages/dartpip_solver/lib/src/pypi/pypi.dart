@@ -1,4 +1,4 @@
-part of dartpip;
+part of dartpip_solver;
 
 /// A collection of functions for interacting with PyPI.
 final class PyPIService {
@@ -26,9 +26,12 @@ final class PyPIService {
   final PyPIClient _client = PyPIClient();
   final http.Client _httpClient = http.Client();
 
+  /// The [PyPIClient] used by this service.
+  PyPIClient get client => _client;
+
   /// Downloads a project from PyPI if it is not already downloaded.
   /// Returns the version of the downloaded project.
-  Future<String> fetch({
+  Future<String?> fetch({
     required String projectName,
     String version = "any",
   }) async {
@@ -47,11 +50,14 @@ final class PyPIService {
       return effectiveVersion;
     }
     print("Downloading Python module '$projectName'...");
-    final String url = await _client.downloadUrl(
+    final String? url = await _client.downloadUrl(
       projectName: projectName,
       version: effectiveVersion,
       packageType: PackageType.sdist,
     );
+    if (url == null) {
+      return null;
+    }
     print("Downloading $url...");
     final String filename = url.split("/").last;
     final http.Response response = await _httpClient.get(Uri.parse(url));
