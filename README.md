@@ -6,11 +6,11 @@ A Python-FFI for Dart.
 
 Easily import any pure Python module into your Dart or Flutter project.
 
-| Platform | Status            |
-|----------|-------------------|
-| macOS    | supported (beta)  |
-| Windows  | supported (alpha) |
-| Linux    | supported (alpha) |
+| Platform | Status                                                |
+|----------|-------------------------------------------------------|
+| macOS    | supported (beta, i.e. works mostly)                   |
+| Windows  | supported (alpha, i.e. sometimes works on my machine) |
+| Linux    | supported (alpha, i.e. sometimes works on my machine) |
 
 ## Flutter support
 
@@ -83,7 +83,7 @@ you can always write a native Dart implementation of the Python module.
 There are three packages intended to be consumed by Dart or Flutter project developers:
 
 - [`dartpip`](./packages/dartpip/README.md): A CLI to add Python modules to your Dart / Flutter
-  project, like pip for Python.
+  project, like `pip` for Python.
     - Can be installed globally on your system or as dev-dependency in your Dart / Flutter project.
 - [`python_ffi`](./packages/python_ffi/README.md): A Python-FFI for Dart, intended for use in a
   Flutter project.
@@ -94,20 +94,28 @@ There are three packages intended to be consumed by Dart or Flutter project deve
 
 ### Adding Python modules
 
-You can use `dartpip` to add any pure Python module to your Dart or Flutter project. It is like pip
-for Python projects or like pub for Dart / Flutter packages.
+You can use `dartpip` to add any pure Python module to your Dart or Flutter project. It is
+like `pip` for Python projects or like `pub` for Dart / Flutter packages.
 
 See [`dartpip`/Readme.md](./packages/dartpip/README.md#usage) for detailed instructions on how to
-install and use this package. Basic usage will be as follows:
+install and use this package. Basic usage is as follows:
 
 ```shell
 $ dart pub global activate dartpip
-$ dartpip install <package>
+$ dartpip install [<package> ...]
 ```
 
-*Note: the `install` command is not available yet, use `bundle` instead.*
+This will install all packages listed as parameters of the command in addition to all previously
+added packages that are listed in your `pubspec.yaml` under the `python_ffi.modules` key.
 
-### Creating a Module-definition in Dart
+All necessary Module-definitions and Class-definitions will be generated automatically and added to
+your project. You can then import the Python modules in your Dart code and use them as if they were
+written in Dart.
+
+### Creating a Module-definition in Dart manually
+
+<details>
+<summary>Click to expand</summary>
 
 A Module-definition in Dart is necessary to consume your imported Python module. The
 Module-definition provides a type-safe interface of the imported Python module mapped to Dart types.
@@ -186,7 +194,12 @@ final class LiblaxModule extends PythonModule {
 }
 ```
 
-### Creating a Class-definition in Dart
+</details>
+
+### Creating a Class-definition in Dart manually
+
+<details>
+<summary>Click to expand</summary>
 
 A Class-definition in Dart is necessary to consume your imported Python class. The Class-definition
 provides a type-safe interface of the imported Python class mapped to Dart types, creating a new
@@ -253,6 +266,8 @@ final class GeocodingModule extends PythonModule {
 }
 ```
 
+</details>
+
 ### Initializing the Python runtime
 
 To use the Python-FFI, you must initialize the Python runtime first. This is done by calling
@@ -274,11 +289,35 @@ void main() async {
 Make sure to call `WidgetsFlutterBinding.ensureInitialized()` before initializing the Python
 runtime.
 
+You can optionally provide a `package` name if you are building a Flutter package that is intended
+to be consumed by other Flutter projects. Make sure that the string you provide is identical to the
+`name` field in your `pubspec.yaml` file:
+
+```yaml
+name: my_package
+
+# ...
+```
+
+```dart
+import "package:flutter/material.dart";
+import "package:python_ffi/python_ffi.dart";
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await PythonFfi.instance.initialize(
+    package: "my_package",
+  );
+  // ...
+}
+```
+
 #### Using the Dart package (`python_ffi_dart`)
 
 ```dart
 import "package:python_ffi_dart/python_ffi_dart.dart";
-import "package:<package_name>/python_modules/src/python_modules.g.dart";
+
+import "python_modules/src/python_modules.g.dart";
 
 void main() async {
   await PythonFfiDart.instance.initialize(kPythonModules);
@@ -295,7 +334,8 @@ location:
 
 ```dart
 import "package:python_ffi_dart/python_ffi_dart.dart";
-import "package:<package_name>/python_modules/src/python_modules.g.dart";
+
+import "python_modules/src/python_modules.g.dart";
 
 void main() async {
   await PythonFfiDart.instance.initialize(
@@ -312,7 +352,7 @@ After initializing the Python runtime, you can import your Python module and use
 code:
 
 ```dart
-import "package:<package_name>/python_modules/json_parser.dart";
+import "python_modules/json_parser.dart";
 
 final JsonParserModule jsonParser = JsonParserModule.import();
 final Object? parsedJson = jsonParser.parse('{"Hello": "World"}');
@@ -388,16 +428,17 @@ case.*
 
 ## Package status
 
-| package name                                                                            | version                                                                                                                                  | status | description                                                                              |
-|-----------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|--------|------------------------------------------------------------------------------------------|
-| [dartpip](https://pub.dev/packages/dartpip)                                             | [![pub package](https://img.shields.io/pub/v/dartpip.svg)](https://pub.dev/packages/dartpip)                                             | 🟩     | Add Python modules (packages) to your Dart or Flutter project.                           |
-| [python_ffi](https://pub.dev/packages/python_ffi)                                       | [![pub package](https://img.shields.io/pub/v/python_ffi.svg)](https://pub.dev/packages/python_ffi)                                       | 🟩🟦   | A Python-FFI for Dart, intended for use in a Flutter project.                            |
-| [python_ffi_dart](https://pub.dev/packages/python_ffi_dart)                             | [![pub package](https://img.shields.io/pub/v/python_ffi_dart.svg)](https://pub.dev/packages/python_ffi_dart)                             | 🟩     | A Python-FFI for Dart, intended for Dart-only applications outside of a Flutter project. |
-| [python_ffi_cpython](https://pub.dev/packages/python_ffi_cpython)                       | [![pub package](https://img.shields.io/pub/v/python_ffi_cpython.svg)](https://pub.dev/packages/python_ffi_cpython)                       | 🟥🟦   | The macOS, Windows and Linux implementation of `python_ffi`, a Python-FFI for Dart.      |
-| [python_ffi_cpython_dart](https://pub.dev/packages/python_ffi_cpython_dart)             | [![pub package](https://img.shields.io/pub/v/python_ffi_cpython_dart.svg)](https://pub.dev/packages/python_ffi_cpython_dart)             | 🟥     | The macOS, Windows and Linux implementation of `python_ffi_dart`, a Python-FFI for Dart. |
-| [python_ffi_interface](https://pub.dev/packages/python_ffi_interface)                   | [![pub package](https://img.shields.io/pub/v/python_ffi_interface.svg)](https://pub.dev/packages/python_ffi_interface)                   | 🟥     | A base interface for `python_ffi_dart`, a Python-FFI for Dart.                           |
-| [python_ffi_lint](https://pub.dev/packages/python_ffi_lint)                             | [![pub package](https://img.shields.io/pub/v/python_ffi_lint.svg)](https://pub.dev/packages/python_ffi_lint)                             | 🟥🟦   | Analysis options used across the Python-FFI for Dart project.                            |
-| [python_ffi_lint_dart](https://pub.dev/packages/python_ffi_lint_dart)                   | [![pub package](https://img.shields.io/pub/v/python_ffi_lint_dart.svg)](https://pub.dev/packages/python_ffi_lint_dart)                   | 🟥     | Analysis options used across the Python-FFI for Dart project.                            |
+| package name                                                                | version                                                                                                                      | status | description                                                                              |
+|-----------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------|--------|------------------------------------------------------------------------------------------|
+| [dartpip](https://pub.dev/packages/dartpip)                                 | [![pub package](https://img.shields.io/pub/v/dartpip.svg)](https://pub.dev/packages/dartpip)                                 | 🟩     | Add Python modules (packages) to your Dart or Flutter project.                           |
+| [dartpip_solver](https://pub.dev/packages/dartpip_solver)                   | [![pub package](https://img.shields.io/pub/v/dartpip_solver.svg)](https://pub.dev/packages/dartpip_solver)                   | 🟥     | Version solver used by the `dartpip` command to resolve python modules.                  |
+| [python_ffi](https://pub.dev/packages/python_ffi)                           | [![pub package](https://img.shields.io/pub/v/python_ffi.svg)](https://pub.dev/packages/python_ffi)                           | 🟩🟦   | A Python-FFI for Dart, intended for use in a Flutter project.                            |
+| [python_ffi_dart](https://pub.dev/packages/python_ffi_dart)                 | [![pub package](https://img.shields.io/pub/v/python_ffi_dart.svg)](https://pub.dev/packages/python_ffi_dart)                 | 🟩     | A Python-FFI for Dart, intended for Dart-only applications outside of a Flutter project. |
+| [python_ffi_cpython](https://pub.dev/packages/python_ffi_cpython)           | [![pub package](https://img.shields.io/pub/v/python_ffi_cpython.svg)](https://pub.dev/packages/python_ffi_cpython)           | 🟥🟦   | The macOS, Windows and Linux implementation of `python_ffi`, a Python-FFI for Dart.      |
+| [python_ffi_cpython_dart](https://pub.dev/packages/python_ffi_cpython_dart) | [![pub package](https://img.shields.io/pub/v/python_ffi_cpython_dart.svg)](https://pub.dev/packages/python_ffi_cpython_dart) | 🟥     | The macOS, Windows and Linux implementation of `python_ffi_dart`, a Python-FFI for Dart. |
+| [python_ffi_interface](https://pub.dev/packages/python_ffi_interface)       | [![pub package](https://img.shields.io/pub/v/python_ffi_interface.svg)](https://pub.dev/packages/python_ffi_interface)       | 🟥     | A base interface for `python_ffi_dart`, a Python-FFI for Dart.                           |
+| [python_ffi_lint](https://pub.dev/packages/python_ffi_lint)                 | [![pub package](https://img.shields.io/pub/v/python_ffi_lint.svg)](https://pub.dev/packages/python_ffi_lint)                 | 🟥🟦   | Analysis options used across the Python-FFI for Dart project.                            |
+| [python_ffi_lint_dart](https://pub.dev/packages/python_ffi_lint_dart)       | [![pub package](https://img.shields.io/pub/v/python_ffi_lint_dart.svg)](https://pub.dev/packages/python_ffi_lint_dart)       | 🟥     | Analysis options used across the Python-FFI for Dart project.                            |
 
 | status indicator | description                                                    |
 |------------------|----------------------------------------------------------------|
@@ -411,7 +452,8 @@ case.*
 
 See [dartpip](/packages/dartpip/README.md) for more details.
 
-The following is only relevant when contributing:
+<details>
+<summary>The following is only relevant when contributing:</summary>
 
 #### Compile & run AOT
 
@@ -425,6 +467,8 @@ bin/dartpip --help
 ```shell
 dart run packages/dartpip/bin/dartpip.dart --help
 ```
+
+</details>
 
 ### `python_ffi_dart_example`
 
@@ -463,9 +507,9 @@ used for developing, testing and showcasing the Python FFI.
 │  │   python_ffi_cpython          │   │  │
 │  │   │          │                │   │  │
 │  │   │     python_ffi_cpython_dart   │  │
-│  └───┴────────────┐              │   │  │
-│                   python_ffi_interface  │
-└─────────────────────────────────────────┘       dartpip
+│  └───┴────────────┐              │   │  │       dartpip
+│                   python_ffi_interface  │          │
+└─────────────────────────────────────────┘    dartpip_solver
                                        │             │
                                        python_ffi_lint
                                               │
@@ -476,14 +520,13 @@ used for developing, testing and showcasing the Python FFI.
 
 - Python `print` is not supported when used in a Flutter environment.
 - The Python stdlib must be installed on the target system and available in the `PATH`.
+- Transitive dependencies are partially supported. Their veersion constraints are not taken into
+  account when resolving them. See  [dartpip_solver](/packages/dartpip_solver/README.md) for more
+  details.
 
 ## Roadmap
 
-Dartpip does not include the dependencies of the imported Python modules yet. This should be
-resolved.
-
-Dart Module / Class-definitions for imported Python modules should be either auto-generated or
-infered on runtime via reflection / meta-programming.
+- Improve the [`dartpip_solver`](/packages/dartpip_solver/README.md) algorithm.
 
 ## About this project
 
