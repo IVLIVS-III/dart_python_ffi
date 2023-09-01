@@ -1,7 +1,7 @@
 part of dartpip;
 
 const Map<String, dynamic> _kPythonFfiModuleInfo = <String, dynamic>{
-  "root": "python_ffi.py"
+  "root": "python_ffi.py",
 };
 
 const String _kPythonFfiBase64 =

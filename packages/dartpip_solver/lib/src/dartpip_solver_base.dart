@@ -6,26 +6,45 @@ import "package:dartpip_solver/python_modules/packaging/requirements.g.dart";
 import "package:dartpip_solver/python_modules/src/python_modules.g.dart";
 import "package:python_ffi_dart/python_ffi_dart.dart";
 
+/// Abstraction of a Python dependency resolved to a specific version.
 class Dependency {
+  /// Creates a new dependency.
   Dependency({
     required this.name,
     required this.version,
   });
 
+  /// The name of the dependency.
   final String name;
+
+  /// The version of the dependency.
   final String version;
 }
 
+/// Abstraction of a constraint on a Python dependency.
+/// This will be turned into a [Dependency] by [solve].
 class Constraint {
+  /// Creates a new constraint.
   Constraint({
     required this.name,
     required this.constraint,
   });
 
+  /// The name of the dependency.
   final String name;
+
+  /// The constraint on the dependency.
   final String constraint;
 }
 
+/// Solves a set of constraints on Python dependencies.
+/// Returns a set of dependencies that represent the resolved dependencies.
+///
+/// This function is is overly naive and does not take into account any
+/// constraints. It simply iterates over all dependencies and their dependencies
+/// recursively and collects all modules. For each module, it then downloads the
+/// latest version from PyPI, regardless of whether it is compatible with the
+/// other modules or not.
 Future<Set<Dependency>> solve(Iterable<Constraint> constraints) async {
   await PythonFfiDart.instance.initialize(kPythonModules);
 

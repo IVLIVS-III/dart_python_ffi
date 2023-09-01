@@ -39,7 +39,7 @@ sealed class _ModuleBundle<T extends Object> {
   _SourceFile _sourceFile(String fileName) => _SourceFile(
         <String>[
           _pythonModuleDestinationDirectory.path,
-          _transformSourceFileName(fileName)
+          _transformSourceFileName(fileName),
         ].join(Platform.pathSeparator),
       );
 
@@ -85,7 +85,7 @@ sealed class _ModuleBundle<T extends Object> {
         _transformSourceData(pythonModule.data),
       );
       await _postExport(<List<String>>[
-        <String>["${pythonModule.moduleName}.py"]
+        <String>["${pythonModule.moduleName}.py"],
       ]);
     } else if (pythonModule is _SingleFilePythonModule) {
       await _exportSingleFile(
@@ -93,7 +93,7 @@ sealed class _ModuleBundle<T extends Object> {
         _transformSourceData(pythonModule.data),
       );
       await _postExport(<List<String>>[
-        <String>[pythonModule.fileName]
+        <String>[pythonModule.fileName],
       ]);
     } else if (pythonModule is _MultiFilePythonModule) {
       await _exportMultiFile(

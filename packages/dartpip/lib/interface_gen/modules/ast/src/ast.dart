@@ -119,6 +119,7 @@ final class Assign extends AST implements AssignBase {
           .map(AST.from);
 
   /// TODO: Document.
+  @override
   Iterable<Attribute> get attributes => targets
       .where(_isOfType("Attribute"))
       .map((AST e) => Attribute.from(e._classDelegate));
@@ -142,7 +143,8 @@ final class AugAssign extends AST implements AssignBase {
   AST get target => AST.from(getAttribute("target"));
 
   /// TODO: Document.
-  Iterable<Attribute> get attributes => [target]
+  @override
+  Iterable<Attribute> get attributes => <AST>[target]
       .where(_isOfType("Attribute"))
       .map((AST e) => Attribute.from(e._classDelegate));
 }
@@ -168,7 +170,8 @@ final class AnnAssign extends AST implements AssignBase {
   AST get annotation => AST.from(getAttribute("annotation"));
 
   /// TODO: Document.
-  Iterable<Attribute> get attributes => [target]
+  @override
+  Iterable<Attribute> get attributes => <AST>[target]
       .where(_isOfType("Attribute"))
       .map((AST e) => Attribute.from(e._classDelegate));
 }

@@ -18,7 +18,7 @@ final class _ConsoleModuleBundle<T extends Object> extends _ModuleBundle<T> {
   _SourceFile get _pythonModulesDartFile => _SourceFile(
         <String>[
           _pythonModuleDestinationDirectory.path,
-          _pythonModulesDartFileName
+          _pythonModulesDartFileName,
         ].join(Platform.pathSeparator),
       );
 
