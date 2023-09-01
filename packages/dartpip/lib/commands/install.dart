@@ -105,16 +105,9 @@ class InstallCommand extends Command<void> {
     yield* pythonModules;
   }
 
-  Future<Iterable<PythonDependency>> _collectAllDependencies({
-    required ArgResults argResults,
-    required PubspecEditor pubspecEditor,
-  }) async {
-    final Iterable<PythonDependency> directDependencies =
-        _collectDirectDependencies(
-      argResults: argResults,
-      pubspecEditor: pubspecEditor,
-    );
-
+  Future<Iterable<PythonDependency>> _collectAllDependencies(
+    Iterable<PythonDependency> directDependencies,
+  ) async {
     final Iterable<PythonDependency> nonPyPiDependencies = directDependencies
         .where((PythonDependency element) => element is! PyPiDependency);
     final Iterable<PyPiDependency> allPyPiDependencies = await solve(
@@ -135,11 +128,14 @@ class InstallCommand extends Command<void> {
     required ArgResults argResults,
     required PubspecEditor pubspecEditor,
   }) async {
-    final Iterable<PythonDependency> allDependencies =
-        await _collectAllDependencies(
+    final Iterable<PythonDependency> directDependencies =
+        _collectDirectDependencies(
       argResults: argResults,
       pubspecEditor: pubspecEditor,
     );
+
+    final Iterable<PythonDependency> allDependencies =
+        await _collectAllDependencies(directDependencies);
 
     final _ProjectMap projects = <String, (PythonDependency, String)>{};
 
@@ -159,7 +155,11 @@ class InstallCommand extends Command<void> {
                 if (version == null) {
                   return;
                 }
-                pubspecEditor.addDependency(moduleName, version: "^$version");
+                if (directDependencies.any(
+                  (PythonDependency element) => element.name == moduleName,
+                )) {
+                  pubspecEditor.addDependency(moduleName, version: "^$version");
+                }
                 projects[moduleName] = (pythonModule, version);
               },
             ),
