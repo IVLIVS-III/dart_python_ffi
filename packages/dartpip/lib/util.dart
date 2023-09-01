@@ -31,26 +31,26 @@ int _detectIndentation(String pubspecString) {
   return relevantSubstring.length - lastNewlineIndex - 1;
 }
 
-Future<_ModuleBundle<_PythonModule<Object>>> _bundleModule({
+Future<_ModuleBundle<Object>?> _bundleModule({
   required String appRoot,
   required String pythonModulePath,
   required String appType,
   bool isSubmodule = false,
 }) async {
-  final _PythonModule<Object> pythonModule =
+  final _PythonModule<Object>? pythonModule =
       _PythonModule.fromPath(pythonModulePath);
 
-  final _ModuleBundle<_PythonModule<Object>> moduleBundle = switch (appType) {
-    _kAppTypeFlutter => _FlutterModuleBundle<Object>(
-        pythonModule: pythonModule,
-        appRoot: appRoot,
-      ),
-    _kAppTypeConsole => _ConsoleModuleBundle<Object>(
-        pythonModule: pythonModule,
-        appRoot: appRoot,
-      ),
-    _ => throw StateError("Invalid app type: $appType"),
-  };
+  if (pythonModule == null) {
+    // TODO: move to logger
+    print("⚠️   Warning: could not find Python module at '$pythonModulePath'.");
+    return null;
+  }
+
+  final _ModuleBundle<Object> moduleBundle = _ModuleBundle<Object>.fromAppType(
+    appType,
+    pythonModule: pythonModule,
+    appRoot: appRoot,
+  );
 
   if (!isSubmodule) {
     await moduleBundle.export();
@@ -58,37 +58,32 @@ Future<_ModuleBundle<_PythonModule<Object>>> _bundleModule({
   return moduleBundle;
 }
 
-Future<_ModuleBundle<_PythonModule<Object>>> _bundleCacheModule({
+Future<Iterable<_ModuleBundle<Object>>> _bundleCacheModule({
   required String appRoot,
   required String projectName,
   required String projectVersion,
   required String appType,
 }) async {
-  final _PythonModule<Object> pythonModule = await _PythonModule.fromCache(
+  final Iterable<_PythonModule<Object>> pythonModules =
+      await _PythonModule.fromCache(
     projectName: projectName,
     version: projectVersion,
   );
-  late final _ModuleBundle<_PythonModule<Object>> moduleBundle;
 
-  switch (appType) {
-    case _kAppTypeFlutter:
-      moduleBundle = _FlutterModuleBundle<Object>(
-        pythonModule: pythonModule,
-        appRoot: appRoot,
-      );
-    case _kAppTypeConsole:
-      moduleBundle = _ConsoleModuleBundle<Object>(
-        pythonModule: pythonModule,
-        appRoot: appRoot,
-      );
-  }
+  final Iterable<_ModuleBundle<Object>> moduleBundles = pythonModules.map(
+    (_PythonModule<Object> e) => _ModuleBundle<Object>.fromAppType(
+      appType,
+      pythonModule: e,
+      appRoot: appRoot,
+    ),
+  );
 
-  await moduleBundle.export();
-  return moduleBundle;
+  await Future.wait(moduleBundles.map((_ModuleBundle<Object> e) => e.export()));
+  return moduleBundles;
 }
 
 Future<void> _generateTypeDefs(
-  _ModuleBundle<_PythonModule<Object>> moduleBundle, {
+  _ModuleBundle<Object> moduleBundle, {
   required String appType,
   required String subPath,
 }) async {
@@ -105,6 +100,9 @@ Future<void> _generateTypeDefs(
     stdlibPath: stdlibPath,
     parentModulePrefix: parentModulePrefix,
   );
+  if (json == "null") {
+    // return;
+  }
   final String parentPath = "lib/python_modules/$subPath";
   final File jsonfile = File("$parentPath$moduleName.g.json");
   if (!jsonfile.existsSync()) {
@@ -117,17 +115,18 @@ Future<void> _generateTypeDefs(
   }
   await outfile.writeAsString(emitInspection(cache));
   Process.runSync("dart", <String>["format", outfile.absolute.path]);
-  return;
 }
 
 Future<void> _bundleAndGenerate({
-  required Future<_ModuleBundle<_PythonModule<Object>>> bundleTask,
+  required _ModuleBundle<Object>? moduleBundle,
   required String appType,
   required String appRoot,
   String subPath = "",
 }) async {
   try {
-    final _ModuleBundle<_PythonModule<Object>> moduleBundle = await bundleTask;
+    if (moduleBundle == null) {
+      return;
+    }
     if (moduleBundle.isBuiltin) {
       return;
     }
@@ -146,7 +145,7 @@ Future<void> _bundleAndGenerate({
           print("found hidden submodule: '${child.path}'");
           nestedFutures.add(
             _bundleAndGenerate(
-              bundleTask: _bundleModule(
+              moduleBundle: await _bundleModule(
                 appRoot: appRoot,
                 pythonModulePath: child.path,
                 appType: appType,

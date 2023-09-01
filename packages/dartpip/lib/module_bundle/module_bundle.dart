@@ -1,12 +1,29 @@
 part of dartpip;
 
-sealed class _ModuleBundle<T extends _PythonModule<Object>> {
+sealed class _ModuleBundle<T extends Object> {
   _ModuleBundle({
     required this.pythonModule,
     required this.appRoot,
   });
 
-  final T pythonModule;
+  factory _ModuleBundle.fromAppType(
+    String appType, {
+    required _PythonModule<T> pythonModule,
+    required String appRoot,
+  }) =>
+      switch (appType) {
+        _kAppTypeFlutter => _FlutterModuleBundle<T>._(
+            pythonModule: pythonModule,
+            appRoot: appRoot,
+          ),
+        _kAppTypeConsole => _ConsoleModuleBundle<T>._(
+            pythonModule: pythonModule,
+            appRoot: appRoot,
+          ),
+        _ => throw StateError("Invalid app type: $appType"),
+      };
+
+  final _PythonModule<T> pythonModule;
   final String appRoot;
 
   bool get isBuiltin => pythonModule is _BuiltinPythonModule;
@@ -54,7 +71,7 @@ sealed class _ModuleBundle<T extends _PythonModule<Object>> {
         );
 
   Future<void> export() async {
-    final T pythonModule = this.pythonModule;
+    final _PythonModule<Object> pythonModule = this.pythonModule;
     if (!(await pythonModule.load())) {
       print("Failed to load Python module ${pythonModule.moduleName}.");
       throw StateError(

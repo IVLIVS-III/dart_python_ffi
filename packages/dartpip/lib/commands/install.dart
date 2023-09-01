@@ -1,5 +1,8 @@
 part of dartpip;
 
+// moduleName -> (pythonDependency, version)
+typedef _ProjectMap = Map<String, (PythonDependency, String)>;
+
 /// Implements the `install` command.
 class InstallCommand extends Command<void> {
   /// Creates a new instance of the [InstallCommand] class.
@@ -81,34 +84,36 @@ class InstallCommand extends Command<void> {
     pubspecYamlFile.writeAsStringSync(pubspecString);
   }
 
-  @override
-  Future<void>? run() async {
-    final ArgResults? argResults = this.argResults;
-    if (argResults == null) {
-      throw StateError("Options must be provided.");
-    }
-
-    final String appRoot = Directory.current.path;
-    final PubspecEditor pubspecEditor = PubspecEditor("$appRoot/pubspec.yaml");
+  Iterable<PythonDependency> _collectDirectDependencies({
+    required ArgResults argResults,
+    required PubspecEditor pubspecEditor,
+  }) sync* {
     final List<PythonDependency> existingPythonModules =
         pubspecEditor.dependencies.toList();
-    final List<String> existingPythonModulesNames =
-        existingPythonModules.map((PythonDependency e) => e.name).toList();
-    final List<PyPiDependency> pythonModules = argResults.rest
+    final Iterable<String> existingPythonModulesNames =
+        existingPythonModules.map((PythonDependency e) => e.name);
+    final Iterable<PyPiDependency> pythonModules = argResults.rest
         .whereNot(existingPythonModulesNames.contains)
-        .map((String e) => PyPiDependency(name: e, version: "any"))
-        .toList();
+        .map((String e) => PyPiDependency(name: e, version: "any"));
     print(
       "Found python modules in pubspec.yaml: ${existingPythonModules.join(", ")}",
     );
     print(
       "Adding python modules to pubspec.yaml: ${pythonModules.join(", ")}",
     );
+    yield* existingPythonModules;
+    yield* pythonModules;
+  }
 
-    final List<PythonDependency> directDependencies = <PythonDependency>[
-      ...existingPythonModules,
-      ...pythonModules,
-    ];
+  Future<Iterable<PythonDependency>> _collectAllDependencies({
+    required ArgResults argResults,
+    required PubspecEditor pubspecEditor,
+  }) async {
+    final Iterable<PythonDependency> directDependencies =
+        _collectDirectDependencies(
+      argResults: argResults,
+      pubspecEditor: pubspecEditor,
+    );
 
     final Iterable<PythonDependency> nonPyPiDependencies = directDependencies
         .where((PythonDependency element) => element is! PyPiDependency);
@@ -123,13 +128,23 @@ class InstallCommand extends Command<void> {
       ),
     );
 
-    // moduleName -> (pythonDependency, version)
-    final Map<String, (PythonDependency, String)> projects =
-        <String, (PythonDependency, String)>{};
+    return nonPyPiDependencies.followedBy(allPyPiDependencies);
+  }
+
+  Future<_ProjectMap> _downloadAllDependencies({
+    required ArgResults argResults,
+    required PubspecEditor pubspecEditor,
+  }) async {
+    final Iterable<PythonDependency> allDependencies =
+        await _collectAllDependencies(
+      argResults: argResults,
+      pubspecEditor: pubspecEditor,
+    );
+
+    final _ProjectMap projects = <String, (PythonDependency, String)>{};
 
     final List<Future<void>> downloadTasks = <Future<void>>[];
-    for (final PythonDependency pythonModule
-        in nonPyPiDependencies.followedBy(allPyPiDependencies)) {
+    for (final PythonDependency pythonModule in allDependencies) {
       print("Installing $pythonModule");
       switch (pythonModule) {
         case PyPiDependency(
@@ -159,6 +174,24 @@ class InstallCommand extends Command<void> {
       }
     }
     await Future.wait(downloadTasks);
+    return projects;
+  }
+
+  @override
+  Future<void>? run() async {
+    final ArgResults? argResults = this.argResults;
+    if (argResults == null) {
+      throw StateError("Options must be provided.");
+    }
+
+    final String appRoot = Directory.current.path;
+    final PubspecEditor pubspecEditor = PubspecEditor("$appRoot/pubspec.yaml");
+
+    final _ProjectMap projects = await _downloadAllDependencies(
+      argResults: argResults,
+      pubspecEditor: pubspecEditor,
+    );
+
     pubspecEditor
       ..save()
       ..close();
@@ -188,7 +221,7 @@ class InstallCommand extends Command<void> {
     );
     if (pythonModulesDir.existsSync()) {
       await pythonModulesDir
-          .list()
+          .list(recursive: true)
           .where(
             (FileSystemEntity e) =>
                 e is File &&
@@ -200,19 +233,20 @@ class InstallCommand extends Command<void> {
     // resets the pubspec.yaml generated assets
     _removeGeneratedAssetDeclarations(appType, appRoot);
 
-    final List<Future<void>> futures = <Future<void>>[
+    final List<Future<Iterable<_ModuleBundle<Object>>>> futures =
+        <Future<Iterable<_ModuleBundle<Object>>>>[
       _bundleModule(
         appRoot: appRoot,
         pythonModulePath: _kBuiltinPythonFfiModuleName,
         appType: appType,
-      ),
+      ).toIterable(),
     ];
     for (final MapEntry<String, (PythonDependency, String)> project
         in projects.entries) {
       final String pythonModuleName = project.key;
       final (PythonDependency pythonDependency, String version) = project.value;
       print("Bundling Python module '$pythonModuleName'...");
-      final Future<_ModuleBundle<_PythonModule<Object>>> bundleTask =
+      final Future<Iterable<_ModuleBundle<Object>>> bundleTask =
           switch (pythonDependency) {
         PyPiDependency() => _bundleCacheModule(
             projectName: pythonModuleName,
@@ -226,17 +260,34 @@ class InstallCommand extends Command<void> {
             appRoot: appRoot,
             pythonModulePath: path,
             appType: appType,
-          ),
+          ).toIterable(),
       };
       futures.add(
-        _bundleAndGenerate(
-          bundleTask: bundleTask,
-          appType: appType,
-          appRoot: appRoot,
-        ),
+        bundleTask.then((Iterable<_ModuleBundle<Object>> value) async {
+          await Future.wait(
+            value.map(
+              (_ModuleBundle<Object> e) async {
+                await PythonFfiDart.instance.prepareModule(e.definition);
+                print("prepared '${e.definition.name}' to be imported");
+              },
+            ),
+          );
+          return value;
+        }),
       );
     }
 
-    await Future.wait(futures);
+    final Iterable<_ModuleBundle<Object>?> bundleTaskResults =
+        (await Future.wait(futures)).flattened;
+
+    await Future.wait(
+      bundleTaskResults.map(
+        (_ModuleBundle<Object>? e) => _bundleAndGenerate(
+          moduleBundle: e,
+          appType: appType,
+          appRoot: appRoot,
+        ),
+      ),
+    );
   }
 }

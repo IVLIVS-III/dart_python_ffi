@@ -23,7 +23,7 @@ final class ProjectResponse {
   /// Field path: {project}.info
   ///
   /// See also: [ProjectResponseInfo]
-  final ProjectResponseInfo info;
+  final ProjectResponseInfo? info;
 
   /// Required by json_serializable.
   Map<String, dynamic> toJson() => _$ProjectResponseToJson(this);

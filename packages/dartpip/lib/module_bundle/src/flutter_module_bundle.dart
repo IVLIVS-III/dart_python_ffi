@@ -104,9 +104,8 @@ final class _AssetsInsertionConfig {
   }
 }
 
-final class _FlutterModuleBundle<T extends Object>
-    extends _ModuleBundle<_PythonModule<T>> {
-  _FlutterModuleBundle({
+final class _FlutterModuleBundle<T extends Object> extends _ModuleBundle<T> {
+  _FlutterModuleBundle._({
     required super.pythonModule,
     required super.appRoot,
   });

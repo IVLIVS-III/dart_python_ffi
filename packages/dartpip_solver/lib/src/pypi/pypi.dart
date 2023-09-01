@@ -38,11 +38,14 @@ final class PyPIService {
     final Directory outputDir = await _cacheDir;
     final RegExp versionRegex = RegExp(r"^\^?(\d+\.\d+\.\d+)$");
     final Match? versionMatch = versionRegex.allMatches(version).singleOrNull;
-    final String effectiveVersion = switch (version) {
+    final String? effectiveVersion = switch (version) {
       "any" => await _client.latestVersion(projectName),
       String() when versionMatch != null => versionMatch.group(1)!,
       _ => await _client.latestVersion(projectName),
     };
+    if (effectiveVersion == null) {
+      return null;
+    }
     final Directory projectDir =
         Directory("${outputDir.path}/$projectName-$effectiveVersion");
     if (projectDir.existsSync()) {

@@ -205,18 +205,22 @@ String emitInspection(
   if (primaryModule == null) {
     primaryModuleOnly = false;
   }
+  const String analysisIgnoreLine =
+      "// ignore_for_file: camel_case_types, non_constant_identifier_names, prefer_void_to_null";
   final StringBuffer buffer = StringBuffer("""
-// ignore_for_file: camel_case_types, non_constant_identifier_names, prefer_void_to_null
+$analysisIgnoreLine
 
 """);
   if (primaryModule != null) {
     buffer.writeln("library ${primaryModule.sanitizedName};");
   }
   const String typedDataImportLine = 'import "dart:typed_data";';
+  const String pythonFfiImportLine =
+      'import "package:python_ffi_dart/python_ffi_dart.dart";';
   buffer.writeln("""
 $typedDataImportLine
 
-import "package:python_ffi_dart/python_ffi_dart.dart";
+$pythonFfiImportLine
 """);
   final Set<String> topLevelNames = <String>{};
   for (final ClassInstance typedef in cache.typedefs) {

@@ -3,7 +3,7 @@ part of dartpip;
 sealed class _PythonModule<T extends Object> {
   _PythonModule._(this.path);
 
-  static _PythonModule<Object> fromPath(String path) {
+  static _PythonModule<Object>? fromPath(String path) {
     switch (path) {
       case _kBuiltinPythonFfiModuleName:
         return _BuiltinPythonModule(path);
@@ -19,10 +19,18 @@ sealed class _PythonModule<T extends Object> {
       return _SingleFilePythonModule(maybeFilePath);
     }
 
-    return _MultiFilePythonModule(path);
+    final FileSystemEntityType type = FileSystemEntity.typeSync(
+      path,
+      followLinks: true,
+    );
+    if (type == FileSystemEntityType.directory) {
+      return _MultiFilePythonModule(path);
+    }
+
+    return null;
   }
 
-  static Future<_PythonModule<Object>> fromCache({
+  static Future<Iterable<_PythonModule<Object>>> fromCache({
     required String projectName,
     required String version,
   }) async {
@@ -213,25 +221,86 @@ final class _MultiFileCachePythonModule extends _MultiFilePythonModule {
     required String path,
   }) : super(path);
 
-  factory _MultiFileCachePythonModule._findPath({
+  static Iterable<_PythonModule<Object>> _findPath({
     required String projectName,
     required String projectVersion,
     required Directory projectCacheDirectory,
-  }) {
-    final String defaultPath = "${projectCacheDirectory.path}/$projectName";
-    final String defaultSrcPath =
-        "${projectCacheDirectory.path}/src/$projectName";
-    final String path = switch (true) {
-      _ when Directory(defaultPath).existsSync() => defaultPath,
-      _ when Directory(defaultSrcPath).existsSync() => defaultSrcPath,
-      _ => projectCacheDirectory.path,
-    };
-    return _MultiFileCachePythonModule._(
-      projectName: projectName,
-      projectVersion: projectVersion,
-      projectCacheDirectory: projectCacheDirectory,
-      path: path,
-    );
+  }) sync* {
+    _SingleFilePythonModule fileModule(String path) =>
+        _SingleFilePythonModule(path);
+
+    _MultiFileCachePythonModule dirModule(String path) =>
+        _MultiFileCachePythonModule._(
+          projectName: projectName,
+          projectVersion: projectVersion,
+          projectCacheDirectory: projectCacheDirectory,
+          path: path,
+        );
+
+    Iterable<_PythonModule<Object>> yieldFromDirectory(
+      Directory dir, {
+      bool Function(FileSystemEntity e)? filter,
+    }) =>
+        dir
+            .listSync()
+            .where(filter ?? (_) => true)
+            .map<_PythonModule<Object>?>(
+              (FileSystemEntity e) => switch (e) {
+                File() when e.name.endsWith(".py") => fileModule(e.path),
+                Directory()
+                    when e
+                        .listSync(recursive: true)
+                        .whereType<File>()
+                        .any((File element) => element.name.endsWith(".py")) =>
+                  // This cast is needed to teach the analyzer that both branches of the
+                  // switch return subtypes of _PythonModule<Object>.
+                  // It is safe to do this cast because _MultiFileCachePythonModule
+                  // extends _PythonModule<Object>, thus also the unnecessary cast
+                  // warning.
+                  // ignore: unnecessary_cast
+                  dirModule(e.path) as _PythonModule<Object>,
+                _ => null,
+              },
+            )
+            .whereNotNull();
+
+    bool didYield = false;
+
+    // Look for a single file with the same name as the project.
+    final String defaultFilePath =
+        "${projectCacheDirectory.path}/$projectName.py";
+    if (File(defaultFilePath).existsSync()) {
+      yield fileModule(defaultFilePath);
+      didYield = true;
+    }
+
+    // Look for a directory with the same name as the project.
+    final String defaultDirPath = "${projectCacheDirectory.path}/$projectName";
+    if (Directory(defaultDirPath).existsSync()) {
+      yield dirModule(defaultDirPath);
+      didYield = true;
+    }
+
+    // Look for modules in the src directory.
+    final String defaultSrcPath = "${projectCacheDirectory.path}/src";
+    if (Directory(defaultSrcPath).existsSync()) {
+      yield* yieldFromDirectory(Directory(defaultSrcPath));
+      didYield = true;
+    }
+
+    // Look for modules in the root directory.
+    if (!didYield) {
+      yield* yieldFromDirectory(
+        projectCacheDirectory,
+        filter: (FileSystemEntity e) => e.name != "setup.py",
+      );
+      didYield = true;
+    }
+
+    // Yield the root directory if nothing else was found.
+    if (!didYield) {
+      yield dirModule(projectCacheDirectory.path);
+    }
   }
 
   final String projectName;

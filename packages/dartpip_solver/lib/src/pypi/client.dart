@@ -25,9 +25,9 @@ final class PyPIClient with http.BaseClient implements http.Client {
   }
 
   /// Returns the latest version of a project.
-  Future<String> latestVersion(String projectName) async {
+  Future<String?> latestVersion(String projectName) async {
     final ProjectResponse projectResponse = await _api.project(projectName);
-    return projectResponse.info.version;
+    return projectResponse.info?.version;
   }
 
   /// Returns the requirements of a project.

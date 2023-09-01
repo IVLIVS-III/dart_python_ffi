@@ -8,7 +8,9 @@ part of 'api.dart';
 
 ProjectResponse _$ProjectResponseFromJson(Map<String, dynamic> json) =>
     ProjectResponse(
-      info: ProjectResponseInfo.fromJson(json['info'] as Map<String, dynamic>),
+      info: json['info'] == null
+          ? null
+          : ProjectResponseInfo.fromJson(json['info'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ProjectResponseToJson(ProjectResponse instance) =>

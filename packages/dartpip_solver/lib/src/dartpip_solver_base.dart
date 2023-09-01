@@ -1,5 +1,6 @@
 import "dart:collection";
 
+import "package:collection/collection.dart";
 import "package:dartpip_solver/dartpip_solver.dart";
 import "package:dartpip_solver/python_modules/packaging/requirements.g.dart";
 import "package:dartpip_solver/python_modules/src/python_modules.g.dart";
@@ -50,11 +51,23 @@ Future<Set<Dependency>> solve(Iterable<Constraint> constraints) async {
       requirements.map((String requirementString) {
         final Requirement requirement =
             Requirement(requirement_string: requirementString);
+        final Object? marker = requirement.marker;
+        if (marker is PythonClassInterface) {
+          final Marker typedMarker = Marker.from(marker);
+          final bool result = typedMarker.evaluate();
+          if (!result) {
+            // TODO: move to logger
+            print(
+              "⚠️   Warning: skipping requirement '$requirementString' because it has a marker that evaluates to false: '$marker'.",
+            );
+            return null;
+          }
+        }
         return Constraint(
           name: requirement.name! as String,
           constraint: requirement.specifier.toString(),
         );
-      }),
+      }).whereNotNull(),
     );
   }
   return UnmodifiableSetView<Dependency>(dependencies);
