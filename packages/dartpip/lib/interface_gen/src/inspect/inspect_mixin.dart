@@ -109,10 +109,10 @@ base mixin InspectMixin
   }
 
   bool _isStdlibEntry(InspectEntry entry, {required String stdlibPath}) {
-    if (inspectModule.isbuiltin(entry.value)) {
-      return true;
-    }
     try {
+      if (inspectModule.isbuiltin(entry.value)) {
+        return true;
+      }
       final String? filename = inspectModule.getfile(entry.value);
       if (filename == null) {
         return false;

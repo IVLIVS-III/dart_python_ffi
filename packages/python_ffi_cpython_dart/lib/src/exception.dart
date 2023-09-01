@@ -56,6 +56,9 @@ base class _PythonExceptionCPython
 
   String? _nativelyFormattedTraceback() {
     try {
+      if (pTraceback == nullptr) {
+        return null;
+      }
       final Object? formattedTraceback =
           platform.importModule("traceback").getFunction("format_tb").rawCall(
         args: <Pointer<PyObject>>[pTraceback],
@@ -99,9 +102,18 @@ base class _PythonExceptionCPython
 
   @override
   String toString() {
-    final String? nativeException = _nativelyFormattedException();
-    if (nativeException != null) {
-      return "PythonExceptionCPython: $nativeException";
+    // For some reason any exception of type `TypeError` results in a
+    // Segmentation Fault when calling `traceback.format_exception` or
+    // `traceback.format_tb`.
+    // Just skip the native formatting in this case.
+    final String typeRepr = BuiltinsModule.import().repr(
+      _PythonObjectCPython(platform, pType),
+    );
+    if (typeRepr != "<class 'TypeError'>") {
+      final String? nativeException = _nativelyFormattedException();
+      if (nativeException != null) {
+        return "PythonExceptionCPython: $nativeException";
+      }
     }
 
     final String? nativeTraceback = _nativelyFormattedTraceback();

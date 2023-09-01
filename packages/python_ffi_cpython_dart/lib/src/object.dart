@@ -112,6 +112,11 @@ base mixin _PythonObjectCPythonMixin
       }
     }
 
+    // check if function is callable
+    if (platform.bindings.PyCallable_Check(reference) == 0) {
+      throw PythonFfiException("Object is not callable");
+    }
+
     // call function
     final Pointer<PyObject> result =
         platform.bindings.PyObject_Call(reference, pArgs, pKwargs);

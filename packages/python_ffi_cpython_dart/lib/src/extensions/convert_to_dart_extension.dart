@@ -76,6 +76,7 @@ extension _ConvertToDartExtension on Pointer<PyObject> {
 
     final String nameString = typeName;
     // backup conversions matching the name as string
+    // TODO: move to logger
     print(
       "ℹ️   Info: falling back to conversion via name as string for '$nameString'",
     );
