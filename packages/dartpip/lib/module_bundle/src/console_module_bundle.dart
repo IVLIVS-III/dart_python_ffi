@@ -34,11 +34,8 @@ final class _ConsoleModuleBundle<T extends Object> extends _ModuleBundle<T> {
       _pythonModulesDartFileName;
 
   @override
-  Map<String, dynamic> _updateModuleInfo(Map<String, dynamic> moduleInfo) {
-    print("Not updating module info for ${pythonModule.moduleName}.");
-    print("staying at ${moduleInfo[pythonModule.moduleName]}");
-    return moduleInfo;
-  }
+  Map<String, dynamic> _updateModuleInfo(Map<String, dynamic> moduleInfo) =>
+      moduleInfo;
 
   Map<String, dynamic> _drillDown(
     List<String> pathSegments,

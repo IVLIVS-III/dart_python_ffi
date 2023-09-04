@@ -1,8 +1,455 @@
 // ignore_for_file: camel_case_types, non_constant_identifier_names, prefer_void_to_null
 
-library lark;
+library standalone;
 
 import "package:python_ffi_dart/python_ffi_dart.dart";
+
+/// ## ModuleType
+final class ModuleType extends PythonClass {
+  factory ModuleType() => PythonFfiDart.instance.importClass(
+        "builtins",
+        "ModuleType",
+        ModuleType.from,
+        <Object?>[],
+      );
+
+  ModuleType.from(super.pythonClass) : super.from();
+}
+
+/// ## Rule
+///
+/// ### python docstring
+///
+/// origin : a symbol
+/// expansion : a list of symbols
+/// order : index of this expansion amongst all rules of the same name
+///
+/// ### python source
+/// ```py
+/// class Rule(Serialize):
+///     """
+///         origin : a symbol
+///         expansion : a list of symbols
+///         order : index of this expansion amongst all rules of the same name
+///     """
+///     __slots__ = ('origin', 'expansion', 'alias', 'options', 'order', '_hash')
+///
+///     __serialize_fields__ = 'origin', 'expansion', 'order', 'alias', 'options'
+///     __serialize_namespace__ = Terminal, NonTerminal, RuleOptions
+///
+///     def __init__(self, origin, expansion, order=0, alias=None, options=None):
+///         self.origin = origin
+///         self.expansion = expansion
+///         self.alias = alias
+///         self.order = order
+///         self.options = options or RuleOptions()
+///         self._hash = hash((self.origin, tuple(self.expansion)))
+///
+///     def _deserialize(self):
+///         self._hash = hash((self.origin, tuple(self.expansion)))
+///
+///     def __str__(self):
+///         return '<%s : %s>' % (self.origin.name, ' '.join(x.name for x in self.expansion))
+///
+///     def __repr__(self):
+///         return 'Rule(%r, %r, %r, %r)' % (self.origin, self.expansion, self.alias, self.options)
+///
+///     def __hash__(self):
+///         return self._hash
+///
+///     def __eq__(self, other):
+///         if not isinstance(other, Rule):
+///             return False
+///         return self.origin == other.origin and self.expansion == other.expansion
+/// ```
+final class Rule extends PythonClass {
+  factory Rule({
+    required Object? origin,
+    required Object? expansion,
+    Object? order = 0,
+    Object? alias,
+    Object? options,
+  }) =>
+      PythonFfiDart.instance.importClass(
+        "lark.grammar",
+        "Rule",
+        Rule.from,
+        <Object?>[
+          origin,
+          expansion,
+          order,
+          alias,
+          options,
+        ],
+        <String, Object?>{},
+      );
+
+  Rule.from(super.pythonClass) : super.from();
+
+  /// ## memo_serialize
+  ///
+  /// ### python source
+  /// ```py
+  /// def memo_serialize(self, types_to_memoize: List) -> Any:
+  ///         memo = SerializeMemoizer(types_to_memoize)
+  ///         return self.serialize(memo), memo.serialize()
+  /// ```
+  Object? memo_serialize({
+    required Object? types_to_memoize,
+  }) =>
+      getFunction("memo_serialize").call(
+        <Object?>[
+          types_to_memoize,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## serialize
+  ///
+  /// ### python source
+  /// ```py
+  /// def serialize(self, memo = None) -> Dict[str, Any]:
+  ///         if memo and memo.in_types(self):
+  ///             return {'@': memo.memoized.get(self)}
+  ///
+  ///         fields = getattr(self, '__serialize_fields__')
+  ///         res = {f: _serialize(getattr(self, f), memo) for f in fields}
+  ///         res['__type__'] = type(self).__name__
+  ///         if hasattr(self, '_serialize'):
+  ///             self._serialize(res, memo)  # type: ignore[attr-defined]
+  ///         return res
+  /// ```
+  Object? serialize({
+    Object? memo,
+  }) =>
+      getFunction("serialize").call(
+        <Object?>[
+          memo,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## deserialize (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// origin : a symbol
+  /// expansion : a list of symbols
+  /// order : index of this expansion amongst all rules of the same name
+  Object? get deserialize => getAttribute("deserialize");
+
+  /// ## deserialize (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// origin : a symbol
+  /// expansion : a list of symbols
+  /// order : index of this expansion amongst all rules of the same name
+  set deserialize(Object? deserialize) =>
+      setAttribute("deserialize", deserialize);
+
+  /// ## alias (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// origin : a symbol
+  /// expansion : a list of symbols
+  /// order : index of this expansion amongst all rules of the same name
+  Object? get alias => getAttribute("alias");
+
+  /// ## alias (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// origin : a symbol
+  /// expansion : a list of symbols
+  /// order : index of this expansion amongst all rules of the same name
+  set alias(Object? alias) => setAttribute("alias", alias);
+
+  /// ## expansion (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// origin : a symbol
+  /// expansion : a list of symbols
+  /// order : index of this expansion amongst all rules of the same name
+  Object? get expansion => getAttribute("expansion");
+
+  /// ## expansion (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// origin : a symbol
+  /// expansion : a list of symbols
+  /// order : index of this expansion amongst all rules of the same name
+  set expansion(Object? expansion) => setAttribute("expansion", expansion);
+
+  /// ## options (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// origin : a symbol
+  /// expansion : a list of symbols
+  /// order : index of this expansion amongst all rules of the same name
+  Object? get options => getAttribute("options");
+
+  /// ## options (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// origin : a symbol
+  /// expansion : a list of symbols
+  /// order : index of this expansion amongst all rules of the same name
+  set options(Object? options) => setAttribute("options", options);
+
+  /// ## order (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// origin : a symbol
+  /// expansion : a list of symbols
+  /// order : index of this expansion amongst all rules of the same name
+  Object? get order => getAttribute("order");
+
+  /// ## order (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// origin : a symbol
+  /// expansion : a list of symbols
+  /// order : index of this expansion amongst all rules of the same name
+  set order(Object? order) => setAttribute("order", order);
+
+  /// ## origin (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// origin : a symbol
+  /// expansion : a list of symbols
+  /// order : index of this expansion amongst all rules of the same name
+  Object? get origin => getAttribute("origin");
+
+  /// ## origin (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// origin : a symbol
+  /// expansion : a list of symbols
+  /// order : index of this expansion amongst all rules of the same name
+  set origin(Object? origin) => setAttribute("origin", origin);
+}
+
+/// ## TerminalDef
+///
+/// ### python docstring
+///
+/// Safe-ish serialization interface that doesn't rely on Pickle
+///
+/// Attributes:
+///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+///                                     Should include all field types that aren't builtin types.
+///
+/// ### python source
+/// ```py
+/// class TerminalDef(Serialize):
+///     __serialize_fields__ = 'name', 'pattern', 'priority'
+///     __serialize_namespace__ = PatternStr, PatternRE
+///
+///     name: str
+///     pattern: Pattern
+///     priority: int
+///
+///     def __init__(self, name: str, pattern: Pattern, priority: int = TOKEN_DEFAULT_PRIORITY) -> None:
+///         assert isinstance(pattern, Pattern), pattern
+///         self.name = name
+///         self.pattern = pattern
+///         self.priority = priority
+///
+///     def __repr__(self):
+///         return '%s(%r, %r)' % (type(self).__name__, self.name, self.pattern)
+///
+///     def user_repr(self) -> str:
+///         if self.name.startswith('__'):  # We represent a generated terminal
+///             return self.pattern.raw or self.name
+///         else:
+///             return self.name
+/// ```
+final class TerminalDef extends PythonClass {
+  factory TerminalDef({
+    required String name,
+    required Pattern pattern,
+    int priority = 0,
+  }) =>
+      PythonFfiDart.instance.importClass(
+        "lark.lexer",
+        "TerminalDef",
+        TerminalDef.from,
+        <Object?>[
+          name,
+          pattern,
+          priority,
+        ],
+        <String, Object?>{},
+      );
+
+  TerminalDef.from(super.pythonClass) : super.from();
+
+  /// ## memo_serialize
+  ///
+  /// ### python source
+  /// ```py
+  /// def memo_serialize(self, types_to_memoize: List) -> Any:
+  ///         memo = SerializeMemoizer(types_to_memoize)
+  ///         return self.serialize(memo), memo.serialize()
+  /// ```
+  Object? memo_serialize({
+    required Object? types_to_memoize,
+  }) =>
+      getFunction("memo_serialize").call(
+        <Object?>[
+          types_to_memoize,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## serialize
+  ///
+  /// ### python source
+  /// ```py
+  /// def serialize(self, memo = None) -> Dict[str, Any]:
+  ///         if memo and memo.in_types(self):
+  ///             return {'@': memo.memoized.get(self)}
+  ///
+  ///         fields = getattr(self, '__serialize_fields__')
+  ///         res = {f: _serialize(getattr(self, f), memo) for f in fields}
+  ///         res['__type__'] = type(self).__name__
+  ///         if hasattr(self, '_serialize'):
+  ///             self._serialize(res, memo)  # type: ignore[attr-defined]
+  ///         return res
+  /// ```
+  Object? serialize({
+    Object? memo,
+  }) =>
+      getFunction("serialize").call(
+        <Object?>[
+          memo,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## user_repr
+  ///
+  /// ### python source
+  /// ```py
+  /// def user_repr(self) -> str:
+  ///         if self.name.startswith('__'):  # We represent a generated terminal
+  ///             return self.pattern.raw or self.name
+  ///         else:
+  ///             return self.name
+  /// ```
+  String user_repr() => getFunction("user_repr").call(
+        <Object?>[],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## deserialize (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  Object? get deserialize => getAttribute("deserialize");
+
+  /// ## deserialize (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  set deserialize(Object? deserialize) =>
+      setAttribute("deserialize", deserialize);
+
+  /// ## name (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  Object? get name => getAttribute("name");
+
+  /// ## name (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  set name(Object? name) => setAttribute("name", name);
+
+  /// ## pattern (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  Object? get pattern => getAttribute("pattern");
+
+  /// ## pattern (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  set pattern(Object? pattern) => setAttribute("pattern", pattern);
+
+  /// ## priority (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  Object? get priority => getAttribute("priority");
+
+  /// ## priority (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  set priority(Object? priority) => setAttribute("priority", priority);
+}
 
 /// ## GrammarError
 ///
@@ -8569,6 +9016,89 @@ final class Visitor extends PythonClass {
       );
 }
 
+/// ## AsList
+///
+/// ### python docstring
+///
+/// Abstract class
+///
+/// Subclasses will be instantiated with the parse results as a single list, instead of as arguments.
+///
+/// ### python source
+/// ```py
+/// class AsList:
+///     """Abstract class
+///
+///     Subclasses will be instantiated with the parse results as a single list, instead of as arguments.
+///     """
+/// ```
+final class AsList extends PythonClass {
+  factory AsList() => PythonFfiDart.instance.importClass(
+        "lark.ast_utils",
+        "AsList",
+        AsList.from,
+        <Object?>[],
+      );
+
+  AsList.from(super.pythonClass) : super.from();
+}
+
+/// ## Ast
+///
+/// ### python docstring
+///
+/// Abstract class
+///
+/// Subclasses will be collected by `create_transformer()`
+///
+/// ### python source
+/// ```py
+/// class Ast:
+///     """Abstract class
+///
+///     Subclasses will be collected by `create_transformer()`
+///     """
+///     pass
+/// ```
+final class Ast extends PythonClass {
+  factory Ast() => PythonFfiDart.instance.importClass(
+        "lark.ast_utils",
+        "Ast",
+        Ast.from,
+        <Object?>[],
+      );
+
+  Ast.from(super.pythonClass) : super.from();
+}
+
+/// ## WithMeta
+///
+/// ### python docstring
+///
+/// Abstract class
+///
+/// Subclasses will be instantiated with the Meta instance of the tree. (see ``v_args`` for more detail)
+///
+/// ### python source
+/// ```py
+/// class WithMeta:
+///     """Abstract class
+///
+///     Subclasses will be instantiated with the Meta instance of the tree. (see ``v_args`` for more detail)
+///     """
+///     pass
+/// ```
+final class WithMeta extends PythonClass {
+  factory WithMeta() => PythonFfiDart.instance.importClass(
+        "lark.ast_utils",
+        "WithMeta",
+        WithMeta.from,
+        <Object?>[],
+      );
+
+  WithMeta.from(super.pythonClass) : super.from();
+}
+
 /// ## LexerConf
 ///
 /// ### python docstring
@@ -8995,18 +9525,6 @@ final class LexerConf extends PythonClass {
   set lexer_type(Object? lexer_type) => setAttribute("lexer_type", lexer_type);
 }
 
-/// ## ModuleType
-final class ModuleType extends PythonClass {
-  factory ModuleType() => PythonFfiDart.instance.importClass(
-        "builtins",
-        "ModuleType",
-        ModuleType.from,
-        <Object?>[],
-      );
-
-  ModuleType.from(super.pythonClass) : super.from();
-}
-
 /// ## ParserConf
 ///
 /// ### python docstring
@@ -9353,218 +9871,6 @@ final class Serialize extends PythonClass {
   ///                                     Should include all field types that aren't builtin types.
   set deserialize(Object? deserialize) =>
       setAttribute("deserialize", deserialize);
-}
-
-/// ## TerminalDef
-///
-/// ### python docstring
-///
-/// Safe-ish serialization interface that doesn't rely on Pickle
-///
-/// Attributes:
-///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
-///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
-///                                     Should include all field types that aren't builtin types.
-///
-/// ### python source
-/// ```py
-/// class TerminalDef(Serialize):
-///     __serialize_fields__ = 'name', 'pattern', 'priority'
-///     __serialize_namespace__ = PatternStr, PatternRE
-///
-///     name: str
-///     pattern: Pattern
-///     priority: int
-///
-///     def __init__(self, name: str, pattern: Pattern, priority: int = TOKEN_DEFAULT_PRIORITY) -> None:
-///         assert isinstance(pattern, Pattern), pattern
-///         self.name = name
-///         self.pattern = pattern
-///         self.priority = priority
-///
-///     def __repr__(self):
-///         return '%s(%r, %r)' % (type(self).__name__, self.name, self.pattern)
-///
-///     def user_repr(self) -> str:
-///         if self.name.startswith('__'):  # We represent a generated terminal
-///             return self.pattern.raw or self.name
-///         else:
-///             return self.name
-/// ```
-final class TerminalDef extends PythonClass {
-  factory TerminalDef({
-    required String name,
-    required Pattern pattern,
-    int priority = 0,
-  }) =>
-      PythonFfiDart.instance.importClass(
-        "lark.lexer",
-        "TerminalDef",
-        TerminalDef.from,
-        <Object?>[
-          name,
-          pattern,
-          priority,
-        ],
-        <String, Object?>{},
-      );
-
-  TerminalDef.from(super.pythonClass) : super.from();
-
-  /// ## memo_serialize
-  ///
-  /// ### python source
-  /// ```py
-  /// def memo_serialize(self, types_to_memoize: List) -> Any:
-  ///         memo = SerializeMemoizer(types_to_memoize)
-  ///         return self.serialize(memo), memo.serialize()
-  /// ```
-  Object? memo_serialize({
-    required Object? types_to_memoize,
-  }) =>
-      getFunction("memo_serialize").call(
-        <Object?>[
-          types_to_memoize,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## serialize
-  ///
-  /// ### python source
-  /// ```py
-  /// def serialize(self, memo = None) -> Dict[str, Any]:
-  ///         if memo and memo.in_types(self):
-  ///             return {'@': memo.memoized.get(self)}
-  ///
-  ///         fields = getattr(self, '__serialize_fields__')
-  ///         res = {f: _serialize(getattr(self, f), memo) for f in fields}
-  ///         res['__type__'] = type(self).__name__
-  ///         if hasattr(self, '_serialize'):
-  ///             self._serialize(res, memo)  # type: ignore[attr-defined]
-  ///         return res
-  /// ```
-  Object? serialize({
-    Object? memo,
-  }) =>
-      getFunction("serialize").call(
-        <Object?>[
-          memo,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## user_repr
-  ///
-  /// ### python source
-  /// ```py
-  /// def user_repr(self) -> str:
-  ///         if self.name.startswith('__'):  # We represent a generated terminal
-  ///             return self.pattern.raw or self.name
-  ///         else:
-  ///             return self.name
-  /// ```
-  String user_repr() => getFunction("user_repr").call(
-        <Object?>[],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## deserialize (getter)
-  ///
-  /// ### python docstring
-  ///
-  /// Safe-ish serialization interface that doesn't rely on Pickle
-  ///
-  /// Attributes:
-  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
-  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
-  ///                                     Should include all field types that aren't builtin types.
-  Object? get deserialize => getAttribute("deserialize");
-
-  /// ## deserialize (setter)
-  ///
-  /// ### python docstring
-  ///
-  /// Safe-ish serialization interface that doesn't rely on Pickle
-  ///
-  /// Attributes:
-  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
-  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
-  ///                                     Should include all field types that aren't builtin types.
-  set deserialize(Object? deserialize) =>
-      setAttribute("deserialize", deserialize);
-
-  /// ## name (getter)
-  ///
-  /// ### python docstring
-  ///
-  /// Safe-ish serialization interface that doesn't rely on Pickle
-  ///
-  /// Attributes:
-  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
-  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
-  ///                                     Should include all field types that aren't builtin types.
-  Object? get name => getAttribute("name");
-
-  /// ## name (setter)
-  ///
-  /// ### python docstring
-  ///
-  /// Safe-ish serialization interface that doesn't rely on Pickle
-  ///
-  /// Attributes:
-  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
-  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
-  ///                                     Should include all field types that aren't builtin types.
-  set name(Object? name) => setAttribute("name", name);
-
-  /// ## pattern (getter)
-  ///
-  /// ### python docstring
-  ///
-  /// Safe-ish serialization interface that doesn't rely on Pickle
-  ///
-  /// Attributes:
-  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
-  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
-  ///                                     Should include all field types that aren't builtin types.
-  Object? get pattern => getAttribute("pattern");
-
-  /// ## pattern (setter)
-  ///
-  /// ### python docstring
-  ///
-  /// Safe-ish serialization interface that doesn't rely on Pickle
-  ///
-  /// Attributes:
-  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
-  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
-  ///                                     Should include all field types that aren't builtin types.
-  set pattern(Object? pattern) => setAttribute("pattern", pattern);
-
-  /// ## priority (getter)
-  ///
-  /// ### python docstring
-  ///
-  /// Safe-ish serialization interface that doesn't rely on Pickle
-  ///
-  /// Attributes:
-  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
-  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
-  ///                                     Should include all field types that aren't builtin types.
-  Object? get priority => getAttribute("priority");
-
-  /// ## priority (setter)
-  ///
-  /// ### python docstring
-  ///
-  /// Safe-ish serialization interface that doesn't rely on Pickle
-  ///
-  /// Attributes:
-  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
-  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
-  ///                                     Should include all field types that aren't builtin types.
-  set priority(Object? priority) => setAttribute("priority", priority);
 }
 
 /// ## ConfigurationError
@@ -10086,229 +10392,6 @@ final class NonTerminal extends PythonClass {
   ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
   ///                                     Should include all field types that aren't builtin types.
   set name(Object? name) => setAttribute("name", name);
-}
-
-/// ## Rule
-///
-/// ### python docstring
-///
-/// origin : a symbol
-/// expansion : a list of symbols
-/// order : index of this expansion amongst all rules of the same name
-///
-/// ### python source
-/// ```py
-/// class Rule(Serialize):
-///     """
-///         origin : a symbol
-///         expansion : a list of symbols
-///         order : index of this expansion amongst all rules of the same name
-///     """
-///     __slots__ = ('origin', 'expansion', 'alias', 'options', 'order', '_hash')
-///
-///     __serialize_fields__ = 'origin', 'expansion', 'order', 'alias', 'options'
-///     __serialize_namespace__ = Terminal, NonTerminal, RuleOptions
-///
-///     def __init__(self, origin, expansion, order=0, alias=None, options=None):
-///         self.origin = origin
-///         self.expansion = expansion
-///         self.alias = alias
-///         self.order = order
-///         self.options = options or RuleOptions()
-///         self._hash = hash((self.origin, tuple(self.expansion)))
-///
-///     def _deserialize(self):
-///         self._hash = hash((self.origin, tuple(self.expansion)))
-///
-///     def __str__(self):
-///         return '<%s : %s>' % (self.origin.name, ' '.join(x.name for x in self.expansion))
-///
-///     def __repr__(self):
-///         return 'Rule(%r, %r, %r, %r)' % (self.origin, self.expansion, self.alias, self.options)
-///
-///     def __hash__(self):
-///         return self._hash
-///
-///     def __eq__(self, other):
-///         if not isinstance(other, Rule):
-///             return False
-///         return self.origin == other.origin and self.expansion == other.expansion
-/// ```
-final class Rule extends PythonClass {
-  factory Rule({
-    required Object? origin,
-    required Object? expansion,
-    Object? order = 0,
-    Object? alias,
-    Object? options,
-  }) =>
-      PythonFfiDart.instance.importClass(
-        "lark.grammar",
-        "Rule",
-        Rule.from,
-        <Object?>[
-          origin,
-          expansion,
-          order,
-          alias,
-          options,
-        ],
-        <String, Object?>{},
-      );
-
-  Rule.from(super.pythonClass) : super.from();
-
-  /// ## memo_serialize
-  ///
-  /// ### python source
-  /// ```py
-  /// def memo_serialize(self, types_to_memoize: List) -> Any:
-  ///         memo = SerializeMemoizer(types_to_memoize)
-  ///         return self.serialize(memo), memo.serialize()
-  /// ```
-  Object? memo_serialize({
-    required Object? types_to_memoize,
-  }) =>
-      getFunction("memo_serialize").call(
-        <Object?>[
-          types_to_memoize,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## serialize
-  ///
-  /// ### python source
-  /// ```py
-  /// def serialize(self, memo = None) -> Dict[str, Any]:
-  ///         if memo and memo.in_types(self):
-  ///             return {'@': memo.memoized.get(self)}
-  ///
-  ///         fields = getattr(self, '__serialize_fields__')
-  ///         res = {f: _serialize(getattr(self, f), memo) for f in fields}
-  ///         res['__type__'] = type(self).__name__
-  ///         if hasattr(self, '_serialize'):
-  ///             self._serialize(res, memo)  # type: ignore[attr-defined]
-  ///         return res
-  /// ```
-  Object? serialize({
-    Object? memo,
-  }) =>
-      getFunction("serialize").call(
-        <Object?>[
-          memo,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## deserialize (getter)
-  ///
-  /// ### python docstring
-  ///
-  /// origin : a symbol
-  /// expansion : a list of symbols
-  /// order : index of this expansion amongst all rules of the same name
-  Object? get deserialize => getAttribute("deserialize");
-
-  /// ## deserialize (setter)
-  ///
-  /// ### python docstring
-  ///
-  /// origin : a symbol
-  /// expansion : a list of symbols
-  /// order : index of this expansion amongst all rules of the same name
-  set deserialize(Object? deserialize) =>
-      setAttribute("deserialize", deserialize);
-
-  /// ## alias (getter)
-  ///
-  /// ### python docstring
-  ///
-  /// origin : a symbol
-  /// expansion : a list of symbols
-  /// order : index of this expansion amongst all rules of the same name
-  Object? get alias => getAttribute("alias");
-
-  /// ## alias (setter)
-  ///
-  /// ### python docstring
-  ///
-  /// origin : a symbol
-  /// expansion : a list of symbols
-  /// order : index of this expansion amongst all rules of the same name
-  set alias(Object? alias) => setAttribute("alias", alias);
-
-  /// ## expansion (getter)
-  ///
-  /// ### python docstring
-  ///
-  /// origin : a symbol
-  /// expansion : a list of symbols
-  /// order : index of this expansion amongst all rules of the same name
-  Object? get expansion => getAttribute("expansion");
-
-  /// ## expansion (setter)
-  ///
-  /// ### python docstring
-  ///
-  /// origin : a symbol
-  /// expansion : a list of symbols
-  /// order : index of this expansion amongst all rules of the same name
-  set expansion(Object? expansion) => setAttribute("expansion", expansion);
-
-  /// ## options (getter)
-  ///
-  /// ### python docstring
-  ///
-  /// origin : a symbol
-  /// expansion : a list of symbols
-  /// order : index of this expansion amongst all rules of the same name
-  Object? get options => getAttribute("options");
-
-  /// ## options (setter)
-  ///
-  /// ### python docstring
-  ///
-  /// origin : a symbol
-  /// expansion : a list of symbols
-  /// order : index of this expansion amongst all rules of the same name
-  set options(Object? options) => setAttribute("options", options);
-
-  /// ## order (getter)
-  ///
-  /// ### python docstring
-  ///
-  /// origin : a symbol
-  /// expansion : a list of symbols
-  /// order : index of this expansion amongst all rules of the same name
-  Object? get order => getAttribute("order");
-
-  /// ## order (setter)
-  ///
-  /// ### python docstring
-  ///
-  /// origin : a symbol
-  /// expansion : a list of symbols
-  /// order : index of this expansion amongst all rules of the same name
-  set order(Object? order) => setAttribute("order", order);
-
-  /// ## origin (getter)
-  ///
-  /// ### python docstring
-  ///
-  /// origin : a symbol
-  /// expansion : a list of symbols
-  /// order : index of this expansion amongst all rules of the same name
-  Object? get origin => getAttribute("origin");
-
-  /// ## origin (setter)
-  ///
-  /// ### python docstring
-  ///
-  /// origin : a symbol
-  /// expansion : a list of symbols
-  /// order : index of this expansion amongst all rules of the same name
-  set origin(Object? origin) => setAttribute("origin", origin);
 }
 
 /// ## RuleOptions
@@ -11005,6 +11088,675 @@ final class Terminal extends PythonClass {
   ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
   ///                                     Should include all field types that aren't builtin types.
   set filter_out(Object? filter_out) => setAttribute("filter_out", filter_out);
+}
+
+/// ## DedentError
+///
+/// ### python source
+/// ```py
+/// class DedentError(LarkError):
+///     pass
+/// ```
+final class DedentError extends PythonClass {
+  factory DedentError() => PythonFfiDart.instance.importClass(
+        "lark.indenter",
+        "DedentError",
+        DedentError.from,
+        <Object?>[],
+      );
+
+  DedentError.from(super.pythonClass) : super.from();
+
+  /// ## args (getter)
+  Object? get args => getAttribute("args");
+
+  /// ## args (setter)
+  set args(Object? args) => setAttribute("args", args);
+
+  /// ## add_note (getter)
+  Object? get add_note => getAttribute("add_note");
+
+  /// ## add_note (setter)
+  set add_note(Object? add_note) => setAttribute("add_note", add_note);
+
+  /// ## with_traceback (getter)
+  Object? get with_traceback => getAttribute("with_traceback");
+
+  /// ## with_traceback (setter)
+  set with_traceback(Object? with_traceback) =>
+      setAttribute("with_traceback", with_traceback);
+}
+
+/// ## Indenter
+///
+/// ### python docstring
+///
+/// Helper class that provides a standard way to create an ABC using
+/// inheritance.
+///
+/// ### python source
+/// ```py
+/// class Indenter(PostLex, ABC):
+///     paren_level: int
+///     indent_level: List[int]
+///
+///     def __init__(self) -> None:
+///         self.paren_level = 0
+///         self.indent_level = [0]
+///         assert self.tab_len > 0
+///
+///     def handle_NL(self, token: Token) -> Iterator[Token]:
+///         if self.paren_level > 0:
+///             return
+///
+///         yield token
+///
+///         indent_str = token.rsplit('\n', 1)[1] # Tabs and spaces
+///         indent = indent_str.count(' ') + indent_str.count('\t') * self.tab_len
+///
+///         if indent > self.indent_level[-1]:
+///             self.indent_level.append(indent)
+///             yield Token.new_borrow_pos(self.INDENT_type, indent_str, token)
+///         else:
+///             while indent < self.indent_level[-1]:
+///                 self.indent_level.pop()
+///                 yield Token.new_borrow_pos(self.DEDENT_type, indent_str, token)
+///
+///             if indent != self.indent_level[-1]:
+///                 raise DedentError('Unexpected dedent to column %s. Expected dedent to %s' % (indent, self.indent_level[-1]))
+///
+///     def _process(self, stream):
+///         for token in stream:
+///             if token.type == self.NL_type:
+///                 yield from self.handle_NL(token)
+///             else:
+///                 yield token
+///
+///             if token.type in self.OPEN_PAREN_types:
+///                 self.paren_level += 1
+///             elif token.type in self.CLOSE_PAREN_types:
+///                 self.paren_level -= 1
+///                 assert self.paren_level >= 0
+///
+///         while len(self.indent_level) > 1:
+///             self.indent_level.pop()
+///             yield Token(self.DEDENT_type, '')
+///
+///         assert self.indent_level == [0], self.indent_level
+///
+///     def process(self, stream):
+///         self.paren_level = 0
+///         self.indent_level = [0]
+///         return self._process(stream)
+///
+///     # XXX Hack for ContextualLexer. Maybe there's a more elegant solution?
+///     @property
+///     def always_accept(self):
+///         return (self.NL_type,)
+///
+///     @property
+///     @abstractmethod
+///     def NL_type(self) -> str:
+///         raise NotImplementedError()
+///
+///     @property
+///     @abstractmethod
+///     def OPEN_PAREN_types(self) -> List[str]:
+///         raise NotImplementedError()
+///
+///     @property
+///     @abstractmethod
+///     def CLOSE_PAREN_types(self) -> List[str]:
+///         raise NotImplementedError()
+///
+///     @property
+///     @abstractmethod
+///     def INDENT_type(self) -> str:
+///         raise NotImplementedError()
+///
+///     @property
+///     @abstractmethod
+///     def DEDENT_type(self) -> str:
+///         raise NotImplementedError()
+///
+///     @property
+///     @abstractmethod
+///     def tab_len(self) -> int:
+///         raise NotImplementedError()
+/// ```
+final class Indenter extends PythonClass {
+  factory Indenter() => PythonFfiDart.instance.importClass(
+        "lark.indenter",
+        "Indenter",
+        Indenter.from,
+        <Object?>[],
+        <String, Object?>{},
+      );
+
+  Indenter.from(super.pythonClass) : super.from();
+
+  /// ## handle_NL
+  ///
+  /// ### python source
+  /// ```py
+  /// def handle_NL(self, token: Token) -> Iterator[Token]:
+  ///         if self.paren_level > 0:
+  ///             return
+  ///
+  ///         yield token
+  ///
+  ///         indent_str = token.rsplit('\n', 1)[1] # Tabs and spaces
+  ///         indent = indent_str.count(' ') + indent_str.count('\t') * self.tab_len
+  ///
+  ///         if indent > self.indent_level[-1]:
+  ///             self.indent_level.append(indent)
+  ///             yield Token.new_borrow_pos(self.INDENT_type, indent_str, token)
+  ///         else:
+  ///             while indent < self.indent_level[-1]:
+  ///                 self.indent_level.pop()
+  ///                 yield Token.new_borrow_pos(self.DEDENT_type, indent_str, token)
+  ///
+  ///             if indent != self.indent_level[-1]:
+  ///                 raise DedentError('Unexpected dedent to column %s. Expected dedent to %s' % (indent, self.indent_level[-1]))
+  /// ```
+  Iterator<Token> handle_NL({
+    required Token token,
+  }) =>
+      TypedIterator.from(
+        PythonIterator.from<Object?, PythonFfiDelegate<Object?>, Object?>(
+          getFunction("handle_NL").call(
+            <Object?>[
+              token,
+            ],
+            kwargs: <String, Object?>{},
+          ),
+        ),
+      )
+          .transform((e) => Token.from(
+                e,
+              ))
+          .cast<Token>();
+
+  /// ## process
+  ///
+  /// ### python source
+  /// ```py
+  /// def process(self, stream):
+  ///         self.paren_level = 0
+  ///         self.indent_level = [0]
+  ///         return self._process(stream)
+  /// ```
+  Object? process({
+    required Object? stream,
+  }) =>
+      getFunction("process").call(
+        <Object?>[
+          stream,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## CLOSE_PAREN_types (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  Object? get CLOSE_PAREN_types => getAttribute("CLOSE_PAREN_types");
+
+  /// ## CLOSE_PAREN_types (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  set CLOSE_PAREN_types(Object? CLOSE_PAREN_types) =>
+      setAttribute("CLOSE_PAREN_types", CLOSE_PAREN_types);
+
+  /// ## DEDENT_type (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  Object? get DEDENT_type => getAttribute("DEDENT_type");
+
+  /// ## DEDENT_type (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  set DEDENT_type(Object? DEDENT_type) =>
+      setAttribute("DEDENT_type", DEDENT_type);
+
+  /// ## INDENT_type (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  Object? get INDENT_type => getAttribute("INDENT_type");
+
+  /// ## INDENT_type (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  set INDENT_type(Object? INDENT_type) =>
+      setAttribute("INDENT_type", INDENT_type);
+
+  /// ## NL_type (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  Object? get NL_type => getAttribute("NL_type");
+
+  /// ## NL_type (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  set NL_type(Object? NL_type) => setAttribute("NL_type", NL_type);
+
+  /// ## OPEN_PAREN_types (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  Object? get OPEN_PAREN_types => getAttribute("OPEN_PAREN_types");
+
+  /// ## OPEN_PAREN_types (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  set OPEN_PAREN_types(Object? OPEN_PAREN_types) =>
+      setAttribute("OPEN_PAREN_types", OPEN_PAREN_types);
+
+  /// ## always_accept (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  Object? get always_accept => getAttribute("always_accept");
+
+  /// ## always_accept (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  set always_accept(Object? always_accept) =>
+      setAttribute("always_accept", always_accept);
+
+  /// ## tab_len (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  Object? get tab_len => getAttribute("tab_len");
+
+  /// ## tab_len (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  set tab_len(Object? tab_len) => setAttribute("tab_len", tab_len);
+
+  /// ## paren_level (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  Object? get paren_level => getAttribute("paren_level");
+
+  /// ## paren_level (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  set paren_level(Object? paren_level) =>
+      setAttribute("paren_level", paren_level);
+
+  /// ## indent_level (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  Object? get indent_level => getAttribute("indent_level");
+
+  /// ## indent_level (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  set indent_level(Object? indent_level) =>
+      setAttribute("indent_level", indent_level);
+}
+
+/// ## PostLex
+///
+/// ### python docstring
+///
+/// Helper class that provides a standard way to create an ABC using
+/// inheritance.
+///
+/// ### python source
+/// ```py
+/// class PostLex(ABC):
+///     @abstractmethod
+///     def process(self, stream: Iterator[Token]) -> Iterator[Token]:
+///         return stream
+///
+///     always_accept: Iterable[str] = ()
+/// ```
+final class PostLex extends PythonClass {
+  factory PostLex() => PythonFfiDart.instance.importClass(
+        "lark.lark",
+        "PostLex",
+        PostLex.from,
+        <Object?>[],
+      );
+
+  PostLex.from(super.pythonClass) : super.from();
+
+  /// ## process
+  ///
+  /// ### python source
+  /// ```py
+  /// @abstractmethod
+  ///     def process(self, stream: Iterator[Token]) -> Iterator[Token]:
+  ///         return stream
+  /// ```
+  Iterator<Token> process({
+    required Iterator<Token> stream,
+  }) =>
+      TypedIterator.from(
+        PythonIterator.from<Object?, PythonFfiDelegate<Object?>, Object?>(
+          getFunction("process").call(
+            <Object?>[
+              stream,
+            ],
+            kwargs: <String, Object?>{},
+          ),
+        ),
+      )
+          .transform((e) => Token.from(
+                e,
+              ))
+          .cast<Token>();
+
+  /// ## always_accept (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  Object? get always_accept => getAttribute("always_accept");
+
+  /// ## always_accept (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  set always_accept(Object? always_accept) =>
+      setAttribute("always_accept", always_accept);
+}
+
+/// ## PythonIndenter
+///
+/// ### python docstring
+///
+/// Helper class that provides a standard way to create an ABC using
+/// inheritance.
+///
+/// ### python source
+/// ```py
+/// class PythonIndenter(Indenter):
+///     NL_type = '_NEWLINE'
+///     OPEN_PAREN_types = ['LPAR', 'LSQB', 'LBRACE']
+///     CLOSE_PAREN_types = ['RPAR', 'RSQB', 'RBRACE']
+///     INDENT_type = '_INDENT'
+///     DEDENT_type = '_DEDENT'
+///     tab_len = 8
+/// ```
+final class PythonIndenter extends PythonClass {
+  factory PythonIndenter() => PythonFfiDart.instance.importClass(
+        "lark.indenter",
+        "PythonIndenter",
+        PythonIndenter.from,
+        <Object?>[],
+        <String, Object?>{},
+      );
+
+  PythonIndenter.from(super.pythonClass) : super.from();
+
+  /// ## handle_NL
+  ///
+  /// ### python source
+  /// ```py
+  /// def handle_NL(self, token: Token) -> Iterator[Token]:
+  ///         if self.paren_level > 0:
+  ///             return
+  ///
+  ///         yield token
+  ///
+  ///         indent_str = token.rsplit('\n', 1)[1] # Tabs and spaces
+  ///         indent = indent_str.count(' ') + indent_str.count('\t') * self.tab_len
+  ///
+  ///         if indent > self.indent_level[-1]:
+  ///             self.indent_level.append(indent)
+  ///             yield Token.new_borrow_pos(self.INDENT_type, indent_str, token)
+  ///         else:
+  ///             while indent < self.indent_level[-1]:
+  ///                 self.indent_level.pop()
+  ///                 yield Token.new_borrow_pos(self.DEDENT_type, indent_str, token)
+  ///
+  ///             if indent != self.indent_level[-1]:
+  ///                 raise DedentError('Unexpected dedent to column %s. Expected dedent to %s' % (indent, self.indent_level[-1]))
+  /// ```
+  Iterator<Token> handle_NL({
+    required Token token,
+  }) =>
+      TypedIterator.from(
+        PythonIterator.from<Object?, PythonFfiDelegate<Object?>, Object?>(
+          getFunction("handle_NL").call(
+            <Object?>[
+              token,
+            ],
+            kwargs: <String, Object?>{},
+          ),
+        ),
+      )
+          .transform((e) => Token.from(
+                e,
+              ))
+          .cast<Token>();
+
+  /// ## process
+  ///
+  /// ### python source
+  /// ```py
+  /// def process(self, stream):
+  ///         self.paren_level = 0
+  ///         self.indent_level = [0]
+  ///         return self._process(stream)
+  /// ```
+  Object? process({
+    required Object? stream,
+  }) =>
+      getFunction("process").call(
+        <Object?>[
+          stream,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## always_accept (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  Object? get always_accept => getAttribute("always_accept");
+
+  /// ## always_accept (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  set always_accept(Object? always_accept) =>
+      setAttribute("always_accept", always_accept);
+
+  /// ## CLOSE_PAREN_types (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  Object? get CLOSE_PAREN_types => getAttribute("CLOSE_PAREN_types");
+
+  /// ## CLOSE_PAREN_types (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  set CLOSE_PAREN_types(Object? CLOSE_PAREN_types) =>
+      setAttribute("CLOSE_PAREN_types", CLOSE_PAREN_types);
+
+  /// ## DEDENT_type (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  Object? get DEDENT_type => getAttribute("DEDENT_type");
+
+  /// ## DEDENT_type (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  set DEDENT_type(Object? DEDENT_type) =>
+      setAttribute("DEDENT_type", DEDENT_type);
+
+  /// ## INDENT_type (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  Object? get INDENT_type => getAttribute("INDENT_type");
+
+  /// ## INDENT_type (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  set INDENT_type(Object? INDENT_type) =>
+      setAttribute("INDENT_type", INDENT_type);
+
+  /// ## NL_type (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  Object? get NL_type => getAttribute("NL_type");
+
+  /// ## NL_type (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  set NL_type(Object? NL_type) => setAttribute("NL_type", NL_type);
+
+  /// ## OPEN_PAREN_types (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  Object? get OPEN_PAREN_types => getAttribute("OPEN_PAREN_types");
+
+  /// ## OPEN_PAREN_types (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  set OPEN_PAREN_types(Object? OPEN_PAREN_types) =>
+      setAttribute("OPEN_PAREN_types", OPEN_PAREN_types);
+
+  /// ## tab_len (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  Object? get tab_len => getAttribute("tab_len");
+
+  /// ## tab_len (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  set tab_len(Object? tab_len) => setAttribute("tab_len", tab_len);
+
+  /// ## paren_level (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  Object? get paren_level => getAttribute("paren_level");
+
+  /// ## paren_level (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  set paren_level(Object? paren_level) =>
+      setAttribute("paren_level", paren_level);
+
+  /// ## indent_level (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  Object? get indent_level => getAttribute("indent_level");
+
+  /// ## indent_level (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Helper class that provides a standard way to create an ABC using
+  /// inheritance.
+  set indent_level(Object? indent_level) =>
+      setAttribute("indent_level", indent_level);
 }
 
 /// ## BasicLexer
@@ -13043,76 +13795,6 @@ final class ParseTreeBuilder extends PythonClass {
   /// ## rule_builders (setter)
   set rule_builders(Object? rule_builders) =>
       setAttribute("rule_builders", rule_builders);
-}
-
-/// ## PostLex
-///
-/// ### python docstring
-///
-/// Helper class that provides a standard way to create an ABC using
-/// inheritance.
-///
-/// ### python source
-/// ```py
-/// class PostLex(ABC):
-///     @abstractmethod
-///     def process(self, stream: Iterator[Token]) -> Iterator[Token]:
-///         return stream
-///
-///     always_accept: Iterable[str] = ()
-/// ```
-final class PostLex extends PythonClass {
-  factory PostLex() => PythonFfiDart.instance.importClass(
-        "lark.lark",
-        "PostLex",
-        PostLex.from,
-        <Object?>[],
-      );
-
-  PostLex.from(super.pythonClass) : super.from();
-
-  /// ## process
-  ///
-  /// ### python source
-  /// ```py
-  /// @abstractmethod
-  ///     def process(self, stream: Iterator[Token]) -> Iterator[Token]:
-  ///         return stream
-  /// ```
-  Iterator<Token> process({
-    required Iterator<Token> stream,
-  }) =>
-      TypedIterator.from(
-        PythonIterator.from<Object?, PythonFfiDelegate<Object?>, Object?>(
-          getFunction("process").call(
-            <Object?>[
-              stream,
-            ],
-            kwargs: <String, Object?>{},
-          ),
-        ),
-      )
-          .transform((e) => Token.from(
-                e,
-              ))
-          .cast<Token>();
-
-  /// ## always_accept (getter)
-  ///
-  /// ### python docstring
-  ///
-  /// Helper class that provides a standard way to create an ABC using
-  /// inheritance.
-  Object? get always_accept => getAttribute("always_accept");
-
-  /// ## always_accept (setter)
-  ///
-  /// ### python docstring
-  ///
-  /// Helper class that provides a standard way to create an ABC using
-  /// inheritance.
-  set always_accept(Object? always_accept) =>
-      setAttribute("always_accept", always_accept);
 }
 
 /// ## SerializeMemoizer
@@ -26928,6 +27610,624 @@ final class ParserState extends PythonClass {
       setAttribute("value_stack", value_stack);
 }
 
+/// ## Reconstructor
+///
+/// ### python docstring
+///
+/// A Reconstructor that will, given a full parse Tree, generate source code.
+///
+/// Note:
+///     The reconstructor cannot generate values from regexps. If you need to produce discarded
+///     regexes, such as newlines, use `term_subs` and provide default values for them.
+///
+/// Parameters:
+///     parser: a Lark instance
+///     term_subs: a dictionary of [Terminal name as str] to [output text as str]
+///
+/// ### python source
+/// ```py
+/// class Reconstructor(TreeMatcher):
+///     """
+///     A Reconstructor that will, given a full parse Tree, generate source code.
+///
+///     Note:
+///         The reconstructor cannot generate values from regexps. If you need to produce discarded
+///         regexes, such as newlines, use `term_subs` and provide default values for them.
+///
+///     Parameters:
+///         parser: a Lark instance
+///         term_subs: a dictionary of [Terminal name as str] to [output text as str]
+///     """
+///
+///     write_tokens: WriteTokensTransformer
+///
+///     def __init__(self, parser: Lark, term_subs: Optional[Dict[str, Callable[[Symbol], str]]]=None) -> None:
+///         TreeMatcher.__init__(self, parser)
+///
+///         self.write_tokens = WriteTokensTransformer({t.name:t for t in self.tokens}, term_subs or {})
+///
+///     def _reconstruct(self, tree):
+///         unreduced_tree = self.match_tree(tree, tree.data)
+///
+///         res = self.write_tokens.transform(unreduced_tree)
+///         for item in res:
+///             if isinstance(item, Tree):
+///                 # TODO use orig_expansion.rulename to support templates
+///                 yield from self._reconstruct(item)
+///             else:
+///                 yield item
+///
+///     def reconstruct(self, tree: ParseTree, postproc: Optional[Callable[[Iterable[str]], Iterable[str]]]=None, insert_spaces: bool=True) -> str:
+///         x = self._reconstruct(tree)
+///         if postproc:
+///             x = postproc(x)
+///         y = []
+///         prev_item = ''
+///         for item in x:
+///             if insert_spaces and prev_item and item and is_id_continue(prev_item[-1]) and is_id_continue(item[0]):
+///                 y.append(' ')
+///             y.append(item)
+///             prev_item = item
+///         return ''.join(y)
+/// ```
+final class Reconstructor extends PythonClass {
+  factory Reconstructor({
+    required Lark parser,
+    Object? term_subs,
+  }) =>
+      PythonFfiDart.instance.importClass(
+        "lark.reconstruct",
+        "Reconstructor",
+        Reconstructor.from,
+        <Object?>[
+          parser,
+          term_subs,
+        ],
+        <String, Object?>{},
+      );
+
+  Reconstructor.from(super.pythonClass) : super.from();
+
+  /// ## match_tree
+  ///
+  /// ### python docstring
+  ///
+  /// Match the elements of `tree` to the symbols of rule `rulename`.
+  ///
+  /// Parameters:
+  ///     tree (Tree): the tree node to match
+  ///     rulename (str): The expected full rule name (including template args)
+  ///
+  /// Returns:
+  ///     Tree: an unreduced tree that matches `rulename`
+  ///
+  /// Raises:
+  ///     UnexpectedToken: If no match was found.
+  ///
+  /// Note:
+  ///     It's the callers' responsibility match the tree recursively.
+  ///
+  /// ### python source
+  /// ```py
+  /// def match_tree(self, tree, rulename):
+  ///         """Match the elements of `tree` to the symbols of rule `rulename`.
+  ///
+  ///         Parameters:
+  ///             tree (Tree): the tree node to match
+  ///             rulename (str): The expected full rule name (including template args)
+  ///
+  ///         Returns:
+  ///             Tree: an unreduced tree that matches `rulename`
+  ///
+  ///         Raises:
+  ///             UnexpectedToken: If no match was found.
+  ///
+  ///         Note:
+  ///             It's the callers' responsibility match the tree recursively.
+  ///         """
+  ///         if rulename:
+  ///             # validate
+  ///             name, _args = parse_rulename(rulename)
+  ///             assert tree.data == name
+  ///         else:
+  ///             rulename = tree.data
+  ///
+  ///         # TODO: ambiguity?
+  ///         try:
+  ///             parser = self._parser_cache[rulename]
+  ///         except KeyError:
+  ///             rules = self.rules + _best_rules_from_group(self.rules_for_root[rulename])
+  ///
+  ///             # TODO pass callbacks through dict, instead of alias?
+  ///             callbacks = {rule: rule.alias for rule in rules}
+  ///             conf = ParserConf(rules, callbacks, [rulename])
+  ///             parser = earley.Parser(self.parser.lexer_conf, conf, _match, resolve_ambiguity=True)
+  ///             self._parser_cache[rulename] = parser
+  ///
+  ///         # find a full derivation
+  ///         unreduced_tree = parser.parse(ChildrenLexer(tree.children), rulename)
+  ///         assert unreduced_tree.data == rulename
+  ///         return unreduced_tree
+  /// ```
+  Object? match_tree({
+    required Object? tree,
+    required Object? rulename,
+  }) =>
+      getFunction("match_tree").call(
+        <Object?>[
+          tree,
+          rulename,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## reconstruct
+  ///
+  /// ### python source
+  /// ```py
+  /// def reconstruct(self, tree: ParseTree, postproc: Optional[Callable[[Iterable[str]], Iterable[str]]]=None, insert_spaces: bool=True) -> str:
+  ///         x = self._reconstruct(tree)
+  ///         if postproc:
+  ///             x = postproc(x)
+  ///         y = []
+  ///         prev_item = ''
+  ///         for item in x:
+  ///             if insert_spaces and prev_item and item and is_id_continue(prev_item[-1]) and is_id_continue(item[0]):
+  ///                 y.append(' ')
+  ///             y.append(item)
+  ///             prev_item = item
+  ///         return ''.join(y)
+  /// ```
+  String reconstruct({
+    required Object? tree,
+    Object? postproc,
+    bool insert_spaces = true,
+  }) =>
+      getFunction("reconstruct").call(
+        <Object?>[
+          tree,
+          postproc,
+          insert_spaces,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## write_tokens (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Reconstructor that will, given a full parse Tree, generate source code.
+  ///
+  /// Note:
+  ///     The reconstructor cannot generate values from regexps. If you need to produce discarded
+  ///     regexes, such as newlines, use `term_subs` and provide default values for them.
+  ///
+  /// Parameters:
+  ///     parser: a Lark instance
+  ///     term_subs: a dictionary of [Terminal name as str] to [output text as str]
+  Object? get write_tokens => getAttribute("write_tokens");
+
+  /// ## write_tokens (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A Reconstructor that will, given a full parse Tree, generate source code.
+  ///
+  /// Note:
+  ///     The reconstructor cannot generate values from regexps. If you need to produce discarded
+  ///     regexes, such as newlines, use `term_subs` and provide default values for them.
+  ///
+  /// Parameters:
+  ///     parser: a Lark instance
+  ///     term_subs: a dictionary of [Terminal name as str] to [output text as str]
+  set write_tokens(Object? write_tokens) =>
+      setAttribute("write_tokens", write_tokens);
+}
+
+/// ## TreeMatcher
+///
+/// ### python docstring
+///
+/// Match the elements of a tree node, based on an ontology
+/// provided by a Lark grammar.
+///
+/// Supports templates and inlined rules (`rule{a, b,..}` and `_rule`)
+///
+/// Initialize with an instance of Lark.
+///
+/// ### python source
+/// ```py
+/// class TreeMatcher:
+///     """Match the elements of a tree node, based on an ontology
+///     provided by a Lark grammar.
+///
+///     Supports templates and inlined rules (`rule{a, b,..}` and `_rule`)
+///
+///     Initialize with an instance of Lark.
+///     """
+///
+///     def __init__(self, parser):
+///         # XXX TODO calling compile twice returns different results!
+///         assert not parser.options.maybe_placeholders
+///         # XXX TODO: we just ignore the potential existence of a postlexer
+///         self.tokens, rules, _extra = parser.grammar.compile(parser.options.start, set())
+///
+///         self.rules_for_root = defaultdict(list)
+///
+///         self.rules = list(self._build_recons_rules(rules))
+///         self.rules.reverse()
+///
+///         # Choose the best rule from each group of {rule => [rule.alias]}, since we only really need one derivation.
+///         self.rules = _best_rules_from_group(self.rules)
+///
+///         self.parser = parser
+///         self._parser_cache = {}
+///
+///     def _build_recons_rules(self, rules):
+///         "Convert tree-parsing/construction rules to tree-matching rules"
+///         expand1s = {r.origin for r in rules if r.options.expand1}
+///
+///         aliases = defaultdict(list)
+///         for r in rules:
+///             if r.alias:
+///                 aliases[r.origin].append(r.alias)
+///
+///         rule_names = {r.origin for r in rules}
+///         nonterminals = {sym for sym in rule_names
+///                         if sym.name.startswith('_') or sym in expand1s or sym in aliases}
+///
+///         seen = set()
+///         for r in rules:
+///             recons_exp = [sym if sym in nonterminals else Terminal(sym.name)
+///                           for sym in r.expansion if not is_discarded_terminal(sym)]
+///
+///             # Skip self-recursive constructs
+///             if recons_exp == [r.origin] and r.alias is None:
+///                 continue
+///
+///             sym = NonTerminal(r.alias) if r.alias else r.origin
+///             rule = make_recons_rule(sym, recons_exp, r.expansion)
+///
+///             if sym in expand1s and len(recons_exp) != 1:
+///                 self.rules_for_root[sym.name].append(rule)
+///
+///                 if sym.name not in seen:
+///                     yield make_recons_rule_to_term(sym, sym)
+///                     seen.add(sym.name)
+///             else:
+///                 if sym.name.startswith('_') or sym in expand1s:
+///                     yield rule
+///                 else:
+///                     self.rules_for_root[sym.name].append(rule)
+///
+///         for origin, rule_aliases in aliases.items():
+///             for alias in rule_aliases:
+///                 yield make_recons_rule_to_term(origin, NonTerminal(alias))
+///             yield make_recons_rule_to_term(origin, origin)
+///
+///     def match_tree(self, tree, rulename):
+///         """Match the elements of `tree` to the symbols of rule `rulename`.
+///
+///         Parameters:
+///             tree (Tree): the tree node to match
+///             rulename (str): The expected full rule name (including template args)
+///
+///         Returns:
+///             Tree: an unreduced tree that matches `rulename`
+///
+///         Raises:
+///             UnexpectedToken: If no match was found.
+///
+///         Note:
+///             It's the callers' responsibility match the tree recursively.
+///         """
+///         if rulename:
+///             # validate
+///             name, _args = parse_rulename(rulename)
+///             assert tree.data == name
+///         else:
+///             rulename = tree.data
+///
+///         # TODO: ambiguity?
+///         try:
+///             parser = self._parser_cache[rulename]
+///         except KeyError:
+///             rules = self.rules + _best_rules_from_group(self.rules_for_root[rulename])
+///
+///             # TODO pass callbacks through dict, instead of alias?
+///             callbacks = {rule: rule.alias for rule in rules}
+///             conf = ParserConf(rules, callbacks, [rulename])
+///             parser = earley.Parser(self.parser.lexer_conf, conf, _match, resolve_ambiguity=True)
+///             self._parser_cache[rulename] = parser
+///
+///         # find a full derivation
+///         unreduced_tree = parser.parse(ChildrenLexer(tree.children), rulename)
+///         assert unreduced_tree.data == rulename
+///         return unreduced_tree
+/// ```
+final class TreeMatcher extends PythonClass {
+  factory TreeMatcher({
+    required Object? parser,
+  }) =>
+      PythonFfiDart.instance.importClass(
+        "lark.tree_matcher",
+        "TreeMatcher",
+        TreeMatcher.from,
+        <Object?>[
+          parser,
+        ],
+        <String, Object?>{},
+      );
+
+  TreeMatcher.from(super.pythonClass) : super.from();
+
+  /// ## match_tree
+  ///
+  /// ### python docstring
+  ///
+  /// Match the elements of `tree` to the symbols of rule `rulename`.
+  ///
+  /// Parameters:
+  ///     tree (Tree): the tree node to match
+  ///     rulename (str): The expected full rule name (including template args)
+  ///
+  /// Returns:
+  ///     Tree: an unreduced tree that matches `rulename`
+  ///
+  /// Raises:
+  ///     UnexpectedToken: If no match was found.
+  ///
+  /// Note:
+  ///     It's the callers' responsibility match the tree recursively.
+  ///
+  /// ### python source
+  /// ```py
+  /// def match_tree(self, tree, rulename):
+  ///         """Match the elements of `tree` to the symbols of rule `rulename`.
+  ///
+  ///         Parameters:
+  ///             tree (Tree): the tree node to match
+  ///             rulename (str): The expected full rule name (including template args)
+  ///
+  ///         Returns:
+  ///             Tree: an unreduced tree that matches `rulename`
+  ///
+  ///         Raises:
+  ///             UnexpectedToken: If no match was found.
+  ///
+  ///         Note:
+  ///             It's the callers' responsibility match the tree recursively.
+  ///         """
+  ///         if rulename:
+  ///             # validate
+  ///             name, _args = parse_rulename(rulename)
+  ///             assert tree.data == name
+  ///         else:
+  ///             rulename = tree.data
+  ///
+  ///         # TODO: ambiguity?
+  ///         try:
+  ///             parser = self._parser_cache[rulename]
+  ///         except KeyError:
+  ///             rules = self.rules + _best_rules_from_group(self.rules_for_root[rulename])
+  ///
+  ///             # TODO pass callbacks through dict, instead of alias?
+  ///             callbacks = {rule: rule.alias for rule in rules}
+  ///             conf = ParserConf(rules, callbacks, [rulename])
+  ///             parser = earley.Parser(self.parser.lexer_conf, conf, _match, resolve_ambiguity=True)
+  ///             self._parser_cache[rulename] = parser
+  ///
+  ///         # find a full derivation
+  ///         unreduced_tree = parser.parse(ChildrenLexer(tree.children), rulename)
+  ///         assert unreduced_tree.data == rulename
+  ///         return unreduced_tree
+  /// ```
+  Object? match_tree({
+    required Object? tree,
+    required Object? rulename,
+  }) =>
+      getFunction("match_tree").call(
+        <Object?>[
+          tree,
+          rulename,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## rules_for_root (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Match the elements of a tree node, based on an ontology
+  /// provided by a Lark grammar.
+  ///
+  /// Supports templates and inlined rules (`rule{a, b,..}` and `_rule`)
+  ///
+  /// Initialize with an instance of Lark.
+  Object? get rules_for_root => getAttribute("rules_for_root");
+
+  /// ## rules_for_root (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Match the elements of a tree node, based on an ontology
+  /// provided by a Lark grammar.
+  ///
+  /// Supports templates and inlined rules (`rule{a, b,..}` and `_rule`)
+  ///
+  /// Initialize with an instance of Lark.
+  set rules_for_root(Object? rules_for_root) =>
+      setAttribute("rules_for_root", rules_for_root);
+
+  /// ## rules (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Match the elements of a tree node, based on an ontology
+  /// provided by a Lark grammar.
+  ///
+  /// Supports templates and inlined rules (`rule{a, b,..}` and `_rule`)
+  ///
+  /// Initialize with an instance of Lark.
+  Object? get rules => getAttribute("rules");
+
+  /// ## rules (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Match the elements of a tree node, based on an ontology
+  /// provided by a Lark grammar.
+  ///
+  /// Supports templates and inlined rules (`rule{a, b,..}` and `_rule`)
+  ///
+  /// Initialize with an instance of Lark.
+  set rules(Object? rules) => setAttribute("rules", rules);
+
+  /// ## parser (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Match the elements of a tree node, based on an ontology
+  /// provided by a Lark grammar.
+  ///
+  /// Supports templates and inlined rules (`rule{a, b,..}` and `_rule`)
+  ///
+  /// Initialize with an instance of Lark.
+  Object? get parser => getAttribute("parser");
+
+  /// ## parser (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Match the elements of a tree node, based on an ontology
+  /// provided by a Lark grammar.
+  ///
+  /// Supports templates and inlined rules (`rule{a, b,..}` and `_rule`)
+  ///
+  /// Initialize with an instance of Lark.
+  set parser(Object? parser) => setAttribute("parser", parser);
+}
+
+/// ## WriteTokensTransformer
+///
+/// ### python docstring
+///
+/// Inserts discarded tokens into their correct place, according to the rules of grammar
+///
+/// ### python source
+/// ```py
+/// class WriteTokensTransformer(Transformer_InPlace):
+///     "Inserts discarded tokens into their correct place, according to the rules of grammar"
+///
+///     tokens: Dict[str, TerminalDef]
+///     term_subs: Dict[str, Callable[[Symbol], str]]
+///
+///     def __init__(self, tokens: Dict[str, TerminalDef], term_subs: Dict[str, Callable[[Symbol], str]]) -> None:
+///         self.tokens = tokens
+///         self.term_subs = term_subs
+///
+///     def __default__(self, data, children, meta):
+///         if not getattr(meta, 'match_tree', False):
+///             return Tree(data, children)
+///
+///         iter_args = iter(children)
+///         to_write = []
+///         for sym in meta.orig_expansion:
+///             if is_discarded_terminal(sym):
+///                 try:
+///                     v = self.term_subs[sym.name](sym)
+///                 except KeyError:
+///                     t = self.tokens[sym.name]
+///                     if not isinstance(t.pattern, PatternStr):
+///                         raise NotImplementedError("Reconstructing regexps not supported yet: %s" % t)
+///
+///                     v = t.pattern.value
+///                 to_write.append(v)
+///             else:
+///                 x = next(iter_args)
+///                 if isinstance(x, list):
+///                     to_write += x
+///                 else:
+///                     if isinstance(x, Token):
+///                         assert Terminal(x.type) == sym, x
+///                     else:
+///                         assert NonTerminal(x.data) == sym, (sym, x)
+///                     to_write.append(x)
+///
+///         assert is_iter_empty(iter_args)
+///         return to_write
+/// ```
+final class WriteTokensTransformer extends PythonClass {
+  factory WriteTokensTransformer({
+    required Object? tokens,
+    required Object? term_subs,
+  }) =>
+      PythonFfiDart.instance.importClass(
+        "lark.reconstruct",
+        "WriteTokensTransformer",
+        WriteTokensTransformer.from,
+        <Object?>[
+          tokens,
+          term_subs,
+        ],
+        <String, Object?>{},
+      );
+
+  WriteTokensTransformer.from(super.pythonClass) : super.from();
+
+  /// ## transform
+  ///
+  /// ### python docstring
+  ///
+  /// Transform the given tree, and return the final result
+  ///
+  /// ### python source
+  /// ```py
+  /// def transform(self, tree: Tree[_Leaf_T]) -> _Return_T:
+  ///         for subtree in tree.iter_subtrees():
+  ///             subtree.children = list(self._transform_children(subtree.children))
+  ///
+  ///         return self._transform_tree(tree)
+  /// ```
+  Object? transform({
+    required Object? tree,
+  }) =>
+      getFunction("transform").call(
+        <Object?>[
+          tree,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## tokens (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Inserts discarded tokens into their correct place, according to the rules of grammar
+  Object? get tokens => getAttribute("tokens");
+
+  /// ## tokens (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Inserts discarded tokens into their correct place, according to the rules of grammar
+  set tokens(Object? tokens) => setAttribute("tokens", tokens);
+
+  /// ## term_subs (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Inserts discarded tokens into their correct place, according to the rules of grammar
+  Object? get term_subs => getAttribute("term_subs");
+
+  /// ## term_subs (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Inserts discarded tokens into their correct place, according to the rules of grammar
+  set term_subs(Object? term_subs) => setAttribute("term_subs", term_subs);
+}
+
 /// ## Meta
 ///
 /// ### python source
@@ -26963,6 +28263,493 @@ final class Meta extends PythonClass {
 
   /// ## empty (setter)
   set empty(Object? empty) => setAttribute("empty", empty);
+}
+
+/// ## ChildrenLexer
+///
+/// ### python source
+/// ```py
+/// class ChildrenLexer:
+///     def __init__(self, children):
+///         self.children = children
+///
+///     def lex(self, parser_state):
+///         return self.children
+/// ```
+final class ChildrenLexer extends PythonClass {
+  factory ChildrenLexer({
+    required Object? children,
+  }) =>
+      PythonFfiDart.instance.importClass(
+        "lark.tree_matcher",
+        "ChildrenLexer",
+        ChildrenLexer.from,
+        <Object?>[
+          children,
+        ],
+        <String, Object?>{},
+      );
+
+  ChildrenLexer.from(super.pythonClass) : super.from();
+
+  /// ## lex
+  ///
+  /// ### python source
+  /// ```py
+  /// def lex(self, parser_state):
+  ///         return self.children
+  /// ```
+  Object? lex({
+    required Object? parser_state,
+  }) =>
+      getFunction("lex").call(
+        <Object?>[
+          parser_state,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## children (getter)
+  Object? get children => getAttribute("children");
+
+  /// ## children (setter)
+  set children(Object? children) => setAttribute("children", children);
+}
+
+/// ## Template
+///
+/// ### python docstring
+///
+/// Represents a tree template, tied to a specific configuration
+///
+/// A tree template is a tree that contains nodes that are template variables.
+/// Those variables will match any tree.
+/// (future versions may support annotations on the variables, to allow more complex templates)
+///
+/// ### python source
+/// ```py
+/// class Template:
+///     """Represents a tree template, tied to a specific configuration
+///
+///     A tree template is a tree that contains nodes that are template variables.
+///     Those variables will match any tree.
+///     (future versions may support annotations on the variables, to allow more complex templates)
+///     """
+///
+///     def __init__(self, tree: Tree[str], conf: TemplateConf = TemplateConf()):
+///         self.conf = conf
+///         self.tree = conf._get_tree(tree)
+///
+///     def match(self, tree: TreeOrCode) -> Optional[MatchResult]:
+///         """Match a tree template to a tree.
+///
+///         A tree template without variables will only match ``tree`` if it is equal to the template.
+///
+///         Parameters:
+///             tree (Tree): The tree to match to the template
+///
+///         Returns:
+///             Optional[Dict[str, Tree]]: If match is found, returns a dictionary mapping
+///                 template variable names to their matching tree nodes.
+///                 If no match was found, returns None.
+///         """
+///         tree = self.conf._get_tree(tree)
+///         return self.conf._match_tree_template(self.tree, tree)
+///
+///     def search(self, tree: TreeOrCode) -> Iterator[Tuple[Tree[str], MatchResult]]:
+///         """Search for all occurrences of the tree template inside ``tree``.
+///         """
+///         tree = self.conf._get_tree(tree)
+///         for subtree in tree.iter_subtrees():
+///             res = self.match(subtree)
+///             if res:
+///                 yield subtree, res
+///
+///     def apply_vars(self, vars: Mapping[str, Tree[str]]) -> Tree[str]:
+///         """Apply vars to the template tree
+///         """
+///         return _ReplaceVars(self.conf, vars).transform(self.tree)
+/// ```
+final class Template extends PythonClass {
+  factory Template({
+    required Object? tree,
+    TemplateConf conf,
+  }) =>
+      PythonFfiDart.instance.importClass(
+        "lark.tree_templates",
+        "Template",
+        Template.from,
+        <Object?>[
+          tree,
+          conf,
+        ],
+        <String, Object?>{},
+      );
+
+  Template.from(super.pythonClass) : super.from();
+
+  /// ## apply_vars
+  ///
+  /// ### python docstring
+  ///
+  /// Apply vars to the template tree
+  ///
+  /// ### python source
+  /// ```py
+  /// def apply_vars(self, vars: Mapping[str, Tree[str]]) -> Tree[str]:
+  ///         """Apply vars to the template tree
+  ///         """
+  ///         return _ReplaceVars(self.conf, vars).transform(self.tree)
+  /// ```
+  Object? apply_vars({
+    required Object? vars,
+  }) =>
+      getFunction("apply_vars").call(
+        <Object?>[
+          vars,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## match
+  ///
+  /// ### python docstring
+  ///
+  /// Match a tree template to a tree.
+  ///
+  /// A tree template without variables will only match ``tree`` if it is equal to the template.
+  ///
+  /// Parameters:
+  ///     tree (Tree): The tree to match to the template
+  ///
+  /// Returns:
+  ///     Optional[Dict[str, Tree]]: If match is found, returns a dictionary mapping
+  ///         template variable names to their matching tree nodes.
+  ///         If no match was found, returns None.
+  ///
+  /// ### python source
+  /// ```py
+  /// def match(self, tree: TreeOrCode) -> Optional[MatchResult]:
+  ///         """Match a tree template to a tree.
+  ///
+  ///         A tree template without variables will only match ``tree`` if it is equal to the template.
+  ///
+  ///         Parameters:
+  ///             tree (Tree): The tree to match to the template
+  ///
+  ///         Returns:
+  ///             Optional[Dict[str, Tree]]: If match is found, returns a dictionary mapping
+  ///                 template variable names to their matching tree nodes.
+  ///                 If no match was found, returns None.
+  ///         """
+  ///         tree = self.conf._get_tree(tree)
+  ///         return self.conf._match_tree_template(self.tree, tree)
+  /// ```
+  Object? match({
+    required Object? tree,
+  }) =>
+      getFunction("match").call(
+        <Object?>[
+          tree,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## search
+  ///
+  /// ### python docstring
+  ///
+  /// Search for all occurrences of the tree template inside ``tree``.
+  ///
+  /// ### python source
+  /// ```py
+  /// def search(self, tree: TreeOrCode) -> Iterator[Tuple[Tree[str], MatchResult]]:
+  ///         """Search for all occurrences of the tree template inside ``tree``.
+  ///         """
+  ///         tree = self.conf._get_tree(tree)
+  ///         for subtree in tree.iter_subtrees():
+  ///             res = self.match(subtree)
+  ///             if res:
+  ///                 yield subtree, res
+  /// ```
+  Iterator<Object?> search({
+    required Object? tree,
+  }) =>
+      TypedIterator.from(
+        PythonIterator.from<Object?, PythonFfiDelegate<Object?>, Object?>(
+          getFunction("search").call(
+            <Object?>[
+              tree,
+            ],
+            kwargs: <String, Object?>{},
+          ),
+        ),
+      ).transform((e) => e).cast<Object?>();
+
+  /// ## conf (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Represents a tree template, tied to a specific configuration
+  ///
+  /// A tree template is a tree that contains nodes that are template variables.
+  /// Those variables will match any tree.
+  /// (future versions may support annotations on the variables, to allow more complex templates)
+  Object? get conf => getAttribute("conf");
+
+  /// ## conf (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Represents a tree template, tied to a specific configuration
+  ///
+  /// A tree template is a tree that contains nodes that are template variables.
+  /// Those variables will match any tree.
+  /// (future versions may support annotations on the variables, to allow more complex templates)
+  set conf(Object? conf) => setAttribute("conf", conf);
+
+  /// ## tree (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Represents a tree template, tied to a specific configuration
+  ///
+  /// A tree template is a tree that contains nodes that are template variables.
+  /// Those variables will match any tree.
+  /// (future versions may support annotations on the variables, to allow more complex templates)
+  Object? get tree => getAttribute("tree");
+
+  /// ## tree (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Represents a tree template, tied to a specific configuration
+  ///
+  /// A tree template is a tree that contains nodes that are template variables.
+  /// Those variables will match any tree.
+  /// (future versions may support annotations on the variables, to allow more complex templates)
+  set tree(Object? tree) => setAttribute("tree", tree);
+}
+
+/// ## TemplateConf
+///
+/// ### python docstring
+///
+/// Template Configuration
+///
+/// Allows customization for different uses of Template
+///
+/// parse() must return a Tree instance.
+///
+/// ### python source
+/// ```py
+/// class TemplateConf:
+///     """Template Configuration
+///
+///     Allows customization for different uses of Template
+///
+///     parse() must return a Tree instance.
+///     """
+///
+///     def __init__(self, parse=None):
+///         self._parse = parse
+///
+///     def test_var(self, var: Union[Tree[str], str]) -> Optional[str]:
+///         """Given a tree node, if it is a template variable return its name. Otherwise, return None.
+///
+///         This method may be overridden for customization
+///
+///         Parameters:
+///             var: Tree | str - The tree node to test
+///
+///         """
+///         if isinstance(var, str):
+///             return _get_template_name(var)
+///
+///         if (
+///             isinstance(var, Tree)
+///             and var.data == "var"
+///             and len(var.children) > 0
+///             and isinstance(var.children[0], str)
+///         ):
+///             return _get_template_name(var.children[0])
+///
+///         return None
+///
+///     def _get_tree(self, template: TreeOrCode) -> Tree[str]:
+///         if isinstance(template, str):
+///             assert self._parse
+///             template = self._parse(template)
+///
+///         if not isinstance(template, Tree):
+///             raise TypeError("template parser must return a Tree instance")
+///
+///         return template
+///
+///     def __call__(self, template: Tree[str]) -> 'Template':
+///         return Template(template, conf=self)
+///
+///     def _match_tree_template(self, template: TreeOrCode, tree: Branch) -> Optional[MatchResult]:
+///         """Returns dict of {var: match} if found a match, else None
+///         """
+///         template_var = self.test_var(template)
+///         if template_var:
+///             if not isinstance(tree, Tree):
+///                 raise TypeError(f"Template variables can only match Tree instances. Not {tree!r}")
+///             return {template_var: tree}
+///
+///         if isinstance(template, str):
+///             if template == tree:
+///                 return {}
+///             return None
+///
+///         assert isinstance(template, Tree) and isinstance(tree, Tree), f"template={template} tree={tree}"
+///
+///         if template.data == tree.data and len(template.children) == len(tree.children):
+///             res = {}
+///             for t1, t2 in zip(template.children, tree.children):
+///                 matches = self._match_tree_template(t1, t2)
+///                 if matches is None:
+///                     return None
+///
+///                 res.update(matches)
+///
+///             return res
+///
+///         return None
+/// ```
+final class TemplateConf extends PythonClass {
+  factory TemplateConf({
+    Object? parse,
+  }) =>
+      PythonFfiDart.instance.importClass(
+        "lark.tree_templates",
+        "TemplateConf",
+        TemplateConf.from,
+        <Object?>[
+          parse,
+        ],
+        <String, Object?>{},
+      );
+
+  TemplateConf.from(super.pythonClass) : super.from();
+
+  /// ## test_var
+  ///
+  /// ### python docstring
+  ///
+  /// Given a tree node, if it is a template variable return its name. Otherwise, return None.
+  ///
+  /// This method may be overridden for customization
+  ///
+  /// Parameters:
+  ///     var: Tree | str - The tree node to test
+  ///
+  /// ### python source
+  /// ```py
+  /// def test_var(self, var: Union[Tree[str], str]) -> Optional[str]:
+  ///         """Given a tree node, if it is a template variable return its name. Otherwise, return None.
+  ///
+  ///         This method may be overridden for customization
+  ///
+  ///         Parameters:
+  ///             var: Tree | str - The tree node to test
+  ///
+  ///         """
+  ///         if isinstance(var, str):
+  ///             return _get_template_name(var)
+  ///
+  ///         if (
+  ///             isinstance(var, Tree)
+  ///             and var.data == "var"
+  ///             and len(var.children) > 0
+  ///             and isinstance(var.children[0], str)
+  ///         ):
+  ///             return _get_template_name(var.children[0])
+  ///
+  ///         return None
+  /// ```
+  Object? test_var({
+    required Object? $var,
+  }) =>
+      getFunction("test_var").call(
+        <Object?>[
+          $var,
+        ],
+        kwargs: <String, Object?>{},
+      );
+}
+
+/// ## TemplateTranslator
+///
+/// ### python docstring
+///
+/// Utility class for translating a collection of patterns
+///
+/// ### python source
+/// ```py
+/// class TemplateTranslator:
+///     """Utility class for translating a collection of patterns
+///     """
+///
+///     def __init__(self, translations: Mapping[Template, Template]):
+///         assert all(isinstance(k, Template) and isinstance(v, Template) for k, v in translations.items())
+///         self.translations = translations
+///
+///     def translate(self, tree: Tree[str]):
+///         for k, v in self.translations.items():
+///             tree = translate(k, v, tree)
+///         return tree
+/// ```
+final class TemplateTranslator extends PythonClass {
+  factory TemplateTranslator({
+    required Object? translations,
+  }) =>
+      PythonFfiDart.instance.importClass(
+        "lark.tree_templates",
+        "TemplateTranslator",
+        TemplateTranslator.from,
+        <Object?>[
+          translations,
+        ],
+        <String, Object?>{},
+      );
+
+  TemplateTranslator.from(super.pythonClass) : super.from();
+
+  /// ## translate
+  ///
+  /// ### python source
+  /// ```py
+  /// def translate(self, tree: Tree[str]):
+  ///         for k, v in self.translations.items():
+  ///             tree = translate(k, v, tree)
+  ///         return tree
+  /// ```
+  Object? translate({
+    required Object? tree,
+  }) =>
+      getFunction("translate").call(
+        <Object?>[
+          tree,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## translations (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Utility class for translating a collection of patterns
+  Object? get translations => getAttribute("translations");
+
+  /// ## translations (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Utility class for translating a collection of patterns
+  set translations(Object? translations) =>
+      setAttribute("translations", translations);
 }
 
 /// ## UCD
@@ -27639,6 +29426,405 @@ final class Visitor_Recursive extends PythonClass {
       );
 }
 
+/// ## standalone
+///
+/// ### python source
+/// ```py
+/// ###{standalone
+/// #
+/// #
+/// #   Lark Stand-alone Generator Tool
+/// # ----------------------------------
+/// # Generates a stand-alone LALR(1) parser
+/// #
+/// # Git:    https://github.com/erezsh/lark
+/// # Author: Erez Shinan (erezshin@gmail.com)
+/// #
+/// #
+/// #    >>> LICENSE
+/// #
+/// #    This tool and its generated code use a separate license from Lark,
+/// #    and are subject to the terms of the Mozilla Public License, v. 2.0.
+/// #    If a copy of the MPL was not distributed with this
+/// #    file, You can obtain one at https://mozilla.org/MPL/2.0/.
+/// #
+/// #    If you wish to purchase a commercial license for this tool and its
+/// #    generated code, you may contact me via email or otherwise.
+/// #
+/// #    If MPL2 is incompatible with your free or open-source project,
+/// #    contact me and we'll work it out.
+/// #
+/// #
+///
+/// from abc import ABC, abstractmethod
+/// from collections.abc import Sequence
+/// from types import ModuleType
+/// from typing import (
+///     TypeVar, Generic, Type, Tuple, List, Dict, Iterator, Collection, Callable, Optional, FrozenSet, Any,
+///     Union, Iterable, IO, TYPE_CHECKING, overload,
+///     Pattern as REPattern, ClassVar, Set, Mapping
+/// )
+/// ###}
+///
+/// import sys
+/// import token, tokenize
+/// import os
+/// from os import path
+/// from collections import defaultdict
+/// from functools import partial
+/// from argparse import ArgumentParser
+///
+/// import lark
+/// from lark.tools import lalr_argparser, build_lalr, make_warnings_comments
+///
+///
+/// from lark.grammar import Rule
+/// from lark.lexer import TerminalDef
+///
+/// _dir = path.dirname(__file__)
+/// _larkdir = path.join(_dir, path.pardir)
+///
+///
+/// EXTRACT_STANDALONE_FILES = [
+///     'tools/standalone.py',
+///     'exceptions.py',
+///     'utils.py',
+///     'tree.py',
+///     'visitors.py',
+///     'grammar.py',
+///     'lexer.py',
+///     'common.py',
+///     'parse_tree_builder.py',
+///     'parsers/lalr_parser.py',
+///     'parsers/lalr_analysis.py',
+///     'parser_frontends.py',
+///     'lark.py',
+///     'indenter.py',
+/// ]
+///
+/// def extract_sections(lines):
+///     section = None
+///     text = []
+///     sections = defaultdict(list)
+///     for line in lines:
+///         if line.startswith('###'):
+///             if line[3] == '{':
+///                 section = line[4:].strip()
+///             elif line[3] == '}':
+///                 sections[section] += text
+///                 section = None
+///                 text = []
+///             else:
+///                 raise ValueError(line)
+///         elif section:
+///             text.append(line)
+///
+///     return {name: ''.join(text) for name, text in sections.items()}
+///
+///
+/// def strip_docstrings(line_gen):
+///     """ Strip comments and docstrings from a file.
+///     Based on code from: https://stackoverflow.com/questions/1769332/script-to-remove-python-comments-docstrings
+///     """
+///     res = []
+///
+///     prev_toktype = token.INDENT
+///     last_lineno = -1
+///     last_col = 0
+///
+///     tokgen = tokenize.generate_tokens(line_gen)
+///     for toktype, ttext, (slineno, scol), (elineno, ecol), ltext in tokgen:
+///         if slineno > last_lineno:
+///             last_col = 0
+///         if scol > last_col:
+///             res.append(" " * (scol - last_col))
+///         if toktype == token.STRING and prev_toktype == token.INDENT:
+///             # Docstring
+///             res.append("#--")
+///         elif toktype == tokenize.COMMENT:
+///             # Comment
+///             res.append("##\n")
+///         else:
+///             res.append(ttext)
+///         prev_toktype = toktype
+///         last_col = ecol
+///         last_lineno = elineno
+///
+///     return ''.join(res)
+///
+///
+/// def gen_standalone(lark_inst, output=None, out=sys.stdout, compress=False):
+///     if output is None:
+///         output = partial(print, file=out)
+///
+///     import pickle, zlib, base64
+///     def compressed_output(obj):
+///         s = pickle.dumps(obj, pickle.HIGHEST_PROTOCOL)
+///         c = zlib.compress(s)
+///         output(repr(base64.b64encode(c)))
+///
+///     def output_decompress(name):
+///         output('%(name)s = pickle.loads(zlib.decompress(base64.b64decode(%(name)s)))' % locals())
+///
+///     output('# The file was automatically generated by Lark v%s' % lark.__version__)
+///     output('__version__ = "%s"' % lark.__version__)
+///     output()
+///
+///     for i, pyfile in enumerate(EXTRACT_STANDALONE_FILES):
+///         with open(os.path.join(_larkdir, pyfile)) as f:
+///             code = extract_sections(f)['standalone']
+///             if i:   # if not this file
+///                 code = strip_docstrings(partial(next, iter(code.splitlines(True))))
+///             output(code)
+///
+///     data, m = lark_inst.memo_serialize([TerminalDef, Rule])
+///     output('import pickle, zlib, base64')
+///     if compress:
+///         output('DATA = (')
+///         compressed_output(data)
+///         output(')')
+///         output_decompress('DATA')
+///         output('MEMO = (')
+///         compressed_output(m)
+///         output(')')
+///         output_decompress('MEMO')
+///     else:
+///         output('DATA = (')
+///         output(data)
+///         output(')')
+///         output('MEMO = (')
+///         output(m)
+///         output(')')
+///
+///
+///     output('Shift = 0')
+///     output('Reduce = 1')
+///     output("def Lark_StandAlone(**kwargs):")
+///     output("  return Lark._load_from_dict(DATA, MEMO, **kwargs)")
+///
+///
+///
+///
+/// def main():
+///     make_warnings_comments()
+///     parser = ArgumentParser(prog="prog='python -m lark.tools.standalone'", description="Lark Stand-alone Generator Tool",
+///                             parents=[lalr_argparser], epilog='Look at the Lark documentation for more info on the options')
+///     parser.add_argument('-c', '--compress', action='store_true', default=0, help="Enable compression")
+///     if len(sys.argv) == 1:
+///         parser.print_help(sys.stderr)
+///         sys.exit(1)
+///     ns = parser.parse_args()
+///
+///     lark_inst, out = build_lalr(ns)
+///     gen_standalone(lark_inst, out=out, compress=ns.compress)
+///
+///     ns.out.close()
+///     ns.grammar_file.close()
+///
+///
+/// if __name__ == '__main__':
+///     main()
+/// ```
+final class standalone extends PythonModule {
+  standalone.from(super.pythonModule) : super.from();
+
+  static standalone import() => PythonFfiDart.instance.importModule(
+        "lark.tools.standalone",
+        standalone.from,
+      );
+
+  /// ## extract_sections
+  ///
+  /// ### python source
+  /// ```py
+  /// def extract_sections(lines):
+  ///     section = None
+  ///     text = []
+  ///     sections = defaultdict(list)
+  ///     for line in lines:
+  ///         if line.startswith('###'):
+  ///             if line[3] == '{':
+  ///                 section = line[4:].strip()
+  ///             elif line[3] == '}':
+  ///                 sections[section] += text
+  ///                 section = None
+  ///                 text = []
+  ///             else:
+  ///                 raise ValueError(line)
+  ///         elif section:
+  ///             text.append(line)
+  ///
+  ///     return {name: ''.join(text) for name, text in sections.items()}
+  /// ```
+  Object? extract_sections({
+    required Object? lines,
+  }) =>
+      getFunction("extract_sections").call(
+        <Object?>[
+          lines,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## gen_standalone
+  ///
+  /// ### python source
+  /// ```py
+  /// def gen_standalone(lark_inst, output=None, out=sys.stdout, compress=False):
+  ///     if output is None:
+  ///         output = partial(print, file=out)
+  ///
+  ///     import pickle, zlib, base64
+  ///     def compressed_output(obj):
+  ///         s = pickle.dumps(obj, pickle.HIGHEST_PROTOCOL)
+  ///         c = zlib.compress(s)
+  ///         output(repr(base64.b64encode(c)))
+  ///
+  ///     def output_decompress(name):
+  ///         output('%(name)s = pickle.loads(zlib.decompress(base64.b64decode(%(name)s)))' % locals())
+  ///
+  ///     output('# The file was automatically generated by Lark v%s' % lark.__version__)
+  ///     output('__version__ = "%s"' % lark.__version__)
+  ///     output()
+  ///
+  ///     for i, pyfile in enumerate(EXTRACT_STANDALONE_FILES):
+  ///         with open(os.path.join(_larkdir, pyfile)) as f:
+  ///             code = extract_sections(f)['standalone']
+  ///             if i:   # if not this file
+  ///                 code = strip_docstrings(partial(next, iter(code.splitlines(True))))
+  ///             output(code)
+  ///
+  ///     data, m = lark_inst.memo_serialize([TerminalDef, Rule])
+  ///     output('import pickle, zlib, base64')
+  ///     if compress:
+  ///         output('DATA = (')
+  ///         compressed_output(data)
+  ///         output(')')
+  ///         output_decompress('DATA')
+  ///         output('MEMO = (')
+  ///         compressed_output(m)
+  ///         output(')')
+  ///         output_decompress('MEMO')
+  ///     else:
+  ///         output('DATA = (')
+  ///         output(data)
+  ///         output(')')
+  ///         output('MEMO = (')
+  ///         output(m)
+  ///         output(')')
+  ///
+  ///
+  ///     output('Shift = 0')
+  ///     output('Reduce = 1')
+  ///     output("def Lark_StandAlone(**kwargs):")
+  ///     output("  return Lark._load_from_dict(DATA, MEMO, **kwargs)")
+  /// ```
+  Object? gen_standalone({
+    required Object? lark_inst,
+    Object? output,
+    Object? out,
+    Object? compress = false,
+  }) =>
+      getFunction("gen_standalone").call(
+        <Object?>[
+          lark_inst,
+          output,
+          out,
+          compress,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## main
+  ///
+  /// ### python source
+  /// ```py
+  /// def main():
+  ///     make_warnings_comments()
+  ///     parser = ArgumentParser(prog="prog='python -m lark.tools.standalone'", description="Lark Stand-alone Generator Tool",
+  ///                             parents=[lalr_argparser], epilog='Look at the Lark documentation for more info on the options')
+  ///     parser.add_argument('-c', '--compress', action='store_true', default=0, help="Enable compression")
+  ///     if len(sys.argv) == 1:
+  ///         parser.print_help(sys.stderr)
+  ///         sys.exit(1)
+  ///     ns = parser.parse_args()
+  ///
+  ///     lark_inst, out = build_lalr(ns)
+  ///     gen_standalone(lark_inst, out=out, compress=ns.compress)
+  ///
+  ///     ns.out.close()
+  ///     ns.grammar_file.close()
+  /// ```
+  Object? main() => getFunction("main").call(
+        <Object?>[],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## strip_docstrings
+  ///
+  /// ### python docstring
+  ///
+  /// Strip comments and docstrings from a file.
+  /// Based on code from: https://stackoverflow.com/questions/1769332/script-to-remove-python-comments-docstrings
+  ///
+  /// ### python source
+  /// ```py
+  /// def strip_docstrings(line_gen):
+  ///     """ Strip comments and docstrings from a file.
+  ///     Based on code from: https://stackoverflow.com/questions/1769332/script-to-remove-python-comments-docstrings
+  ///     """
+  ///     res = []
+  ///
+  ///     prev_toktype = token.INDENT
+  ///     last_lineno = -1
+  ///     last_col = 0
+  ///
+  ///     tokgen = tokenize.generate_tokens(line_gen)
+  ///     for toktype, ttext, (slineno, scol), (elineno, ecol), ltext in tokgen:
+  ///         if slineno > last_lineno:
+  ///             last_col = 0
+  ///         if scol > last_col:
+  ///             res.append(" " * (scol - last_col))
+  ///         if toktype == token.STRING and prev_toktype == token.INDENT:
+  ///             # Docstring
+  ///             res.append("#--")
+  ///         elif toktype == tokenize.COMMENT:
+  ///             # Comment
+  ///             res.append("##\n")
+  ///         else:
+  ///             res.append(ttext)
+  ///         prev_toktype = toktype
+  ///         last_col = ecol
+  ///         last_lineno = elineno
+  ///
+  ///     return ''.join(res)
+  /// ```
+  Object? strip_docstrings({
+    required Object? line_gen,
+  }) =>
+      getFunction("strip_docstrings").call(
+        <Object?>[
+          line_gen,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## EXTRACT_STANDALONE_FILES (getter)
+  Object? get EXTRACT_STANDALONE_FILES =>
+      getAttribute("EXTRACT_STANDALONE_FILES");
+
+  /// ## EXTRACT_STANDALONE_FILES (setter)
+  set EXTRACT_STANDALONE_FILES(Object? EXTRACT_STANDALONE_FILES) =>
+      setAttribute("EXTRACT_STANDALONE_FILES", EXTRACT_STANDALONE_FILES);
+
+  /// ## TYPE_CHECKING (getter)
+  Object? get TYPE_CHECKING => getAttribute("TYPE_CHECKING");
+
+  /// ## TYPE_CHECKING (setter)
+  set TYPE_CHECKING(Object? TYPE_CHECKING) =>
+      setAttribute("TYPE_CHECKING", TYPE_CHECKING);
+}
+
 /// ## lark
 ///
 /// ### python source
@@ -27688,6 +29874,162 @@ final class lark extends PythonModule {
   static lark import() => PythonFfiDart.instance.importModule(
         "lark",
         lark.from,
+      );
+}
+
+/// ## ast_utils
+///
+/// ### python docstring
+///
+/// Module of utilities for transforming a lark.Tree into a custom Abstract Syntax Tree
+///
+/// ### python source
+/// ```py
+/// """
+///     Module of utilities for transforming a lark.Tree into a custom Abstract Syntax Tree
+/// """
+///
+/// import inspect, re
+/// import types
+/// from typing import Optional, Callable
+///
+/// from lark import Transformer, v_args
+///
+/// class Ast:
+///     """Abstract class
+///
+///     Subclasses will be collected by `create_transformer()`
+///     """
+///     pass
+///
+/// class AsList:
+///     """Abstract class
+///
+///     Subclasses will be instantiated with the parse results as a single list, instead of as arguments.
+///     """
+///
+/// class WithMeta:
+///     """Abstract class
+///
+///     Subclasses will be instantiated with the Meta instance of the tree. (see ``v_args`` for more detail)
+///     """
+///     pass
+///
+/// def camel_to_snake(name):
+///     return re.sub(r'(?<!^)(?=[A-Z])', '_', name).lower()
+///
+/// def create_transformer(ast_module: types.ModuleType,
+///                        transformer: Optional[Transformer]=None,
+///                        decorator_factory: Callable=v_args) -> Transformer:
+///     """Collects `Ast` subclasses from the given module, and creates a Lark transformer that builds the AST.
+///
+///     For each class, we create a corresponding rule in the transformer, with a matching name.
+///     CamelCase names will be converted into snake_case. Example: "CodeBlock" -> "code_block".
+///
+///     Classes starting with an underscore (`_`) will be skipped.
+///
+///     Parameters:
+///         ast_module: A Python module containing all the subclasses of ``ast_utils.Ast``
+///         transformer (Optional[Transformer]): An initial transformer. Its attributes may be overwritten.
+///         decorator_factory (Callable): An optional callable accepting two booleans, inline, and meta,
+///             and returning a decorator for the methods of ``transformer``. (default: ``v_args``).
+///     """
+///     t = transformer or Transformer()
+///
+///     for name, obj in inspect.getmembers(ast_module):
+///         if not name.startswith('_') and inspect.isclass(obj):
+///             if issubclass(obj, Ast):
+///                 wrapper = decorator_factory(inline=not issubclass(obj, AsList), meta=issubclass(obj, WithMeta))
+///                 obj = wrapper(obj).__get__(t)
+///                 setattr(t, camel_to_snake(name), obj)
+///
+///     return t
+/// ```
+final class ast_utils extends PythonModule {
+  ast_utils.from(super.pythonModule) : super.from();
+
+  static ast_utils import() => PythonFfiDart.instance.importModule(
+        "lark.ast_utils",
+        ast_utils.from,
+      );
+
+  /// ## camel_to_snake
+  ///
+  /// ### python source
+  /// ```py
+  /// def camel_to_snake(name):
+  ///     return re.sub(r'(?<!^)(?=[A-Z])', '_', name).lower()
+  /// ```
+  Object? camel_to_snake({
+    required Object? name,
+  }) =>
+      getFunction("camel_to_snake").call(
+        <Object?>[
+          name,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## create_transformer
+  ///
+  /// ### python docstring
+  ///
+  /// Collects `Ast` subclasses from the given module, and creates a Lark transformer that builds the AST.
+  ///
+  /// For each class, we create a corresponding rule in the transformer, with a matching name.
+  /// CamelCase names will be converted into snake_case. Example: "CodeBlock" -> "code_block".
+  ///
+  /// Classes starting with an underscore (`_`) will be skipped.
+  ///
+  /// Parameters:
+  ///     ast_module: A Python module containing all the subclasses of ``ast_utils.Ast``
+  ///     transformer (Optional[Transformer]): An initial transformer. Its attributes may be overwritten.
+  ///     decorator_factory (Callable): An optional callable accepting two booleans, inline, and meta,
+  ///         and returning a decorator for the methods of ``transformer``. (default: ``v_args``).
+  ///
+  /// ### python source
+  /// ```py
+  /// def create_transformer(ast_module: types.ModuleType,
+  ///                        transformer: Optional[Transformer]=None,
+  ///                        decorator_factory: Callable=v_args) -> Transformer:
+  ///     """Collects `Ast` subclasses from the given module, and creates a Lark transformer that builds the AST.
+  ///
+  ///     For each class, we create a corresponding rule in the transformer, with a matching name.
+  ///     CamelCase names will be converted into snake_case. Example: "CodeBlock" -> "code_block".
+  ///
+  ///     Classes starting with an underscore (`_`) will be skipped.
+  ///
+  ///     Parameters:
+  ///         ast_module: A Python module containing all the subclasses of ``ast_utils.Ast``
+  ///         transformer (Optional[Transformer]): An initial transformer. Its attributes may be overwritten.
+  ///         decorator_factory (Callable): An optional callable accepting two booleans, inline, and meta,
+  ///             and returning a decorator for the methods of ``transformer``. (default: ``v_args``).
+  ///     """
+  ///     t = transformer or Transformer()
+  ///
+  ///     for name, obj in inspect.getmembers(ast_module):
+  ///         if not name.startswith('_') and inspect.isclass(obj):
+  ///             if issubclass(obj, Ast):
+  ///                 wrapper = decorator_factory(inline=not issubclass(obj, AsList), meta=issubclass(obj, WithMeta))
+  ///                 obj = wrapper(obj).__get__(t)
+  ///                 setattr(t, camel_to_snake(name), obj)
+  ///
+  ///     return t
+  /// ```
+  Transformer create_transformer({
+    required ModuleType ast_module,
+    Object? transformer,
+    Function decorator_factory,
+  }) =>
+      Transformer.from(
+        getFunction("create_transformer").call(
+          <Object?>[
+            ast_module,
+            transformer,
+            decorator_factory,
+          ],
+          kwargs: <String, Object?>{},
+        ),
       );
 }
 
@@ -28499,6 +30841,146 @@ final class grammar extends PythonModule {
   /// ## TOKEN_DEFAULT_PRIORITY (setter)
   set TOKEN_DEFAULT_PRIORITY(Object? TOKEN_DEFAULT_PRIORITY) =>
       setAttribute("TOKEN_DEFAULT_PRIORITY", TOKEN_DEFAULT_PRIORITY);
+}
+
+/// ## grammars
+final class grammars extends PythonModule {
+  grammars.from(super.pythonModule) : super.from();
+
+  static grammars import() => PythonFfiDart.instance.importModule(
+        "lark.grammars",
+        grammars.from,
+      );
+}
+
+/// ## indenter
+///
+/// ### python docstring
+///
+/// Provides Indentation services for languages with indentation similar to Python
+///
+/// ### python source
+/// ```py
+/// "Provides Indentation services for languages with indentation similar to Python"
+///
+/// from abc import ABC, abstractmethod
+/// from typing import List, Iterator
+///
+/// from .exceptions import LarkError
+/// from .lark import PostLex
+/// from .lexer import Token
+///
+/// ###{standalone
+///
+/// class DedentError(LarkError):
+///     pass
+///
+/// class Indenter(PostLex, ABC):
+///     paren_level: int
+///     indent_level: List[int]
+///
+///     def __init__(self) -> None:
+///         self.paren_level = 0
+///         self.indent_level = [0]
+///         assert self.tab_len > 0
+///
+///     def handle_NL(self, token: Token) -> Iterator[Token]:
+///         if self.paren_level > 0:
+///             return
+///
+///         yield token
+///
+///         indent_str = token.rsplit('\n', 1)[1] # Tabs and spaces
+///         indent = indent_str.count(' ') + indent_str.count('\t') * self.tab_len
+///
+///         if indent > self.indent_level[-1]:
+///             self.indent_level.append(indent)
+///             yield Token.new_borrow_pos(self.INDENT_type, indent_str, token)
+///         else:
+///             while indent < self.indent_level[-1]:
+///                 self.indent_level.pop()
+///                 yield Token.new_borrow_pos(self.DEDENT_type, indent_str, token)
+///
+///             if indent != self.indent_level[-1]:
+///                 raise DedentError('Unexpected dedent to column %s. Expected dedent to %s' % (indent, self.indent_level[-1]))
+///
+///     def _process(self, stream):
+///         for token in stream:
+///             if token.type == self.NL_type:
+///                 yield from self.handle_NL(token)
+///             else:
+///                 yield token
+///
+///             if token.type in self.OPEN_PAREN_types:
+///                 self.paren_level += 1
+///             elif token.type in self.CLOSE_PAREN_types:
+///                 self.paren_level -= 1
+///                 assert self.paren_level >= 0
+///
+///         while len(self.indent_level) > 1:
+///             self.indent_level.pop()
+///             yield Token(self.DEDENT_type, '')
+///
+///         assert self.indent_level == [0], self.indent_level
+///
+///     def process(self, stream):
+///         self.paren_level = 0
+///         self.indent_level = [0]
+///         return self._process(stream)
+///
+///     # XXX Hack for ContextualLexer. Maybe there's a more elegant solution?
+///     @property
+///     def always_accept(self):
+///         return (self.NL_type,)
+///
+///     @property
+///     @abstractmethod
+///     def NL_type(self) -> str:
+///         raise NotImplementedError()
+///
+///     @property
+///     @abstractmethod
+///     def OPEN_PAREN_types(self) -> List[str]:
+///         raise NotImplementedError()
+///
+///     @property
+///     @abstractmethod
+///     def CLOSE_PAREN_types(self) -> List[str]:
+///         raise NotImplementedError()
+///
+///     @property
+///     @abstractmethod
+///     def INDENT_type(self) -> str:
+///         raise NotImplementedError()
+///
+///     @property
+///     @abstractmethod
+///     def DEDENT_type(self) -> str:
+///         raise NotImplementedError()
+///
+///     @property
+///     @abstractmethod
+///     def tab_len(self) -> int:
+///         raise NotImplementedError()
+///
+///
+/// class PythonIndenter(Indenter):
+///     NL_type = '_NEWLINE'
+///     OPEN_PAREN_types = ['LPAR', 'LSQB', 'LBRACE']
+///     CLOSE_PAREN_types = ['RPAR', 'RSQB', 'RBRACE']
+///     INDENT_type = '_INDENT'
+///     DEDENT_type = '_DEDENT'
+///     tab_len = 8
+///
+/// ###}
+/// ```
+final class indenter extends PythonModule {
+  indenter.from(super.pythonModule) : super.from();
+
+  static indenter import() => PythonFfiDart.instance.importModule(
+        "lark.indenter",
+        indenter.from,
+      );
 }
 
 /// ## lexer
@@ -35139,6 +37621,426 @@ final class lalr_parser extends PythonModule {
       );
 }
 
+/// ## reconstruct
+///
+/// ### python docstring
+///
+/// Reconstruct text from a tree, based on Lark grammar
+///
+/// ### python source
+/// ```py
+/// """Reconstruct text from a tree, based on Lark grammar"""
+///
+/// from typing import Dict, Callable, Iterable, Optional
+///
+/// from .lark import Lark
+/// from .tree import Tree, ParseTree
+/// from .visitors import Transformer_InPlace
+/// from .lexer import Token, PatternStr, TerminalDef
+/// from .grammar import Terminal, NonTerminal, Symbol
+///
+/// from .tree_matcher import TreeMatcher, is_discarded_terminal
+/// from .utils import is_id_continue
+///
+/// def is_iter_empty(i):
+///     try:
+///         _ = next(i)
+///         return False
+///     except StopIteration:
+///         return True
+///
+///
+/// class WriteTokensTransformer(Transformer_InPlace):
+///     "Inserts discarded tokens into their correct place, according to the rules of grammar"
+///
+///     tokens: Dict[str, TerminalDef]
+///     term_subs: Dict[str, Callable[[Symbol], str]]
+///
+///     def __init__(self, tokens: Dict[str, TerminalDef], term_subs: Dict[str, Callable[[Symbol], str]]) -> None:
+///         self.tokens = tokens
+///         self.term_subs = term_subs
+///
+///     def __default__(self, data, children, meta):
+///         if not getattr(meta, 'match_tree', False):
+///             return Tree(data, children)
+///
+///         iter_args = iter(children)
+///         to_write = []
+///         for sym in meta.orig_expansion:
+///             if is_discarded_terminal(sym):
+///                 try:
+///                     v = self.term_subs[sym.name](sym)
+///                 except KeyError:
+///                     t = self.tokens[sym.name]
+///                     if not isinstance(t.pattern, PatternStr):
+///                         raise NotImplementedError("Reconstructing regexps not supported yet: %s" % t)
+///
+///                     v = t.pattern.value
+///                 to_write.append(v)
+///             else:
+///                 x = next(iter_args)
+///                 if isinstance(x, list):
+///                     to_write += x
+///                 else:
+///                     if isinstance(x, Token):
+///                         assert Terminal(x.type) == sym, x
+///                     else:
+///                         assert NonTerminal(x.data) == sym, (sym, x)
+///                     to_write.append(x)
+///
+///         assert is_iter_empty(iter_args)
+///         return to_write
+///
+///
+/// class Reconstructor(TreeMatcher):
+///     """
+///     A Reconstructor that will, given a full parse Tree, generate source code.
+///
+///     Note:
+///         The reconstructor cannot generate values from regexps. If you need to produce discarded
+///         regexes, such as newlines, use `term_subs` and provide default values for them.
+///
+///     Parameters:
+///         parser: a Lark instance
+///         term_subs: a dictionary of [Terminal name as str] to [output text as str]
+///     """
+///
+///     write_tokens: WriteTokensTransformer
+///
+///     def __init__(self, parser: Lark, term_subs: Optional[Dict[str, Callable[[Symbol], str]]]=None) -> None:
+///         TreeMatcher.__init__(self, parser)
+///
+///         self.write_tokens = WriteTokensTransformer({t.name:t for t in self.tokens}, term_subs or {})
+///
+///     def _reconstruct(self, tree):
+///         unreduced_tree = self.match_tree(tree, tree.data)
+///
+///         res = self.write_tokens.transform(unreduced_tree)
+///         for item in res:
+///             if isinstance(item, Tree):
+///                 # TODO use orig_expansion.rulename to support templates
+///                 yield from self._reconstruct(item)
+///             else:
+///                 yield item
+///
+///     def reconstruct(self, tree: ParseTree, postproc: Optional[Callable[[Iterable[str]], Iterable[str]]]=None, insert_spaces: bool=True) -> str:
+///         x = self._reconstruct(tree)
+///         if postproc:
+///             x = postproc(x)
+///         y = []
+///         prev_item = ''
+///         for item in x:
+///             if insert_spaces and prev_item and item and is_id_continue(prev_item[-1]) and is_id_continue(item[0]):
+///                 y.append(' ')
+///             y.append(item)
+///             prev_item = item
+///         return ''.join(y)
+/// ```
+final class reconstruct extends PythonModule {
+  reconstruct.from(super.pythonModule) : super.from();
+
+  static reconstruct import() => PythonFfiDart.instance.importModule(
+        "lark.reconstruct",
+        reconstruct.from,
+      );
+
+  /// ## is_iter_empty
+  ///
+  /// ### python source
+  /// ```py
+  /// def is_iter_empty(i):
+  ///     try:
+  ///         _ = next(i)
+  ///         return False
+  ///     except StopIteration:
+  ///         return True
+  /// ```
+  Object? is_iter_empty({
+    required Object? i,
+  }) =>
+      getFunction("is_iter_empty").call(
+        <Object?>[
+          i,
+        ],
+        kwargs: <String, Object?>{},
+      );
+}
+
+/// ## tools
+///
+/// ### python source
+/// ```py
+/// import sys
+/// from argparse import ArgumentParser, FileType
+/// from textwrap import indent
+/// from logging import DEBUG, INFO, WARN, ERROR
+/// from typing import Optional
+/// import warnings
+///
+/// from lark import Lark, logger
+/// try:
+///     from interegular import logger as interegular_logger
+///     has_interegular = True
+/// except ImportError:
+///     has_interegular = False
+///
+/// lalr_argparser = ArgumentParser(add_help=False, epilog='Look at the Lark documentation for more info on the options')
+///
+/// flags = [
+///     ('d', 'debug'),
+///     'keep_all_tokens',
+///     'regex',
+///     'propagate_positions',
+///     'maybe_placeholders',
+///     'use_bytes'
+/// ]
+///
+/// options = ['start', 'lexer']
+///
+/// lalr_argparser.add_argument('-v', '--verbose', action='count', default=0, help="Increase Logger output level, up to three times")
+/// lalr_argparser.add_argument('-s', '--start', action='append', default=[])
+/// lalr_argparser.add_argument('-l', '--lexer', default='contextual', choices=('basic', 'contextual'))
+/// encoding: Optional[str] = 'utf-8' if sys.version_info > (3, 4) else None
+/// lalr_argparser.add_argument('-o', '--out', type=FileType('w', encoding=encoding), default=sys.stdout, help='the output file (default=stdout)')
+/// lalr_argparser.add_argument('grammar_file', type=FileType('r', encoding=encoding), help='A valid .lark file')
+///
+/// for flag in flags:
+///     if isinstance(flag, tuple):
+///         options.append(flag[1])
+///         lalr_argparser.add_argument('-' + flag[0], '--' + flag[1], action='store_true')
+///     elif isinstance(flag, str):
+///         options.append(flag)
+///         lalr_argparser.add_argument('--' + flag, action='store_true')
+///     else:
+///         raise NotImplementedError("flags must only contain strings or tuples of strings")
+///
+///
+/// def build_lalr(namespace):
+///     logger.setLevel((ERROR, WARN, INFO, DEBUG)[min(namespace.verbose, 3)])
+///     if has_interegular:
+///         interegular_logger.setLevel(logger.getEffectiveLevel())
+///     if len(namespace.start) == 0:
+///         namespace.start.append('start')
+///     kwargs = {n: getattr(namespace, n) for n in options}
+///     return Lark(namespace.grammar_file, parser='lalr', **kwargs), namespace.out
+///
+///
+/// def showwarning_as_comment(message, category, filename, lineno, file=None, line=None):
+///     # Based on warnings._showwarnmsg_impl
+///     text = warnings.formatwarning(message, category, filename, lineno, line)
+///     text = indent(text, '# ')
+///     if file is None:
+///         file = sys.stderr
+///         if file is None:
+///             return
+///     try:
+///         file.write(text)
+///     except OSError:
+///         pass
+///
+///
+/// def make_warnings_comments():
+///     warnings.showwarning = showwarning_as_comment
+/// ```
+final class tools extends PythonModule {
+  tools.from(super.pythonModule) : super.from();
+
+  static tools import() => PythonFfiDart.instance.importModule(
+        "lark.tools",
+        tools.from,
+      );
+
+  /// ## build_lalr
+  ///
+  /// ### python source
+  /// ```py
+  /// def build_lalr(namespace):
+  ///     logger.setLevel((ERROR, WARN, INFO, DEBUG)[min(namespace.verbose, 3)])
+  ///     if has_interegular:
+  ///         interegular_logger.setLevel(logger.getEffectiveLevel())
+  ///     if len(namespace.start) == 0:
+  ///         namespace.start.append('start')
+  ///     kwargs = {n: getattr(namespace, n) for n in options}
+  ///     return Lark(namespace.grammar_file, parser='lalr', **kwargs), namespace.out
+  /// ```
+  Object? build_lalr({
+    required Object? namespace,
+  }) =>
+      getFunction("build_lalr").call(
+        <Object?>[
+          namespace,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## make_warnings_comments
+  ///
+  /// ### python source
+  /// ```py
+  /// def make_warnings_comments():
+  ///     warnings.showwarning = showwarning_as_comment
+  /// ```
+  Object? make_warnings_comments() =>
+      getFunction("make_warnings_comments").call(
+        <Object?>[],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## showwarning_as_comment
+  ///
+  /// ### python source
+  /// ```py
+  /// def showwarning_as_comment(message, category, filename, lineno, file=None, line=None):
+  ///     # Based on warnings._showwarnmsg_impl
+  ///     text = warnings.formatwarning(message, category, filename, lineno, line)
+  ///     text = indent(text, '# ')
+  ///     if file is None:
+  ///         file = sys.stderr
+  ///         if file is None:
+  ///             return
+  ///     try:
+  ///         file.write(text)
+  ///     except OSError:
+  ///         pass
+  /// ```
+  Object? showwarning_as_comment({
+    required Object? message,
+    required Object? category,
+    required Object? filename,
+    required Object? lineno,
+    Object? file,
+    Object? line,
+  }) =>
+      getFunction("showwarning_as_comment").call(
+        <Object?>[
+          message,
+          category,
+          filename,
+          lineno,
+          file,
+          line,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## DEBUG (getter)
+  Object? get DEBUG => getAttribute("DEBUG");
+
+  /// ## DEBUG (setter)
+  set DEBUG(Object? DEBUG) => setAttribute("DEBUG", DEBUG);
+
+  /// ## ERROR (getter)
+  Object? get ERROR => getAttribute("ERROR");
+
+  /// ## ERROR (setter)
+  set ERROR(Object? ERROR) => setAttribute("ERROR", ERROR);
+
+  /// ## INFO (getter)
+  Object? get INFO => getAttribute("INFO");
+
+  /// ## INFO (setter)
+  set INFO(Object? INFO) => setAttribute("INFO", INFO);
+
+  /// ## WARN (getter)
+  Object? get WARN => getAttribute("WARN");
+
+  /// ## WARN (setter)
+  set WARN(Object? WARN) => setAttribute("WARN", WARN);
+
+  /// ## encoding (getter)
+  Object? get encoding => getAttribute("encoding");
+
+  /// ## encoding (setter)
+  set encoding(Object? encoding) => setAttribute("encoding", encoding);
+
+  /// ## flag (getter)
+  Object? get flag => getAttribute("flag");
+
+  /// ## flag (setter)
+  set flag(Object? flag) => setAttribute("flag", flag);
+
+  /// ## flags (getter)
+  Object? get flags => getAttribute("flags");
+
+  /// ## flags (setter)
+  set flags(Object? flags) => setAttribute("flags", flags);
+
+  /// ## has_interegular (getter)
+  Object? get has_interegular => getAttribute("has_interegular");
+
+  /// ## has_interegular (setter)
+  set has_interegular(Object? has_interegular) =>
+      setAttribute("has_interegular", has_interegular);
+
+  /// ## options (getter)
+  Object? get options => getAttribute("options");
+
+  /// ## options (setter)
+  set options(Object? options) => setAttribute("options", options);
+}
+
+/// ## serialize
+///
+/// ### python source
+/// ```py
+/// import sys
+/// import json
+///
+/// from lark.grammar import Rule
+/// from lark.lexer import TerminalDef
+/// from lark.tools import lalr_argparser, build_lalr
+///
+/// import argparse
+///
+/// argparser = argparse.ArgumentParser(prog='python -m lark.tools.serialize', parents=[lalr_argparser],
+///                                     description="Lark Serialization Tool - Stores Lark's internal state & LALR analysis as a JSON file",
+///                                     epilog='Look at the Lark documentation for more info on the options')
+///
+///
+/// def serialize(lark_inst, outfile):
+///     data, memo = lark_inst.memo_serialize([TerminalDef, Rule])
+///     outfile.write('{\n')
+///     outfile.write('  "data": %s,\n' % json.dumps(data))
+///     outfile.write('  "memo": %s\n' % json.dumps(memo))
+///     outfile.write('}\n')
+///
+///
+/// def main():
+///     if len(sys.argv)==1:
+///         argparser.print_help(sys.stderr)
+///         sys.exit(1)
+///     ns = argparser.parse_args()
+///     serialize(*build_lalr(ns))
+///
+///
+/// if __name__ == '__main__':
+///     main()
+/// ```
+final class serialize extends PythonModule {
+  serialize.from(super.pythonModule) : super.from();
+
+  static serialize import() => PythonFfiDart.instance.importModule(
+        "lark.tools.serialize",
+        serialize.from,
+      );
+
+  /// ## main
+  ///
+  /// ### python source
+  /// ```py
+  /// def main():
+  ///     if len(sys.argv)==1:
+  ///         argparser.print_help(sys.stderr)
+  ///         sys.exit(1)
+  ///     ns = argparser.parse_args()
+  ///     serialize(*build_lalr(ns))
+  /// ```
+  Object? main() => getFunction("main").call(
+        <Object?>[],
+        kwargs: <String, Object?>{},
+      );
+}
+
 /// ## tree
 ///
 /// ### python source
@@ -35556,6 +38458,522 @@ final class tree extends PythonModule {
   /// ## TYPE_CHECKING (setter)
   set TYPE_CHECKING(Object? TYPE_CHECKING) =>
       setAttribute("TYPE_CHECKING", TYPE_CHECKING);
+}
+
+/// ## tree_matcher
+///
+/// ### python docstring
+///
+/// Tree matcher based on Lark grammar
+///
+/// ### python source
+/// ```py
+/// """Tree matcher based on Lark grammar"""
+///
+/// import re
+/// from collections import defaultdict
+///
+/// from . import Tree, Token
+/// from .common import ParserConf
+/// from .parsers import earley
+/// from .grammar import Rule, Terminal, NonTerminal
+///
+///
+/// def is_discarded_terminal(t):
+///     return t.is_term and t.filter_out
+///
+///
+/// class _MakeTreeMatch:
+///     def __init__(self, name, expansion):
+///         self.name = name
+///         self.expansion = expansion
+///
+///     def __call__(self, args):
+///         t = Tree(self.name, args)
+///         t.meta.match_tree = True
+///         t.meta.orig_expansion = self.expansion
+///         return t
+///
+///
+/// def _best_from_group(seq, group_key, cmp_key):
+///     d = {}
+///     for item in seq:
+///         key = group_key(item)
+///         if key in d:
+///             v1 = cmp_key(item)
+///             v2 = cmp_key(d[key])
+///             if v2 > v1:
+///                 d[key] = item
+///         else:
+///             d[key] = item
+///     return list(d.values())
+///
+///
+/// def _best_rules_from_group(rules):
+///     rules = _best_from_group(rules, lambda r: r, lambda r: -len(r.expansion))
+///     rules.sort(key=lambda r: len(r.expansion))
+///     return rules
+///
+///
+/// def _match(term, token):
+///     if isinstance(token, Tree):
+///         name, _args = parse_rulename(term.name)
+///         return token.data == name
+///     elif isinstance(token, Token):
+///         return term == Terminal(token.type)
+///     assert False, (term, token)
+///
+///
+/// def make_recons_rule(origin, expansion, old_expansion):
+///     return Rule(origin, expansion, alias=_MakeTreeMatch(origin.name, old_expansion))
+///
+///
+/// def make_recons_rule_to_term(origin, term):
+///     return make_recons_rule(origin, [Terminal(term.name)], [term])
+///
+///
+/// def parse_rulename(s):
+///     "Parse rule names that may contain a template syntax (like rule{a, b, ...})"
+///     name, args_str = re.match(r'(\w+)(?:{(.+)})?', s).groups()
+///     args = args_str and [a.strip() for a in args_str.split(',')]
+///     return name, args
+///
+///
+///
+/// class ChildrenLexer:
+///     def __init__(self, children):
+///         self.children = children
+///
+///     def lex(self, parser_state):
+///         return self.children
+///
+/// class TreeMatcher:
+///     """Match the elements of a tree node, based on an ontology
+///     provided by a Lark grammar.
+///
+///     Supports templates and inlined rules (`rule{a, b,..}` and `_rule`)
+///
+///     Initialize with an instance of Lark.
+///     """
+///
+///     def __init__(self, parser):
+///         # XXX TODO calling compile twice returns different results!
+///         assert not parser.options.maybe_placeholders
+///         # XXX TODO: we just ignore the potential existence of a postlexer
+///         self.tokens, rules, _extra = parser.grammar.compile(parser.options.start, set())
+///
+///         self.rules_for_root = defaultdict(list)
+///
+///         self.rules = list(self._build_recons_rules(rules))
+///         self.rules.reverse()
+///
+///         # Choose the best rule from each group of {rule => [rule.alias]}, since we only really need one derivation.
+///         self.rules = _best_rules_from_group(self.rules)
+///
+///         self.parser = parser
+///         self._parser_cache = {}
+///
+///     def _build_recons_rules(self, rules):
+///         "Convert tree-parsing/construction rules to tree-matching rules"
+///         expand1s = {r.origin for r in rules if r.options.expand1}
+///
+///         aliases = defaultdict(list)
+///         for r in rules:
+///             if r.alias:
+///                 aliases[r.origin].append(r.alias)
+///
+///         rule_names = {r.origin for r in rules}
+///         nonterminals = {sym for sym in rule_names
+///                         if sym.name.startswith('_') or sym in expand1s or sym in aliases}
+///
+///         seen = set()
+///         for r in rules:
+///             recons_exp = [sym if sym in nonterminals else Terminal(sym.name)
+///                           for sym in r.expansion if not is_discarded_terminal(sym)]
+///
+///             # Skip self-recursive constructs
+///             if recons_exp == [r.origin] and r.alias is None:
+///                 continue
+///
+///             sym = NonTerminal(r.alias) if r.alias else r.origin
+///             rule = make_recons_rule(sym, recons_exp, r.expansion)
+///
+///             if sym in expand1s and len(recons_exp) != 1:
+///                 self.rules_for_root[sym.name].append(rule)
+///
+///                 if sym.name not in seen:
+///                     yield make_recons_rule_to_term(sym, sym)
+///                     seen.add(sym.name)
+///             else:
+///                 if sym.name.startswith('_') or sym in expand1s:
+///                     yield rule
+///                 else:
+///                     self.rules_for_root[sym.name].append(rule)
+///
+///         for origin, rule_aliases in aliases.items():
+///             for alias in rule_aliases:
+///                 yield make_recons_rule_to_term(origin, NonTerminal(alias))
+///             yield make_recons_rule_to_term(origin, origin)
+///
+///     def match_tree(self, tree, rulename):
+///         """Match the elements of `tree` to the symbols of rule `rulename`.
+///
+///         Parameters:
+///             tree (Tree): the tree node to match
+///             rulename (str): The expected full rule name (including template args)
+///
+///         Returns:
+///             Tree: an unreduced tree that matches `rulename`
+///
+///         Raises:
+///             UnexpectedToken: If no match was found.
+///
+///         Note:
+///             It's the callers' responsibility match the tree recursively.
+///         """
+///         if rulename:
+///             # validate
+///             name, _args = parse_rulename(rulename)
+///             assert tree.data == name
+///         else:
+///             rulename = tree.data
+///
+///         # TODO: ambiguity?
+///         try:
+///             parser = self._parser_cache[rulename]
+///         except KeyError:
+///             rules = self.rules + _best_rules_from_group(self.rules_for_root[rulename])
+///
+///             # TODO pass callbacks through dict, instead of alias?
+///             callbacks = {rule: rule.alias for rule in rules}
+///             conf = ParserConf(rules, callbacks, [rulename])
+///             parser = earley.Parser(self.parser.lexer_conf, conf, _match, resolve_ambiguity=True)
+///             self._parser_cache[rulename] = parser
+///
+///         # find a full derivation
+///         unreduced_tree = parser.parse(ChildrenLexer(tree.children), rulename)
+///         assert unreduced_tree.data == rulename
+///         return unreduced_tree
+/// ```
+final class tree_matcher extends PythonModule {
+  tree_matcher.from(super.pythonModule) : super.from();
+
+  static tree_matcher import() => PythonFfiDart.instance.importModule(
+        "lark.tree_matcher",
+        tree_matcher.from,
+      );
+
+  /// ## is_discarded_terminal
+  ///
+  /// ### python source
+  /// ```py
+  /// def is_discarded_terminal(t):
+  ///     return t.is_term and t.filter_out
+  /// ```
+  Object? is_discarded_terminal({
+    required Object? t,
+  }) =>
+      getFunction("is_discarded_terminal").call(
+        <Object?>[
+          t,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## make_recons_rule
+  ///
+  /// ### python source
+  /// ```py
+  /// def make_recons_rule(origin, expansion, old_expansion):
+  ///     return Rule(origin, expansion, alias=_MakeTreeMatch(origin.name, old_expansion))
+  /// ```
+  Object? make_recons_rule({
+    required Object? origin,
+    required Object? expansion,
+    required Object? old_expansion,
+  }) =>
+      getFunction("make_recons_rule").call(
+        <Object?>[
+          origin,
+          expansion,
+          old_expansion,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## make_recons_rule_to_term
+  ///
+  /// ### python source
+  /// ```py
+  /// def make_recons_rule_to_term(origin, term):
+  ///     return make_recons_rule(origin, [Terminal(term.name)], [term])
+  /// ```
+  Object? make_recons_rule_to_term({
+    required Object? origin,
+    required Object? term,
+  }) =>
+      getFunction("make_recons_rule_to_term").call(
+        <Object?>[
+          origin,
+          term,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## parse_rulename
+  ///
+  /// ### python docstring
+  ///
+  /// Parse rule names that may contain a template syntax (like rule{a, b, ...})
+  ///
+  /// ### python source
+  /// ```py
+  /// def parse_rulename(s):
+  ///     "Parse rule names that may contain a template syntax (like rule{a, b, ...})"
+  ///     name, args_str = re.match(r'(\w+)(?:{(.+)})?', s).groups()
+  ///     args = args_str and [a.strip() for a in args_str.split(',')]
+  ///     return name, args
+  /// ```
+  Object? parse_rulename({
+    required Object? s,
+  }) =>
+      getFunction("parse_rulename").call(
+        <Object?>[
+          s,
+        ],
+        kwargs: <String, Object?>{},
+      );
+}
+
+/// ## tree_templates
+///
+/// ### python docstring
+///
+/// This module defines utilities for matching and translation tree templates.
+///
+/// A tree templates is a tree that contains nodes that are template variables.
+///
+/// ### python source
+/// ```py
+/// """This module defines utilities for matching and translation tree templates.
+///
+/// A tree templates is a tree that contains nodes that are template variables.
+///
+/// """
+///
+/// from typing import Union, Optional, Mapping, Dict, Tuple, Iterator
+///
+/// from lark import Tree, Transformer
+/// from lark.exceptions import MissingVariableError
+///
+/// Branch = Union[Tree[str], str]
+/// TreeOrCode = Union[Tree[str], str]
+/// MatchResult = Dict[str, Tree]
+/// _TEMPLATE_MARKER = '$'
+///
+///
+/// class TemplateConf:
+///     """Template Configuration
+///
+///     Allows customization for different uses of Template
+///
+///     parse() must return a Tree instance.
+///     """
+///
+///     def __init__(self, parse=None):
+///         self._parse = parse
+///
+///     def test_var(self, var: Union[Tree[str], str]) -> Optional[str]:
+///         """Given a tree node, if it is a template variable return its name. Otherwise, return None.
+///
+///         This method may be overridden for customization
+///
+///         Parameters:
+///             var: Tree | str - The tree node to test
+///
+///         """
+///         if isinstance(var, str):
+///             return _get_template_name(var)
+///
+///         if (
+///             isinstance(var, Tree)
+///             and var.data == "var"
+///             and len(var.children) > 0
+///             and isinstance(var.children[0], str)
+///         ):
+///             return _get_template_name(var.children[0])
+///
+///         return None
+///
+///     def _get_tree(self, template: TreeOrCode) -> Tree[str]:
+///         if isinstance(template, str):
+///             assert self._parse
+///             template = self._parse(template)
+///
+///         if not isinstance(template, Tree):
+///             raise TypeError("template parser must return a Tree instance")
+///
+///         return template
+///
+///     def __call__(self, template: Tree[str]) -> 'Template':
+///         return Template(template, conf=self)
+///
+///     def _match_tree_template(self, template: TreeOrCode, tree: Branch) -> Optional[MatchResult]:
+///         """Returns dict of {var: match} if found a match, else None
+///         """
+///         template_var = self.test_var(template)
+///         if template_var:
+///             if not isinstance(tree, Tree):
+///                 raise TypeError(f"Template variables can only match Tree instances. Not {tree!r}")
+///             return {template_var: tree}
+///
+///         if isinstance(template, str):
+///             if template == tree:
+///                 return {}
+///             return None
+///
+///         assert isinstance(template, Tree) and isinstance(tree, Tree), f"template={template} tree={tree}"
+///
+///         if template.data == tree.data and len(template.children) == len(tree.children):
+///             res = {}
+///             for t1, t2 in zip(template.children, tree.children):
+///                 matches = self._match_tree_template(t1, t2)
+///                 if matches is None:
+///                     return None
+///
+///                 res.update(matches)
+///
+///             return res
+///
+///         return None
+///
+///
+/// class _ReplaceVars(Transformer[str, Tree[str]]):
+///     def __init__(self, conf: TemplateConf, vars: Mapping[str, Tree[str]]) -> None:
+///         super().__init__()
+///         self._conf = conf
+///         self._vars = vars
+///
+///     def __default__(self, data, children, meta) -> Tree[str]:
+///         tree = super().__default__(data, children, meta)
+///
+///         var = self._conf.test_var(tree)
+///         if var:
+///             try:
+///                 return self._vars[var]
+///             except KeyError:
+///                 raise MissingVariableError(f"No mapping for template variable ({var})")
+///         return tree
+///
+///
+/// class Template:
+///     """Represents a tree template, tied to a specific configuration
+///
+///     A tree template is a tree that contains nodes that are template variables.
+///     Those variables will match any tree.
+///     (future versions may support annotations on the variables, to allow more complex templates)
+///     """
+///
+///     def __init__(self, tree: Tree[str], conf: TemplateConf = TemplateConf()):
+///         self.conf = conf
+///         self.tree = conf._get_tree(tree)
+///
+///     def match(self, tree: TreeOrCode) -> Optional[MatchResult]:
+///         """Match a tree template to a tree.
+///
+///         A tree template without variables will only match ``tree`` if it is equal to the template.
+///
+///         Parameters:
+///             tree (Tree): The tree to match to the template
+///
+///         Returns:
+///             Optional[Dict[str, Tree]]: If match is found, returns a dictionary mapping
+///                 template variable names to their matching tree nodes.
+///                 If no match was found, returns None.
+///         """
+///         tree = self.conf._get_tree(tree)
+///         return self.conf._match_tree_template(self.tree, tree)
+///
+///     def search(self, tree: TreeOrCode) -> Iterator[Tuple[Tree[str], MatchResult]]:
+///         """Search for all occurrences of the tree template inside ``tree``.
+///         """
+///         tree = self.conf._get_tree(tree)
+///         for subtree in tree.iter_subtrees():
+///             res = self.match(subtree)
+///             if res:
+///                 yield subtree, res
+///
+///     def apply_vars(self, vars: Mapping[str, Tree[str]]) -> Tree[str]:
+///         """Apply vars to the template tree
+///         """
+///         return _ReplaceVars(self.conf, vars).transform(self.tree)
+///
+///
+/// def translate(t1: Template, t2: Template, tree: TreeOrCode):
+///     """Search tree and translate each occurrence of t1 into t2.
+///     """
+///     tree = t1.conf._get_tree(tree)      # ensure it's a tree, parse if necessary and possible
+///     for subtree, vars in t1.search(tree):
+///         res = t2.apply_vars(vars)
+///         subtree.set(res.data, res.children)
+///     return tree
+///
+///
+/// class TemplateTranslator:
+///     """Utility class for translating a collection of patterns
+///     """
+///
+///     def __init__(self, translations: Mapping[Template, Template]):
+///         assert all(isinstance(k, Template) and isinstance(v, Template) for k, v in translations.items())
+///         self.translations = translations
+///
+///     def translate(self, tree: Tree[str]):
+///         for k, v in self.translations.items():
+///             tree = translate(k, v, tree)
+///         return tree
+///
+///
+/// def _get_template_name(value: str) -> Optional[str]:
+///     return value.lstrip(_TEMPLATE_MARKER) if value.startswith(_TEMPLATE_MARKER) else None
+/// ```
+final class tree_templates extends PythonModule {
+  tree_templates.from(super.pythonModule) : super.from();
+
+  static tree_templates import() => PythonFfiDart.instance.importModule(
+        "lark.tree_templates",
+        tree_templates.from,
+      );
+
+  /// ## translate
+  ///
+  /// ### python docstring
+  ///
+  /// Search tree and translate each occurrence of t1 into t2.
+  ///
+  /// ### python source
+  /// ```py
+  /// def translate(t1: Template, t2: Template, tree: TreeOrCode):
+  ///     """Search tree and translate each occurrence of t1 into t2.
+  ///     """
+  ///     tree = t1.conf._get_tree(tree)      # ensure it's a tree, parse if necessary and possible
+  ///     for subtree, vars in t1.search(tree):
+  ///         res = t2.apply_vars(vars)
+  ///         subtree.set(res.data, res.children)
+  ///     return tree
+  /// ```
+  Object? translate({
+    required Template t1,
+    required Template t2,
+    required Object? tree,
+  }) =>
+      getFunction("translate").call(
+        <Object?>[
+          t1,
+          t2,
+          tree,
+        ],
+        kwargs: <String, Object?>{},
+      );
 }
 
 /// ## utils

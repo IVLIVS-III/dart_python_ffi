@@ -63,21 +63,13 @@ sealed class _ModuleBundle<T extends Object> {
 
   set moduleInfo(Map<String, dynamic> moduleInfo);
 
-  Map<String, dynamic> _updateModuleInfo(Map<String, dynamic> moduleInfo) {
-    print("Updating module info for ${pythonModule.moduleName}:");
-    return moduleInfo
-      ..update(
-        pythonModule.moduleName,
-        (Object? prev) {
-          print("was: $prev; is: ${pythonModule.moduleInfo}");
-          return pythonModule.moduleInfo;
-        },
-        ifAbsent: () {
-          print("was missing; is: ${pythonModule.moduleInfo}");
-          return pythonModule.moduleInfo;
-        },
-      );
-  }
+  Map<String, dynamic> _updateModuleInfo(Map<String, dynamic> moduleInfo) =>
+      moduleInfo
+        ..update(
+          pythonModule.moduleName,
+          (Object? prev) => pythonModule.moduleInfo,
+          ifAbsent: () => pythonModule.moduleInfo,
+        );
 
   Future<void> export() async {
     final _PythonModule<Object> pythonModule = this.pythonModule;
@@ -127,7 +119,6 @@ sealed class _ModuleBundle<T extends Object> {
         "Python module ${pythonModule.moduleName} not found in module info.",
       );
     }
-    print("got entry<${entry.runtimeType}>: $entry");
     final (PythonSourceEntity root, _) =
         PythonFfiCPythonDart.decodePythonSourceEntity(entry);
     return root;

@@ -236,8 +236,15 @@ base mixin PythonFfiCPythonMixin on PythonFfiCPythonBase {
   Directory? _supportDir;
 
   /// Directory for application support files.
-  FutureOr<Directory> get supportDir async =>
-      _supportDir ??= await getApplicationSupportDirectory();
+  FutureOr<Directory> get supportDir async {
+    FutureOr<Directory> getAndPrintSupportDir() async {
+      final Directory supportDir = await getApplicationSupportDirectory();
+      print("supportDir: ${supportDir.path}");
+      return supportDir;
+    }
+
+    return _supportDir ??= await getAndPrintSupportDir();
+  }
 
   Directory? _pythonFfiDir;
 
