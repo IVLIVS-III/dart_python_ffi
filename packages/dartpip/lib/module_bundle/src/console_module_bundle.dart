@@ -34,8 +34,11 @@ final class _ConsoleModuleBundle<T extends Object> extends _ModuleBundle<T> {
       _pythonModulesDartFileName;
 
   @override
-  Map<String, dynamic> _updateModuleInfo(Map<String, dynamic> moduleInfo) =>
-      moduleInfo;
+  Map<String, dynamic> _updateModuleInfo(Map<String, dynamic> moduleInfo) {
+    print("Not updating module info for ${pythonModule.moduleName}.");
+    print("staying at ${moduleInfo[pythonModule.moduleName]}");
+    return moduleInfo;
+  }
 
   Map<String, dynamic> _drillDown(
     List<String> pathSegments,
@@ -44,19 +47,17 @@ final class _ConsoleModuleBundle<T extends Object> extends _ModuleBundle<T> {
   ) {
     assert(pathSegments.isNotEmpty, "pathSegments must not be empty");
     if (pathSegments.length == 1) {
-      late final Object? name;
-      if (value is String) {
-        name = value;
-      } else if (value is Map<String, dynamic>) {
-        name = value["name"];
-      } else {
-        throw ArgumentError.value(
-          value,
-          "value",
-          "value must be either a String or a Map<String, dynamic>",
-        );
-      }
-      return <String, dynamic>{"name": name, "base64": base64};
+      final String name = switch (value) {
+        String() => value,
+        Map<String, dynamic>() when value["name"] is String =>
+          value["name"] as String,
+        _ => throw ArgumentError.value(
+            value,
+            "value",
+            "value must be either a String or a Map<String, dynamic> with a 'name' key",
+          ),
+      };
+      return <String, Object>{"name": name, "base64": base64};
     }
     final String key = pathSegments.first;
     final List<String> remainingPathSegments = pathSegments.sublist(1);
@@ -107,36 +108,38 @@ final class _ConsoleModuleBundle<T extends Object> extends _ModuleBundle<T> {
 
   @override
   Future<void> _exportSingleFile(String fileName, ByteData data) async {
-    final Map<String, dynamic> moduleEntry =
-        (moduleInfo[pythonModule.moduleName] as Map<String, dynamic>?) ??
-            pythonModule.moduleInfo;
+    final Object? rawEntry = moduleInfo[pythonModule.moduleName];
+    final Object moduleEntry = rawEntry ?? pythonModule.moduleInfo;
     final List<String> pathSegments = fileName.split(Platform.pathSeparator);
     final String base64 = String.fromCharCodes(data.buffer.asUint8List());
-    moduleEntry["root"] = _drillDown(pathSegments, base64, moduleEntry["root"]);
+    final Map<String, dynamic> filledModuleEntry =
+        _drillDown(pathSegments, base64, moduleEntry);
     moduleInfo = moduleInfo
       ..update(
         pythonModule.moduleName,
-        (Object? _) => moduleEntry,
-        ifAbsent: () => moduleEntry,
+        (Object? _) => filledModuleEntry,
+        ifAbsent: () => filledModuleEntry,
       );
   }
 
   @override
-  Map<String, dynamic> get moduleInfo {
+  Map<String, Object> get moduleInfo {
     if (!_pythonModulesDartFile.existsSync()) {
-      return <String, dynamic>{};
+      return <String, Object>{};
     }
     final String content = _pythonModulesDartFile.readAsStringSync();
     final RegExpMatch? match = _kPythonModulesDartRegex.firstMatch(content);
     if (match == null) {
-      return <String, dynamic>{};
+      return <String, Object>{};
     }
     final String? rawBase64 = match.group(1);
     if (rawBase64 == null) {
-      return <String, dynamic>{};
+      return <String, Object>{};
     }
     final String rawJson = utf8.decode(base64Decode(rawBase64));
-    return jsonDecode(rawJson) as Map<String, dynamic>;
+    return Map<String, Object>.from(
+      jsonDecode(rawJson) as Map<String, dynamic>,
+    );
   }
 
   @override
@@ -151,4 +154,17 @@ final class _ConsoleModuleBundle<T extends Object> extends _ModuleBundle<T> {
       ..ensureHeader(_kPythonModulesGeneratedHeader)
       ..ensureFooter("\n");
   }
+}
+
+final class _FakeConsoleModuleBundle<T extends Object>
+    extends _ConsoleModuleBundle<T> {
+  _FakeConsoleModuleBundle._({
+    required super.pythonModule,
+    required super.appRoot,
+    required PythonSourceEntity sourceTree,
+  })  : _sourceTree = sourceTree,
+        super._();
+
+  @override
+  final PythonSourceEntity _sourceTree;
 }

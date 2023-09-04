@@ -49,23 +49,33 @@ final class SourceDirectory extends PythonSourceEntity {
 
   final Set<PythonSourceEntity> _children = <PythonSourceEntity>{};
 
+  /// Exposes the children of this directory.
+  /// Access with caution. To get a recursive, flat iterable of all children
+  /// files, use [sourceFiles] instead.
+  Iterable<PythonSourceEntity> get children sync* {
+    yield* _children;
+  }
+
   @override
   Iterable<PythonSourceFileEntity> get sourceFiles sync* {
     for (final PythonSourceEntity child in _children) {
-      yield* child.sourceFiles.map((PythonSourceFileEntity e) {
-        if (e is SourceFile) {
-          return SourceFile("$name/${e.name}");
-        } else if (e is SourceBase64) {
-          return SourceBase64("$name/${e.name}", e.base64);
-        }
-        return SourceFile("$name/${e.name}");
-      });
+      yield* child.sourceFiles.map(
+        (PythonSourceFileEntity e) => switch (e) {
+          SourceFile() => SourceFile("$name/${e.name}"),
+          SourceBase64() => SourceBase64("$name/${e.name}", e.base64),
+        },
+      );
     }
   }
 
   /// Adds a child to this directory.
   void add(PythonSourceEntity child) {
     _children.add(child);
+  }
+
+  /// Adds multiple children to this directory.
+  void addAll(Iterable<PythonSourceEntity> children) {
+    _children.addAll(children);
   }
 }
 

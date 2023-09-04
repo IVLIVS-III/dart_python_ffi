@@ -82,6 +82,57 @@ Future<Iterable<_ModuleBundle<Object>>> _bundleCacheModule({
   return moduleBundles;
 }
 
+Future<_ConsoleModuleBundle<Object>> _ensureConsoleModuleBundle(
+  _ModuleBundle<Object> moduleBundle,
+) async {
+  switch (moduleBundle) {
+    case _ConsoleModuleBundle<Object>():
+      return moduleBundle;
+    case _FlutterModuleBundle<Object>():
+      final PythonSourceEntity sourceTree = moduleBundle._sourceTree;
+      final String modulesRoot = p.join(moduleBundle.appRoot, "python-modules");
+      final PythonSourceEntity newSourceTree =
+          await _ensureConsolePythonSourceEntity(
+        sourceTree,
+        parentDir: modulesRoot,
+      );
+      return _FakeConsoleModuleBundle<Object>._(
+        pythonModule: moduleBundle.pythonModule,
+        appRoot: moduleBundle.appRoot,
+        sourceTree: newSourceTree,
+      );
+  }
+}
+
+Future<PythonSourceEntity> _ensureConsolePythonSourceEntity(
+  PythonSourceEntity entity, {
+  required String parentDir,
+}) async {
+  switch (entity) {
+    case SourceFile():
+      final File file = File(p.join(parentDir, entity.name));
+      if (!file.existsSync()) {
+        throw StateError("File '${file.path}' does not exist.");
+      }
+      final String base64 = base64Encode(file.readAsBytesSync());
+      return SourceBase64(entity.name, base64);
+    case SourceDirectory():
+      final SourceDirectory newEntity = SourceDirectory(entity.name);
+      final List<PythonSourceEntity> newChildren = await Future.wait(
+        entity.children.map(
+          (PythonSourceEntity e) => _ensureConsolePythonSourceEntity(
+            e,
+            parentDir: p.join(parentDir, entity.name),
+          ),
+        ),
+      );
+      newEntity.addAll(newChildren);
+      return newEntity;
+    case SourceBase64():
+      return entity;
+  }
+}
+
 Future<void> _generateTypeDefs(
   _ModuleBundle<Object> moduleBundle, {
   required String appType,

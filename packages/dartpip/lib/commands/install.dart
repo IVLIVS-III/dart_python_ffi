@@ -263,17 +263,21 @@ class InstallCommand extends Command<void> {
           ).toIterable(),
       };
       futures.add(
-        bundleTask.then((Iterable<_ModuleBundle<Object>> value) async {
-          await Future.wait(
+        bundleTask.then(
+          (Iterable<_ModuleBundle<Object>> value) async => Future.wait(
             value.map(
               (_ModuleBundle<Object> e) async {
-                await PythonFfiDart.instance.prepareModule(e.definition);
-                print("prepared '${e.definition.name}' to be imported");
+                final _ConsoleModuleBundle<Object> consoleModuleBundle =
+                    await _ensureConsoleModuleBundle(e);
+                final PythonModuleDefinition definition =
+                    consoleModuleBundle.definition;
+                await PythonFfiDart.instance.prepareModule(definition);
+                print("prepared '${definition.name}' to be imported");
+                return consoleModuleBundle;
               },
             ),
-          );
-          return value;
-        }),
+          ),
+        ),
       );
     }
 

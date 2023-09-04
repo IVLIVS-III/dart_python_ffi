@@ -149,35 +149,26 @@ final class PythonFfiCPythonDart extends PythonFfiCPythonBase
 
   /// Decodes the bundled Python module into a format that can be used to create
   /// [PythonModuleDefinition]s.
+  /// If [platform] is not provided, then it will be inferred from [data].
   static (PythonSourceEntity, PythonSourceFileEntity?) decodePythonSourceEntity(
-    Map<String, dynamic> data,
-  ) {
-    if (data.keys.contains("children")) {
-      final SourceDirectory entity = SourceDirectory(data["name"] as String);
-      PythonSourceFileEntity? licenseFile;
-      for (final Object? child in data["children"] as List<Object?>) {
-        if (child is! Map<String, dynamic>) {
-          print("Unexpected child type: $child");
-          continue;
-        }
-        if (child["name"] == "LICENSE.txt") {
-          licenseFile =
-              SourceBase64(child["name"] as String, child["base64"] as String);
-          continue;
-        }
-        // ignore: always_specify_types
-        final (pythonSourceEntity, pythonSourceFileEntity) =
-            decodePythonSourceEntity(child);
-        licenseFile ??= pythonSourceFileEntity;
-        entity.add(pythonSourceEntity);
-      }
-      return (entity, licenseFile);
-    } else {
-      return (
-        SourceBase64(data["name"] as String, data["base64"] as String),
-        null,
-      );
-    }
+    Object? data, {
+    PythonSourceEntityPlatform? platform,
+  }) {
+    platform ??= switch (data) {
+      Map<String, dynamic>()
+          when jsonEncode(data).contains("\\\"base64\\\":") =>
+        PythonSourceEntityPlatform.console,
+      Object() => PythonSourceEntityPlatform.flutter,
+      _ => throw ArgumentError.value(
+          data,
+          "data",
+          "data must be either a Map<String, dynamic> or an Object",
+        ),
+    };
+    return _decodePythonSourceEntity(
+      data: data,
+      platform: platform,
+    );
   }
 
   static Iterable<PythonModuleDefinition> _decodePythonModules(
@@ -189,12 +180,12 @@ final class PythonFfiCPythonDart extends PythonFfiCPythonBase
         jsonDecode(pythonModulesRaw) as Map<String, dynamic>;
     for (final MapEntry<String, dynamic> entry in pythonModulesJson.entries) {
       final String moduleName = entry.key;
-      final Map<String, dynamic> moduleJson =
-          entry.value as Map<String, dynamic>;
-      final Map<String, dynamic> root =
-          moduleJson["root"] as Map<String, dynamic>;
-      // ignore: always_specify_types
-      final (decodedRoot, license) = decodePythonSourceEntity(root);
+      final Object? root = entry.value;
+      if (root is! Map<String, dynamic>) {
+        continue;
+      }
+      final (PythonSourceEntity decodedRoot, PythonSourceFileEntity? license) =
+          _decodePythonSourceEntityConsole(root);
       yield PythonModuleDefinition(
         name: moduleName,
         root: decodedRoot,
@@ -211,7 +202,9 @@ final class PythonFfiCPythonDart extends PythonFfiCPythonBase
     if (sourceFile is SourceBase64) {
       return ByteData.view(base64Decode(sourceFile.base64).buffer);
     }
-    throw Exception("Unsupported source file type: $sourceFile");
+    throw Exception(
+      "Unsupported source file type: $sourceFile@${sourceFile.name}",
+    );
   }
 
   @override

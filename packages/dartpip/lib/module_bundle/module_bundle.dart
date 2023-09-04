@@ -1,5 +1,6 @@
 part of dartpip;
 
+/// Describes a Python module bundled for consumption by the Dart Python FFI.
 sealed class _ModuleBundle<T extends Object> {
   _ModuleBundle({
     required this.pythonModule,
@@ -62,13 +63,21 @@ sealed class _ModuleBundle<T extends Object> {
 
   set moduleInfo(Map<String, dynamic> moduleInfo);
 
-  Map<String, dynamic> _updateModuleInfo(Map<String, dynamic> moduleInfo) =>
-      moduleInfo
-        ..update(
-          pythonModule.moduleName,
-          (Object? _) => pythonModule.moduleInfo,
-          ifAbsent: () => pythonModule.moduleInfo,
-        );
+  Map<String, dynamic> _updateModuleInfo(Map<String, dynamic> moduleInfo) {
+    print("Updating module info for ${pythonModule.moduleName}:");
+    return moduleInfo
+      ..update(
+        pythonModule.moduleName,
+        (Object? prev) {
+          print("was: $prev; is: ${pythonModule.moduleInfo}");
+          return pythonModule.moduleInfo;
+        },
+        ifAbsent: () {
+          print("was missing; is: ${pythonModule.moduleInfo}");
+          return pythonModule.moduleInfo;
+        },
+      );
+  }
 
   Future<void> export() async {
     final _PythonModule<Object> pythonModule = this.pythonModule;
@@ -112,11 +121,15 @@ sealed class _ModuleBundle<T extends Object> {
   }
 
   PythonSourceEntity get _sourceTree {
-    final Map<String, dynamic> data =
-        // ignore: avoid_dynamic_calls
-        moduleInfo[pythonModule.moduleName]["root"] as Map<String, dynamic>;
+    final Object? entry = moduleInfo[pythonModule.moduleName];
+    if (entry == null) {
+      throw StateError(
+        "Python module ${pythonModule.moduleName} not found in module info.",
+      );
+    }
+    print("got entry<${entry.runtimeType}>: $entry");
     final (PythonSourceEntity root, _) =
-        PythonFfiCPythonDart.decodePythonSourceEntity(data);
+        PythonFfiCPythonDart.decodePythonSourceEntity(entry);
     return root;
   }
 

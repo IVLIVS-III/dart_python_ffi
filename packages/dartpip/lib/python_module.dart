@@ -84,7 +84,7 @@ sealed class _PythonModule<T extends Object> {
 
   String get moduleName;
 
-  Map<String, dynamic> get moduleInfo;
+  Object get moduleInfo;
 }
 
 final class _BuiltinPythonModule extends _PythonModule<ByteData> {
@@ -106,10 +106,10 @@ final class _BuiltinPythonModule extends _PythonModule<ByteData> {
   String get moduleName => path;
 
   @override
-  Map<String, dynamic> get moduleInfo {
+  Map<String, Object> get moduleInfo {
     switch (path) {
       case _kBuiltinPythonFfiModuleName:
-        return Map<String, dynamic>.from(_kPythonFfiModuleInfo);
+        return Map<String, Object>.from(_kPythonFfiModuleInfo);
       default:
         throw ArgumentError.value(path, "path", "Unknown builtin module.");
     }
@@ -130,7 +130,16 @@ final class _SingleFilePythonModule extends _PythonModule<ByteData> {
       : fileName;
 
   @override
-  Map<String, dynamic> get moduleInfo => <String, dynamic>{"root": fileName};
+  Object get moduleInfo {
+    final ByteData? data = _data;
+    if (data == null) {
+      return fileName;
+    }
+    return <String, Object>{
+      "name": fileName,
+      "base64": base64Encode(data.buffer.asUint8List()),
+    };
+  }
 }
 
 final class _FileNode {
@@ -153,7 +162,7 @@ final class _FileNode {
     child.insert(pathElements.sublist(1));
   }
 
-  Object? get info => children.isEmpty
+  Object get info => children.isEmpty
       ? name
       : <String, Object>{
           "name": name,
@@ -209,8 +218,7 @@ final class _MultiFilePythonModule
   }
 
   @override
-  Map<String, dynamic> get moduleInfo =>
-      <String, dynamic>{"root": _fileTree.info};
+  Object get moduleInfo => _fileTree.info;
 }
 
 final class _MultiFileCachePythonModule extends _MultiFilePythonModule {

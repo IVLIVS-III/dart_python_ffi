@@ -94,39 +94,14 @@ final class PythonFfiCPython extends PythonFfiCPythonBase
     return super.prepareModule(moduleDefinition);
   }
 
-  static (PythonSourceEntity, PythonSourceFileEntity?)
-      _decodePythonSourceEntity(Object data) {
-    if (data is String) {
-      return (SourceFile(data), null);
-    }
-    data = data as Map<String, dynamic>;
-    if (data.keys.contains("children")) {
-      final SourceDirectory entity = SourceDirectory(data["name"] as String);
-      PythonSourceFileEntity? licenseFile;
-      for (final Object? child in data["children"] as List<Object?>) {
-        if (child == null) {
-          continue;
-        }
-        if (child is String) {
-          if (child.toLowerCase().contains("license")) {
-            licenseFile = SourceFile(child);
-            continue;
-          }
-        }
-        // ignore: always_specify_types
-        final (pythonSourceEntity, pythonSourceFileEntity) =
-            _decodePythonSourceEntity(child);
-        licenseFile ??= pythonSourceFileEntity;
-        entity.add(pythonSourceEntity);
-      }
-      return (entity, licenseFile);
-    } else {
-      return (
-        SourceBase64(data["name"] as String, data["base64"] as String),
-        null,
+  static (
+    PythonSourceEntity,
+    PythonSourceFileEntity?
+  ) _decodePythonSourceEntity(Object data) =>
+      PythonFfiCPythonDart.decodePythonSourceEntity(
+        data,
+        platform: PythonSourceEntityPlatform.flutter,
       );
-    }
-  }
 
   static Iterable<PythonModuleDefinition> _decodePythonModules(
     String pythonModules,
@@ -135,14 +110,12 @@ final class PythonFfiCPython extends PythonFfiCPythonBase
         jsonDecode(pythonModules) as Map<String, dynamic>;
     for (final MapEntry<String, dynamic> entry in pythonModulesJson.entries) {
       final String moduleName = entry.key;
-      final Map<String, dynamic> moduleJson =
-          entry.value as Map<String, dynamic>;
-      final Object? root = moduleJson["root"];
+      final Object? root = entry.value;
       if (root == null) {
         continue;
       }
-      // ignore: always_specify_types
-      final (decodedRoot, license) = _decodePythonSourceEntity(root);
+      final (PythonSourceEntity decodedRoot, PythonSourceFileEntity? license) =
+          _decodePythonSourceEntity(root);
       yield PythonModuleDefinition(
         name: moduleName,
         root: decodedRoot,

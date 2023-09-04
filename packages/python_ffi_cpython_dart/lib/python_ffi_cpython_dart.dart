@@ -42,3 +42,4 @@ part "src/function.dart";
 part "src/module.dart";
 part "src/object.dart";
 part "src/python_ffi_cpython_dart_base.dart";
+part "src/util.dart";
