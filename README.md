@@ -37,12 +37,13 @@ dynamic library must be provided during initialization.*
 2. [Getting started](#getting-started)
     1. [Repository overview](#repository-overview)
     2. [Adding Python modules](#adding-python-modules)
-    3. [Creating a Module-definition in Dart](#creating-a-module-definition-in-dart)
-    4. [Creating a Class-definition in Dart](#creating-a-class-definition-in-dart)
-    5. [Initializing the Python runtime](#initializing-the-python-runtime)
-        1. [Using the Flutter package (`python_ffi`)](#using-the-flutter-package-python_ffi)
-        2. [Using the Dart package (`python_ffi_dart`)](#using-the-dart-package-python_ffi_dart)
-    6. [Using the Python module](#using-the-python-module)
+    3. [Which Python modules are supported?](#which-python-modules-are-supported)
+    4. [Creating a Module-definition in Dart manually](#creating-a-module-definition-in-dart-manually)
+    5. [Creating a Class-definition in Dart manually](#creating-a-class-definition-in-dart-manually)
+    6. [Initializing the Python runtime](#initializing-the-python-runtime)
+        1. [Using the Flutter package (`python_ffi`)](#using-the-flutter-package--pythonffi-)
+        2. [Using the Dart package (`python_ffi_dart`)](#using-the-dart-package--pythonffidart-)
+    7. [Using the Python module](#using-the-python-module)
 3. [Examples](#examples)
     1. [Basic CLI adder](#importing-your-first-python-module)
     2. [Basic dataclass](#importing-a-python-module-with-a-custom-python-class)
@@ -54,7 +55,7 @@ dynamic library must be provided during initialization.*
 5. [Package status](#package-status)
 6. [Usage](#usage)
     1. [`dartpip`](#dartpip)
-    2. [`python_ffi_dart_example`](#python_ffi_dart_example)
+    2. [`python_ffi_dart_example`](#pythonffidartexample)
 7. [Package graph](#package-graph)
 8. [Limitations](#limitations)
 9. [Roadmap](#roadmap)
@@ -111,6 +112,13 @@ added packages that are listed in your `pubspec.yaml` under the `python_ffi.modu
 All necessary Module-definitions and Class-definitions will be generated automatically and added to
 your project. You can then import the Python modules in your Dart code and use them as if they were
 written in Dart.
+
+### Which Python modules are supported?
+
+Any pure Python module is supported.
+
+Pure Python modules are implemented in Python only, in particular they must not contain any C
+extensions or other native code. They also must not depend on any non-pure Python modules.
 
 ### Creating a Module-definition in Dart manually
 
@@ -519,7 +527,6 @@ used for developing, testing and showcasing the Python FFI.
 ## Limitations
 
 - Python `print` is not supported when used in a Flutter environment.
-- The Python stdlib must be installed on the target system and available in the `PATH`.
 - Transitive dependencies are partially supported. Their veersion constraints are not taken into
   account when resolving them. See  [dartpip_solver](/packages/dartpip_solver/README.md) for more
   details.
