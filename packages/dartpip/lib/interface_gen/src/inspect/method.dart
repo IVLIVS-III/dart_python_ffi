@@ -3,8 +3,7 @@ part of interface_gen;
 /// TODO: Document.
 final class Method extends Function_ {
   /// TODO: Document.
-  Method.from(super.name, super.sanitizedName, super.functionDelegate)
-      : super.from();
+  Method.from(super.functionDelegate) : super.from();
 
   @override
   Iterable<Parameter> get parameters sync* {
@@ -27,4 +26,28 @@ final class Method extends Function_ {
             element.kind == ParameterKind.positional_only ||
             element.kind == ParameterKind.positional_or_keyword,
       );
+
+  @override
+  InstantiatedInspectEntry _instantiateFrom({
+    required String name,
+    required String sanitizedName,
+    required InstantiatedModule instantiatingModule,
+  }) =>
+      InstantiatedMethod.from(
+        this,
+        name: name,
+        sanitizedName: sanitizedName,
+        instantiatingModule: instantiatingModule,
+      );
+}
+
+/// TODO: Document.
+final class InstantiatedMethod extends InstantiatedFunction_ {
+  /// TODO: Document.
+  InstantiatedMethod.from(
+    super.source, {
+    required super.name,
+    required super.sanitizedName,
+    required super.instantiatingModule,
+  }) : super.from();
 }

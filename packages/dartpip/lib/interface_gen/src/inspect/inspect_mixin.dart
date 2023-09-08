@@ -4,6 +4,60 @@ part of interface_gen;
 base mixin InspectMixin
     on PythonObjectInterface<PythonFfiDelegate<Object?>, Object?>
     implements InspectEntry {
+  final List<InspectEntryModuleConnection> _moduleConnections =
+      <InspectEntryModuleConnection>[];
+
+  @override
+  List<InspectEntryModuleConnection> get moduleConnections =>
+      List<InspectEntryModuleConnection>.unmodifiable(_moduleConnections);
+
+  @override
+  bool hasModuleConnection(InspectEntryModuleConnection connection) =>
+      _moduleConnections.contains(connection);
+
+  @override
+  void addModuleConnection(InspectEntryModuleConnection connection) {
+    if (hasModuleConnection(connection)) {
+      return;
+    }
+    _moduleConnections.add(connection);
+  }
+
+  final Set<InstantiatedInspectEntry> _cachedInstantiations =
+      <InstantiatedInspectEntry>{};
+
+  @override
+  Iterable<InstantiatedInspectEntry> get cachedInstantiations sync* {
+    yield* _cachedInstantiations;
+  }
+
+  @override
+  String get sanitizedName {
+    final String? fromCachedInstantiations = _cachedInstantiations
+        .map((InstantiatedInspectEntry e) => e.sanitizedName)
+        .firstOrNull;
+    if (fromCachedInstantiations != null) {
+      return fromCachedInstantiations;
+    }
+    final String? fromModuleConnections = moduleConnections
+        .map((InspectEntryModuleConnection e) => e.sanitizedName)
+        .firstOrNull;
+    if (fromModuleConnections != null) {
+      return fromModuleConnections;
+    }
+    try {
+      final Object? value = this.value;
+      if (value is PythonObjectInterface) {
+        final String name = (value as dynamic).__name__ as String;
+        return sanitizeName(name);
+      }
+    } on PythonExceptionInterface<PythonFfiDelegate<Object?>,
+        Object?> catch (_) {
+      // ignore
+    }
+    throw UnimplementedError();
+  }
+
   final Map<String, InspectEntry> _children = <String, InspectEntry>{};
 
   void _setChild(String name, InspectEntry child) {
@@ -27,8 +81,20 @@ base mixin InspectMixin
 
   Set<String> get _sanitizationExtraKeywords => const <String>{};
 
-  /// TODO: Document.
-  Object? get parentModule => inspectModule.getmodule(value);
+  /// Returns the module in which this object is defined.
+  ///
+  /// Example:
+  /// ```py
+  /// // file: my_module.py
+  /// my_object = None
+  ///
+  /// // file: main.py
+  /// from my_module import my_object as my_object_
+  /// ```
+  ///
+  /// In this example, `my_object.definingModule` as well as
+  /// `my_object_.definingModule` will return the module object for `my_module`.
+  Object? get definingModule => inspectModule.getmodule(value);
 
   @override
   Iterable<(String, InspectEntry)> get children => _children.entries
@@ -37,7 +103,11 @@ base mixin InspectMixin
   static const Set<String> _explicitlyAllowedChildNames = <String>{"__init__"};
 
   @override
-  void collectChildren(InspectionCache cache, {required String stdlibPath}) {
+  void collectChildren(
+    InspectionCache cache, {
+    required String stdlibPath,
+    required Module parentModule,
+  }) {
     final inspect inspectModule = inspect.import();
     final InspectEntry? selfCached = cache[value];
     if (selfCached == null) {
@@ -64,39 +134,50 @@ base mixin InspectMixin
           Object?> catch (_) {
         // ignore
       }
-      final InspectEntry? cached = cache[value];
-      if (cached != null) {
-        _setChild(name, cached);
-        continue;
-      }
       final String sanitizedName =
           sanitizeName(name, extraKeywords: _sanitizationExtraKeywords);
-      final InspectEntry child = switch (value) {
-        PythonModuleInterface<PythonFfiDelegate<Object?>, Object?>()
-            when inspectModule.ismodule(value) =>
-          Module.from(name, sanitizedName, value),
-        PythonModuleInterface<PythonFfiDelegate<Object?>, Object?>() =>
-          throw Exception("'$name' is not a module: $value"),
-        PythonClassDefinitionInterface<PythonFfiDelegate<Object?>, Object?>()
-            when inspectModule.isclass(value) =>
-          ClassDefinition.from(name, sanitizedName, value),
-        PythonClassInterface<PythonFfiDelegate<Object?>, Object?>() =>
-          ClassInstance.from(name, sanitizedName, value),
-        PythonFunctionInterface<PythonFfiDelegate<Object?>, Object?>()
-            when inspectModule.isfunction(value) =>
-          Function_.from(name, sanitizedName, value),
-        PythonFunctionInterface<PythonFfiDelegate<Object?>, Object?>() =>
-          throw Exception("'$name' is not a function: $value"),
-        PythonObjectInterface<PythonFfiDelegate<Object?>, Object?>() =>
-          Object_.from(name, sanitizedName, value),
-        _ => Primitive(name, sanitizedName, value),
-      };
+      final InspectEntry? cached = cache[value];
+      final InspectEntry child = cached ??
+          switch (value) {
+            PythonModuleInterface<PythonFfiDelegate<Object?>, Object?>()
+                when inspectModule.ismodule(value) =>
+              Module.from(value, name: name, sanitizedName: sanitizedName),
+            PythonModuleInterface<PythonFfiDelegate<Object?>, Object?>() =>
+              throw Exception("'$name' is not a module: $value"),
+            PythonClassDefinitionInterface<PythonFfiDelegate<Object?>,
+                    Object?>()
+                when inspectModule.isclass(value) =>
+              ClassDefinition.from(value),
+            PythonClassInterface<PythonFfiDelegate<Object?>, Object?>() =>
+              ClassInstance.from(value),
+            PythonFunctionInterface<PythonFfiDelegate<Object?>, Object?>()
+                when inspectModule.isfunction(value) =>
+              Function_.from(value),
+            PythonFunctionInterface<PythonFfiDelegate<Object?>, Object?>() =>
+              throw Exception("'$name' is not a function: $value"),
+            PythonObjectInterface<PythonFfiDelegate<Object?>, Object?>() =>
+              Object_.from(value),
+            _ => Primitive(name, sanitizedName, value),
+          } as InspectEntry;
       if (!_isTypedef(child) && _isStdlibEntry(child, stdlibPath: stdlibPath)) {
         continue;
       }
-      cache[value] = child;
+      final InspectEntryModuleConnection connection =
+          InspectEntryModuleConnection(
+        name: name,
+        sanitizedName: sanitizedName,
+        parentModule: parentModule,
+      );
+      child.addModuleConnection(connection);
       _setChild(name, child);
-      child.collectChildren(cache, stdlibPath: stdlibPath);
+      if (cached == null) {
+        cache[value] = child;
+      }
+      child.collectChildren(
+        cache,
+        stdlibPath: stdlibPath,
+        parentModule: parentModule,
+      );
     }
   }
 
@@ -125,6 +206,100 @@ base mixin InspectMixin
     return false;
   }
 
+  InstantiatedInspectEntry _instantiateFrom({
+    required String name,
+    required String sanitizedName,
+    required InstantiatedModule instantiatingModule,
+  });
+
+  @override
+  InstantiatedInspectEntry? instantiate(
+    InstantiatedModule instantiatingModule,
+  ) {
+    final InspectEntryModuleConnection? connection =
+        moduleConnections.firstWhereOrNull(
+      (InspectEntryModuleConnection element) =>
+          element.parentModule == instantiatingModule.source,
+    );
+    if (connection == null) {
+      print(
+        "⚠️  Warning: found no connection to instantiate for ${instantiatingModule.source.value}",
+      );
+      return null;
+    }
+    final InstantiatedInspectEntry instantiation = _instantiateFrom(
+      name: connection.name,
+      sanitizedName: connection.sanitizedName,
+      instantiatingModule: instantiatingModule,
+    );
+    _cachedInstantiations.add(instantiation);
+    return instantiation;
+  }
+
+  /// TODO: Document.
+  Iterable<InstantiatedInspectEntry> get instantiations sync* {
+    for (final InspectEntryModuleConnection connection in moduleConnections) {
+      yield _instantiateFrom(
+        name: connection.name,
+        sanitizedName: connection.sanitizedName,
+        instantiatingModule:
+            InstantiatedModule.fromModule(connection.parentModule),
+      );
+    }
+  }
+
+  @override
+  Map<String, Object?> debugDump({
+    InspectionCache? cache,
+    bool expandChildren = true,
+  }) {
+    final int? id = cache?.id(value);
+    return <String, Object?>{
+      if (id != null) "_id": id,
+      "moduleConnections": moduleConnections
+          .map(
+            (InspectEntryModuleConnection e) => e.debugDump(
+              cache: cache,
+              expandChildren: id == null,
+            ),
+          )
+          .toList(),
+      "value": value,
+      "type": type.displayName,
+      "parentModule": definingModule,
+      "doc": inspectModule.getdoc(value),
+      if (expandChildren)
+        "children": Map<String, Map<String, Object?>>.fromEntries(
+          children.map(
+            ((String, InspectEntry) e) =>
+                MapEntry<String, Map<String, Object?>>(
+              e.$1,
+              e.$2.debugDump(cache: cache, expandChildren: id == null),
+            ),
+          ),
+        ),
+    };
+  }
+}
+
+/// TODO: Document.
+base mixin InstantiatedInspectMixin
+    on PythonObjectInterface<PythonFfiDelegate<Object?>, Object?>
+    implements InstantiatedInspectEntry {
+  /// TODO: Document.
+  final inspect inspectModule = inspect.import();
+
+  Set<String> get _sanitizationExtraKeywords => const <String>{};
+
+  Iterable<InstantiatedInspectEntry> get _children => source.children.map(
+        ((String, InspectEntry) e) {
+          final InspectEntry child = e.$2;
+          final InstantiatedInspectEntry? entry =
+              child.instantiate(instantiatingModule);
+          return entry;
+        },
+      ).whereNotNull();
+
   @override
   void emit(StringBuffer buffer, {required InspectionCache cache}) {
     throw UnimplementedError("$runtimeType.emit");
@@ -132,7 +307,7 @@ base mixin InspectMixin
 
   @override
   void emitDoc(StringBuffer buffer) {
-    final String? doc = inspectModule.getdoc(value)?.trim();
+    final String? doc = inspectModule.getdoc(source.value)?.trim();
     if (doc == null) {
       return;
     }
@@ -151,7 +326,7 @@ base mixin InspectMixin
   @override
   void emitSource(StringBuffer buffer) {
     try {
-      final String? source = inspectModule.getsource(value)?.trim();
+      final String? source = inspectModule.getsource(this.source.value)?.trim();
       if (source == null) {
         return;
       }
@@ -168,32 +343,5 @@ base mixin InspectMixin
         Object?> catch (_) {
       // ignore
     }
-  }
-
-  @override
-  Map<String, Object?> debugDump({
-    InspectionCache? cache,
-    bool expandChildren = true,
-  }) {
-    final int? id = cache?.id(value);
-    return <String, Object?>{
-      if (id != null) "_id": id,
-      "name": name,
-      "sanitizedName": sanitizedName,
-      "value": value,
-      "type": type.displayName,
-      "parentModule": parentModule,
-      "doc": inspectModule.getdoc(value),
-      if (expandChildren)
-        "children": Map<String, Map<String, Object?>>.fromEntries(
-          children.map(
-            ((String, InspectEntry) e) =>
-                MapEntry<String, Map<String, Object?>>(
-              e.$1,
-              e.$2.debugDump(cache: cache, expandChildren: id == null),
-            ),
-          ),
-        ),
-    };
   }
 }

@@ -1,15 +1,16 @@
 part of interface_gen;
 
 /// TODO: Document.
-base mixin FunctionFieldMixin on InspectMixin {
+base mixin FunctionFieldMixin on InstantiatedInspectMixin {
   void _emitFunctionFields(
     StringBuffer buffer, {
     required Set<String> memberNames,
     required InspectionCache cache,
-    bool Function(InspectEntry child)? filter,
-    InspectEntry? parentEntry,
+    bool Function(InstantiatedInspectEntry child)? filter,
+    InstantiatedInspectEntry? parentEntry,
   }) {
-    for (final Function_ field in _children.values.whereType<Function_>()) {
+    for (final InstantiatedFunction_ field
+        in _children.whereType<InstantiatedFunction_>()) {
       if (filter != null && !filter(field)) {
         continue;
       }

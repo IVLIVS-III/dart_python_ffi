@@ -229,6 +229,16 @@ final class _MultiFileCachePythonModule extends _MultiFilePythonModule {
     required String path,
   }) : super(path);
 
+  /// Discovers python modules in a project cache directory.
+  ///
+  /// The following locations are searched in order:
+  /// 1. A single file with the same name as the project.
+  /// 2. A directory with the same name as the project.
+  /// 3. Modules in the src directory.
+  /// 4. Modules in the root directory.
+  /// 5. The root directory.
+  ///
+  /// Steps 4 and 5 are only searched if no modules were found in steps 1-3.
   static Iterable<_PythonModule<Object>> _findPath({
     required String projectName,
     required String projectVersion,
@@ -239,7 +249,7 @@ final class _MultiFileCachePythonModule extends _MultiFilePythonModule {
 
     _MultiFileCachePythonModule dirModule(String path) =>
         _MultiFileCachePythonModule._(
-          projectName: projectName,
+          projectName: path.split(Platform.pathSeparator).last,
           projectVersion: projectVersion,
           projectCacheDirectory: projectCacheDirectory,
           path: path,

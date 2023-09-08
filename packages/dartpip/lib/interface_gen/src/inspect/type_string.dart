@@ -265,7 +265,7 @@ PythonFunction.from($call,)
   Object? object, {
   required InspectionCache cache,
   bool isReturnString = false,
-  InspectEntry? parentEntry,
+  InstantiatedInspectEntry? parentEntry,
 }) {
   // TODO: implement typedef
   switch (object) {
@@ -295,7 +295,7 @@ PythonFunction.from($call,)
       );
     case String() when object == parentEntry?.sanitizedName:
       return _getTypeStringWithTransform(
-        parentEntry?.value,
+        parentEntry?.source.value,
         cache: cache,
         isReturnString: isReturnString,
       );

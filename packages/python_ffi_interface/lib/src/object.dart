@@ -94,6 +94,16 @@ abstract base class PythonObjectInterface<P extends PythonFfiDelegate<R>,
   /// Gets the function with the given name.
   PythonFunctionInterface<P, R> getFunction(String name);
 
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PythonObjectInterface && reference == other.reference;
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => reference.hashCode;
+
   Object? _onUnknownMethod(
     String name,
     List<Object?> positionalArguments,

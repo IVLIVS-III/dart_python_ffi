@@ -4,33 +4,23 @@ part of interface_gen;
 
 /// TODO: Document.
 final class ClassDefinition extends PythonClassDefinition
-    with
-        InspectMixin,
-        FunctionFieldMixin,
-        GetterSetterMixin,
-        GettersSettersMixin
+    with InspectMixin
     implements InspectEntry {
   /// TODO: Document.
-  ClassDefinition.from(
-    this.name,
-    this.sanitizedName,
-    super.classDefinitionDelegate,
-  )   : value = classDefinitionDelegate,
+  ClassDefinition.from(super.classDefinitionDelegate)
+      : value = classDefinitionDelegate,
         super.from();
 
-  @override
-  final String name;
+  /// TODO: Document.
+  static const Set<String> sanitizationExtraKeywords = <String>{
+    "newInstance",
+    "call",
+    "rawCall",
+    ...Object_.sanitizationExtraKeywords,
+  };
 
   @override
-  final String sanitizedName;
-
-  @override
-  Set<String> get _sanitizationExtraKeywords => const <String>{
-        "newInstance",
-        "call",
-        "rawCall",
-        ...Object_.sanitizationExtraKeywords,
-      };
+  Set<String> get _sanitizationExtraKeywords => sanitizationExtraKeywords;
 
   @override
   final PythonClassDefinitionInterface<PythonFfiDelegate<Object?>, Object?>
@@ -42,7 +32,12 @@ final class ClassDefinition extends PythonClassDefinition
   @override
   void _setChild(String name, InspectEntry child) {
     if (child is Function_) {
-      child = Method.from(child.name, child.sanitizedName, child.value);
+      final Function_ function = child;
+      child = Method.from(child.value);
+      for (final InspectEntryModuleConnection connection
+          in function.moduleConnections) {
+        child.addModuleConnection(connection);
+      }
     }
     super._setChild(name, child);
   }
@@ -120,7 +115,7 @@ final class ClassDefinition extends PythonClassDefinition
     return names.toSet();
   }
 
-  void _extractFieldsFromInit() {
+  void _extractFieldsFromInit(Module parentModule) {
     final Method? initMethod = __init__;
     if (initMethod == null) {
       return;
@@ -155,7 +150,7 @@ final class ClassDefinition extends PythonClassDefinition
     }
   }
 
-  void _extractFieldsFromDataclassFields() {
+  void _extractFieldsFromDataclassFields(Module parentModule) {
     final Set<String> dataclassFields = __dataclass_fields__;
     for (final String field in dataclassFields) {
       final InspectEntry child = AnyTypePrimitive(
@@ -167,22 +162,87 @@ final class ClassDefinition extends PythonClassDefinition
   }
 
   @override
-  void collectChildren(InspectionCache cache, {required String stdlibPath}) {
-    super.collectChildren(cache, stdlibPath: stdlibPath);
-    _extractFieldsFromInit();
-    _extractFieldsFromDataclassFields();
+  void collectChildren(
+    InspectionCache cache, {
+    required String stdlibPath,
+    required Module parentModule,
+  }) {
+    super.collectChildren(
+      cache,
+      stdlibPath: stdlibPath,
+      parentModule: parentModule,
+    );
+    _extractFieldsFromInit(parentModule);
+    _extractFieldsFromDataclassFields(parentModule);
+  }
+
+  @override
+  InstantiatedInspectEntry _instantiateFrom({
+    required String name,
+    required String sanitizedName,
+    required InstantiatedModule instantiatingModule,
+  }) =>
+      InstantiatedClassDefinition.from(
+        this,
+        name: name,
+        sanitizedName: sanitizedName,
+        instantiatingModule: instantiatingModule,
+      );
+}
+
+/// TODO: Document.
+final class InstantiatedClassDefinition extends PythonClassDefinition
+    with
+        InstantiatedInspectMixin,
+        FunctionFieldMixin,
+        GetterSetterMixin,
+        GettersSettersMixin
+    implements InstantiatedInspectEntry {
+  /// TODO: Document.
+  InstantiatedClassDefinition.from(
+    this.source, {
+    required this.name,
+    required this.sanitizedName,
+    required this.instantiatingModule,
+  }) : super.from(source.value);
+
+  @override
+  final ClassDefinition source;
+
+  @override
+  final String name;
+
+  @override
+  final String sanitizedName;
+
+  @override
+  final InstantiatedModule instantiatingModule;
+
+  @override
+  Set<String> get _sanitizationExtraKeywords =>
+      ClassDefinition.sanitizationExtraKeywords;
+
+  InstantiatedMethod? get __init__ {
+    final Method? sourceInit = source.__init__;
+    if (sourceInit == null) {
+      return null;
+    }
+    final InspectEntryModuleConnection connection =
+        InspectEntryModuleConnection(
+      name: "__init__",
+      sanitizedName: "__init__",
+      parentModule: instantiatingModule.source,
+    );
+    sourceInit.addModuleConnection(connection);
+    final InstantiatedInspectEntry? candidate =
+        source.__init__?.instantiate(instantiatingModule);
+    return candidate is InstantiatedMethod ? candidate : null;
   }
 
   @override
   void emit(StringBuffer buffer, {required InspectionCache cache}) {
-    final Object? parentModule = this.parentModule;
-    final String moduleName = switch (parentModule) {
-      PythonModuleInterface<PythonFfiDelegate<Object?>, Object?>() =>
-        // ignore: avoid_dynamic_calls
-        (parentModule as dynamic).__name__ as String,
-      _ => throw Exception("parentModule is not a module: $parentModule"),
-    };
-    final Method? initMethod = __init__;
+    final String moduleName = instantiatingModule.name;
+    final InstantiatedMethod? initMethod = __init__;
     buffer.writeln("/// ## $name");
     emitDoc(buffer);
     emitSource(buffer);

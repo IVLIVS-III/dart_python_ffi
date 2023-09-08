@@ -2,21 +2,20 @@ part of interface_gen;
 
 /// TODO: Document.
 final class Module extends PythonModule
-    with
-        InspectMixin,
-        FunctionFieldMixin,
-        GetterSetterMixin,
-        GettersSettersMixin
+    with InspectMixin
     implements InspectEntry {
   /// TODO: Document.
-  Module.from(this.name, this.sanitizedName, super.moduleDelegate)
-      : value = moduleDelegate,
+  Module.from(
+    super.moduleDelegate, {
+    required this.name,
+    required this.sanitizedName,
+  })  : value = moduleDelegate,
         super.from();
 
-  @override
+  /// TODO: Document.
   final String name;
 
-  @override
+  /// TODO: Document.
   final String sanitizedName;
 
   @override
@@ -26,32 +25,78 @@ final class Module extends PythonModule
         ...Object_.sanitizationExtraKeywords,
       };
 
-  /// TODO: Document.
-  String get qualifiedName {
-    try {
-      // ignore: avoid_dynamic_calls
-      return (value as dynamic).__name__ as String;
-      // ignore: avoid_catches_without_on_clauses
-    } catch (_) {
-      return name;
-    }
-  }
-
   @override
   final PythonModuleInterface<PythonFfiDelegate<Object?>, Object?> value;
 
   @override
   InspectEntryType get type => InspectEntryType.module;
 
-  bool _isMyChild(InspectEntry child) {
+  @override
+  InstantiatedInspectEntry _instantiateFrom({
+    required String name,
+    required String sanitizedName,
+    required InstantiatedModule instantiatingModule,
+  }) =>
+      InstantiatedModule.from(
+        this,
+        name: name,
+        sanitizedName: sanitizedName,
+        instantiatingModule: instantiatingModule,
+      );
+}
+
+/// TODO: Document.
+final class InstantiatedModule extends PythonModule
+    with
+        InstantiatedInspectMixin,
+        FunctionFieldMixin,
+        GetterSetterMixin,
+        GettersSettersMixin
+    implements InstantiatedInspectEntry {
+  /// TODO: Document.
+  InstantiatedModule.from(
+    this.source, {
+    required this.name,
+    required this.instantiatingModule,
+    String? sanitizedName,
+  })  : sanitizedName = sanitizedName ?? sanitizeName(name),
+        super.from(source.value);
+
+  /// TODO: Document.
+  InstantiatedModule.fromModule(this.source)
+      : name = source.name,
+        sanitizedName = source.sanitizedName,
+        super.from(source.value) {
+    instantiatingModule = this;
+  }
+
+  @override
+  final Module source;
+
+  @override
+  final String name;
+
+  @override
+  final String sanitizedName;
+
+  @override
+  late final InstantiatedModule instantiatingModule;
+
+  /// TODO: Document.
+  String get qualifiedName {
+    try {
+      // ignore: avoid_dynamic_calls
+      return (source.value as dynamic).__name__ as String;
+      // ignore: avoid_catches_without_on_clauses
+    } catch (_) {
+      return name;
+    }
+  }
+
+  bool _isMyChild(InstantiatedInspectEntry child) {
     switch (child) {
-      case InspectMixin():
-        final Object? parentModule = child.parentModule;
-        if (parentModule is PythonModuleInterface) {
-          return ReferenceEqualityWrapper(parentModule) ==
-              ReferenceEqualityWrapper(value);
-        }
-        return false;
+      case InstantiatedInspectMixin():
+        return source == child.instantiatingModule;
       case Primitive():
         return true;
     }
@@ -80,8 +125,8 @@ final class $sanitizedName extends PythonModule {
       cache: cache,
       filter: _isMyChild,
     );
-    for (final Module child
-        in _children.values.whereType<Module>().where(_isMyChild)) {
+    for (final InstantiatedModule child
+        in _children.whereType<InstantiatedModule>().where(_isMyChild)) {
       final String moduleName = child.sanitizedName;
       final String fieldName = "\$${child.sanitizedName}";
       if (memberNames.contains(fieldName)) {

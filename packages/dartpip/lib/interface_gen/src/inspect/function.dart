@@ -7,22 +7,9 @@ final class Function_ extends PythonFunction
     with InspectMixin
     implements InspectEntry {
   /// TODO: Document.
-  Function_.from(this.name, this.sanitizedName, super.functionDelegate)
+  Function_.from(super.functionDelegate)
       : value = functionDelegate,
         super.from();
-
-  @override
-  final String name;
-
-  @override
-  final String sanitizedName;
-
-  @override
-  Set<String> get _sanitizationExtraKeywords => const <String>{
-        "call",
-        "asFunction",
-        ...Object_.sanitizationExtraKeywords,
-      };
 
   @override
   final PythonFunctionInterface<PythonFfiDelegate<Object?>, Object?> value;
@@ -36,8 +23,62 @@ final class Function_ extends PythonFunction
   /// TODO: Document.
   Iterable<Parameter> get parameters => signature.parameters.values;
 
+  @override
+  Map<String, Object?> debugDump({
+    InspectionCache? cache,
+    bool expandChildren = true,
+  }) =>
+      <String, Object?>{
+        ...super.debugDump(cache: cache, expandChildren: expandChildren),
+        "signature": signature.debugDump(cache: cache),
+      };
+
+  @override
+  InstantiatedInspectEntry _instantiateFrom({
+    required String name,
+    required String sanitizedName,
+    required InstantiatedModule instantiatingModule,
+  }) =>
+      InstantiatedFunction_.from(
+        this,
+        name: name,
+        sanitizedName: sanitizedName,
+        instantiatingModule: instantiatingModule,
+      );
+}
+
+/// TODO: Document.
+final class InstantiatedFunction_ extends PythonFunction
+    with InstantiatedInspectMixin
+    implements InstantiatedInspectEntry {
+  /// TODO: Document.
+  InstantiatedFunction_.from(
+    this.source, {
+    required this.name,
+    required this.sanitizedName,
+    required this.instantiatingModule,
+  }) : super.from(source.value);
+
+  @override
+  final Function_ source;
+
+  @override
+  final String name;
+
+  @override
+  final String sanitizedName;
+  @override
+  final InstantiatedModule instantiatingModule;
+
+  @override
+  Set<String> get _sanitizationExtraKeywords => const <String>{
+        "call",
+        "asFunction",
+        ...Object_.sanitizationExtraKeywords,
+      };
+
   Iterable<Parameter> _parametersOfKind(ParameterKind kind) =>
-      parameters.where((Parameter parameter) => parameter.kind == kind);
+      source.parameters.where((Parameter parameter) => parameter.kind == kind);
 
   bool _hasKeywordParameters() =>
       _parametersOfKind(ParameterKind.var_positional).isNotEmpty ||
@@ -49,7 +90,7 @@ final class Function_ extends PythonFunction
   Iterable<Transform> emitArguments(
     StringBuffer buffer, {
     required InspectionCache cache,
-    InspectEntry? parentEntry,
+    InstantiatedInspectEntry? parentEntry,
   }) {
     final List<Transform> transforms = <Transform>[];
     for (final Parameter parameter
@@ -165,14 +206,14 @@ final class Function_ extends PythonFunction
     StringBuffer buffer, {
     required InspectionCache cache,
     Set<String> extraKeywords = const <String>{},
-    InspectEntry? parentEntry,
+    InstantiatedInspectEntry? parentEntry,
   }) {
     buffer.writeln("/// ## $name");
     emitDoc(buffer);
     emitSource(buffer);
     final (String returnType, Transform transform) =
         _getTypeStringWithTransform(
-      signature.return_annotation,
+      source.signature.return_annotation,
       cache: cache,
       isReturnString: true,
       parentEntry: parentEntry,
@@ -187,14 +228,4 @@ final class Function_ extends PythonFunction
     callBuffer.writeln(")");
     buffer.write("${transform(callBuffer.toString())};");
   }
-
-  @override
-  Map<String, Object?> debugDump({
-    InspectionCache? cache,
-    bool expandChildren = true,
-  }) =>
-      <String, Object?>{
-        ...super.debugDump(cache: cache, expandChildren: expandChildren),
-        "signature": signature.debugDump(cache: cache),
-      };
 }

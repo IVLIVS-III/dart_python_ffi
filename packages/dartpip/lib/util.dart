@@ -70,6 +70,10 @@ Future<Iterable<_ModuleBundle<Object>>> _bundleCacheModule({
     version: projectVersion,
   );
 
+  print(
+    "Discovered ${pythonModules.length} modules in cache directory '$projectName-$projectVersion': ${pythonModules.map((_PythonModule<Object> e) => "${e.moduleName}@${e.path}").join(", ")}.",
+  );
+
   final Iterable<_ModuleBundle<Object>> moduleBundles = pythonModules.map(
     (_PythonModule<Object> e) => _ModuleBundle<Object>.fromAppType(
       appType,

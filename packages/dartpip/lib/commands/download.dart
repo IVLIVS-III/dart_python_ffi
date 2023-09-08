@@ -9,7 +9,7 @@ class DownloadCommand extends Command<void> {
   final String name = "download";
 
   @override
-  final String description = "Downloads python modules from pypi.";
+  final String description = "Downloads python modules from PyPI.";
 
   @override
   Future<void>? run() async {

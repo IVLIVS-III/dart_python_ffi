@@ -4,18 +4,12 @@ part of interface_gen;
 
 /// TODO: Document.
 final class Object_ extends PythonObject
-    with InspectMixin, GetterSetterMixin
+    with InspectMixin
     implements InspectEntry {
   /// TODO: Document.
-  Object_.from(this.name, this.sanitizedName, super.objectDelegate)
+  Object_.from(super.objectDelegate)
       : value = objectDelegate,
         super.from();
-
-  @override
-  final String name;
-
-  @override
-  final String sanitizedName;
 
   @override
   Set<String> get _sanitizationExtraKeywords => sanitizationExtraKeywords;
@@ -46,6 +40,44 @@ final class Object_ extends PythonObject
 
   @override
   InspectEntryType get type => InspectEntryType.object;
+
+  @override
+  InstantiatedInspectEntry _instantiateFrom({
+    required String name,
+    required String sanitizedName,
+    required InstantiatedModule instantiatingModule,
+  }) =>
+      InstantiatedObject_.from(
+        this,
+        name: name,
+        sanitizedName: sanitizedName,
+        instantiatingModule: instantiatingModule,
+      );
+}
+
+/// TODO: Document.
+final class InstantiatedObject_ extends PythonObject
+    with InstantiatedInspectMixin, GetterSetterMixin
+    implements InstantiatedInspectEntry {
+  /// TODO: Document.
+  InstantiatedObject_.from(
+    this.source, {
+    required this.name,
+    required this.sanitizedName,
+    required this.instantiatingModule,
+  }) : super.from(source.value);
+
+  @override
+  final Object_ source;
+
+  @override
+  final String name;
+
+  @override
+  final String sanitizedName;
+
+  @override
+  final InstantiatedModule instantiatingModule;
 
   @override
   void emit(StringBuffer buffer, {required InspectionCache cache}) =>

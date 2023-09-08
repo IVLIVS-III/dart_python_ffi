@@ -13,15 +13,13 @@ final class types extends PythonModule {
         types.from,
       );
 
-  /// TODO: Document.
-  static bool isType(ClassInstance class_) {
+  static bool _isType(
+    PythonObjectInterface<PythonFfiDelegate<Object?>, Object?>
+        classParentModule,
+  ) {
     final types typesModule = types.import();
     final ReferenceEqualityWrapper typesModuleWrapper =
         ReferenceEqualityWrapper(typesModule);
-    final Object? classParentModule = class_.parentModule;
-    if (classParentModule is! PythonModuleInterface) {
-      return false;
-    }
     final ReferenceEqualityWrapper classParentModuleWrapper =
         ReferenceEqualityWrapper(classParentModule);
     if (classParentModuleWrapper != typesModuleWrapper) {
@@ -30,4 +28,17 @@ final class types extends PythonModule {
     // TODO: make this more robust
     return true;
   }
+
+  /// TODO: Document.
+  static bool isType(ClassInstance class_) {
+    final Object? classParentModule = class_.definingModule;
+    if (classParentModule is! PythonModuleInterface) {
+      return false;
+    }
+    return _isType(classParentModule);
+  }
+
+  /// TODO: Document.
+  static bool isInstantiatedType(InstantiatedClassInstance class_) =>
+      _isType(class_.instantiatingModule);
 }

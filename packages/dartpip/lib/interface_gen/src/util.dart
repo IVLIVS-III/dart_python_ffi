@@ -129,8 +129,17 @@ Future<String> doInspection(
     final Module interface = PythonFfiDart.instance.importModule(
       "$parentModulePrefix$moduleName",
       (PythonModuleInterface<PythonFfiDelegate<Object?>, Object?> m) =>
-          Module.from(moduleName, sanitizeName(moduleName), m),
-    )..collectChildren(cache, stdlibPath: stdlibPath);
+          Module.from(
+        m,
+        name: moduleName,
+        sanitizedName: sanitizeName(moduleName),
+      ),
+    );
+    interface.collectChildren(
+      cache,
+      stdlibPath: stdlibPath,
+      parentModule: interface,
+    );
 
     Object? toEncodable(Object? o) {
       final Object? object = o;
@@ -202,7 +211,10 @@ String emitInspection(
   String moduleParentPrefix = "",
 }) {
   final Module? primaryModule = cache.modules.firstOrNull;
-  if (primaryModule == null) {
+  final InstantiatedModule? primaryInstantiatedModule = primaryModule != null
+      ? InstantiatedModule.fromModule(primaryModule)
+      : null;
+  if (primaryInstantiatedModule == null) {
     primaryModuleOnly = false;
   }
   const String analysisIgnoreLine =
@@ -211,8 +223,8 @@ String emitInspection(
 $analysisIgnoreLine
 
 """);
-  if (primaryModule != null) {
-    buffer.writeln("library ${primaryModule.sanitizedName};");
+  if (primaryInstantiatedModule != null) {
+    buffer.writeln("library ${primaryInstantiatedModule.sanitizedName};");
   }
   const String typedDataImportLine = 'import "dart:typed_data";';
   const String pythonFfiImportLine =
@@ -224,28 +236,40 @@ $pythonFfiImportLine
 """);
   final Set<String> topLevelNames = <String>{};
   for (final ClassInstance typedef in cache.typedefs) {
-    final String typedefName = typedef.sanitizedName;
-    if (topLevelNames.contains(typedefName)) {
-      continue;
+    for (final InstantiatedClassInstance instantiatedTypedef
+        in typedef.instantiations.whereType()) {
+      final String typedefName = instantiatedTypedef.sanitizedName;
+      if (topLevelNames.contains(typedefName)) {
+        continue;
+      }
+      topLevelNames.add(typedefName);
+      instantiatedTypedef.emit(buffer, cache: cache);
     }
-    topLevelNames.add(typedefName);
-    typedef.emit(buffer, cache: cache);
   }
   for (final ClassDefinition classDefinition in cache.classDefinitions) {
-    final String className = classDefinition.sanitizedName;
-    if (topLevelNames.contains(className)) {
-      continue;
+    for (final InstantiatedClassDefinition instantiatedClassDefinition
+        in classDefinition.instantiations.whereType()) {
+      final String className = instantiatedClassDefinition.sanitizedName;
+      if (topLevelNames.contains(className)) {
+        continue;
+      }
+      topLevelNames.add(className);
+      instantiatedClassDefinition.emit(buffer, cache: cache);
     }
-    topLevelNames.add(className);
-    classDefinition.emit(buffer, cache: cache);
   }
   for (final Module module in cache.modules) {
-    final String moduleName = module.sanitizedName;
+    final InstantiatedModule instantiatedModule =
+        InstantiatedModule.fromModule(module);
+    final String moduleName = instantiatedModule.sanitizedName;
     if (topLevelNames.contains(moduleName)) {
       continue;
     }
     topLevelNames.add(moduleName);
-    module.emit(buffer, cache: cache, moduleParentPrefix: moduleParentPrefix);
+    instantiatedModule.emit(
+      buffer,
+      cache: cache,
+      moduleParentPrefix: moduleParentPrefix,
+    );
   }
   final String result = buffer.toString();
   if (!result.contains("Uint8List")) {

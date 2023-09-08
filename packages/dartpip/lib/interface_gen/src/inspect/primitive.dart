@@ -1,15 +1,9 @@
 part of interface_gen;
 
 /// TODO: Document.
-final class Primitive implements InspectEntry {
+final class Primitive implements InspectEntry, InstantiatedInspectEntry {
   /// TODO: Document.
   const Primitive(this.name, this.sanitizedName, this.value);
-
-  @override
-  final String name;
-
-  @override
-  final String sanitizedName;
 
   @override
   final Object? value;
@@ -18,11 +12,44 @@ final class Primitive implements InspectEntry {
   InspectEntryType get type => InspectEntryType.primitive;
 
   @override
+  InspectEntry get source => this;
+
+  @override
+  final String name;
+
+  @override
+  final String sanitizedName;
+
+  @override
+  InstantiatedModule get instantiatingModule =>
+      throw UnimplementedError("$runtimeType.instantiatingModule");
+
+  @override
+  List<InspectEntryModuleConnection> get moduleConnections =>
+      throw UnimplementedError("$runtimeType.moduleConnections");
+
+  @override
+  bool hasModuleConnection(InspectEntryModuleConnection connection) => false;
+
+  @override
+  void addModuleConnection(InspectEntryModuleConnection connection) {}
+
+  @override
   Iterable<(String, InspectEntry)> get children =>
       const <(String, InspectEntry)>[];
 
   @override
-  void collectChildren(InspectionCache cache, {required String stdlibPath}) {}
+  InstantiatedInspectEntry instantiate(
+    InstantiatedModule instantiatingModule,
+  ) =>
+      this;
+
+  @override
+  void collectChildren(
+    InspectionCache cache, {
+    required String stdlibPath,
+    required Module parentModule,
+  }) {}
 
   @override
   void emit(StringBuffer buffer, {required InspectionCache cache}) {
@@ -41,11 +68,14 @@ final class Primitive implements InspectEntry {
     bool expandChildren = true,
   }) =>
       <String, Object?>{
-        "name": name,
-        "sanitizedName": sanitizedName,
         "value": value,
         "type": type.displayName,
       };
+
+  @override
+  Iterable<InstantiatedInspectEntry> get cachedInstantiations sync* {
+    yield this;
+  }
 }
 
 /// TODO: Document.
