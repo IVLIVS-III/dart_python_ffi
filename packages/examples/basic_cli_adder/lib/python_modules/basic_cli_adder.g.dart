@@ -42,4 +42,10 @@ final class basic_cli_adder extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## num (getter)
+  Object? get $num => getAttribute("num");
+
+  /// ## num (setter)
+  set $num(Object? $num) => setAttribute("num", $num);
 }

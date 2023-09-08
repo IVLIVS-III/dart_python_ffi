@@ -40,8 +40,7 @@ void main(List<String> arguments) async {
   await initialize(libPath: libPath);
   stdout.write("Enter a duration: ");
   final String? input = stdin.readLineSync();
-  final PyTimeParse pyTimeParse = PyTimeParse.import();
-  final num? seconds = pyTimeParse.parse(input ?? "");
+  final Object? seconds = pytimeparse.import().parse(sval: input ?? "");
   if (seconds == null) {
     stdout.writeln("unable to normalize duration: $input");
     return;

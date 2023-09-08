@@ -1,6 +1,6 @@
-extension DurationExtension on num? {
+extension DurationExtension on Object? {
   Duration get asDuration {
-    final num? value = this;
+    final Object? value = this;
     if (value == null) {
       return Duration.zero;
     }
@@ -10,6 +10,10 @@ extension DurationExtension on num? {
     if (value is double) {
       return Duration(microseconds: (value * 1000000).toInt());
     }
-    throw ArgumentError.value(value, "value");
+    throw ArgumentError.value(
+      value,
+      "value",
+      "Conversion to Duration only supported for int and double.",
+    );
   }
 }

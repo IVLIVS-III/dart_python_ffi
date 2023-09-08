@@ -239,6 +239,29 @@ final class timeparse extends PythonModule {
         kwargs: <String, Object?>{},
       );
 
+  /// ## COMPILED_SIGN (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// timeparse.py
+  /// (c) Will Roberts <wildwilhelm@gmail.com>  1 February, 2014
+  ///
+  /// Implements a single function, `timeparse`, which can parse various
+  /// kinds of time expressions.
+  Object? get COMPILED_SIGN => getAttribute("COMPILED_SIGN");
+
+  /// ## COMPILED_SIGN (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// timeparse.py
+  /// (c) Will Roberts <wildwilhelm@gmail.com>  1 February, 2014
+  ///
+  /// Implements a single function, `timeparse`, which can parse various
+  /// kinds of time expressions.
+  set COMPILED_SIGN(Object? COMPILED_SIGN) =>
+      setAttribute("COMPILED_SIGN", COMPILED_SIGN);
+
   /// ## COMPILED_TIMEFORMATS (getter)
   ///
   /// ### python docstring

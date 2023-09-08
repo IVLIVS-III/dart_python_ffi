@@ -7,7 +7,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 /// ## charbuffertype
 final class charbuffertype extends PythonClass {
   factory charbuffertype() => PythonFfiDart.instance.importClass(
-        "builtins",
+        "pytimeparse",
         "charbuffertype",
         charbuffertype.from,
         <Object?>[],
@@ -343,6 +343,226 @@ final class pytimeparse extends PythonModule {
         "pytimeparse",
         pytimeparse.from,
       );
+
+  /// ## open
+  ///
+  /// ### python docstring
+  ///
+  /// Open an encoded file using the given mode and return
+  /// a wrapped version providing transparent encoding/decoding.
+  ///
+  /// Note: The wrapped version will only accept the object format
+  /// defined by the codecs, i.e. Unicode objects for most builtin
+  /// codecs. Output is also codec dependent and will usually be
+  /// Unicode as well.
+  ///
+  /// If encoding is not None, then the
+  /// underlying encoded files are always opened in binary mode.
+  /// The default file mode is 'r', meaning to open the file in read mode.
+  ///
+  /// encoding specifies the encoding which is to be used for the
+  /// file.
+  ///
+  /// errors may be given to define the error handling. It defaults
+  /// to 'strict' which causes ValueErrors to be raised in case an
+  /// encoding error occurs.
+  ///
+  /// buffering has the same meaning as for the builtin open() API.
+  /// It defaults to -1 which means that the default buffer size will
+  /// be used.
+  ///
+  /// The returned wrapped file object provides an extra attribute
+  /// .encoding which allows querying the used encoding. This
+  /// attribute is only available if an encoding was specified as
+  /// parameter.
+  Object? open({
+    required Object? filename,
+    Object? mode = "r",
+    Object? encoding,
+    Object? errors = "strict",
+    Object? buffering = -1,
+  }) =>
+      getFunction("open").call(
+        <Object?>[
+          filename,
+          mode,
+          encoding,
+          errors,
+          buffering,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## parse
+  ///
+  /// ### python docstring
+  ///
+  /// Parse a time expression, returning it as a number of seconds.  If
+  /// possible, the return value will be an `int`; if this is not
+  /// possible, the return will be a `float`.  Returns `None` if a time
+  /// expression cannot be parsed from the given string.
+  ///
+  /// Arguments:
+  /// - `sval`: the string value to parse
+  ///
+  /// >>> timeparse('1:24')
+  /// 84
+  /// >>> timeparse(':22')
+  /// 22
+  /// >>> timeparse('1 minute, 24 secs')
+  /// 84
+  /// >>> timeparse('1m24s')
+  /// 84
+  /// >>> timeparse('1.2 minutes')
+  /// 72
+  /// >>> timeparse('1.2 seconds')
+  /// 1.2
+  ///
+  /// Time expressions can be signed.
+  ///
+  /// >>> timeparse('- 1 minute')
+  /// -60
+  /// >>> timeparse('+ 1 minute')
+  /// 60
+  ///
+  /// If granularity is specified as ``minutes``, then ambiguous digits following
+  /// a colon will be interpreted as minutes; otherwise they are considered seconds.
+  ///
+  /// >>> timeparse('1:30')
+  /// 90
+  /// >>> timeparse('1:30', granularity='minutes')
+  /// 5400
+  ///
+  /// ### python source
+  /// ```py
+  /// def timeparse(sval, granularity='seconds'):
+  ///     '''
+  ///     Parse a time expression, returning it as a number of seconds.  If
+  ///     possible, the return value will be an `int`; if this is not
+  ///     possible, the return will be a `float`.  Returns `None` if a time
+  ///     expression cannot be parsed from the given string.
+  ///
+  ///     Arguments:
+  ///     - `sval`: the string value to parse
+  ///
+  ///     >>> timeparse('1:24')
+  ///     84
+  ///     >>> timeparse(':22')
+  ///     22
+  ///     >>> timeparse('1 minute, 24 secs')
+  ///     84
+  ///     >>> timeparse('1m24s')
+  ///     84
+  ///     >>> timeparse('1.2 minutes')
+  ///     72
+  ///     >>> timeparse('1.2 seconds')
+  ///     1.2
+  ///
+  ///     Time expressions can be signed.
+  ///
+  ///     >>> timeparse('- 1 minute')
+  ///     -60
+  ///     >>> timeparse('+ 1 minute')
+  ///     60
+  ///
+  ///     If granularity is specified as ``minutes``, then ambiguous digits following
+  ///     a colon will be interpreted as minutes; otherwise they are considered seconds.
+  ///
+  ///     >>> timeparse('1:30')
+  ///     90
+  ///     >>> timeparse('1:30', granularity='minutes')
+  ///     5400
+  ///     '''
+  ///     match = COMPILED_SIGN.match(sval)
+  ///     sign = -1 if match.groupdict()['sign'] == '-' else 1
+  ///     sval = match.groupdict()['unsigned']
+  ///     for timefmt in COMPILED_TIMEFORMATS:
+  ///         match = timefmt.match(sval)
+  ///         if match and match.group(0).strip():
+  ///             mdict = match.groupdict()
+  ///             if granularity == 'minutes':
+  ///                 mdict = _interpret_as_minutes(sval, mdict)
+  ///             # if all of the fields are integer numbers
+  ///             if all(v.isdigit() for v in list(mdict.values()) if v):
+  ///                 return sign * sum([MULTIPLIERS[k] * int(v, 10) for (k, v) in
+  ///                             list(mdict.items()) if v is not None])
+  ///             # if SECS is an integer number
+  ///             elif ('secs' not in mdict or
+  ///                   mdict['secs'] is None or
+  ///                   mdict['secs'].isdigit()):
+  ///                 # we will return an integer
+  ///                 return (
+  ///                     sign * int(sum([MULTIPLIERS[k] * float(v) for (k, v) in
+  ///                              list(mdict.items()) if k != 'secs' and v is not None])) +
+  ///                     (int(mdict['secs'], 10) if mdict['secs'] else 0))
+  ///             else:
+  ///                 # SECS is a float, we will return a float
+  ///                 return sign * sum([MULTIPLIERS[k] * float(v) for (k, v) in
+  ///                             list(mdict.items()) if v is not None])
+  /// ```
+  Object? parse({
+    required Object? sval,
+    Object? granularity = "seconds",
+  }) =>
+      getFunction("parse").call(
+        <Object?>[
+          sval,
+          granularity,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## timeparse
+  ///
+  /// ### python docstring
+  ///
+  /// timeparse.py
+  /// (c) Will Roberts <wildwilhelm@gmail.com>  1 February, 2014
+  ///
+  /// Implements a single function, `timeparse`, which can parse various
+  /// kinds of time expressions.
+  timeparse get $timeparse => timeparse.import();
+
+  /// ## absolute_import (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// __init__.py
+  /// (c) Will Roberts <wildwilhelm@gmail.com>   1 February, 2014
+  ///
+  /// `timeparse` module.
+  Object? get absolute_import => getAttribute("absolute_import");
+
+  /// ## absolute_import (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// __init__.py
+  /// (c) Will Roberts <wildwilhelm@gmail.com>   1 February, 2014
+  ///
+  /// `timeparse` module.
+  set absolute_import(Object? absolute_import) =>
+      setAttribute("absolute_import", absolute_import);
+
+  /// ## infile (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// __init__.py
+  /// (c) Will Roberts <wildwilhelm@gmail.com>   1 February, 2014
+  ///
+  /// `timeparse` module.
+  Object? get infile => getAttribute("infile");
+
+  /// ## infile (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// __init__.py
+  /// (c) Will Roberts <wildwilhelm@gmail.com>   1 February, 2014
+  ///
+  /// `timeparse` module.
+  set infile(Object? infile) => setAttribute("infile", infile);
 }
 
 /// ## timeparse
@@ -545,158 +765,6 @@ final class timeparse extends PythonModule {
   static timeparse import() => PythonFfiDart.instance.importModule(
         "pytimeparse.timeparse",
         timeparse.from,
-      );
-
-  /// ## OPT
-  ///
-  /// ### python source
-  /// ```py
-  /// OPT         = lambda x: r'(?:{x})?'.format(x=x, SEPARATORS=SEPARATORS)
-  /// ```
-  Object? OPT({
-    required Object? x,
-  }) =>
-      getFunction("OPT").call(
-        <Object?>[
-          x,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## OPTSEP
-  ///
-  /// ### python source
-  /// ```py
-  /// OPTSEP      = lambda x: r'(?:{x}\s*(?:{SEPARATORS}\s*)?)?'.format(
-  ///     x=x, SEPARATORS=SEPARATORS)
-  /// ```
-  Object? OPTSEP({
-    required Object? x,
-  }) =>
-      getFunction("OPTSEP").call(
-        <Object?>[
-          x,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## parse
-  ///
-  /// ### python docstring
-  ///
-  /// Parse a time expression, returning it as a number of seconds.  If
-  /// possible, the return value will be an `int`; if this is not
-  /// possible, the return will be a `float`.  Returns `None` if a time
-  /// expression cannot be parsed from the given string.
-  ///
-  /// Arguments:
-  /// - `sval`: the string value to parse
-  ///
-  /// >>> timeparse('1:24')
-  /// 84
-  /// >>> timeparse(':22')
-  /// 22
-  /// >>> timeparse('1 minute, 24 secs')
-  /// 84
-  /// >>> timeparse('1m24s')
-  /// 84
-  /// >>> timeparse('1.2 minutes')
-  /// 72
-  /// >>> timeparse('1.2 seconds')
-  /// 1.2
-  ///
-  /// Time expressions can be signed.
-  ///
-  /// >>> timeparse('- 1 minute')
-  /// -60
-  /// >>> timeparse('+ 1 minute')
-  /// 60
-  ///
-  /// If granularity is specified as ``minutes``, then ambiguous digits following
-  /// a colon will be interpreted as minutes; otherwise they are considered seconds.
-  ///
-  /// >>> timeparse('1:30')
-  /// 90
-  /// >>> timeparse('1:30', granularity='minutes')
-  /// 5400
-  ///
-  /// ### python source
-  /// ```py
-  /// def timeparse(sval, granularity='seconds'):
-  ///     '''
-  ///     Parse a time expression, returning it as a number of seconds.  If
-  ///     possible, the return value will be an `int`; if this is not
-  ///     possible, the return will be a `float`.  Returns `None` if a time
-  ///     expression cannot be parsed from the given string.
-  ///
-  ///     Arguments:
-  ///     - `sval`: the string value to parse
-  ///
-  ///     >>> timeparse('1:24')
-  ///     84
-  ///     >>> timeparse(':22')
-  ///     22
-  ///     >>> timeparse('1 minute, 24 secs')
-  ///     84
-  ///     >>> timeparse('1m24s')
-  ///     84
-  ///     >>> timeparse('1.2 minutes')
-  ///     72
-  ///     >>> timeparse('1.2 seconds')
-  ///     1.2
-  ///
-  ///     Time expressions can be signed.
-  ///
-  ///     >>> timeparse('- 1 minute')
-  ///     -60
-  ///     >>> timeparse('+ 1 minute')
-  ///     60
-  ///
-  ///     If granularity is specified as ``minutes``, then ambiguous digits following
-  ///     a colon will be interpreted as minutes; otherwise they are considered seconds.
-  ///
-  ///     >>> timeparse('1:30')
-  ///     90
-  ///     >>> timeparse('1:30', granularity='minutes')
-  ///     5400
-  ///     '''
-  ///     match = COMPILED_SIGN.match(sval)
-  ///     sign = -1 if match.groupdict()['sign'] == '-' else 1
-  ///     sval = match.groupdict()['unsigned']
-  ///     for timefmt in COMPILED_TIMEFORMATS:
-  ///         match = timefmt.match(sval)
-  ///         if match and match.group(0).strip():
-  ///             mdict = match.groupdict()
-  ///             if granularity == 'minutes':
-  ///                 mdict = _interpret_as_minutes(sval, mdict)
-  ///             # if all of the fields are integer numbers
-  ///             if all(v.isdigit() for v in list(mdict.values()) if v):
-  ///                 return sign * sum([MULTIPLIERS[k] * int(v, 10) for (k, v) in
-  ///                             list(mdict.items()) if v is not None])
-  ///             # if SECS is an integer number
-  ///             elif ('secs' not in mdict or
-  ///                   mdict['secs'] is None or
-  ///                   mdict['secs'].isdigit()):
-  ///                 # we will return an integer
-  ///                 return (
-  ///                     sign * int(sum([MULTIPLIERS[k] * float(v) for (k, v) in
-  ///                              list(mdict.items()) if k != 'secs' and v is not None])) +
-  ///                     (int(mdict['secs'], 10) if mdict['secs'] else 0))
-  ///             else:
-  ///                 # SECS is a float, we will return a float
-  ///                 return sign * sum([MULTIPLIERS[k] * float(v) for (k, v) in
-  ///                             list(mdict.items()) if v is not None])
-  /// ```
-  Object? parse({
-    required Object? sval,
-    Object? granularity = "seconds",
-  }) =>
-      getFunction("parse").call(
-        <Object?>[
-          sval,
-          granularity,
-        ],
-        kwargs: <String, Object?>{},
       );
 
   /// ## COMPILED_TIMEFORMATS (getter)

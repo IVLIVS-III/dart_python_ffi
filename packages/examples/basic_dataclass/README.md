@@ -14,8 +14,8 @@ module.
 3. [Including the Python module source](#including-the-python-module-source)
 4. [Adding the Python module to the Dart project](#adding-the-python-module-to-the-dart-project)
     1. [List the Python module as a dependency in `pubspec.yaml`](#1-list-the-python-module-as-a-dependency-in-pubspecyaml)
-    2. [Run `dartpip bundle`](#2-run-dartpip-bundle)
-    3. [Creating the Class-definition in Dart](#3-creating-the-class-definition-in-dart)
+    2. [Run `dartpip install`](#2-run-dartpip-install)
+    3. [Export the generated files](#3-export-the-generated-files)
 5. [Using the Python module in Dart](#using-the-python-module-in-dart)
 6. [Testing the Python module](#testing-the-python-module)
 7. [Next step](#next-step)
@@ -72,54 +72,193 @@ class Person:
 
 python_ffi:
   modules:
-    basic_dataclass: any
+    basic_dataclass:
+      path: python-modules/basic_dataclass.py
 ```
 
-### 2. Run `dartpip bundle`
+### 2. Run `dartpip install`
 
 The following command should be run from the root of your Dart project. It will bundle the Python
 module source into the Dart project.
 
 ```shell
-$ dartpip bundle -r . -m python-modules
+$ dartpip install
 ```
 
-The value behind the `-m` option is the path to the directory containing the Python module source.
-The value behind the `-r` option is the root of the Dart project. Both are relative to the current
-working directory.
+Each Python module needs its corresponding Dart Module-definition.
 
-### 3. Creating the Class-definition in Dart
+The `install` command will automatically generate a Module-definition in Dart for the Python module.
+The generated file will be located at `lib/python_modules/basic_dataclass.g.dart`.
 
-Each Python class needs its corresponding Dart Class-definition:
+<details>
+<summary>Click to see the generated file</summary>
 
 ```dart
-// lib/basic_dataclass.dart
+// lib/python_modules/basic_dataclass.g.dart
+
+// ignore_for_file: camel_case_types, non_constant_identifier_names, prefer_void_to_null
+
+library basic_dataclass;
 
 import "package:python_ffi_dart/python_ffi_dart.dart";
 
+/// ## Person
+///
+/// ### python docstring
+///
+/// Person(name: str, x: int = 0, y: int = 0)
+///
+/// ### python source
+/// ```py
+/// @dataclass
+/// class Person:
+///     name: str
+///     x: int = 0
+///     y: int = 0
+///
+///     def move(self, dx: int, dy: int) -> None:
+///         self.x += dx
+///         self.y += dy
+///
+///     def __str__(self) -> str:
+///         return f"{self.name} @ ({self.x}, {self.y})"
+/// ```
 final class Person extends PythonClass {
-  factory Person(String name) =>
+  factory Person({
+    required String name,
+    int x = 0,
+    int y = 0,
+  }) =>
       PythonFfiDart.instance.importClass(
         "basic_dataclass",
         "Person",
         Person.from,
-        <Object?>[name],
+        <Object?>[
+          name,
+          x,
+          y,
+        ],
+        <String, Object?>{},
       );
 
   Person.from(super.pythonClass) : super.from();
 
-  void move(int dx, int dy) => getFunction("move").call(<Object?>[dx, dy]);
+  /// ## move
+  ///
+  /// ### python source
+  /// ```py
+  /// def move(self, dx: int, dy: int) -> None:
+  ///         self.x += dx
+  ///         self.y += dy
+  /// ```
+  Null move({
+    required int dx,
+    required int dy,
+  }) =>
+      getFunction("move").call(
+        <Object?>[
+          dx,
+          dy,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## x (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Person(name: str, x: int = 0, y: int = 0)
+  Object? get x => getAttribute("x");
+
+  /// ## x (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Person(name: str, x: int = 0, y: int = 0)
+  set x(Object? x) => setAttribute("x", x);
+
+  /// ## y (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Person(name: str, x: int = 0, y: int = 0)
+  Object? get y => getAttribute("y");
+
+  /// ## y (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Person(name: str, x: int = 0, y: int = 0)
+  set y(Object? y) => setAttribute("y", y);
+
+  /// ## name (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Person(name: str, x: int = 0, y: int = 0)
+  Object? get name => getAttribute("name");
+
+  /// ## name (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Person(name: str, x: int = 0, y: int = 0)
+  set name(Object? name) => setAttribute("name", name);
+}
+
+/// ## basic_dataclass
+///
+/// ### python source
+/// ```py
+/// from dataclasses import dataclass
+///
+/// @dataclass
+/// class Person:
+///     name: str
+///     x: int = 0
+///     y: int = 0
+///
+///     def move(self, dx: int, dy: int) -> None:
+///         self.x += dx
+///         self.y += dy
+///
+///     def __str__(self) -> str:
+///         return f"{self.name} @ ({self.x}, {self.y})"
+/// ```
+final class basic_dataclass extends PythonModule {
+  basic_dataclass.from(super.pythonModule) : super.from();
+
+  static basic_dataclass import() =>
+      PythonFfiDart.instance.importModule(
+        "basic_dataclass",
+        basic_dataclass.from,
+      );
 }
 ```
 
-*Note: We don't need to map the Dart `toString` method to the Python `__str__` method. This is
-handled automatically. Simply printing the Dart instance will invoke the Python `__str__` method.*
+</details>
+
+*Note: The Dart `toString` method is not mapped to the Python `__str__` method. This is handled
+automatically during runtime. Simply printing the Dart instance will invoke the Python `__str__`
+method.*
+
+### 3. Export the generated files
+
+To make the Python module available to other Dart files, we need to export the generated files.
+To do this, we modify `lib/basic_dataclass.dart`:
+
+```dart
+// lib/basic_dataclass.dart
+
+export "python_modules/basic_dataclass.g.dart";
+export "python_modules/src/python_modules.g.dart";
+```
 
 ## Using the Python module in Dart
 
 First we need to initialize the Python runtime once. This is done by calling the `initialize` method
 on the `PythonFfiDart.instance` singleton. The `initialize` method takes the encoded Python modules
-added via `dartpip bundle`.
+added via `dartpip install`.
 
 We can then instantiate a `Person` object in Dart. It will be automatically backed by Python memory.
 Then we can call the `move` method on the Dart instance, which will call the corresponding Python
@@ -131,13 +270,12 @@ method. Printing the Dart instance will invoke the Python `__str__` method.
 import "dart:io";
 
 import "package:basic_dataclass/basic_dataclass.dart";
-import "package:basic_dataclass/python_modules/src/python_modules.g.dart";
 import "package:python_ffi_dart/python_ffi_dart.dart";
 
 void main(List<String> arguments) async {
   await PythonFfiDart.instance.initialize(kPythonModules);
 
-  final Person person = Person(arguments.first);
+  final Person person = Person(name: arguments[0]);
   print("<use W,A,S,D to move, press q to quit>");
   String? input;
   do {
@@ -146,21 +284,21 @@ void main(List<String> arguments) async {
     input = stdin.readLineSync();
     switch (input) {
       case "w":
-        person.move(0, -1);
-        break;
+        person.move(dx: 0, dy: -1);
       case "a":
-        person.move(-1, 0);
-        break;
+        person.move(dx: -1, dy: 0);
       case "s":
-        person.move(0, 1);
-        break;
+        person.move(dx: 0, dy: 1);
       case "d":
-        person.move(1, 0);
-        break;
+        person.move(dx: 1, dy: 0);
     }
   } while (input != "q");
 }
 ```
+
+*Note: When you look at the file `bin/basic_dataclass.dart` as it is in this repository, you will
+notice that it is quite different. This is because the complete example project allows for passing
+arguments via the command line. This is not relevant for this tutorial, so we have removed it here.*
 
 ## Testing the Python module
 
@@ -171,35 +309,48 @@ Python runtime once first. Then we can import the Python module and test its fun
 // test/basic_dataclass_test.dart
 
 import "package:basic_dataclass/basic_dataclass.dart";
-import "package:basic_dataclass/python_modules/src/python_modules.g.dart";
 import "package:python_ffi_dart/python_ffi_dart.dart";
 import "package:test/test.dart";
 
 void main() async {
-  await PythonFfiDart.instance.initialize(kPythonModules);
-
-  late Person person;
-
-  setUp(() => person = Person("John"));
+  setUpAll(() async {
+    await PythonFfiDart.instance.initialize(kPythonModules);
+  });
 
   test("move W", () {
-    expect((person..move(0, -1)).toString(), "John @ (0, -1)");
+    expect(
+      (Person(name: "John")
+        ..move(dx: 0, dy: -1)).toString(),
+      "John @ (0, -1)",
+    );
   });
 
   test("move A", () {
-    expect((person..move(-1, 0)).toString(), "John @ (-1, 0)");
+    expect(
+      (Person(name: "John")
+        ..move(dx: -1, dy: 0)).toString(),
+      "John @ (-1, 0)",
+    );
   });
 
   test("move S", () {
-    expect((person..move(0, 1)).toString(), "John @ (0, 1)");
+    expect(
+      (Person(name: "John")
+        ..move(dx: 0, dy: 1)).toString(),
+      "John @ (0, 1)",
+    );
   });
 
   test("move D", () {
-    expect((person..move(1, 0)).toString(), "John @ (1, 0)");
+    expect(
+      (Person(name: "John")
+        ..move(dx: 1, dy: 0)).toString(),
+      "John @ (1, 0)",
+    );
   });
 }
 ```
 
 ## Next step
 
-Importing a Python module from pypi. See [pytimeparse_dart](../pytimeparse_dart/README.md).
+Importing a Python module from PyPI. See [pytimeparse_dart](../pytimeparse_dart/README.md).

@@ -6,7 +6,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 import "package:pytimeparse_dart/python_modules/src/python_modules.g.dart";
 
 export "extensions.dart";
-export "python_modules/pytimeparse.dart";
+export "python_modules/pytimeparse.g.dart";
 
 Future<void> initialize({String? libPath}) async {
   await PythonFfiDart.instance.initialize(kPythonModules, libPath: libPath);

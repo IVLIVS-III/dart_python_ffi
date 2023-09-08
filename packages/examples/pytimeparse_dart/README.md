@@ -1,22 +1,9 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
-
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
--->
-
 # pytimeparse_dart
 
 A Dart wrapper of [pytimeparse](https://pypi.org/project/pytimeparse/), a Python library for parsing
 human-readable time strings.
 
-This example shows how to import a (third-party) Python module from pypi. Additionally, we import
+This example shows how to import a (third-party) Python module from PyPI. Additionally, we import
 the Python module in a Dart package that exposes part of the Python module's functionality as a Dart
 API to its package clients. A simulated package client is the `example` directory.
 
@@ -26,9 +13,7 @@ API to its package clients. A simulated package client is the `example` director
 2. [Prerequisites](#prerequisites)
 3. [Including the Python module source](#including-the-python-module-source)
 4. [Adding the Python module to the Dart project](#adding-the-python-module-to-the-dart-project)
-    1. [List the Python module as a dependency in `pubspec.yaml`](#1-list-the-python-module-as-a-dependency-in-pubspecyaml)
-    2. [Run `dartpip bundle`](#2-run-dartpip-bundle)
-    3. [Creating the Module-definition in Dart](#3-creating-the-module-definition-in-dart)
+    1. [Run `dartpip install`](#1-run-dartpip-install)
 5. [Using the Python module in Dart](#using-the-python-module-in-dart)
 6. [Testing the Python module](#testing-the-python-module)
 7. [Next step](#next-step)
@@ -46,56 +31,25 @@ normalized duration: 1:02:03.000000
 * The [dartpip cli](https://pub.dev/packages/dartpip) should be installed (either globally or as
   dev-dependency in this Dart project).
 
-## Including the Python module source
-
-Download the Python module source from pypi or Github. This Python module is a multi-file module.
-Create a new directory `pytimeparse` in the `python-modules` directory. Copy the Python module
-source into the `pytimeparse` directory. This will result in a module named `pytimeparse` that we
-will be importing from Dart.
-
 ## Adding the Python module to the Dart project
 
-### 1. List the Python module as a dependency in `pubspec.yaml`
+### 1. Run `dartpip install`
 
-```yaml
-# pubspec.yaml
-
-python_ffi:
-  modules:
-    pytimeparse: any
-```
-
-### 2. Run `dartpip bundle`
-
-The following command should be run from the root of your Dart project. It will bundle the Python
-module source into the Dart project.
+The following command should be run from the root of your Dart project. It will download and bundle
+the Python module source into the Dart project.
 
 ```shell
-$ dartpip bundle -r . -m python-modules
+$ dartpip install pytimeparse
 ```
 
-The value behind the `-m` option is the path to the directory containing the Python module source.
-The value behind the `-r` option is the root of the Dart project. Both are relative to the current
-working directory.
+Each Python module needs its corresponding Dart Module-definition.
 
-### 3. Creating the Module-definition in Dart
+The `install` command will automatically generate a Module-definition in Dart for the Python module.
+The generated file will be located at `lib/python_modules/pytimeparse.g.dart`.
 
-Each Python module needs its corresponding Dart Module-definition:
-
-```dart
-// lib/python_modules/pytimeparse.dart
-
-import "package:python_ffi_dart/python_ffi_dart.dart";
-
-final class PyTimeParse extends PythonModule {
-  PyTimeParse.from(super.pythonModule) : super.from();
-
-  static PyTimeParse import() =>
-      PythonFfiDart.instance.importModule("pytimeparse", PyTimeParse.from);
-
-  num? parse(String timeStr) => getFunction("parse").call(<Object?>[timeStr]);
-}
-```
+Since the generated file is over 1000 lines long, we will not include it here. `dartpip install`
+also generated various other `*.g.dart` files in the `lib/python_modules` directory. These files are
+some submodules of `pytimeparse` and are not relevant for this example.
 
 ## Using the Python module in Dart
 
@@ -118,10 +72,13 @@ import "package:pytimeparse_dart/python_modules/src/python_modules.g.dart";
 export "extensions.dart";
 export "python_modules/pytimeparse.dart";
 
-Future<void> initialize() async {
-  await PythonFfiDart.instance.initialize(kPythonModules);
+Future<void> initialize({String? libPath}) async {
+  await PythonFfiDart.instance.initialize(kPythonModules, libPath: libPath);
 }
 ```
+
+The optional `libPath` parameter is used to specify the path to the Python shared library. We
+expose this parameter to the package client to allow maximum flexibility.
 
 ### 2. Consuming the Dart package
 
@@ -141,8 +98,7 @@ void main() async {
   await initialize();
   stdout.write("Enter a duration: ");
   final String? input = stdin.readLineSync();
-  final PyTimeParse pyTimeParse = PyTimeParse.import();
-  final num? seconds = pyTimeParse.parse(input ?? "");
+  final Object? seconds = pytimeparse.import().parse(sval: input ?? "");
   if (seconds == null) {
     stdout.writeln("unable to normalize duration: $input");
     return;
@@ -151,6 +107,10 @@ void main() async {
   stdout.writeln("normalized duration: $duration");
 }
 ```
+
+*Note: When you look at the file `bin/basic_dataclass.dart` as it is in this repository, you will
+notice that it is quite different. This is because the complete example project allows for passing
+arguments via the command line. This is not relevant for this tutorial, so we have removed it here.*
 
 ## Testing the Python module
 
@@ -166,24 +126,25 @@ import "package:pytimeparse_dart/pytimeparse_dart.dart";
 import "package:test/test.dart";
 
 void main() async {
-  await PythonFfiDart.instance.initialize(kPythonModules);
-
   group("Examples from Readme:", () {
-    final PyTimeParse pytimeparse = PyTimeParse.import();
-
-    setUp(() {
-      // Additional setup goes here.
+    setUpAll(() async {
+      await PythonFfiDart.instance.initialize(kPythonModules);
     });
 
     test("32m", () {
-      expect(pytimeparse
-          .parse("32m")
-          .asDuration, Duration(minutes: 32));
+      expect(
+        pytimeparse
+            .import()
+            .parse(sval: "32m")
+            .asDuration,
+        Duration(minutes: 32),
+      );
     });
     test("2h32m", () {
       expect(
         pytimeparse
-            .parse("2h32m")
+            .import()
+            .parse(sval: "2h32m")
             .asDuration,
         Duration(hours: 2, minutes: 32),
       );
@@ -191,7 +152,8 @@ void main() async {
     test("2:04:13:02.266", () {
       expect(
         pytimeparse
-            .parse("2:04:13:02.266")
+            .import()
+            .parse(sval: "2:04:13:02.266")
             .asDuration,
         Duration(
           hours: 2 * 24 + 4,
