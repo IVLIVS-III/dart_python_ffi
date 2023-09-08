@@ -16,6 +16,7 @@ final class Module extends PythonModule
   final String name;
 
   /// TODO: Document.
+  @override
   final String sanitizedName;
 
   @override

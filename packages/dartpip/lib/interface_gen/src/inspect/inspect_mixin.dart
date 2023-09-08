@@ -48,11 +48,15 @@ base mixin InspectMixin
     try {
       final Object? value = this.value;
       if (value is PythonObjectInterface) {
-        final String name = (value as dynamic).__name__ as String;
-        return sanitizeName(name);
+        final String? name = value.getAttributeOrNull("__name__");
+        if (name != null) {
+          return sanitizeName(name);
+        }
       }
     } on PythonExceptionInterface<PythonFfiDelegate<Object?>,
         Object?> catch (_) {
+      // ignore
+    } on PythonFfiException catch (_) {
       // ignore
     }
     throw UnimplementedError();

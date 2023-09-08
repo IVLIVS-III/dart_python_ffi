@@ -22,8 +22,8 @@ include: package:python_ffi_lint_dart/analysis.yaml
 analyzer:
   errors:
     public_member_api_docs: ignore
-#   exclude:
-#     - path/to/excluded/files/**
+  exclude:
+    - lib/**/*.g.dart
 
 # For more information about the core and recommended set of lints, see
 # https://dart.dev/go/core-lints
