@@ -34,7 +34,7 @@ int _detectIndentation(String pubspecString) {
 Future<_ModuleBundle<Object>?> _bundleModule({
   required String appRoot,
   required String pythonModulePath,
-  required String appType,
+  required AppType appType,
   bool isSubmodule = false,
 }) async {
   final _PythonModule<Object>? pythonModule =
@@ -62,7 +62,7 @@ Future<Iterable<_ModuleBundle<Object>>> _bundleCacheModule({
   required String appRoot,
   required String projectName,
   required String projectVersion,
-  required String appType,
+  required AppType appType,
 }) async {
   final Iterable<_PythonModule<Object>> pythonModules =
       await _PythonModule.fromCache(
@@ -139,7 +139,7 @@ Future<PythonSourceEntity> _ensureConsolePythonSourceEntity(
 
 Future<void> _generateTypeDefs(
   _ModuleBundle<Object> moduleBundle, {
-  required String appType,
+  required AppType appType,
   required String subPath,
 }) async {
   final String parentModulePrefix =
@@ -171,6 +171,7 @@ Future<void> _generateTypeDefs(
   await outfile.writeAsString(
     emitInspection(
       cache,
+      appType: appType,
       moduleParentPrefix: parentModulePrefix,
     ),
   );
@@ -179,7 +180,7 @@ Future<void> _generateTypeDefs(
 
 Future<void> _bundleAndGenerate({
   required _ModuleBundle<Object>? moduleBundle,
-  required String appType,
+  required AppType appType,
   required String appRoot,
   String subPath = "",
 }) async {

@@ -36,7 +36,8 @@ class BundleModuleCommand extends Command<void> {
 
     final String appRoot = argResults[_kAppRootOption] as String;
     final String pythonModulePath = argResults[_kPythonModuleOption] as String;
-    final String appType = argResults[_kAppTypeOption] as String;
+    final String appTypeString = argResults[_kAppTypeOption] as String;
+    final AppType appType = AppType.fromString(appTypeString);
 
     await _bundleModule(
       appRoot: appRoot,

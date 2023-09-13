@@ -8,20 +8,19 @@ sealed class _ModuleBundle<T extends Object> {
   });
 
   factory _ModuleBundle.fromAppType(
-    String appType, {
+    AppType appType, {
     required _PythonModule<T> pythonModule,
     required String appRoot,
   }) =>
       switch (appType) {
-        _kAppTypeFlutter => _FlutterModuleBundle<T>._(
+        AppType.flutter => _FlutterModuleBundle<T>._(
             pythonModule: pythonModule,
             appRoot: appRoot,
           ),
-        _kAppTypeConsole => _ConsoleModuleBundle<T>._(
+        AppType.console => _ConsoleModuleBundle<T>._(
             pythonModule: pythonModule,
             appRoot: appRoot,
           ),
-        _ => throw StateError("Invalid app type: $appType"),
       };
 
   final _PythonModule<T> pythonModule;

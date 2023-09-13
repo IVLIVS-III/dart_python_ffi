@@ -94,7 +94,9 @@ final class _AssetsInsertionConfig {
     if (insertAssetsKey) {
       buffer.write("\n${" " * indentation}assets:");
     }
-    buffer.write(_filePathsToYaml(filePaths, indentation, prefix: "\n"));
+    buffer.write(
+      _filePathsToYaml(filePaths, indentation, prefix: "\n"),
+    );
     final String insertString = buffer.toString();
     return pubspecString.replaceRange(
       insertionPoint,

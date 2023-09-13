@@ -20,7 +20,7 @@ class BundleCommand extends Command<void> {
   final String description =
       "Bundles all Python modules specified in pubspec.yaml for a Dart application.";
 
-  String _getAppType(Map<dynamic, dynamic> pubspecYaml) {
+  AppType _getAppType(Map<dynamic, dynamic> pubspecYaml) {
     final dynamic dependencies = pubspecYaml["dependencies"];
 
     if (dependencies is! Map) {
@@ -30,9 +30,9 @@ class BundleCommand extends Command<void> {
     }
 
     if (dependencies.containsKey("flutter")) {
-      return _kAppTypeFlutter;
+      return AppType.flutter;
     } else {
-      return _kAppTypeConsole;
+      return AppType.console;
     }
   }
 
@@ -56,8 +56,8 @@ class BundleCommand extends Command<void> {
     return pythonModules.keys.cast<String>();
   }
 
-  void _removeGeneratedAssetDeclarations(String appType, String appRoot) {
-    if (appType != _kAppTypeFlutter) {
+  void _removeGeneratedAssetDeclarations(AppType appType, String appRoot) {
+    if (appType != AppType.flutter) {
       return;
     }
     final File pubspecYamlFile = File(
@@ -120,7 +120,7 @@ class BundleCommand extends Command<void> {
         argResults[_kPythonModulesRootOption] as String;
 
     final Map<dynamic, dynamic> pubspecYaml = _parsePubspec(appRoot);
-    final String appType = _getAppType(pubspecYaml);
+    final AppType appType = _getAppType(pubspecYaml);
     final Iterable<String> pythonModuleNames =
         _getPythonModuleNames(_getPythonFfiMap(pubspecYaml));
 

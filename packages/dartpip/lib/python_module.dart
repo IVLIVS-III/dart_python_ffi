@@ -182,11 +182,18 @@ final class _MultiFilePythonModule
 
   late final _FileNode _fileTree = _FileNode(name: moduleName);
 
+  static const List<String> _unwantedFilenames = <String>[
+    ".ds_store",
+  ];
+
   Future<Map<List<String>, ByteData>> _loadDirectory(
     Directory directory,
   ) async {
     final Map<List<String>, ByteData> result = <List<String>, ByteData>{};
     await for (final FileSystemEntity entity in directory.list()) {
+      if (_unwantedFilenames.contains(entity.name.toLowerCase())) {
+        continue;
+      }
       if (entity is File) {
         final ByteData? fileData = await _loadFile(entity.path);
         if (fileData != null) {

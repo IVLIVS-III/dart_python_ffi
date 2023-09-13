@@ -73,30 +73,40 @@ final class ClassDefinition extends PythonClassDefinition
         .map((String line) => line.substring(indent).trimRight())
         .join("\n");
 
-    final FunctionDef init = ast
-        .import()
-        .parse(dedentedSourceCode)
-        .functionDefs
-        .singleWhere((FunctionDef element) => element.name == "__init__");
+    try {
+      final FunctionDef init = ast
+          .import()
+          .parse(dedentedSourceCode)
+          .functionDefs
+          .singleWhere((FunctionDef element) => element.name == "__init__");
 
-    // TODO: make more robust
-    final Iterable<AssignBase> assigns = init.allAssigns;
+      // TODO: make more robust
+      final Iterable<AssignBase> assigns = init.allAssigns;
 
-    final Set<String> assignments = <String>{};
-    for (final AssignBase assign in assigns) {
-      for (final Attribute attribute in assign.attributes.where(
-        (Attribute element) =>
-            // ignore: avoid_dynamic_calls
-            (element.value as dynamic).__class__.__name__ == "Name",
-      )) {
-        // ignore: avoid_dynamic_calls
-        if ((attribute.value as dynamic).id == selfParameterName) {
+      final Set<String> assignments = <String>{};
+      for (final AssignBase assign in assigns) {
+        for (final Attribute attribute in assign.attributes.where(
+          (Attribute element) =>
+              // ignore: avoid_dynamic_calls
+              (element.value as dynamic).__class__.__name__ == "Name",
+        )) {
           // ignore: avoid_dynamic_calls
-          assignments.add((attribute as dynamic).attr as String);
+          if ((attribute.value as dynamic).id == selfParameterName) {
+            // ignore: avoid_dynamic_calls
+            assignments.add((attribute as dynamic).attr as String);
+          }
         }
       }
+      return assignments;
+    } on PythonExceptionInterface<PythonFfiDelegate<Object?>,
+        Object?> catch (e) {
+      // Skip [SyntaxError]s during interface generation for fields from init.
+      // Worst case, we miss some fields. But at least we don't crash.
+      if (e.type != "<class 'SyntaxError'>") {
+        rethrow;
+      }
+      return const <String>{};
     }
-    return assignments;
   }
 
   Set<String> _getNamesFromInit({
@@ -243,6 +253,7 @@ final class InstantiatedClassDefinition extends PythonClassDefinition
   void emit(
     StringBuffer buffer, {
     required InspectionCache cache,
+    required AppType appType,
     String moduleParentPrefix = "",
   }) {
     final String moduleName = instantiatingModule.name;
@@ -250,6 +261,10 @@ final class InstantiatedClassDefinition extends PythonClassDefinition
     buffer.writeln("/// ## $name");
     emitDoc(buffer);
     emitSource(buffer);
+    final String pythonFfiInstanceName = switch (appType) {
+      AppType.console => "PythonFfiDart.instance",
+      AppType.flutter => "PythonFfi.instance",
+    };
     buffer.writeln("""
 final class $sanitizedName extends PythonClass {
   factory $sanitizedName(""");
@@ -258,7 +273,7 @@ final class $sanitizedName extends PythonClass {
             <Transform>[];
     buffer.writeln("""
     ) =>
-      PythonFfiDart.instance.importClass(
+      $pythonFfiInstanceName.importClass(
         "$moduleParentPrefix$moduleName",
         "$name",
         $sanitizedName.from,""");
@@ -278,6 +293,7 @@ final class $sanitizedName extends PythonClass {
       buffer,
       memberNames: memberNames,
       cache: cache,
+      appType: appType,
       parentEntry: this,
     );
     _emitGettersSetters(

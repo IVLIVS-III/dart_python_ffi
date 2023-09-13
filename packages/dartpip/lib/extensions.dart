@@ -22,3 +22,18 @@ extension _ToIterableExtension<T> on T? {
 extension _FutureToIterableExtension<T> on Future<T?> {
   Future<Iterable<T>> toIterable() async => (await this).toIterable();
 }
+
+extension _IterableSplitExtension<T> on Iterable<T> {
+  (List<T>, List<S>) split<S extends T>() {
+    final List<T> genericElements = <T>[];
+    final List<S> specificElements = <S>[];
+    for (final T element in this) {
+      if (element is S) {
+        specificElements.add(element);
+      } else {
+        genericElements.add(element);
+      }
+    }
+    return (genericElements, specificElements);
+  }
+}

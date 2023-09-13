@@ -3,6 +3,29 @@ part of dartpip;
 // moduleName -> (pythonDependency, version)
 typedef _ProjectMap = Map<String, (PythonDependency, String)>;
 
+/// Type of the bundle target application.
+/// [AppType.console] is a Dart console application.
+/// [AppType.flutter] is a Flutter application.
+enum AppType {
+  /// A Dart console application.
+  console,
+
+  /// A Flutter application.
+  flutter;
+
+  /// Converts a string to an [AppType].
+  static AppType fromString(String string) {
+    switch (string) {
+      case _kAppTypeConsole:
+        return AppType.console;
+      case _kAppTypeFlutter:
+        return AppType.flutter;
+      default:
+        throw ArgumentError.value(string, "string");
+    }
+  }
+}
+
 /// Implements the `install` command.
 class InstallCommand extends Command<void> {
   /// Creates a new instance of the [InstallCommand] class.
@@ -18,22 +41,22 @@ class InstallCommand extends Command<void> {
   final String description =
       "Adds Python modules to the current Dart / Flutter project. They will be specified in pubspec.yaml and bundled for a Dart application.";
 
-  String _getAppType(Map<dynamic, dynamic> pubspecYaml) {
+  AppType _getAppType(Map<dynamic, dynamic> pubspecYaml) {
     final dynamic dependencies = pubspecYaml["dependencies"];
 
     if (dependencies is! Map) {
-      return _kAppTypeConsole;
+      return AppType.console;
     }
 
     if (dependencies.containsKey("flutter")) {
-      return _kAppTypeFlutter;
+      return AppType.flutter;
     } else {
-      return _kAppTypeConsole;
+      return AppType.console;
     }
   }
 
-  void _removeGeneratedAssetDeclarations(String appType, String appRoot) {
-    if (appType != _kAppTypeFlutter) {
+  void _removeGeneratedAssetDeclarations(AppType appType, String appRoot) {
+    if (appType != AppType.flutter) {
       return;
     }
     final File pubspecYamlFile = File(
@@ -108,13 +131,15 @@ class InstallCommand extends Command<void> {
   Future<Iterable<PythonDependency>> _collectAllDependencies(
     Iterable<PythonDependency> directDependencies,
   ) async {
-    final Iterable<PythonDependency> nonPyPiDependencies = directDependencies
-        .where((PythonDependency element) => element is! PyPiDependency);
+    final (
+      Iterable<PythonDependency> nonPyPiDependencies,
+      Iterable<PyPiDependency> pyPiDependencies
+    ) = directDependencies.split();
+
     final Iterable<PyPiDependency> allPyPiDependencies = await solve(
-      directDependencies.whereType<PyPiDependency>().map(
-            (PyPiDependency e) =>
-                Constraint(name: e.name, constraint: e.version),
-          ),
+      pyPiDependencies.map(
+        (PyPiDependency e) => Constraint(name: e.name, constraint: e.version),
+      ),
     ).then(
       (Set<Dependency> value) => value.map(
         (Dependency e) => PyPiDependency(name: e.name, version: e.version),
@@ -197,7 +222,7 @@ class InstallCommand extends Command<void> {
       ..close();
 
     final Map<dynamic, dynamic> pubspecYaml = _parsePubspec(appRoot);
-    final String appType = _getAppType(pubspecYaml);
+    final AppType appType = _getAppType(pubspecYaml);
 
     if (projects.isEmpty) {
       print("No Python modules specified in pubspec.yaml.");

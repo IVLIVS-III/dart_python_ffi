@@ -107,6 +107,7 @@ final class InstantiatedModule extends PythonModule
   void emit(
     StringBuffer buffer, {
     required InspectionCache cache,
+    required AppType appType,
     String moduleParentPrefix = "",
   }) {
     buffer.writeln("/// ## $name");
@@ -117,11 +118,15 @@ final class InstantiatedModule extends PythonModule
         qualifiedName.startsWith(moduleParentPrefix)
             ? qualifiedName
             : "$moduleParentPrefix$qualifiedName";
+    final String pythonFfiInstanceName = switch (appType) {
+      AppType.console => "PythonFfiDart.instance",
+      AppType.flutter => "PythonFfi.instance",
+    };
     buffer.writeln("""
 final class $sanitizedName extends PythonModule {
   $sanitizedName.from(super.pythonModule) : super.from();
   
-  static $sanitizedName import() => PythonFfiDart.instance
+  static $sanitizedName import() => $pythonFfiInstanceName
       .importModule("$fullyQualifiedImportName", $sanitizedName.from,);
 """);
     final Set<String> memberNames = <String>{name};
@@ -129,6 +134,7 @@ final class $sanitizedName extends PythonModule {
       buffer,
       memberNames: memberNames,
       cache: cache,
+      appType: appType,
       filter: _isMyChild,
     );
     for (final InstantiatedModule child

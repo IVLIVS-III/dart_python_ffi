@@ -26,4 +26,5 @@ flutter:
 
 python_ffi:
   modules:
-    basic_adder: any
+    basic_adder:
+      path: python-modules/basic_adder.py

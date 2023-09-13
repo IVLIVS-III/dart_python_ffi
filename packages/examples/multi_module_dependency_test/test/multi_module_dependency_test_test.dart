@@ -13,7 +13,7 @@ void main() async {
     test("attr module can be imported", () {
       expect(attr.import(), anything);
     });
-    
+
     test("attrs module can be imported", () {
       expect(attrs.import(), anything);
     });

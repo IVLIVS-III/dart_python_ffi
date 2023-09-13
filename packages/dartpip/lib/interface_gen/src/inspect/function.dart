@@ -205,6 +205,7 @@ final class InstantiatedFunction_ extends PythonFunction
   void emit(
     StringBuffer buffer, {
     required InspectionCache cache,
+    required AppType appType,
     Set<String> extraKeywords = const <String>{},
     InstantiatedInspectEntry? parentEntry,
   }) {

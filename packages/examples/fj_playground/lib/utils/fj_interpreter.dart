@@ -1,4 +1,4 @@
-import "package:fj_playground/python_modules/fj.dart";
+import "package:fj_playground/python_modules/fj.g.dart";
 
 class InterpreterResult {
   const InterpreterResult({
@@ -35,12 +35,12 @@ Future<InterpreterResult> runFJInterpreter(
   bool withConstructor = false,
   bool onlyTypecheck = false,
 }) async {
-  final FJModule fjModule = FJModule.import();
+  final fj fjModule = fj.import();
 
-  final List<String> result = fjModule.fjRun(
-    input,
-    withConstructor: withConstructor,
-    onlyTypecheck: onlyTypecheck,
+  final List<String> result = fjModule.fj_run(
+    program_as_str: input,
+    with_constructor: withConstructor,
+    only_typecheck: onlyTypecheck,
   );
 
   if (result.length != 3) {

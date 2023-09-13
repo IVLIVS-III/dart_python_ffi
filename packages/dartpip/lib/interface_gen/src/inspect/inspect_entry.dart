@@ -152,7 +152,11 @@ sealed class InstantiatedInspectEntry {
   InstantiatedModule get instantiatingModule;
 
   /// TODO: Document.
-  void emit(StringBuffer buffer, {required InspectionCache cache});
+  void emit(
+    StringBuffer buffer, {
+    required InspectionCache cache,
+    required AppType appType,
+  });
 
   /// TODO: Document.
   void emitDoc(StringBuffer buffer);

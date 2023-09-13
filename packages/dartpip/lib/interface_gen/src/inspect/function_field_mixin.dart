@@ -7,6 +7,7 @@ base mixin FunctionFieldMixin on InstantiatedInspectMixin {
     StringBuffer buffer, {
     required Set<String> memberNames,
     required InspectionCache cache,
+    required AppType appType,
     bool Function(InstantiatedInspectEntry child)? filter,
     InstantiatedInspectEntry? parentEntry,
   }) {
@@ -26,6 +27,7 @@ base mixin FunctionFieldMixin on InstantiatedInspectMixin {
       field.emit(
         buffer,
         cache: cache,
+        appType: appType,
         extraKeywords: _sanitizationExtraKeywords,
         parentEntry: parentEntry,
       );

@@ -80,6 +80,10 @@ final class InstantiatedObject_ extends PythonObject
   final InstantiatedModule instantiatingModule;
 
   @override
-  void emit(StringBuffer buffer, {required InspectionCache cache}) =>
+  void emit(
+    StringBuffer buffer, {
+    required InspectionCache cache,
+    required AppType appType,
+  }) =>
       _emitGetterSetter(buffer, entry: this, cache: cache);
 }

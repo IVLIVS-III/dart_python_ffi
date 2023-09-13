@@ -52,7 +52,11 @@ final class Primitive implements InspectEntry, InstantiatedInspectEntry {
   }) {}
 
   @override
-  void emit(StringBuffer buffer, {required InspectionCache cache}) {
+  void emit(
+    StringBuffer buffer, {
+    required InspectionCache cache,
+    required AppType appType,
+  }) {
     throw UnimplementedError("$runtimeType.emit");
   }
 

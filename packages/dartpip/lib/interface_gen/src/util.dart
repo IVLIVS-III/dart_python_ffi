@@ -110,7 +110,7 @@ String sanitizeName(
 Future<String> doInspection(
   PythonModuleDefinition? moduleDefinition, {
   required String moduleName,
-  required String appType,
+  required AppType appType,
   required InspectionCache cache,
   required String stdlibPath,
   String parentModulePrefix = "",
@@ -207,6 +207,7 @@ Future<String> doInspection(
 /// TODO: Document.
 String emitInspection(
   InspectionCache cache, {
+  required AppType appType,
   bool primaryModuleOnly = true,
   String moduleParentPrefix = "",
 }) {
@@ -227,8 +228,14 @@ $analysisIgnoreLine
     buffer.writeln("library ${primaryInstantiatedModule.sanitizedName};");
   }
   const String typedDataImportLine = 'import "dart:typed_data";';
-  const String pythonFfiImportLine =
+  const String pythonFfiConsoleImportLine =
       'import "package:python_ffi_dart/python_ffi_dart.dart";';
+  const String pythonFfiFlutterImportLine =
+      'import "package:python_ffi/python_ffi.dart";';
+  final String pythonFfiImportLine = switch (appType) {
+    AppType.console => pythonFfiConsoleImportLine,
+    AppType.flutter => pythonFfiFlutterImportLine,
+  };
   buffer.writeln("""
 $typedDataImportLine
 
@@ -243,7 +250,11 @@ $pythonFfiImportLine
         continue;
       }
       topLevelNames.add(typedefName);
-      instantiatedTypedef.emit(buffer, cache: cache);
+      instantiatedTypedef.emit(
+        buffer,
+        cache: cache,
+        appType: appType,
+      );
     }
   }
   for (final ClassDefinition classDefinition in cache.classDefinitions) {
@@ -257,6 +268,7 @@ $pythonFfiImportLine
       instantiatedClassDefinition.emit(
         buffer,
         cache: cache,
+        appType: appType,
         moduleParentPrefix: moduleParentPrefix,
       );
     }
@@ -272,6 +284,7 @@ $pythonFfiImportLine
     instantiatedModule.emit(
       buffer,
       cache: cache,
+      appType: appType,
       moduleParentPrefix: moduleParentPrefix,
     );
   }

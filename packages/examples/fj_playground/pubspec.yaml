@@ -45,13 +45,20 @@ dev_dependencies:
 python_ffi:
   modules:
     lark: any
-    fj: any
-    FJ_AST: any
-    FJ_auxiliary_typing: any
-    FJ_computation: any
-    FJ_interpreter: any
-    FJ_parser: any
-    FJ_typing: any
+    fj:
+      path: python-modules/fj
+    FJ_AST:
+      path: python-modules/FJ_AST.py
+    FJ_auxiliary_typing:
+      path: python-modules/FJ_auxiliary_typing.py
+    FJ_computation:
+      path: python-modules/FJ_computation.py
+    FJ_interpreter:
+      path: python-modules/FJ_interpreter.py
+    FJ_parser:
+      path: python-modules/FJ_parser.py
+    FJ_typing:
+      path: python-modules/FJ_typing.py
 
 
 # For information on the generic Dart part of this file, see the
@@ -78,7 +85,6 @@ flutter:
     - python-modules/lark/tools/standalone.py
     - python-modules/lark/tools/__init__.py
     - python-modules/lark/tools/nearley.py
-    - python-modules/lark/LICENSE
     - python-modules/lark/__pyinstaller/__init__.py
     - python-modules/lark/__pyinstaller/hook-lark.py
     - python-modules/lark/visitors.py
@@ -100,14 +106,21 @@ flutter:
     - python-modules/lark/tree_matcher.py
     - python-modules/lark/reconstruct.py
     - python-modules/lark/parse_tree_builder.py
+    - python-modules/lark/LICENSE
+    - python-modules/fj/FJ_AST.py
     - python-modules/fj/LICENSE
+    - python-modules/fj/FJ_auxiliary_typing.py
     - python-modules/fj/__init__.py
-    - python-modules/FJ_auxiliary_typing.py
-    - python-modules/FJ_typing.py
+    - python-modules/fj/FJ_interpreter.py
+    - python-modules/fj/FJ_parser.py
+    - python-modules/fj/FJ_computation.py
+    - python-modules/fj/FJ_typing.py
     - python-modules/FJ_parser.py
     - python-modules/FJ_interpreter.py
+    - python-modules/FJ_typing.py
     - python-modules/FJ_computation.py
     - python-modules/FJ_AST.py
+    - python-modules/FJ_auxiliary_typing.py
     - python-modules/python_ffi.py
     - python-modules/modules.json
 

@@ -307,25 +307,33 @@ base mixin InstantiatedInspectMixin
       ).whereNotNull();
 
   @override
-  void emit(StringBuffer buffer, {required InspectionCache cache}) {
+  void emit(
+    StringBuffer buffer, {
+    required InspectionCache cache,
+    required AppType appType,
+  }) {
     throw UnimplementedError("$runtimeType.emit");
   }
 
   @override
   void emitDoc(StringBuffer buffer) {
-    final String? doc = inspectModule.getdoc(source.value)?.trim();
-    if (doc == null) {
-      return;
-    }
-    if (doc.isEmpty) {
-      return;
-    }
-    buffer.writeln("""
+    try {
+      final String? doc = inspectModule.getdoc(source.value)?.trim();
+      if (doc == null) {
+        return;
+      }
+      if (doc.isEmpty) {
+        return;
+      }
+      buffer.writeln("""
 ///
 /// ### python docstring
 ///""");
-    for (final String line in doc.split("\n")) {
-      buffer.writeln("/// $line");
+      for (final String line in doc.split("\n")) {
+        buffer.writeln("/// $line");
+      }
+    } on PythonFfiException catch (_) {
+      // ignore
     }
   }
 
