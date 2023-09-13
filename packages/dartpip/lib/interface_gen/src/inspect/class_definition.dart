@@ -240,7 +240,11 @@ final class InstantiatedClassDefinition extends PythonClassDefinition
   }
 
   @override
-  void emit(StringBuffer buffer, {required InspectionCache cache}) {
+  void emit(
+    StringBuffer buffer, {
+    required InspectionCache cache,
+    String moduleParentPrefix = "",
+  }) {
     final String moduleName = instantiatingModule.name;
     final InstantiatedMethod? initMethod = __init__;
     buffer.writeln("/// ## $name");
@@ -255,7 +259,7 @@ final class $sanitizedName extends PythonClass {
     buffer.writeln("""
     ) =>
       PythonFfiDart.instance.importClass(
-        "$moduleName",
+        "$moduleParentPrefix$moduleName",
         "$name",
         $sanitizedName.from,""");
     if (initMethod != null) {

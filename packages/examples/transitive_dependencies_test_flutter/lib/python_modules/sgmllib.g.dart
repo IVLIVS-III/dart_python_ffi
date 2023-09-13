@@ -2971,4 +2971,161 @@ final class sgmllib extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## attrfind (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A parser for SGML, using the derived class as a static DTD.
+  Object? get attrfind => getAttribute("attrfind");
+
+  /// ## attrfind (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A parser for SGML, using the derived class as a static DTD.
+  set attrfind(Object? attrfind) => setAttribute("attrfind", attrfind);
+
+  /// ## charref (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A parser for SGML, using the derived class as a static DTD.
+  Object? get charref => getAttribute("charref");
+
+  /// ## charref (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A parser for SGML, using the derived class as a static DTD.
+  set charref(Object? charref) => setAttribute("charref", charref);
+
+  /// ## endbracket (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A parser for SGML, using the derived class as a static DTD.
+  Object? get endbracket => getAttribute("endbracket");
+
+  /// ## endbracket (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A parser for SGML, using the derived class as a static DTD.
+  set endbracket(Object? endbracket) => setAttribute("endbracket", endbracket);
+
+  /// ## entityref (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A parser for SGML, using the derived class as a static DTD.
+  Object? get entityref => getAttribute("entityref");
+
+  /// ## entityref (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A parser for SGML, using the derived class as a static DTD.
+  set entityref(Object? entityref) => setAttribute("entityref", entityref);
+
+  /// ## incomplete (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A parser for SGML, using the derived class as a static DTD.
+  Object? get incomplete => getAttribute("incomplete");
+
+  /// ## incomplete (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A parser for SGML, using the derived class as a static DTD.
+  set incomplete(Object? incomplete) => setAttribute("incomplete", incomplete);
+
+  /// ## interesting (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A parser for SGML, using the derived class as a static DTD.
+  Object? get interesting => getAttribute("interesting");
+
+  /// ## interesting (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A parser for SGML, using the derived class as a static DTD.
+  set interesting(Object? interesting) =>
+      setAttribute("interesting", interesting);
+
+  /// ## piclose (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A parser for SGML, using the derived class as a static DTD.
+  Object? get piclose => getAttribute("piclose");
+
+  /// ## piclose (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A parser for SGML, using the derived class as a static DTD.
+  set piclose(Object? piclose) => setAttribute("piclose", piclose);
+
+  /// ## shorttag (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A parser for SGML, using the derived class as a static DTD.
+  Object? get shorttag => getAttribute("shorttag");
+
+  /// ## shorttag (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A parser for SGML, using the derived class as a static DTD.
+  set shorttag(Object? shorttag) => setAttribute("shorttag", shorttag);
+
+  /// ## shorttagopen (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A parser for SGML, using the derived class as a static DTD.
+  Object? get shorttagopen => getAttribute("shorttagopen");
+
+  /// ## shorttagopen (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A parser for SGML, using the derived class as a static DTD.
+  set shorttagopen(Object? shorttagopen) =>
+      setAttribute("shorttagopen", shorttagopen);
+
+  /// ## starttagopen (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A parser for SGML, using the derived class as a static DTD.
+  Object? get starttagopen => getAttribute("starttagopen");
+
+  /// ## starttagopen (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A parser for SGML, using the derived class as a static DTD.
+  set starttagopen(Object? starttagopen) =>
+      setAttribute("starttagopen", starttagopen);
+
+  /// ## tagfind (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// A parser for SGML, using the derived class as a static DTD.
+  Object? get tagfind => getAttribute("tagfind");
+
+  /// ## tagfind (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// A parser for SGML, using the derived class as a static DTD.
+  set tagfind(Object? tagfind) => setAttribute("tagfind", tagfind);
 }

@@ -7,7 +7,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 /// ## ModuleType
 final class ModuleType extends PythonClass {
   factory ModuleType() => PythonFfiDart.instance.importClass(
-        "builtins",
+        "lark.tools.standalone",
         "ModuleType",
         ModuleType.from,
         <Object?>[],
@@ -71,7 +71,7 @@ final class Rule extends PythonClass {
     Object? options,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.tools.standalone",
         "Rule",
         Rule.from,
         <Object?>[
@@ -282,7 +282,7 @@ final class TerminalDef extends PythonClass {
     int priority = 0,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.tools.standalone",
         "TerminalDef",
         TerminalDef.from,
         <Object?>[
@@ -460,7 +460,7 @@ final class TerminalDef extends PythonClass {
 /// ```
 final class GrammarError extends PythonClass {
   factory GrammarError() => PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.tools.standalone",
         "GrammarError",
         GrammarError.from,
         <Object?>[],
@@ -998,7 +998,7 @@ final class Lark extends PythonClass {
     Map<String, Object?> options = const <String, Object?>{},
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lark",
+        "lark.tools.standalone",
         "Lark",
         Lark.from,
         <Object?>[
@@ -3319,7 +3319,7 @@ final class Lark extends PythonClass {
 /// ```
 final class LarkError extends PythonClass {
   factory LarkError() => PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.tools.standalone",
         "LarkError",
         LarkError.from,
         <Object?>[],
@@ -3356,7 +3356,7 @@ final class LarkError extends PythonClass {
 /// ```
 final class LexError extends PythonClass {
   factory LexError() => PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.tools.standalone",
         "LexError",
         LexError.from,
         <Object?>[],
@@ -3393,7 +3393,7 @@ final class LexError extends PythonClass {
 /// ```
 final class ParseError extends PythonClass {
   factory ParseError() => PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.tools.standalone",
         "ParseError",
         ParseError.from,
         <Object?>[],
@@ -3578,7 +3578,7 @@ final class ParseError extends PythonClass {
 /// ```
 final class Token extends PythonClass {
   factory Token() => PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.tools.standalone",
         "Token",
         Token.from,
         <Object?>[],
@@ -6301,7 +6301,7 @@ final class Transformer extends PythonClass {
     bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.visitors",
+        "lark.tools.standalone",
         "Transformer",
         Transformer.from,
         <Object?>[
@@ -6398,7 +6398,7 @@ final class Transformer_NonRecursive extends PythonClass {
     bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.visitors",
+        "lark.tools.standalone",
         "Transformer_NonRecursive",
         Transformer_NonRecursive.from,
         <Object?>[
@@ -6671,7 +6671,7 @@ final class Tree extends PythonClass {
     Object? meta,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.tree",
+        "lark.tools.standalone",
         "Tree",
         Tree.from,
         <Object?>[
@@ -7110,7 +7110,7 @@ final class UnexpectedCharacters extends PythonClass {
     Object? considered_rules,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.tools.standalone",
         "UnexpectedCharacters",
         UnexpectedCharacters.from,
         <Object?>[
@@ -7514,7 +7514,7 @@ final class UnexpectedEOF extends PythonClass {
     Object? terminals_by_name,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.tools.standalone",
         "UnexpectedEOF",
         UnexpectedEOF.from,
         <Object?>[
@@ -7930,7 +7930,7 @@ final class UnexpectedEOF extends PythonClass {
 /// ```
 final class UnexpectedInput extends PythonClass {
   factory UnexpectedInput() => PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.tools.standalone",
         "UnexpectedInput",
         UnexpectedInput.from,
         <Object?>[],
@@ -8290,7 +8290,7 @@ final class UnexpectedToken extends PythonClass {
     Object? token_history,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.tools.standalone",
         "UnexpectedToken",
         UnexpectedToken.from,
         <Object?>[
@@ -8959,7 +8959,7 @@ final class UnexpectedToken extends PythonClass {
 /// ```
 final class Visitor extends PythonClass {
   factory Visitor() => PythonFfiDart.instance.importClass(
-        "lark.visitors",
+        "lark.tools.standalone",
         "Visitor",
         Visitor.from,
         <Object?>[],
@@ -9034,7 +9034,7 @@ final class Visitor extends PythonClass {
 /// ```
 final class AsList extends PythonClass {
   factory AsList() => PythonFfiDart.instance.importClass(
-        "lark.ast_utils",
+        "lark.tools.standalone",
         "AsList",
         AsList.from,
         <Object?>[],
@@ -9062,7 +9062,7 @@ final class AsList extends PythonClass {
 /// ```
 final class Ast extends PythonClass {
   factory Ast() => PythonFfiDart.instance.importClass(
-        "lark.ast_utils",
+        "lark.tools.standalone",
         "Ast",
         Ast.from,
         <Object?>[],
@@ -9090,7 +9090,7 @@ final class Ast extends PythonClass {
 /// ```
 final class WithMeta extends PythonClass {
   factory WithMeta() => PythonFfiDart.instance.importClass(
-        "lark.ast_utils",
+        "lark.tools.standalone",
         "WithMeta",
         WithMeta.from,
         <Object?>[],
@@ -9170,7 +9170,7 @@ final class LexerConf extends PythonClass {
     bool strict = false,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.common",
+        "lark.tools.standalone",
         "LexerConf",
         LexerConf.from,
         <Object?>[
@@ -9556,7 +9556,7 @@ final class ParserConf extends PythonClass {
     required Object? start,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.common",
+        "lark.tools.standalone",
         "ParserConf",
         ParserConf.from,
         <Object?>[
@@ -9796,7 +9796,7 @@ final class ParserConf extends PythonClass {
 /// ```
 final class Serialize extends PythonClass {
   factory Serialize() => PythonFfiDart.instance.importClass(
-        "lark.utils",
+        "lark.tools.standalone",
         "Serialize",
         Serialize.from,
         <Object?>[],
@@ -9882,7 +9882,7 @@ final class Serialize extends PythonClass {
 /// ```
 final class ConfigurationError extends PythonClass {
   factory ConfigurationError() => PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.tools.standalone",
         "ConfigurationError",
         ConfigurationError.from,
         <Object?>[],
@@ -9919,7 +9919,7 @@ final class ConfigurationError extends PythonClass {
 /// ```
 final class MissingVariableError extends PythonClass {
   factory MissingVariableError() => PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.tools.standalone",
         "MissingVariableError",
         MissingVariableError.from,
         <Object?>[],
@@ -9995,7 +9995,7 @@ final class VisitError extends PythonClass {
     required Object? orig_exc,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.tools.standalone",
         "VisitError",
         VisitError.from,
         <Object?>[
@@ -10225,7 +10225,7 @@ final class NonTerminal extends PythonClass {
     required String name,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.tools.standalone",
         "NonTerminal",
         NonTerminal.from,
         <Object?>[
@@ -10235,6 +10235,198 @@ final class NonTerminal extends PythonClass {
       );
 
   NonTerminal.from(super.pythonClass) : super.from();
+
+  /// ## memo_serialize
+  ///
+  /// ### python source
+  /// ```py
+  /// def memo_serialize(self, types_to_memoize: List) -> Any:
+  ///         memo = SerializeMemoizer(types_to_memoize)
+  ///         return self.serialize(memo), memo.serialize()
+  /// ```
+  Object? memo_serialize({
+    required Object? types_to_memoize,
+  }) =>
+      getFunction("memo_serialize").call(
+        <Object?>[
+          types_to_memoize,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## renamed
+  ///
+  /// ### python source
+  /// ```py
+  /// def renamed(self, f):
+  ///         return type(self)(f(self.name))
+  /// ```
+  Object? renamed({
+    required Object? f,
+  }) =>
+      getFunction("renamed").call(
+        <Object?>[
+          f,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## serialize
+  ///
+  /// ### python source
+  /// ```py
+  /// def serialize(self, memo = None) -> Dict[str, Any]:
+  ///         if memo and memo.in_types(self):
+  ///             return {'@': memo.memoized.get(self)}
+  ///
+  ///         fields = getattr(self, '__serialize_fields__')
+  ///         res = {f: _serialize(getattr(self, f), memo) for f in fields}
+  ///         res['__type__'] = type(self).__name__
+  ///         if hasattr(self, '_serialize'):
+  ///             self._serialize(res, memo)  # type: ignore[attr-defined]
+  ///         return res
+  /// ```
+  Object? serialize({
+    Object? memo,
+  }) =>
+      getFunction("serialize").call(
+        <Object?>[
+          memo,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## fullrepr (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  Object? get fullrepr => getAttribute("fullrepr");
+
+  /// ## fullrepr (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  set fullrepr(Object? fullrepr) => setAttribute("fullrepr", fullrepr);
+
+  /// ## deserialize (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  Object? get deserialize => getAttribute("deserialize");
+
+  /// ## deserialize (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  set deserialize(Object? deserialize) =>
+      setAttribute("deserialize", deserialize);
+
+  /// ## is_term (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  Object? get is_term => getAttribute("is_term");
+
+  /// ## is_term (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  set is_term(Object? is_term) => setAttribute("is_term", is_term);
+
+  /// ## name (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  Object? get name => getAttribute("name");
+
+  /// ## name (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  set name(Object? name) => setAttribute("name", name);
+}
+
+/// ## NT
+///
+/// ### python docstring
+///
+/// Safe-ish serialization interface that doesn't rely on Pickle
+///
+/// Attributes:
+///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+///                                     Should include all field types that aren't builtin types.
+///
+/// ### python source
+/// ```py
+/// class NonTerminal(Symbol):
+///     __serialize_fields__ = 'name',
+///
+///     is_term: ClassVar[bool] = False
+/// ```
+final class NT extends PythonClass {
+  factory NT({
+    required String name,
+  }) =>
+      PythonFfiDart.instance.importClass(
+        "lark.tools.standalone",
+        "NT",
+        NT.from,
+        <Object?>[
+          name,
+        ],
+        <String, Object?>{},
+      );
+
+  NT.from(super.pythonClass) : super.from();
 
   /// ## memo_serialize
   ///
@@ -10440,7 +10632,7 @@ final class RuleOptions extends PythonClass {
     Object? empty_indices = const [],
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.tools.standalone",
         "RuleOptions",
         RuleOptions.from,
         <Object?>[
@@ -10692,7 +10884,7 @@ final class $Symbol extends PythonClass {
     required String name,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.tools.standalone",
         "Symbol",
         $Symbol.from,
         <Object?>[
@@ -10896,7 +11088,7 @@ final class Terminal extends PythonClass {
     Object? filter_out = false,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.tools.standalone",
         "Terminal",
         Terminal.from,
         <Object?>[
@@ -11090,6 +11282,235 @@ final class Terminal extends PythonClass {
   set filter_out(Object? filter_out) => setAttribute("filter_out", filter_out);
 }
 
+/// ## T
+///
+/// ### python docstring
+///
+/// Safe-ish serialization interface that doesn't rely on Pickle
+///
+/// Attributes:
+///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+///                                     Should include all field types that aren't builtin types.
+///
+/// ### python source
+/// ```py
+/// class Terminal(Symbol):
+///     __serialize_fields__ = 'name', 'filter_out'
+///
+///     is_term: ClassVar[bool] = True
+///
+///     def __init__(self, name, filter_out=False):
+///         self.name = name
+///         self.filter_out = filter_out
+///
+///     @property
+///     def fullrepr(self):
+///         return '%s(%r, %r)' % (type(self).__name__, self.name, self.filter_out)
+///
+///     def renamed(self, f):
+///         return type(self)(f(self.name), self.filter_out)
+/// ```
+final class T extends PythonClass {
+  factory T({
+    required Object? name,
+    Object? filter_out = false,
+  }) =>
+      PythonFfiDart.instance.importClass(
+        "lark.tools.standalone",
+        "T",
+        T.from,
+        <Object?>[
+          name,
+          filter_out,
+        ],
+        <String, Object?>{},
+      );
+
+  T.from(super.pythonClass) : super.from();
+
+  /// ## memo_serialize
+  ///
+  /// ### python source
+  /// ```py
+  /// def memo_serialize(self, types_to_memoize: List) -> Any:
+  ///         memo = SerializeMemoizer(types_to_memoize)
+  ///         return self.serialize(memo), memo.serialize()
+  /// ```
+  Object? memo_serialize({
+    required Object? types_to_memoize,
+  }) =>
+      getFunction("memo_serialize").call(
+        <Object?>[
+          types_to_memoize,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## renamed
+  ///
+  /// ### python source
+  /// ```py
+  /// def renamed(self, f):
+  ///         return type(self)(f(self.name), self.filter_out)
+  /// ```
+  Object? renamed({
+    required Object? f,
+  }) =>
+      getFunction("renamed").call(
+        <Object?>[
+          f,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## serialize
+  ///
+  /// ### python source
+  /// ```py
+  /// def serialize(self, memo = None) -> Dict[str, Any]:
+  ///         if memo and memo.in_types(self):
+  ///             return {'@': memo.memoized.get(self)}
+  ///
+  ///         fields = getattr(self, '__serialize_fields__')
+  ///         res = {f: _serialize(getattr(self, f), memo) for f in fields}
+  ///         res['__type__'] = type(self).__name__
+  ///         if hasattr(self, '_serialize'):
+  ///             self._serialize(res, memo)  # type: ignore[attr-defined]
+  ///         return res
+  /// ```
+  Object? serialize({
+    Object? memo,
+  }) =>
+      getFunction("serialize").call(
+        <Object?>[
+          memo,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## fullrepr (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  Object? get fullrepr => getAttribute("fullrepr");
+
+  /// ## fullrepr (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  set fullrepr(Object? fullrepr) => setAttribute("fullrepr", fullrepr);
+
+  /// ## deserialize (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  Object? get deserialize => getAttribute("deserialize");
+
+  /// ## deserialize (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  set deserialize(Object? deserialize) =>
+      setAttribute("deserialize", deserialize);
+
+  /// ## is_term (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  Object? get is_term => getAttribute("is_term");
+
+  /// ## is_term (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  set is_term(Object? is_term) => setAttribute("is_term", is_term);
+
+  /// ## name (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  Object? get name => getAttribute("name");
+
+  /// ## name (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  set name(Object? name) => setAttribute("name", name);
+
+  /// ## filter_out (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  Object? get filter_out => getAttribute("filter_out");
+
+  /// ## filter_out (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  set filter_out(Object? filter_out) => setAttribute("filter_out", filter_out);
+}
+
 /// ## DedentError
 ///
 /// ### python source
@@ -11099,7 +11520,7 @@ final class Terminal extends PythonClass {
 /// ```
 final class DedentError extends PythonClass {
   factory DedentError() => PythonFfiDart.instance.importClass(
-        "lark.indenter",
+        "lark.tools.standalone",
         "DedentError",
         DedentError.from,
         <Object?>[],
@@ -11226,7 +11647,7 @@ final class DedentError extends PythonClass {
 /// ```
 final class Indenter extends PythonClass {
   factory Indenter() => PythonFfiDart.instance.importClass(
-        "lark.indenter",
+        "lark.tools.standalone",
         "Indenter",
         Indenter.from,
         <Object?>[],
@@ -11466,7 +11887,7 @@ final class Indenter extends PythonClass {
 /// ```
 final class PostLex extends PythonClass {
   factory PostLex() => PythonFfiDart.instance.importClass(
-        "lark.lark",
+        "lark.tools.standalone",
         "PostLex",
         PostLex.from,
         <Object?>[],
@@ -11537,7 +11958,7 @@ final class PostLex extends PythonClass {
 /// ```
 final class PythonIndenter extends PythonClass {
   factory PythonIndenter() => PythonFfiDart.instance.importClass(
-        "lark.indenter",
+        "lark.tools.standalone",
         "PythonIndenter",
         PythonIndenter.from,
         <Object?>[],
@@ -11888,7 +12309,7 @@ final class BasicLexer extends PythonClass {
     Object? comparator,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.tools.standalone",
         "BasicLexer",
         BasicLexer.from,
         <Object?>[
@@ -12225,7 +12646,7 @@ final class BasicLexer extends PythonClass {
 /// ```
 final class FS extends PythonClass {
   factory FS() => PythonFfiDart.instance.importClass(
-        "lark.utils",
+        "lark.tools.standalone",
         "FS",
         FS.from,
         <Object?>[],
@@ -12332,7 +12753,7 @@ final class FromPackageLoader extends PythonClass {
     Object? search_paths = const [""],
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.load_grammar",
+        "lark.tools.standalone",
         "FromPackageLoader",
         FromPackageLoader.from,
         <Object?>[
@@ -12544,7 +12965,7 @@ final class Grammar extends PythonClass {
     required Object? ignore,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.load_grammar",
+        "lark.tools.standalone",
         "Grammar",
         Grammar.from,
         <Object?>[
@@ -12987,7 +13408,7 @@ final class LarkOptions extends PythonClass {
     required Object? options_dict,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lark",
+        "lark.tools.standalone",
         "LarkOptions",
         LarkOptions.from,
         <Object?>[
@@ -13391,7 +13812,7 @@ final class LarkOptions extends PythonClass {
 /// ```
 final class Lexer extends PythonClass {
   factory Lexer() => PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.tools.standalone",
         "Lexer",
         Lexer.from,
         <Object?>[],
@@ -13484,7 +13905,7 @@ final class LexerThread extends PythonClass {
     required LexerState lexer_state,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.tools.standalone",
         "LexerThread",
         LexerThread.from,
         <Object?>[
@@ -13563,7 +13984,7 @@ final class LexerThread extends PythonClass {
 /// PackageResource(pkg_name, path)
 final class PackageResource extends PythonClass {
   factory PackageResource() => PythonFfiDart.instance.importClass(
-        "lark.load_grammar",
+        "lark.tools.standalone",
         "PackageResource",
         PackageResource.from,
         <Object?>[],
@@ -13701,7 +14122,7 @@ final class ParseTreeBuilder extends PythonClass {
     Object? maybe_placeholders = false,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parse_tree_builder",
+        "lark.tools.standalone",
         "ParseTreeBuilder",
         ParseTreeBuilder.from,
         <Object?>[
@@ -13829,7 +14250,7 @@ final class SerializeMemoizer extends PythonClass {
     required Object? types_to_memoize,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.utils",
+        "lark.tools.standalone",
         "SerializeMemoizer",
         SerializeMemoizer.from,
         <Object?>[
@@ -13953,7 +14374,7 @@ final class CallChain extends PythonClass {
     required Object? cond,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.tools.standalone",
         "CallChain",
         CallChain.from,
         <Object?>[
@@ -14055,7 +14476,7 @@ final class ContextualLexer extends PythonClass {
     Object? always_accept = const [],
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.tools.standalone",
         "ContextualLexer",
         ContextualLexer.from,
         <Object?>[
@@ -14213,7 +14634,7 @@ final class LexerState extends PythonClass {
     Object? last_token,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.tools.standalone",
         "LexerState",
         LexerState.from,
         <Object?>[
@@ -14314,7 +14735,7 @@ final class LineCounter extends PythonClass {
     required Object? newline_char,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.tools.standalone",
         "LineCounter",
         LineCounter.from,
         <Object?>[
@@ -14455,7 +14876,7 @@ final class Pattern extends PythonClass {
     Object? raw,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.tools.standalone",
         "Pattern",
         Pattern.from,
         <Object?>[
@@ -14712,7 +15133,7 @@ final class PatternRE extends PythonClass {
     Object? raw,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.tools.standalone",
         "PatternRE",
         PatternRE.from,
         <Object?>[
@@ -14986,7 +15407,7 @@ final class PatternStr extends PythonClass {
     Object? raw,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.tools.standalone",
         "PatternStr",
         PatternStr.from,
         <Object?>[
@@ -15274,7 +15695,7 @@ final class Scanner extends PythonClass {
     Object? match_whole = false,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.tools.standalone",
         "Scanner",
         Scanner.from,
         <Object?>[
@@ -15370,7 +15791,7 @@ final class UnlessCallback extends PythonClass {
     required Object? scanner,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.tools.standalone",
         "UnlessCallback",
         UnlessCallback.from,
         <Object?>[
@@ -15423,7 +15844,7 @@ final class ApplyTemplates extends PythonClass {
     required Object? rule_defs,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.load_grammar",
+        "lark.tools.standalone",
         "ApplyTemplates",
         ApplyTemplates.from,
         <Object?>[
@@ -15549,7 +15970,7 @@ final class Definition extends PythonClass {
     Object? options,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.load_grammar",
+        "lark.tools.standalone",
         "Definition",
         Definition.from,
         <Object?>[
@@ -15755,7 +16176,7 @@ final class Definition extends PythonClass {
 /// ```
 final class EBNF_to_BNF extends PythonClass {
   factory EBNF_to_BNF() => PythonFfiDart.instance.importClass(
-        "lark.load_grammar",
+        "lark.tools.standalone",
         "EBNF_to_BNF",
         EBNF_to_BNF.from,
         <Object?>[],
@@ -15986,7 +16407,7 @@ final class FindRuleSize extends PythonClass {
     required Object? keep_all_tokens,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.load_grammar",
+        "lark.tools.standalone",
         "FindRuleSize",
         FindRuleSize.from,
         <Object?>[
@@ -16439,7 +16860,7 @@ final class GrammarBuilder extends PythonClass {
     Object? used_files,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.load_grammar",
+        "lark.tools.standalone",
         "GrammarBuilder",
         GrammarBuilder.from,
         <Object?>[
@@ -16759,7 +17180,7 @@ final class ParsingFrontend extends PythonClass {
     Object? parser,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parser_frontends",
+        "lark.tools.standalone",
         "ParsingFrontend",
         ParsingFrontend.from,
         <Object?>[
@@ -17103,7 +17524,7 @@ final class PrepareAnonTerminals extends PythonClass {
     required Object? terminals,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.load_grammar",
+        "lark.tools.standalone",
         "PrepareAnonTerminals",
         PrepareAnonTerminals.from,
         <Object?>[
@@ -17248,7 +17669,7 @@ final class PrepareGrammar extends PythonClass {
     bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.load_grammar",
+        "lark.tools.standalone",
         "PrepareGrammar",
         PrepareGrammar.from,
         <Object?>[
@@ -17349,7 +17770,7 @@ final class PrepareLiterals extends PythonClass {
     bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.load_grammar",
+        "lark.tools.standalone",
         "PrepareLiterals",
         PrepareLiterals.from,
         <Object?>[
@@ -17474,7 +17895,7 @@ final class RuleTreeToText extends PythonClass {
     bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.load_grammar",
+        "lark.tools.standalone",
         "RuleTreeToText",
         RuleTreeToText.from,
         <Object?>[
@@ -17593,7 +18014,7 @@ final class ST extends PythonClass {
     Object? meta,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.tree",
+        "lark.tools.standalone",
         "ST",
         ST.from,
         <Object?>[
@@ -17605,6 +18026,456 @@ final class ST extends PythonClass {
       );
 
   ST.from(super.pythonClass) : super.from();
+
+  /// ## copy
+  ///
+  /// ### python source
+  /// ```py
+  /// def copy(self) -> 'Tree[_Leaf_T]':
+  ///         return type(self)(self.data, self.children)
+  /// ```
+  Object? copy() => getFunction("copy").call(
+        <Object?>[],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## expand_kids_by_data
+  ///
+  /// ### python docstring
+  ///
+  /// Expand (inline) children with any of the given data values. Returns True if anything changed
+  ///
+  /// ### python source
+  /// ```py
+  /// def expand_kids_by_data(self, *data_values):
+  ///         """Expand (inline) children with any of the given data values. Returns True if anything changed"""
+  ///         changed = False
+  ///         for i in range(len(self.children)-1, -1, -1):
+  ///             child = self.children[i]
+  ///             if isinstance(child, Tree) and child.data in data_values:
+  ///                 self.children[i:i+1] = child.children
+  ///                 changed = True
+  ///         return changed
+  /// ```
+  Object? expand_kids_by_data({
+    List<Object?> data_values = const <Object?>[],
+  }) =>
+      getFunction("expand_kids_by_data").call(
+        <Object?>[
+          ...data_values,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## find_data
+  ///
+  /// ### python docstring
+  ///
+  /// Returns all nodes of the tree whose data equals the given data.
+  ///
+  /// ### python source
+  /// ```py
+  /// def find_data(self, data: str) -> 'Iterator[Tree[_Leaf_T]]':
+  ///         """Returns all nodes of the tree whose data equals the given data."""
+  ///         return self.find_pred(lambda t: t.data == data)
+  /// ```
+  Object? find_data({
+    required String data,
+  }) =>
+      getFunction("find_data").call(
+        <Object?>[
+          data,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## find_pred
+  ///
+  /// ### python docstring
+  ///
+  /// Returns all nodes of the tree that evaluate pred(node) as true.
+  ///
+  /// ### python source
+  /// ```py
+  /// def find_pred(self, pred: 'Callable[[Tree[_Leaf_T]], bool]') -> 'Iterator[Tree[_Leaf_T]]':
+  ///         """Returns all nodes of the tree that evaluate pred(node) as true."""
+  ///         return filter(pred, self.iter_subtrees())
+  /// ```
+  Object? find_pred({
+    required Object? pred,
+  }) =>
+      getFunction("find_pred").call(
+        <Object?>[
+          pred,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## iter_subtrees
+  ///
+  /// ### python docstring
+  ///
+  /// Depth-first iteration.
+  ///
+  /// Iterates over all the subtrees, never returning to the same node twice (Lark's parse-tree is actually a DAG).
+  ///
+  /// ### python source
+  /// ```py
+  /// def iter_subtrees(self) -> 'Iterator[Tree[_Leaf_T]]':
+  ///         """Depth-first iteration.
+  ///
+  ///         Iterates over all the subtrees, never returning to the same node twice (Lark's parse-tree is actually a DAG).
+  ///         """
+  ///         queue = [self]
+  ///         subtrees = OrderedDict()
+  ///         for subtree in queue:
+  ///             subtrees[id(subtree)] = subtree
+  ///             # Reason for type ignore https://github.com/python/mypy/issues/10999
+  ///             queue += [c for c in reversed(subtree.children)  # type: ignore[misc]
+  ///                       if isinstance(c, Tree) and id(c) not in subtrees]
+  ///
+  ///         del queue
+  ///         return reversed(list(subtrees.values()))
+  /// ```
+  Object? iter_subtrees() => getFunction("iter_subtrees").call(
+        <Object?>[],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## iter_subtrees_topdown
+  ///
+  /// ### python docstring
+  ///
+  /// Breadth-first iteration.
+  ///
+  /// Iterates over all the subtrees, return nodes in order like pretty() does.
+  ///
+  /// ### python source
+  /// ```py
+  /// def iter_subtrees_topdown(self):
+  ///         """Breadth-first iteration.
+  ///
+  ///         Iterates over all the subtrees, return nodes in order like pretty() does.
+  ///         """
+  ///         stack = [self]
+  ///         stack_append = stack.append
+  ///         stack_pop = stack.pop
+  ///         while stack:
+  ///             node = stack_pop()
+  ///             if not isinstance(node, Tree):
+  ///                 continue
+  ///             yield node
+  ///             for child in reversed(node.children):
+  ///                 stack_append(child)
+  /// ```
+  Object? iter_subtrees_topdown() => getFunction("iter_subtrees_topdown").call(
+        <Object?>[],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## pretty
+  ///
+  /// ### python docstring
+  ///
+  /// Returns an indented string representation of the tree.
+  ///
+  /// Great for debugging.
+  ///
+  /// ### python source
+  /// ```py
+  /// def pretty(self, indent_str: str='  ') -> str:
+  ///         """Returns an indented string representation of the tree.
+  ///
+  ///         Great for debugging.
+  ///         """
+  ///         return ''.join(self._pretty(0, indent_str))
+  /// ```
+  String pretty({
+    String indent_str = "  ",
+  }) =>
+      getFunction("pretty").call(
+        <Object?>[
+          indent_str,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## scan_values
+  ///
+  /// ### python docstring
+  ///
+  /// Return all values in the tree that evaluate pred(value) as true.
+  ///
+  /// This can be used to find all the tokens in the tree.
+  ///
+  /// Example:
+  ///     >>> all_tokens = tree.scan_values(lambda v: isinstance(v, Token))
+  ///
+  /// ### python source
+  /// ```py
+  /// def scan_values(self, pred: 'Callable[[Branch[_Leaf_T]], bool]') -> Iterator[_Leaf_T]:
+  ///         """Return all values in the tree that evaluate pred(value) as true.
+  ///
+  ///         This can be used to find all the tokens in the tree.
+  ///
+  ///         Example:
+  ///             >>> all_tokens = tree.scan_values(lambda v: isinstance(v, Token))
+  ///         """
+  ///         for c in self.children:
+  ///             if isinstance(c, Tree):
+  ///                 for t in c.scan_values(pred):
+  ///                     yield t
+  ///             else:
+  ///                 if pred(c):
+  ///                     yield c
+  /// ```
+  Iterator<Object?> scan_values({
+    required Object? pred,
+  }) =>
+      TypedIterator.from(
+        PythonIterator.from<Object?, PythonFfiDelegate<Object?>, Object?>(
+          getFunction("scan_values").call(
+            <Object?>[
+              pred,
+            ],
+            kwargs: <String, Object?>{},
+          ),
+        ),
+      ).transform((e) => e).cast<Object?>();
+
+  /// ## set
+  ///
+  /// ### python source
+  /// ```py
+  /// def set(self, data: str, children: 'List[Branch[_Leaf_T]]') -> None:
+  ///         self.data = data
+  ///         self.children = children
+  /// ```
+  Null $set({
+    required String data,
+    required Object? children,
+  }) =>
+      getFunction("set").call(
+        <Object?>[
+          data,
+          children,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## meta (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// The main tree class.
+  ///
+  /// Creates a new tree, and stores "data" and "children" in attributes of the same name.
+  /// Trees can be hashed and compared.
+  ///
+  /// Parameters:
+  ///     data: The name of the rule or alias
+  ///     children: List of matched sub-rules and terminals
+  ///     meta: Line & Column numbers (if ``propagate_positions`` is enabled).
+  ///         meta attributes: (line, column, end_line, end_column, start_pos, end_pos,
+  ///                           container_line, container_column, container_end_line, container_end_column)
+  ///         container_* attributes consider all symbols, including those that have been inlined in the tree.
+  ///         For example, in the rule 'a: _A B _C', the regular attributes will mark the start and end of B,
+  ///         but the container_* attributes will also include _A and _C in the range. However, rules that
+  ///         contain 'a' will consider it in full, including _A and _C for all attributes.
+  Object? get meta => getAttribute("meta");
+
+  /// ## meta (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// The main tree class.
+  ///
+  /// Creates a new tree, and stores "data" and "children" in attributes of the same name.
+  /// Trees can be hashed and compared.
+  ///
+  /// Parameters:
+  ///     data: The name of the rule or alias
+  ///     children: List of matched sub-rules and terminals
+  ///     meta: Line & Column numbers (if ``propagate_positions`` is enabled).
+  ///         meta attributes: (line, column, end_line, end_column, start_pos, end_pos,
+  ///                           container_line, container_column, container_end_line, container_end_column)
+  ///         container_* attributes consider all symbols, including those that have been inlined in the tree.
+  ///         For example, in the rule 'a: _A B _C', the regular attributes will mark the start and end of B,
+  ///         but the container_* attributes will also include _A and _C in the range. However, rules that
+  ///         contain 'a' will consider it in full, including _A and _C for all attributes.
+  set meta(Object? meta) => setAttribute("meta", meta);
+
+  /// ## rule (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// The main tree class.
+  ///
+  /// Creates a new tree, and stores "data" and "children" in attributes of the same name.
+  /// Trees can be hashed and compared.
+  ///
+  /// Parameters:
+  ///     data: The name of the rule or alias
+  ///     children: List of matched sub-rules and terminals
+  ///     meta: Line & Column numbers (if ``propagate_positions`` is enabled).
+  ///         meta attributes: (line, column, end_line, end_column, start_pos, end_pos,
+  ///                           container_line, container_column, container_end_line, container_end_column)
+  ///         container_* attributes consider all symbols, including those that have been inlined in the tree.
+  ///         For example, in the rule 'a: _A B _C', the regular attributes will mark the start and end of B,
+  ///         but the container_* attributes will also include _A and _C in the range. However, rules that
+  ///         contain 'a' will consider it in full, including _A and _C for all attributes.
+  Object? get rule => getAttribute("rule");
+
+  /// ## rule (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// The main tree class.
+  ///
+  /// Creates a new tree, and stores "data" and "children" in attributes of the same name.
+  /// Trees can be hashed and compared.
+  ///
+  /// Parameters:
+  ///     data: The name of the rule or alias
+  ///     children: List of matched sub-rules and terminals
+  ///     meta: Line & Column numbers (if ``propagate_positions`` is enabled).
+  ///         meta attributes: (line, column, end_line, end_column, start_pos, end_pos,
+  ///                           container_line, container_column, container_end_line, container_end_column)
+  ///         container_* attributes consider all symbols, including those that have been inlined in the tree.
+  ///         For example, in the rule 'a: _A B _C', the regular attributes will mark the start and end of B,
+  ///         but the container_* attributes will also include _A and _C in the range. However, rules that
+  ///         contain 'a' will consider it in full, including _A and _C for all attributes.
+  set rule(Object? rule) => setAttribute("rule", rule);
+
+  /// ## children (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// The main tree class.
+  ///
+  /// Creates a new tree, and stores "data" and "children" in attributes of the same name.
+  /// Trees can be hashed and compared.
+  ///
+  /// Parameters:
+  ///     data: The name of the rule or alias
+  ///     children: List of matched sub-rules and terminals
+  ///     meta: Line & Column numbers (if ``propagate_positions`` is enabled).
+  ///         meta attributes: (line, column, end_line, end_column, start_pos, end_pos,
+  ///                           container_line, container_column, container_end_line, container_end_column)
+  ///         container_* attributes consider all symbols, including those that have been inlined in the tree.
+  ///         For example, in the rule 'a: _A B _C', the regular attributes will mark the start and end of B,
+  ///         but the container_* attributes will also include _A and _C in the range. However, rules that
+  ///         contain 'a' will consider it in full, including _A and _C for all attributes.
+  Object? get children => getAttribute("children");
+
+  /// ## children (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// The main tree class.
+  ///
+  /// Creates a new tree, and stores "data" and "children" in attributes of the same name.
+  /// Trees can be hashed and compared.
+  ///
+  /// Parameters:
+  ///     data: The name of the rule or alias
+  ///     children: List of matched sub-rules and terminals
+  ///     meta: Line & Column numbers (if ``propagate_positions`` is enabled).
+  ///         meta attributes: (line, column, end_line, end_column, start_pos, end_pos,
+  ///                           container_line, container_column, container_end_line, container_end_column)
+  ///         container_* attributes consider all symbols, including those that have been inlined in the tree.
+  ///         For example, in the rule 'a: _A B _C', the regular attributes will mark the start and end of B,
+  ///         but the container_* attributes will also include _A and _C in the range. However, rules that
+  ///         contain 'a' will consider it in full, including _A and _C for all attributes.
+  set children(Object? children) => setAttribute("children", children);
+
+  /// ## data (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// The main tree class.
+  ///
+  /// Creates a new tree, and stores "data" and "children" in attributes of the same name.
+  /// Trees can be hashed and compared.
+  ///
+  /// Parameters:
+  ///     data: The name of the rule or alias
+  ///     children: List of matched sub-rules and terminals
+  ///     meta: Line & Column numbers (if ``propagate_positions`` is enabled).
+  ///         meta attributes: (line, column, end_line, end_column, start_pos, end_pos,
+  ///                           container_line, container_column, container_end_line, container_end_column)
+  ///         container_* attributes consider all symbols, including those that have been inlined in the tree.
+  ///         For example, in the rule 'a: _A B _C', the regular attributes will mark the start and end of B,
+  ///         but the container_* attributes will also include _A and _C in the range. However, rules that
+  ///         contain 'a' will consider it in full, including _A and _C for all attributes.
+  Object? get data => getAttribute("data");
+
+  /// ## data (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// The main tree class.
+  ///
+  /// Creates a new tree, and stores "data" and "children" in attributes of the same name.
+  /// Trees can be hashed and compared.
+  ///
+  /// Parameters:
+  ///     data: The name of the rule or alias
+  ///     children: List of matched sub-rules and terminals
+  ///     meta: Line & Column numbers (if ``propagate_positions`` is enabled).
+  ///         meta attributes: (line, column, end_line, end_column, start_pos, end_pos,
+  ///                           container_line, container_column, container_end_line, container_end_column)
+  ///         container_* attributes consider all symbols, including those that have been inlined in the tree.
+  ///         For example, in the rule 'a: _A B _C', the regular attributes will mark the start and end of B,
+  ///         but the container_* attributes will also include _A and _C in the range. However, rules that
+  ///         contain 'a' will consider it in full, including _A and _C for all attributes.
+  set data(Object? data) => setAttribute("data", data);
+}
+
+/// ## SlottedTree
+///
+/// ### python docstring
+///
+/// The main tree class.
+///
+/// Creates a new tree, and stores "data" and "children" in attributes of the same name.
+/// Trees can be hashed and compared.
+///
+/// Parameters:
+///     data: The name of the rule or alias
+///     children: List of matched sub-rules and terminals
+///     meta: Line & Column numbers (if ``propagate_positions`` is enabled).
+///         meta attributes: (line, column, end_line, end_column, start_pos, end_pos,
+///                           container_line, container_column, container_end_line, container_end_column)
+///         container_* attributes consider all symbols, including those that have been inlined in the tree.
+///         For example, in the rule 'a: _A B _C', the regular attributes will mark the start and end of B,
+///         but the container_* attributes will also include _A and _C in the range. However, rules that
+///         contain 'a' will consider it in full, including _A and _C for all attributes.
+///
+/// ### python source
+/// ```py
+/// class SlottedTree(Tree):
+///     __slots__ = 'data', 'children', 'rule', '_meta'
+/// ```
+final class SlottedTree extends PythonClass {
+  factory SlottedTree({
+    required String data,
+    required Object? children,
+    Object? meta,
+  }) =>
+      PythonFfiDart.instance.importClass(
+        "lark.tools.standalone",
+        "SlottedTree",
+        SlottedTree.from,
+        <Object?>[
+          data,
+          children,
+          meta,
+        ],
+        <String, Object?>{},
+      );
+
+  SlottedTree.from(super.pythonClass) : super.from();
 
   /// ## copy
   ///
@@ -18067,7 +18938,7 @@ final class ST extends PythonClass {
 /// ```
 final class SimplifyRule_Visitor extends PythonClass {
   factory SimplifyRule_Visitor() => PythonFfiDart.instance.importClass(
-        "lark.load_grammar",
+        "lark.tools.standalone",
         "SimplifyRule_Visitor",
         SimplifyRule_Visitor.from,
         <Object?>[],
@@ -18267,7 +19138,7 @@ final class TerminalTreeToPattern extends PythonClass {
     bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.load_grammar",
+        "lark.tools.standalone",
         "TerminalTreeToPattern",
         TerminalTreeToPattern.from,
         <Object?>[
@@ -18508,7 +19379,7 @@ final class Transformer_InPlace extends PythonClass {
     bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.visitors",
+        "lark.tools.standalone",
         "Transformer_InPlace",
         Transformer_InPlace.from,
         <Object?>[
@@ -18565,7 +19436,7 @@ final class ValidateSymbols extends PythonClass {
     bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.load_grammar",
+        "lark.tools.standalone",
         "ValidateSymbols",
         ValidateSymbols.from,
         <Object?>[
@@ -18670,7 +19541,7 @@ final class AmbiguousExpander extends PythonClass {
     required Object? node_builder,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parse_tree_builder",
+        "lark.tools.standalone",
         "AmbiguousExpander",
         AmbiguousExpander.from,
         <Object?>[
@@ -18875,7 +19746,7 @@ final class AmbiguousIntermediateExpander extends PythonClass {
     required Object? node_builder,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parse_tree_builder",
+        "lark.tools.standalone",
         "AmbiguousIntermediateExpander",
         AmbiguousIntermediateExpander.from,
         <Object?>[
@@ -19094,7 +19965,7 @@ final class ChildFilter extends PythonClass {
     required Object? node_builder,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parse_tree_builder",
+        "lark.tools.standalone",
         "ChildFilter",
         ChildFilter.from,
         <Object?>[
@@ -19164,7 +20035,7 @@ final class ChildFilterLALR extends PythonClass {
     required Object? node_builder,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parse_tree_builder",
+        "lark.tools.standalone",
         "ChildFilterLALR",
         ChildFilterLALR.from,
         <Object?>[
@@ -19254,7 +20125,7 @@ final class ChildFilterLALR_NoPlaceholders extends PythonClass {
     required Object? node_builder,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parse_tree_builder",
+        "lark.tools.standalone",
         "ChildFilterLALR_NoPlaceholders",
         ChildFilterLALR_NoPlaceholders.from,
         <Object?>[
@@ -19315,7 +20186,7 @@ final class ExpandSingleChild extends PythonClass {
     required Object? node_builder,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parse_tree_builder",
+        "lark.tools.standalone",
         "ExpandSingleChild",
         ExpandSingleChild.from,
         <Object?>[
@@ -19399,7 +20270,7 @@ final class PropagatePositions extends PythonClass {
     Object? node_filter,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parse_tree_builder",
+        "lark.tools.standalone",
         "PropagatePositions",
         PropagatePositions.from,
         <Object?>[
@@ -19429,7 +20300,7 @@ final class PropagatePositions extends PythonClass {
 /// ## product
 final class product extends PythonClass {
   factory product() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.tools.standalone",
         "product",
         product.from,
         <Object?>[],
@@ -19471,7 +20342,7 @@ final class CYK_FrontEnd extends PythonClass {
     Object? options,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parser_frontends",
+        "lark.tools.standalone",
         "CYK_FrontEnd",
         CYK_FrontEnd.from,
         <Object?>[
@@ -19547,7 +20418,7 @@ final class EarleyRegexpMatcher extends PythonClass {
     required Object? lexer_conf,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parser_frontends",
+        "lark.tools.standalone",
         "EarleyRegexpMatcher",
         EarleyRegexpMatcher.from,
         <Object?>[
@@ -19661,7 +20532,7 @@ final class GrammarAnalyzer extends PythonClass {
     Object? strict = false,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.grammar_analysis",
+        "lark.tools.standalone",
         "GrammarAnalyzer",
         GrammarAnalyzer.from,
         <Object?>[
@@ -19840,7 +20711,7 @@ final class LALR_Parser extends PythonClass {
     Object? strict = false,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.lalr_parser",
+        "lark.tools.standalone",
         "LALR_Parser",
         LALR_Parser.from,
         <Object?>[
@@ -20051,7 +20922,7 @@ final class PostLexConnector extends PythonClass {
     required Object? postlexer,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parser_frontends",
+        "lark.tools.standalone",
         "PostLexConnector",
         PostLexConnector.from,
         <Object?>[
@@ -20141,7 +21012,7 @@ final class CnfWrapper extends PythonClass {
     required Object? grammar,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.cyk",
+        "lark.tools.standalone",
         "CnfWrapper",
         CnfWrapper.from,
         <Object?>[
@@ -20284,7 +21155,7 @@ final class Parser extends PythonClass {
     required Object? rules,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.cyk",
+        "lark.tools.standalone",
         "Parser",
         Parser.from,
         <Object?>[
@@ -20382,7 +21253,7 @@ final class RuleNode extends PythonClass {
     Object? weight = 0,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.cyk",
+        "lark.tools.standalone",
         "RuleNode",
         RuleNode.from,
         <Object?>[
@@ -20467,7 +21338,7 @@ final class UnitSkipRule extends PythonClass {
     required Object? alias,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.cyk",
+        "lark.tools.standalone",
         "UnitSkipRule",
         UnitSkipRule.from,
         <Object?>[
@@ -20501,7 +21372,7 @@ final class UnitSkipRule extends PythonClass {
 /// ## accumulate
 final class accumulate extends PythonClass {
   factory accumulate() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.tools.standalone",
         "accumulate",
         accumulate.from,
         <Object?>[],
@@ -20513,7 +21384,7 @@ final class accumulate extends PythonClass {
 /// ## chain
 final class chain extends PythonClass {
   factory chain() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.tools.standalone",
         "chain",
         chain.from,
         <Object?>[],
@@ -20525,7 +21396,7 @@ final class chain extends PythonClass {
 /// ## combinations
 final class combinations extends PythonClass {
   factory combinations() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.tools.standalone",
         "combinations",
         combinations.from,
         <Object?>[],
@@ -20537,7 +21408,7 @@ final class combinations extends PythonClass {
 /// ## combinations_with_replacement
 final class combinations_with_replacement extends PythonClass {
   factory combinations_with_replacement() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.tools.standalone",
         "combinations_with_replacement",
         combinations_with_replacement.from,
         <Object?>[],
@@ -20549,7 +21420,7 @@ final class combinations_with_replacement extends PythonClass {
 /// ## compress
 final class compress extends PythonClass {
   factory compress() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.tools.standalone",
         "compress",
         compress.from,
         <Object?>[],
@@ -20561,7 +21432,7 @@ final class compress extends PythonClass {
 /// ## count
 final class count extends PythonClass {
   factory count() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.tools.standalone",
         "count",
         count.from,
         <Object?>[],
@@ -20573,7 +21444,7 @@ final class count extends PythonClass {
 /// ## cycle
 final class cycle extends PythonClass {
   factory cycle() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.tools.standalone",
         "cycle",
         cycle.from,
         <Object?>[],
@@ -20585,7 +21456,7 @@ final class cycle extends PythonClass {
 /// ## dropwhile
 final class dropwhile extends PythonClass {
   factory dropwhile() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.tools.standalone",
         "dropwhile",
         dropwhile.from,
         <Object?>[],
@@ -20597,7 +21468,7 @@ final class dropwhile extends PythonClass {
 /// ## filterfalse
 final class filterfalse extends PythonClass {
   factory filterfalse() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.tools.standalone",
         "filterfalse",
         filterfalse.from,
         <Object?>[],
@@ -20609,7 +21480,7 @@ final class filterfalse extends PythonClass {
 /// ## groupby
 final class groupby extends PythonClass {
   factory groupby() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.tools.standalone",
         "groupby",
         groupby.from,
         <Object?>[],
@@ -20621,7 +21492,7 @@ final class groupby extends PythonClass {
 /// ## islice
 final class islice extends PythonClass {
   factory islice() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.tools.standalone",
         "islice",
         islice.from,
         <Object?>[],
@@ -20633,7 +21504,7 @@ final class islice extends PythonClass {
 /// ## pairwise
 final class pairwise extends PythonClass {
   factory pairwise() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.tools.standalone",
         "pairwise",
         pairwise.from,
         <Object?>[],
@@ -20645,7 +21516,7 @@ final class pairwise extends PythonClass {
 /// ## permutations
 final class permutations extends PythonClass {
   factory permutations() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.tools.standalone",
         "permutations",
         permutations.from,
         <Object?>[],
@@ -20657,7 +21528,7 @@ final class permutations extends PythonClass {
 /// ## repeat
 final class repeat extends PythonClass {
   factory repeat() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.tools.standalone",
         "repeat",
         repeat.from,
         <Object?>[],
@@ -20669,7 +21540,7 @@ final class repeat extends PythonClass {
 /// ## starmap
 final class starmap extends PythonClass {
   factory starmap() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.tools.standalone",
         "starmap",
         starmap.from,
         <Object?>[],
@@ -20681,7 +21552,7 @@ final class starmap extends PythonClass {
 /// ## takewhile
 final class takewhile extends PythonClass {
   factory takewhile() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.tools.standalone",
         "takewhile",
         takewhile.from,
         <Object?>[],
@@ -20693,7 +21564,7 @@ final class takewhile extends PythonClass {
 /// ## zip_longest
 final class zip_longest extends PythonClass {
   factory zip_longest() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.tools.standalone",
         "zip_longest",
         zip_longest.from,
         <Object?>[],
@@ -20759,7 +21630,7 @@ final class zip_longest extends PythonClass {
 /// ```
 final class ForestSumVisitor extends PythonClass {
   factory ForestSumVisitor() => PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_forest",
+        "lark.tools.standalone",
         "ForestSumVisitor",
         ForestSumVisitor.from,
         <Object?>[],
@@ -21218,7 +22089,7 @@ final class ForestToParseTree extends PythonClass {
     Object? use_cache = true,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_forest",
+        "lark.tools.standalone",
         "ForestToParseTree",
         ForestToParseTree.from,
         <Object?>[
@@ -21791,7 +22662,7 @@ final class Item extends PythonClass {
     required Object? start,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_common",
+        "lark.tools.standalone",
         "Item",
         Item.from,
         <Object?>[
@@ -21930,6 +22801,587 @@ final class Item extends PythonClass {
   set start(Object? start) => setAttribute("start", start);
 }
 
+/// ## BaseParser
+///
+/// ### python source
+/// ```py
+/// class Parser:
+///     lexer_conf: 'LexerConf'
+///     parser_conf: 'ParserConf'
+///     debug: bool
+///
+///     def __init__(self, lexer_conf: 'LexerConf', parser_conf: 'ParserConf', term_matcher, resolve_ambiguity=True, debug=False, tree_class=Tree):
+///         analysis = GrammarAnalyzer(parser_conf)
+///         self.lexer_conf = lexer_conf
+///         self.parser_conf = parser_conf
+///         self.resolve_ambiguity = resolve_ambiguity
+///         self.debug = debug
+///         self.tree_class = tree_class
+///
+///         self.FIRST = analysis.FIRST
+///         self.NULLABLE = analysis.NULLABLE
+///         self.callbacks = parser_conf.callbacks
+///         # TODO add typing info
+///         self.predictions = {}   # type: ignore[var-annotated]
+///
+///         ## These could be moved to the grammar analyzer. Pre-computing these is *much* faster than
+///         #  the slow 'isupper' in is_terminal.
+///         self.TERMINALS = { sym for r in parser_conf.rules for sym in r.expansion if sym.is_term }
+///         self.NON_TERMINALS = { sym for r in parser_conf.rules for sym in r.expansion if not sym.is_term }
+///
+///         self.forest_sum_visitor = None
+///         for rule in parser_conf.rules:
+///             if rule.origin not in self.predictions:
+///                 self.predictions[rule.origin] = [x.rule for x in analysis.expand_rule(rule.origin)]
+///
+///             ## Detect if any rules/terminals have priorities set. If the user specified priority = None, then
+///             #  the priorities will be stripped from all rules/terminals before they reach us, allowing us to
+///             #  skip the extra tree walk. We'll also skip this if the user just didn't specify priorities
+///             #  on any rules/terminals.
+///             if self.forest_sum_visitor is None and rule.options.priority is not None:
+///                 self.forest_sum_visitor = ForestSumVisitor
+///
+///         # Check terminals for priorities
+///         # Ignore terminal priorities if the basic lexer is used
+///         if self.lexer_conf.lexer_type != 'basic' and self.forest_sum_visitor is None:
+///             for term in self.lexer_conf.terminals:
+///                 if term.priority:
+///                     self.forest_sum_visitor = ForestSumVisitor
+///                     break
+///
+///         self.term_matcher = term_matcher
+///
+///
+///     def predict_and_complete(self, i, to_scan, columns, transitives):
+///         """The core Earley Predictor and Completer.
+///
+///         At each stage of the input, we handling any completed items (things
+///         that matched on the last cycle) and use those to predict what should
+///         come next in the input stream. The completions and any predicted
+///         non-terminals are recursively processed until we reach a set of,
+///         which can be added to the scan list for the next scanner cycle."""
+///         # Held Completions (H in E.Scotts paper).
+///         node_cache = {}
+///         held_completions = {}
+///
+///         column = columns[i]
+///         # R (items) = Ei (column.items)
+///         items = deque(column)
+///         while items:
+///             item = items.pop()    # remove an element, A say, from R
+///
+///             ### The Earley completer
+///             if item.is_complete:   ### (item.s == string)
+///                 if item.node is None:
+///                     label = (item.s, item.start, i)
+///                     item.node = node_cache[label] if label in node_cache else node_cache.setdefault(label, SymbolNode(*label))
+///                     item.node.add_family(item.s, item.rule, item.start, None, None)
+///
+///                 # create_leo_transitives(item.rule.origin, item.start)
+///
+///                 ###R Joop Leo right recursion Completer
+///                 if item.rule.origin in transitives[item.start]:
+///                     transitive = transitives[item.start][item.s]
+///                     if transitive.previous in transitives[transitive.column]:
+///                         root_transitive = transitives[transitive.column][transitive.previous]
+///                     else:
+///                         root_transitive = transitive
+///
+///                     new_item = Item(transitive.rule, transitive.ptr, transitive.start)
+///                     label = (root_transitive.s, root_transitive.start, i)
+///                     new_item.node = node_cache[label] if label in node_cache else node_cache.setdefault(label, SymbolNode(*label))
+///                     new_item.node.add_path(root_transitive, item.node)
+///                     if new_item.expect in self.TERMINALS:
+///                         # Add (B :: aC.B, h, y) to Q
+///                         to_scan.add(new_item)
+///                     elif new_item not in column:
+///                         # Add (B :: aC.B, h, y) to Ei and R
+///                         column.add(new_item)
+///                         items.append(new_item)
+///                 ###R Regular Earley completer
+///                 else:
+///                     # Empty has 0 length. If we complete an empty symbol in a particular
+///                     # parse step, we need to be able to use that same empty symbol to complete
+///                     # any predictions that result, that themselves require empty. Avoids
+///                     # infinite recursion on empty symbols.
+///                     # held_completions is 'H' in E.Scott's paper.
+///                     is_empty_item = item.start == i
+///                     if is_empty_item:
+///                         held_completions[item.rule.origin] = item.node
+///
+///                     originators = [originator for originator in columns[item.start] if originator.expect is not None and originator.expect == item.s]
+///                     for originator in originators:
+///                         new_item = originator.advance()
+///                         label = (new_item.s, originator.start, i)
+///                         new_item.node = node_cache[label] if label in node_cache else node_cache.setdefault(label, SymbolNode(*label))
+///                         new_item.node.add_family(new_item.s, new_item.rule, i, originator.node, item.node)
+///                         if new_item.expect in self.TERMINALS:
+///                             # Add (B :: aC.B, h, y) to Q
+///                             to_scan.add(new_item)
+///                         elif new_item not in column:
+///                             # Add (B :: aC.B, h, y) to Ei and R
+///                             column.add(new_item)
+///                             items.append(new_item)
+///
+///             ### The Earley predictor
+///             elif item.expect in self.NON_TERMINALS: ### (item.s == lr0)
+///                 new_items = []
+///                 for rule in self.predictions[item.expect]:
+///                     new_item = Item(rule, 0, i)
+///                     new_items.append(new_item)
+///
+///                 # Process any held completions (H).
+///                 if item.expect in held_completions:
+///                     new_item = item.advance()
+///                     label = (new_item.s, item.start, i)
+///                     new_item.node = node_cache[label] if label in node_cache else node_cache.setdefault(label, SymbolNode(*label))
+///                     new_item.node.add_family(new_item.s, new_item.rule, new_item.start, item.node, held_completions[item.expect])
+///                     new_items.append(new_item)
+///
+///                 for new_item in new_items:
+///                     if new_item.expect in self.TERMINALS:
+///                         to_scan.add(new_item)
+///                     elif new_item not in column:
+///                         column.add(new_item)
+///                         items.append(new_item)
+///
+///     def _parse(self, lexer, columns, to_scan, start_symbol=None):
+///         def is_quasi_complete(item):
+///             if item.is_complete:
+///                 return True
+///
+///             quasi = item.advance()
+///             while not quasi.is_complete:
+///                 if quasi.expect not in self.NULLABLE:
+///                     return False
+///                 if quasi.rule.origin == start_symbol and quasi.expect == start_symbol:
+///                     return False
+///                 quasi = quasi.advance()
+///             return True
+///
+///         # def create_leo_transitives(origin, start):
+///         #   ...   # removed at commit 4c1cfb2faf24e8f8bff7112627a00b94d261b420
+///
+///         def scan(i, token, to_scan):
+///             """The core Earley Scanner.
+///
+///             This is a custom implementation of the scanner that uses the
+///             Lark lexer to match tokens. The scan list is built by the
+///             Earley predictor, based on the previously completed tokens.
+///             This ensures that at each phase of the parse we have a custom
+///             lexer context, allowing for more complex ambiguities."""
+///             next_to_scan = set()
+///             next_set = set()
+///             columns.append(next_set)
+///             transitives.append({})
+///             node_cache = {}
+///
+///             for item in set(to_scan):
+///                 if match(item.expect, token):
+///                     new_item = item.advance()
+///                     label = (new_item.s, new_item.start, i)
+///                     # 'terminals' may not contain token.type when using %declare
+///                     # Additionally, token is not always a Token
+///                     # For example, it can be a Tree when using TreeMatcher
+///                     term = terminals.get(token.type) if isinstance(token, Token) else None
+///                     # Set the priority of the token node to 0 so that the
+///                     # terminal priorities do not affect the Tree chosen by
+///                     # ForestSumVisitor after the basic lexer has already
+///                     # "used up" the terminal priorities
+///                     token_node = TokenNode(token, term, priority=0)
+///                     new_item.node = node_cache[label] if label in node_cache else node_cache.setdefault(label, SymbolNode(*label))
+///                     new_item.node.add_family(new_item.s, item.rule, new_item.start, item.node, token_node)
+///
+///                     if new_item.expect in self.TERMINALS:
+///                         # add (B ::= Aai+1.B, h, y) to Q'
+///                         next_to_scan.add(new_item)
+///                     else:
+///                         # add (B ::= Aa+1.B, h, y) to Ei+1
+///                         next_set.add(new_item)
+///
+///             if not next_set and not next_to_scan:
+///                 expect = {i.expect.name for i in to_scan}
+///                 raise UnexpectedToken(token, expect, considered_rules=set(to_scan), state=frozenset(i.s for i in to_scan))
+///
+///             return next_to_scan
+///
+///
+///         # Define parser functions
+///         match = self.term_matcher
+///
+///         terminals = self.lexer_conf.terminals_by_name
+///
+///         # Cache for nodes & tokens created in a particular parse step.
+///         transitives = [{}]
+///
+///         ## The main Earley loop.
+///         # Run the Prediction/Completion cycle for any Items in the current Earley set.
+///         # Completions will be added to the SPPF tree, and predictions will be recursively
+///         # processed down to terminals/empty nodes to be added to the scanner for the next
+///         # step.
+///         expects = {i.expect for i in to_scan}
+///         i = 0
+///         for token in lexer.lex(expects):
+///             self.predict_and_complete(i, to_scan, columns, transitives)
+///
+///             to_scan = scan(i, token, to_scan)
+///             i += 1
+///
+///             expects.clear()
+///             expects |= {i.expect for i in to_scan}
+///
+///         self.predict_and_complete(i, to_scan, columns, transitives)
+///
+///         ## Column is now the final column in the parse.
+///         assert i == len(columns)-1
+///         return to_scan
+///
+///     def parse(self, lexer, start):
+///         assert start, start
+///         start_symbol = NonTerminal(start)
+///
+///         columns = [set()]
+///         to_scan = set()     # The scan buffer. 'Q' in E.Scott's paper.
+///
+///         ## Predict for the start_symbol.
+///         # Add predicted items to the first Earley set (for the predictor) if they
+///         # result in a non-terminal, or the scanner if they result in a terminal.
+///         for rule in self.predictions[start_symbol]:
+///             item = Item(rule, 0, 0)
+///             if item.expect in self.TERMINALS:
+///                 to_scan.add(item)
+///             else:
+///                 columns[0].add(item)
+///
+///         to_scan = self._parse(lexer, columns, to_scan, start_symbol)
+///
+///         # If the parse was successful, the start
+///         # symbol should have been completed in the last step of the Earley cycle, and will be in
+///         # this column. Find the item for the start_symbol, which is the root of the SPPF tree.
+///         solutions = [n.node for n in columns[-1] if n.is_complete and n.node is not None and n.s == start_symbol and n.start == 0]
+///         if not solutions:
+///             expected_terminals = [t.expect.name for t in to_scan]
+///             raise UnexpectedEOF(expected_terminals, state=frozenset(i.s for i in to_scan))
+///
+///         if self.debug:
+///             from .earley_forest import ForestToPyDotVisitor
+///             try:
+///                 debug_walker = ForestToPyDotVisitor()
+///             except ImportError:
+///                 logger.warning("Cannot find dependency 'pydot', will not generate sppf debug image")
+///             else:
+///                 debug_walker.visit(solutions[0], "sppf.png")
+///
+///
+///         if len(solutions) > 1:
+///             assert False, 'Earley should not generate multiple start symbol items!'
+///
+///         if self.tree_class is not None:
+///             # Perform our SPPF -> AST conversion
+///             transformer = ForestToParseTree(self.tree_class, self.callbacks, self.forest_sum_visitor and self.forest_sum_visitor(), self.resolve_ambiguity)
+///             return transformer.transform(solutions[0])
+///
+///         # return the root of the SPPF
+///         return solutions[0]
+/// ```
+final class BaseParser extends PythonClass {
+  factory BaseParser({
+    required Object? lexer_conf,
+    required Object? parser_conf,
+    required Object? term_matcher,
+    Object? resolve_ambiguity = true,
+    Object? debug = false,
+    Object? tree_class,
+  }) =>
+      PythonFfiDart.instance.importClass(
+        "lark.tools.standalone",
+        "BaseParser",
+        BaseParser.from,
+        <Object?>[
+          lexer_conf,
+          parser_conf,
+          term_matcher,
+          resolve_ambiguity,
+          debug,
+          tree_class,
+        ],
+        <String, Object?>{},
+      );
+
+  BaseParser.from(super.pythonClass) : super.from();
+
+  /// ## parse
+  ///
+  /// ### python source
+  /// ```py
+  /// def parse(self, lexer, start):
+  ///         assert start, start
+  ///         start_symbol = NonTerminal(start)
+  ///
+  ///         columns = [set()]
+  ///         to_scan = set()     # The scan buffer. 'Q' in E.Scott's paper.
+  ///
+  ///         ## Predict for the start_symbol.
+  ///         # Add predicted items to the first Earley set (for the predictor) if they
+  ///         # result in a non-terminal, or the scanner if they result in a terminal.
+  ///         for rule in self.predictions[start_symbol]:
+  ///             item = Item(rule, 0, 0)
+  ///             if item.expect in self.TERMINALS:
+  ///                 to_scan.add(item)
+  ///             else:
+  ///                 columns[0].add(item)
+  ///
+  ///         to_scan = self._parse(lexer, columns, to_scan, start_symbol)
+  ///
+  ///         # If the parse was successful, the start
+  ///         # symbol should have been completed in the last step of the Earley cycle, and will be in
+  ///         # this column. Find the item for the start_symbol, which is the root of the SPPF tree.
+  ///         solutions = [n.node for n in columns[-1] if n.is_complete and n.node is not None and n.s == start_symbol and n.start == 0]
+  ///         if not solutions:
+  ///             expected_terminals = [t.expect.name for t in to_scan]
+  ///             raise UnexpectedEOF(expected_terminals, state=frozenset(i.s for i in to_scan))
+  ///
+  ///         if self.debug:
+  ///             from .earley_forest import ForestToPyDotVisitor
+  ///             try:
+  ///                 debug_walker = ForestToPyDotVisitor()
+  ///             except ImportError:
+  ///                 logger.warning("Cannot find dependency 'pydot', will not generate sppf debug image")
+  ///             else:
+  ///                 debug_walker.visit(solutions[0], "sppf.png")
+  ///
+  ///
+  ///         if len(solutions) > 1:
+  ///             assert False, 'Earley should not generate multiple start symbol items!'
+  ///
+  ///         if self.tree_class is not None:
+  ///             # Perform our SPPF -> AST conversion
+  ///             transformer = ForestToParseTree(self.tree_class, self.callbacks, self.forest_sum_visitor and self.forest_sum_visitor(), self.resolve_ambiguity)
+  ///             return transformer.transform(solutions[0])
+  ///
+  ///         # return the root of the SPPF
+  ///         return solutions[0]
+  /// ```
+  Object? parse({
+    required Object? lexer,
+    required Object? start,
+  }) =>
+      getFunction("parse").call(
+        <Object?>[
+          lexer,
+          start,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## predict_and_complete
+  ///
+  /// ### python docstring
+  ///
+  /// The core Earley Predictor and Completer.
+  ///
+  /// At each stage of the input, we handling any completed items (things
+  /// that matched on the last cycle) and use those to predict what should
+  /// come next in the input stream. The completions and any predicted
+  /// non-terminals are recursively processed until we reach a set of,
+  /// which can be added to the scan list for the next scanner cycle.
+  ///
+  /// ### python source
+  /// ```py
+  /// def predict_and_complete(self, i, to_scan, columns, transitives):
+  ///         """The core Earley Predictor and Completer.
+  ///
+  ///         At each stage of the input, we handling any completed items (things
+  ///         that matched on the last cycle) and use those to predict what should
+  ///         come next in the input stream. The completions and any predicted
+  ///         non-terminals are recursively processed until we reach a set of,
+  ///         which can be added to the scan list for the next scanner cycle."""
+  ///         # Held Completions (H in E.Scotts paper).
+  ///         node_cache = {}
+  ///         held_completions = {}
+  ///
+  ///         column = columns[i]
+  ///         # R (items) = Ei (column.items)
+  ///         items = deque(column)
+  ///         while items:
+  ///             item = items.pop()    # remove an element, A say, from R
+  ///
+  ///             ### The Earley completer
+  ///             if item.is_complete:   ### (item.s == string)
+  ///                 if item.node is None:
+  ///                     label = (item.s, item.start, i)
+  ///                     item.node = node_cache[label] if label in node_cache else node_cache.setdefault(label, SymbolNode(*label))
+  ///                     item.node.add_family(item.s, item.rule, item.start, None, None)
+  ///
+  ///                 # create_leo_transitives(item.rule.origin, item.start)
+  ///
+  ///                 ###R Joop Leo right recursion Completer
+  ///                 if item.rule.origin in transitives[item.start]:
+  ///                     transitive = transitives[item.start][item.s]
+  ///                     if transitive.previous in transitives[transitive.column]:
+  ///                         root_transitive = transitives[transitive.column][transitive.previous]
+  ///                     else:
+  ///                         root_transitive = transitive
+  ///
+  ///                     new_item = Item(transitive.rule, transitive.ptr, transitive.start)
+  ///                     label = (root_transitive.s, root_transitive.start, i)
+  ///                     new_item.node = node_cache[label] if label in node_cache else node_cache.setdefault(label, SymbolNode(*label))
+  ///                     new_item.node.add_path(root_transitive, item.node)
+  ///                     if new_item.expect in self.TERMINALS:
+  ///                         # Add (B :: aC.B, h, y) to Q
+  ///                         to_scan.add(new_item)
+  ///                     elif new_item not in column:
+  ///                         # Add (B :: aC.B, h, y) to Ei and R
+  ///                         column.add(new_item)
+  ///                         items.append(new_item)
+  ///                 ###R Regular Earley completer
+  ///                 else:
+  ///                     # Empty has 0 length. If we complete an empty symbol in a particular
+  ///                     # parse step, we need to be able to use that same empty symbol to complete
+  ///                     # any predictions that result, that themselves require empty. Avoids
+  ///                     # infinite recursion on empty symbols.
+  ///                     # held_completions is 'H' in E.Scott's paper.
+  ///                     is_empty_item = item.start == i
+  ///                     if is_empty_item:
+  ///                         held_completions[item.rule.origin] = item.node
+  ///
+  ///                     originators = [originator for originator in columns[item.start] if originator.expect is not None and originator.expect == item.s]
+  ///                     for originator in originators:
+  ///                         new_item = originator.advance()
+  ///                         label = (new_item.s, originator.start, i)
+  ///                         new_item.node = node_cache[label] if label in node_cache else node_cache.setdefault(label, SymbolNode(*label))
+  ///                         new_item.node.add_family(new_item.s, new_item.rule, i, originator.node, item.node)
+  ///                         if new_item.expect in self.TERMINALS:
+  ///                             # Add (B :: aC.B, h, y) to Q
+  ///                             to_scan.add(new_item)
+  ///                         elif new_item not in column:
+  ///                             # Add (B :: aC.B, h, y) to Ei and R
+  ///                             column.add(new_item)
+  ///                             items.append(new_item)
+  ///
+  ///             ### The Earley predictor
+  ///             elif item.expect in self.NON_TERMINALS: ### (item.s == lr0)
+  ///                 new_items = []
+  ///                 for rule in self.predictions[item.expect]:
+  ///                     new_item = Item(rule, 0, i)
+  ///                     new_items.append(new_item)
+  ///
+  ///                 # Process any held completions (H).
+  ///                 if item.expect in held_completions:
+  ///                     new_item = item.advance()
+  ///                     label = (new_item.s, item.start, i)
+  ///                     new_item.node = node_cache[label] if label in node_cache else node_cache.setdefault(label, SymbolNode(*label))
+  ///                     new_item.node.add_family(new_item.s, new_item.rule, new_item.start, item.node, held_completions[item.expect])
+  ///                     new_items.append(new_item)
+  ///
+  ///                 for new_item in new_items:
+  ///                     if new_item.expect in self.TERMINALS:
+  ///                         to_scan.add(new_item)
+  ///                     elif new_item not in column:
+  ///                         column.add(new_item)
+  ///                         items.append(new_item)
+  /// ```
+  Object? predict_and_complete({
+    required Object? i,
+    required Object? to_scan,
+    required Object? columns,
+    required Object? transitives,
+  }) =>
+      getFunction("predict_and_complete").call(
+        <Object?>[
+          i,
+          to_scan,
+          columns,
+          transitives,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## lexer_conf (getter)
+  Object? get lexer_conf => getAttribute("lexer_conf");
+
+  /// ## lexer_conf (setter)
+  set lexer_conf(Object? lexer_conf) => setAttribute("lexer_conf", lexer_conf);
+
+  /// ## parser_conf (getter)
+  Object? get parser_conf => getAttribute("parser_conf");
+
+  /// ## parser_conf (setter)
+  set parser_conf(Object? parser_conf) =>
+      setAttribute("parser_conf", parser_conf);
+
+  /// ## resolve_ambiguity (getter)
+  Object? get resolve_ambiguity => getAttribute("resolve_ambiguity");
+
+  /// ## resolve_ambiguity (setter)
+  set resolve_ambiguity(Object? resolve_ambiguity) =>
+      setAttribute("resolve_ambiguity", resolve_ambiguity);
+
+  /// ## debug (getter)
+  Object? get debug => getAttribute("debug");
+
+  /// ## debug (setter)
+  set debug(Object? debug) => setAttribute("debug", debug);
+
+  /// ## tree_class (getter)
+  Object? get tree_class => getAttribute("tree_class");
+
+  /// ## tree_class (setter)
+  set tree_class(Object? tree_class) => setAttribute("tree_class", tree_class);
+
+  /// ## FIRST (getter)
+  Object? get FIRST => getAttribute("FIRST");
+
+  /// ## FIRST (setter)
+  set FIRST(Object? FIRST) => setAttribute("FIRST", FIRST);
+
+  /// ## NULLABLE (getter)
+  Object? get NULLABLE => getAttribute("NULLABLE");
+
+  /// ## NULLABLE (setter)
+  set NULLABLE(Object? NULLABLE) => setAttribute("NULLABLE", NULLABLE);
+
+  /// ## callbacks (getter)
+  Object? get callbacks => getAttribute("callbacks");
+
+  /// ## callbacks (setter)
+  set callbacks(Object? callbacks) => setAttribute("callbacks", callbacks);
+
+  /// ## predictions (getter)
+  Object? get predictions => getAttribute("predictions");
+
+  /// ## predictions (setter)
+  set predictions(Object? predictions) =>
+      setAttribute("predictions", predictions);
+
+  /// ## TERMINALS (getter)
+  Object? get TERMINALS => getAttribute("TERMINALS");
+
+  /// ## TERMINALS (setter)
+  set TERMINALS(Object? TERMINALS) => setAttribute("TERMINALS", TERMINALS);
+
+  /// ## NON_TERMINALS (getter)
+  Object? get NON_TERMINALS => getAttribute("NON_TERMINALS");
+
+  /// ## NON_TERMINALS (setter)
+  set NON_TERMINALS(Object? NON_TERMINALS) =>
+      setAttribute("NON_TERMINALS", NON_TERMINALS);
+
+  /// ## forest_sum_visitor (getter)
+  Object? get forest_sum_visitor => getAttribute("forest_sum_visitor");
+
+  /// ## forest_sum_visitor (setter)
+  set forest_sum_visitor(Object? forest_sum_visitor) =>
+      setAttribute("forest_sum_visitor", forest_sum_visitor);
+
+  /// ## term_matcher (getter)
+  Object? get term_matcher => getAttribute("term_matcher");
+
+  /// ## term_matcher (setter)
+  set term_matcher(Object? term_matcher) =>
+      setAttribute("term_matcher", term_matcher);
+}
+
 /// ## SymbolNode
 ///
 /// ### python docstring
@@ -22053,7 +23505,7 @@ final class SymbolNode extends PythonClass {
     required Object? end,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_forest",
+        "lark.tools.standalone",
         "SymbolNode",
         SymbolNode.from,
         <Object?>[
@@ -22651,7 +24103,7 @@ final class TokenNode extends PythonClass {
     Object? priority,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_forest",
+        "lark.tools.standalone",
         "TokenNode",
         TokenNode.from,
         <Object?>[
@@ -22746,7 +24198,7 @@ final class TokenNode extends PythonClass {
 /// ```
 final class ForestNode extends PythonClass {
   factory ForestNode() => PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_forest",
+        "lark.tools.standalone",
         "ForestNode",
         ForestNode.from,
         <Object?>[],
@@ -22852,7 +24304,7 @@ final class ForestToPyDotVisitor extends PythonClass {
     Object? rankdir = "TB",
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_forest",
+        "lark.tools.standalone",
         "ForestToPyDotVisitor",
         ForestToPyDotVisitor.from,
         <Object?>[
@@ -23262,7 +24714,7 @@ final class ForestToPyDotVisitor extends PythonClass {
 /// ```
 final class ForestTransformer extends PythonClass {
   factory ForestTransformer() => PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_forest",
+        "lark.tools.standalone",
         "ForestTransformer",
         ForestTransformer.from,
         <Object?>[],
@@ -23968,7 +25420,7 @@ final class ForestVisitor extends PythonClass {
     Object? single_visit = false,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_forest",
+        "lark.tools.standalone",
         "ForestVisitor",
         ForestVisitor.from,
         <Object?>[
@@ -24357,7 +25809,7 @@ final class PackedData extends PythonClass {
     required Object? data,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_forest",
+        "lark.tools.standalone",
         "PackedData",
         PackedData.from,
         <Object?>[
@@ -24507,7 +25959,7 @@ final class PackedNode extends PythonClass {
     required Object? right,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_forest",
+        "lark.tools.standalone",
         "PackedNode",
         PackedNode.from,
         <Object?>[
@@ -24935,7 +26387,7 @@ final class TreeForestTransformer extends PythonClass {
     Object? use_cache = false,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_forest",
+        "lark.tools.standalone",
         "TreeForestTransformer",
         TreeForestTransformer.from,
         <Object?>[
@@ -25348,7 +26800,7 @@ final class LR0ItemSet extends PythonClass {
     required Object? closure,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.grammar_analysis",
+        "lark.tools.standalone",
         "LR0ItemSet",
         LR0ItemSet.from,
         <Object?>[
@@ -25427,7 +26879,7 @@ final class RulePtr extends PythonClass {
     required Object? index,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.grammar_analysis",
+        "lark.tools.standalone",
         "RulePtr",
         RulePtr.from,
         <Object?>[
@@ -25493,7 +26945,7 @@ final class RulePtr extends PythonClass {
 /// ```
 final class fzset extends PythonClass {
   factory fzset() => PythonFfiDart.instance.importClass(
-        "lark.utils",
+        "lark.tools.standalone",
         "fzset",
         fzset.from,
         <Object?>[],
@@ -25569,7 +27021,7 @@ final class Action extends PythonClass {
     required Object? name,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.lalr_analysis",
+        "lark.tools.standalone",
         "Action",
         Action.from,
         <Object?>[
@@ -25619,7 +27071,7 @@ final class Action extends PythonClass {
 /// ```
 final class Enumerator extends PythonClass {
   factory Enumerator() => PythonFfiDart.instance.importClass(
-        "lark.utils",
+        "lark.tools.standalone",
         "Enumerator",
         Enumerator.from,
         <Object?>[],
@@ -25783,7 +27235,7 @@ final class IntParseTable extends PythonClass {
     required Object? end_states,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.lalr_analysis",
+        "lark.tools.standalone",
         "IntParseTable",
         IntParseTable.from,
         <Object?>[
@@ -26047,7 +27499,7 @@ final class LALR_Analyzer extends PythonClass {
     Object? strict = false,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.lalr_analysis",
+        "lark.tools.standalone",
         "LALR_Analyzer",
         LALR_Analyzer.from,
         <Object?>[
@@ -26403,7 +27855,7 @@ final class ParseTable extends PythonClass {
     required Object? end_states,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.lalr_analysis",
+        "lark.tools.standalone",
         "ParseTable",
         ParseTable.from,
         <Object?>[
@@ -26517,7 +27969,7 @@ final class ImmutableInteractiveParser extends PythonClass {
     required LexerThread lexer_thread,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.lalr_interactive_parser",
+        "lark.tools.standalone",
         "ImmutableInteractiveParser",
         ImmutableInteractiveParser.from,
         <Object?>[
@@ -26990,7 +28442,7 @@ final class InteractiveParser extends PythonClass {
     required LexerThread lexer_thread,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.lalr_interactive_parser",
+        "lark.tools.standalone",
         "InteractiveParser",
         InteractiveParser.from,
         <Object?>[
@@ -27353,7 +28805,7 @@ final class ParseConf extends PythonClass {
     required Object? start,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.lalr_parser",
+        "lark.tools.standalone",
         "ParseConf",
         ParseConf.from,
         <Object?>[
@@ -27491,7 +28943,7 @@ final class ParserState extends PythonClass {
     Object? value_stack,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.lalr_parser",
+        "lark.tools.standalone",
         "ParserState",
         ParserState.from,
         <Object?>[
@@ -27676,7 +29128,7 @@ final class Reconstructor extends PythonClass {
     Object? term_subs,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.reconstruct",
+        "lark.tools.standalone",
         "Reconstructor",
         Reconstructor.from,
         <Object?>[
@@ -27950,7 +29402,7 @@ final class TreeMatcher extends PythonClass {
     required Object? parser,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.tree_matcher",
+        "lark.tools.standalone",
         "TreeMatcher",
         TreeMatcher.from,
         <Object?>[
@@ -28163,7 +29615,7 @@ final class WriteTokensTransformer extends PythonClass {
     required Object? term_subs,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.reconstruct",
+        "lark.tools.standalone",
         "WriteTokensTransformer",
         WriteTokensTransformer.from,
         <Object?>[
@@ -28249,7 +29701,7 @@ final class WriteTokensTransformer extends PythonClass {
 /// ```
 final class Meta extends PythonClass {
   factory Meta() => PythonFfiDart.instance.importClass(
-        "lark.tree",
+        "lark.tools.standalone",
         "Meta",
         Meta.from,
         <Object?>[],
@@ -28281,7 +29733,7 @@ final class ChildrenLexer extends PythonClass {
     required Object? children,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.tree_matcher",
+        "lark.tools.standalone",
         "ChildrenLexer",
         ChildrenLexer.from,
         <Object?>[
@@ -28376,7 +29828,7 @@ final class Template extends PythonClass {
     TemplateConf conf,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.tree_templates",
+        "lark.tools.standalone",
         "Template",
         Template.from,
         <Object?>[
@@ -28623,7 +30075,7 @@ final class TemplateConf extends PythonClass {
     Object? parse,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.tree_templates",
+        "lark.tools.standalone",
         "TemplateConf",
         TemplateConf.from,
         <Object?>[
@@ -28706,7 +30158,7 @@ final class TemplateTranslator extends PythonClass {
     required Object? translations,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.tree_templates",
+        "lark.tools.standalone",
         "TemplateTranslator",
         TemplateTranslator.from,
         <Object?>[
@@ -28755,7 +30207,7 @@ final class TemplateTranslator extends PythonClass {
 /// ## UCD
 final class UCD extends PythonClass {
   factory UCD() => PythonFfiDart.instance.importClass(
-        "unicodedata",
+        "lark.tools.standalone",
         "UCD",
         UCD.from,
         <Object?>[],
@@ -28890,7 +30342,7 @@ final class CollapseAmbiguities extends PythonClass {
     bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.visitors",
+        "lark.tools.standalone",
         "CollapseAmbiguities",
         CollapseAmbiguities.from,
         <Object?>[
@@ -28976,7 +30428,7 @@ final class InlineTransformer extends PythonClass {
     bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.visitors",
+        "lark.tools.standalone",
         "InlineTransformer",
         InlineTransformer.from,
         <Object?>[
@@ -29064,7 +30516,7 @@ final class InlineTransformer extends PythonClass {
 /// ```
 final class Interpreter extends PythonClass {
   factory Interpreter() => PythonFfiDart.instance.importClass(
-        "lark.visitors",
+        "lark.tools.standalone",
         "Interpreter",
         Interpreter.from,
         <Object?>[],
@@ -29159,7 +30611,7 @@ final class TransformerChain extends PythonClass {
     List<Object?> transformers = const <Object?>[],
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.visitors",
+        "lark.tools.standalone",
         "TransformerChain",
         TransformerChain.from,
         <Object?>[
@@ -29258,7 +30710,7 @@ final class Transformer_InPlaceRecursive extends PythonClass {
     bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.visitors",
+        "lark.tools.standalone",
         "Transformer_InPlaceRecursive",
         Transformer_InPlaceRecursive.from,
         <Object?>[
@@ -29312,7 +30764,7 @@ final class Transformer_InPlaceRecursive extends PythonClass {
 /// ```
 final class VisitorBase extends PythonClass {
   factory VisitorBase() => PythonFfiDart.instance.importClass(
-        "lark.visitors",
+        "lark.tools.standalone",
         "VisitorBase",
         VisitorBase.from,
         <Object?>[],
@@ -29362,7 +30814,7 @@ final class VisitorBase extends PythonClass {
 /// ```
 final class Visitor_Recursive extends PythonClass {
   factory Visitor_Recursive() => PythonFfiDart.instance.importClass(
-        "lark.visitors",
+        "lark.tools.standalone",
         "Visitor_Recursive",
         Visitor_Recursive.from,
         <Object?>[],
@@ -29633,6 +31085,58 @@ final class standalone extends PythonModule {
         standalone.from,
       );
 
+  /// ## abstractmethod
+  ///
+  /// ### python docstring
+  ///
+  /// A decorator indicating abstract methods.
+  ///
+  /// Requires that the metaclass is ABCMeta or derived from it.  A
+  /// class that has a metaclass derived from ABCMeta cannot be
+  /// instantiated unless all of its abstract methods are overridden.
+  /// The abstract methods can be called using any of the normal
+  /// 'super' call mechanisms.  abstractmethod() may be used to declare
+  /// abstract methods for properties and descriptors.
+  ///
+  /// Usage:
+  ///
+  ///     class C(metaclass=ABCMeta):
+  ///         @abstractmethod
+  ///         def my_abstract_method(self, ...):
+  ///             ...
+  Object? abstractmethod({
+    required Object? funcobj,
+  }) =>
+      getFunction("abstractmethod").call(
+        <Object?>[
+          funcobj,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## build_lalr
+  ///
+  /// ### python source
+  /// ```py
+  /// def build_lalr(namespace):
+  ///     logger.setLevel((ERROR, WARN, INFO, DEBUG)[min(namespace.verbose, 3)])
+  ///     if has_interegular:
+  ///         interegular_logger.setLevel(logger.getEffectiveLevel())
+  ///     if len(namespace.start) == 0:
+  ///         namespace.start.append('start')
+  ///     kwargs = {n: getattr(namespace, n) for n in options}
+  ///     return Lark(namespace.grammar_file, parser='lalr', **kwargs), namespace.out
+  /// ```
+  Object? build_lalr({
+    required Object? namespace,
+  }) =>
+      getFunction("build_lalr").call(
+        <Object?>[
+          namespace,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
   /// ## extract_sections
   ///
   /// ### python source
@@ -29760,6 +31264,19 @@ final class standalone extends PythonModule {
         kwargs: <String, Object?>{},
       );
 
+  /// ## make_warnings_comments
+  ///
+  /// ### python source
+  /// ```py
+  /// def make_warnings_comments():
+  ///     warnings.showwarning = showwarning_as_comment
+  /// ```
+  Object? make_warnings_comments() =>
+      getFunction("make_warnings_comments").call(
+        <Object?>[],
+        kwargs: <String, Object?>{},
+      );
+
   /// ## strip_docstrings
   ///
   /// ### python docstring
@@ -29808,6 +31325,109 @@ final class standalone extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## lark
+  lark get $lark => lark.import();
+
+  /// ## sys
+  sys get $sys => sys.import();
+
+  /// ## lalr_argparser (getter)
+  Object? get lalr_argparser => getAttribute("lalr_argparser");
+
+  /// ## lalr_argparser (setter)
+  set lalr_argparser(Object? lalr_argparser) =>
+      setAttribute("lalr_argparser", lalr_argparser);
+
+  /// ## Callable (getter)
+  Object? get Callable => getAttribute("Callable");
+
+  /// ## Callable (setter)
+  set Callable(Object? Callable) => setAttribute("Callable", Callable);
+
+  /// ## ClassVar (getter)
+  Object? get ClassVar => getAttribute("ClassVar");
+
+  /// ## ClassVar (setter)
+  set ClassVar(Object? ClassVar) => setAttribute("ClassVar", ClassVar);
+
+  /// ## Collection (getter)
+  Object? get Collection => getAttribute("Collection");
+
+  /// ## Collection (setter)
+  set Collection(Object? Collection) => setAttribute("Collection", Collection);
+
+  /// ## Dict (getter)
+  Object? get Dict => getAttribute("Dict");
+
+  /// ## Dict (setter)
+  set Dict(Object? Dict) => setAttribute("Dict", Dict);
+
+  /// ## FrozenSet (getter)
+  Object? get FrozenSet => getAttribute("FrozenSet");
+
+  /// ## FrozenSet (setter)
+  set FrozenSet(Object? FrozenSet) => setAttribute("FrozenSet", FrozenSet);
+
+  /// ## Iterable (getter)
+  Object? get $Iterable => getAttribute("Iterable");
+
+  /// ## Iterable (setter)
+  set $Iterable(Object? $Iterable) => setAttribute("Iterable", $Iterable);
+
+  /// ## Iterator (getter)
+  Object? get $Iterator => getAttribute("Iterator");
+
+  /// ## Iterator (setter)
+  set $Iterator(Object? $Iterator) => setAttribute("Iterator", $Iterator);
+
+  /// ## List (getter)
+  Object? get $List => getAttribute("List");
+
+  /// ## List (setter)
+  set $List(Object? $List) => setAttribute("List", $List);
+
+  /// ## Mapping (getter)
+  Object? get Mapping => getAttribute("Mapping");
+
+  /// ## Mapping (setter)
+  set Mapping(Object? Mapping) => setAttribute("Mapping", Mapping);
+
+  /// ## Optional (getter)
+  Object? get Optional => getAttribute("Optional");
+
+  /// ## Optional (setter)
+  set Optional(Object? Optional) => setAttribute("Optional", Optional);
+
+  /// ## REPattern (getter)
+  Object? get REPattern => getAttribute("REPattern");
+
+  /// ## REPattern (setter)
+  set REPattern(Object? REPattern) => setAttribute("REPattern", REPattern);
+
+  /// ## Set (getter)
+  Object? get $Set => getAttribute("Set");
+
+  /// ## Set (setter)
+  set $Set(Object? $Set) => setAttribute("Set", $Set);
+
+  /// ## Tuple (getter)
+  Object? get Tuple => getAttribute("Tuple");
+
+  /// ## Tuple (setter)
+  set Tuple(Object? Tuple) => setAttribute("Tuple", Tuple);
+
+  /// ## Type (getter)
+  Object? get Type => getAttribute("Type");
+
+  /// ## Type (setter)
+  set Type(Object? Type) => setAttribute("Type", Type);
+
+  /// ## Union (getter)
+  Object? get Union => getAttribute("Union");
+
+  /// ## Union (setter)
+  set Union(Object? Union) => setAttribute("Union", Union);
 
   /// ## EXTRACT_STANDALONE_FILES (getter)
   Object? get EXTRACT_STANDALONE_FILES =>
@@ -29872,7 +31492,7 @@ final class lark extends PythonModule {
   lark.from(super.pythonModule) : super.from();
 
   static lark import() => PythonFfiDart.instance.importModule(
-        "lark",
+        "lark.tools.lark",
         lark.from,
       );
 }
@@ -29949,87 +31569,8 @@ final class ast_utils extends PythonModule {
   ast_utils.from(super.pythonModule) : super.from();
 
   static ast_utils import() => PythonFfiDart.instance.importModule(
-        "lark.ast_utils",
+        "lark.tools.lark.ast_utils",
         ast_utils.from,
-      );
-
-  /// ## camel_to_snake
-  ///
-  /// ### python source
-  /// ```py
-  /// def camel_to_snake(name):
-  ///     return re.sub(r'(?<!^)(?=[A-Z])', '_', name).lower()
-  /// ```
-  Object? camel_to_snake({
-    required Object? name,
-  }) =>
-      getFunction("camel_to_snake").call(
-        <Object?>[
-          name,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## create_transformer
-  ///
-  /// ### python docstring
-  ///
-  /// Collects `Ast` subclasses from the given module, and creates a Lark transformer that builds the AST.
-  ///
-  /// For each class, we create a corresponding rule in the transformer, with a matching name.
-  /// CamelCase names will be converted into snake_case. Example: "CodeBlock" -> "code_block".
-  ///
-  /// Classes starting with an underscore (`_`) will be skipped.
-  ///
-  /// Parameters:
-  ///     ast_module: A Python module containing all the subclasses of ``ast_utils.Ast``
-  ///     transformer (Optional[Transformer]): An initial transformer. Its attributes may be overwritten.
-  ///     decorator_factory (Callable): An optional callable accepting two booleans, inline, and meta,
-  ///         and returning a decorator for the methods of ``transformer``. (default: ``v_args``).
-  ///
-  /// ### python source
-  /// ```py
-  /// def create_transformer(ast_module: types.ModuleType,
-  ///                        transformer: Optional[Transformer]=None,
-  ///                        decorator_factory: Callable=v_args) -> Transformer:
-  ///     """Collects `Ast` subclasses from the given module, and creates a Lark transformer that builds the AST.
-  ///
-  ///     For each class, we create a corresponding rule in the transformer, with a matching name.
-  ///     CamelCase names will be converted into snake_case. Example: "CodeBlock" -> "code_block".
-  ///
-  ///     Classes starting with an underscore (`_`) will be skipped.
-  ///
-  ///     Parameters:
-  ///         ast_module: A Python module containing all the subclasses of ``ast_utils.Ast``
-  ///         transformer (Optional[Transformer]): An initial transformer. Its attributes may be overwritten.
-  ///         decorator_factory (Callable): An optional callable accepting two booleans, inline, and meta,
-  ///             and returning a decorator for the methods of ``transformer``. (default: ``v_args``).
-  ///     """
-  ///     t = transformer or Transformer()
-  ///
-  ///     for name, obj in inspect.getmembers(ast_module):
-  ///         if not name.startswith('_') and inspect.isclass(obj):
-  ///             if issubclass(obj, Ast):
-  ///                 wrapper = decorator_factory(inline=not issubclass(obj, AsList), meta=issubclass(obj, WithMeta))
-  ///                 obj = wrapper(obj).__get__(t)
-  ///                 setattr(t, camel_to_snake(name), obj)
-  ///
-  ///     return t
-  /// ```
-  Transformer create_transformer({
-    required ModuleType ast_module,
-    Object? transformer,
-    Function decorator_factory,
-  }) =>
-      Transformer.from(
-        getFunction("create_transformer").call(
-          <Object?>[
-            ast_module,
-            transformer,
-            decorator_factory,
-          ],
-          kwargs: <String, Object?>{},
-        ),
       );
 }
 
@@ -30127,7 +31668,7 @@ final class common extends PythonModule {
   common.from(super.pythonModule) : super.from();
 
   static common import() => PythonFfiDart.instance.importModule(
-        "lark.common",
+        "lark.tools.lark.common",
         common.from,
       );
 
@@ -30144,7 +31685,7 @@ final class sys extends PythonModule {
   sys.from(super.pythonModule) : super.from();
 
   static sys import() => PythonFfiDart.instance.importModule(
-        "sys",
+        "lark.tools.sys",
         sys.from,
       );
 
@@ -30660,37 +32201,9 @@ final class exceptions extends PythonModule {
   exceptions.from(super.pythonModule) : super.from();
 
   static exceptions import() => PythonFfiDart.instance.importModule(
-        "lark.exceptions",
+        "lark.tools.lark.exceptions",
         exceptions.from,
       );
-
-  /// ## assert_config
-  ///
-  /// ### python source
-  /// ```py
-  /// def assert_config(value, options: Collection, msg='Got %r, expected one of %s'):
-  ///     if value not in options:
-  ///         raise ConfigurationError(msg % (value, options))
-  /// ```
-  Object? assert_config({
-    required Object? value,
-    required Object? options,
-    Object? msg = "Got %r, expected one of %s",
-  }) =>
-      getFunction("assert_config").call(
-        <Object?>[
-          value,
-          options,
-          msg,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## T (getter)
-  Object? get T => getAttribute("T");
-
-  /// ## T (setter)
-  set T(Object? T) => setAttribute("T", T);
 
   /// ## TYPE_CHECKING (getter)
   Object? get TYPE_CHECKING => getAttribute("TYPE_CHECKING");
@@ -30831,7 +32344,7 @@ final class grammar extends PythonModule {
   grammar.from(super.pythonModule) : super.from();
 
   static grammar import() => PythonFfiDart.instance.importModule(
-        "lark.grammar",
+        "lark.tools.lark.grammar",
         grammar.from,
       );
 
@@ -30848,7 +32361,7 @@ final class grammars extends PythonModule {
   grammars.from(super.pythonModule) : super.from();
 
   static grammars import() => PythonFfiDart.instance.importModule(
-        "lark.grammars",
+        "lark.tools.lark.grammars",
         grammars.from,
       );
 }
@@ -30978,7 +32491,7 @@ final class indenter extends PythonModule {
   indenter.from(super.pythonModule) : super.from();
 
   static indenter import() => PythonFfiDart.instance.importModule(
-        "lark.indenter",
+        "lark.tools.lark.indenter",
         indenter.from,
       );
 }
@@ -31653,7 +33166,7 @@ final class lexer extends PythonModule {
   lexer.from(super.pythonModule) : super.from();
 
   static lexer import() => PythonFfiDart.instance.importModule(
-        "lark.lexer",
+        "lark.tools.lark.lexer",
         lexer.from,
       );
 
@@ -33115,276 +34628,9 @@ final class load_grammar extends PythonModule {
   load_grammar.from(super.pythonModule) : super.from();
 
   static load_grammar import() => PythonFfiDart.instance.importModule(
-        "lark.load_grammar",
+        "lark.tools.lark.load_grammar",
         load_grammar.from,
       );
-
-  /// ## eval_escaping
-  ///
-  /// ### python source
-  /// ```py
-  /// def eval_escaping(s):
-  ///     w = ''
-  ///     i = iter(s)
-  ///     for n in i:
-  ///         w += n
-  ///         if n == '\\':
-  ///             try:
-  ///                 n2 = next(i)
-  ///             except StopIteration:
-  ///                 raise GrammarError("Literal ended unexpectedly (bad escaping): `%r`" % s)
-  ///             if n2 == '\\':
-  ///                 w += '\\\\'
-  ///             elif n2 not in 'Uuxnftr':
-  ///                 w += '\\'
-  ///             w += n2
-  ///     w = w.replace('\\"', '"').replace("'", "\\'")
-  ///
-  ///     to_eval = "u'''%s'''" % w
-  ///     try:
-  ///         s = literal_eval(to_eval)
-  ///     except SyntaxError as e:
-  ///         raise GrammarError(s, e)
-  ///
-  ///     return s
-  /// ```
-  Object? eval_escaping({
-    required Object? s,
-  }) =>
-      getFunction("eval_escaping").call(
-        <Object?>[
-          s,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## find_grammar_errors
-  ///
-  /// ### python source
-  /// ```py
-  /// def find_grammar_errors(text: str, start: str='start') -> List[Tuple[UnexpectedInput, str]]:
-  ///     errors = []
-  ///     def on_error(e):
-  ///         errors.append((e, _error_repr(e)))
-  ///
-  ///         # recover to a new line
-  ///         token_path, _ = _search_interactive_parser(e.interactive_parser.as_immutable(), lambda p: '_NL' in p.choices())
-  ///         for token_type in token_path:
-  ///             e.interactive_parser.feed_token(Token(token_type, ''))
-  ///         e.interactive_parser.feed_token(Token('_NL', '\n'))
-  ///         return True
-  ///
-  ///     _tree = _get_parser().parse(text + '\n', start, on_error=on_error)
-  ///
-  ///     errors_by_line = classify(errors, lambda e: e[0].line)
-  ///     errors = [el[0] for el in errors_by_line.values()]      # already sorted
-  ///
-  ///     for e in errors:
-  ///         e[0].interactive_parser = None
-  ///     return errors
-  /// ```
-  Object? find_grammar_errors({
-    required String text,
-    String start = "start",
-  }) =>
-      getFunction("find_grammar_errors").call(
-        <Object?>[
-          text,
-          start,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## list_grammar_imports
-  ///
-  /// ### python docstring
-  ///
-  /// Returns a list of paths to the lark grammars imported by the given grammar (recursively)
-  ///
-  /// ### python source
-  /// ```py
-  /// def list_grammar_imports(grammar, import_paths=[]):
-  ///     "Returns a list of paths to the lark grammars imported by the given grammar (recursively)"
-  ///     builder = GrammarBuilder(False, import_paths)
-  ///     builder.load_grammar(grammar, '<string>')
-  ///     return list(builder.used_files.keys())
-  /// ```
-  Object? list_grammar_imports({
-    required Object? grammar,
-    Object? import_paths = const [],
-  }) =>
-      getFunction("list_grammar_imports").call(
-        <Object?>[
-          grammar,
-          import_paths,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## nr_deepcopy_tree
-  ///
-  /// ### python docstring
-  ///
-  /// Deepcopy tree `t` without recursion
-  ///
-  /// ### python source
-  /// ```py
-  /// def nr_deepcopy_tree(t):
-  ///     """Deepcopy tree `t` without recursion"""
-  ///     return Transformer_NonRecursive(False).transform(t)
-  /// ```
-  Object? nr_deepcopy_tree({
-    required Object? t,
-  }) =>
-      getFunction("nr_deepcopy_tree").call(
-        <Object?>[
-          t,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## resolve_term_references
-  ///
-  /// ### python source
-  /// ```py
-  /// def resolve_term_references(term_dict):
-  ///     # TODO Solve with transitive closure (maybe)
-  ///
-  ///     while True:
-  ///         changed = False
-  ///         for name, token_tree in term_dict.items():
-  ///             if token_tree is None:  # Terminal added through %declare
-  ///                 continue
-  ///             for exp in token_tree.find_data('value'):
-  ///                 item ,= exp.children
-  ///                 if isinstance(item, NonTerminal):
-  ///                     raise GrammarError("Rules aren't allowed inside terminals (%s in %s)" % (item, name))
-  ///                 elif isinstance(item, Terminal):
-  ///                     try:
-  ///                         term_value = term_dict[item.name]
-  ///                     except KeyError:
-  ///                         raise GrammarError("Terminal used but not defined: %s" % item.name)
-  ///                     assert term_value is not None
-  ///                     exp.children[0] = term_value
-  ///                     changed = True
-  ///                 else:
-  ///                     assert isinstance(item, Tree)
-  ///         if not changed:
-  ///             break
-  ///
-  ///     for name, term in term_dict.items():
-  ///         if term:    # Not just declared
-  ///             for child in term.children:
-  ///                 ids = [id(x) for x in child.iter_subtrees()]
-  ///                 if id(term) in ids:
-  ///                     raise GrammarError("Recursion in terminal '%s' (recursion is only allowed in rules, not terminals)" % name)
-  /// ```
-  Object? resolve_term_references({
-    required Object? term_dict,
-  }) =>
-      getFunction("resolve_term_references").call(
-        <Object?>[
-          term_dict,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## sha256_digest
-  ///
-  /// ### python docstring
-  ///
-  /// Get the sha256 digest of a string
-  ///
-  /// Supports the `usedforsecurity` argument for Python 3.9+ to allow running on
-  /// a FIPS-enabled system.
-  ///
-  /// ### python source
-  /// ```py
-  /// def sha256_digest(s: str) -> str:
-  ///     """Get the sha256 digest of a string
-  ///
-  ///     Supports the `usedforsecurity` argument for Python 3.9+ to allow running on
-  ///     a FIPS-enabled system.
-  ///     """
-  ///     if sys.version_info >= (3, 9):
-  ///         return hashlib.sha256(s.encode('utf8'), usedforsecurity=False).hexdigest()
-  ///     else:
-  ///         return hashlib.sha256(s.encode('utf8')).hexdigest()
-  /// ```
-  String sha256_digest({
-    required String s,
-  }) =>
-      getFunction("sha256_digest").call(
-        <Object?>[
-          s,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## symbol_from_strcase
-  ///
-  /// ### python source
-  /// ```py
-  /// def symbol_from_strcase(s):
-  ///     assert isinstance(s, str)
-  ///     return Terminal(s, filter_out=s.startswith('_')) if s.isupper() else NonTerminal(s)
-  /// ```
-  Object? symbol_from_strcase({
-    required Object? s,
-  }) =>
-      getFunction("symbol_from_strcase").call(
-        <Object?>[
-          s,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## verify_used_files
-  ///
-  /// ### python source
-  /// ```py
-  /// def verify_used_files(file_hashes):
-  ///     for path, old in file_hashes.items():
-  ///         text = None
-  ///         if isinstance(path, str) and os.path.exists(path):
-  ///             with open(path, encoding='utf8') as f:
-  ///                 text = f.read()
-  ///         elif isinstance(path, PackageResource):
-  ///             with suppress(IOError):
-  ///                 text = pkgutil.get_data(*path).decode('utf-8')
-  ///         if text is None: # We don't know how to load the path. ignore it.
-  ///             continue
-  ///
-  ///         current = sha256_digest(text)
-  ///         if old != current:
-  ///             logger.info("File %r changed, rebuilding Parser" % path)
-  ///             return False
-  ///     return True
-  /// ```
-  Object? verify_used_files({
-    required Object? file_hashes,
-  }) =>
-      getFunction("verify_used_files").call(
-        <Object?>[
-          file_hashes,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## stdlib_loader (getter)
-  ///
-  /// ### python docstring
-  ///
-  /// Parses and creates Grammar objects
-  Object? get stdlib_loader => getAttribute("stdlib_loader");
-
-  /// ## stdlib_loader (setter)
-  ///
-  /// ### python docstring
-  ///
-  /// Parses and creates Grammar objects
-  set stdlib_loader(Object? stdlib_loader) =>
-      setAttribute("stdlib_loader", stdlib_loader);
 
   /// ## EXT (getter)
   ///
@@ -33902,152 +35148,8 @@ final class parse_tree_builder extends PythonModule {
   parse_tree_builder.from(super.pythonModule) : super.from();
 
   static parse_tree_builder import() => PythonFfiDart.instance.importModule(
-        "lark.parse_tree_builder",
+        "lark.tools.lark.parse_tree_builder",
         parse_tree_builder.from,
-      );
-
-  /// ## apply_visit_wrapper
-  ///
-  /// ### python source
-  /// ```py
-  /// def apply_visit_wrapper(func, name, wrapper):
-  ///     if wrapper is _vargs_meta or wrapper is _vargs_meta_inline:
-  ///         raise NotImplementedError("Meta args not supported for internal transformer")
-  ///
-  ///     @wraps(func)
-  ///     def f(children):
-  ///         return wrapper(func, name, children, None)
-  ///     return f
-  /// ```
-  Object? apply_visit_wrapper({
-    required Object? func,
-    required Object? name,
-    required Object? wrapper,
-  }) =>
-      getFunction("apply_visit_wrapper").call(
-        <Object?>[
-          func,
-          name,
-          wrapper,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## inplace_transformer
-  ///
-  /// ### python source
-  /// ```py
-  /// def inplace_transformer(func):
-  ///     @wraps(func)
-  ///     def f(children):
-  ///         # function name in a Transformer is a rule name.
-  ///         tree = Tree(func.__name__, children)
-  ///         return func(tree)
-  ///     return f
-  /// ```
-  Object? inplace_transformer({
-    required Object? func,
-  }) =>
-      getFunction("inplace_transformer").call(
-        <Object?>[
-          func,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## make_propagate_positions
-  ///
-  /// ### python source
-  /// ```py
-  /// def make_propagate_positions(option):
-  ///     if callable(option):
-  ///         return partial(PropagatePositions, node_filter=option)
-  ///     elif option is True:
-  ///         return PropagatePositions
-  ///     elif option is False:
-  ///         return None
-  ///
-  ///     raise ConfigurationError('Invalid option for propagate_positions: %r' % option)
-  /// ```
-  Object? make_propagate_positions({
-    required Object? option,
-  }) =>
-      getFunction("make_propagate_positions").call(
-        <Object?>[
-          option,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## maybe_create_ambiguous_expander
-  ///
-  /// ### python source
-  /// ```py
-  /// def maybe_create_ambiguous_expander(tree_class, expansion, keep_all_tokens):
-  ///     to_expand = [i for i, sym in enumerate(expansion)
-  ///                  if keep_all_tokens or ((not (sym.is_term and sym.filter_out)) and _should_expand(sym))]
-  ///     if to_expand:
-  ///         return partial(AmbiguousExpander, to_expand, tree_class)
-  /// ```
-  Object? maybe_create_ambiguous_expander({
-    required Object? tree_class,
-    required Object? expansion,
-    required Object? keep_all_tokens,
-  }) =>
-      getFunction("maybe_create_ambiguous_expander").call(
-        <Object?>[
-          tree_class,
-          expansion,
-          keep_all_tokens,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## maybe_create_child_filter
-  ///
-  /// ### python source
-  /// ```py
-  /// def maybe_create_child_filter(expansion, keep_all_tokens, ambiguous, _empty_indices: List[bool]):
-  ///     # Prepare empty_indices as: How many Nones to insert at each index?
-  ///     if _empty_indices:
-  ///         assert _empty_indices.count(False) == len(expansion)
-  ///         s = ''.join(str(int(b)) for b in _empty_indices)
-  ///         empty_indices = [len(ones) for ones in s.split('0')]
-  ///         assert len(empty_indices) == len(expansion)+1, (empty_indices, len(expansion))
-  ///     else:
-  ///         empty_indices = [0] * (len(expansion)+1)
-  ///
-  ///     to_include = []
-  ///     nones_to_add = 0
-  ///     for i, sym in enumerate(expansion):
-  ///         nones_to_add += empty_indices[i]
-  ///         if keep_all_tokens or not (sym.is_term and sym.filter_out):
-  ///             to_include.append((i, _should_expand(sym), nones_to_add))
-  ///             nones_to_add = 0
-  ///
-  ///     nones_to_add += empty_indices[len(expansion)]
-  ///
-  ///     if _empty_indices or len(to_include) < len(expansion) or any(to_expand for i, to_expand,_ in to_include):
-  ///         if _empty_indices or ambiguous:
-  ///             return partial(ChildFilter if ambiguous else ChildFilterLALR, to_include, nones_to_add)
-  ///         else:
-  ///             # LALR without placeholders
-  ///             return partial(ChildFilterLALR_NoPlaceholders, [(i, x) for i,x,_ in to_include])
-  /// ```
-  Object? maybe_create_child_filter({
-    required Object? expansion,
-    required Object? keep_all_tokens,
-    required Object? ambiguous,
-    required Object? $_empty_indices,
-  }) =>
-      getFunction("maybe_create_child_filter").call(
-        <Object?>[
-          expansion,
-          keep_all_tokens,
-          ambiguous,
-          $_empty_indices,
-        ],
-        kwargs: <String, Object?>{},
       );
 }
 
@@ -34313,172 +35415,8 @@ final class parser_frontends extends PythonModule {
   parser_frontends.from(super.pythonModule) : super.from();
 
   static parser_frontends import() => PythonFfiDart.instance.importModule(
-        "lark.parser_frontends",
+        "lark.tools.lark.parser_frontends",
         parser_frontends.from,
-      );
-
-  /// ## create_basic_lexer
-  ///
-  /// ### python source
-  /// ```py
-  /// def create_basic_lexer(lexer_conf, parser, postlex, options) -> BasicLexer:
-  ///     cls = (options and options._plugins.get('BasicLexer')) or BasicLexer
-  ///     return cls(lexer_conf)
-  /// ```
-  BasicLexer create_basic_lexer({
-    required Object? lexer_conf,
-    required Object? parser,
-    required Object? postlex,
-    required Object? options,
-  }) =>
-      BasicLexer.from(
-        getFunction("create_basic_lexer").call(
-          <Object?>[
-            lexer_conf,
-            parser,
-            postlex,
-            options,
-          ],
-          kwargs: <String, Object?>{},
-        ),
-      );
-
-  /// ## create_contextual_lexer
-  ///
-  /// ### python source
-  /// ```py
-  /// def create_contextual_lexer(lexer_conf: LexerConf, parser, postlex, options) -> ContextualLexer:
-  ///     cls = (options and options._plugins.get('ContextualLexer')) or ContextualLexer
-  ///     states: Dict[str, Collection[str]] = {idx:list(t.keys()) for idx, t in parser._parse_table.states.items()}
-  ///     always_accept: Collection[str] = postlex.always_accept if postlex else ()
-  ///     return cls(lexer_conf, states, always_accept=always_accept)
-  /// ```
-  ContextualLexer create_contextual_lexer({
-    required LexerConf lexer_conf,
-    required Object? parser,
-    required Object? postlex,
-    required Object? options,
-  }) =>
-      ContextualLexer.from(
-        getFunction("create_contextual_lexer").call(
-          <Object?>[
-            lexer_conf,
-            parser,
-            postlex,
-            options,
-          ],
-          kwargs: <String, Object?>{},
-        ),
-      );
-
-  /// ## create_earley_parser
-  ///
-  /// ### python source
-  /// ```py
-  /// def create_earley_parser(lexer_conf: LexerConf, parser_conf: ParserConf, options) -> earley.Parser:
-  ///     resolve_ambiguity = options.ambiguity == 'resolve'
-  ///     debug = options.debug if options else False
-  ///     tree_class = options.tree_class or Tree if options.ambiguity != 'forest' else None
-  ///
-  ///     extra = {}
-  ///     if lexer_conf.lexer_type == 'dynamic':
-  ///         f = create_earley_parser__dynamic
-  ///     elif lexer_conf.lexer_type == 'dynamic_complete':
-  ///         extra['complete_lex'] = True
-  ///         f = create_earley_parser__dynamic
-  ///     else:
-  ///         f = create_earley_parser__basic
-  ///
-  ///     return f(lexer_conf, parser_conf, resolve_ambiguity=resolve_ambiguity, debug=debug, tree_class=tree_class, **extra)
-  /// ```
-  Parser create_earley_parser({
-    required LexerConf lexer_conf,
-    required ParserConf parser_conf,
-    required Object? options,
-  }) =>
-      Parser.from(
-        getFunction("create_earley_parser").call(
-          <Object?>[
-            lexer_conf,
-            parser_conf,
-            options,
-          ],
-          kwargs: <String, Object?>{},
-        ),
-      );
-
-  /// ## create_earley_parser__basic
-  ///
-  /// ### python source
-  /// ```py
-  /// def create_earley_parser__basic(lexer_conf: LexerConf, parser_conf: ParserConf, **kw):
-  ///     return earley.Parser(lexer_conf, parser_conf, _match_earley_basic, **kw)
-  /// ```
-  Object? create_earley_parser__basic({
-    required LexerConf lexer_conf,
-    required ParserConf parser_conf,
-    Map<String, Object?> kw = const <String, Object?>{},
-  }) =>
-      getFunction("create_earley_parser__basic").call(
-        <Object?>[
-          lexer_conf,
-          parser_conf,
-        ],
-        kwargs: <String, Object?>{
-          ...kw,
-        },
-      );
-
-  /// ## create_earley_parser__dynamic
-  ///
-  /// ### python source
-  /// ```py
-  /// def create_earley_parser__dynamic(lexer_conf: LexerConf, parser_conf: ParserConf, **kw):
-  ///     if lexer_conf.callbacks:
-  ///         raise GrammarError("Earley's dynamic lexer doesn't support lexer_callbacks.")
-  ///
-  ///     earley_matcher = EarleyRegexpMatcher(lexer_conf)
-  ///     return xearley.Parser(lexer_conf, parser_conf, earley_matcher.match, **kw)
-  /// ```
-  Object? create_earley_parser__dynamic({
-    required LexerConf lexer_conf,
-    required ParserConf parser_conf,
-    Map<String, Object?> kw = const <String, Object?>{},
-  }) =>
-      getFunction("create_earley_parser__dynamic").call(
-        <Object?>[
-          lexer_conf,
-          parser_conf,
-        ],
-        kwargs: <String, Object?>{
-          ...kw,
-        },
-      );
-
-  /// ## create_lalr_parser
-  ///
-  /// ### python source
-  /// ```py
-  /// def create_lalr_parser(lexer_conf: LexerConf, parser_conf: ParserConf, options=None) -> LALR_Parser:
-  ///     debug = options.debug if options else False
-  ///     strict = options.strict if options else False
-  ///     cls = (options and options._plugins.get('LALR_Parser')) or LALR_Parser
-  ///     return cls(parser_conf, debug=debug, strict=strict)
-  /// ```
-  LALR_Parser create_lalr_parser({
-    required LexerConf lexer_conf,
-    required ParserConf parser_conf,
-    Object? options,
-  }) =>
-      LALR_Parser.from(
-        getFunction("create_lalr_parser").call(
-          <Object?>[
-            lexer_conf,
-            parser_conf,
-            options,
-          ],
-          kwargs: <String, Object?>{},
-        ),
       );
 }
 
@@ -34835,203 +35773,8 @@ final class cyk extends PythonModule {
   cyk.from(super.pythonModule) : super.from();
 
   static cyk import() => PythonFfiDart.instance.importModule(
-        "lark.parsers.cyk",
+        "lark.tools.lark.parsers.cyk",
         cyk.from,
-      );
-
-  /// ## build_unit_skiprule
-  ///
-  /// ### python source
-  /// ```py
-  /// def build_unit_skiprule(unit_rule, target_rule):
-  ///     skipped_rules = []
-  ///     if isinstance(unit_rule, UnitSkipRule):
-  ///         skipped_rules += unit_rule.skipped_rules
-  ///     skipped_rules.append(target_rule)
-  ///     if isinstance(target_rule, UnitSkipRule):
-  ///         skipped_rules += target_rule.skipped_rules
-  ///     return UnitSkipRule(unit_rule.lhs, target_rule.rhs, skipped_rules,
-  ///                       weight=unit_rule.weight + target_rule.weight, alias=unit_rule.alias)
-  /// ```
-  Object? build_unit_skiprule({
-    required Object? unit_rule,
-    required Object? target_rule,
-  }) =>
-      getFunction("build_unit_skiprule").call(
-        <Object?>[
-          unit_rule,
-          target_rule,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## get_any_nt_unit_rule
-  ///
-  /// ### python docstring
-  ///
-  /// Returns a non-terminal unit rule from 'g', or None if there is none.
-  ///
-  /// ### python source
-  /// ```py
-  /// def get_any_nt_unit_rule(g):
-  ///     """Returns a non-terminal unit rule from 'g', or None if there is none."""
-  ///     for rule in g.rules:
-  ///         if len(rule.rhs) == 1 and isinstance(rule.rhs[0], NT):
-  ///             return rule
-  ///     return None
-  /// ```
-  Object? get_any_nt_unit_rule({
-    required Object? g,
-  }) =>
-      getFunction("get_any_nt_unit_rule").call(
-        <Object?>[
-          g,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## match
-  ///
-  /// ### python source
-  /// ```py
-  /// def match(t, s):
-  ///     assert isinstance(t, T)
-  ///     return t.name == s.type
-  /// ```
-  Object? match({
-    required Object? t,
-    required Object? s,
-  }) =>
-      getFunction("match").call(
-        <Object?>[
-          t,
-          s,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## print_parse
-  ///
-  /// ### python source
-  /// ```py
-  /// def print_parse(node, indent=0):
-  ///     if isinstance(node, RuleNode):
-  ///         print(' ' * (indent * 2) + str(node.rule.lhs))
-  ///         for child in node.children:
-  ///             print_parse(child, indent + 1)
-  ///     else:
-  ///         print(' ' * (indent * 2) + str(node.s))
-  /// ```
-  Object? print_parse({
-    required Object? node,
-    Object? indent = 0,
-  }) =>
-      getFunction("print_parse").call(
-        <Object?>[
-          node,
-          indent,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## revert_cnf
-  ///
-  /// ### python docstring
-  ///
-  /// Reverts a parse tree (RuleNode) to its original non-CNF form (Node).
-  ///
-  /// ### python source
-  /// ```py
-  /// def revert_cnf(node):
-  ///     """Reverts a parse tree (RuleNode) to its original non-CNF form (Node)."""
-  ///     if isinstance(node, T):
-  ///         return node
-  ///     # Reverts TERM rule.
-  ///     if node.rule.lhs.name.startswith('__T_'):
-  ///         return node.children[0]
-  ///     else:
-  ///         children = []
-  ///         for child in map(revert_cnf, node.children):
-  ///             # Reverts BIN rule.
-  ///             if isinstance(child, RuleNode) and child.rule.lhs.name.startswith('__SP_'):
-  ///                 children += child.children
-  ///             else:
-  ///                 children.append(child)
-  ///         # Reverts UNIT rule.
-  ///         if isinstance(node.rule, UnitSkipRule):
-  ///             return unroll_unit_skiprule(node.rule.lhs, node.rule.rhs,
-  ///                                     node.rule.skipped_rules, children,
-  ///                                     node.rule.weight, node.rule.alias)
-  ///         else:
-  ///             return RuleNode(node.rule, children)
-  /// ```
-  Object? revert_cnf({
-    required Object? node,
-  }) =>
-      getFunction("revert_cnf").call(
-        <Object?>[
-          node,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## to_cnf
-  ///
-  /// ### python docstring
-  ///
-  /// Creates a CNF grammar from a general context-free grammar 'g'.
-  ///
-  /// ### python source
-  /// ```py
-  /// def to_cnf(g):
-  ///     """Creates a CNF grammar from a general context-free grammar 'g'."""
-  ///     g = _unit(_bin(_term(g)))
-  ///     return CnfWrapper(g)
-  /// ```
-  Object? to_cnf({
-    required Object? g,
-  }) =>
-      getFunction("to_cnf").call(
-        <Object?>[
-          g,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## unroll_unit_skiprule
-  ///
-  /// ### python source
-  /// ```py
-  /// def unroll_unit_skiprule(lhs, orig_rhs, skipped_rules, children, weight, alias):
-  ///     if not skipped_rules:
-  ///         return RuleNode(Rule(lhs, orig_rhs, weight=weight, alias=alias), children, weight=weight)
-  ///     else:
-  ///         weight = weight - skipped_rules[0].weight
-  ///         return RuleNode(
-  ///             Rule(lhs, [skipped_rules[0].lhs], weight=weight, alias=alias), [
-  ///                 unroll_unit_skiprule(skipped_rules[0].lhs, orig_rhs,
-  ///                                 skipped_rules[1:], children,
-  ///                                 skipped_rules[0].weight, skipped_rules[0].alias)
-  ///             ], weight=weight)
-  /// ```
-  Object? unroll_unit_skiprule({
-    required Object? lhs,
-    required Object? orig_rhs,
-    required Object? skipped_rules,
-    required Object? children,
-    required Object? weight,
-    required Object? alias,
-  }) =>
-      getFunction("unroll_unit_skiprule").call(
-        <Object?>[
-          lhs,
-          orig_rhs,
-          skipped_rules,
-          children,
-          weight,
-          alias,
-        ],
-        kwargs: <String, Object?>{},
       );
 }
 
@@ -35040,7 +35783,7 @@ final class itertools extends PythonModule {
   itertools.from(super.pythonModule) : super.from();
 
   static itertools import() => PythonFfiDart.instance.importModule(
-        "itertools",
+        "lark.tools.itertools",
         itertools.from,
       );
 }
@@ -35371,7 +36114,7 @@ final class earley extends PythonModule {
   earley.from(super.pythonModule) : super.from();
 
   static earley import() => PythonFfiDart.instance.importModule(
-        "lark.parsers.earley",
+        "lark.tools.lark.parsers.earley",
         earley.from,
       );
 }
@@ -35561,7 +36304,7 @@ final class xearley extends PythonModule {
   xearley.from(super.pythonModule) : super.from();
 
   static xearley import() => PythonFfiDart.instance.importModule(
-        "lark.parsers.xearley",
+        "lark.tools.lark.parsers.xearley",
         xearley.from,
       );
 }
@@ -35571,7 +36314,7 @@ final class parsers extends PythonModule {
   parsers.from(super.pythonModule) : super.from();
 
   static parsers import() => PythonFfiDart.instance.importModule(
-        "lark.parsers",
+        "lark.tools.lark.parsers",
         parsers.from,
       );
 }
@@ -35631,7 +36374,7 @@ final class earley_common extends PythonModule {
   earley_common.from(super.pythonModule) : super.from();
 
   static earley_common import() => PythonFfiDart.instance.importModule(
-        "lark.parsers.earley_common",
+        "lark.tools.lark.parsers.earley_common",
         earley_common.from,
       );
 }
@@ -36459,33 +37202,8 @@ final class earley_forest extends PythonModule {
   earley_forest.from(super.pythonModule) : super.from();
 
   static earley_forest import() => PythonFfiDart.instance.importModule(
-        "lark.parsers.earley_forest",
+        "lark.tools.lark.parsers.earley_forest",
         earley_forest.from,
-      );
-
-  /// ## handles_ambiguity
-  ///
-  /// ### python docstring
-  ///
-  /// Decorator for methods of subclasses of ``TreeForestTransformer``.
-  /// Denotes that the method should receive a list of transformed derivations.
-  ///
-  /// ### python source
-  /// ```py
-  /// def handles_ambiguity(func):
-  ///     """Decorator for methods of subclasses of ``TreeForestTransformer``.
-  ///     Denotes that the method should receive a list of transformed derivations."""
-  ///     func.handles_ambiguity = True
-  ///     return func
-  /// ```
-  Object? handles_ambiguity({
-    required Object? func,
-  }) =>
-      getFunction("handles_ambiguity").call(
-        <Object?>[
-          func,
-        ],
-        kwargs: <String, Object?>{},
       );
 }
 
@@ -36684,113 +37402,8 @@ final class grammar_analysis extends PythonModule {
   grammar_analysis.from(super.pythonModule) : super.from();
 
   static grammar_analysis import() => PythonFfiDart.instance.importModule(
-        "lark.parsers.grammar_analysis",
+        "lark.tools.lark.parsers.grammar_analysis",
         grammar_analysis.from,
-      );
-
-  /// ## calculate_sets
-  ///
-  /// ### python docstring
-  ///
-  /// Calculate FOLLOW sets.
-  ///
-  /// Adapted from: http://lara.epfl.ch/w/cc09:algorithm_for_first_and_follow_sets
-  ///
-  /// ### python source
-  /// ```py
-  /// def calculate_sets(rules):
-  ///     """Calculate FOLLOW sets.
-  ///
-  ///     Adapted from: http://lara.epfl.ch/w/cc09:algorithm_for_first_and_follow_sets"""
-  ///     symbols = {sym for rule in rules for sym in rule.expansion} | {rule.origin for rule in rules}
-  ///
-  ///     # foreach grammar rule X ::= Y(1) ... Y(k)
-  ///     # if k=0 or {Y(1),...,Y(k)} subset of NULLABLE then
-  ///     #   NULLABLE = NULLABLE union {X}
-  ///     # for i = 1 to k
-  ///     #   if i=1 or {Y(1),...,Y(i-1)} subset of NULLABLE then
-  ///     #     FIRST(X) = FIRST(X) union FIRST(Y(i))
-  ///     #   for j = i+1 to k
-  ///     #     if i=k or {Y(i+1),...Y(k)} subset of NULLABLE then
-  ///     #       FOLLOW(Y(i)) = FOLLOW(Y(i)) union FOLLOW(X)
-  ///     #     if i+1=j or {Y(i+1),...,Y(j-1)} subset of NULLABLE then
-  ///     #       FOLLOW(Y(i)) = FOLLOW(Y(i)) union FIRST(Y(j))
-  ///     # until none of NULLABLE,FIRST,FOLLOW changed in last iteration
-  ///
-  ///     NULLABLE = set()
-  ///     FIRST = {}
-  ///     FOLLOW = {}
-  ///     for sym in symbols:
-  ///         FIRST[sym]={sym} if sym.is_term else set()
-  ///         FOLLOW[sym]=set()
-  ///
-  ///     # Calculate NULLABLE and FIRST
-  ///     changed = True
-  ///     while changed:
-  ///         changed = False
-  ///
-  ///         for rule in rules:
-  ///             if set(rule.expansion) <= NULLABLE:
-  ///                 if update_set(NULLABLE, {rule.origin}):
-  ///                     changed = True
-  ///
-  ///             for i, sym in enumerate(rule.expansion):
-  ///                 if set(rule.expansion[:i]) <= NULLABLE:
-  ///                     if update_set(FIRST[rule.origin], FIRST[sym]):
-  ///                         changed = True
-  ///                 else:
-  ///                     break
-  ///
-  ///     # Calculate FOLLOW
-  ///     changed = True
-  ///     while changed:
-  ///         changed = False
-  ///
-  ///         for rule in rules:
-  ///             for i, sym in enumerate(rule.expansion):
-  ///                 if i==len(rule.expansion)-1 or set(rule.expansion[i+1:]) <= NULLABLE:
-  ///                     if update_set(FOLLOW[sym], FOLLOW[rule.origin]):
-  ///                         changed = True
-  ///
-  ///                 for j in range(i+1, len(rule.expansion)):
-  ///                     if set(rule.expansion[i+1:j]) <= NULLABLE:
-  ///                         if update_set(FOLLOW[sym], FIRST[rule.expansion[j]]):
-  ///                             changed = True
-  ///
-  ///     return FIRST, FOLLOW, NULLABLE
-  /// ```
-  Object? calculate_sets({
-    required Object? rules,
-  }) =>
-      getFunction("calculate_sets").call(
-        <Object?>[
-          rules,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## update_set
-  ///
-  /// ### python source
-  /// ```py
-  /// def update_set(set1, set2):
-  ///     if not set2 or set1 > set2:
-  ///         return False
-  ///
-  ///     copy = set(set1)
-  ///     set1 |= set2
-  ///     return set1 != copy
-  /// ```
-  Object? update_set({
-    required Object? set1,
-    required Object? set2,
-  }) =>
-      getFunction("update_set").call(
-        <Object?>[
-          set1,
-          set2,
-        ],
-        kwargs: <String, Object?>{},
       );
 }
 
@@ -37116,123 +37729,9 @@ final class lalr_analysis extends PythonModule {
   lalr_analysis.from(super.pythonModule) : super.from();
 
   static lalr_analysis import() => PythonFfiDart.instance.importModule(
-        "lark.parsers.lalr_analysis",
+        "lark.tools.lark.parsers.lalr_analysis",
         lalr_analysis.from,
       );
-
-  /// ## digraph
-  ///
-  /// ### python source
-  /// ```py
-  /// def digraph(X, R, G):
-  ///     F = {}
-  ///     S = []
-  ///     N = dict.fromkeys(X, 0)
-  ///     for x in X:
-  ///         # this is always true for the first iteration, but N[x] may be updated in traverse below
-  ///         if N[x] == 0:
-  ///             traverse(x, S, N, X, R, G, F)
-  ///     return F
-  /// ```
-  Object? digraph({
-    required Object? X,
-    required Object? R,
-    required Object? G,
-  }) =>
-      getFunction("digraph").call(
-        <Object?>[
-          X,
-          R,
-          G,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## traverse
-  ///
-  /// ### python source
-  /// ```py
-  /// def traverse(x, S, N, X, R, G, F):
-  ///     S.append(x)
-  ///     d = len(S)
-  ///     N[x] = d
-  ///     F[x] = G[x]
-  ///     for y in R[x]:
-  ///         if N[y] == 0:
-  ///             traverse(y, S, N, X, R, G, F)
-  ///         n_x = N[x]
-  ///         assert(n_x > 0)
-  ///         n_y = N[y]
-  ///         assert(n_y != 0)
-  ///         if (n_y > 0) and (n_y < n_x):
-  ///             N[x] = n_y
-  ///         F[x].update(F[y])
-  ///     if N[x] == d:
-  ///         f_x = F[x]
-  ///         while True:
-  ///             z = S.pop()
-  ///             N[z] = -1
-  ///             F[z] = f_x
-  ///             if z == x:
-  ///                 break
-  /// ```
-  Object? traverse({
-    required Object? x,
-    required Object? S,
-    required Object? N,
-    required Object? X,
-    required Object? R,
-    required Object? G,
-    required Object? F,
-  }) =>
-      getFunction("traverse").call(
-        <Object?>[
-          x,
-          S,
-          N,
-          X,
-          R,
-          G,
-          F,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## Reduce (getter)
-  ///
-  /// ### python docstring
-  ///
-  /// This module builds a LALR(1) transition-table for lalr_parser.py
-  ///
-  /// For now, shift/reduce conflicts are automatically resolved as shifts.
-  Object? get Reduce => getAttribute("Reduce");
-
-  /// ## Reduce (setter)
-  ///
-  /// ### python docstring
-  ///
-  /// This module builds a LALR(1) transition-table for lalr_parser.py
-  ///
-  /// For now, shift/reduce conflicts are automatically resolved as shifts.
-  set Reduce(Object? Reduce) => setAttribute("Reduce", Reduce);
-
-  /// ## Shift (getter)
-  ///
-  /// ### python docstring
-  ///
-  /// This module builds a LALR(1) transition-table for lalr_parser.py
-  ///
-  /// For now, shift/reduce conflicts are automatically resolved as shifts.
-  Object? get Shift => getAttribute("Shift");
-
-  /// ## Shift (setter)
-  ///
-  /// ### python docstring
-  ///
-  /// This module builds a LALR(1) transition-table for lalr_parser.py
-  ///
-  /// For now, shift/reduce conflicts are automatically resolved as shifts.
-  set Shift(Object? Shift) => setAttribute("Shift", Shift);
 }
 
 /// ## lalr_interactive_parser
@@ -37394,7 +37893,7 @@ final class lalr_interactive_parser extends PythonModule {
 
   static lalr_interactive_parser import() =>
       PythonFfiDart.instance.importModule(
-        "lark.parsers.lalr_interactive_parser",
+        "lark.tools.lark.parsers.lalr_interactive_parser",
         lalr_interactive_parser.from,
       );
 }
@@ -37616,7 +38115,7 @@ final class lalr_parser extends PythonModule {
   lalr_parser.from(super.pythonModule) : super.from();
 
   static lalr_parser import() => PythonFfiDart.instance.importModule(
-        "lark.parsers.lalr_parser",
+        "lark.tools.lark.parsers.lalr_parser",
         lalr_parser.from,
       );
 }
@@ -37740,29 +38239,8 @@ final class reconstruct extends PythonModule {
   reconstruct.from(super.pythonModule) : super.from();
 
   static reconstruct import() => PythonFfiDart.instance.importModule(
-        "lark.reconstruct",
+        "lark.tools.lark.reconstruct",
         reconstruct.from,
-      );
-
-  /// ## is_iter_empty
-  ///
-  /// ### python source
-  /// ```py
-  /// def is_iter_empty(i):
-  ///     try:
-  ///         _ = next(i)
-  ///         return False
-  ///     except StopIteration:
-  ///         return True
-  /// ```
-  Object? is_iter_empty({
-    required Object? i,
-  }) =>
-      getFunction("is_iter_empty").call(
-        <Object?>[
-          i,
-        ],
-        kwargs: <String, Object?>{},
       );
 }
 
@@ -37846,81 +38324,8 @@ final class tools extends PythonModule {
   tools.from(super.pythonModule) : super.from();
 
   static tools import() => PythonFfiDart.instance.importModule(
-        "lark.tools",
+        "lark.tools.lark.tools",
         tools.from,
-      );
-
-  /// ## build_lalr
-  ///
-  /// ### python source
-  /// ```py
-  /// def build_lalr(namespace):
-  ///     logger.setLevel((ERROR, WARN, INFO, DEBUG)[min(namespace.verbose, 3)])
-  ///     if has_interegular:
-  ///         interegular_logger.setLevel(logger.getEffectiveLevel())
-  ///     if len(namespace.start) == 0:
-  ///         namespace.start.append('start')
-  ///     kwargs = {n: getattr(namespace, n) for n in options}
-  ///     return Lark(namespace.grammar_file, parser='lalr', **kwargs), namespace.out
-  /// ```
-  Object? build_lalr({
-    required Object? namespace,
-  }) =>
-      getFunction("build_lalr").call(
-        <Object?>[
-          namespace,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## make_warnings_comments
-  ///
-  /// ### python source
-  /// ```py
-  /// def make_warnings_comments():
-  ///     warnings.showwarning = showwarning_as_comment
-  /// ```
-  Object? make_warnings_comments() =>
-      getFunction("make_warnings_comments").call(
-        <Object?>[],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## showwarning_as_comment
-  ///
-  /// ### python source
-  /// ```py
-  /// def showwarning_as_comment(message, category, filename, lineno, file=None, line=None):
-  ///     # Based on warnings._showwarnmsg_impl
-  ///     text = warnings.formatwarning(message, category, filename, lineno, line)
-  ///     text = indent(text, '# ')
-  ///     if file is None:
-  ///         file = sys.stderr
-  ///         if file is None:
-  ///             return
-  ///     try:
-  ///         file.write(text)
-  ///     except OSError:
-  ///         pass
-  /// ```
-  Object? showwarning_as_comment({
-    required Object? message,
-    required Object? category,
-    required Object? filename,
-    required Object? lineno,
-    Object? file,
-    Object? line,
-  }) =>
-      getFunction("showwarning_as_comment").call(
-        <Object?>[
-          message,
-          category,
-          filename,
-          lineno,
-          file,
-          line,
-        ],
-        kwargs: <String, Object?>{},
       );
 
   /// ## DEBUG (getter)
@@ -38022,22 +38427,6 @@ final class serialize extends PythonModule {
   static serialize import() => PythonFfiDart.instance.importModule(
         "lark.tools.serialize",
         serialize.from,
-      );
-
-  /// ## main
-  ///
-  /// ### python source
-  /// ```py
-  /// def main():
-  ///     if len(sys.argv)==1:
-  ///         argparser.print_help(sys.stderr)
-  ///         sys.exit(1)
-  ///     ns = argparser.parse_args()
-  ///     serialize(*build_lalr(ns))
-  /// ```
-  Object? main() => getFunction("main").call(
-        <Object?>[],
-        kwargs: <String, Object?>{},
       );
 }
 
@@ -38322,135 +38711,9 @@ final class tree extends PythonModule {
   tree.from(super.pythonModule) : super.from();
 
   static tree import() => PythonFfiDart.instance.importModule(
-        "lark.tree",
+        "lark.tools.lark.tree",
         tree.from,
       );
-
-  /// ## pydot__tree_to_dot
-  ///
-  /// ### python source
-  /// ```py
-  /// def pydot__tree_to_dot(tree: Tree, filename, rankdir="LR", **kwargs):
-  ///     graph = pydot__tree_to_graph(tree, rankdir, **kwargs)
-  ///     graph.write(filename)
-  /// ```
-  Object? pydot__tree_to_dot({
-    required Tree tree,
-    required Object? filename,
-    Object? rankdir = "LR",
-    Map<String, Object?> kwargs = const <String, Object?>{},
-  }) =>
-      getFunction("pydot__tree_to_dot").call(
-        <Object?>[
-          tree,
-          filename,
-          rankdir,
-        ],
-        kwargs: <String, Object?>{
-          ...kwargs,
-        },
-      );
-
-  /// ## pydot__tree_to_graph
-  ///
-  /// ### python docstring
-  ///
-  /// Creates a colorful image that represents the tree (data+children, without meta)
-  ///
-  /// Possible values for `rankdir` are "TB", "LR", "BT", "RL", corresponding to
-  /// directed graphs drawn from top to bottom, from left to right, from bottom to
-  /// top, and from right to left, respectively.
-  ///
-  /// `kwargs` can be any graph attribute (e. g. `dpi=200`). For a list of
-  /// possible attributes, see https://www.graphviz.org/doc/info/attrs.html.
-  ///
-  /// ### python source
-  /// ```py
-  /// def pydot__tree_to_graph(tree: Tree, rankdir="LR", **kwargs):
-  ///     """Creates a colorful image that represents the tree (data+children, without meta)
-  ///
-  ///     Possible values for `rankdir` are "TB", "LR", "BT", "RL", corresponding to
-  ///     directed graphs drawn from top to bottom, from left to right, from bottom to
-  ///     top, and from right to left, respectively.
-  ///
-  ///     `kwargs` can be any graph attribute (e. g. `dpi=200`). For a list of
-  ///     possible attributes, see https://www.graphviz.org/doc/info/attrs.html.
-  ///     """
-  ///
-  ///     import pydot  # type: ignore[import]
-  ///     graph = pydot.Dot(graph_type='digraph', rankdir=rankdir, **kwargs)
-  ///
-  ///     i = [0]
-  ///
-  ///     def new_leaf(leaf):
-  ///         node = pydot.Node(i[0], label=repr(leaf))
-  ///         i[0] += 1
-  ///         graph.add_node(node)
-  ///         return node
-  ///
-  ///     def _to_pydot(subtree):
-  ///         color = hash(subtree.data) & 0xffffff
-  ///         color |= 0x808080
-  ///
-  ///         subnodes = [_to_pydot(child) if isinstance(child, Tree) else new_leaf(child)
-  ///                     for child in subtree.children]
-  ///         node = pydot.Node(i[0], style="filled", fillcolor="#%x" % color, label=subtree.data)
-  ///         i[0] += 1
-  ///         graph.add_node(node)
-  ///
-  ///         for subnode in subnodes:
-  ///             graph.add_edge(pydot.Edge(node, subnode))
-  ///
-  ///         return node
-  ///
-  ///     _to_pydot(tree)
-  ///     return graph
-  /// ```
-  Object? pydot__tree_to_graph({
-    required Tree tree,
-    Object? rankdir = "LR",
-    Map<String, Object?> kwargs = const <String, Object?>{},
-  }) =>
-      getFunction("pydot__tree_to_graph").call(
-        <Object?>[
-          tree,
-          rankdir,
-        ],
-        kwargs: <String, Object?>{
-          ...kwargs,
-        },
-      );
-
-  /// ## pydot__tree_to_png
-  ///
-  /// ### python source
-  /// ```py
-  /// def pydot__tree_to_png(tree: Tree, filename: str, rankdir: 'Literal["TB", "LR", "BT", "RL"]'="LR", **kwargs) -> None:
-  ///     graph = pydot__tree_to_graph(tree, rankdir, **kwargs)
-  ///     graph.write_png(filename)
-  /// ```
-  Null pydot__tree_to_png({
-    required Tree tree,
-    required String filename,
-    Object? rankdir = "LR",
-    Map<String, Object?> kwargs = const <String, Object?>{},
-  }) =>
-      getFunction("pydot__tree_to_png").call(
-        <Object?>[
-          tree,
-          filename,
-          rankdir,
-        ],
-        kwargs: <String, Object?>{
-          ...kwargs,
-        },
-      );
-
-  /// ## ParseTree (getter)
-  Object? get ParseTree => getAttribute("ParseTree");
-
-  /// ## ParseTree (setter)
-  set ParseTree(Object? ParseTree) => setAttribute("ParseTree", ParseTree);
 
   /// ## TYPE_CHECKING (getter)
   Object? get TYPE_CHECKING => getAttribute("TYPE_CHECKING");
@@ -38659,89 +38922,8 @@ final class tree_matcher extends PythonModule {
   tree_matcher.from(super.pythonModule) : super.from();
 
   static tree_matcher import() => PythonFfiDart.instance.importModule(
-        "lark.tree_matcher",
+        "lark.tools.lark.tree_matcher",
         tree_matcher.from,
-      );
-
-  /// ## is_discarded_terminal
-  ///
-  /// ### python source
-  /// ```py
-  /// def is_discarded_terminal(t):
-  ///     return t.is_term and t.filter_out
-  /// ```
-  Object? is_discarded_terminal({
-    required Object? t,
-  }) =>
-      getFunction("is_discarded_terminal").call(
-        <Object?>[
-          t,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## make_recons_rule
-  ///
-  /// ### python source
-  /// ```py
-  /// def make_recons_rule(origin, expansion, old_expansion):
-  ///     return Rule(origin, expansion, alias=_MakeTreeMatch(origin.name, old_expansion))
-  /// ```
-  Object? make_recons_rule({
-    required Object? origin,
-    required Object? expansion,
-    required Object? old_expansion,
-  }) =>
-      getFunction("make_recons_rule").call(
-        <Object?>[
-          origin,
-          expansion,
-          old_expansion,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## make_recons_rule_to_term
-  ///
-  /// ### python source
-  /// ```py
-  /// def make_recons_rule_to_term(origin, term):
-  ///     return make_recons_rule(origin, [Terminal(term.name)], [term])
-  /// ```
-  Object? make_recons_rule_to_term({
-    required Object? origin,
-    required Object? term,
-  }) =>
-      getFunction("make_recons_rule_to_term").call(
-        <Object?>[
-          origin,
-          term,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## parse_rulename
-  ///
-  /// ### python docstring
-  ///
-  /// Parse rule names that may contain a template syntax (like rule{a, b, ...})
-  ///
-  /// ### python source
-  /// ```py
-  /// def parse_rulename(s):
-  ///     "Parse rule names that may contain a template syntax (like rule{a, b, ...})"
-  ///     name, args_str = re.match(r'(\w+)(?:{(.+)})?', s).groups()
-  ///     args = args_str and [a.strip() for a in args_str.split(',')]
-  ///     return name, args
-  /// ```
-  Object? parse_rulename({
-    required Object? s,
-  }) =>
-      getFunction("parse_rulename").call(
-        <Object?>[
-          s,
-        ],
-        kwargs: <String, Object?>{},
       );
 }
 
@@ -38940,39 +39122,8 @@ final class tree_templates extends PythonModule {
   tree_templates.from(super.pythonModule) : super.from();
 
   static tree_templates import() => PythonFfiDart.instance.importModule(
-        "lark.tree_templates",
+        "lark.tools.lark.tree_templates",
         tree_templates.from,
-      );
-
-  /// ## translate
-  ///
-  /// ### python docstring
-  ///
-  /// Search tree and translate each occurrence of t1 into t2.
-  ///
-  /// ### python source
-  /// ```py
-  /// def translate(t1: Template, t2: Template, tree: TreeOrCode):
-  ///     """Search tree and translate each occurrence of t1 into t2.
-  ///     """
-  ///     tree = t1.conf._get_tree(tree)      # ensure it's a tree, parse if necessary and possible
-  ///     for subtree, vars in t1.search(tree):
-  ///         res = t2.apply_vars(vars)
-  ///         subtree.set(res.data, res.children)
-  ///     return tree
-  /// ```
-  Object? translate({
-    required Template t1,
-    required Template t2,
-    required Object? tree,
-  }) =>
-      getFunction("translate").call(
-        <Object?>[
-          t1,
-          t2,
-          tree,
-        ],
-        kwargs: <String, Object?>{},
       );
 }
 
@@ -39315,369 +39466,9 @@ final class utils extends PythonModule {
   utils.from(super.pythonModule) : super.from();
 
   static utils import() => PythonFfiDart.instance.importModule(
-        "lark.utils",
+        "lark.tools.lark.utils",
         utils.from,
       );
-
-  /// ## bfs
-  ///
-  /// ### python source
-  /// ```py
-  /// def bfs(initial: Sequence, expand: Callable) -> Iterator:
-  ///     open_q = deque(list(initial))
-  ///     visited = set(open_q)
-  ///     while open_q:
-  ///         node = open_q.popleft()
-  ///         yield node
-  ///         for next_node in expand(node):
-  ///             if next_node not in visited:
-  ///                 visited.add(next_node)
-  ///                 open_q.append(next_node)
-  /// ```
-  Iterator bfs({
-    required Object? initial,
-    required Function expand,
-  }) =>
-      getFunction("bfs").call(
-        <Object?>[
-          initial,
-          expand,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## bfs_all_unique
-  ///
-  /// ### python docstring
-  ///
-  /// bfs, but doesn't keep track of visited (aka seen), because there can be no repetitions
-  ///
-  /// ### python source
-  /// ```py
-  /// def bfs_all_unique(initial, expand):
-  ///     "bfs, but doesn't keep track of visited (aka seen), because there can be no repetitions"
-  ///     open_q = deque(list(initial))
-  ///     while open_q:
-  ///         node = open_q.popleft()
-  ///         yield node
-  ///         open_q += expand(node)
-  /// ```
-  Object? bfs_all_unique({
-    required Object? initial,
-    required Object? expand,
-  }) =>
-      getFunction("bfs_all_unique").call(
-        <Object?>[
-          initial,
-          expand,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## classify
-  ///
-  /// ### python source
-  /// ```py
-  /// def classify(seq: Iterable, key: Optional[Callable] = None, value: Optional[Callable] = None) -> Dict:
-  ///     d: Dict[Any, Any] = {}
-  ///     for item in seq:
-  ///         k = key(item) if (key is not None) else item
-  ///         v = value(item) if (value is not None) else item
-  ///         try:
-  ///             d[k].append(v)
-  ///         except KeyError:
-  ///             d[k] = [v]
-  ///     return d
-  /// ```
-  Object? classify({
-    required Iterable seq,
-    Object? key,
-    Object? value,
-  }) =>
-      getFunction("classify").call(
-        <Object?>[
-          seq,
-          key,
-          value,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## classify_bool
-  ///
-  /// ### python source
-  /// ```py
-  /// def classify_bool(seq: Sequence, pred: Callable) -> Any:
-  ///     false_elems = []
-  ///     true_elems = [elem for elem in seq if pred(elem) or false_elems.append(elem)]  # type: ignore[func-returns-value]
-  ///     return true_elems, false_elems
-  /// ```
-  Object? classify_bool({
-    required Object? seq,
-    required Function pred,
-  }) =>
-      getFunction("classify_bool").call(
-        <Object?>[
-          seq,
-          pred,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## combine_alternatives
-  ///
-  /// ### python docstring
-  ///
-  /// Accepts a list of alternatives, and enumerates all their possible concatenations.
-  ///
-  /// Examples:
-  ///     >>> combine_alternatives([range(2), [4,5]])
-  ///     [[0, 4], [0, 5], [1, 4], [1, 5]]
-  ///
-  ///     >>> combine_alternatives(["abc", "xy", '$'])
-  ///     [['a', 'x', '$'], ['a', 'y', '$'], ['b', 'x', '$'], ['b', 'y', '$'], ['c', 'x', '$'], ['c', 'y', '$']]
-  ///
-  ///     >>> combine_alternatives([])
-  ///     [[]]
-  ///
-  /// ### python source
-  /// ```py
-  /// def combine_alternatives(lists):
-  ///     """
-  ///     Accepts a list of alternatives, and enumerates all their possible concatenations.
-  ///
-  ///     Examples:
-  ///         >>> combine_alternatives([range(2), [4,5]])
-  ///         [[0, 4], [0, 5], [1, 4], [1, 5]]
-  ///
-  ///         >>> combine_alternatives(["abc", "xy", '$'])
-  ///         [['a', 'x', '$'], ['a', 'y', '$'], ['b', 'x', '$'], ['b', 'y', '$'], ['c', 'x', '$'], ['c', 'y', '$']]
-  ///
-  ///         >>> combine_alternatives([])
-  ///         [[]]
-  ///     """
-  ///     if not lists:
-  ///         return [[]]
-  ///     assert all(l for l in lists), lists
-  ///     return list(product(*lists))
-  /// ```
-  Object? combine_alternatives({
-    required Object? lists,
-  }) =>
-      getFunction("combine_alternatives").call(
-        <Object?>[
-          lists,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## dedup_list
-  ///
-  /// ### python docstring
-  ///
-  /// Given a list (l) will removing duplicates from the list,
-  /// preserving the original order of the list. Assumes that
-  /// the list entries are hashable.
-  ///
-  /// ### python source
-  /// ```py
-  /// def dedup_list(l: List[T]) -> List[T]:
-  ///     """Given a list (l) will removing duplicates from the list,
-  ///        preserving the original order of the list. Assumes that
-  ///        the list entries are hashable."""
-  ///     dedup = set()
-  ///     # This returns None, but that's expected
-  ///     return [x for x in l if not (x in dedup or dedup.add(x))]  # type: ignore[func-returns-value]
-  ///     # 2x faster (ordered in PyPy and CPython 3.6+, guaranteed to be ordered in Python 3.7+)
-  ///     # return list(dict.fromkeys(l))
-  /// ```
-  Object? dedup_list({
-    required Object? l,
-  }) =>
-      getFunction("dedup_list").call(
-        <Object?>[
-          l,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## get_regexp_width
-  ///
-  /// ### python source
-  /// ```py
-  /// def get_regexp_width(expr: str) -> Union[Tuple[int, int], List[int]]:
-  ///     if _has_regex:
-  ///         # Since `sre_parse` cannot deal with Unicode categories of the form `\p{Mn}`, we replace these with
-  ///         # a simple letter, which makes no difference as we are only trying to get the possible lengths of the regex
-  ///         # match here below.
-  ///         regexp_final = re.sub(categ_pattern, 'A', expr)
-  ///     else:
-  ///         if re.search(categ_pattern, expr):
-  ///             raise ImportError('`regex` module must be installed in order to use Unicode categories.', expr)
-  ///         regexp_final = expr
-  ///     try:
-  ///         # Fixed in next version (past 0.960) of typeshed
-  ///         return [int(x) for x in sre_parse.parse(regexp_final).getwidth()]   # type: ignore[attr-defined]
-  ///     except sre_constants.error:
-  ///         if not _has_regex:
-  ///             raise ValueError(expr)
-  ///         else:
-  ///             # sre_parse does not support the new features in regex. To not completely fail in that case,
-  ///             # we manually test for the most important info (whether the empty string is matched)
-  ///             c = regex.compile(regexp_final)
-  ///             if c.match('') is None:
-  ///                 # MAXREPEAT is a none pickable subclass of int, therefore needs to be converted to enable caching
-  ///                 return 1, int(sre_constants.MAXREPEAT)
-  ///             else:
-  ///                 return 0, int(sre_constants.MAXREPEAT)
-  /// ```
-  Object? get_regexp_width({
-    required String expr,
-  }) =>
-      getFunction("get_regexp_width").call(
-        <Object?>[
-          expr,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## is_id_continue
-  ///
-  /// ### python docstring
-  ///
-  /// Checks if all characters in `s` are alphanumeric characters (Unicode standard, so diacritics, indian vowels, non-latin
-  /// numbers, etc. all pass). Synonymous with a Python `ID_CONTINUE` identifier. See PEP 3131 for details.
-  ///
-  /// ### python source
-  /// ```py
-  /// def is_id_continue(s: str) -> bool:
-  ///     """
-  ///     Checks if all characters in `s` are alphanumeric characters (Unicode standard, so diacritics, indian vowels, non-latin
-  ///     numbers, etc. all pass). Synonymous with a Python `ID_CONTINUE` identifier. See PEP 3131 for details.
-  ///     """
-  ///     return _test_unicode_category(s, _ID_CONTINUE)
-  /// ```
-  bool is_id_continue({
-    required String s,
-  }) =>
-      getFunction("is_id_continue").call(
-        <Object?>[
-          s,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## is_id_start
-  ///
-  /// ### python docstring
-  ///
-  /// Checks if all characters in `s` are alphabetic characters (Unicode standard, so diacritics, indian vowels, non-latin
-  /// numbers, etc. all pass). Synonymous with a Python `ID_START` identifier. See PEP 3131 for details.
-  ///
-  /// ### python source
-  /// ```py
-  /// def is_id_start(s: str) -> bool:
-  ///     """
-  ///     Checks if all characters in `s` are alphabetic characters (Unicode standard, so diacritics, indian vowels, non-latin
-  ///     numbers, etc. all pass). Synonymous with a Python `ID_START` identifier. See PEP 3131 for details.
-  ///     """
-  ///     return _test_unicode_category(s, _ID_START)
-  /// ```
-  bool is_id_start({
-    required String s,
-  }) =>
-      getFunction("is_id_start").call(
-        <Object?>[
-          s,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## isascii
-  ///
-  /// ### python docstring
-  ///
-  /// str.isascii only exists in python3.7+
-  ///
-  /// ### python source
-  /// ```py
-  /// def isascii(s: str) -> bool:
-  ///     """ str.isascii only exists in python3.7+ """
-  ///     if sys.version_info >= (3, 7):
-  ///         return s.isascii()
-  ///     else:
-  ///         try:
-  ///             s.encode('ascii')
-  ///             return True
-  ///         except (UnicodeDecodeError, UnicodeEncodeError):
-  ///             return False
-  /// ```
-  bool isascii({
-    required String s,
-  }) =>
-      getFunction("isascii").call(
-        <Object?>[
-          s,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## small_factors
-  ///
-  /// ### python docstring
-  ///
-  /// Splits n up into smaller factors and summands <= max_factor.
-  /// Returns a list of [(a, b), ...]
-  /// so that the following code returns n:
-  ///
-  /// n = 1
-  /// for a, b in values:
-  ///     n = n * a + b
-  ///
-  /// Currently, we also keep a + b <= max_factor, but that might change
-  ///
-  /// ### python source
-  /// ```py
-  /// def small_factors(n: int, max_factor: int) -> List[Tuple[int, int]]:
-  ///     """
-  ///     Splits n up into smaller factors and summands <= max_factor.
-  ///     Returns a list of [(a, b), ...]
-  ///     so that the following code returns n:
-  ///
-  ///     n = 1
-  ///     for a, b in values:
-  ///         n = n * a + b
-  ///
-  ///     Currently, we also keep a + b <= max_factor, but that might change
-  ///     """
-  ///     assert n >= 0
-  ///     assert max_factor > 2
-  ///     if n <= max_factor:
-  ///         return [(n, 0)]
-  ///
-  ///     for a in range(max_factor, 1, -1):
-  ///         r, b = divmod(n, a)
-  ///         if a + b <= max_factor:
-  ///             return small_factors(r, max_factor) + [(a, b)]
-  ///     assert False, "Failed to factorize %s" % n
-  /// ```
-  Object? small_factors({
-    required int n,
-    required int max_factor,
-  }) =>
-      getFunction("small_factors").call(
-        <Object?>[
-          n,
-          max_factor,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## T (getter)
-  Object? get T => getAttribute("T");
-
-  /// ## T (setter)
-  set T(Object? T) => setAttribute("T", T);
 }
 
 /// ## unicodedata
@@ -39685,15 +39476,9 @@ final class unicodedata extends PythonModule {
   unicodedata.from(super.pythonModule) : super.from();
 
   static unicodedata import() => PythonFfiDart.instance.importModule(
-        "unicodedata",
+        "lark.tools.unicodedata",
         unicodedata.from,
       );
-
-  /// ## ucd_3_2_0 (getter)
-  Object? get ucd_3_2_0 => getAttribute("ucd_3_2_0");
-
-  /// ## ucd_3_2_0 (setter)
-  set ucd_3_2_0(Object? ucd_3_2_0) => setAttribute("ucd_3_2_0", ucd_3_2_0);
 
   /// ## unidata_version (getter)
   Object? get unidata_version => getAttribute("unidata_version");
@@ -40305,271 +40090,7 @@ final class visitors extends PythonModule {
   visitors.from(super.pythonModule) : super.from();
 
   static visitors import() => PythonFfiDart.instance.importModule(
-        "lark.visitors",
+        "lark.tools.lark.visitors",
         visitors.from,
       );
-
-  /// ## merge_transformers
-  ///
-  /// ### python docstring
-  ///
-  /// Merge a collection of transformers into the base_transformer, each into its own 'namespace'.
-  ///
-  /// When called, it will collect the methods from each transformer, and assign them to base_transformer,
-  /// with their name prefixed with the given keyword, as ``prefix__methodname``.
-  ///
-  /// This function is especially useful for processing grammars that import other grammars,
-  /// thereby creating some of their rules in a 'namespace'. (i.e with a consistent name prefix).
-  /// In this case, the key for the transformer should match the name of the imported grammar.
-  ///
-  /// Parameters:
-  ///     base_transformer (Transformer, optional): The transformer that all other transformers will be added to.
-  ///     **transformers_to_merge: Keyword arguments, in the form of ``name_prefix = transformer``.
-  ///
-  /// Raises:
-  ///     AttributeError: In case of a name collision in the merged methods
-  ///
-  /// Example:
-  ///     ::
-  ///
-  ///         class TBase(Transformer):
-  ///             def start(self, children):
-  ///                 return children[0] + 'bar'
-  ///
-  ///         class TImportedGrammar(Transformer):
-  ///             def foo(self, children):
-  ///                 return "foo"
-  ///
-  ///         composed_transformer = merge_transformers(TBase(), imported=TImportedGrammar())
-  ///
-  ///         t = Tree('start', [ Tree('imported__foo', []) ])
-  ///
-  ///         assert composed_transformer.transform(t) == 'foobar'
-  ///
-  /// ### python source
-  /// ```py
-  /// def merge_transformers(base_transformer=None, **transformers_to_merge):
-  ///     """Merge a collection of transformers into the base_transformer, each into its own 'namespace'.
-  ///
-  ///     When called, it will collect the methods from each transformer, and assign them to base_transformer,
-  ///     with their name prefixed with the given keyword, as ``prefix__methodname``.
-  ///
-  ///     This function is especially useful for processing grammars that import other grammars,
-  ///     thereby creating some of their rules in a 'namespace'. (i.e with a consistent name prefix).
-  ///     In this case, the key for the transformer should match the name of the imported grammar.
-  ///
-  ///     Parameters:
-  ///         base_transformer (Transformer, optional): The transformer that all other transformers will be added to.
-  ///         **transformers_to_merge: Keyword arguments, in the form of ``name_prefix = transformer``.
-  ///
-  ///     Raises:
-  ///         AttributeError: In case of a name collision in the merged methods
-  ///
-  ///     Example:
-  ///         ::
-  ///
-  ///             class TBase(Transformer):
-  ///                 def start(self, children):
-  ///                     return children[0] + 'bar'
-  ///
-  ///             class TImportedGrammar(Transformer):
-  ///                 def foo(self, children):
-  ///                     return "foo"
-  ///
-  ///             composed_transformer = merge_transformers(TBase(), imported=TImportedGrammar())
-  ///
-  ///             t = Tree('start', [ Tree('imported__foo', []) ])
-  ///
-  ///             assert composed_transformer.transform(t) == 'foobar'
-  ///
-  ///     """
-  ///     if base_transformer is None:
-  ///         base_transformer = Transformer()
-  ///     for prefix, transformer in transformers_to_merge.items():
-  ///         for method_name in dir(transformer):
-  ///             method = getattr(transformer, method_name)
-  ///             if not callable(method):
-  ///                 continue
-  ///             if method_name.startswith("_") or method_name == "transform":
-  ///                 continue
-  ///             prefixed_method = prefix + "__" + method_name
-  ///             if hasattr(base_transformer, prefixed_method):
-  ///                 raise AttributeError("Cannot merge: method '%s' appears more than once" % prefixed_method)
-  ///
-  ///             setattr(base_transformer, prefixed_method, method)
-  ///
-  ///     return base_transformer
-  /// ```
-  Object? merge_transformers({
-    Object? base_transformer,
-    Map<String, Object?> transformers_to_merge = const <String, Object?>{},
-  }) =>
-      getFunction("merge_transformers").call(
-        <Object?>[
-          base_transformer,
-        ],
-        kwargs: <String, Object?>{
-          ...transformers_to_merge,
-        },
-      );
-
-  /// ## v_args
-  ///
-  /// ### python docstring
-  ///
-  /// A convenience decorator factory for modifying the behavior of user-supplied visitor methods.
-  ///
-  /// By default, callback methods of transformers/visitors accept one argument - a list of the node's children.
-  ///
-  /// ``v_args`` can modify this behavior. When used on a transformer/visitor class definition,
-  /// it applies to all the callback methods inside it.
-  ///
-  /// ``v_args`` can be applied to a single method, or to an entire class. When applied to both,
-  /// the options given to the method take precedence.
-  ///
-  /// Parameters:
-  ///     inline (bool, optional): Children are provided as ``*args`` instead of a list argument (not recommended for very long lists).
-  ///     meta (bool, optional): Provides two arguments: ``meta`` and ``children`` (instead of just the latter)
-  ///     tree (bool, optional): Provides the entire tree as the argument, instead of the children.
-  ///     wrapper (function, optional): Provide a function to decorate all methods.
-  ///
-  /// Example:
-  ///     ::
-  ///
-  ///         @v_args(inline=True)
-  ///         class SolveArith(Transformer):
-  ///             def add(self, left, right):
-  ///                 return left + right
-  ///
-  ///             @v_args(meta=True)
-  ///             def mul(self, meta, children):
-  ///                 logger.info(f'mul at line {meta.line}')
-  ///                 left, right = children
-  ///                 return left * right
-  ///
-  ///
-  ///         class ReverseNotation(Transformer_InPlace):
-  ///             @v_args(tree=True)
-  ///             def tree_node(self, tree):
-  ///                 tree.children = tree.children[::-1]
-  ///
-  /// ### python source
-  /// ```py
-  /// def v_args(inline: bool = False, meta: bool = False, tree: bool = False, wrapper: Optional[Callable] = None) -> Callable[[_DECORATED], _DECORATED]:
-  ///     """A convenience decorator factory for modifying the behavior of user-supplied visitor methods.
-  ///
-  ///     By default, callback methods of transformers/visitors accept one argument - a list of the node's children.
-  ///
-  ///     ``v_args`` can modify this behavior. When used on a transformer/visitor class definition,
-  ///     it applies to all the callback methods inside it.
-  ///
-  ///     ``v_args`` can be applied to a single method, or to an entire class. When applied to both,
-  ///     the options given to the method take precedence.
-  ///
-  ///     Parameters:
-  ///         inline (bool, optional): Children are provided as ``*args`` instead of a list argument (not recommended for very long lists).
-  ///         meta (bool, optional): Provides two arguments: ``meta`` and ``children`` (instead of just the latter)
-  ///         tree (bool, optional): Provides the entire tree as the argument, instead of the children.
-  ///         wrapper (function, optional): Provide a function to decorate all methods.
-  ///
-  ///     Example:
-  ///         ::
-  ///
-  ///             @v_args(inline=True)
-  ///             class SolveArith(Transformer):
-  ///                 def add(self, left, right):
-  ///                     return left + right
-  ///
-  ///                 @v_args(meta=True)
-  ///                 def mul(self, meta, children):
-  ///                     logger.info(f'mul at line {meta.line}')
-  ///                     left, right = children
-  ///                     return left * right
-  ///
-  ///
-  ///             class ReverseNotation(Transformer_InPlace):
-  ///                 @v_args(tree=True)
-  ///                 def tree_node(self, tree):
-  ///                     tree.children = tree.children[::-1]
-  ///     """
-  ///     if tree and (meta or inline):
-  ///         raise ValueError("Visitor functions cannot combine 'tree' with 'meta' or 'inline'.")
-  ///
-  ///     func = None
-  ///     if meta:
-  ///         if inline:
-  ///             func = _vargs_meta_inline
-  ///         else:
-  ///             func = _vargs_meta
-  ///     elif inline:
-  ///         func = _vargs_inline
-  ///     elif tree:
-  ///         func = _vargs_tree
-  ///
-  ///     if wrapper is not None:
-  ///         if func is not None:
-  ///             raise ValueError("Cannot use 'wrapper' along with 'tree', 'meta' or 'inline'.")
-  ///         func = wrapper
-  ///
-  ///     def _visitor_args_dec(obj):
-  ///         return _apply_v_args(obj, func)
-  ///     return _visitor_args_dec
-  /// ```
-  Object? Function(Object?) v_args({
-    bool inline = false,
-    bool meta = false,
-    bool tree = false,
-    Object? wrapper,
-  }) =>
-      PythonFunction.from(
-        getFunction("v_args").call(
-          <Object?>[
-            inline,
-            meta,
-            tree,
-            wrapper,
-          ],
-          kwargs: <String, Object?>{},
-        ),
-      ).asFunction(
-        (PythonFunctionInterface<PythonFfiDelegate<Object?>, Object?> f) =>
-            (Object? x0) => f.call(<Object?>[x0]),
-      );
-
-  /// ## visit_children_decor
-  ///
-  /// ### python docstring
-  ///
-  /// See Interpreter
-  ///
-  /// ### python source
-  /// ```py
-  /// def visit_children_decor(func: _InterMethod) -> _InterMethod:
-  ///     "See Interpreter"
-  ///     @wraps(func)
-  ///     def inner(cls, tree):
-  ///         values = cls.visit_children(tree)
-  ///         return func(cls, values)
-  ///     return inner
-  /// ```
-  Object? Function(Object?, Object?) visit_children_decor({
-    required Object? Function(Object?, Object?) func,
-  }) =>
-      PythonFunction.from(
-        getFunction("visit_children_decor").call(
-          <Object?>[
-            func.generic2,
-          ],
-          kwargs: <String, Object?>{},
-        ),
-      ).asFunction(
-        (PythonFunctionInterface<PythonFfiDelegate<Object?>, Object?> f) =>
-            (Object? x0, Object? x1) => f.call(<Object?>[x0, x1]),
-      );
-
-  /// ## Discard (getter)
-  Object? get Discard => getAttribute("Discard");
-
-  /// ## Discard (setter)
-  set Discard(Object? Discard) => setAttribute("Discard", Discard);
 }

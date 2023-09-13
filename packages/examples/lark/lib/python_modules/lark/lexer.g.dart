@@ -703,7 +703,7 @@ final class ContextualLexer extends PythonClass {
 /// ```
 final class LexError extends PythonClass {
   factory LexError() => PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.lexer",
         "LexError",
         LexError.from,
         <Object?>[],
@@ -1148,7 +1148,7 @@ final class LineCounter extends PythonClass {
 /// ## ModuleType
 final class ModuleType extends PythonClass {
   factory ModuleType() => PythonFfiDart.instance.importClass(
-        "builtins",
+        "lark.lexer",
         "ModuleType",
         ModuleType.from,
         <Object?>[],
@@ -1467,7 +1467,6 @@ final class Pattern extends PythonClass {
 ///     @property
 ///     def max_width(self) -> int:
 ///         return self._get_width()[1]
-/// #
 /// ```
 final class PatternRE extends PythonClass {
   factory PatternRE({
@@ -2176,7 +2175,7 @@ final class Scanner extends PythonClass {
 /// ```
 final class Serialize extends PythonClass {
   factory Serialize() => PythonFfiDart.instance.importClass(
-        "lark.utils",
+        "lark.lexer",
         "Serialize",
         Serialize.from,
         <Object?>[],
@@ -5256,7 +5255,7 @@ final class UnexpectedCharacters extends PythonClass {
     Object? considered_rules,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.lexer",
         "UnexpectedCharacters",
         UnexpectedCharacters.from,
         <Object?>[
@@ -5703,7 +5702,7 @@ final class UnexpectedToken extends PythonClass {
     Object? token_history,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.lexer",
         "UnexpectedToken",
         UnexpectedToken.from,
         <Object?>[
@@ -7052,6 +7051,158 @@ final class lexer extends PythonModule {
         "lark.lexer",
         lexer.from,
       );
+
+  /// ## abstractmethod
+  ///
+  /// ### python docstring
+  ///
+  /// A decorator indicating abstract methods.
+  ///
+  /// Requires that the metaclass is ABCMeta or derived from it.  A
+  /// class that has a metaclass derived from ABCMeta cannot be
+  /// instantiated unless all of its abstract methods are overridden.
+  /// The abstract methods can be called using any of the normal
+  /// 'super' call mechanisms.  abstractmethod() may be used to declare
+  /// abstract methods for properties and descriptors.
+  ///
+  /// Usage:
+  ///
+  ///     class C(metaclass=ABCMeta):
+  ///         @abstractmethod
+  ///         def my_abstract_method(self, ...):
+  ///             ...
+  Object? abstractmethod({
+    required Object? funcobj,
+  }) =>
+      getFunction("abstractmethod").call(
+        <Object?>[
+          funcobj,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## classify
+  ///
+  /// ### python source
+  /// ```py
+  /// def classify(seq: Iterable, key: Optional[Callable] = None, value: Optional[Callable] = None) -> Dict:
+  ///     d: Dict[Any, Any] = {}
+  ///     for item in seq:
+  ///         k = key(item) if (key is not None) else item
+  ///         v = value(item) if (value is not None) else item
+  ///         try:
+  ///             d[k].append(v)
+  ///         except KeyError:
+  ///             d[k] = [v]
+  ///     return d
+  /// ```
+  Object? classify({
+    required Iterable seq,
+    Object? key,
+    Object? value,
+  }) =>
+      getFunction("classify").call(
+        <Object?>[
+          seq,
+          key,
+          value,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## get_regexp_width
+  ///
+  /// ### python source
+  /// ```py
+  /// def get_regexp_width(expr: str) -> Union[Tuple[int, int], List[int]]:
+  ///     if _has_regex:
+  ///         # Since `sre_parse` cannot deal with Unicode categories of the form `\p{Mn}`, we replace these with
+  ///         # a simple letter, which makes no difference as we are only trying to get the possible lengths of the regex
+  ///         # match here below.
+  ///         regexp_final = re.sub(categ_pattern, 'A', expr)
+  ///     else:
+  ///         if re.search(categ_pattern, expr):
+  ///             raise ImportError('`regex` module must be installed in order to use Unicode categories.', expr)
+  ///         regexp_final = expr
+  ///     try:
+  ///         # Fixed in next version (past 0.960) of typeshed
+  ///         return [int(x) for x in sre_parse.parse(regexp_final).getwidth()]   # type: ignore[attr-defined]
+  ///     except sre_constants.error:
+  ///         if not _has_regex:
+  ///             raise ValueError(expr)
+  ///         else:
+  ///             # sre_parse does not support the new features in regex. To not completely fail in that case,
+  ///             # we manually test for the most important info (whether the empty string is matched)
+  ///             c = regex.compile(regexp_final)
+  ///             if c.match('') is None:
+  ///                 # MAXREPEAT is a none pickable subclass of int, therefore needs to be converted to enable caching
+  ///                 return 1, int(sre_constants.MAXREPEAT)
+  ///             else:
+  ///                 return 0, int(sre_constants.MAXREPEAT)
+  /// ```
+  Object? get_regexp_width({
+    required String expr,
+  }) =>
+      getFunction("get_regexp_width").call(
+        <Object?>[
+          expr,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## logger (getter)
+  Object? get logger => getAttribute("logger");
+
+  /// ## logger (setter)
+  set logger(Object? logger) => setAttribute("logger", logger);
+
+  /// ## Callable (getter)
+  Object? get Callable => getAttribute("Callable");
+
+  /// ## Callable (setter)
+  set Callable(Object? Callable) => setAttribute("Callable", Callable);
+
+  /// ## ClassVar (getter)
+  Object? get ClassVar => getAttribute("ClassVar");
+
+  /// ## ClassVar (setter)
+  set ClassVar(Object? ClassVar) => setAttribute("ClassVar", ClassVar);
+
+  /// ## Collection (getter)
+  Object? get Collection => getAttribute("Collection");
+
+  /// ## Collection (setter)
+  set Collection(Object? Collection) => setAttribute("Collection", Collection);
+
+  /// ## Dict (getter)
+  Object? get Dict => getAttribute("Dict");
+
+  /// ## Dict (setter)
+  set Dict(Object? Dict) => setAttribute("Dict", Dict);
+
+  /// ## FrozenSet (getter)
+  Object? get FrozenSet => getAttribute("FrozenSet");
+
+  /// ## FrozenSet (setter)
+  set FrozenSet(Object? FrozenSet) => setAttribute("FrozenSet", FrozenSet);
+
+  /// ## Iterator (getter)
+  Object? get $Iterator => getAttribute("Iterator");
+
+  /// ## Iterator (setter)
+  set $Iterator(Object? $Iterator) => setAttribute("Iterator", $Iterator);
+
+  /// ## Optional (getter)
+  Object? get Optional => getAttribute("Optional");
+
+  /// ## Optional (setter)
+  set Optional(Object? Optional) => setAttribute("Optional", Optional);
+
+  /// ## Type (getter)
+  Object? get Type => getAttribute("Type");
+
+  /// ## Type (setter)
+  set Type(Object? Type) => setAttribute("Type", Type);
 
   /// ## TOKEN_DEFAULT_PRIORITY (getter)
   Object? get TOKEN_DEFAULT_PRIORITY => getAttribute("TOKEN_DEFAULT_PRIORITY");

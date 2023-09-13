@@ -77,10 +77,8 @@ class InspectEntryModuleConnection {
       <String, Object?>{
         "name": name,
         "sanitizedName": sanitizedName,
-        "parentModule": parentModule.debugDump(
-          cache: cache,
-          expandChildren: false,
-        ),
+        "parentModule":
+            parentModule.debugDump(cache: cache, expandChildren: false),
       };
 }
 
@@ -94,8 +92,10 @@ sealed class InspectEntry {
   /// TODO: Document.
   bool hasModuleConnection(InspectEntryModuleConnection connection);
 
-  /// TODO: Document.
-  void addModuleConnection(InspectEntryModuleConnection connection);
+  /// Connects this entry to a module.
+  /// Returns true if the connection was successful, false if the connection
+  /// already existed.
+  bool addModuleConnection(InspectEntryModuleConnection connection);
 
   /// TODO: Document.
   List<InspectEntryModuleConnection> get moduleConnections;

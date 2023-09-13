@@ -13,7 +13,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 /// ```
 final class MissingVariableError extends PythonClass {
   factory MissingVariableError() => PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.tree_templates",
         "MissingVariableError",
         MissingVariableError.from,
         <Object?>[],
@@ -629,7 +629,7 @@ final class Transformer extends PythonClass {
     bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.visitors",
+        "lark.tree_templates",
         "Transformer",
         Transformer.from,
         <Object?>[
@@ -868,7 +868,7 @@ final class Tree extends PythonClass {
     Object? meta,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.tree",
+        "lark.tree_templates",
         "Tree",
         Tree.from,
         <Object?>[
@@ -1473,4 +1473,149 @@ final class tree_templates extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## Branch (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// This module defines utilities for matching and translation tree templates.
+  ///
+  /// A tree templates is a tree that contains nodes that are template variables.
+  Object? get Branch => getAttribute("Branch");
+
+  /// ## Branch (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// This module defines utilities for matching and translation tree templates.
+  ///
+  /// A tree templates is a tree that contains nodes that are template variables.
+  set Branch(Object? Branch) => setAttribute("Branch", Branch);
+
+  /// ## Dict (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// This module defines utilities for matching and translation tree templates.
+  ///
+  /// A tree templates is a tree that contains nodes that are template variables.
+  Object? get Dict => getAttribute("Dict");
+
+  /// ## Dict (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// This module defines utilities for matching and translation tree templates.
+  ///
+  /// A tree templates is a tree that contains nodes that are template variables.
+  set Dict(Object? Dict) => setAttribute("Dict", Dict);
+
+  /// ## Iterator (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// This module defines utilities for matching and translation tree templates.
+  ///
+  /// A tree templates is a tree that contains nodes that are template variables.
+  Object? get $Iterator => getAttribute("Iterator");
+
+  /// ## Iterator (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// This module defines utilities for matching and translation tree templates.
+  ///
+  /// A tree templates is a tree that contains nodes that are template variables.
+  set $Iterator(Object? $Iterator) => setAttribute("Iterator", $Iterator);
+
+  /// ## Mapping (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// This module defines utilities for matching and translation tree templates.
+  ///
+  /// A tree templates is a tree that contains nodes that are template variables.
+  Object? get Mapping => getAttribute("Mapping");
+
+  /// ## Mapping (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// This module defines utilities for matching and translation tree templates.
+  ///
+  /// A tree templates is a tree that contains nodes that are template variables.
+  set Mapping(Object? Mapping) => setAttribute("Mapping", Mapping);
+
+  /// ## MatchResult (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// This module defines utilities for matching and translation tree templates.
+  ///
+  /// A tree templates is a tree that contains nodes that are template variables.
+  Object? get MatchResult => getAttribute("MatchResult");
+
+  /// ## MatchResult (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// This module defines utilities for matching and translation tree templates.
+  ///
+  /// A tree templates is a tree that contains nodes that are template variables.
+  set MatchResult(Object? MatchResult) =>
+      setAttribute("MatchResult", MatchResult);
+
+  /// ## Optional (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// This module defines utilities for matching and translation tree templates.
+  ///
+  /// A tree templates is a tree that contains nodes that are template variables.
+  Object? get Optional => getAttribute("Optional");
+
+  /// ## Optional (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// This module defines utilities for matching and translation tree templates.
+  ///
+  /// A tree templates is a tree that contains nodes that are template variables.
+  set Optional(Object? Optional) => setAttribute("Optional", Optional);
+
+  /// ## Tuple (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// This module defines utilities for matching and translation tree templates.
+  ///
+  /// A tree templates is a tree that contains nodes that are template variables.
+  Object? get Tuple => getAttribute("Tuple");
+
+  /// ## Tuple (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// This module defines utilities for matching and translation tree templates.
+  ///
+  /// A tree templates is a tree that contains nodes that are template variables.
+  set Tuple(Object? Tuple) => setAttribute("Tuple", Tuple);
+
+  /// ## Union (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// This module defines utilities for matching and translation tree templates.
+  ///
+  /// A tree templates is a tree that contains nodes that are template variables.
+  Object? get Union => getAttribute("Union");
+
+  /// ## Union (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// This module defines utilities for matching and translation tree templates.
+  ///
+  /// A tree templates is a tree that contains nodes that are template variables.
+  set Union(Object? Union) => setAttribute("Union", Union);
 }

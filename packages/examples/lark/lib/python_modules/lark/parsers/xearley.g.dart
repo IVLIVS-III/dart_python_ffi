@@ -297,7 +297,7 @@ final class BaseParser extends PythonClass {
     Object? tree_class,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.earley",
+        "lark.parsers.xearley",
         "BaseParser",
         BaseParser.from,
         <Object?>[
@@ -1075,7 +1075,7 @@ final class SymbolNode extends PythonClass {
     required Object? end,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_forest",
+        "lark.parsers.xearley",
         "SymbolNode",
         SymbolNode.from,
         <Object?>[
@@ -1658,7 +1658,7 @@ final class Terminal extends PythonClass {
     Object? filter_out = false,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.parsers.xearley",
         "Terminal",
         Terminal.from,
         <Object?>[
@@ -2009,7 +2009,7 @@ final class Terminal extends PythonClass {
 /// ```
 final class Token extends PythonClass {
   factory Token() => PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.parsers.xearley",
         "Token",
         Token.from,
         <Object?>[],
@@ -4630,7 +4630,7 @@ final class TokenNode extends PythonClass {
     Object? priority,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_forest",
+        "lark.parsers.xearley",
         "TokenNode",
         TokenNode.from,
         <Object?>[
@@ -4921,7 +4921,7 @@ final class Tree extends PythonClass {
     Object? meta,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.tree",
+        "lark.parsers.xearley",
         "Tree",
         Tree.from,
         <Object?>[
@@ -5360,7 +5360,7 @@ final class UnexpectedCharacters extends PythonClass {
     Object? considered_rules,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.parsers.xearley",
         "UnexpectedCharacters",
         UnexpectedCharacters.from,
         <Object?>[

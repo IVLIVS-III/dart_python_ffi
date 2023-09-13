@@ -144,7 +144,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 /// ```
 final class FeedParserDict extends PythonClass {
   factory FeedParserDict() => PythonFfiDart.instance.importClass(
-        "feedparser.util",
+        "feedparser.namespaces.itunes",
         "FeedParserDict",
         FeedParserDict.from,
         <Object?>[],

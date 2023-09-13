@@ -33,7 +33,7 @@ final class IntParseTable extends PythonClass {
     required Object? end_states,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.lalr_analysis",
+        "lark.parsers.lalr_parser",
         "IntParseTable",
         IntParseTable.from,
         <Object?>[
@@ -237,7 +237,7 @@ final class InteractiveParser extends PythonClass {
     required Object? lexer_thread,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.lalr_interactive_parser",
+        "lark.parsers.lalr_parser",
         "InteractiveParser",
         InteractiveParser.from,
         <Object?>[
@@ -763,7 +763,7 @@ final class LALR_Analyzer extends PythonClass {
     Object? strict = false,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.lalr_analysis",
+        "lark.parsers.lalr_parser",
         "LALR_Analyzer",
         LALR_Analyzer.from,
         <Object?>[
@@ -1685,7 +1685,7 @@ final class ParserState extends PythonClass {
 /// ```
 final class Serialize extends PythonClass {
   factory Serialize() => PythonFfiDart.instance.importClass(
-        "lark.utils",
+        "lark.parsers.lalr_parser",
         "Serialize",
         Serialize.from,
         <Object?>[],
@@ -1919,7 +1919,7 @@ final class Serialize extends PythonClass {
 /// ```
 final class Token extends PythonClass {
   factory Token() => PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.parsers.lalr_parser",
         "Token",
         Token.from,
         <Object?>[],
@@ -4553,7 +4553,7 @@ final class UnexpectedCharacters extends PythonClass {
     Object? considered_rules,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.parsers.lalr_parser",
         "UnexpectedCharacters",
         UnexpectedCharacters.from,
         <Object?>[
@@ -5045,7 +5045,7 @@ final class UnexpectedCharacters extends PythonClass {
 /// ```
 final class UnexpectedInput extends PythonClass {
   factory UnexpectedInput() => PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.parsers.lalr_parser",
         "UnexpectedInput",
         UnexpectedInput.from,
         <Object?>[],
@@ -5405,7 +5405,7 @@ final class UnexpectedToken extends PythonClass {
     Object? token_history,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.parsers.lalr_parser",
         "UnexpectedToken",
         UnexpectedToken.from,
         <Object?>[
@@ -6264,4 +6264,32 @@ final class lalr_parser extends PythonModule {
         "lark.parsers.lalr_parser",
         lalr_parser.from,
       );
+
+  /// ## Shift (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// This module implements a LALR(1) Parser
+  Object? get Shift => getAttribute("Shift");
+
+  /// ## Shift (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// This module implements a LALR(1) Parser
+  set Shift(Object? Shift) => setAttribute("Shift", Shift);
+
+  /// ## Dict (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// This module implements a LALR(1) Parser
+  Object? get Dict => getAttribute("Dict");
+
+  /// ## Dict (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// This module implements a LALR(1) Parser
+  set Dict(Object? Dict) => setAttribute("Dict", Dict);
 }

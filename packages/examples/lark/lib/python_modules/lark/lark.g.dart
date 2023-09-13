@@ -133,7 +133,7 @@ final class BasicLexer extends PythonClass {
     Object? comparator,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.lark",
         "BasicLexer",
         BasicLexer.from,
         <Object?>[
@@ -463,7 +463,7 @@ final class BasicLexer extends PythonClass {
 /// ```
 final class ConfigurationError extends PythonClass {
   factory ConfigurationError() => PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.lark",
         "ConfigurationError",
         ConfigurationError.from,
         <Object?>[],
@@ -507,7 +507,7 @@ final class ConfigurationError extends PythonClass {
 /// ```
 final class FS extends PythonClass {
   factory FS() => PythonFfiDart.instance.importClass(
-        "lark.utils",
+        "lark.lark",
         "FS",
         FS.from,
         <Object?>[],
@@ -614,7 +614,7 @@ final class FromPackageLoader extends PythonClass {
     Object? search_paths = const [""],
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.load_grammar",
+        "lark.lark",
         "FromPackageLoader",
         FromPackageLoader.from,
         <Object?>[
@@ -826,7 +826,7 @@ final class Grammar extends PythonClass {
     required Object? ignore,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.load_grammar",
+        "lark.lark",
         "Grammar",
         Grammar.from,
         <Object?>[
@@ -4495,7 +4495,7 @@ final class LarkOptions extends PythonClass {
 /// ```
 final class Lexer extends PythonClass {
   factory Lexer() => PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.lark",
         "Lexer",
         Lexer.from,
         <Object?>[],
@@ -4625,7 +4625,7 @@ final class LexerConf extends PythonClass {
     bool strict = false,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.common",
+        "lark.lark",
         "LexerConf",
         LexerConf.from,
         <Object?>[
@@ -5014,7 +5014,7 @@ final class LexerThread extends PythonClass {
     required Object? lexer_state,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.lark",
         "LexerThread",
         LexerThread.from,
         <Object?>[
@@ -5093,7 +5093,7 @@ final class LexerThread extends PythonClass {
 /// PackageResource(pkg_name, path)
 final class PackageResource extends PythonClass {
   factory PackageResource() => PythonFfiDart.instance.importClass(
-        "lark.load_grammar",
+        "lark.lark",
         "PackageResource",
         PackageResource.from,
         <Object?>[],
@@ -5231,7 +5231,7 @@ final class ParseTreeBuilder extends PythonClass {
     Object? maybe_placeholders = false,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parse_tree_builder",
+        "lark.lark",
         "ParseTreeBuilder",
         ParseTreeBuilder.from,
         <Object?>[
@@ -5358,7 +5358,7 @@ final class ParserConf extends PythonClass {
     required Object? start,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.common",
+        "lark.lark",
         "ParserConf",
         ParserConf.from,
         <Object?>[
@@ -5662,7 +5662,7 @@ final class Rule extends PythonClass {
     Object? options,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.lark",
         "Rule",
         Rule.from,
         <Object?>[
@@ -5891,7 +5891,7 @@ final class Rule extends PythonClass {
 /// ```
 final class Serialize extends PythonClass {
   factory Serialize() => PythonFfiDart.instance.importClass(
-        "lark.utils",
+        "lark.lark",
         "Serialize",
         Serialize.from,
         <Object?>[],
@@ -6000,7 +6000,7 @@ final class SerializeMemoizer extends PythonClass {
     required Object? types_to_memoize,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.utils",
+        "lark.lark",
         "SerializeMemoizer",
         SerializeMemoizer.from,
         <Object?>[
@@ -6146,7 +6146,7 @@ final class TerminalDef extends PythonClass {
     int priority = 0,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.lark",
         "TerminalDef",
         TerminalDef.from,
         <Object?>[
@@ -6472,7 +6472,7 @@ final class TerminalDef extends PythonClass {
 /// ```
 final class Token extends PythonClass {
   factory Token() => PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.lark",
         "Token",
         Token.from,
         <Object?>[],
@@ -9248,7 +9248,7 @@ final class Tree extends PythonClass {
     Object? meta,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.tree",
+        "lark.lark",
         "Tree",
         Tree.from,
         <Object?>[
@@ -9750,7 +9750,7 @@ final class Tree extends PythonClass {
 /// ```
 final class UnexpectedInput extends PythonClass {
   factory UnexpectedInput() => PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.lark",
         "UnexpectedInput",
         UnexpectedInput.from,
         <Object?>[],
@@ -10697,6 +10697,250 @@ final class lark extends PythonModule {
         lark.from,
       );
 
+  /// ## abstractmethod
+  ///
+  /// ### python docstring
+  ///
+  /// A decorator indicating abstract methods.
+  ///
+  /// Requires that the metaclass is ABCMeta or derived from it.  A
+  /// class that has a metaclass derived from ABCMeta cannot be
+  /// instantiated unless all of its abstract methods are overridden.
+  /// The abstract methods can be called using any of the normal
+  /// 'super' call mechanisms.  abstractmethod() may be used to declare
+  /// abstract methods for properties and descriptors.
+  ///
+  /// Usage:
+  ///
+  ///     class C(metaclass=ABCMeta):
+  ///         @abstractmethod
+  ///         def my_abstract_method(self, ...):
+  ///             ...
+  Object? abstractmethod({
+    required Object? funcobj,
+  }) =>
+      getFunction("abstractmethod").call(
+        <Object?>[
+          funcobj,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## assert_config
+  ///
+  /// ### python source
+  /// ```py
+  /// def assert_config(value, options: Collection, msg='Got %r, expected one of %s'):
+  ///     if value not in options:
+  ///         raise ConfigurationError(msg % (value, options))
+  /// ```
+  Object? assert_config({
+    required Object? value,
+    required Object? options,
+    Object? msg = "Got %r, expected one of %s",
+  }) =>
+      getFunction("assert_config").call(
+        <Object?>[
+          value,
+          options,
+          msg,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## isascii
+  ///
+  /// ### python docstring
+  ///
+  /// str.isascii only exists in python3.7+
+  ///
+  /// ### python source
+  /// ```py
+  /// def isascii(s: str) -> bool:
+  ///     """ str.isascii only exists in python3.7+ """
+  ///     if sys.version_info >= (3, 7):
+  ///         return s.isascii()
+  ///     else:
+  ///         try:
+  ///             s.encode('ascii')
+  ///             return True
+  ///         except (UnicodeDecodeError, UnicodeEncodeError):
+  ///             return False
+  /// ```
+  bool isascii({
+    required String s,
+  }) =>
+      getFunction("isascii").call(
+        <Object?>[
+          s,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## load_grammar
+  ///
+  /// ### python source
+  /// ```py
+  /// def load_grammar(grammar, source, import_paths, global_keep_all_tokens):
+  ///     builder = GrammarBuilder(global_keep_all_tokens, import_paths)
+  ///     builder.load_grammar(grammar, source)
+  ///     return builder.build(), builder.used_files
+  /// ```
+  Object? load_grammar({
+    required Object? grammar,
+    required Object? source,
+    required Object? import_paths,
+    required Object? global_keep_all_tokens,
+  }) =>
+      getFunction("load_grammar").call(
+        <Object?>[
+          grammar,
+          source,
+          import_paths,
+          global_keep_all_tokens,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## sha256_digest
+  ///
+  /// ### python docstring
+  ///
+  /// Get the sha256 digest of a string
+  ///
+  /// Supports the `usedforsecurity` argument for Python 3.9+ to allow running on
+  /// a FIPS-enabled system.
+  ///
+  /// ### python source
+  /// ```py
+  /// def sha256_digest(s: str) -> str:
+  ///     """Get the sha256 digest of a string
+  ///
+  ///     Supports the `usedforsecurity` argument for Python 3.9+ to allow running on
+  ///     a FIPS-enabled system.
+  ///     """
+  ///     if sys.version_info >= (3, 9):
+  ///         return hashlib.sha256(s.encode('utf8'), usedforsecurity=False).hexdigest()
+  ///     else:
+  ///         return hashlib.sha256(s.encode('utf8')).hexdigest()
+  /// ```
+  String sha256_digest({
+    required String s,
+  }) =>
+      getFunction("sha256_digest").call(
+        <Object?>[
+          s,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## verify_used_files
+  ///
+  /// ### python source
+  /// ```py
+  /// def verify_used_files(file_hashes):
+  ///     for path, old in file_hashes.items():
+  ///         text = None
+  ///         if isinstance(path, str) and os.path.exists(path):
+  ///             with open(path, encoding='utf8') as f:
+  ///                 text = f.read()
+  ///         elif isinstance(path, PackageResource):
+  ///             with suppress(IOError):
+  ///                 text = pkgutil.get_data(*path).decode('utf-8')
+  ///         if text is None: # We don't know how to load the path. ignore it.
+  ///             continue
+  ///
+  ///         current = sha256_digest(text)
+  ///         if old != current:
+  ///             logger.info("File %r changed, rebuilding Parser" % path)
+  ///             return False
+  ///     return True
+  /// ```
+  Object? verify_used_files({
+    required Object? file_hashes,
+  }) =>
+      getFunction("verify_used_files").call(
+        <Object?>[
+          file_hashes,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## sys
+  sys get $sys => sys.import();
+
+  /// ## logger (getter)
+  Object? get logger => getAttribute("logger");
+
+  /// ## logger (setter)
+  set logger(Object? logger) => setAttribute("logger", logger);
+
+  /// ## Callable (getter)
+  Object? get Callable => getAttribute("Callable");
+
+  /// ## Callable (setter)
+  set Callable(Object? Callable) => setAttribute("Callable", Callable);
+
+  /// ## Collection (getter)
+  Object? get Collection => getAttribute("Collection");
+
+  /// ## Collection (setter)
+  set Collection(Object? Collection) => setAttribute("Collection", Collection);
+
+  /// ## Dict (getter)
+  Object? get Dict => getAttribute("Dict");
+
+  /// ## Dict (setter)
+  set Dict(Object? Dict) => setAttribute("Dict", Dict);
+
+  /// ## Iterable (getter)
+  Object? get $Iterable => getAttribute("Iterable");
+
+  /// ## Iterable (setter)
+  set $Iterable(Object? $Iterable) => setAttribute("Iterable", $Iterable);
+
+  /// ## Iterator (getter)
+  Object? get $Iterator => getAttribute("Iterator");
+
+  /// ## Iterator (setter)
+  set $Iterator(Object? $Iterator) => setAttribute("Iterator", $Iterator);
+
+  /// ## List (getter)
+  Object? get $List => getAttribute("List");
+
+  /// ## List (setter)
+  set $List(Object? $List) => setAttribute("List", $List);
+
+  /// ## Optional (getter)
+  Object? get Optional => getAttribute("Optional");
+
+  /// ## Optional (setter)
+  set Optional(Object? Optional) => setAttribute("Optional", Optional);
+
+  /// ## Sequence (getter)
+  Object? get Sequence => getAttribute("Sequence");
+
+  /// ## Sequence (setter)
+  set Sequence(Object? Sequence) => setAttribute("Sequence", Sequence);
+
+  /// ## Tuple (getter)
+  Object? get Tuple => getAttribute("Tuple");
+
+  /// ## Tuple (setter)
+  set Tuple(Object? Tuple) => setAttribute("Tuple", Tuple);
+
+  /// ## Type (getter)
+  Object? get Type => getAttribute("Type");
+
+  /// ## Type (setter)
+  set Type(Object? Type) => setAttribute("Type", Type);
+
+  /// ## Union (getter)
+  Object? get Union => getAttribute("Union");
+
+  /// ## Union (setter)
+  set Union(Object? Union) => setAttribute("Union", Union);
+
   /// ## TYPE_CHECKING (getter)
   Object? get TYPE_CHECKING => getAttribute("TYPE_CHECKING");
 
@@ -10710,7 +10954,7 @@ final class sys extends PythonModule {
   sys.from(super.pythonModule) : super.from();
 
   static sys import() => PythonFfiDart.instance.importModule(
-        "sys",
+        "lark.sys",
         sys.from,
       );
 

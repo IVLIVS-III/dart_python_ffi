@@ -23,7 +23,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 /// ```
 final class FrozenAttributeError extends PythonClass {
   factory FrozenAttributeError() => PythonFfiDart.instance.importClass(
-        "attr.exceptions",
+        "attr.setters",
         "FrozenAttributeError",
         FrozenAttributeError.from,
         <Object?>[],
@@ -378,4 +378,18 @@ final class setters extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## NO_OP (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Commonly used hooks for on_setattr.
+  Object? get NO_OP => getAttribute("NO_OP");
+
+  /// ## NO_OP (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Commonly used hooks for on_setattr.
+  set NO_OP(Object? NO_OP) => setAttribute("NO_OP", NO_OP);
 }

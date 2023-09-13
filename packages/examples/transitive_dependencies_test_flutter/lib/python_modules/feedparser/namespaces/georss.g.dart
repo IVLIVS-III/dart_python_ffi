@@ -144,7 +144,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 /// ```
 final class FeedParserDict extends PythonClass {
   factory FeedParserDict() => PythonFfiDart.instance.importClass(
-        "feedparser.util",
+        "feedparser.namespaces.georss",
         "FeedParserDict",
         FeedParserDict.from,
         <Object?>[],
@@ -736,4 +736,11 @@ final class georss extends PythonModule {
         "feedparser.namespaces.georss",
         georss.from,
       );
+
+  /// ## generator_stop (getter)
+  Object? get generator_stop => getAttribute("generator_stop");
+
+  /// ## generator_stop (setter)
+  set generator_stop(Object? generator_stop) =>
+      setAttribute("generator_stop", generator_stop);
 }

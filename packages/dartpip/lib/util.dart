@@ -168,7 +168,12 @@ Future<void> _generateTypeDefs(
   if (!outfile.existsSync()) {
     outfile.createSync(recursive: true);
   }
-  await outfile.writeAsString(emitInspection(cache));
+  await outfile.writeAsString(
+    emitInspection(
+      cache,
+      moduleParentPrefix: parentModulePrefix,
+    ),
+  );
   Process.runSync("dart", <String>["format", outfile.absolute.path]);
 }
 

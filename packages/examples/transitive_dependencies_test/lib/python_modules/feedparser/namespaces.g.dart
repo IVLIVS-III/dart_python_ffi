@@ -144,7 +144,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 /// ```
 final class FeedParserDict extends PythonClass {
   factory FeedParserDict() => PythonFfiDart.instance.importClass(
-        "feedparser.util",
+        "feedparser.namespaces",
         "FeedParserDict",
         FeedParserDict.from,
         <Object?>[],
@@ -331,7 +331,7 @@ final class FeedParserDict extends PythonClass {
 /// ```
 final class Namespace extends PythonClass {
   factory Namespace() => PythonFfiDart.instance.importClass(
-        "feedparser.namespaces.cc",
+        "feedparser.namespaces",
         "Namespace",
         Namespace.from,
         <Object?>[],
@@ -355,6 +355,24 @@ final class namespaces extends PythonModule {
         "feedparser.namespaces",
         namespaces.from,
       );
+
+  /// ## cc
+  cc get $cc => cc.import();
+
+  /// ## dc
+  dc get $dc => dc.import();
+
+  /// ## georss
+  georss get $georss => georss.import();
+
+  /// ## itunes
+  itunes get $itunes => itunes.import();
+
+  /// ## mediarss
+  mediarss get $mediarss => mediarss.import();
+
+  /// ## psc
+  psc get $psc => psc.import();
 }
 
 /// ## cc

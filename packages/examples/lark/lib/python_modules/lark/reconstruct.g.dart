@@ -514,7 +514,7 @@ final class Lark extends PythonClass {
     Map<String, Object?> options = const <String, Object?>{},
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lark",
+        "lark.reconstruct",
         "Lark",
         Lark.from,
         <Object?>[
@@ -2849,7 +2849,7 @@ final class NonTerminal extends PythonClass {
     required String name,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.reconstruct",
         "NonTerminal",
         NonTerminal.from,
         <Object?>[
@@ -3054,7 +3054,7 @@ final class PatternStr extends PythonClass {
     Object? raw,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.reconstruct",
         "PatternStr",
         PatternStr.from,
         <Object?>[
@@ -3551,7 +3551,7 @@ final class $Symbol extends PythonClass {
     required String name,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.reconstruct",
         "Symbol",
         $Symbol.from,
         <Object?>[
@@ -3755,7 +3755,7 @@ final class Terminal extends PythonClass {
     Object? filter_out = false,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.reconstruct",
         "Terminal",
         Terminal.from,
         <Object?>[
@@ -3992,7 +3992,7 @@ final class TerminalDef extends PythonClass {
     int priority = 0,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.reconstruct",
         "TerminalDef",
         TerminalDef.from,
         <Object?>[
@@ -4318,7 +4318,7 @@ final class TerminalDef extends PythonClass {
 /// ```
 final class Token extends PythonClass {
   factory Token() => PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.reconstruct",
         "Token",
         Token.from,
         <Object?>[],
@@ -6918,7 +6918,7 @@ final class Transformer_InPlace extends PythonClass {
     bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.visitors",
+        "lark.reconstruct",
         "Transformer_InPlace",
         Transformer_InPlace.from,
         <Object?>[
@@ -7159,7 +7159,7 @@ final class Tree extends PythonClass {
     Object? meta,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.tree",
+        "lark.reconstruct",
         "Tree",
         Tree.from,
         <Object?>[
@@ -7661,7 +7661,7 @@ final class TreeMatcher extends PythonClass {
     required Object? parser,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.tree_matcher",
+        "lark.reconstruct",
         "TreeMatcher",
         TreeMatcher.from,
         <Object?>[
@@ -8062,6 +8062,49 @@ final class reconstruct extends PythonModule {
         reconstruct.from,
       );
 
+  /// ## is_discarded_terminal
+  ///
+  /// ### python source
+  /// ```py
+  /// def is_discarded_terminal(t):
+  ///     return t.is_term and t.filter_out
+  /// ```
+  Object? is_discarded_terminal({
+    required Object? t,
+  }) =>
+      getFunction("is_discarded_terminal").call(
+        <Object?>[
+          t,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## is_id_continue
+  ///
+  /// ### python docstring
+  ///
+  /// Checks if all characters in `s` are alphanumeric characters (Unicode standard, so diacritics, indian vowels, non-latin
+  /// numbers, etc. all pass). Synonymous with a Python `ID_CONTINUE` identifier. See PEP 3131 for details.
+  ///
+  /// ### python source
+  /// ```py
+  /// def is_id_continue(s: str) -> bool:
+  ///     """
+  ///     Checks if all characters in `s` are alphanumeric characters (Unicode standard, so diacritics, indian vowels, non-latin
+  ///     numbers, etc. all pass). Synonymous with a Python `ID_CONTINUE` identifier. See PEP 3131 for details.
+  ///     """
+  ///     return _test_unicode_category(s, _ID_CONTINUE)
+  /// ```
+  bool is_id_continue({
+    required String s,
+  }) =>
+      getFunction("is_id_continue").call(
+        <Object?>[
+          s,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
   /// ## is_iter_empty
   ///
   /// ### python source
@@ -8082,4 +8125,74 @@ final class reconstruct extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## Callable (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Reconstruct text from a tree, based on Lark grammar
+  Object? get Callable => getAttribute("Callable");
+
+  /// ## Callable (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Reconstruct text from a tree, based on Lark grammar
+  set Callable(Object? Callable) => setAttribute("Callable", Callable);
+
+  /// ## Dict (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Reconstruct text from a tree, based on Lark grammar
+  Object? get Dict => getAttribute("Dict");
+
+  /// ## Dict (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Reconstruct text from a tree, based on Lark grammar
+  set Dict(Object? Dict) => setAttribute("Dict", Dict);
+
+  /// ## Iterable (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Reconstruct text from a tree, based on Lark grammar
+  Object? get $Iterable => getAttribute("Iterable");
+
+  /// ## Iterable (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Reconstruct text from a tree, based on Lark grammar
+  set $Iterable(Object? $Iterable) => setAttribute("Iterable", $Iterable);
+
+  /// ## Optional (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Reconstruct text from a tree, based on Lark grammar
+  Object? get Optional => getAttribute("Optional");
+
+  /// ## Optional (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Reconstruct text from a tree, based on Lark grammar
+  set Optional(Object? Optional) => setAttribute("Optional", Optional);
+
+  /// ## ParseTree (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Reconstruct text from a tree, based on Lark grammar
+  Object? get ParseTree => getAttribute("ParseTree");
+
+  /// ## ParseTree (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Reconstruct text from a tree, based on Lark grammar
+  set ParseTree(Object? ParseTree) => setAttribute("ParseTree", ParseTree);
 }

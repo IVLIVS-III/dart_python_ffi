@@ -2,6 +2,7 @@ part of interface_gen;
 
 /// TODO: Document.
 base mixin FunctionFieldMixin on InstantiatedInspectMixin {
+  /// Emits all member functions of a class or module.
   void _emitFunctionFields(
     StringBuffer buffer, {
     required Set<String> memberNames,

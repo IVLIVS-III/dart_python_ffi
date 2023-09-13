@@ -16,11 +16,12 @@ base mixin InspectMixin
       _moduleConnections.contains(connection);
 
   @override
-  void addModuleConnection(InspectEntryModuleConnection connection) {
+  bool addModuleConnection(InspectEntryModuleConnection connection) {
     if (hasModuleConnection(connection)) {
-      return;
+      return false;
     }
     _moduleConnections.add(connection);
+    return true;
   }
 
   final Set<InstantiatedInspectEntry> _cachedInstantiations =
@@ -172,16 +173,18 @@ base mixin InspectMixin
         sanitizedName: sanitizedName,
         parentModule: parentModule,
       );
-      child.addModuleConnection(connection);
+      final bool didAddConnection = child.addModuleConnection(connection);
       _setChild(name, child);
       if (cached == null) {
         cache[value] = child;
       }
-      child.collectChildren(
-        cache,
-        stdlibPath: stdlibPath,
-        parentModule: parentModule,
-      );
+      if (didAddConnection) {
+        child.collectChildren(
+          cache,
+          stdlibPath: stdlibPath,
+          parentModule: parentModule,
+        );
+      }
     }
   }
 
@@ -260,14 +263,13 @@ base mixin InspectMixin
     final int? id = cache?.id(value);
     return <String, Object?>{
       if (id != null) "_id": id,
-      "moduleConnections": moduleConnections
-          .map(
-            (InspectEntryModuleConnection e) => e.debugDump(
-              cache: cache,
-              expandChildren: id == null,
-            ),
-          )
-          .toList(),
+      if (expandChildren)
+        "moduleConnections": moduleConnections
+            .map(
+              (InspectEntryModuleConnection e) =>
+                  e.debugDump(cache: cache, expandChildren: id == null),
+            )
+            .toList(),
       "value": value,
       "type": type.displayName,
       "parentModule": definingModule,

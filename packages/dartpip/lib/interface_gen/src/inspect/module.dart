@@ -112,12 +112,17 @@ final class InstantiatedModule extends PythonModule
     buffer.writeln("/// ## $name");
     emitDoc(buffer);
     emitSource(buffer);
+    final String qualifiedName = this.qualifiedName;
+    final String fullyQualifiedImportName =
+        qualifiedName.startsWith(moduleParentPrefix)
+            ? qualifiedName
+            : "$moduleParentPrefix$qualifiedName";
     buffer.writeln("""
 final class $sanitizedName extends PythonModule {
   $sanitizedName.from(super.pythonModule) : super.from();
   
   static $sanitizedName import() => PythonFfiDart.instance
-      .importModule("$moduleParentPrefix$qualifiedName", $sanitizedName.from,);
+      .importModule("$fullyQualifiedImportName", $sanitizedName.from,);
 """);
     final Set<String> memberNames = <String>{name};
     _emitFunctionFields(

@@ -1477,11 +1477,50 @@ final class tree extends PythonModule {
         },
       );
 
+  /// ## sys
+  sys get $sys => sys.import();
+
+  /// ## Branch (getter)
+  Object? get Branch => getAttribute("Branch");
+
+  /// ## Branch (setter)
+  set Branch(Object? Branch) => setAttribute("Branch", Branch);
+
+  /// ## Callable (getter)
+  Object? get Callable => getAttribute("Callable");
+
+  /// ## Callable (setter)
+  set Callable(Object? Callable) => setAttribute("Callable", Callable);
+
+  /// ## Iterator (getter)
+  Object? get $Iterator => getAttribute("Iterator");
+
+  /// ## Iterator (setter)
+  set $Iterator(Object? $Iterator) => setAttribute("Iterator", $Iterator);
+
+  /// ## List (getter)
+  Object? get $List => getAttribute("List");
+
+  /// ## List (setter)
+  set $List(Object? $List) => setAttribute("List", $List);
+
+  /// ## Optional (getter)
+  Object? get Optional => getAttribute("Optional");
+
+  /// ## Optional (setter)
+  set Optional(Object? Optional) => setAttribute("Optional", Optional);
+
   /// ## ParseTree (getter)
   Object? get ParseTree => getAttribute("ParseTree");
 
   /// ## ParseTree (setter)
   set ParseTree(Object? ParseTree) => setAttribute("ParseTree", ParseTree);
+
+  /// ## Union (getter)
+  Object? get Union => getAttribute("Union");
+
+  /// ## Union (setter)
+  set Union(Object? Union) => setAttribute("Union", Union);
 
   /// ## TYPE_CHECKING (getter)
   Object? get TYPE_CHECKING => getAttribute("TYPE_CHECKING");
@@ -1496,7 +1535,7 @@ final class sys extends PythonModule {
   sys.from(super.pythonModule) : super.from();
 
   static sys import() => PythonFfiDart.instance.importModule(
-        "sys",
+        "lark.sys",
         sys.from,
       );
 

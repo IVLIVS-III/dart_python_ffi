@@ -62,7 +62,7 @@ final class Factory extends PythonClass {
     Object? takes_self = false,
   }) =>
       PythonFfiDart.instance.importClass(
-        "attr._make",
+        "attr.converters",
         "Factory",
         Factory.from,
         <Object?>[
@@ -447,6 +447,72 @@ final class converters extends PythonModule {
         kwargs: <String, Object?>{},
       );
 
+  /// ## pipe
+  ///
+  /// ### python docstring
+  ///
+  /// A converter that composes multiple converters into one.
+  ///
+  /// When called on a value, it runs all wrapped converters, returning the
+  /// *last* value.
+  ///
+  /// Type annotations will be inferred from the wrapped converters', if
+  /// they have any.
+  ///
+  /// :param callables converters: Arbitrary number of converters.
+  ///
+  /// .. versionadded:: 20.1.0
+  ///
+  /// ### python source
+  /// ```py
+  /// def pipe(*converters):
+  ///     """
+  ///     A converter that composes multiple converters into one.
+  ///
+  ///     When called on a value, it runs all wrapped converters, returning the
+  ///     *last* value.
+  ///
+  ///     Type annotations will be inferred from the wrapped converters', if
+  ///     they have any.
+  ///
+  ///     :param callables converters: Arbitrary number of converters.
+  ///
+  ///     .. versionadded:: 20.1.0
+  ///     """
+  ///
+  ///     def pipe_converter(val):
+  ///         for converter in converters:
+  ///             val = converter(val)
+  ///
+  ///         return val
+  ///
+  ///     if not converters:
+  ///         # If the converter list is empty, pipe_converter is the identity.
+  ///         A = typing.TypeVar("A")
+  ///         pipe_converter.__annotations__ = {"val": A, "return": A}
+  ///     else:
+  ///         # Get parameter type from first converter.
+  ///         t = _AnnotationExtractor(converters[0]).get_first_param_type()
+  ///         if t:
+  ///             pipe_converter.__annotations__["val"] = t
+  ///
+  ///         # Get return type from last converter.
+  ///         rt = _AnnotationExtractor(converters[-1]).get_return_type()
+  ///         if rt:
+  ///             pipe_converter.__annotations__["return"] = rt
+  ///
+  ///     return pipe_converter
+  /// ```
+  Object? pipe({
+    List<Object?> converters = const <Object?>[],
+  }) =>
+      getFunction("pipe").call(
+        <Object?>[
+          ...converters,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
   /// ## to_bool
   ///
   /// ### python docstring
@@ -526,4 +592,18 @@ final class converters extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## NOTHING (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Commonly useful converters.
+  Object? get NOTHING => getAttribute("NOTHING");
+
+  /// ## NOTHING (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Commonly useful converters.
+  set NOTHING(Object? NOTHING) => setAttribute("NOTHING", NOTHING);
 }

@@ -371,7 +371,7 @@ final class Indenter extends PythonClass {
 /// ```
 final class LarkError extends PythonClass {
   factory LarkError() => PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.indenter",
         "LarkError",
         LarkError.from,
         <Object?>[],
@@ -417,7 +417,7 @@ final class LarkError extends PythonClass {
 /// ```
 final class PostLex extends PythonClass {
   factory PostLex() => PythonFfiDart.instance.importClass(
-        "lark.lark",
+        "lark.indenter",
         "PostLex",
         PostLex.from,
         <Object?>[],
@@ -867,7 +867,7 @@ final class PythonIndenter extends PythonClass {
 /// ```
 final class Token extends PythonClass {
   factory Token() => PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.indenter",
         "Token",
         Token.from,
         <Object?>[],
@@ -3566,4 +3566,61 @@ final class indenter extends PythonModule {
         "lark.indenter",
         indenter.from,
       );
+
+  /// ## abstractmethod
+  ///
+  /// ### python docstring
+  ///
+  /// A decorator indicating abstract methods.
+  ///
+  /// Requires that the metaclass is ABCMeta or derived from it.  A
+  /// class that has a metaclass derived from ABCMeta cannot be
+  /// instantiated unless all of its abstract methods are overridden.
+  /// The abstract methods can be called using any of the normal
+  /// 'super' call mechanisms.  abstractmethod() may be used to declare
+  /// abstract methods for properties and descriptors.
+  ///
+  /// Usage:
+  ///
+  ///     class C(metaclass=ABCMeta):
+  ///         @abstractmethod
+  ///         def my_abstract_method(self, ...):
+  ///             ...
+  Object? abstractmethod({
+    required Object? funcobj,
+  }) =>
+      getFunction("abstractmethod").call(
+        <Object?>[
+          funcobj,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## Iterator (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Provides Indentation services for languages with indentation similar to Python
+  Object? get $Iterator => getAttribute("Iterator");
+
+  /// ## Iterator (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Provides Indentation services for languages with indentation similar to Python
+  set $Iterator(Object? $Iterator) => setAttribute("Iterator", $Iterator);
+
+  /// ## List (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Provides Indentation services for languages with indentation similar to Python
+  Object? get $List => getAttribute("List");
+
+  /// ## List (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Provides Indentation services for languages with indentation similar to Python
+  set $List(Object? $List) => setAttribute("List", $List);
 }

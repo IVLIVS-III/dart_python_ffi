@@ -198,4 +198,10 @@ final class class_types extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## Self (getter)
+  Object? get Self => getAttribute("Self");
+
+  /// ## Self (setter)
+  set Self(Object? Self) => setAttribute("Self", Self);
 }

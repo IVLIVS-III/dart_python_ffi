@@ -18,7 +18,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 /// fields' descriptions for details.
 final class struct_time extends PythonClass {
   factory struct_time() => PythonFfiDart.instance.importClass(
-        "time",
+        "feedparser.datetimes",
         "struct_time",
         struct_time.from,
         <Object?>[],
@@ -581,6 +581,30 @@ final class datetimes extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## asctime
+  asctime get $asctime => asctime.import();
+
+  /// ## greek
+  greek get $greek => greek.import();
+
+  /// ## hungarian
+  hungarian get $hungarian => hungarian.import();
+
+  /// ## iso8601
+  iso8601 get $iso8601 => iso8601.import();
+
+  /// ## korean
+  korean get $korean => korean.import();
+
+  /// ## perforce
+  perforce get $perforce => perforce.import();
+
+  /// ## rfc822
+  rfc822 get $rfc822 => rfc822.import();
+
+  /// ## w3dtf
+  w3dtf get $w3dtf => w3dtf.import();
 }
 
 /// ## asctime
@@ -1031,7 +1055,7 @@ final class time extends PythonModule {
   time.from(super.pythonModule) : super.from();
 
   static time import() => PythonFfiDart.instance.importModule(
-        "time",
+        "feedparser.time",
         time.from,
       );
 

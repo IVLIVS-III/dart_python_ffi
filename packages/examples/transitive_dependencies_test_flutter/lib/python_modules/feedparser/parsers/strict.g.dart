@@ -13,7 +13,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 /// ```
 final class UndeclaredNamespace extends PythonClass {
   factory UndeclaredNamespace() => PythonFfiDart.instance.importClass(
-        "feedparser.exceptions",
+        "feedparser.parsers.strict",
         "UndeclaredNamespace",
         UndeclaredNamespace.from,
         <Object?>[],

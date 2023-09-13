@@ -64,4 +64,10 @@ final class generic_types extends PythonModule {
 
   /// ## T (setter)
   set T(Object? T) => setAttribute("T", T);
+
+  /// ## Callable (getter)
+  Object? get Callable => getAttribute("Callable");
+
+  /// ## Callable (setter)
+  set Callable(Object? Callable) => setAttribute("Callable", Callable);
 }

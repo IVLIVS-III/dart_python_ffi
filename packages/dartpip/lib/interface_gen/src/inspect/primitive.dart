@@ -32,7 +32,7 @@ final class Primitive implements InspectEntry, InstantiatedInspectEntry {
   bool hasModuleConnection(InspectEntryModuleConnection connection) => false;
 
   @override
-  void addModuleConnection(InspectEntryModuleConnection connection) {}
+  bool addModuleConnection(InspectEntryModuleConnection connection) => false;
 
   @override
   Iterable<(String, InspectEntry)> get children =>

@@ -23,7 +23,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 /// ```
 final class AttrsAttributeNotFoundError extends PythonClass {
   factory AttrsAttributeNotFoundError() => PythonFfiDart.instance.importClass(
-        "attr.exceptions",
+        "attrs.exceptions",
         "AttrsAttributeNotFoundError",
         AttrsAttributeNotFoundError.from,
         <Object?>[],
@@ -108,7 +108,7 @@ final class AttrsAttributeNotFoundError extends PythonClass {
 /// ```
 final class DefaultAlreadySetError extends PythonClass {
   factory DefaultAlreadySetError() => PythonFfiDart.instance.importClass(
-        "attr.exceptions",
+        "attrs.exceptions",
         "DefaultAlreadySetError",
         DefaultAlreadySetError.from,
         <Object?>[],
@@ -197,7 +197,7 @@ final class DefaultAlreadySetError extends PythonClass {
 /// ```
 final class FrozenAttributeError extends PythonClass {
   factory FrozenAttributeError() => PythonFfiDart.instance.importClass(
-        "attr.exceptions",
+        "attrs.exceptions",
         "FrozenAttributeError",
         FrozenAttributeError.from,
         <Object?>[],
@@ -345,7 +345,7 @@ final class FrozenAttributeError extends PythonClass {
 /// ```
 final class FrozenError extends PythonClass {
   factory FrozenError() => PythonFfiDart.instance.importClass(
-        "attr.exceptions",
+        "attrs.exceptions",
         "FrozenError",
         FrozenError.from,
         <Object?>[],
@@ -530,7 +530,7 @@ final class FrozenError extends PythonClass {
 /// ```
 final class FrozenInstanceError extends PythonClass {
   factory FrozenInstanceError() => PythonFfiDart.instance.importClass(
-        "attr.exceptions",
+        "attrs.exceptions",
         "FrozenInstanceError",
         FrozenInstanceError.from,
         <Object?>[],
@@ -667,7 +667,7 @@ final class FrozenInstanceError extends PythonClass {
 /// ```
 final class NotAnAttrsClassError extends PythonClass {
   factory NotAnAttrsClassError() => PythonFfiDart.instance.importClass(
-        "attr.exceptions",
+        "attrs.exceptions",
         "NotAnAttrsClassError",
         NotAnAttrsClassError.from,
         <Object?>[],
@@ -764,7 +764,7 @@ final class NotCallableError extends PythonClass {
     required Object? value,
   }) =>
       PythonFfiDart.instance.importClass(
-        "attr.exceptions",
+        "attrs.exceptions",
         "NotCallableError",
         NotCallableError.from,
         <Object?>[
@@ -899,7 +899,7 @@ final class NotCallableError extends PythonClass {
 /// ```
 final class PythonTooOldError extends PythonClass {
   factory PythonTooOldError() => PythonFfiDart.instance.importClass(
-        "attr.exceptions",
+        "attrs.exceptions",
         "PythonTooOldError",
         PythonTooOldError.from,
         <Object?>[],
@@ -988,7 +988,7 @@ final class PythonTooOldError extends PythonClass {
 /// ```
 final class UnannotatedAttributeError extends PythonClass {
   factory UnannotatedAttributeError() => PythonFfiDart.instance.importClass(
-        "attr.exceptions",
+        "attrs.exceptions",
         "UnannotatedAttributeError",
         UnannotatedAttributeError.from,
         <Object?>[],

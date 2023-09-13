@@ -212,7 +212,7 @@ final class NT extends PythonClass {
     required String name,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.parsers.cyk",
         "NT",
         NT.from,
         <Object?>[
@@ -390,7 +390,7 @@ final class NT extends PythonClass {
 /// ```
 final class ParseError extends PythonClass {
   factory ParseError() => PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.parsers.cyk",
         "ParseError",
         ParseError.from,
         <Object?>[],
@@ -788,7 +788,7 @@ final class $Symbol extends PythonClass {
     required String name,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.parsers.cyk",
         "Symbol",
         $Symbol.from,
         <Object?>[
@@ -992,7 +992,7 @@ final class T extends PythonClass {
     Object? filter_out = false,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.parsers.cyk",
         "T",
         T.from,
         <Object?>[
@@ -1343,7 +1343,7 @@ final class T extends PythonClass {
 /// ```
 final class Token extends PythonClass {
   factory Token() => PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.parsers.cyk",
         "Token",
         Token.from,
         <Object?>[],
@@ -4119,7 +4119,7 @@ final class Tree extends PythonClass {
     Object? meta,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.tree",
+        "lark.parsers.cyk",
         "Tree",
         Tree.from,
         <Object?>[
@@ -4558,7 +4558,7 @@ final class UnitSkipRule extends PythonClass {
 /// ## accumulate
 final class accumulate extends PythonClass {
   factory accumulate() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parsers.cyk",
         "accumulate",
         accumulate.from,
         <Object?>[],
@@ -4570,7 +4570,7 @@ final class accumulate extends PythonClass {
 /// ## chain
 final class chain extends PythonClass {
   factory chain() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parsers.cyk",
         "chain",
         chain.from,
         <Object?>[],
@@ -4582,7 +4582,7 @@ final class chain extends PythonClass {
 /// ## combinations
 final class combinations extends PythonClass {
   factory combinations() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parsers.cyk",
         "combinations",
         combinations.from,
         <Object?>[],
@@ -4594,7 +4594,7 @@ final class combinations extends PythonClass {
 /// ## combinations_with_replacement
 final class combinations_with_replacement extends PythonClass {
   factory combinations_with_replacement() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parsers.cyk",
         "combinations_with_replacement",
         combinations_with_replacement.from,
         <Object?>[],
@@ -4606,7 +4606,7 @@ final class combinations_with_replacement extends PythonClass {
 /// ## compress
 final class compress extends PythonClass {
   factory compress() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parsers.cyk",
         "compress",
         compress.from,
         <Object?>[],
@@ -4618,7 +4618,7 @@ final class compress extends PythonClass {
 /// ## count
 final class count extends PythonClass {
   factory count() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parsers.cyk",
         "count",
         count.from,
         <Object?>[],
@@ -4630,7 +4630,7 @@ final class count extends PythonClass {
 /// ## cycle
 final class cycle extends PythonClass {
   factory cycle() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parsers.cyk",
         "cycle",
         cycle.from,
         <Object?>[],
@@ -4642,7 +4642,7 @@ final class cycle extends PythonClass {
 /// ## dropwhile
 final class dropwhile extends PythonClass {
   factory dropwhile() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parsers.cyk",
         "dropwhile",
         dropwhile.from,
         <Object?>[],
@@ -4654,7 +4654,7 @@ final class dropwhile extends PythonClass {
 /// ## filterfalse
 final class filterfalse extends PythonClass {
   factory filterfalse() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parsers.cyk",
         "filterfalse",
         filterfalse.from,
         <Object?>[],
@@ -4666,7 +4666,7 @@ final class filterfalse extends PythonClass {
 /// ## groupby
 final class groupby extends PythonClass {
   factory groupby() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parsers.cyk",
         "groupby",
         groupby.from,
         <Object?>[],
@@ -4678,7 +4678,7 @@ final class groupby extends PythonClass {
 /// ## islice
 final class islice extends PythonClass {
   factory islice() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parsers.cyk",
         "islice",
         islice.from,
         <Object?>[],
@@ -4690,7 +4690,7 @@ final class islice extends PythonClass {
 /// ## pairwise
 final class pairwise extends PythonClass {
   factory pairwise() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parsers.cyk",
         "pairwise",
         pairwise.from,
         <Object?>[],
@@ -4702,7 +4702,7 @@ final class pairwise extends PythonClass {
 /// ## permutations
 final class permutations extends PythonClass {
   factory permutations() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parsers.cyk",
         "permutations",
         permutations.from,
         <Object?>[],
@@ -4714,7 +4714,7 @@ final class permutations extends PythonClass {
 /// ## product
 final class product extends PythonClass {
   factory product() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parsers.cyk",
         "product",
         product.from,
         <Object?>[],
@@ -4726,7 +4726,7 @@ final class product extends PythonClass {
 /// ## repeat
 final class repeat extends PythonClass {
   factory repeat() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parsers.cyk",
         "repeat",
         repeat.from,
         <Object?>[],
@@ -4738,7 +4738,7 @@ final class repeat extends PythonClass {
 /// ## starmap
 final class starmap extends PythonClass {
   factory starmap() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parsers.cyk",
         "starmap",
         starmap.from,
         <Object?>[],
@@ -4750,7 +4750,7 @@ final class starmap extends PythonClass {
 /// ## takewhile
 final class takewhile extends PythonClass {
   factory takewhile() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parsers.cyk",
         "takewhile",
         takewhile.from,
         <Object?>[],
@@ -4762,7 +4762,7 @@ final class takewhile extends PythonClass {
 /// ## zip_longest
 final class zip_longest extends PythonClass {
   factory zip_longest() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parsers.cyk",
         "zip_longest",
         zip_longest.from,
         <Object?>[],
@@ -5322,6 +5322,9 @@ final class cyk extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## itertools
+  itertools get $itertools => itertools.import();
 }
 
 /// ## itertools
@@ -5329,7 +5332,7 @@ final class itertools extends PythonModule {
   itertools.from(super.pythonModule) : super.from();
 
   static itertools import() => PythonFfiDart.instance.importModule(
-        "itertools",
+        "lark.parsers.itertools",
         itertools.from,
       );
 }

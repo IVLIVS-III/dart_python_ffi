@@ -101,6 +101,12 @@ final class inherited_fields_rename extends PythonModule {
         kwargs: <String, Object?>{},
       );
 
+  /// ## Self (getter)
+  Object? get Self => getAttribute("Self");
+
+  /// ## Self (setter)
+  set Self(Object? Self) => setAttribute("Self", Self);
+
   /// ## getClass (getter)
   Object? get $getClass => getAttribute("getClass");
 

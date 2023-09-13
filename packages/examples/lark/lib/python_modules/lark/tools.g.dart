@@ -514,7 +514,7 @@ final class Lark extends PythonClass {
     Map<String, Object?> options = const <String, Object?>{},
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lark",
+        "lark.tools",
         "Lark",
         Lark.from,
         <Object?>[
@@ -2977,6 +2977,28 @@ final class tools extends PythonModule {
         kwargs: <String, Object?>{},
       );
 
+  /// ## sys
+  sys get $sys => sys.import();
+
+  /// ## lalr_argparser (getter)
+  Object? get lalr_argparser => getAttribute("lalr_argparser");
+
+  /// ## lalr_argparser (setter)
+  set lalr_argparser(Object? lalr_argparser) =>
+      setAttribute("lalr_argparser", lalr_argparser);
+
+  /// ## logger (getter)
+  Object? get logger => getAttribute("logger");
+
+  /// ## logger (setter)
+  set logger(Object? logger) => setAttribute("logger", logger);
+
+  /// ## Optional (getter)
+  Object? get Optional => getAttribute("Optional");
+
+  /// ## Optional (setter)
+  set Optional(Object? Optional) => setAttribute("Optional", Optional);
+
   /// ## DEBUG (getter)
   Object? get DEBUG => getAttribute("DEBUG");
 
@@ -3038,7 +3060,7 @@ final class sys extends PythonModule {
   sys.from(super.pythonModule) : super.from();
 
   static sys import() => PythonFfiDart.instance.importModule(
-        "sys",
+        "lark.sys",
         sys.from,
       );
 

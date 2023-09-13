@@ -273,7 +273,7 @@ final class Attribute extends PythonClass {
     Object? alias,
   }) =>
       PythonFfiDart.instance.importClass(
-        "attr._make",
+        "attr.filters",
         "Attribute",
         Attribute.from,
         <Object?>[

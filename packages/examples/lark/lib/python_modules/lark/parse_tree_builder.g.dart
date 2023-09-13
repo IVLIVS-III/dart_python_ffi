@@ -689,7 +689,7 @@ final class ChildFilterLALR_NoPlaceholders extends PythonClass {
 /// ```
 final class ConfigurationError extends PythonClass {
   factory ConfigurationError() => PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.parse_tree_builder",
         "ConfigurationError",
         ConfigurationError.from,
         <Object?>[],
@@ -764,7 +764,7 @@ final class ExpandSingleChild extends PythonClass {
 /// ```
 final class GrammarError extends PythonClass {
   factory GrammarError() => PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.parse_tree_builder",
         "GrammarError",
         GrammarError.from,
         <Object?>[],
@@ -1210,7 +1210,7 @@ final class PropagatePositions extends PythonClass {
 /// ```
 final class Token extends PythonClass {
   factory Token() => PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.parse_tree_builder",
         "Token",
         Token.from,
         <Object?>[],
@@ -3810,7 +3810,7 @@ final class Transformer_InPlace extends PythonClass {
     bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.visitors",
+        "lark.parse_tree_builder",
         "Transformer_InPlace",
         Transformer_InPlace.from,
         <Object?>[
@@ -4051,7 +4051,7 @@ final class Tree extends PythonClass {
     Object? meta,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.tree",
+        "lark.parse_tree_builder",
         "Tree",
         Tree.from,
         <Object?>[
@@ -4430,7 +4430,7 @@ final class Tree extends PythonClass {
 /// ## product
 final class product extends PythonClass {
   factory product() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parse_tree_builder",
         "product",
         product.from,
         <Object?>[],
@@ -4984,4 +4984,10 @@ final class parse_tree_builder extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## List (getter)
+  Object? get $List => getAttribute("List");
+
+  /// ## List (setter)
+  set $List(Object? $List) => setAttribute("List", $List);
 }

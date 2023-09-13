@@ -69,7 +69,7 @@ final class EndBracketMatch extends PythonClass {
 /// ```
 final class SGMLParseError extends PythonClass {
   factory SGMLParseError() => PythonFfiDart.instance.importClass(
-        "sgmllib",
+        "feedparser.sgml",
         "SGMLParseError",
         SGMLParseError.from,
         <Object?>[],
@@ -535,7 +535,7 @@ final class SGMLParser extends PythonClass {
     Object? verbose = 0,
   }) =>
       PythonFfiDart.instance.importClass(
-        "sgmllib",
+        "feedparser.sgml",
         "SGMLParser",
         SGMLParser.from,
         <Object?>[
@@ -1480,7 +1480,7 @@ final class TestSGMLParser extends PythonClass {
     Object? verbose = 0,
   }) =>
       PythonFfiDart.instance.importClass(
-        "sgmllib",
+        "feedparser.sgml",
         "TestSGMLParser",
         TestSGMLParser.from,
         <Object?>[
@@ -2521,11 +2521,75 @@ final class sgml extends PythonModule {
         sgml.from,
       );
 
+  /// ## sgmllib
+  ///
+  /// ### python docstring
+  ///
+  /// A parser for SGML, using the derived class as a static DTD.
+  sgmllib get $sgmllib => sgmllib.import();
+
+  /// ## attrfind (getter)
+  Object? get attrfind => getAttribute("attrfind");
+
+  /// ## attrfind (setter)
+  set attrfind(Object? attrfind) => setAttribute("attrfind", attrfind);
+
+  /// ## charref (getter)
+  Object? get charref => getAttribute("charref");
+
+  /// ## charref (setter)
+  set charref(Object? charref) => setAttribute("charref", charref);
+
   /// ## endbracket (getter)
   Object? get endbracket => getAttribute("endbracket");
 
   /// ## endbracket (setter)
   set endbracket(Object? endbracket) => setAttribute("endbracket", endbracket);
+
+  /// ## entityref (getter)
+  Object? get entityref => getAttribute("entityref");
+
+  /// ## entityref (setter)
+  set entityref(Object? entityref) => setAttribute("entityref", entityref);
+
+  /// ## incomplete (getter)
+  Object? get incomplete => getAttribute("incomplete");
+
+  /// ## incomplete (setter)
+  set incomplete(Object? incomplete) => setAttribute("incomplete", incomplete);
+
+  /// ## interesting (getter)
+  Object? get interesting => getAttribute("interesting");
+
+  /// ## interesting (setter)
+  set interesting(Object? interesting) =>
+      setAttribute("interesting", interesting);
+
+  /// ## shorttag (getter)
+  Object? get shorttag => getAttribute("shorttag");
+
+  /// ## shorttag (setter)
+  set shorttag(Object? shorttag) => setAttribute("shorttag", shorttag);
+
+  /// ## shorttagopen (getter)
+  Object? get shorttagopen => getAttribute("shorttagopen");
+
+  /// ## shorttagopen (setter)
+  set shorttagopen(Object? shorttagopen) =>
+      setAttribute("shorttagopen", shorttagopen);
+
+  /// ## starttagopen (getter)
+  Object? get starttagopen => getAttribute("starttagopen");
+
+  /// ## starttagopen (setter)
+  set starttagopen(Object? starttagopen) =>
+      setAttribute("starttagopen", starttagopen);
+
+  /// ## tagfind (getter)
+  Object? get tagfind => getAttribute("tagfind");
+
+  /// ## tagfind (setter)
+  set tagfind(Object? tagfind) => setAttribute("tagfind", tagfind);
 }
 
 /// ## sgmllib
@@ -3088,56 +3152,7 @@ final class sgmllib extends PythonModule {
   sgmllib.from(super.pythonModule) : super.from();
 
   static sgmllib import() => PythonFfiDart.instance.importModule(
-        "sgmllib",
+        "feedparser.sgmllib",
         sgmllib.from,
-      );
-
-  /// ## test
-  ///
-  /// ### python source
-  /// ```py
-  /// def test(args = None):
-  ///     import sys
-  ///
-  ///     if args is None:
-  ///         args = sys.argv[1:]
-  ///
-  ///     if args and args[0] == '-s':
-  ///         args = args[1:]
-  ///         klass = SGMLParser
-  ///     else:
-  ///         klass = TestSGMLParser
-  ///
-  ///     if args:
-  ///         file = args[0]
-  ///     else:
-  ///         file = 'test.html'
-  ///
-  ///     if file == '-':
-  ///         f = sys.stdin
-  ///     else:
-  ///         try:
-  ///             f = open(file, 'r')
-  ///         except IOError as msg:
-  ///             print(file, ":", msg)
-  ///             sys.exit(1)
-  ///
-  ///     data = f.read()
-  ///     if f is not sys.stdin:
-  ///         f.close()
-  ///
-  ///     x = klass()
-  ///     for c in data:
-  ///         x.feed(c)
-  ///     x.close()
-  /// ```
-  Object? test({
-    Object? args,
-  }) =>
-      getFunction("test").call(
-        <Object?>[
-          args,
-        ],
-        kwargs: <String, Object?>{},
       );
 }

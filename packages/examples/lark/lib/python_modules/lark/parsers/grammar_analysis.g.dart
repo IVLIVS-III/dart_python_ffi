@@ -192,7 +192,7 @@ final class GrammarAnalyzer extends PythonClass {
 /// ```
 final class GrammarError extends PythonClass {
   factory GrammarError() => PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.parsers.grammar_analysis",
         "GrammarError",
         GrammarError.from,
         <Object?>[],
@@ -303,7 +303,7 @@ final class NonTerminal extends PythonClass {
     required String name,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.parsers.grammar_analysis",
         "NonTerminal",
         NonTerminal.from,
         <Object?>[
@@ -527,7 +527,7 @@ final class Rule extends PythonClass {
     Object? options,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.parsers.grammar_analysis",
         "Rule",
         Rule.from,
         <Object?>[
@@ -827,7 +827,7 @@ final class Terminal extends PythonClass {
     Object? filter_out = false,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.parsers.grammar_analysis",
         "Terminal",
         Terminal.from,
         <Object?>[
@@ -1031,7 +1031,7 @@ final class Terminal extends PythonClass {
 /// ```
 final class fzset extends PythonClass {
   factory fzset() => PythonFfiDart.instance.importClass(
-        "lark.utils",
+        "lark.parsers.grammar_analysis",
         "fzset",
         fzset.from,
         <Object?>[],
@@ -1289,6 +1289,33 @@ final class grammar_analysis extends PythonModule {
         grammar_analysis.from,
       );
 
+  /// ## bfs
+  ///
+  /// ### python source
+  /// ```py
+  /// def bfs(initial: Sequence, expand: Callable) -> Iterator:
+  ///     open_q = deque(list(initial))
+  ///     visited = set(open_q)
+  ///     while open_q:
+  ///         node = open_q.popleft()
+  ///         yield node
+  ///         for next_node in expand(node):
+  ///             if next_node not in visited:
+  ///                 visited.add(next_node)
+  ///                 open_q.append(next_node)
+  /// ```
+  Iterator bfs({
+    required Object? initial,
+    required Function expand,
+  }) =>
+      getFunction("bfs").call(
+        <Object?>[
+          initial,
+          expand,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
   /// ## calculate_sets
   ///
   /// ### python docstring
@@ -1366,6 +1393,35 @@ final class grammar_analysis extends PythonModule {
       getFunction("calculate_sets").call(
         <Object?>[
           rules,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## classify
+  ///
+  /// ### python source
+  /// ```py
+  /// def classify(seq: Iterable, key: Optional[Callable] = None, value: Optional[Callable] = None) -> Dict:
+  ///     d: Dict[Any, Any] = {}
+  ///     for item in seq:
+  ///         k = key(item) if (key is not None) else item
+  ///         v = value(item) if (value is not None) else item
+  ///         try:
+  ///             d[k].append(v)
+  ///         except KeyError:
+  ///             d[k] = [v]
+  ///     return d
+  /// ```
+  Object? classify({
+    required Iterable seq,
+    Object? key,
+    Object? value,
+  }) =>
+      getFunction("classify").call(
+        <Object?>[
+          seq,
+          key,
+          value,
         ],
         kwargs: <String, Object?>{},
       );

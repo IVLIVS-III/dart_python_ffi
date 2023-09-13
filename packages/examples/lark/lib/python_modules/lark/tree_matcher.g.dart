@@ -78,7 +78,7 @@ final class NonTerminal extends PythonClass {
     required String name,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.tree_matcher",
         "NonTerminal",
         NonTerminal.from,
         <Object?>[
@@ -278,7 +278,7 @@ final class ParserConf extends PythonClass {
     required Object? start,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.common",
+        "lark.tree_matcher",
         "ParserConf",
         ParserConf.from,
         <Object?>[
@@ -512,7 +512,7 @@ final class Rule extends PythonClass {
     Object? options,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.tree_matcher",
         "Rule",
         Rule.from,
         <Object?>[
@@ -715,7 +715,7 @@ final class Terminal extends PythonClass {
     Object? filter_out = false,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.tree_matcher",
         "Terminal",
         Terminal.from,
         <Object?>[
@@ -1066,7 +1066,7 @@ final class Terminal extends PythonClass {
 /// ```
 final class Token extends PythonClass {
   factory Token() => PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.tree_matcher",
         "Token",
         Token.from,
         <Object?>[],
@@ -3842,7 +3842,7 @@ final class Tree extends PythonClass {
     Object? meta,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.tree",
+        "lark.tree_matcher",
         "Tree",
         Tree.from,
         <Object?>[
@@ -4559,7 +4559,7 @@ final class TreeMatcher extends PythonClass {
 /// ```
 final class ForestSumVisitor extends PythonClass {
   factory ForestSumVisitor() => PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_forest",
+        "lark.tree_matcher",
         "ForestSumVisitor",
         ForestSumVisitor.from,
         <Object?>[],
@@ -5018,7 +5018,7 @@ final class ForestToParseTree extends PythonClass {
     Object? use_cache = true,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_forest",
+        "lark.tree_matcher",
         "ForestToParseTree",
         ForestToParseTree.from,
         <Object?>[
@@ -5616,7 +5616,7 @@ final class GrammarAnalyzer extends PythonClass {
     Object? strict = false,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.grammar_analysis",
+        "lark.tree_matcher",
         "GrammarAnalyzer",
         GrammarAnalyzer.from,
         <Object?>[
@@ -5770,7 +5770,7 @@ final class Item extends PythonClass {
     required Object? start,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_common",
+        "lark.tree_matcher",
         "Item",
         Item.from,
         <Object?>[
@@ -6202,7 +6202,7 @@ final class Parser extends PythonClass {
     Object? tree_class,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.earley",
+        "lark.tree_matcher",
         "Parser",
         Parser.from,
         <Object?>[
@@ -6613,7 +6613,7 @@ final class SymbolNode extends PythonClass {
     required Object? end,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_forest",
+        "lark.tree_matcher",
         "SymbolNode",
         SymbolNode.from,
         <Object?>[
@@ -7211,7 +7211,7 @@ final class TokenNode extends PythonClass {
     Object? priority,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_forest",
+        "lark.tree_matcher",
         "TokenNode",
         TokenNode.from,
         <Object?>[
@@ -7335,7 +7335,7 @@ final class UnexpectedEOF extends PythonClass {
     Object? terminals_by_name,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.tree_matcher",
         "UnexpectedEOF",
         UnexpectedEOF.from,
         <Object?>[
@@ -7706,7 +7706,7 @@ final class UnexpectedToken extends PythonClass {
     Object? token_history,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.tree_matcher",
         "UnexpectedToken",
         UnexpectedToken.from,
         <Object?>[
@@ -8628,6 +8628,21 @@ final class tree_matcher extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## earley
+  ///
+  /// ### python docstring
+  ///
+  /// This module implements an Earley parser.
+  ///
+  /// The core Earley algorithm used here is based on Elizabeth Scott's implementation, here:
+  ///     https://www.sciencedirect.com/science/article/pii/S1571066108001497
+  ///
+  /// That is probably the best reference for understanding the algorithm here.
+  ///
+  /// The Earley parser outputs an SPPF-tree as per that document. The SPPF tree format
+  /// is explained here: https://lark-parser.readthedocs.io/en/latest/_static/sppf/sppf.html
+  earley get $earley => earley.import();
 }
 
 /// ## earley

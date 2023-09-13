@@ -894,7 +894,7 @@ final class LexerThread extends PythonClass {
     required Object? lexer_state,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.parsers.lalr_interactive_parser",
         "LexerThread",
         LexerThread.from,
         <Object?>[
@@ -1123,7 +1123,7 @@ final class LexerThread extends PythonClass {
 /// ```
 final class Token extends PythonClass {
   factory Token() => PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.parsers.lalr_interactive_parser",
         "Token",
         Token.from,
         <Object?>[],
@@ -3775,7 +3775,7 @@ final class UnexpectedToken extends PythonClass {
     Object? token_history,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.parsers.lalr_interactive_parser",
         "UnexpectedToken",
         UnexpectedToken.from,
         <Object?>[
@@ -4576,4 +4576,16 @@ final class lalr_interactive_parser extends PythonModule {
         "lark.parsers.lalr_interactive_parser",
         lalr_interactive_parser.from,
       );
+
+  /// ## Iterator (getter)
+  Object? get $Iterator => getAttribute("Iterator");
+
+  /// ## Iterator (setter)
+  set $Iterator(Object? $Iterator) => setAttribute("Iterator", $Iterator);
+
+  /// ## List (getter)
+  Object? get $List => getAttribute("List");
+
+  /// ## List (setter)
+  set $List(Object? $List) => setAttribute("List", $List);
 }

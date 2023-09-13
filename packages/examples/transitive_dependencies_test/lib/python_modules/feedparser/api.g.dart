@@ -13,7 +13,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 /// ```
 final class CharacterEncodingOverride extends PythonClass {
   factory CharacterEncodingOverride() => PythonFfiDart.instance.importClass(
-        "feedparser.exceptions",
+        "feedparser.api",
         "CharacterEncodingOverride",
         CharacterEncodingOverride.from,
         <Object?>[],
@@ -50,7 +50,7 @@ final class CharacterEncodingOverride extends PythonClass {
 /// ```
 final class CharacterEncodingUnknown extends PythonClass {
   factory CharacterEncodingUnknown() => PythonFfiDart.instance.importClass(
-        "feedparser.exceptions",
+        "feedparser.api",
         "CharacterEncodingUnknown",
         CharacterEncodingUnknown.from,
         <Object?>[],
@@ -218,7 +218,7 @@ final class CharacterEncodingUnknown extends PythonClass {
 /// ```
 final class FeedParserDict extends PythonClass {
   factory FeedParserDict() => PythonFfiDart.instance.importClass(
-        "feedparser.util",
+        "feedparser.api",
         "FeedParserDict",
         FeedParserDict.from,
         <Object?>[],
@@ -802,7 +802,7 @@ final class LooseFeedParser extends PythonClass {
   ///             else:
   ///                 c = int(ref)
   ///             text = chr(c).encode('utf-8')
-  ///         self.elementstack[-1][2].append(text)
+  ///         self.elementstack[-1][2].append(text)#
   /// ```
   Object? handle_charref({
     required Object? ref,
@@ -2141,7 +2141,7 @@ final class LooseFeedParser extends PythonClass {
 /// ```
 final class NonXMLContentType extends PythonClass {
   factory NonXMLContentType() => PythonFfiDart.instance.importClass(
-        "feedparser.exceptions",
+        "feedparser.api",
         "NonXMLContentType",
         NonXMLContentType.from,
         <Object?>[],
@@ -2320,7 +2320,7 @@ final class StrictFeedParser extends PythonClass {
   ///             else:
   ///                 c = int(ref)
   ///             text = chr(c).encode('utf-8')
-  ///         self.elementstack[-1][2].append(text)
+  ///         self.elementstack[-1][2].append(text)#
   /// ```
   Object? handle_charref({
     required Object? ref,
@@ -3371,7 +3371,7 @@ final class StrictFeedParser extends PythonClass {
 /// ```
 final class ThingsNobodyCaresAboutButMe extends PythonClass {
   factory ThingsNobodyCaresAboutButMe() => PythonFfiDart.instance.importClass(
-        "feedparser.exceptions",
+        "feedparser.api",
         "ThingsNobodyCaresAboutButMe",
         ThingsNobodyCaresAboutButMe.from,
         <Object?>[],
@@ -3408,7 +3408,7 @@ final class ThingsNobodyCaresAboutButMe extends PythonClass {
 /// ```
 final class UndeclaredNamespace extends PythonClass {
   factory UndeclaredNamespace() => PythonFfiDart.instance.importClass(
-        "feedparser.exceptions",
+        "feedparser.api",
         "UndeclaredNamespace",
         UndeclaredNamespace.from,
         <Object?>[],
@@ -3439,7 +3439,7 @@ final class UndeclaredNamespace extends PythonClass {
 /// ## error
 final class error extends PythonClass {
   factory error() => PythonFfiDart.instance.importClass(
-        "zlib",
+        "feedparser.api",
         "error",
         error.from,
         <Object?>[],
@@ -3470,7 +3470,7 @@ final class error extends PythonClass {
 /// ## Error
 final class Error extends PythonClass {
   factory Error() => PythonFfiDart.instance.importClass(
-        "binascii",
+        "feedparser.api",
         "Error",
         Error.from,
         <Object?>[],
@@ -3501,7 +3501,7 @@ final class Error extends PythonClass {
 /// ## Incomplete
 final class Incomplete extends PythonClass {
   factory Incomplete() => PythonFfiDart.instance.importClass(
-        "binascii",
+        "feedparser.api",
         "Incomplete",
         Incomplete.from,
         <Object?>[],
@@ -3574,7 +3574,7 @@ final class Incomplete extends PythonClass {
 /// ```
 final class Namespace extends PythonClass {
   factory Namespace() => PythonFfiDart.instance.importClass(
-        "feedparser.namespaces.cc",
+        "feedparser.api",
         "Namespace",
         Namespace.from,
         <Object?>[],
@@ -3604,7 +3604,7 @@ final class Namespace extends PythonClass {
 /// ```
 final class SGMLParseError extends PythonClass {
   factory SGMLParseError() => PythonFfiDart.instance.importClass(
-        "sgmllib",
+        "feedparser.api",
         "SGMLParseError",
         SGMLParseError.from,
         <Object?>[],
@@ -4070,7 +4070,7 @@ final class SGMLParser extends PythonClass {
     Object? verbose = 0,
   }) =>
       PythonFfiDart.instance.importClass(
-        "sgmllib",
+        "feedparser.api",
         "SGMLParser",
         SGMLParser.from,
         <Object?>[
@@ -5015,7 +5015,7 @@ final class TestSGMLParser extends PythonClass {
     Object? verbose = 0,
   }) =>
       PythonFfiDart.instance.importClass(
-        "sgmllib",
+        "feedparser.api",
         "TestSGMLParser",
         TestSGMLParser.from,
         <Object?>[
@@ -6235,6 +6235,321 @@ final class api extends PythonModule {
         api.from,
       );
 
+  /// ## convert_to_idn
+  ///
+  /// ### python docstring
+  ///
+  /// Convert a URL to IDN notation
+  ///
+  /// ### python source
+  /// ```py
+  /// def convert_to_idn(url):
+  ///     """Convert a URL to IDN notation"""
+  ///     # this function should only be called with a unicode string
+  ///     # strategy: if the host cannot be encoded in ascii, then
+  ///     # it'll be necessary to encode it in idn form
+  ///     parts = list(urllib.parse.urlsplit(url))
+  ///     try:
+  ///         parts[1].encode('ascii')
+  ///     except UnicodeEncodeError:
+  ///         # the url needs to be converted to idn notation
+  ///         host = parts[1].rsplit(':', 1)
+  ///         newhost = []
+  ///         port = ''
+  ///         if len(host) == 2:
+  ///             port = host.pop()
+  ///         for h in host[0].split('.'):
+  ///             newhost.append(h.encode('idna').decode('utf-8'))
+  ///         parts[1] = '.'.join(newhost)
+  ///         if port:
+  ///             parts[1] += ':' + port
+  ///         return urllib.parse.urlunsplit(parts)
+  ///     else:
+  ///         return url
+  /// ```
+  Object? convert_to_idn({
+    required Object? url,
+  }) =>
+      getFunction("convert_to_idn").call(
+        <Object?>[
+          url,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## convert_to_utf8
+  ///
+  /// ### python docstring
+  ///
+  /// Detect and convert the character encoding to UTF-8.
+  ///
+  /// http_headers is a dictionary
+  /// data is a raw string (not Unicode)
+  ///
+  /// ### python source
+  /// ```py
+  /// def convert_to_utf8(http_headers, data, result):
+  ///     """Detect and convert the character encoding to UTF-8.
+  ///
+  ///     http_headers is a dictionary
+  ///     data is a raw string (not Unicode)"""
+  ///
+  ///     # This is so much trickier than it sounds, it's not even funny.
+  ///     # According to RFC 3023 ('XML Media Types'), if the HTTP Content-Type
+  ///     # is application/xml, application/*+xml,
+  ///     # application/xml-external-parsed-entity, or application/xml-dtd,
+  ///     # the encoding given in the charset parameter of the HTTP Content-Type
+  ///     # takes precedence over the encoding given in the XML prefix within the
+  ///     # document, and defaults to 'utf-8' if neither are specified.  But, if
+  ///     # the HTTP Content-Type is text/xml, text/*+xml, or
+  ///     # text/xml-external-parsed-entity, the encoding given in the XML prefix
+  ///     # within the document is ALWAYS IGNORED and only the encoding given in
+  ///     # the charset parameter of the HTTP Content-Type header should be
+  ///     # respected, and it defaults to 'us-ascii' if not specified.
+  ///
+  ///     # Furthermore, discussion on the atom-syntax mailing list with the
+  ///     # author of RFC 3023 leads me to the conclusion that any document
+  ///     # served with a Content-Type of text/* and no charset parameter
+  ///     # must be treated as us-ascii.  (We now do this.)  And also that it
+  ///     # must always be flagged as non-well-formed.  (We now do this too.)
+  ///
+  ///     # If Content-Type is unspecified (input was local file or non-HTTP source)
+  ///     # or unrecognized (server just got it totally wrong), then go by the
+  ///     # encoding given in the XML prefix of the document and default to
+  ///     # 'iso-8859-1' as per the HTTP specification (RFC 2616).
+  ///
+  ///     # Then, assuming we didn't find a character encoding in the HTTP headers
+  ///     # (and the HTTP Content-type allowed us to look in the body), we need
+  ///     # to sniff the first few bytes of the XML data and try to determine
+  ///     # whether the encoding is ASCII-compatible.  Section F of the XML
+  ///     # specification shows the way here:
+  ///     # http://www.w3.org/TR/REC-xml/#sec-guessing-no-ext-info
+  ///
+  ///     # If the sniffed encoding is not ASCII-compatible, we need to make it
+  ///     # ASCII compatible so that we can sniff further into the XML declaration
+  ///     # to find the encoding attribute, which will tell us the true encoding.
+  ///
+  ///     # Of course, none of this guarantees that we will be able to parse the
+  ///     # feed in the declared character encoding (assuming it was declared
+  ///     # correctly, which many are not).  iconv_codec can help a lot;
+  ///     # you should definitely install it if you can.
+  ///     # http://cjkpython.i18n.org/
+  ///
+  ///     bom_encoding = ''
+  ///     xml_encoding = ''
+  ///
+  ///     # Look at the first few bytes of the document to guess what
+  ///     # its encoding may be. We only need to decode enough of the
+  ///     # document that we can use an ASCII-compatible regular
+  ///     # expression to search for an XML encoding declaration.
+  ///     # The heuristic follows the XML specification, section F:
+  ///     # http://www.w3.org/TR/REC-xml/#sec-guessing-no-ext-info
+  ///     # Check for BOMs first.
+  ///     if data[:4] == codecs.BOM_UTF32_BE:
+  ///         bom_encoding = 'utf-32be'
+  ///         data = data[4:]
+  ///     elif data[:4] == codecs.BOM_UTF32_LE:
+  ///         bom_encoding = 'utf-32le'
+  ///         data = data[4:]
+  ///     elif data[:2] == codecs.BOM_UTF16_BE and data[2:4] != ZERO_BYTES:
+  ///         bom_encoding = 'utf-16be'
+  ///         data = data[2:]
+  ///     elif data[:2] == codecs.BOM_UTF16_LE and data[2:4] != ZERO_BYTES:
+  ///         bom_encoding = 'utf-16le'
+  ///         data = data[2:]
+  ///     elif data[:3] == codecs.BOM_UTF8:
+  ///         bom_encoding = 'utf-8'
+  ///         data = data[3:]
+  ///     # Check for the characters '<?xm' in several encodings.
+  ///     elif data[:4] == EBCDIC_MARKER:
+  ///         bom_encoding = 'cp037'
+  ///     elif data[:4] == UTF16BE_MARKER:
+  ///         bom_encoding = 'utf-16be'
+  ///     elif data[:4] == UTF16LE_MARKER:
+  ///         bom_encoding = 'utf-16le'
+  ///     elif data[:4] == UTF32BE_MARKER:
+  ///         bom_encoding = 'utf-32be'
+  ///     elif data[:4] == UTF32LE_MARKER:
+  ///         bom_encoding = 'utf-32le'
+  ///
+  ///     tempdata = data
+  ///     try:
+  ///         if bom_encoding:
+  ///             tempdata = data.decode(bom_encoding).encode('utf-8')
+  ///     except (UnicodeDecodeError, LookupError):
+  ///         # feedparser recognizes UTF-32 encodings that aren't
+  ///         # available in Python 2.4 and 2.5, so it's possible to
+  ///         # encounter a LookupError during decoding.
+  ///         xml_encoding_match = None
+  ///     else:
+  ///         xml_encoding_match = RE_XML_PI_ENCODING.match(tempdata)
+  ///
+  ///     if xml_encoding_match:
+  ///         xml_encoding = xml_encoding_match.groups()[0].decode('utf-8').lower()
+  ///         # Normalize the xml_encoding if necessary.
+  ///         if bom_encoding and (xml_encoding in (
+  ///             'u16', 'utf-16', 'utf16', 'utf_16',
+  ///             'u32', 'utf-32', 'utf32', 'utf_32',
+  ///             'iso-10646-ucs-2', 'iso-10646-ucs-4',
+  ///             'csucs4', 'csunicode', 'ucs-2', 'ucs-4'
+  ///         )):
+  ///             xml_encoding = bom_encoding
+  ///
+  ///     # Find the HTTP Content-Type and, hopefully, a character
+  ///     # encoding provided by the server. The Content-Type is used
+  ///     # to choose the "correct" encoding among the BOM encoding,
+  ///     # XML declaration encoding, and HTTP encoding, following the
+  ///     # heuristic defined in RFC 3023.
+  ///     http_content_type = http_headers.get('content-type') or ''
+  ///     http_content_type, params = cgi.parse_header(http_content_type)
+  ///     http_encoding = params.get('charset', '').replace("'", "")
+  ///     if isinstance(http_encoding, bytes):
+  ///         http_encoding = http_encoding.decode('utf-8', 'ignore')
+  ///
+  ///     acceptable_content_type = 0
+  ///     application_content_types = ('application/xml', 'application/xml-dtd',
+  ///                                  'application/xml-external-parsed-entity')
+  ///     text_content_types = ('text/xml', 'text/xml-external-parsed-entity')
+  ///     if (
+  ///             http_content_type in application_content_types
+  ///             or (
+  ///                     http_content_type.startswith('application/')
+  ///                     and http_content_type.endswith('+xml')
+  ///             )
+  ///     ):
+  ///         acceptable_content_type = 1
+  ///         rfc3023_encoding = http_encoding or xml_encoding or 'utf-8'
+  ///     elif (
+  ///             http_content_type in text_content_types
+  ///             or (
+  ///                     http_content_type.startswith('text/')
+  ///                     and http_content_type.endswith('+xml')
+  ///             )
+  ///     ):
+  ///         acceptable_content_type = 1
+  ///         rfc3023_encoding = http_encoding or 'us-ascii'
+  ///     elif http_content_type.startswith('text/'):
+  ///         rfc3023_encoding = http_encoding or 'us-ascii'
+  ///     elif http_headers and 'content-type' not in http_headers:
+  ///         rfc3023_encoding = xml_encoding or 'iso-8859-1'
+  ///     else:
+  ///         rfc3023_encoding = xml_encoding or 'utf-8'
+  ///     # gb18030 is a superset of gb2312, so always replace gb2312
+  ///     # with gb18030 for greater compatibility.
+  ///     if rfc3023_encoding.lower() == 'gb2312':
+  ///         rfc3023_encoding = 'gb18030'
+  ///     if xml_encoding.lower() == 'gb2312':
+  ///         xml_encoding = 'gb18030'
+  ///
+  ///     # there are four encodings to keep track of:
+  ///     # - http_encoding is the encoding declared in the Content-Type HTTP header
+  ///     # - xml_encoding is the encoding declared in the <?xml declaration
+  ///     # - bom_encoding is the encoding sniffed from the first 4 bytes of the XML data
+  ///     # - rfc3023_encoding is the actual encoding, as per RFC 3023 and a variety of other conflicting specifications
+  ///     error = None
+  ///
+  ///     if http_headers and (not acceptable_content_type):
+  ///         if 'content-type' in http_headers:
+  ///             msg = '%s is not an XML media type' % http_headers['content-type']
+  ///         else:
+  ///             msg = 'no Content-type specified'
+  ///         error = NonXMLContentType(msg)
+  ///
+  ///     # determine character encoding
+  ///     known_encoding = 0
+  ///     tried_encodings = []
+  ///     # try: HTTP encoding, declared XML encoding, encoding sniffed from BOM
+  ///     for proposed_encoding in (rfc3023_encoding, xml_encoding, bom_encoding,
+  ///                               lazy_chardet_encoding, 'utf-8', 'windows-1252', 'iso-8859-2'):
+  ///         if callable(proposed_encoding):
+  ///             proposed_encoding = proposed_encoding(data)
+  ///         if not proposed_encoding:
+  ///             continue
+  ///         if proposed_encoding in tried_encodings:
+  ///             continue
+  ///         tried_encodings.append(proposed_encoding)
+  ///         try:
+  ///             data = data.decode(proposed_encoding)
+  ///         except (UnicodeDecodeError, LookupError):
+  ///             pass
+  ///         else:
+  ///             known_encoding = 1
+  ///             # Update the encoding in the opening XML processing instruction.
+  ///             new_declaration = '''<?xml version='1.0' encoding='utf-8'?>'''
+  ///             if RE_XML_DECLARATION.search(data):
+  ///                 data = RE_XML_DECLARATION.sub(new_declaration, data)
+  ///             else:
+  ///                 data = new_declaration + '\n' + data
+  ///             data = data.encode('utf-8')
+  ///             break
+  ///     # if still no luck, give up
+  ///     if not known_encoding:
+  ///         error = CharacterEncodingUnknown(
+  ///             'document encoding unknown, I tried ' +
+  ///             '%s, %s, utf-8, windows-1252, and iso-8859-2 but nothing worked' %
+  ///             (rfc3023_encoding, xml_encoding))
+  ///         rfc3023_encoding = ''
+  ///     elif proposed_encoding != rfc3023_encoding:
+  ///         error = CharacterEncodingOverride(
+  ///             'document declared as %s, but parsed as %s' %
+  ///             (rfc3023_encoding, proposed_encoding))
+  ///         rfc3023_encoding = proposed_encoding
+  ///
+  ///     result['encoding'] = rfc3023_encoding
+  ///     if error:
+  ///         result['bozo'] = True
+  ///         result['bozo_exception'] = error
+  ///     return data
+  /// ```
+  Object? convert_to_utf8({
+    required Object? http_headers,
+    required Object? data,
+    required Object? result,
+  }) =>
+      getFunction("convert_to_utf8").call(
+        <Object?>[
+          http_headers,
+          data,
+          result,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## make_safe_absolute_uri
+  ///
+  /// ### python source
+  /// ```py
+  /// def make_safe_absolute_uri(base, rel=None):
+  ///     # bail if ACCEPTABLE_URI_SCHEMES is empty
+  ///     if not ACCEPTABLE_URI_SCHEMES:
+  ///         return _urljoin(base, rel or '')
+  ///     if not base:
+  ///         return rel or ''
+  ///     if not rel:
+  ///         try:
+  ///             scheme = urllib.parse.urlparse(base)[0]
+  ///         except ValueError:
+  ///             return ''
+  ///         if not scheme or scheme in ACCEPTABLE_URI_SCHEMES:
+  ///             return base
+  ///         return ''
+  ///     uri = _urljoin(base, rel)
+  ///     if uri.strip().split(':', 1)[0] not in ACCEPTABLE_URI_SCHEMES:
+  ///         return ''
+  ///     return uri
+  /// ```
+  Object? make_safe_absolute_uri({
+    required Object? $base,
+    Object? rel,
+  }) =>
+      getFunction("make_safe_absolute_uri").call(
+        <Object?>[
+          $base,
+          rel,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
   /// ## parse
   ///
   /// ### python docstring
@@ -6440,6 +6755,171 @@ final class api extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## registerDateHandler
+  ///
+  /// ### python docstring
+  ///
+  /// Register a date handler function (takes string, returns 9-tuple date in GMT)
+  ///
+  /// ### python source
+  /// ```py
+  /// def registerDateHandler(func):
+  ///     """Register a date handler function (takes string, returns 9-tuple date in GMT)"""
+  ///     _date_handlers.insert(0, func)
+  /// ```
+  Object? registerDateHandler({
+    required Object? func,
+  }) =>
+      getFunction("registerDateHandler").call(
+        <Object?>[
+          func,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## replace_doctype
+  ///
+  /// ### python docstring
+  ///
+  /// Strips and replaces the DOCTYPE, returns (rss_version, stripped_data)
+  ///
+  /// rss_version may be 'rss091n' or None
+  /// stripped_data is the same XML document with a replaced DOCTYPE
+  ///
+  /// ### python source
+  /// ```py
+  /// def replace_doctype(data):
+  ///     """Strips and replaces the DOCTYPE, returns (rss_version, stripped_data)
+  ///
+  ///     rss_version may be 'rss091n' or None
+  ///     stripped_data is the same XML document with a replaced DOCTYPE
+  ///     """
+  ///
+  ///     # Divide the document into two groups by finding the location
+  ///     # of the first element that doesn't begin with '<?' or '<!'.
+  ///     start = re.search(br'<\w', data)
+  ///     start = start and start.start() or -1
+  ///     head, data = data[:start+1], data[start+1:]
+  ///
+  ///     # Save and then remove all of the ENTITY declarations.
+  ///     entity_results = RE_ENTITY_PATTERN.findall(head)
+  ///     head = RE_ENTITY_PATTERN.sub(b'', head)
+  ///
+  ///     # Find the DOCTYPE declaration and check the feed type.
+  ///     doctype_results = RE_DOCTYPE_PATTERN.findall(head)
+  ///     doctype = doctype_results and doctype_results[0] or b''
+  ///     if b'netscape' in doctype.lower():
+  ///         version = 'rss091n'
+  ///     else:
+  ///         version = None
+  ///
+  ///     # Re-insert the safe ENTITY declarations if a DOCTYPE was found.
+  ///     replacement = b''
+  ///     if len(doctype_results) == 1 and entity_results:
+  ///         safe_entities = [
+  ///             e
+  ///             for e in entity_results
+  ///             if RE_SAFE_ENTITY_PATTERN.match(e)
+  ///         ]
+  ///         if safe_entities:
+  ///             replacement = b'<!DOCTYPE feed [\n<!ENTITY' \
+  ///                         + b'>\n<!ENTITY '.join(safe_entities) \
+  ///                         + b'>\n]>'
+  ///     data = RE_DOCTYPE_PATTERN.sub(replacement, head) + data
+  ///
+  ///     # Precompute the safe entities for the loose parser.
+  ///     safe_entities = {
+  ///         k.decode('utf-8'): v.decode('utf-8')
+  ///         for k, v in RE_SAFE_ENTITY_PATTERN.findall(replacement)
+  ///     }
+  ///     return version, data, safe_entities
+  /// ```
+  Object? replace_doctype({
+    required Object? data,
+  }) =>
+      getFunction("replace_doctype").call(
+        <Object?>[
+          data,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## http
+  http get $http => http.import();
+
+  /// ## $mixin
+  $mixin get $$mixin => $mixin.import();
+
+  /// ## sgmllib
+  ///
+  /// ### python docstring
+  ///
+  /// A parser for SGML, using the derived class as a static DTD.
+  sgmllib get $sgmllib => sgmllib.import();
+
+  /// ## attrfind (getter)
+  Object? get attrfind => getAttribute("attrfind");
+
+  /// ## attrfind (setter)
+  set attrfind(Object? attrfind) => setAttribute("attrfind", attrfind);
+
+  /// ## charref (getter)
+  Object? get charref => getAttribute("charref");
+
+  /// ## charref (setter)
+  set charref(Object? charref) => setAttribute("charref", charref);
+
+  /// ## endbracket (getter)
+  Object? get endbracket => getAttribute("endbracket");
+
+  /// ## endbracket (setter)
+  set endbracket(Object? endbracket) => setAttribute("endbracket", endbracket);
+
+  /// ## entityref (getter)
+  Object? get entityref => getAttribute("entityref");
+
+  /// ## entityref (setter)
+  set entityref(Object? entityref) => setAttribute("entityref", entityref);
+
+  /// ## incomplete (getter)
+  Object? get incomplete => getAttribute("incomplete");
+
+  /// ## incomplete (setter)
+  set incomplete(Object? incomplete) => setAttribute("incomplete", incomplete);
+
+  /// ## interesting (getter)
+  Object? get interesting => getAttribute("interesting");
+
+  /// ## interesting (setter)
+  set interesting(Object? interesting) =>
+      setAttribute("interesting", interesting);
+
+  /// ## shorttag (getter)
+  Object? get shorttag => getAttribute("shorttag");
+
+  /// ## shorttag (setter)
+  set shorttag(Object? shorttag) => setAttribute("shorttag", shorttag);
+
+  /// ## shorttagopen (getter)
+  Object? get shorttagopen => getAttribute("shorttagopen");
+
+  /// ## shorttagopen (setter)
+  set shorttagopen(Object? shorttagopen) =>
+      setAttribute("shorttagopen", shorttagopen);
+
+  /// ## starttagopen (getter)
+  Object? get starttagopen => getAttribute("starttagopen");
+
+  /// ## starttagopen (setter)
+  set starttagopen(Object? starttagopen) =>
+      setAttribute("starttagopen", starttagopen);
+
+  /// ## tagfind (getter)
+  Object? get tagfind => getAttribute("tagfind");
+
+  /// ## tagfind (setter)
+  set tagfind(Object? tagfind) => setAttribute("tagfind", tagfind);
 
   /// ## PREFERRED_XML_PARSERS (getter)
   Object? get PREFERRED_XML_PARSERS => getAttribute("PREFERRED_XML_PARSERS");
@@ -6696,139 +7176,6 @@ final class http extends PythonModule {
         http.from,
       );
 
-  /// ## get
-  ///
-  /// ### python source
-  /// ```py
-  /// def get(url, etag=None, modified=None, agent=None, referrer=None, handlers=None, request_headers=None, result=None):
-  ///     if handlers is None:
-  ///         handlers = []
-  ///     elif not isinstance(handlers, list):
-  ///         handlers = [handlers]
-  ///     if request_headers is None:
-  ///         request_headers = {}
-  ///
-  ///     # Deal with the feed URI scheme
-  ///     if url.startswith('feed:http'):
-  ///         url = url[5:]
-  ///     elif url.startswith('feed:'):
-  ///         url = 'http:' + url[5:]
-  ///     if not agent:
-  ///         from . import USER_AGENT
-  ///         agent = USER_AGENT
-  ///     # Test for inline user:password credentials for HTTP basic auth
-  ///     auth = None
-  ///     if not url.startswith('ftp:'):
-  ///         url_pieces = urllib.parse.urlparse(url)
-  ///         if url_pieces.username:
-  ///             new_pieces = list(url_pieces)
-  ///             new_pieces[1] = url_pieces.hostname
-  ///             if url_pieces.port:
-  ///                 new_pieces[1] = f'{url_pieces.hostname}:{url_pieces.port}'
-  ///             url = urllib.parse.urlunparse(new_pieces)
-  ///             auth = base64.standard_b64encode(f'{url_pieces.username}:{url_pieces.password}'.encode()).decode()
-  ///
-  ///     # iri support
-  ///     if not isinstance(url, bytes):
-  ///         url = convert_to_idn(url)
-  ///
-  ///     # Prevent UnicodeEncodeErrors caused by Unicode characters in the path.
-  ///     bits = []
-  ///     for c in url:
-  ///         try:
-  ///             c.encode('ascii')
-  ///         except UnicodeEncodeError:
-  ///             bits.append(urllib.parse.quote(c))
-  ///         else:
-  ///             bits.append(c)
-  ///     url = ''.join(bits)
-  ///
-  ///     # try to open with urllib2 (to use optional headers)
-  ///     request = _build_urllib2_request(url, agent, ACCEPT_HEADER, etag, modified, referrer, auth, request_headers)
-  ///     opener = urllib.request.build_opener(*tuple(handlers + [_FeedURLHandler()]))
-  ///     opener.addheaders = []  # RMK - must clear so we only send our custom User-Agent
-  ///     f = opener.open(request)
-  ///     data = f.read()
-  ///     f.close()
-  ///
-  ///     # lowercase all of the HTTP headers for comparisons per RFC 2616
-  ///     result['headers'] = {k.lower(): v for k, v in f.headers.items()}
-  ///
-  ///     # if feed is gzip-compressed, decompress it
-  ///     if data and 'gzip' in result['headers'].get('content-encoding', ''):
-  ///         try:
-  ///             data = gzip.GzipFile(fileobj=io.BytesIO(data)).read()
-  ///         except (EOFError, IOError, struct.error) as e:
-  ///             # IOError can occur if the gzip header is bad.
-  ///             # struct.error can occur if the data is damaged.
-  ///             result['bozo'] = True
-  ///             result['bozo_exception'] = e
-  ///             if isinstance(e, struct.error):
-  ///                 # A gzip header was found but the data is corrupt.
-  ///                 # Ideally, we should re-request the feed without the
-  ///                 # 'Accept-encoding: gzip' header, but we don't.
-  ///                 data = None
-  ///     elif data and 'deflate' in result['headers'].get('content-encoding', ''):
-  ///         try:
-  ///             data = zlib.decompress(data)
-  ///         except zlib.error:
-  ///             try:
-  ///                 # The data may have no headers and no checksum.
-  ///                 data = zlib.decompress(data, -15)
-  ///             except zlib.error as e:
-  ///                 result['bozo'] = True
-  ///                 result['bozo_exception'] = e
-  ///
-  ///     # save HTTP headers
-  ///     if 'etag' in result['headers']:
-  ///         etag = result['headers'].get('etag', '')
-  ///         if isinstance(etag, bytes):
-  ///             etag = etag.decode('utf-8', 'ignore')
-  ///         if etag:
-  ///             result['etag'] = etag
-  ///     if 'last-modified' in result['headers']:
-  ///         modified = result['headers'].get('last-modified', '')
-  ///         if modified:
-  ///             result['modified'] = modified
-  ///             result['modified_parsed'] = _parse_date(modified)
-  ///     if isinstance(f.url, bytes):
-  ///         result['href'] = f.url.decode('utf-8', 'ignore')
-  ///     else:
-  ///         result['href'] = f.url
-  ///     result['status'] = getattr(f, 'status', None) or 200
-  ///
-  ///     # Stop processing if the server sent HTTP 304 Not Modified.
-  ///     if getattr(f, 'code', 0) == 304:
-  ///         result['version'] = ''
-  ///         result['debug_message'] = 'The feed has not changed since you last checked, ' + \
-  ///             'so the server sent no data.  This is a feature, not a bug!'
-  ///
-  ///     return data
-  /// ```
-  Object? $get({
-    required Object? url,
-    Object? etag,
-    Object? modified,
-    Object? agent,
-    Object? referrer,
-    Object? handlers,
-    Object? request_headers,
-    Object? result,
-  }) =>
-      getFunction("get").call(
-        <Object?>[
-          url,
-          etag,
-          modified,
-          agent,
-          referrer,
-          handlers,
-          request_headers,
-          result,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
   /// ## ACCEPT_HEADER (getter)
   Object? get ACCEPT_HEADER => getAttribute("ACCEPT_HEADER");
 
@@ -6842,7 +7189,7 @@ final class zlib extends PythonModule {
   zlib.from(super.pythonModule) : super.from();
 
   static zlib import() => PythonFfiDart.instance.importModule(
-        "zlib",
+        "feedparser.zlib",
         zlib.from,
       );
 
@@ -7796,7 +8143,7 @@ final class binascii extends PythonModule {
   binascii.from(super.pythonModule) : super.from();
 
   static binascii import() => PythonFfiDart.instance.importModule(
-        "binascii",
+        "feedparser.binascii",
         binascii.from,
       );
 }
@@ -9427,56 +9774,7 @@ final class sgmllib extends PythonModule {
   sgmllib.from(super.pythonModule) : super.from();
 
   static sgmllib import() => PythonFfiDart.instance.importModule(
-        "sgmllib",
+        "feedparser.sgmllib",
         sgmllib.from,
-      );
-
-  /// ## test
-  ///
-  /// ### python source
-  /// ```py
-  /// def test(args = None):
-  ///     import sys
-  ///
-  ///     if args is None:
-  ///         args = sys.argv[1:]
-  ///
-  ///     if args and args[0] == '-s':
-  ///         args = args[1:]
-  ///         klass = SGMLParser
-  ///     else:
-  ///         klass = TestSGMLParser
-  ///
-  ///     if args:
-  ///         file = args[0]
-  ///     else:
-  ///         file = 'test.html'
-  ///
-  ///     if file == '-':
-  ///         f = sys.stdin
-  ///     else:
-  ///         try:
-  ///             f = open(file, 'r')
-  ///         except IOError as msg:
-  ///             print(file, ":", msg)
-  ///             sys.exit(1)
-  ///
-  ///     data = f.read()
-  ///     if f is not sys.stdin:
-  ///         f.close()
-  ///
-  ///     x = klass()
-  ///     for c in data:
-  ///         x.feed(c)
-  ///     x.close()
-  /// ```
-  Object? test({
-    Object? args,
-  }) =>
-      getFunction("test").call(
-        <Object?>[
-          args,
-        ],
-        kwargs: <String, Object?>{},
       );
 }

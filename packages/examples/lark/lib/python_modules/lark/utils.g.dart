@@ -575,7 +575,7 @@ final class fzset extends PythonClass {
 /// ## product
 final class product extends PythonClass {
   factory product() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.utils",
         "product",
         product.from,
         <Object?>[],
@@ -587,7 +587,7 @@ final class product extends PythonClass {
 /// ## UCD
 final class UCD extends PythonClass {
   factory UCD() => PythonFfiDart.instance.importClass(
-        "unicodedata",
+        "lark.utils",
         "UCD",
         UCD.from,
         <Object?>[],
@@ -1368,7 +1368,7 @@ final class utils extends PythonModule {
   ///         r, b = divmod(n, a)
   ///         if a + b <= max_factor:
   ///             return small_factors(r, max_factor) + [(a, b)]
-  ///     assert False, "Failed to factorize %s" % n
+  ///     assert False, "Failed to factorize %s" % n+
   /// ```
   Object? small_factors({
     required int n,
@@ -1382,11 +1382,96 @@ final class utils extends PythonModule {
         kwargs: <String, Object?>{},
       );
 
+  /// ## sys
+  sys get $sys => sys.import();
+
+  /// ## unicodedata
+  unicodedata get $unicodedata => unicodedata.import();
+
+  /// ## NO_VALUE (getter)
+  Object? get NO_VALUE => getAttribute("NO_VALUE");
+
+  /// ## NO_VALUE (setter)
+  set NO_VALUE(Object? NO_VALUE) => setAttribute("NO_VALUE", NO_VALUE);
+
   /// ## T (getter)
   Object? get T => getAttribute("T");
 
   /// ## T (setter)
   set T(Object? T) => setAttribute("T", T);
+
+  /// ## categ_pattern (getter)
+  Object? get categ_pattern => getAttribute("categ_pattern");
+
+  /// ## categ_pattern (setter)
+  set categ_pattern(Object? categ_pattern) =>
+      setAttribute("categ_pattern", categ_pattern);
+
+  /// ## logger (getter)
+  Object? get logger => getAttribute("logger");
+
+  /// ## logger (setter)
+  set logger(Object? logger) => setAttribute("logger", logger);
+
+  /// ## Callable (getter)
+  Object? get Callable => getAttribute("Callable");
+
+  /// ## Callable (setter)
+  set Callable(Object? Callable) => setAttribute("Callable", Callable);
+
+  /// ## Dict (getter)
+  Object? get Dict => getAttribute("Dict");
+
+  /// ## Dict (setter)
+  set Dict(Object? Dict) => setAttribute("Dict", Dict);
+
+  /// ## Iterable (getter)
+  Object? get $Iterable => getAttribute("Iterable");
+
+  /// ## Iterable (setter)
+  set $Iterable(Object? $Iterable) => setAttribute("Iterable", $Iterable);
+
+  /// ## Iterator (getter)
+  Object? get $Iterator => getAttribute("Iterator");
+
+  /// ## Iterator (setter)
+  set $Iterator(Object? $Iterator) => setAttribute("Iterator", $Iterator);
+
+  /// ## List (getter)
+  Object? get $List => getAttribute("List");
+
+  /// ## List (setter)
+  set $List(Object? $List) => setAttribute("List", $List);
+
+  /// ## Optional (getter)
+  Object? get Optional => getAttribute("Optional");
+
+  /// ## Optional (setter)
+  set Optional(Object? Optional) => setAttribute("Optional", Optional);
+
+  /// ## Sequence (getter)
+  Object? get Sequence => getAttribute("Sequence");
+
+  /// ## Sequence (setter)
+  set Sequence(Object? Sequence) => setAttribute("Sequence", Sequence);
+
+  /// ## Tuple (getter)
+  Object? get Tuple => getAttribute("Tuple");
+
+  /// ## Tuple (setter)
+  set Tuple(Object? Tuple) => setAttribute("Tuple", Tuple);
+
+  /// ## Type (getter)
+  Object? get Type => getAttribute("Type");
+
+  /// ## Type (setter)
+  set Type(Object? Type) => setAttribute("Type", Type);
+
+  /// ## Union (getter)
+  Object? get Union => getAttribute("Union");
+
+  /// ## Union (setter)
+  set Union(Object? Union) => setAttribute("Union", Union);
 }
 
 /// ## sys
@@ -1394,7 +1479,7 @@ final class sys extends PythonModule {
   sys.from(super.pythonModule) : super.from();
 
   static sys import() => PythonFfiDart.instance.importModule(
-        "sys",
+        "lark.sys",
         sys.from,
       );
 
@@ -1614,15 +1699,9 @@ final class unicodedata extends PythonModule {
   unicodedata.from(super.pythonModule) : super.from();
 
   static unicodedata import() => PythonFfiDart.instance.importModule(
-        "unicodedata",
+        "lark.unicodedata",
         unicodedata.from,
       );
-
-  /// ## ucd_3_2_0 (getter)
-  Object? get ucd_3_2_0 => getAttribute("ucd_3_2_0");
-
-  /// ## ucd_3_2_0 (setter)
-  set ucd_3_2_0(Object? ucd_3_2_0) => setAttribute("ucd_3_2_0", ucd_3_2_0);
 
   /// ## unidata_version (getter)
   Object? get unidata_version => getAttribute("unidata_version");

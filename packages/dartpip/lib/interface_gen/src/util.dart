@@ -254,7 +254,11 @@ $pythonFfiImportLine
         continue;
       }
       topLevelNames.add(className);
-      instantiatedClassDefinition.emit(buffer, cache: cache);
+      instantiatedClassDefinition.emit(
+        buffer,
+        cache: cache,
+        moduleParentPrefix: moduleParentPrefix,
+      );
     }
   }
   for (final Module module in cache.modules) {

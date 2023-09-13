@@ -7,7 +7,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 /// ## error
 final class error extends PythonClass {
   factory error() => PythonFfiDart.instance.importClass(
-        "zlib",
+        "feedparser.http",
         "error",
         error.from,
         <Object?>[],
@@ -275,6 +275,48 @@ final class http extends PythonModule {
         http.from,
       );
 
+  /// ## convert_to_idn
+  ///
+  /// ### python docstring
+  ///
+  /// Convert a URL to IDN notation
+  ///
+  /// ### python source
+  /// ```py
+  /// def convert_to_idn(url):
+  ///     """Convert a URL to IDN notation"""
+  ///     # this function should only be called with a unicode string
+  ///     # strategy: if the host cannot be encoded in ascii, then
+  ///     # it'll be necessary to encode it in idn form
+  ///     parts = list(urllib.parse.urlsplit(url))
+  ///     try:
+  ///         parts[1].encode('ascii')
+  ///     except UnicodeEncodeError:
+  ///         # the url needs to be converted to idn notation
+  ///         host = parts[1].rsplit(':', 1)
+  ///         newhost = []
+  ///         port = ''
+  ///         if len(host) == 2:
+  ///             port = host.pop()
+  ///         for h in host[0].split('.'):
+  ///             newhost.append(h.encode('idna').decode('utf-8'))
+  ///         parts[1] = '.'.join(newhost)
+  ///         if port:
+  ///             parts[1] += ':' + port
+  ///         return urllib.parse.urlunsplit(parts)
+  ///     else:
+  ///         return url
+  /// ```
+  Object? convert_to_idn({
+    required Object? url,
+  }) =>
+      getFunction("convert_to_idn").call(
+        <Object?>[
+          url,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
   /// ## get
   ///
   /// ### python source
@@ -408,6 +450,9 @@ final class http extends PythonModule {
         kwargs: <String, Object?>{},
       );
 
+  /// ## zlib
+  zlib get $zlib => zlib.import();
+
   /// ## ACCEPT_HEADER (getter)
   Object? get ACCEPT_HEADER => getAttribute("ACCEPT_HEADER");
 
@@ -421,7 +466,7 @@ final class zlib extends PythonModule {
   zlib.from(super.pythonModule) : super.from();
 
   static zlib import() => PythonFfiDart.instance.importModule(
-        "zlib",
+        "feedparser.zlib",
         zlib.from,
       );
 

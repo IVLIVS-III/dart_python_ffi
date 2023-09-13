@@ -2690,11 +2690,77 @@ final class exceptions extends PythonModule {
         kwargs: <String, Object?>{},
       );
 
+  /// ## NO_VALUE (getter)
+  Object? get NO_VALUE => getAttribute("NO_VALUE");
+
+  /// ## NO_VALUE (setter)
+  set NO_VALUE(Object? NO_VALUE) => setAttribute("NO_VALUE", NO_VALUE);
+
   /// ## T (getter)
   Object? get T => getAttribute("T");
 
   /// ## T (setter)
   set T(Object? T) => setAttribute("T", T);
+
+  /// ## logger (getter)
+  Object? get logger => getAttribute("logger");
+
+  /// ## logger (setter)
+  set logger(Object? logger) => setAttribute("logger", logger);
+
+  /// ## Callable (getter)
+  Object? get Callable => getAttribute("Callable");
+
+  /// ## Callable (setter)
+  set Callable(Object? Callable) => setAttribute("Callable", Callable);
+
+  /// ## Collection (getter)
+  Object? get Collection => getAttribute("Collection");
+
+  /// ## Collection (setter)
+  set Collection(Object? Collection) => setAttribute("Collection", Collection);
+
+  /// ## Iterable (getter)
+  Object? get $Iterable => getAttribute("Iterable");
+
+  /// ## Iterable (setter)
+  set $Iterable(Object? $Iterable) => setAttribute("Iterable", $Iterable);
+
+  /// ## List (getter)
+  Object? get $List => getAttribute("List");
+
+  /// ## List (setter)
+  set $List(Object? $List) => setAttribute("List", $List);
+
+  /// ## Mapping (getter)
+  Object? get Mapping => getAttribute("Mapping");
+
+  /// ## Mapping (setter)
+  set Mapping(Object? Mapping) => setAttribute("Mapping", Mapping);
+
+  /// ## Optional (getter)
+  Object? get Optional => getAttribute("Optional");
+
+  /// ## Optional (setter)
+  set Optional(Object? Optional) => setAttribute("Optional", Optional);
+
+  /// ## Set (getter)
+  Object? get $Set => getAttribute("Set");
+
+  /// ## Set (setter)
+  set $Set(Object? $Set) => setAttribute("Set", $Set);
+
+  /// ## Tuple (getter)
+  Object? get Tuple => getAttribute("Tuple");
+
+  /// ## Tuple (setter)
+  set Tuple(Object? Tuple) => setAttribute("Tuple", Tuple);
+
+  /// ## Union (getter)
+  Object? get Union => getAttribute("Union");
+
+  /// ## Union (setter)
+  set Union(Object? Union) => setAttribute("Union", Union);
 
   /// ## TYPE_CHECKING (getter)
   Object? get TYPE_CHECKING => getAttribute("TYPE_CHECKING");

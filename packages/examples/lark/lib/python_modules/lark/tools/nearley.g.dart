@@ -514,7 +514,7 @@ final class Lark extends PythonClass {
     Map<String, Object?> options = const <String, Object?>{},
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lark",
+        "lark.tools.nearley",
         "Lark",
         Lark.from,
         <Object?>[
@@ -3945,7 +3945,7 @@ final class Transformer extends PythonClass {
     bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.visitors",
+        "lark.tools.nearley",
         "Transformer",
         Transformer.from,
         <Object?>[
@@ -4184,7 +4184,7 @@ final class tree_class extends PythonClass {
     Object? meta,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.tree",
+        "lark.tools.nearley",
         "tree_class",
         tree_class.from,
         <Object?>[
@@ -4882,6 +4882,147 @@ final class nearley extends PythonModule {
         kwargs: <String, Object?>{},
       );
 
+  /// ## v_args
+  ///
+  /// ### python docstring
+  ///
+  /// A convenience decorator factory for modifying the behavior of user-supplied visitor methods.
+  ///
+  /// By default, callback methods of transformers/visitors accept one argument - a list of the node's children.
+  ///
+  /// ``v_args`` can modify this behavior. When used on a transformer/visitor class definition,
+  /// it applies to all the callback methods inside it.
+  ///
+  /// ``v_args`` can be applied to a single method, or to an entire class. When applied to both,
+  /// the options given to the method take precedence.
+  ///
+  /// Parameters:
+  ///     inline (bool, optional): Children are provided as ``*args`` instead of a list argument (not recommended for very long lists).
+  ///     meta (bool, optional): Provides two arguments: ``meta`` and ``children`` (instead of just the latter)
+  ///     tree (bool, optional): Provides the entire tree as the argument, instead of the children.
+  ///     wrapper (function, optional): Provide a function to decorate all methods.
+  ///
+  /// Example:
+  ///     ::
+  ///
+  ///         @v_args(inline=True)
+  ///         class SolveArith(Transformer):
+  ///             def add(self, left, right):
+  ///                 return left + right
+  ///
+  ///             @v_args(meta=True)
+  ///             def mul(self, meta, children):
+  ///                 logger.info(f'mul at line {meta.line}')
+  ///                 left, right = children
+  ///                 return left * right
+  ///
+  ///
+  ///         class ReverseNotation(Transformer_InPlace):
+  ///             @v_args(tree=True)
+  ///             def tree_node(self, tree):
+  ///                 tree.children = tree.children[::-1]
+  ///
+  /// ### python source
+  /// ```py
+  /// def v_args(inline: bool = False, meta: bool = False, tree: bool = False, wrapper: Optional[Callable] = None) -> Callable[[_DECORATED], _DECORATED]:
+  ///     """A convenience decorator factory for modifying the behavior of user-supplied visitor methods.
+  ///
+  ///     By default, callback methods of transformers/visitors accept one argument - a list of the node's children.
+  ///
+  ///     ``v_args`` can modify this behavior. When used on a transformer/visitor class definition,
+  ///     it applies to all the callback methods inside it.
+  ///
+  ///     ``v_args`` can be applied to a single method, or to an entire class. When applied to both,
+  ///     the options given to the method take precedence.
+  ///
+  ///     Parameters:
+  ///         inline (bool, optional): Children are provided as ``*args`` instead of a list argument (not recommended for very long lists).
+  ///         meta (bool, optional): Provides two arguments: ``meta`` and ``children`` (instead of just the latter)
+  ///         tree (bool, optional): Provides the entire tree as the argument, instead of the children.
+  ///         wrapper (function, optional): Provide a function to decorate all methods.
+  ///
+  ///     Example:
+  ///         ::
+  ///
+  ///             @v_args(inline=True)
+  ///             class SolveArith(Transformer):
+  ///                 def add(self, left, right):
+  ///                     return left + right
+  ///
+  ///                 @v_args(meta=True)
+  ///                 def mul(self, meta, children):
+  ///                     logger.info(f'mul at line {meta.line}')
+  ///                     left, right = children
+  ///                     return left * right
+  ///
+  ///
+  ///             class ReverseNotation(Transformer_InPlace):
+  ///                 @v_args(tree=True)
+  ///                 def tree_node(self, tree):
+  ///                     tree.children = tree.children[::-1]
+  ///     """
+  ///     if tree and (meta or inline):
+  ///         raise ValueError("Visitor functions cannot combine 'tree' with 'meta' or 'inline'.")
+  ///
+  ///     func = None
+  ///     if meta:
+  ///         if inline:
+  ///             func = _vargs_meta_inline
+  ///         else:
+  ///             func = _vargs_meta
+  ///     elif inline:
+  ///         func = _vargs_inline
+  ///     elif tree:
+  ///         func = _vargs_tree
+  ///
+  ///     if wrapper is not None:
+  ///         if func is not None:
+  ///             raise ValueError("Cannot use 'wrapper' along with 'tree', 'meta' or 'inline'.")
+  ///         func = wrapper
+  ///
+  ///     def _visitor_args_dec(obj):
+  ///         return _apply_v_args(obj, func)
+  ///     return _visitor_args_dec
+  /// ```
+  Object? Function(Object?) v_args({
+    bool inline = false,
+    bool meta = false,
+    bool tree = false,
+    Object? wrapper,
+  }) =>
+      PythonFunction.from(
+        getFunction("v_args").call(
+          <Object?>[
+            inline,
+            meta,
+            tree,
+            wrapper,
+          ],
+          kwargs: <String, Object?>{},
+        ),
+      ).asFunction(
+        (PythonFunctionInterface<PythonFfiDelegate<Object?>, Object?> f) =>
+            (Object? x0) => f.call(<Object?>[x0]),
+      );
+
+  /// ## sys
+  sys get $sys => sys.import();
+
+  /// ## nearley_grammar_parser (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Converts Nearley grammars to Lark
+  Object? get nearley_grammar_parser => getAttribute("nearley_grammar_parser");
+
+  /// ## nearley_grammar_parser (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Converts Nearley grammars to Lark
+  set nearley_grammar_parser(Object? nearley_grammar_parser) =>
+      setAttribute("nearley_grammar_parser", nearley_grammar_parser);
+
   /// ## nearley_grammar (getter)
   ///
   /// ### python docstring
@@ -4903,7 +5044,7 @@ final class sys extends PythonModule {
   sys.from(super.pythonModule) : super.from();
 
   static sys import() => PythonFfiDart.instance.importModule(
-        "sys",
+        "lark.tools.sys",
         sys.from,
       );
 

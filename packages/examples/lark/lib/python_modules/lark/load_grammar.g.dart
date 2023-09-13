@@ -1737,7 +1737,7 @@ final class GrammarBuilder extends PythonClass {
 /// ```
 final class GrammarError extends PythonClass {
   factory GrammarError() => PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.load_grammar",
         "GrammarError",
         GrammarError.from,
         <Object?>[],
@@ -1836,7 +1836,7 @@ final class LexerConf extends PythonClass {
     bool strict = false,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.common",
+        "lark.load_grammar",
         "LexerConf",
         LexerConf.from,
         <Object?>[
@@ -2214,7 +2214,7 @@ final class NonTerminal extends PythonClass {
     required String name,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.load_grammar",
         "NonTerminal",
         NonTerminal.from,
         <Object?>[
@@ -2464,7 +2464,7 @@ final class PackageResource extends PythonClass {
 /// ```
 final class ParseError extends PythonClass {
   factory ParseError() => PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.load_grammar",
         "ParseError",
         ParseError.from,
         <Object?>[],
@@ -2565,7 +2565,7 @@ final class ParseTreeBuilder extends PythonClass {
     Object? maybe_placeholders = false,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parse_tree_builder",
+        "lark.load_grammar",
         "ParseTreeBuilder",
         ParseTreeBuilder.from,
         <Object?>[
@@ -2692,7 +2692,7 @@ final class ParserConf extends PythonClass {
     required Object? start,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.common",
+        "lark.load_grammar",
         "ParserConf",
         ParserConf.from,
         <Object?>[
@@ -2966,7 +2966,7 @@ final class ParsingFrontend extends PythonClass {
     Object? parser,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parser_frontends",
+        "lark.load_grammar",
         "ParsingFrontend",
         ParsingFrontend.from,
         <Object?>[
@@ -3285,7 +3285,7 @@ final class PatternRE extends PythonClass {
     Object? raw,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.load_grammar",
         "PatternRE",
         PatternRE.from,
         <Object?>[
@@ -3559,7 +3559,7 @@ final class PatternStr extends PythonClass {
     Object? raw,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.load_grammar",
         "PatternStr",
         PatternStr.from,
         <Object?>[
@@ -4237,7 +4237,7 @@ final class Rule extends PythonClass {
     Object? options,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.load_grammar",
         "Rule",
         Rule.from,
         <Object?>[
@@ -4451,7 +4451,7 @@ final class RuleOptions extends PythonClass {
     Object? empty_indices = const [],
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.load_grammar",
         "RuleOptions",
         RuleOptions.from,
         <Object?>[
@@ -4830,7 +4830,7 @@ final class ST extends PythonClass {
     Object? meta,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.tree",
+        "lark.load_grammar",
         "ST",
         ST.from,
         <Object?>[
@@ -5485,7 +5485,7 @@ final class $Symbol extends PythonClass {
     required String name,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.load_grammar",
         "Symbol",
         $Symbol.from,
         <Object?>[
@@ -5689,7 +5689,7 @@ final class Terminal extends PythonClass {
     Object? filter_out = false,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.load_grammar",
         "Terminal",
         Terminal.from,
         <Object?>[
@@ -5926,7 +5926,7 @@ final class TerminalDef extends PythonClass {
     int priority = 0,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.load_grammar",
         "TerminalDef",
         TerminalDef.from,
         <Object?>[
@@ -6528,7 +6528,7 @@ final class TerminalTreeToPattern extends PythonClass {
 /// ```
 final class Token extends PythonClass {
   factory Token() => PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.load_grammar",
         "Token",
         Token.from,
         <Object?>[],
@@ -9251,7 +9251,7 @@ final class Transformer extends PythonClass {
     bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.visitors",
+        "lark.load_grammar",
         "Transformer",
         Transformer.from,
         <Object?>[
@@ -9314,7 +9314,7 @@ final class Transformer_InPlace extends PythonClass {
     bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.visitors",
+        "lark.load_grammar",
         "Transformer_InPlace",
         Transformer_InPlace.from,
         <Object?>[
@@ -9413,7 +9413,7 @@ final class Transformer_NonRecursive extends PythonClass {
     bool visit_tokens = true,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.visitors",
+        "lark.load_grammar",
         "Transformer_NonRecursive",
         Transformer_NonRecursive.from,
         <Object?>[
@@ -9686,7 +9686,7 @@ final class Tree extends PythonClass {
     Object? meta,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.tree",
+        "lark.load_grammar",
         "Tree",
         Tree.from,
         <Object?>[
@@ -10125,7 +10125,7 @@ final class UnexpectedCharacters extends PythonClass {
     Object? considered_rules,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.load_grammar",
         "UnexpectedCharacters",
         UnexpectedCharacters.from,
         <Object?>[
@@ -10617,7 +10617,7 @@ final class UnexpectedCharacters extends PythonClass {
 /// ```
 final class UnexpectedInput extends PythonClass {
   factory UnexpectedInput() => PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.load_grammar",
         "UnexpectedInput",
         UnexpectedInput.from,
         <Object?>[],
@@ -10977,7 +10977,7 @@ final class UnexpectedToken extends PythonClass {
     Object? token_history,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.load_grammar",
         "UnexpectedToken",
         UnexpectedToken.from,
         <Object?>[
@@ -11722,7 +11722,7 @@ final class ValidateSymbols extends PythonClass {
 /// ```
 final class Visitor extends PythonClass {
   factory Visitor() => PythonFfiDart.instance.importClass(
-        "lark.visitors",
+        "lark.load_grammar",
         "Visitor",
         Visitor.from,
         <Object?>[],
@@ -13219,6 +13219,141 @@ final class load_grammar extends PythonModule {
         load_grammar.from,
       );
 
+  /// ## bfs
+  ///
+  /// ### python source
+  /// ```py
+  /// def bfs(initial: Sequence, expand: Callable) -> Iterator:
+  ///     open_q = deque(list(initial))
+  ///     visited = set(open_q)
+  ///     while open_q:
+  ///         node = open_q.popleft()
+  ///         yield node
+  ///         for next_node in expand(node):
+  ///             if next_node not in visited:
+  ///                 visited.add(next_node)
+  ///                 open_q.append(next_node)
+  /// ```
+  Iterator bfs({
+    required Object? initial,
+    required Function expand,
+  }) =>
+      getFunction("bfs").call(
+        <Object?>[
+          initial,
+          expand,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## bfs_all_unique
+  ///
+  /// ### python docstring
+  ///
+  /// bfs, but doesn't keep track of visited (aka seen), because there can be no repetitions
+  ///
+  /// ### python source
+  /// ```py
+  /// def bfs_all_unique(initial, expand):
+  ///     "bfs, but doesn't keep track of visited (aka seen), because there can be no repetitions"
+  ///     open_q = deque(list(initial))
+  ///     while open_q:
+  ///         node = open_q.popleft()
+  ///         yield node
+  ///         open_q += expand(node)
+  /// ```
+  Object? bfs_all_unique({
+    required Object? initial,
+    required Object? expand,
+  }) =>
+      getFunction("bfs_all_unique").call(
+        <Object?>[
+          initial,
+          expand,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## classify
+  ///
+  /// ### python source
+  /// ```py
+  /// def classify(seq: Iterable, key: Optional[Callable] = None, value: Optional[Callable] = None) -> Dict:
+  ///     d: Dict[Any, Any] = {}
+  ///     for item in seq:
+  ///         k = key(item) if (key is not None) else item
+  ///         v = value(item) if (value is not None) else item
+  ///         try:
+  ///             d[k].append(v)
+  ///         except KeyError:
+  ///             d[k] = [v]
+  ///     return d
+  /// ```
+  Object? classify({
+    required Iterable seq,
+    Object? key,
+    Object? value,
+  }) =>
+      getFunction("classify").call(
+        <Object?>[
+          seq,
+          key,
+          value,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## classify_bool
+  ///
+  /// ### python source
+  /// ```py
+  /// def classify_bool(seq: Sequence, pred: Callable) -> Any:
+  ///     false_elems = []
+  ///     true_elems = [elem for elem in seq if pred(elem) or false_elems.append(elem)]  # type: ignore[func-returns-value]
+  ///     return true_elems, false_elems
+  /// ```
+  Object? classify_bool({
+    required Object? seq,
+    required Function pred,
+  }) =>
+      getFunction("classify_bool").call(
+        <Object?>[
+          seq,
+          pred,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## dedup_list
+  ///
+  /// ### python docstring
+  ///
+  /// Given a list (l) will removing duplicates from the list,
+  /// preserving the original order of the list. Assumes that
+  /// the list entries are hashable.
+  ///
+  /// ### python source
+  /// ```py
+  /// def dedup_list(l: List[T]) -> List[T]:
+  ///     """Given a list (l) will removing duplicates from the list,
+  ///        preserving the original order of the list. Assumes that
+  ///        the list entries are hashable."""
+  ///     dedup = set()
+  ///     # This returns None, but that's expected
+  ///     return [x for x in l if not (x in dedup or dedup.add(x))]  # type: ignore[func-returns-value]
+  ///     # 2x faster (ordered in PyPy and CPython 3.6+, guaranteed to be ordered in Python 3.7+)
+  ///     # return list(dict.fromkeys(l))
+  /// ```
+  Object? dedup_list({
+    required Object? l,
+  }) =>
+      getFunction("dedup_list").call(
+        <Object?>[
+          l,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
   /// ## eval_escaping
   ///
   /// ### python source
@@ -13291,6 +13426,75 @@ final class load_grammar extends PythonModule {
         <Object?>[
           text,
           start,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## inline_args
+  ///
+  /// ### python source
+  /// ```py
+  /// def _visitor_args_dec(obj):
+  ///         return _apply_v_args(obj, func)
+  /// ```
+  Object? inline_args({
+    required Object? obj,
+  }) =>
+      getFunction("inline_args").call(
+        <Object?>[
+          obj,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## is_id_continue
+  ///
+  /// ### python docstring
+  ///
+  /// Checks if all characters in `s` are alphanumeric characters (Unicode standard, so diacritics, indian vowels, non-latin
+  /// numbers, etc. all pass). Synonymous with a Python `ID_CONTINUE` identifier. See PEP 3131 for details.
+  ///
+  /// ### python source
+  /// ```py
+  /// def is_id_continue(s: str) -> bool:
+  ///     """
+  ///     Checks if all characters in `s` are alphanumeric characters (Unicode standard, so diacritics, indian vowels, non-latin
+  ///     numbers, etc. all pass). Synonymous with a Python `ID_CONTINUE` identifier. See PEP 3131 for details.
+  ///     """
+  ///     return _test_unicode_category(s, _ID_CONTINUE)
+  /// ```
+  bool is_id_continue({
+    required String s,
+  }) =>
+      getFunction("is_id_continue").call(
+        <Object?>[
+          s,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## is_id_start
+  ///
+  /// ### python docstring
+  ///
+  /// Checks if all characters in `s` are alphabetic characters (Unicode standard, so diacritics, indian vowels, non-latin
+  /// numbers, etc. all pass). Synonymous with a Python `ID_START` identifier. See PEP 3131 for details.
+  ///
+  /// ### python source
+  /// ```py
+  /// def is_id_start(s: str) -> bool:
+  ///     """
+  ///     Checks if all characters in `s` are alphabetic characters (Unicode standard, so diacritics, indian vowels, non-latin
+  ///     numbers, etc. all pass). Synonymous with a Python `ID_START` identifier. See PEP 3131 for details.
+  ///     """
+  ///     return _test_unicode_category(s, _ID_START)
+  /// ```
+  bool is_id_start({
+    required String s,
+  }) =>
+      getFunction("is_id_start").call(
+        <Object?>[
+          s,
         ],
         kwargs: <String, Object?>{},
       );
@@ -13421,6 +13625,57 @@ final class load_grammar extends PythonModule {
         kwargs: <String, Object?>{},
       );
 
+  /// ## small_factors
+  ///
+  /// ### python docstring
+  ///
+  /// Splits n up into smaller factors and summands <= max_factor.
+  /// Returns a list of [(a, b), ...]
+  /// so that the following code returns n:
+  ///
+  /// n = 1
+  /// for a, b in values:
+  ///     n = n * a + b
+  ///
+  /// Currently, we also keep a + b <= max_factor, but that might change
+  ///
+  /// ### python source
+  /// ```py
+  /// def small_factors(n: int, max_factor: int) -> List[Tuple[int, int]]:
+  ///     """
+  ///     Splits n up into smaller factors and summands <= max_factor.
+  ///     Returns a list of [(a, b), ...]
+  ///     so that the following code returns n:
+  ///
+  ///     n = 1
+  ///     for a, b in values:
+  ///         n = n * a + b
+  ///
+  ///     Currently, we also keep a + b <= max_factor, but that might change
+  ///     """
+  ///     assert n >= 0
+  ///     assert max_factor > 2
+  ///     if n <= max_factor:
+  ///         return [(n, 0)]
+  ///
+  ///     for a in range(max_factor, 1, -1):
+  ///         r, b = divmod(n, a)
+  ///         if a + b <= max_factor:
+  ///             return small_factors(r, max_factor) + [(a, b)]
+  ///     assert False, "Failed to factorize %s" % n
+  /// ```
+  Object? small_factors({
+    required int n,
+    required int max_factor,
+  }) =>
+      getFunction("small_factors").call(
+        <Object?>[
+          n,
+          max_factor,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
   /// ## symbol_from_strcase
   ///
   /// ### python source
@@ -13437,6 +13692,129 @@ final class load_grammar extends PythonModule {
           s,
         ],
         kwargs: <String, Object?>{},
+      );
+
+  /// ## v_args
+  ///
+  /// ### python docstring
+  ///
+  /// A convenience decorator factory for modifying the behavior of user-supplied visitor methods.
+  ///
+  /// By default, callback methods of transformers/visitors accept one argument - a list of the node's children.
+  ///
+  /// ``v_args`` can modify this behavior. When used on a transformer/visitor class definition,
+  /// it applies to all the callback methods inside it.
+  ///
+  /// ``v_args`` can be applied to a single method, or to an entire class. When applied to both,
+  /// the options given to the method take precedence.
+  ///
+  /// Parameters:
+  ///     inline (bool, optional): Children are provided as ``*args`` instead of a list argument (not recommended for very long lists).
+  ///     meta (bool, optional): Provides two arguments: ``meta`` and ``children`` (instead of just the latter)
+  ///     tree (bool, optional): Provides the entire tree as the argument, instead of the children.
+  ///     wrapper (function, optional): Provide a function to decorate all methods.
+  ///
+  /// Example:
+  ///     ::
+  ///
+  ///         @v_args(inline=True)
+  ///         class SolveArith(Transformer):
+  ///             def add(self, left, right):
+  ///                 return left + right
+  ///
+  ///             @v_args(meta=True)
+  ///             def mul(self, meta, children):
+  ///                 logger.info(f'mul at line {meta.line}')
+  ///                 left, right = children
+  ///                 return left * right
+  ///
+  ///
+  ///         class ReverseNotation(Transformer_InPlace):
+  ///             @v_args(tree=True)
+  ///             def tree_node(self, tree):
+  ///                 tree.children = tree.children[::-1]
+  ///
+  /// ### python source
+  /// ```py
+  /// def v_args(inline: bool = False, meta: bool = False, tree: bool = False, wrapper: Optional[Callable] = None) -> Callable[[_DECORATED], _DECORATED]:
+  ///     """A convenience decorator factory for modifying the behavior of user-supplied visitor methods.
+  ///
+  ///     By default, callback methods of transformers/visitors accept one argument - a list of the node's children.
+  ///
+  ///     ``v_args`` can modify this behavior. When used on a transformer/visitor class definition,
+  ///     it applies to all the callback methods inside it.
+  ///
+  ///     ``v_args`` can be applied to a single method, or to an entire class. When applied to both,
+  ///     the options given to the method take precedence.
+  ///
+  ///     Parameters:
+  ///         inline (bool, optional): Children are provided as ``*args`` instead of a list argument (not recommended for very long lists).
+  ///         meta (bool, optional): Provides two arguments: ``meta`` and ``children`` (instead of just the latter)
+  ///         tree (bool, optional): Provides the entire tree as the argument, instead of the children.
+  ///         wrapper (function, optional): Provide a function to decorate all methods.
+  ///
+  ///     Example:
+  ///         ::
+  ///
+  ///             @v_args(inline=True)
+  ///             class SolveArith(Transformer):
+  ///                 def add(self, left, right):
+  ///                     return left + right
+  ///
+  ///                 @v_args(meta=True)
+  ///                 def mul(self, meta, children):
+  ///                     logger.info(f'mul at line {meta.line}')
+  ///                     left, right = children
+  ///                     return left * right
+  ///
+  ///
+  ///             class ReverseNotation(Transformer_InPlace):
+  ///                 @v_args(tree=True)
+  ///                 def tree_node(self, tree):
+  ///                     tree.children = tree.children[::-1]
+  ///     """
+  ///     if tree and (meta or inline):
+  ///         raise ValueError("Visitor functions cannot combine 'tree' with 'meta' or 'inline'.")
+  ///
+  ///     func = None
+  ///     if meta:
+  ///         if inline:
+  ///             func = _vargs_meta_inline
+  ///         else:
+  ///             func = _vargs_meta
+  ///     elif inline:
+  ///         func = _vargs_inline
+  ///     elif tree:
+  ///         func = _vargs_tree
+  ///
+  ///     if wrapper is not None:
+  ///         if func is not None:
+  ///             raise ValueError("Cannot use 'wrapper' along with 'tree', 'meta' or 'inline'.")
+  ///         func = wrapper
+  ///
+  ///     def _visitor_args_dec(obj):
+  ///         return _apply_v_args(obj, func)
+  ///     return _visitor_args_dec
+  /// ```
+  Object? Function(Object?) v_args({
+    bool inline = false,
+    bool meta = false,
+    bool tree = false,
+    Object? wrapper,
+  }) =>
+      PythonFunction.from(
+        getFunction("v_args").call(
+          <Object?>[
+            inline,
+            meta,
+            tree,
+            wrapper,
+          ],
+          kwargs: <String, Object?>{},
+        ),
+      ).asFunction(
+        (PythonFunctionInterface<PythonFfiDelegate<Object?>, Object?> f) =>
+            (Object? x0) => f.call(<Object?>[x0]),
       );
 
   /// ## verify_used_files
@@ -13470,6 +13848,121 @@ final class load_grammar extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## sys
+  sys get $sys => sys.import();
+
+  /// ## logger (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
+  Object? get logger => getAttribute("logger");
+
+  /// ## logger (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
+  set logger(Object? logger) => setAttribute("logger", logger);
+
+  /// ## Callable (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
+  Object? get Callable => getAttribute("Callable");
+
+  /// ## Callable (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
+  set Callable(Object? Callable) => setAttribute("Callable", Callable);
+
+  /// ## Dict (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
+  Object? get Dict => getAttribute("Dict");
+
+  /// ## Dict (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
+  set Dict(Object? Dict) => setAttribute("Dict", Dict);
+
+  /// ## List (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
+  Object? get $List => getAttribute("List");
+
+  /// ## List (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
+  set $List(Object? $List) => setAttribute("List", $List);
+
+  /// ## Optional (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
+  Object? get Optional => getAttribute("Optional");
+
+  /// ## Optional (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
+  set Optional(Object? Optional) => setAttribute("Optional", Optional);
+
+  /// ## Sequence (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
+  Object? get Sequence => getAttribute("Sequence");
+
+  /// ## Sequence (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
+  set Sequence(Object? Sequence) => setAttribute("Sequence", Sequence);
+
+  /// ## Tuple (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
+  Object? get Tuple => getAttribute("Tuple");
+
+  /// ## Tuple (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
+  set Tuple(Object? Tuple) => setAttribute("Tuple", Tuple);
+
+  /// ## Union (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
+  Object? get Union => getAttribute("Union");
+
+  /// ## Union (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Parses and creates Grammar objects
+  set Union(Object? Union) => setAttribute("Union", Union);
 
   /// ## stdlib_loader (getter)
   ///
@@ -13609,7 +14102,7 @@ final class sys extends PythonModule {
   sys.from(super.pythonModule) : super.from();
 
   static sys import() => PythonFfiDart.instance.importModule(
-        "sys",
+        "lark.sys",
         sys.from,
       );
 

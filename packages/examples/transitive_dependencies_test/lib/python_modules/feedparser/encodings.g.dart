@@ -13,7 +13,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 /// ```
 final class CharacterEncodingOverride extends PythonClass {
   factory CharacterEncodingOverride() => PythonFfiDart.instance.importClass(
-        "feedparser.exceptions",
+        "feedparser.encodings",
         "CharacterEncodingOverride",
         CharacterEncodingOverride.from,
         <Object?>[],
@@ -50,7 +50,7 @@ final class CharacterEncodingOverride extends PythonClass {
 /// ```
 final class CharacterEncodingUnknown extends PythonClass {
   factory CharacterEncodingUnknown() => PythonFfiDart.instance.importClass(
-        "feedparser.exceptions",
+        "feedparser.encodings",
         "CharacterEncodingUnknown",
         CharacterEncodingUnknown.from,
         <Object?>[],
@@ -87,7 +87,7 @@ final class CharacterEncodingUnknown extends PythonClass {
 /// ```
 final class NonXMLContentType extends PythonClass {
   factory NonXMLContentType() => PythonFfiDart.instance.importClass(
-        "feedparser.exceptions",
+        "feedparser.encodings",
         "NonXMLContentType",
         NonXMLContentType.from,
         <Object?>[],
@@ -647,6 +647,20 @@ final class encodings extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## RE_XML_DECLARATION (getter)
+  Object? get RE_XML_DECLARATION => getAttribute("RE_XML_DECLARATION");
+
+  /// ## RE_XML_DECLARATION (setter)
+  set RE_XML_DECLARATION(Object? RE_XML_DECLARATION) =>
+      setAttribute("RE_XML_DECLARATION", RE_XML_DECLARATION);
+
+  /// ## RE_XML_PI_ENCODING (getter)
+  Object? get RE_XML_PI_ENCODING => getAttribute("RE_XML_PI_ENCODING");
+
+  /// ## RE_XML_PI_ENCODING (setter)
+  set RE_XML_PI_ENCODING(Object? RE_XML_PI_ENCODING) =>
+      setAttribute("RE_XML_PI_ENCODING", RE_XML_PI_ENCODING);
 
   /// ## EBCDIC_MARKER (getter)
   Object? get EBCDIC_MARKER => getAttribute("EBCDIC_MARKER");

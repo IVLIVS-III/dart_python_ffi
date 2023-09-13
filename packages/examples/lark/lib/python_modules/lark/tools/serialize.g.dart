@@ -59,7 +59,7 @@ final class Rule extends PythonClass {
     Object? options,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.tools.serialize",
         "Rule",
         Rule.from,
         <Object?>[
@@ -270,7 +270,7 @@ final class TerminalDef extends PythonClass {
     int priority = 0,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.tools.serialize",
         "TerminalDef",
         TerminalDef.from,
         <Object?>[
@@ -484,6 +484,29 @@ final class serialize extends PythonModule {
         serialize.from,
       );
 
+  /// ## build_lalr
+  ///
+  /// ### python source
+  /// ```py
+  /// def build_lalr(namespace):
+  ///     logger.setLevel((ERROR, WARN, INFO, DEBUG)[min(namespace.verbose, 3)])
+  ///     if has_interegular:
+  ///         interegular_logger.setLevel(logger.getEffectiveLevel())
+  ///     if len(namespace.start) == 0:
+  ///         namespace.start.append('start')
+  ///     kwargs = {n: getattr(namespace, n) for n in options}
+  ///     return Lark(namespace.grammar_file, parser='lalr', **kwargs), namespace.out
+  /// ```
+  Object? build_lalr({
+    required Object? namespace,
+  }) =>
+      getFunction("build_lalr").call(
+        <Object?>[
+          namespace,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
   /// ## main
   ///
   /// ### python source
@@ -499,6 +522,22 @@ final class serialize extends PythonModule {
         <Object?>[],
         kwargs: <String, Object?>{},
       );
+
+  /// ## sys
+  sys get $sys => sys.import();
+
+  /// ## argparser (getter)
+  Object? get argparser => getAttribute("argparser");
+
+  /// ## argparser (setter)
+  set argparser(Object? argparser) => setAttribute("argparser", argparser);
+
+  /// ## lalr_argparser (getter)
+  Object? get lalr_argparser => getAttribute("lalr_argparser");
+
+  /// ## lalr_argparser (setter)
+  set lalr_argparser(Object? lalr_argparser) =>
+      setAttribute("lalr_argparser", lalr_argparser);
 }
 
 /// ## sys
@@ -506,7 +545,7 @@ final class sys extends PythonModule {
   sys.from(super.pythonModule) : super.from();
 
   static sys import() => PythonFfiDart.instance.importModule(
-        "sys",
+        "lark.tools.sys",
         sys.from,
       );
 

@@ -202,7 +202,7 @@ final class Namespace extends PythonClass {
 /// ```
 final class FeedParserDict extends PythonClass {
   factory FeedParserDict() => PythonFfiDart.instance.importClass(
-        "feedparser.util",
+        "feedparser.namespaces.psc",
         "FeedParserDict",
         FeedParserDict.from,
         <Object?>[],
@@ -430,6 +430,15 @@ final class psc extends PythonModule {
         "feedparser.namespaces.psc",
         psc.from,
       );
+
+  /// ## util
+  util get $util => util.import();
+
+  /// ## format_ (getter)
+  Object? get format_ => getAttribute("format_");
+
+  /// ## format_ (setter)
+  set format_(Object? format_) => setAttribute("format_", format_);
 }
 
 /// ## util
@@ -604,7 +613,7 @@ final class util extends PythonModule {
   util.from(super.pythonModule) : super.from();
 
   static util import() => PythonFfiDart.instance.importModule(
-        "feedparser.util",
+        "feedparser.namespaces.feedparser.util",
         util.from,
       );
 }

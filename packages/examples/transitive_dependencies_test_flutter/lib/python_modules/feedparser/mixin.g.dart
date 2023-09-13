@@ -144,7 +144,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 /// ```
 final class FeedParserDict extends PythonClass {
   factory FeedParserDict() => PythonFfiDart.instance.importClass(
-        "feedparser.util",
+        "feedparser.mixin",
         "FeedParserDict",
         FeedParserDict.from,
         <Object?>[],
@@ -289,7 +289,7 @@ final class FeedParserDict extends PythonClass {
 /// ## Error
 final class Error extends PythonClass {
   factory Error() => PythonFfiDart.instance.importClass(
-        "binascii",
+        "feedparser.mixin",
         "Error",
         Error.from,
         <Object?>[],
@@ -320,7 +320,7 @@ final class Error extends PythonClass {
 /// ## Incomplete
 final class Incomplete extends PythonClass {
   factory Incomplete() => PythonFfiDart.instance.importClass(
-        "binascii",
+        "feedparser.mixin",
         "Incomplete",
         Incomplete.from,
         <Object?>[],
@@ -393,7 +393,7 @@ final class Incomplete extends PythonClass {
 /// ```
 final class Namespace extends PythonClass {
   factory Namespace() => PythonFfiDart.instance.importClass(
-        "feedparser.namespaces.cc",
+        "feedparser.mixin",
         "Namespace",
         Namespace.from,
         <Object?>[],
@@ -1206,6 +1206,87 @@ final class $mixin extends PythonModule {
         "feedparser.mixin",
         $mixin.from,
       );
+
+  /// ## make_safe_absolute_uri
+  ///
+  /// ### python source
+  /// ```py
+  /// def make_safe_absolute_uri(base, rel=None):
+  ///     # bail if ACCEPTABLE_URI_SCHEMES is empty
+  ///     if not ACCEPTABLE_URI_SCHEMES:
+  ///         return _urljoin(base, rel or '')
+  ///     if not base:
+  ///         return rel or ''
+  ///     if not rel:
+  ///         try:
+  ///             scheme = urllib.parse.urlparse(base)[0]
+  ///         except ValueError:
+  ///             return ''
+  ///         if not scheme or scheme in ACCEPTABLE_URI_SCHEMES:
+  ///             return base
+  ///         return ''
+  ///     uri = _urljoin(base, rel)
+  ///     if uri.strip().split(':', 1)[0] not in ACCEPTABLE_URI_SCHEMES:
+  ///         return ''
+  ///     return uri
+  /// ```
+  Object? make_safe_absolute_uri({
+    required Object? $base,
+    Object? rel,
+  }) =>
+      getFunction("make_safe_absolute_uri").call(
+        <Object?>[
+          $base,
+          rel,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## resolve_relative_uris
+  ///
+  /// ### python source
+  /// ```py
+  /// def resolve_relative_uris(html_source, base_uri, encoding, type_):
+  ///     p = RelativeURIResolver(base_uri, encoding, type_)
+  ///     p.feed(html_source)
+  ///     return p.output()
+  /// ```
+  Object? resolve_relative_uris({
+    required Object? html_source,
+    required Object? base_uri,
+    required Object? encoding,
+    required Object? type_,
+  }) =>
+      getFunction("resolve_relative_uris").call(
+        <Object?>[
+          html_source,
+          base_uri,
+          encoding,
+          type_,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## binascii
+  binascii get $binascii => binascii.import();
+
+  /// ## cc
+  cc get $cc => cc.import();
+
+  /// ## dc
+  dc get $dc => dc.import();
+
+  /// ## georss
+  georss get $georss => georss.import();
+
+  /// ## itunes
+  itunes get $itunes => itunes.import();
+
+  /// ## mediarss
+  mediarss get $mediarss => mediarss.import();
+
+  /// ## psc
+  psc get $psc => psc.import();
 }
 
 /// ## binascii
@@ -1213,7 +1294,7 @@ final class binascii extends PythonModule {
   binascii.from(super.pythonModule) : super.from();
 
   static binascii import() => PythonFfiDart.instance.importModule(
-        "binascii",
+        "feedparser.binascii",
         binascii.from,
       );
 }

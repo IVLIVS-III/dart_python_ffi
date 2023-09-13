@@ -967,6 +967,41 @@ final class sanitizer extends PythonModule {
         sanitizer.from,
       );
 
+  /// ## make_safe_absolute_uri
+  ///
+  /// ### python source
+  /// ```py
+  /// def make_safe_absolute_uri(base, rel=None):
+  ///     # bail if ACCEPTABLE_URI_SCHEMES is empty
+  ///     if not ACCEPTABLE_URI_SCHEMES:
+  ///         return _urljoin(base, rel or '')
+  ///     if not base:
+  ///         return rel or ''
+  ///     if not rel:
+  ///         try:
+  ///             scheme = urllib.parse.urlparse(base)[0]
+  ///         except ValueError:
+  ///             return ''
+  ///         if not scheme or scheme in ACCEPTABLE_URI_SCHEMES:
+  ///             return base
+  ///         return ''
+  ///     uri = _urljoin(base, rel)
+  ///     if uri.strip().split(':', 1)[0] not in ACCEPTABLE_URI_SCHEMES:
+  ///         return ''
+  ///     return uri
+  /// ```
+  Object? make_safe_absolute_uri({
+    required Object? $base,
+    Object? rel,
+  }) =>
+      getFunction("make_safe_absolute_uri").call(
+        <Object?>[
+          $base,
+          rel,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
   /// ## replace_doctype
   ///
   /// ### python docstring
@@ -1033,4 +1068,25 @@ final class sanitizer extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## RE_DOCTYPE_PATTERN (getter)
+  Object? get RE_DOCTYPE_PATTERN => getAttribute("RE_DOCTYPE_PATTERN");
+
+  /// ## RE_DOCTYPE_PATTERN (setter)
+  set RE_DOCTYPE_PATTERN(Object? RE_DOCTYPE_PATTERN) =>
+      setAttribute("RE_DOCTYPE_PATTERN", RE_DOCTYPE_PATTERN);
+
+  /// ## RE_ENTITY_PATTERN (getter)
+  Object? get RE_ENTITY_PATTERN => getAttribute("RE_ENTITY_PATTERN");
+
+  /// ## RE_ENTITY_PATTERN (setter)
+  set RE_ENTITY_PATTERN(Object? RE_ENTITY_PATTERN) =>
+      setAttribute("RE_ENTITY_PATTERN", RE_ENTITY_PATTERN);
+
+  /// ## RE_SAFE_ENTITY_PATTERN (getter)
+  Object? get RE_SAFE_ENTITY_PATTERN => getAttribute("RE_SAFE_ENTITY_PATTERN");
+
+  /// ## RE_SAFE_ENTITY_PATTERN (setter)
+  set RE_SAFE_ENTITY_PATTERN(Object? RE_SAFE_ENTITY_PATTERN) =>
+      setAttribute("RE_SAFE_ENTITY_PATTERN", RE_SAFE_ENTITY_PATTERN);
 }

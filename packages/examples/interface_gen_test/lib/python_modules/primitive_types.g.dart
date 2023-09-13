@@ -771,4 +771,34 @@ final class primitive_types extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## num (getter)
+  Object? get $num => getAttribute("num");
+
+  /// ## num (setter)
+  set $num(Object? $num) => setAttribute("num", $num);
+
+  /// ## Callable (getter)
+  Object? get Callable => getAttribute("Callable");
+
+  /// ## Callable (setter)
+  set Callable(Object? Callable) => setAttribute("Callable", Callable);
+
+  /// ## Generator (getter)
+  Object? get Generator => getAttribute("Generator");
+
+  /// ## Generator (setter)
+  set Generator(Object? Generator) => setAttribute("Generator", Generator);
+
+  /// ## Iterable (getter)
+  Object? get $Iterable => getAttribute("Iterable");
+
+  /// ## Iterable (setter)
+  set $Iterable(Object? $Iterable) => setAttribute("Iterable", $Iterable);
+
+  /// ## Iterator (getter)
+  Object? get $Iterator => getAttribute("Iterator");
+
+  /// ## Iterator (setter)
+  set $Iterator(Object? $Iterator) => setAttribute("Iterator", $Iterator);
 }

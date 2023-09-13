@@ -61,7 +61,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 /// ```
 final class ForestSumVisitor extends PythonClass {
   factory ForestSumVisitor() => PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_forest",
+        "lark.parsers.earley",
         "ForestSumVisitor",
         ForestSumVisitor.from,
         <Object?>[],
@@ -520,7 +520,7 @@ final class ForestToParseTree extends PythonClass {
     Object? use_cache = true,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_forest",
+        "lark.parsers.earley",
         "ForestToParseTree",
         ForestToParseTree.from,
         <Object?>[
@@ -1118,7 +1118,7 @@ final class GrammarAnalyzer extends PythonClass {
     Object? strict = false,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.grammar_analysis",
+        "lark.parsers.earley",
         "GrammarAnalyzer",
         GrammarAnalyzer.from,
         <Object?>[
@@ -1272,7 +1272,7 @@ final class Item extends PythonClass {
     required Object? start,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_common",
+        "lark.parsers.earley",
         "Item",
         Item.from,
         <Object?>[
@@ -1434,7 +1434,7 @@ final class NonTerminal extends PythonClass {
     required String name,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.parsers.earley",
         "NonTerminal",
         NonTerminal.from,
         <Object?>[
@@ -2307,7 +2307,7 @@ final class SymbolNode extends PythonClass {
     required Object? end,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_forest",
+        "lark.parsers.earley",
         "SymbolNode",
         SymbolNode.from,
         <Object?>[
@@ -3012,7 +3012,7 @@ final class SymbolNode extends PythonClass {
 /// ```
 final class Token extends PythonClass {
   factory Token() => PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.parsers.earley",
         "Token",
         Token.from,
         <Object?>[],
@@ -5633,7 +5633,7 @@ final class TokenNode extends PythonClass {
     Object? priority,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_forest",
+        "lark.parsers.earley",
         "TokenNode",
         TokenNode.from,
         <Object?>[
@@ -5924,7 +5924,7 @@ final class Tree extends PythonClass {
     Object? meta,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.tree",
+        "lark.parsers.earley",
         "Tree",
         Tree.from,
         <Object?>[
@@ -6338,7 +6338,7 @@ final class UnexpectedEOF extends PythonClass {
     Object? terminals_by_name,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.parsers.earley",
         "UnexpectedEOF",
         UnexpectedEOF.from,
         <Object?>[
@@ -6709,7 +6709,7 @@ final class UnexpectedToken extends PythonClass {
     Object? token_history,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.parsers.earley",
         "UnexpectedToken",
         UnexpectedToken.from,
         <Object?>[
@@ -7677,4 +7677,34 @@ final class earley extends PythonModule {
         "lark.parsers.earley",
         earley.from,
       );
+
+  /// ## logger (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// This module implements an Earley parser.
+  ///
+  /// The core Earley algorithm used here is based on Elizabeth Scott's implementation, here:
+  ///     https://www.sciencedirect.com/science/article/pii/S1571066108001497
+  ///
+  /// That is probably the best reference for understanding the algorithm here.
+  ///
+  /// The Earley parser outputs an SPPF-tree as per that document. The SPPF tree format
+  /// is explained here: https://lark-parser.readthedocs.io/en/latest/_static/sppf/sppf.html
+  Object? get logger => getAttribute("logger");
+
+  /// ## logger (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// This module implements an Earley parser.
+  ///
+  /// The core Earley algorithm used here is based on Elizabeth Scott's implementation, here:
+  ///     https://www.sciencedirect.com/science/article/pii/S1571066108001497
+  ///
+  /// That is probably the best reference for understanding the algorithm here.
+  ///
+  /// The Earley parser outputs an SPPF-tree as per that document. The SPPF tree format
+  /// is explained here: https://lark-parser.readthedocs.io/en/latest/_static/sppf/sppf.html
+  set logger(Object? logger) => setAttribute("logger", logger);
 }

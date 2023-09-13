@@ -134,7 +134,7 @@ final class AmbiguousIntermediateExpander extends PythonClass {
     required Object? node_builder,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parse_tree_builder",
+        "lark.parsers.earley_forest",
         "AmbiguousIntermediateExpander",
         AmbiguousIntermediateExpander.from,
         <Object?>[
@@ -4438,7 +4438,7 @@ final class Tree extends PythonClass {
     Object? meta,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.tree",
+        "lark.parsers.earley_forest",
         "Tree",
         Tree.from,
         <Object?>[
@@ -6187,4 +6187,56 @@ final class earley_forest extends PythonModule {
         ],
         kwargs: <String, Object?>{},
       );
+
+  /// ## Discard (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// "This module implements an SPPF implementation
+  ///
+  /// This is used as the primary output mechanism for the Earley parser
+  /// in order to store complex ambiguities.
+  ///
+  /// Full reference and more details is here:
+  /// https://web.archive.org/web/20190616123959/http://www.bramvandersanden.com/post/2014/06/shared-packed-parse-forest/
+  Object? get Discard => getAttribute("Discard");
+
+  /// ## Discard (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// "This module implements an SPPF implementation
+  ///
+  /// This is used as the primary output mechanism for the Earley parser
+  /// in order to store complex ambiguities.
+  ///
+  /// Full reference and more details is here:
+  /// https://web.archive.org/web/20190616123959/http://www.bramvandersanden.com/post/2014/06/shared-packed-parse-forest/
+  set Discard(Object? Discard) => setAttribute("Discard", Discard);
+
+  /// ## logger (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// "This module implements an SPPF implementation
+  ///
+  /// This is used as the primary output mechanism for the Earley parser
+  /// in order to store complex ambiguities.
+  ///
+  /// Full reference and more details is here:
+  /// https://web.archive.org/web/20190616123959/http://www.bramvandersanden.com/post/2014/06/shared-packed-parse-forest/
+  Object? get logger => getAttribute("logger");
+
+  /// ## logger (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// "This module implements an SPPF implementation
+  ///
+  /// This is used as the primary output mechanism for the Earley parser
+  /// in order to store complex ambiguities.
+  ///
+  /// Full reference and more details is here:
+  /// https://web.archive.org/web/20190616123959/http://www.bramvandersanden.com/post/2014/06/shared-packed-parse-forest/
+  set logger(Object? logger) => setAttribute("logger", logger);
 }

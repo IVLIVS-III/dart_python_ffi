@@ -733,7 +733,7 @@ final class RuleOptions extends PythonClass {
 /// ```
 final class Serialize extends PythonClass {
   factory Serialize() => PythonFfiDart.instance.importClass(
-        "lark.utils",
+        "lark.grammar",
         "Serialize",
         Serialize.from,
         <Object?>[],
@@ -1387,6 +1387,24 @@ final class grammar extends PythonModule {
         "lark.grammar",
         grammar.from,
       );
+
+  /// ## ClassVar (getter)
+  Object? get ClassVar => getAttribute("ClassVar");
+
+  /// ## ClassVar (setter)
+  set ClassVar(Object? ClassVar) => setAttribute("ClassVar", ClassVar);
+
+  /// ## Optional (getter)
+  Object? get Optional => getAttribute("Optional");
+
+  /// ## Optional (setter)
+  set Optional(Object? Optional) => setAttribute("Optional", Optional);
+
+  /// ## Tuple (getter)
+  Object? get Tuple => getAttribute("Tuple");
+
+  /// ## Tuple (setter)
+  set Tuple(Object? Tuple) => setAttribute("Tuple", Tuple);
 
   /// ## TOKEN_DEFAULT_PRIORITY (getter)
   Object? get TOKEN_DEFAULT_PRIORITY => getAttribute("TOKEN_DEFAULT_PRIORITY");

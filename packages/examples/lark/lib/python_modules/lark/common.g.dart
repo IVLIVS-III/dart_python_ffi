@@ -433,7 +433,7 @@ final class LexerConf extends PythonClass {
 /// ## ModuleType
 final class ModuleType extends PythonClass {
   factory ModuleType() => PythonFfiDart.instance.importClass(
-        "builtins",
+        "lark.common",
         "ModuleType",
         ModuleType.from,
         <Object?>[],
@@ -713,7 +713,7 @@ final class ParserConf extends PythonClass {
 /// ```
 final class Serialize extends PythonClass {
   factory Serialize() => PythonFfiDart.instance.importClass(
-        "lark.utils",
+        "lark.common",
         "Serialize",
         Serialize.from,
         <Object?>[],
@@ -833,7 +833,7 @@ final class TerminalDef extends PythonClass {
     int priority = 0,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.common",
         "TerminalDef",
         TerminalDef.from,
         <Object?>[
@@ -1159,7 +1159,7 @@ final class TerminalDef extends PythonClass {
 /// ```
 final class Token extends PythonClass {
   factory Token() => PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.common",
         "Token",
         Token.from,
         <Object?>[],
@@ -3828,6 +3828,33 @@ final class common extends PythonModule {
         common.from,
       );
 
+  /// ## sys
+  sys get $sys => sys.import();
+
+  /// ## Callable (getter)
+  Object? get Callable => getAttribute("Callable");
+
+  /// ## Callable (setter)
+  set Callable(Object? Callable) => setAttribute("Callable", Callable);
+
+  /// ## Collection (getter)
+  Object? get Collection => getAttribute("Collection");
+
+  /// ## Collection (setter)
+  set Collection(Object? Collection) => setAttribute("Collection", Collection);
+
+  /// ## Dict (getter)
+  Object? get Dict => getAttribute("Dict");
+
+  /// ## Dict (setter)
+  set Dict(Object? Dict) => setAttribute("Dict", Dict);
+
+  /// ## Optional (getter)
+  Object? get Optional => getAttribute("Optional");
+
+  /// ## Optional (setter)
+  set Optional(Object? Optional) => setAttribute("Optional", Optional);
+
   /// ## TYPE_CHECKING (getter)
   Object? get TYPE_CHECKING => getAttribute("TYPE_CHECKING");
 
@@ -3841,7 +3868,7 @@ final class sys extends PythonModule {
   sys.from(super.pythonModule) : super.from();
 
   static sys import() => PythonFfiDart.instance.importModule(
-        "sys",
+        "lark.sys",
         sys.from,
       );
 

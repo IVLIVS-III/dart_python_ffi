@@ -273,7 +273,7 @@ final class Attribute extends PythonClass {
     Object? alias,
   }) =>
       PythonFfiDart.instance.importClass(
-        "attr._make",
+        "attrs.filters",
         "Attribute",
         Attribute.from,
         <Object?>[
@@ -2015,5 +2015,103 @@ final class filters extends PythonModule {
   static filters import() => PythonFfiDart.instance.importModule(
         "attrs.filters",
         filters.from,
+      );
+
+  /// ## exclude
+  ///
+  /// ### python docstring
+  ///
+  /// Exclude *what*.
+  ///
+  /// :param what: What to exclude.
+  /// :type what: `list` of classes `type`, field names `str` or
+  ///     `attrs.Attribute`\ s.
+  ///
+  /// :rtype: `callable`
+  ///
+  /// .. versionchanged:: 23.3.0 Accept field name string as input argument
+  ///
+  /// ### python source
+  /// ```py
+  /// def exclude(*what):
+  ///     """
+  ///     Exclude *what*.
+  ///
+  ///     :param what: What to exclude.
+  ///     :type what: `list` of classes `type`, field names `str` or
+  ///         `attrs.Attribute`\\ s.
+  ///
+  ///     :rtype: `callable`
+  ///
+  ///     .. versionchanged:: 23.3.0 Accept field name string as input argument
+  ///     """
+  ///     cls, names, attrs = _split_what(what)
+  ///
+  ///     def exclude_(attribute, value):
+  ///         return not (
+  ///             value.__class__ in cls
+  ///             or attribute.name in names
+  ///             or attribute in attrs
+  ///         )
+  ///
+  ///     return exclude_
+  /// ```
+  Object? exclude({
+    List<Object?> what = const <Object?>[],
+  }) =>
+      getFunction("exclude").call(
+        <Object?>[
+          ...what,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## include
+  ///
+  /// ### python docstring
+  ///
+  /// Include *what*.
+  ///
+  /// :param what: What to include.
+  /// :type what: `list` of classes `type`, field names `str` or
+  ///     `attrs.Attribute`\ s
+  ///
+  /// :rtype: `callable`
+  ///
+  /// .. versionchanged:: 23.1.0 Accept strings with field names.
+  ///
+  /// ### python source
+  /// ```py
+  /// def include(*what):
+  ///     """
+  ///     Include *what*.
+  ///
+  ///     :param what: What to include.
+  ///     :type what: `list` of classes `type`, field names `str` or
+  ///         `attrs.Attribute`\\ s
+  ///
+  ///     :rtype: `callable`
+  ///
+  ///     .. versionchanged:: 23.1.0 Accept strings with field names.
+  ///     """
+  ///     cls, names, attrs = _split_what(what)
+  ///
+  ///     def include_(attribute, value):
+  ///         return (
+  ///             value.__class__ in cls
+  ///             or attribute.name in names
+  ///             or attribute in attrs
+  ///         )
+  ///
+  ///     return include_
+  /// ```
+  Object? include({
+    List<Object?> what = const <Object?>[],
+  }) =>
+      getFunction("include").call(
+        <Object?>[
+          ...what,
+        ],
+        kwargs: <String, Object?>{},
       );
 }

@@ -133,7 +133,7 @@ final class BasicLexer extends PythonClass {
     Object? comparator,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.parser_frontends",
         "BasicLexer",
         BasicLexer.from,
         <Object?>[
@@ -543,7 +543,7 @@ final class CYK_FrontEnd extends PythonClass {
 /// ```
 final class ConfigurationError extends PythonClass {
   factory ConfigurationError() => PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.parser_frontends",
         "ConfigurationError",
         ConfigurationError.from,
         <Object?>[],
@@ -641,7 +641,7 @@ final class ContextualLexer extends PythonClass {
     Object? always_accept = const [],
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.parser_frontends",
         "ContextualLexer",
         ContextualLexer.from,
         <Object?>[
@@ -901,7 +901,7 @@ final class GrammarAnalyzer extends PythonClass {
     Object? strict = false,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.grammar_analysis",
+        "lark.parser_frontends",
         "GrammarAnalyzer",
         GrammarAnalyzer.from,
         <Object?>[
@@ -1014,7 +1014,7 @@ final class GrammarAnalyzer extends PythonClass {
 /// ```
 final class GrammarError extends PythonClass {
   factory GrammarError() => PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.parser_frontends",
         "GrammarError",
         GrammarError.from,
         <Object?>[],
@@ -1117,7 +1117,7 @@ final class LALR_Parser extends PythonClass {
     Object? strict = false,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.lalr_parser",
+        "lark.parser_frontends",
         "LALR_Parser",
         LALR_Parser.from,
         <Object?>[
@@ -1336,7 +1336,7 @@ final class LALR_Parser extends PythonClass {
 /// ```
 final class Lexer extends PythonClass {
   factory Lexer() => PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.parser_frontends",
         "Lexer",
         Lexer.from,
         <Object?>[],
@@ -1466,7 +1466,7 @@ final class LexerConf extends PythonClass {
     bool strict = false,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.common",
+        "lark.parser_frontends",
         "LexerConf",
         LexerConf.from,
         <Object?>[
@@ -1855,7 +1855,7 @@ final class LexerThread extends PythonClass {
     required Object? lexer_state,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.parser_frontends",
         "LexerThread",
         LexerThread.from,
         <Object?>[
@@ -1958,7 +1958,7 @@ final class ParserConf extends PythonClass {
     required Object? start,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.common",
+        "lark.parser_frontends",
         "ParserConf",
         ParserConf.from,
         <Object?>[
@@ -2634,7 +2634,7 @@ final class PostLexConnector extends PythonClass {
 /// ```
 final class Serialize extends PythonClass {
   factory Serialize() => PythonFfiDart.instance.importClass(
-        "lark.utils",
+        "lark.parser_frontends",
         "Serialize",
         Serialize.from,
         <Object?>[],
@@ -2916,7 +2916,7 @@ final class Tree extends PythonClass {
     Object? meta,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.tree",
+        "lark.parser_frontends",
         "Tree",
         Tree.from,
         <Object?>[
@@ -3337,7 +3337,7 @@ final class CnfWrapper extends PythonClass {
     required Object? grammar,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.cyk",
+        "lark.parser_frontends",
         "CnfWrapper",
         CnfWrapper.from,
         <Object?>[
@@ -3451,7 +3451,7 @@ final class Grammar extends PythonClass {
     required Object? rules,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.cyk",
+        "lark.parser_frontends",
         "Grammar",
         Grammar.from,
         <Object?>[
@@ -3500,7 +3500,7 @@ final class NT extends PythonClass {
     required String name,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.parser_frontends",
         "NT",
         NT.from,
         <Object?>[
@@ -3669,6 +3669,198 @@ final class NT extends PythonClass {
   set name(Object? name) => setAttribute("name", name);
 }
 
+/// ## NonTerminal
+///
+/// ### python docstring
+///
+/// Safe-ish serialization interface that doesn't rely on Pickle
+///
+/// Attributes:
+///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+///                                     Should include all field types that aren't builtin types.
+///
+/// ### python source
+/// ```py
+/// class NonTerminal(Symbol):
+///     __serialize_fields__ = 'name',
+///
+///     is_term: ClassVar[bool] = False
+/// ```
+final class NonTerminal extends PythonClass {
+  factory NonTerminal({
+    required String name,
+  }) =>
+      PythonFfiDart.instance.importClass(
+        "lark.parser_frontends",
+        "NonTerminal",
+        NonTerminal.from,
+        <Object?>[
+          name,
+        ],
+        <String, Object?>{},
+      );
+
+  NonTerminal.from(super.pythonClass) : super.from();
+
+  /// ## memo_serialize
+  ///
+  /// ### python source
+  /// ```py
+  /// def memo_serialize(self, types_to_memoize: List) -> Any:
+  ///         memo = SerializeMemoizer(types_to_memoize)
+  ///         return self.serialize(memo), memo.serialize()
+  /// ```
+  Object? memo_serialize({
+    required Object? types_to_memoize,
+  }) =>
+      getFunction("memo_serialize").call(
+        <Object?>[
+          types_to_memoize,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## renamed
+  ///
+  /// ### python source
+  /// ```py
+  /// def renamed(self, f):
+  ///         return type(self)(f(self.name))
+  /// ```
+  Object? renamed({
+    required Object? f,
+  }) =>
+      getFunction("renamed").call(
+        <Object?>[
+          f,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## serialize
+  ///
+  /// ### python source
+  /// ```py
+  /// def serialize(self, memo = None) -> Dict[str, Any]:
+  ///         if memo and memo.in_types(self):
+  ///             return {'@': memo.memoized.get(self)}
+  ///
+  ///         fields = getattr(self, '__serialize_fields__')
+  ///         res = {f: _serialize(getattr(self, f), memo) for f in fields}
+  ///         res['__type__'] = type(self).__name__
+  ///         if hasattr(self, '_serialize'):
+  ///             self._serialize(res, memo)  # type: ignore[attr-defined]
+  ///         return res
+  /// ```
+  Object? serialize({
+    Object? memo,
+  }) =>
+      getFunction("serialize").call(
+        <Object?>[
+          memo,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## fullrepr (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  Object? get fullrepr => getAttribute("fullrepr");
+
+  /// ## fullrepr (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  set fullrepr(Object? fullrepr) => setAttribute("fullrepr", fullrepr);
+
+  /// ## deserialize (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  Object? get deserialize => getAttribute("deserialize");
+
+  /// ## deserialize (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  set deserialize(Object? deserialize) =>
+      setAttribute("deserialize", deserialize);
+
+  /// ## is_term (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  Object? get is_term => getAttribute("is_term");
+
+  /// ## is_term (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  set is_term(Object? is_term) => setAttribute("is_term", is_term);
+
+  /// ## name (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  Object? get name => getAttribute("name");
+
+  /// ## name (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  set name(Object? name) => setAttribute("name", name);
+}
+
 /// ## ParseError
 ///
 /// ### python source
@@ -3678,7 +3870,7 @@ final class NT extends PythonClass {
 /// ```
 final class ParseError extends PythonClass {
   factory ParseError() => PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.parser_frontends",
         "ParseError",
         ParseError.from,
         <Object?>[],
@@ -3763,7 +3955,7 @@ final class Parser extends PythonClass {
     required Object? rules,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.cyk",
+        "lark.parser_frontends",
         "Parser",
         Parser.from,
         <Object?>[
@@ -3878,7 +4070,7 @@ final class Rule extends PythonClass {
     required Object? alias,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.cyk",
+        "lark.parser_frontends",
         "Rule",
         Rule.from,
         <Object?>[
@@ -3975,7 +4167,7 @@ final class RuleNode extends PythonClass {
     Object? weight = 0,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.cyk",
+        "lark.parser_frontends",
         "RuleNode",
         RuleNode.from,
         <Object?>[
@@ -4076,7 +4268,7 @@ final class $Symbol extends PythonClass {
     required String name,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.parser_frontends",
         "Symbol",
         $Symbol.from,
         <Object?>[
@@ -4280,7 +4472,7 @@ final class T extends PythonClass {
     Object? filter_out = false,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.grammar",
+        "lark.parser_frontends",
         "T",
         T.from,
         <Object?>[
@@ -4291,6 +4483,235 @@ final class T extends PythonClass {
       );
 
   T.from(super.pythonClass) : super.from();
+
+  /// ## memo_serialize
+  ///
+  /// ### python source
+  /// ```py
+  /// def memo_serialize(self, types_to_memoize: List) -> Any:
+  ///         memo = SerializeMemoizer(types_to_memoize)
+  ///         return self.serialize(memo), memo.serialize()
+  /// ```
+  Object? memo_serialize({
+    required Object? types_to_memoize,
+  }) =>
+      getFunction("memo_serialize").call(
+        <Object?>[
+          types_to_memoize,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## renamed
+  ///
+  /// ### python source
+  /// ```py
+  /// def renamed(self, f):
+  ///         return type(self)(f(self.name), self.filter_out)
+  /// ```
+  Object? renamed({
+    required Object? f,
+  }) =>
+      getFunction("renamed").call(
+        <Object?>[
+          f,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## serialize
+  ///
+  /// ### python source
+  /// ```py
+  /// def serialize(self, memo = None) -> Dict[str, Any]:
+  ///         if memo and memo.in_types(self):
+  ///             return {'@': memo.memoized.get(self)}
+  ///
+  ///         fields = getattr(self, '__serialize_fields__')
+  ///         res = {f: _serialize(getattr(self, f), memo) for f in fields}
+  ///         res['__type__'] = type(self).__name__
+  ///         if hasattr(self, '_serialize'):
+  ///             self._serialize(res, memo)  # type: ignore[attr-defined]
+  ///         return res
+  /// ```
+  Object? serialize({
+    Object? memo,
+  }) =>
+      getFunction("serialize").call(
+        <Object?>[
+          memo,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## fullrepr (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  Object? get fullrepr => getAttribute("fullrepr");
+
+  /// ## fullrepr (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  set fullrepr(Object? fullrepr) => setAttribute("fullrepr", fullrepr);
+
+  /// ## deserialize (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  Object? get deserialize => getAttribute("deserialize");
+
+  /// ## deserialize (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  set deserialize(Object? deserialize) =>
+      setAttribute("deserialize", deserialize);
+
+  /// ## is_term (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  Object? get is_term => getAttribute("is_term");
+
+  /// ## is_term (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  set is_term(Object? is_term) => setAttribute("is_term", is_term);
+
+  /// ## name (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  Object? get name => getAttribute("name");
+
+  /// ## name (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  set name(Object? name) => setAttribute("name", name);
+
+  /// ## filter_out (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  Object? get filter_out => getAttribute("filter_out");
+
+  /// ## filter_out (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// Safe-ish serialization interface that doesn't rely on Pickle
+  ///
+  /// Attributes:
+  ///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+  ///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+  ///                                     Should include all field types that aren't builtin types.
+  set filter_out(Object? filter_out) => setAttribute("filter_out", filter_out);
+}
+
+/// ## Terminal
+///
+/// ### python docstring
+///
+/// Safe-ish serialization interface that doesn't rely on Pickle
+///
+/// Attributes:
+///     __serialize_fields__ (List[str]): Fields (aka attributes) to serialize.
+///     __serialize_namespace__ (list): List of classes that deserialization is allowed to instantiate.
+///                                     Should include all field types that aren't builtin types.
+///
+/// ### python source
+/// ```py
+/// class Terminal(Symbol):
+///     __serialize_fields__ = 'name', 'filter_out'
+///
+///     is_term: ClassVar[bool] = True
+///
+///     def __init__(self, name, filter_out=False):
+///         self.name = name
+///         self.filter_out = filter_out
+///
+///     @property
+///     def fullrepr(self):
+///         return '%s(%r, %r)' % (type(self).__name__, self.name, self.filter_out)
+///
+///     def renamed(self, f):
+///         return type(self)(f(self.name), self.filter_out)
+/// ```
+final class Terminal extends PythonClass {
+  factory Terminal({
+    required Object? name,
+    Object? filter_out = false,
+  }) =>
+      PythonFfiDart.instance.importClass(
+        "lark.parser_frontends",
+        "Terminal",
+        Terminal.from,
+        <Object?>[
+          name,
+          filter_out,
+        ],
+        <String, Object?>{},
+      );
+
+  Terminal.from(super.pythonClass) : super.from();
 
   /// ## memo_serialize
   ///
@@ -4631,7 +5052,7 @@ final class T extends PythonClass {
 /// ```
 final class Token extends PythonClass {
   factory Token() => PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.parser_frontends",
         "Token",
         Token.from,
         <Object?>[],
@@ -7231,7 +7652,7 @@ final class UnitSkipRule extends PythonClass {
     required Object? alias,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.cyk",
+        "lark.parser_frontends",
         "UnitSkipRule",
         UnitSkipRule.from,
         <Object?>[
@@ -7265,7 +7686,7 @@ final class UnitSkipRule extends PythonClass {
 /// ## accumulate
 final class accumulate extends PythonClass {
   factory accumulate() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parser_frontends",
         "accumulate",
         accumulate.from,
         <Object?>[],
@@ -7277,7 +7698,7 @@ final class accumulate extends PythonClass {
 /// ## chain
 final class chain extends PythonClass {
   factory chain() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parser_frontends",
         "chain",
         chain.from,
         <Object?>[],
@@ -7289,7 +7710,7 @@ final class chain extends PythonClass {
 /// ## combinations
 final class combinations extends PythonClass {
   factory combinations() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parser_frontends",
         "combinations",
         combinations.from,
         <Object?>[],
@@ -7301,7 +7722,7 @@ final class combinations extends PythonClass {
 /// ## combinations_with_replacement
 final class combinations_with_replacement extends PythonClass {
   factory combinations_with_replacement() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parser_frontends",
         "combinations_with_replacement",
         combinations_with_replacement.from,
         <Object?>[],
@@ -7313,7 +7734,7 @@ final class combinations_with_replacement extends PythonClass {
 /// ## compress
 final class compress extends PythonClass {
   factory compress() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parser_frontends",
         "compress",
         compress.from,
         <Object?>[],
@@ -7325,7 +7746,7 @@ final class compress extends PythonClass {
 /// ## count
 final class count extends PythonClass {
   factory count() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parser_frontends",
         "count",
         count.from,
         <Object?>[],
@@ -7337,7 +7758,7 @@ final class count extends PythonClass {
 /// ## cycle
 final class cycle extends PythonClass {
   factory cycle() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parser_frontends",
         "cycle",
         cycle.from,
         <Object?>[],
@@ -7349,7 +7770,7 @@ final class cycle extends PythonClass {
 /// ## dropwhile
 final class dropwhile extends PythonClass {
   factory dropwhile() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parser_frontends",
         "dropwhile",
         dropwhile.from,
         <Object?>[],
@@ -7361,7 +7782,7 @@ final class dropwhile extends PythonClass {
 /// ## filterfalse
 final class filterfalse extends PythonClass {
   factory filterfalse() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parser_frontends",
         "filterfalse",
         filterfalse.from,
         <Object?>[],
@@ -7373,7 +7794,7 @@ final class filterfalse extends PythonClass {
 /// ## groupby
 final class groupby extends PythonClass {
   factory groupby() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parser_frontends",
         "groupby",
         groupby.from,
         <Object?>[],
@@ -7385,7 +7806,7 @@ final class groupby extends PythonClass {
 /// ## islice
 final class islice extends PythonClass {
   factory islice() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parser_frontends",
         "islice",
         islice.from,
         <Object?>[],
@@ -7397,7 +7818,7 @@ final class islice extends PythonClass {
 /// ## pairwise
 final class pairwise extends PythonClass {
   factory pairwise() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parser_frontends",
         "pairwise",
         pairwise.from,
         <Object?>[],
@@ -7409,7 +7830,7 @@ final class pairwise extends PythonClass {
 /// ## permutations
 final class permutations extends PythonClass {
   factory permutations() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parser_frontends",
         "permutations",
         permutations.from,
         <Object?>[],
@@ -7421,7 +7842,7 @@ final class permutations extends PythonClass {
 /// ## product
 final class product extends PythonClass {
   factory product() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parser_frontends",
         "product",
         product.from,
         <Object?>[],
@@ -7433,7 +7854,7 @@ final class product extends PythonClass {
 /// ## repeat
 final class repeat extends PythonClass {
   factory repeat() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parser_frontends",
         "repeat",
         repeat.from,
         <Object?>[],
@@ -7445,7 +7866,7 @@ final class repeat extends PythonClass {
 /// ## starmap
 final class starmap extends PythonClass {
   factory starmap() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parser_frontends",
         "starmap",
         starmap.from,
         <Object?>[],
@@ -7457,7 +7878,7 @@ final class starmap extends PythonClass {
 /// ## takewhile
 final class takewhile extends PythonClass {
   factory takewhile() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parser_frontends",
         "takewhile",
         takewhile.from,
         <Object?>[],
@@ -7469,7 +7890,7 @@ final class takewhile extends PythonClass {
 /// ## zip_longest
 final class zip_longest extends PythonClass {
   factory zip_longest() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "lark.parser_frontends",
         "zip_longest",
         zip_longest.from,
         <Object?>[],
@@ -7535,7 +7956,7 @@ final class zip_longest extends PythonClass {
 /// ```
 final class ForestSumVisitor extends PythonClass {
   factory ForestSumVisitor() => PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_forest",
+        "lark.parser_frontends",
         "ForestSumVisitor",
         ForestSumVisitor.from,
         <Object?>[],
@@ -7994,7 +8415,7 @@ final class ForestToParseTree extends PythonClass {
     Object? use_cache = true,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_forest",
+        "lark.parser_frontends",
         "ForestToParseTree",
         ForestToParseTree.from,
         <Object?>[
@@ -8567,7 +8988,7 @@ final class Item extends PythonClass {
     required Object? start,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_common",
+        "lark.parser_frontends",
         "Item",
         Item.from,
         <Object?>[
@@ -8706,6 +9127,587 @@ final class Item extends PythonClass {
   set start(Object? start) => setAttribute("start", start);
 }
 
+/// ## BaseParser
+///
+/// ### python source
+/// ```py
+/// class Parser:
+///     lexer_conf: 'LexerConf'
+///     parser_conf: 'ParserConf'
+///     debug: bool
+///
+///     def __init__(self, lexer_conf: 'LexerConf', parser_conf: 'ParserConf', term_matcher, resolve_ambiguity=True, debug=False, tree_class=Tree):
+///         analysis = GrammarAnalyzer(parser_conf)
+///         self.lexer_conf = lexer_conf
+///         self.parser_conf = parser_conf
+///         self.resolve_ambiguity = resolve_ambiguity
+///         self.debug = debug
+///         self.tree_class = tree_class
+///
+///         self.FIRST = analysis.FIRST
+///         self.NULLABLE = analysis.NULLABLE
+///         self.callbacks = parser_conf.callbacks
+///         # TODO add typing info
+///         self.predictions = {}   # type: ignore[var-annotated]
+///
+///         ## These could be moved to the grammar analyzer. Pre-computing these is *much* faster than
+///         #  the slow 'isupper' in is_terminal.
+///         self.TERMINALS = { sym for r in parser_conf.rules for sym in r.expansion if sym.is_term }
+///         self.NON_TERMINALS = { sym for r in parser_conf.rules for sym in r.expansion if not sym.is_term }
+///
+///         self.forest_sum_visitor = None
+///         for rule in parser_conf.rules:
+///             if rule.origin not in self.predictions:
+///                 self.predictions[rule.origin] = [x.rule for x in analysis.expand_rule(rule.origin)]
+///
+///             ## Detect if any rules/terminals have priorities set. If the user specified priority = None, then
+///             #  the priorities will be stripped from all rules/terminals before they reach us, allowing us to
+///             #  skip the extra tree walk. We'll also skip this if the user just didn't specify priorities
+///             #  on any rules/terminals.
+///             if self.forest_sum_visitor is None and rule.options.priority is not None:
+///                 self.forest_sum_visitor = ForestSumVisitor
+///
+///         # Check terminals for priorities
+///         # Ignore terminal priorities if the basic lexer is used
+///         if self.lexer_conf.lexer_type != 'basic' and self.forest_sum_visitor is None:
+///             for term in self.lexer_conf.terminals:
+///                 if term.priority:
+///                     self.forest_sum_visitor = ForestSumVisitor
+///                     break
+///
+///         self.term_matcher = term_matcher
+///
+///
+///     def predict_and_complete(self, i, to_scan, columns, transitives):
+///         """The core Earley Predictor and Completer.
+///
+///         At each stage of the input, we handling any completed items (things
+///         that matched on the last cycle) and use those to predict what should
+///         come next in the input stream. The completions and any predicted
+///         non-terminals are recursively processed until we reach a set of,
+///         which can be added to the scan list for the next scanner cycle."""
+///         # Held Completions (H in E.Scotts paper).
+///         node_cache = {}
+///         held_completions = {}
+///
+///         column = columns[i]
+///         # R (items) = Ei (column.items)
+///         items = deque(column)
+///         while items:
+///             item = items.pop()    # remove an element, A say, from R
+///
+///             ### The Earley completer
+///             if item.is_complete:   ### (item.s == string)
+///                 if item.node is None:
+///                     label = (item.s, item.start, i)
+///                     item.node = node_cache[label] if label in node_cache else node_cache.setdefault(label, SymbolNode(*label))
+///                     item.node.add_family(item.s, item.rule, item.start, None, None)
+///
+///                 # create_leo_transitives(item.rule.origin, item.start)
+///
+///                 ###R Joop Leo right recursion Completer
+///                 if item.rule.origin in transitives[item.start]:
+///                     transitive = transitives[item.start][item.s]
+///                     if transitive.previous in transitives[transitive.column]:
+///                         root_transitive = transitives[transitive.column][transitive.previous]
+///                     else:
+///                         root_transitive = transitive
+///
+///                     new_item = Item(transitive.rule, transitive.ptr, transitive.start)
+///                     label = (root_transitive.s, root_transitive.start, i)
+///                     new_item.node = node_cache[label] if label in node_cache else node_cache.setdefault(label, SymbolNode(*label))
+///                     new_item.node.add_path(root_transitive, item.node)
+///                     if new_item.expect in self.TERMINALS:
+///                         # Add (B :: aC.B, h, y) to Q
+///                         to_scan.add(new_item)
+///                     elif new_item not in column:
+///                         # Add (B :: aC.B, h, y) to Ei and R
+///                         column.add(new_item)
+///                         items.append(new_item)
+///                 ###R Regular Earley completer
+///                 else:
+///                     # Empty has 0 length. If we complete an empty symbol in a particular
+///                     # parse step, we need to be able to use that same empty symbol to complete
+///                     # any predictions that result, that themselves require empty. Avoids
+///                     # infinite recursion on empty symbols.
+///                     # held_completions is 'H' in E.Scott's paper.
+///                     is_empty_item = item.start == i
+///                     if is_empty_item:
+///                         held_completions[item.rule.origin] = item.node
+///
+///                     originators = [originator for originator in columns[item.start] if originator.expect is not None and originator.expect == item.s]
+///                     for originator in originators:
+///                         new_item = originator.advance()
+///                         label = (new_item.s, originator.start, i)
+///                         new_item.node = node_cache[label] if label in node_cache else node_cache.setdefault(label, SymbolNode(*label))
+///                         new_item.node.add_family(new_item.s, new_item.rule, i, originator.node, item.node)
+///                         if new_item.expect in self.TERMINALS:
+///                             # Add (B :: aC.B, h, y) to Q
+///                             to_scan.add(new_item)
+///                         elif new_item not in column:
+///                             # Add (B :: aC.B, h, y) to Ei and R
+///                             column.add(new_item)
+///                             items.append(new_item)
+///
+///             ### The Earley predictor
+///             elif item.expect in self.NON_TERMINALS: ### (item.s == lr0)
+///                 new_items = []
+///                 for rule in self.predictions[item.expect]:
+///                     new_item = Item(rule, 0, i)
+///                     new_items.append(new_item)
+///
+///                 # Process any held completions (H).
+///                 if item.expect in held_completions:
+///                     new_item = item.advance()
+///                     label = (new_item.s, item.start, i)
+///                     new_item.node = node_cache[label] if label in node_cache else node_cache.setdefault(label, SymbolNode(*label))
+///                     new_item.node.add_family(new_item.s, new_item.rule, new_item.start, item.node, held_completions[item.expect])
+///                     new_items.append(new_item)
+///
+///                 for new_item in new_items:
+///                     if new_item.expect in self.TERMINALS:
+///                         to_scan.add(new_item)
+///                     elif new_item not in column:
+///                         column.add(new_item)
+///                         items.append(new_item)
+///
+///     def _parse(self, lexer, columns, to_scan, start_symbol=None):
+///         def is_quasi_complete(item):
+///             if item.is_complete:
+///                 return True
+///
+///             quasi = item.advance()
+///             while not quasi.is_complete:
+///                 if quasi.expect not in self.NULLABLE:
+///                     return False
+///                 if quasi.rule.origin == start_symbol and quasi.expect == start_symbol:
+///                     return False
+///                 quasi = quasi.advance()
+///             return True
+///
+///         # def create_leo_transitives(origin, start):
+///         #   ...   # removed at commit 4c1cfb2faf24e8f8bff7112627a00b94d261b420
+///
+///         def scan(i, token, to_scan):
+///             """The core Earley Scanner.
+///
+///             This is a custom implementation of the scanner that uses the
+///             Lark lexer to match tokens. The scan list is built by the
+///             Earley predictor, based on the previously completed tokens.
+///             This ensures that at each phase of the parse we have a custom
+///             lexer context, allowing for more complex ambiguities."""
+///             next_to_scan = set()
+///             next_set = set()
+///             columns.append(next_set)
+///             transitives.append({})
+///             node_cache = {}
+///
+///             for item in set(to_scan):
+///                 if match(item.expect, token):
+///                     new_item = item.advance()
+///                     label = (new_item.s, new_item.start, i)
+///                     # 'terminals' may not contain token.type when using %declare
+///                     # Additionally, token is not always a Token
+///                     # For example, it can be a Tree when using TreeMatcher
+///                     term = terminals.get(token.type) if isinstance(token, Token) else None
+///                     # Set the priority of the token node to 0 so that the
+///                     # terminal priorities do not affect the Tree chosen by
+///                     # ForestSumVisitor after the basic lexer has already
+///                     # "used up" the terminal priorities
+///                     token_node = TokenNode(token, term, priority=0)
+///                     new_item.node = node_cache[label] if label in node_cache else node_cache.setdefault(label, SymbolNode(*label))
+///                     new_item.node.add_family(new_item.s, item.rule, new_item.start, item.node, token_node)
+///
+///                     if new_item.expect in self.TERMINALS:
+///                         # add (B ::= Aai+1.B, h, y) to Q'
+///                         next_to_scan.add(new_item)
+///                     else:
+///                         # add (B ::= Aa+1.B, h, y) to Ei+1
+///                         next_set.add(new_item)
+///
+///             if not next_set and not next_to_scan:
+///                 expect = {i.expect.name for i in to_scan}
+///                 raise UnexpectedToken(token, expect, considered_rules=set(to_scan), state=frozenset(i.s for i in to_scan))
+///
+///             return next_to_scan
+///
+///
+///         # Define parser functions
+///         match = self.term_matcher
+///
+///         terminals = self.lexer_conf.terminals_by_name
+///
+///         # Cache for nodes & tokens created in a particular parse step.
+///         transitives = [{}]
+///
+///         ## The main Earley loop.
+///         # Run the Prediction/Completion cycle for any Items in the current Earley set.
+///         # Completions will be added to the SPPF tree, and predictions will be recursively
+///         # processed down to terminals/empty nodes to be added to the scanner for the next
+///         # step.
+///         expects = {i.expect for i in to_scan}
+///         i = 0
+///         for token in lexer.lex(expects):
+///             self.predict_and_complete(i, to_scan, columns, transitives)
+///
+///             to_scan = scan(i, token, to_scan)
+///             i += 1
+///
+///             expects.clear()
+///             expects |= {i.expect for i in to_scan}
+///
+///         self.predict_and_complete(i, to_scan, columns, transitives)
+///
+///         ## Column is now the final column in the parse.
+///         assert i == len(columns)-1
+///         return to_scan
+///
+///     def parse(self, lexer, start):
+///         assert start, start
+///         start_symbol = NonTerminal(start)
+///
+///         columns = [set()]
+///         to_scan = set()     # The scan buffer. 'Q' in E.Scott's paper.
+///
+///         ## Predict for the start_symbol.
+///         # Add predicted items to the first Earley set (for the predictor) if they
+///         # result in a non-terminal, or the scanner if they result in a terminal.
+///         for rule in self.predictions[start_symbol]:
+///             item = Item(rule, 0, 0)
+///             if item.expect in self.TERMINALS:
+///                 to_scan.add(item)
+///             else:
+///                 columns[0].add(item)
+///
+///         to_scan = self._parse(lexer, columns, to_scan, start_symbol)
+///
+///         # If the parse was successful, the start
+///         # symbol should have been completed in the last step of the Earley cycle, and will be in
+///         # this column. Find the item for the start_symbol, which is the root of the SPPF tree.
+///         solutions = [n.node for n in columns[-1] if n.is_complete and n.node is not None and n.s == start_symbol and n.start == 0]
+///         if not solutions:
+///             expected_terminals = [t.expect.name for t in to_scan]
+///             raise UnexpectedEOF(expected_terminals, state=frozenset(i.s for i in to_scan))
+///
+///         if self.debug:
+///             from .earley_forest import ForestToPyDotVisitor
+///             try:
+///                 debug_walker = ForestToPyDotVisitor()
+///             except ImportError:
+///                 logger.warning("Cannot find dependency 'pydot', will not generate sppf debug image")
+///             else:
+///                 debug_walker.visit(solutions[0], "sppf.png")
+///
+///
+///         if len(solutions) > 1:
+///             assert False, 'Earley should not generate multiple start symbol items!'
+///
+///         if self.tree_class is not None:
+///             # Perform our SPPF -> AST conversion
+///             transformer = ForestToParseTree(self.tree_class, self.callbacks, self.forest_sum_visitor and self.forest_sum_visitor(), self.resolve_ambiguity)
+///             return transformer.transform(solutions[0])
+///
+///         # return the root of the SPPF
+///         return solutions[0]
+/// ```
+final class BaseParser extends PythonClass {
+  factory BaseParser({
+    required Object? lexer_conf,
+    required Object? parser_conf,
+    required Object? term_matcher,
+    Object? resolve_ambiguity = true,
+    Object? debug = false,
+    Object? tree_class,
+  }) =>
+      PythonFfiDart.instance.importClass(
+        "lark.parser_frontends",
+        "BaseParser",
+        BaseParser.from,
+        <Object?>[
+          lexer_conf,
+          parser_conf,
+          term_matcher,
+          resolve_ambiguity,
+          debug,
+          tree_class,
+        ],
+        <String, Object?>{},
+      );
+
+  BaseParser.from(super.pythonClass) : super.from();
+
+  /// ## parse
+  ///
+  /// ### python source
+  /// ```py
+  /// def parse(self, lexer, start):
+  ///         assert start, start
+  ///         start_symbol = NonTerminal(start)
+  ///
+  ///         columns = [set()]
+  ///         to_scan = set()     # The scan buffer. 'Q' in E.Scott's paper.
+  ///
+  ///         ## Predict for the start_symbol.
+  ///         # Add predicted items to the first Earley set (for the predictor) if they
+  ///         # result in a non-terminal, or the scanner if they result in a terminal.
+  ///         for rule in self.predictions[start_symbol]:
+  ///             item = Item(rule, 0, 0)
+  ///             if item.expect in self.TERMINALS:
+  ///                 to_scan.add(item)
+  ///             else:
+  ///                 columns[0].add(item)
+  ///
+  ///         to_scan = self._parse(lexer, columns, to_scan, start_symbol)
+  ///
+  ///         # If the parse was successful, the start
+  ///         # symbol should have been completed in the last step of the Earley cycle, and will be in
+  ///         # this column. Find the item for the start_symbol, which is the root of the SPPF tree.
+  ///         solutions = [n.node for n in columns[-1] if n.is_complete and n.node is not None and n.s == start_symbol and n.start == 0]
+  ///         if not solutions:
+  ///             expected_terminals = [t.expect.name for t in to_scan]
+  ///             raise UnexpectedEOF(expected_terminals, state=frozenset(i.s for i in to_scan))
+  ///
+  ///         if self.debug:
+  ///             from .earley_forest import ForestToPyDotVisitor
+  ///             try:
+  ///                 debug_walker = ForestToPyDotVisitor()
+  ///             except ImportError:
+  ///                 logger.warning("Cannot find dependency 'pydot', will not generate sppf debug image")
+  ///             else:
+  ///                 debug_walker.visit(solutions[0], "sppf.png")
+  ///
+  ///
+  ///         if len(solutions) > 1:
+  ///             assert False, 'Earley should not generate multiple start symbol items!'
+  ///
+  ///         if self.tree_class is not None:
+  ///             # Perform our SPPF -> AST conversion
+  ///             transformer = ForestToParseTree(self.tree_class, self.callbacks, self.forest_sum_visitor and self.forest_sum_visitor(), self.resolve_ambiguity)
+  ///             return transformer.transform(solutions[0])
+  ///
+  ///         # return the root of the SPPF
+  ///         return solutions[0]
+  /// ```
+  Object? parse({
+    required Object? lexer,
+    required Object? start,
+  }) =>
+      getFunction("parse").call(
+        <Object?>[
+          lexer,
+          start,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## predict_and_complete
+  ///
+  /// ### python docstring
+  ///
+  /// The core Earley Predictor and Completer.
+  ///
+  /// At each stage of the input, we handling any completed items (things
+  /// that matched on the last cycle) and use those to predict what should
+  /// come next in the input stream. The completions and any predicted
+  /// non-terminals are recursively processed until we reach a set of,
+  /// which can be added to the scan list for the next scanner cycle.
+  ///
+  /// ### python source
+  /// ```py
+  /// def predict_and_complete(self, i, to_scan, columns, transitives):
+  ///         """The core Earley Predictor and Completer.
+  ///
+  ///         At each stage of the input, we handling any completed items (things
+  ///         that matched on the last cycle) and use those to predict what should
+  ///         come next in the input stream. The completions and any predicted
+  ///         non-terminals are recursively processed until we reach a set of,
+  ///         which can be added to the scan list for the next scanner cycle."""
+  ///         # Held Completions (H in E.Scotts paper).
+  ///         node_cache = {}
+  ///         held_completions = {}
+  ///
+  ///         column = columns[i]
+  ///         # R (items) = Ei (column.items)
+  ///         items = deque(column)
+  ///         while items:
+  ///             item = items.pop()    # remove an element, A say, from R
+  ///
+  ///             ### The Earley completer
+  ///             if item.is_complete:   ### (item.s == string)
+  ///                 if item.node is None:
+  ///                     label = (item.s, item.start, i)
+  ///                     item.node = node_cache[label] if label in node_cache else node_cache.setdefault(label, SymbolNode(*label))
+  ///                     item.node.add_family(item.s, item.rule, item.start, None, None)
+  ///
+  ///                 # create_leo_transitives(item.rule.origin, item.start)
+  ///
+  ///                 ###R Joop Leo right recursion Completer
+  ///                 if item.rule.origin in transitives[item.start]:
+  ///                     transitive = transitives[item.start][item.s]
+  ///                     if transitive.previous in transitives[transitive.column]:
+  ///                         root_transitive = transitives[transitive.column][transitive.previous]
+  ///                     else:
+  ///                         root_transitive = transitive
+  ///
+  ///                     new_item = Item(transitive.rule, transitive.ptr, transitive.start)
+  ///                     label = (root_transitive.s, root_transitive.start, i)
+  ///                     new_item.node = node_cache[label] if label in node_cache else node_cache.setdefault(label, SymbolNode(*label))
+  ///                     new_item.node.add_path(root_transitive, item.node)
+  ///                     if new_item.expect in self.TERMINALS:
+  ///                         # Add (B :: aC.B, h, y) to Q
+  ///                         to_scan.add(new_item)
+  ///                     elif new_item not in column:
+  ///                         # Add (B :: aC.B, h, y) to Ei and R
+  ///                         column.add(new_item)
+  ///                         items.append(new_item)
+  ///                 ###R Regular Earley completer
+  ///                 else:
+  ///                     # Empty has 0 length. If we complete an empty symbol in a particular
+  ///                     # parse step, we need to be able to use that same empty symbol to complete
+  ///                     # any predictions that result, that themselves require empty. Avoids
+  ///                     # infinite recursion on empty symbols.
+  ///                     # held_completions is 'H' in E.Scott's paper.
+  ///                     is_empty_item = item.start == i
+  ///                     if is_empty_item:
+  ///                         held_completions[item.rule.origin] = item.node
+  ///
+  ///                     originators = [originator for originator in columns[item.start] if originator.expect is not None and originator.expect == item.s]
+  ///                     for originator in originators:
+  ///                         new_item = originator.advance()
+  ///                         label = (new_item.s, originator.start, i)
+  ///                         new_item.node = node_cache[label] if label in node_cache else node_cache.setdefault(label, SymbolNode(*label))
+  ///                         new_item.node.add_family(new_item.s, new_item.rule, i, originator.node, item.node)
+  ///                         if new_item.expect in self.TERMINALS:
+  ///                             # Add (B :: aC.B, h, y) to Q
+  ///                             to_scan.add(new_item)
+  ///                         elif new_item not in column:
+  ///                             # Add (B :: aC.B, h, y) to Ei and R
+  ///                             column.add(new_item)
+  ///                             items.append(new_item)
+  ///
+  ///             ### The Earley predictor
+  ///             elif item.expect in self.NON_TERMINALS: ### (item.s == lr0)
+  ///                 new_items = []
+  ///                 for rule in self.predictions[item.expect]:
+  ///                     new_item = Item(rule, 0, i)
+  ///                     new_items.append(new_item)
+  ///
+  ///                 # Process any held completions (H).
+  ///                 if item.expect in held_completions:
+  ///                     new_item = item.advance()
+  ///                     label = (new_item.s, item.start, i)
+  ///                     new_item.node = node_cache[label] if label in node_cache else node_cache.setdefault(label, SymbolNode(*label))
+  ///                     new_item.node.add_family(new_item.s, new_item.rule, new_item.start, item.node, held_completions[item.expect])
+  ///                     new_items.append(new_item)
+  ///
+  ///                 for new_item in new_items:
+  ///                     if new_item.expect in self.TERMINALS:
+  ///                         to_scan.add(new_item)
+  ///                     elif new_item not in column:
+  ///                         column.add(new_item)
+  ///                         items.append(new_item)
+  /// ```
+  Object? predict_and_complete({
+    required Object? i,
+    required Object? to_scan,
+    required Object? columns,
+    required Object? transitives,
+  }) =>
+      getFunction("predict_and_complete").call(
+        <Object?>[
+          i,
+          to_scan,
+          columns,
+          transitives,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## lexer_conf (getter)
+  Object? get lexer_conf => getAttribute("lexer_conf");
+
+  /// ## lexer_conf (setter)
+  set lexer_conf(Object? lexer_conf) => setAttribute("lexer_conf", lexer_conf);
+
+  /// ## parser_conf (getter)
+  Object? get parser_conf => getAttribute("parser_conf");
+
+  /// ## parser_conf (setter)
+  set parser_conf(Object? parser_conf) =>
+      setAttribute("parser_conf", parser_conf);
+
+  /// ## resolve_ambiguity (getter)
+  Object? get resolve_ambiguity => getAttribute("resolve_ambiguity");
+
+  /// ## resolve_ambiguity (setter)
+  set resolve_ambiguity(Object? resolve_ambiguity) =>
+      setAttribute("resolve_ambiguity", resolve_ambiguity);
+
+  /// ## debug (getter)
+  Object? get debug => getAttribute("debug");
+
+  /// ## debug (setter)
+  set debug(Object? debug) => setAttribute("debug", debug);
+
+  /// ## tree_class (getter)
+  Object? get tree_class => getAttribute("tree_class");
+
+  /// ## tree_class (setter)
+  set tree_class(Object? tree_class) => setAttribute("tree_class", tree_class);
+
+  /// ## FIRST (getter)
+  Object? get FIRST => getAttribute("FIRST");
+
+  /// ## FIRST (setter)
+  set FIRST(Object? FIRST) => setAttribute("FIRST", FIRST);
+
+  /// ## NULLABLE (getter)
+  Object? get NULLABLE => getAttribute("NULLABLE");
+
+  /// ## NULLABLE (setter)
+  set NULLABLE(Object? NULLABLE) => setAttribute("NULLABLE", NULLABLE);
+
+  /// ## callbacks (getter)
+  Object? get callbacks => getAttribute("callbacks");
+
+  /// ## callbacks (setter)
+  set callbacks(Object? callbacks) => setAttribute("callbacks", callbacks);
+
+  /// ## predictions (getter)
+  Object? get predictions => getAttribute("predictions");
+
+  /// ## predictions (setter)
+  set predictions(Object? predictions) =>
+      setAttribute("predictions", predictions);
+
+  /// ## TERMINALS (getter)
+  Object? get TERMINALS => getAttribute("TERMINALS");
+
+  /// ## TERMINALS (setter)
+  set TERMINALS(Object? TERMINALS) => setAttribute("TERMINALS", TERMINALS);
+
+  /// ## NON_TERMINALS (getter)
+  Object? get NON_TERMINALS => getAttribute("NON_TERMINALS");
+
+  /// ## NON_TERMINALS (setter)
+  set NON_TERMINALS(Object? NON_TERMINALS) =>
+      setAttribute("NON_TERMINALS", NON_TERMINALS);
+
+  /// ## forest_sum_visitor (getter)
+  Object? get forest_sum_visitor => getAttribute("forest_sum_visitor");
+
+  /// ## forest_sum_visitor (setter)
+  set forest_sum_visitor(Object? forest_sum_visitor) =>
+      setAttribute("forest_sum_visitor", forest_sum_visitor);
+
+  /// ## term_matcher (getter)
+  Object? get term_matcher => getAttribute("term_matcher");
+
+  /// ## term_matcher (setter)
+  set term_matcher(Object? term_matcher) =>
+      setAttribute("term_matcher", term_matcher);
+}
+
 /// ## SymbolNode
 ///
 /// ### python docstring
@@ -8829,7 +9831,7 @@ final class SymbolNode extends PythonClass {
     required Object? end,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_forest",
+        "lark.parser_frontends",
         "SymbolNode",
         SymbolNode.from,
         <Object?>[
@@ -9427,7 +10429,7 @@ final class TokenNode extends PythonClass {
     Object? priority,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.parsers.earley_forest",
+        "lark.parser_frontends",
         "TokenNode",
         TokenNode.from,
         <Object?>[
@@ -9551,7 +10553,7 @@ final class UnexpectedEOF extends PythonClass {
     Object? terminals_by_name,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.parser_frontends",
         "UnexpectedEOF",
         UnexpectedEOF.from,
         <Object?>[
@@ -9922,7 +10924,7 @@ final class UnexpectedToken extends PythonClass {
     Object? token_history,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.parser_frontends",
         "UnexpectedToken",
         UnexpectedToken.from,
         <Object?>[
@@ -10624,7 +11626,7 @@ final class UnexpectedCharacters extends PythonClass {
     Object? considered_rules,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.parser_frontends",
         "UnexpectedCharacters",
         UnexpectedCharacters.from,
         <Object?>[
@@ -11256,6 +12258,28 @@ final class parser_frontends extends PythonModule {
         parser_frontends.from,
       );
 
+  /// ## assert_config
+  ///
+  /// ### python source
+  /// ```py
+  /// def assert_config(value, options: Collection, msg='Got %r, expected one of %s'):
+  ///     if value not in options:
+  ///         raise ConfigurationError(msg % (value, options))
+  /// ```
+  Object? assert_config({
+    required Object? value,
+    required Object? options,
+    Object? msg = "Got %r, expected one of %s",
+  }) =>
+      getFunction("assert_config").call(
+        <Object?>[
+          value,
+          options,
+          msg,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
   /// ## create_basic_lexer
   ///
   /// ### python source
@@ -11419,6 +12443,112 @@ final class parser_frontends extends PythonModule {
           kwargs: <String, Object?>{},
         ),
       );
+
+  /// ## get_regexp_width
+  ///
+  /// ### python source
+  /// ```py
+  /// def get_regexp_width(expr: str) -> Union[Tuple[int, int], List[int]]:
+  ///     if _has_regex:
+  ///         # Since `sre_parse` cannot deal with Unicode categories of the form `\p{Mn}`, we replace these with
+  ///         # a simple letter, which makes no difference as we are only trying to get the possible lengths of the regex
+  ///         # match here below.
+  ///         regexp_final = re.sub(categ_pattern, 'A', expr)
+  ///     else:
+  ///         if re.search(categ_pattern, expr):
+  ///             raise ImportError('`regex` module must be installed in order to use Unicode categories.', expr)
+  ///         regexp_final = expr
+  ///     try:
+  ///         # Fixed in next version (past 0.960) of typeshed
+  ///         return [int(x) for x in sre_parse.parse(regexp_final).getwidth()]   # type: ignore[attr-defined]
+  ///     except sre_constants.error:
+  ///         if not _has_regex:
+  ///             raise ValueError(expr)
+  ///         else:
+  ///             # sre_parse does not support the new features in regex. To not completely fail in that case,
+  ///             # we manually test for the most important info (whether the empty string is matched)
+  ///             c = regex.compile(regexp_final)
+  ///             if c.match('') is None:
+  ///                 # MAXREPEAT is a none pickable subclass of int, therefore needs to be converted to enable caching
+  ///                 return 1, int(sre_constants.MAXREPEAT)
+  ///             else:
+  ///                 return 0, int(sre_constants.MAXREPEAT)
+  /// ```
+  Object? get_regexp_width({
+    required String expr,
+  }) =>
+      getFunction("get_regexp_width").call(
+        <Object?>[
+          expr,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
+  /// ## cyk
+  ///
+  /// ### python docstring
+  ///
+  /// This module implements a CYK parser.
+  cyk get $cyk => cyk.import();
+
+  /// ## earley
+  ///
+  /// ### python docstring
+  ///
+  /// This module implements an Earley parser.
+  ///
+  /// The core Earley algorithm used here is based on Elizabeth Scott's implementation, here:
+  ///     https://www.sciencedirect.com/science/article/pii/S1571066108001497
+  ///
+  /// That is probably the best reference for understanding the algorithm here.
+  ///
+  /// The Earley parser outputs an SPPF-tree as per that document. The SPPF tree format
+  /// is explained here: https://lark-parser.readthedocs.io/en/latest/_static/sppf/sppf.html
+  earley get $earley => earley.import();
+
+  /// ## xearley
+  ///
+  /// ### python docstring
+  ///
+  /// This module implements an experimental Earley parser with a dynamic lexer
+  ///
+  /// The core Earley algorithm used here is based on Elizabeth Scott's implementation, here:
+  ///     https://www.sciencedirect.com/science/article/pii/S1571066108001497
+  ///
+  /// That is probably the best reference for understanding the algorithm here.
+  ///
+  /// The Earley parser outputs an SPPF-tree as per that document. The SPPF tree format
+  /// is better documented here:
+  ///     http://www.bramvandersanden.com/post/2014/06/shared-packed-parse-forest/
+  ///
+  /// Instead of running a lexer beforehand, or using a costy char-by-char method, this parser
+  /// uses regular expressions by necessity, achieving high-performance while maintaining all of
+  /// Earley's power in parsing any CFG.
+  xearley get $xearley => xearley.import();
+
+  /// ## Callable (getter)
+  Object? get Callable => getAttribute("Callable");
+
+  /// ## Callable (setter)
+  set Callable(Object? Callable) => setAttribute("Callable", Callable);
+
+  /// ## Collection (getter)
+  Object? get Collection => getAttribute("Collection");
+
+  /// ## Collection (setter)
+  set Collection(Object? Collection) => setAttribute("Collection", Collection);
+
+  /// ## Dict (getter)
+  Object? get Dict => getAttribute("Dict");
+
+  /// ## Dict (setter)
+  set Dict(Object? Dict) => setAttribute("Dict", Dict);
+
+  /// ## Optional (getter)
+  Object? get Optional => getAttribute("Optional");
+
+  /// ## Optional (setter)
+  set Optional(Object? Optional) => setAttribute("Optional", Optional);
 }
 
 /// ## cyk
@@ -11777,201 +12907,6 @@ final class cyk extends PythonModule {
         "lark.parsers.cyk",
         cyk.from,
       );
-
-  /// ## build_unit_skiprule
-  ///
-  /// ### python source
-  /// ```py
-  /// def build_unit_skiprule(unit_rule, target_rule):
-  ///     skipped_rules = []
-  ///     if isinstance(unit_rule, UnitSkipRule):
-  ///         skipped_rules += unit_rule.skipped_rules
-  ///     skipped_rules.append(target_rule)
-  ///     if isinstance(target_rule, UnitSkipRule):
-  ///         skipped_rules += target_rule.skipped_rules
-  ///     return UnitSkipRule(unit_rule.lhs, target_rule.rhs, skipped_rules,
-  ///                       weight=unit_rule.weight + target_rule.weight, alias=unit_rule.alias)
-  /// ```
-  Object? build_unit_skiprule({
-    required Object? unit_rule,
-    required Object? target_rule,
-  }) =>
-      getFunction("build_unit_skiprule").call(
-        <Object?>[
-          unit_rule,
-          target_rule,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## get_any_nt_unit_rule
-  ///
-  /// ### python docstring
-  ///
-  /// Returns a non-terminal unit rule from 'g', or None if there is none.
-  ///
-  /// ### python source
-  /// ```py
-  /// def get_any_nt_unit_rule(g):
-  ///     """Returns a non-terminal unit rule from 'g', or None if there is none."""
-  ///     for rule in g.rules:
-  ///         if len(rule.rhs) == 1 and isinstance(rule.rhs[0], NT):
-  ///             return rule
-  ///     return None
-  /// ```
-  Object? get_any_nt_unit_rule({
-    required Object? g,
-  }) =>
-      getFunction("get_any_nt_unit_rule").call(
-        <Object?>[
-          g,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## match
-  ///
-  /// ### python source
-  /// ```py
-  /// def match(t, s):
-  ///     assert isinstance(t, T)
-  ///     return t.name == s.type
-  /// ```
-  Object? match({
-    required Object? t,
-    required Object? s,
-  }) =>
-      getFunction("match").call(
-        <Object?>[
-          t,
-          s,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## print_parse
-  ///
-  /// ### python source
-  /// ```py
-  /// def print_parse(node, indent=0):
-  ///     if isinstance(node, RuleNode):
-  ///         print(' ' * (indent * 2) + str(node.rule.lhs))
-  ///         for child in node.children:
-  ///             print_parse(child, indent + 1)
-  ///     else:
-  ///         print(' ' * (indent * 2) + str(node.s))
-  /// ```
-  Object? print_parse({
-    required Object? node,
-    Object? indent = 0,
-  }) =>
-      getFunction("print_parse").call(
-        <Object?>[
-          node,
-          indent,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## revert_cnf
-  ///
-  /// ### python docstring
-  ///
-  /// Reverts a parse tree (RuleNode) to its original non-CNF form (Node).
-  ///
-  /// ### python source
-  /// ```py
-  /// def revert_cnf(node):
-  ///     """Reverts a parse tree (RuleNode) to its original non-CNF form (Node)."""
-  ///     if isinstance(node, T):
-  ///         return node
-  ///     # Reverts TERM rule.
-  ///     if node.rule.lhs.name.startswith('__T_'):
-  ///         return node.children[0]
-  ///     else:
-  ///         children = []
-  ///         for child in map(revert_cnf, node.children):
-  ///             # Reverts BIN rule.
-  ///             if isinstance(child, RuleNode) and child.rule.lhs.name.startswith('__SP_'):
-  ///                 children += child.children
-  ///             else:
-  ///                 children.append(child)
-  ///         # Reverts UNIT rule.
-  ///         if isinstance(node.rule, UnitSkipRule):
-  ///             return unroll_unit_skiprule(node.rule.lhs, node.rule.rhs,
-  ///                                     node.rule.skipped_rules, children,
-  ///                                     node.rule.weight, node.rule.alias)
-  ///         else:
-  ///             return RuleNode(node.rule, children)
-  /// ```
-  Object? revert_cnf({
-    required Object? node,
-  }) =>
-      getFunction("revert_cnf").call(
-        <Object?>[
-          node,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## to_cnf
-  ///
-  /// ### python docstring
-  ///
-  /// Creates a CNF grammar from a general context-free grammar 'g'.
-  ///
-  /// ### python source
-  /// ```py
-  /// def to_cnf(g):
-  ///     """Creates a CNF grammar from a general context-free grammar 'g'."""
-  ///     g = _unit(_bin(_term(g)))
-  ///     return CnfWrapper(g)
-  /// ```
-  Object? to_cnf({
-    required Object? g,
-  }) =>
-      getFunction("to_cnf").call(
-        <Object?>[
-          g,
-        ],
-        kwargs: <String, Object?>{},
-      );
-
-  /// ## unroll_unit_skiprule
-  ///
-  /// ### python source
-  /// ```py
-  /// def unroll_unit_skiprule(lhs, orig_rhs, skipped_rules, children, weight, alias):
-  ///     if not skipped_rules:
-  ///         return RuleNode(Rule(lhs, orig_rhs, weight=weight, alias=alias), children, weight=weight)
-  ///     else:
-  ///         weight = weight - skipped_rules[0].weight
-  ///         return RuleNode(
-  ///             Rule(lhs, [skipped_rules[0].lhs], weight=weight, alias=alias), [
-  ///                 unroll_unit_skiprule(skipped_rules[0].lhs, orig_rhs,
-  ///                                 skipped_rules[1:], children,
-  ///                                 skipped_rules[0].weight, skipped_rules[0].alias)
-  ///             ], weight=weight)
-  /// ```
-  Object? unroll_unit_skiprule({
-    required Object? lhs,
-    required Object? orig_rhs,
-    required Object? skipped_rules,
-    required Object? children,
-    required Object? weight,
-    required Object? alias,
-  }) =>
-      getFunction("unroll_unit_skiprule").call(
-        <Object?>[
-          lhs,
-          orig_rhs,
-          skipped_rules,
-          children,
-          weight,
-          alias,
-        ],
-        kwargs: <String, Object?>{},
-      );
 }
 
 /// ## itertools
@@ -11979,7 +12914,7 @@ final class itertools extends PythonModule {
   itertools.from(super.pythonModule) : super.from();
 
   static itertools import() => PythonFfiDart.instance.importModule(
-        "itertools",
+        "lark.itertools",
         itertools.from,
       );
 }

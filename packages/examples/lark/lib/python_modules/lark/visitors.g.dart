@@ -84,7 +84,7 @@ final class CollapseAmbiguities extends PythonClass {
 /// ```
 final class GrammarError extends PythonClass {
   factory GrammarError() => PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.visitors",
         "GrammarError",
         GrammarError.from,
         <Object?>[],
@@ -456,7 +456,7 @@ final class Interpreter extends PythonClass {
 /// ```
 final class Token extends PythonClass {
   factory Token() => PythonFfiDart.instance.importClass(
-        "lark.lexer",
+        "lark.visitors",
         "Token",
         Token.from,
         <Object?>[],
@@ -3795,7 +3795,7 @@ final class Tree extends PythonClass {
     Object? meta,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.tree",
+        "lark.visitors",
         "Tree",
         Tree.from,
         <Object?>[
@@ -4219,7 +4219,7 @@ final class VisitError extends PythonClass {
     required Object? orig_exc,
   }) =>
       PythonFfiDart.instance.importClass(
-        "lark.exceptions",
+        "lark.visitors",
         "VisitError",
         VisitError.from,
         <Object?>[
@@ -5253,6 +5253,53 @@ final class visitors extends PythonModule {
         visitors.from,
       );
 
+  /// ## combine_alternatives
+  ///
+  /// ### python docstring
+  ///
+  /// Accepts a list of alternatives, and enumerates all their possible concatenations.
+  ///
+  /// Examples:
+  ///     >>> combine_alternatives([range(2), [4,5]])
+  ///     [[0, 4], [0, 5], [1, 4], [1, 5]]
+  ///
+  ///     >>> combine_alternatives(["abc", "xy", '$'])
+  ///     [['a', 'x', '$'], ['a', 'y', '$'], ['b', 'x', '$'], ['b', 'y', '$'], ['c', 'x', '$'], ['c', 'y', '$']]
+  ///
+  ///     >>> combine_alternatives([])
+  ///     [[]]
+  ///
+  /// ### python source
+  /// ```py
+  /// def combine_alternatives(lists):
+  ///     """
+  ///     Accepts a list of alternatives, and enumerates all their possible concatenations.
+  ///
+  ///     Examples:
+  ///         >>> combine_alternatives([range(2), [4,5]])
+  ///         [[0, 4], [0, 5], [1, 4], [1, 5]]
+  ///
+  ///         >>> combine_alternatives(["abc", "xy", '$'])
+  ///         [['a', 'x', '$'], ['a', 'y', '$'], ['b', 'x', '$'], ['b', 'y', '$'], ['c', 'x', '$'], ['c', 'y', '$']]
+  ///
+  ///         >>> combine_alternatives([])
+  ///         [[]]
+  ///     """
+  ///     if not lists:
+  ///         return [[]]
+  ///     assert all(l for l in lists), lists
+  ///     return list(product(*lists))
+  /// ```
+  Object? combine_alternatives({
+    required Object? lists,
+  }) =>
+      getFunction("combine_alternatives").call(
+        <Object?>[
+          lists,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
   /// ## merge_transformers
   ///
   /// ### python docstring
@@ -5516,4 +5563,46 @@ final class visitors extends PythonModule {
 
   /// ## Discard (setter)
   set Discard(Object? Discard) => setAttribute("Discard", Discard);
+
+  /// ## Branch (getter)
+  Object? get Branch => getAttribute("Branch");
+
+  /// ## Branch (setter)
+  set Branch(Object? Branch) => setAttribute("Branch", Branch);
+
+  /// ## Callable (getter)
+  Object? get Callable => getAttribute("Callable");
+
+  /// ## Callable (setter)
+  set Callable(Object? Callable) => setAttribute("Callable", Callable);
+
+  /// ## List (getter)
+  Object? get $List => getAttribute("List");
+
+  /// ## List (setter)
+  set $List(Object? $List) => setAttribute("List", $List);
+
+  /// ## Optional (getter)
+  Object? get Optional => getAttribute("Optional");
+
+  /// ## Optional (setter)
+  set Optional(Object? Optional) => setAttribute("Optional", Optional);
+
+  /// ## Tuple (getter)
+  Object? get Tuple => getAttribute("Tuple");
+
+  /// ## Tuple (setter)
+  set Tuple(Object? Tuple) => setAttribute("Tuple", Tuple);
+
+  /// ## Type (getter)
+  Object? get Type => getAttribute("Type");
+
+  /// ## Type (setter)
+  set Type(Object? Type) => setAttribute("Type", Type);
+
+  /// ## Union (getter)
+  Object? get Union => getAttribute("Union");
+
+  /// ## Union (setter)
+  set Union(Object? Union) => setAttribute("Union", Union);
 }
