@@ -421,11 +421,6 @@ base mixin PythonFfiCPythonMixin on PythonFfiCPythonBase {
     final Directory packagesDir = await this.packagesDir;
     appendToPath(packagesDir.path);
 
-    // clear modules cache
-    if (packagesDir.existsSync()) {
-      packagesDir.deleteSync(recursive: true);
-    }
-
     // load modules
     final Set<PythonModuleDefinition> modules =
         await discoverPythonModules(package: package);
