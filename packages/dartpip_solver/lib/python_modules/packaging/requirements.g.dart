@@ -141,7 +141,7 @@ final class Marker extends PythonClass {
     required String marker,
   }) =>
       PythonFfiDart.instance.importClass(
-        "packaging.markers",
+        "packaging.requirements",
         "Marker",
         Marker.from,
         <Object?>[
@@ -232,7 +232,7 @@ final class ParserSyntaxError extends PythonClass {
     required Object? span,
   }) =>
       PythonFfiDart.instance.importClass(
-        "packaging._tokenizer",
+        "packaging.requirements",
         "ParserSyntaxError",
         ParserSyntaxError.from,
         <Object?>[
@@ -894,7 +894,7 @@ final class SpecifierSet extends PythonClass {
     Object? prereleases,
   }) =>
       PythonFfiDart.instance.importClass(
-        "packaging.specifiers",
+        "packaging.requirements",
         "SpecifierSet",
         SpecifierSet.from,
         <Object?>[
@@ -1274,4 +1274,22 @@ final class requirements extends PythonModule {
         "packaging.requirements",
         requirements.from,
       );
+
+  /// ## List (getter)
+  Object? get $List => getAttribute("List");
+
+  /// ## List (setter)
+  set $List(Object? $List) => setAttribute("List", $List);
+
+  /// ## Optional (getter)
+  Object? get Optional => getAttribute("Optional");
+
+  /// ## Optional (setter)
+  set Optional(Object? Optional) => setAttribute("Optional", Optional);
+
+  /// ## Set (getter)
+  Object? get $Set => getAttribute("Set");
+
+  /// ## Set (setter)
+  set $Set(Object? $Set) => setAttribute("Set", $Set);
 }

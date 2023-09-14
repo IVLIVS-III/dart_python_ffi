@@ -1,3 +1,8 @@
+## 0.2.3
+
+- Tests, examples and documentation are mostly ignored by the `dartpip install` command. The command
+  no longer tries to generate Python interface definitions for them.
+
 ## 0.2.2
 
 - Updated dependencies.

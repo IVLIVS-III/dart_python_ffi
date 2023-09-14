@@ -184,6 +184,24 @@ final class _MultiFilePythonModule
 
   static const List<String> _unwantedFilenames = <String>[
     ".ds_store",
+    "tests",
+    "test",
+    "examples",
+    "example",
+    "docs",
+    "doc",
+    "build",
+    "egg-info",
+    "egg",
+    "bin",
+    "scripts",
+    "data",
+    "assets",
+    "resources",
+    "res",
+    "setup.py",
+    "tools",
+    "tool",
   ];
 
   Future<Map<List<String>, ByteData>> _loadDirectory(
@@ -318,7 +336,9 @@ final class _MultiFileCachePythonModule extends _MultiFilePythonModule {
     if (!didYield) {
       yield* yieldFromDirectory(
         projectCacheDirectory,
-        filter: (FileSystemEntity e) => e.name != "setup.py",
+        filter: (FileSystemEntity e) => !_MultiFilePythonModule
+            ._unwantedFilenames
+            .contains(e.name.toLowerCase()),
       );
       didYield = true;
     }

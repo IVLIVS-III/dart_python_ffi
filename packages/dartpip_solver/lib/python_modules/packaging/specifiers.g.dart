@@ -2045,7 +2045,7 @@ final class Version extends PythonClass {
     required String version,
   }) =>
       PythonFfiDart.instance.importClass(
-        "packaging.version",
+        "packaging.specifiers",
         "Version",
         Version.from,
         <Object?>[
@@ -2820,7 +2820,7 @@ final class Version extends PythonClass {
 /// ## accumulate
 final class accumulate extends PythonClass {
   factory accumulate() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.specifiers",
         "accumulate",
         accumulate.from,
         <Object?>[],
@@ -2832,7 +2832,7 @@ final class accumulate extends PythonClass {
 /// ## chain
 final class chain extends PythonClass {
   factory chain() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.specifiers",
         "chain",
         chain.from,
         <Object?>[],
@@ -2844,7 +2844,7 @@ final class chain extends PythonClass {
 /// ## combinations
 final class combinations extends PythonClass {
   factory combinations() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.specifiers",
         "combinations",
         combinations.from,
         <Object?>[],
@@ -2856,7 +2856,7 @@ final class combinations extends PythonClass {
 /// ## combinations_with_replacement
 final class combinations_with_replacement extends PythonClass {
   factory combinations_with_replacement() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.specifiers",
         "combinations_with_replacement",
         combinations_with_replacement.from,
         <Object?>[],
@@ -2868,7 +2868,7 @@ final class combinations_with_replacement extends PythonClass {
 /// ## compress
 final class compress extends PythonClass {
   factory compress() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.specifiers",
         "compress",
         compress.from,
         <Object?>[],
@@ -2880,7 +2880,7 @@ final class compress extends PythonClass {
 /// ## count
 final class count extends PythonClass {
   factory count() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.specifiers",
         "count",
         count.from,
         <Object?>[],
@@ -2892,7 +2892,7 @@ final class count extends PythonClass {
 /// ## cycle
 final class cycle extends PythonClass {
   factory cycle() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.specifiers",
         "cycle",
         cycle.from,
         <Object?>[],
@@ -2904,7 +2904,7 @@ final class cycle extends PythonClass {
 /// ## dropwhile
 final class dropwhile extends PythonClass {
   factory dropwhile() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.specifiers",
         "dropwhile",
         dropwhile.from,
         <Object?>[],
@@ -2916,7 +2916,7 @@ final class dropwhile extends PythonClass {
 /// ## filterfalse
 final class filterfalse extends PythonClass {
   factory filterfalse() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.specifiers",
         "filterfalse",
         filterfalse.from,
         <Object?>[],
@@ -2928,7 +2928,7 @@ final class filterfalse extends PythonClass {
 /// ## groupby
 final class groupby extends PythonClass {
   factory groupby() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.specifiers",
         "groupby",
         groupby.from,
         <Object?>[],
@@ -2940,7 +2940,7 @@ final class groupby extends PythonClass {
 /// ## islice
 final class islice extends PythonClass {
   factory islice() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.specifiers",
         "islice",
         islice.from,
         <Object?>[],
@@ -2952,7 +2952,7 @@ final class islice extends PythonClass {
 /// ## pairwise
 final class pairwise extends PythonClass {
   factory pairwise() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.specifiers",
         "pairwise",
         pairwise.from,
         <Object?>[],
@@ -2964,7 +2964,7 @@ final class pairwise extends PythonClass {
 /// ## permutations
 final class permutations extends PythonClass {
   factory permutations() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.specifiers",
         "permutations",
         permutations.from,
         <Object?>[],
@@ -2976,7 +2976,7 @@ final class permutations extends PythonClass {
 /// ## product
 final class product extends PythonClass {
   factory product() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.specifiers",
         "product",
         product.from,
         <Object?>[],
@@ -2988,7 +2988,7 @@ final class product extends PythonClass {
 /// ## repeat
 final class repeat extends PythonClass {
   factory repeat() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.specifiers",
         "repeat",
         repeat.from,
         <Object?>[],
@@ -3000,7 +3000,7 @@ final class repeat extends PythonClass {
 /// ## starmap
 final class starmap extends PythonClass {
   factory starmap() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.specifiers",
         "starmap",
         starmap.from,
         <Object?>[],
@@ -3012,7 +3012,7 @@ final class starmap extends PythonClass {
 /// ## takewhile
 final class takewhile extends PythonClass {
   factory takewhile() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.specifiers",
         "takewhile",
         takewhile.from,
         <Object?>[],
@@ -3024,7 +3024,7 @@ final class takewhile extends PythonClass {
 /// ## zip_longest
 final class zip_longest extends PythonClass {
   factory zip_longest() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.specifiers",
         "zip_longest",
         zip_longest.from,
         <Object?>[],
@@ -4061,6 +4061,78 @@ final class specifiers extends PythonModule {
         specifiers.from,
       );
 
+  /// ## canonicalize_version
+  ///
+  /// ### python docstring
+  ///
+  /// This is very similar to Version.__str__, but has one subtle difference
+  /// with the way it handles the release segment.
+  ///
+  /// ### python source
+  /// ```py
+  /// def canonicalize_version(
+  ///     version: Union[Version, str], *, strip_trailing_zero: bool = True
+  /// ) -> str:
+  ///     """
+  ///     This is very similar to Version.__str__, but has one subtle difference
+  ///     with the way it handles the release segment.
+  ///     """
+  ///     if isinstance(version, str):
+  ///         try:
+  ///             parsed = Version(version)
+  ///         except InvalidVersion:
+  ///             # Legacy versions cannot be normalized
+  ///             return version
+  ///     else:
+  ///         parsed = version
+  ///
+  ///     parts = []
+  ///
+  ///     # Epoch
+  ///     if parsed.epoch != 0:
+  ///         parts.append(f"{parsed.epoch}!")
+  ///
+  ///     # Release segment
+  ///     release_segment = ".".join(str(x) for x in parsed.release)
+  ///     if strip_trailing_zero:
+  ///         # NB: This strips trailing '.0's to normalize
+  ///         release_segment = re.sub(r"(\.0)+$", "", release_segment)
+  ///     parts.append(release_segment)
+  ///
+  ///     # Pre-release
+  ///     if parsed.pre is not None:
+  ///         parts.append("".join(str(x) for x in parsed.pre))
+  ///
+  ///     # Post-release
+  ///     if parsed.post is not None:
+  ///         parts.append(f".post{parsed.post}")
+  ///
+  ///     # Development release
+  ///     if parsed.dev is not None:
+  ///         parts.append(f".dev{parsed.dev}")
+  ///
+  ///     # Local version segment
+  ///     if parsed.local is not None:
+  ///         parts.append(f"+{parsed.local}")
+  ///
+  ///     return "".join(parts)
+  /// ```
+  String canonicalize_version({
+    required Object? version,
+    bool strip_trailing_zero = true,
+  }) =>
+      getFunction("canonicalize_version").call(
+        <Object?>[
+          version,
+        ],
+        kwargs: <String, Object?>{
+          "strip_trailing_zero": strip_trailing_zero,
+        },
+      );
+
+  /// ## itertools
+  itertools get $itertools => itertools.import();
+
   /// ## UnparsedVersionVar (getter)
   ///
   /// ### python docstring
@@ -4081,6 +4153,208 @@ final class specifiers extends PythonModule {
   ///     from packaging.version import Version
   set UnparsedVersionVar(Object? UnparsedVersionVar) =>
       setAttribute("UnparsedVersionVar", UnparsedVersionVar);
+
+  /// ## Callable (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.specifiers import Specifier, SpecifierSet, InvalidSpecifier
+  ///     from packaging.version import Version
+  Object? get Callable => getAttribute("Callable");
+
+  /// ## Callable (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.specifiers import Specifier, SpecifierSet, InvalidSpecifier
+  ///     from packaging.version import Version
+  set Callable(Object? Callable) => setAttribute("Callable", Callable);
+
+  /// ## CallableOperator (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.specifiers import Specifier, SpecifierSet, InvalidSpecifier
+  ///     from packaging.version import Version
+  Object? get CallableOperator => getAttribute("CallableOperator");
+
+  /// ## CallableOperator (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.specifiers import Specifier, SpecifierSet, InvalidSpecifier
+  ///     from packaging.version import Version
+  set CallableOperator(Object? CallableOperator) =>
+      setAttribute("CallableOperator", CallableOperator);
+
+  /// ## Iterable (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.specifiers import Specifier, SpecifierSet, InvalidSpecifier
+  ///     from packaging.version import Version
+  Object? get $Iterable => getAttribute("Iterable");
+
+  /// ## Iterable (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.specifiers import Specifier, SpecifierSet, InvalidSpecifier
+  ///     from packaging.version import Version
+  set $Iterable(Object? $Iterable) => setAttribute("Iterable", $Iterable);
+
+  /// ## Iterator (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.specifiers import Specifier, SpecifierSet, InvalidSpecifier
+  ///     from packaging.version import Version
+  Object? get $Iterator => getAttribute("Iterator");
+
+  /// ## Iterator (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.specifiers import Specifier, SpecifierSet, InvalidSpecifier
+  ///     from packaging.version import Version
+  set $Iterator(Object? $Iterator) => setAttribute("Iterator", $Iterator);
+
+  /// ## List (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.specifiers import Specifier, SpecifierSet, InvalidSpecifier
+  ///     from packaging.version import Version
+  Object? get $List => getAttribute("List");
+
+  /// ## List (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.specifiers import Specifier, SpecifierSet, InvalidSpecifier
+  ///     from packaging.version import Version
+  set $List(Object? $List) => setAttribute("List", $List);
+
+  /// ## Optional (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.specifiers import Specifier, SpecifierSet, InvalidSpecifier
+  ///     from packaging.version import Version
+  Object? get Optional => getAttribute("Optional");
+
+  /// ## Optional (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.specifiers import Specifier, SpecifierSet, InvalidSpecifier
+  ///     from packaging.version import Version
+  set Optional(Object? Optional) => setAttribute("Optional", Optional);
+
+  /// ## Set (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.specifiers import Specifier, SpecifierSet, InvalidSpecifier
+  ///     from packaging.version import Version
+  Object? get $Set => getAttribute("Set");
+
+  /// ## Set (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.specifiers import Specifier, SpecifierSet, InvalidSpecifier
+  ///     from packaging.version import Version
+  set $Set(Object? $Set) => setAttribute("Set", $Set);
+
+  /// ## Tuple (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.specifiers import Specifier, SpecifierSet, InvalidSpecifier
+  ///     from packaging.version import Version
+  Object? get Tuple => getAttribute("Tuple");
+
+  /// ## Tuple (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.specifiers import Specifier, SpecifierSet, InvalidSpecifier
+  ///     from packaging.version import Version
+  set Tuple(Object? Tuple) => setAttribute("Tuple", Tuple);
+
+  /// ## Union (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.specifiers import Specifier, SpecifierSet, InvalidSpecifier
+  ///     from packaging.version import Version
+  Object? get Union => getAttribute("Union");
+
+  /// ## Union (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.specifiers import Specifier, SpecifierSet, InvalidSpecifier
+  ///     from packaging.version import Version
+  set Union(Object? Union) => setAttribute("Union", Union);
+
+  /// ## UnparsedVersion (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.specifiers import Specifier, SpecifierSet, InvalidSpecifier
+  ///     from packaging.version import Version
+  Object? get UnparsedVersion => getAttribute("UnparsedVersion");
+
+  /// ## UnparsedVersion (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.specifiers import Specifier, SpecifierSet, InvalidSpecifier
+  ///     from packaging.version import Version
+  set UnparsedVersion(Object? UnparsedVersion) =>
+      setAttribute("UnparsedVersion", UnparsedVersion);
 }
 
 /// ## itertools
@@ -4088,7 +4362,7 @@ final class itertools extends PythonModule {
   itertools.from(super.pythonModule) : super.from();
 
   static itertools import() => PythonFfiDart.instance.importModule(
-        "itertools",
+        "packaging.itertools",
         itertools.from,
       );
 }

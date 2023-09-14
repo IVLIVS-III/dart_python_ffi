@@ -95,7 +95,7 @@ final class InvalidSdistFilename extends PythonClass {
 /// ```
 final class InvalidVersion extends PythonClass {
   factory InvalidVersion() => PythonFfiDart.instance.importClass(
-        "packaging.version",
+        "packaging.utils",
         "InvalidVersion",
         InvalidVersion.from,
         <Object?>[],
@@ -315,7 +315,7 @@ final class Tag extends PythonClass {
     required String platform,
   }) =>
       PythonFfiDart.instance.importClass(
-        "packaging.tags",
+        "packaging.utils",
         "Tag",
         Tag.from,
         <Object?>[
@@ -718,7 +718,7 @@ final class Version extends PythonClass {
     required String version,
   }) =>
       PythonFfiDart.instance.importClass(
-        "packaging.version",
+        "packaging.utils",
         "Version",
         Version.from,
         <Object?>[
@@ -1767,6 +1767,42 @@ final class utils extends PythonModule {
         kwargs: <String, Object?>{},
       );
 
+  /// ## parse_tag
+  ///
+  /// ### python docstring
+  ///
+  /// Parses the provided tag (e.g. `py3-none-any`) into a frozenset of Tag instances.
+  ///
+  /// Returning a set is required due to the possibility that the tag is a
+  /// compressed tag set.
+  ///
+  /// ### python source
+  /// ```py
+  /// def parse_tag(tag: str) -> FrozenSet[Tag]:
+  ///     """
+  ///     Parses the provided tag (e.g. `py3-none-any`) into a frozenset of Tag instances.
+  ///
+  ///     Returning a set is required due to the possibility that the tag is a
+  ///     compressed tag set.
+  ///     """
+  ///     tags = set()
+  ///     interpreters, abis, platforms = tag.split("-")
+  ///     for interpreter in interpreters.split("."):
+  ///         for abi in abis.split("."):
+  ///             for platform_ in platforms.split("."):
+  ///                 tags.add(Tag(interpreter, abi, platform_))
+  ///     return frozenset(tags)
+  /// ```
+  Object? parse_tag({
+    required String tag,
+  }) =>
+      getFunction("parse_tag").call(
+        <Object?>[
+          tag,
+        ],
+        kwargs: <String, Object?>{},
+      );
+
   /// ## parse_wheel_filename
   ///
   /// ### python source
@@ -1816,10 +1852,34 @@ final class utils extends PythonModule {
         kwargs: <String, Object?>{},
       );
 
+  /// ## BuildTag (getter)
+  Object? get BuildTag => getAttribute("BuildTag");
+
+  /// ## BuildTag (setter)
+  set BuildTag(Object? BuildTag) => setAttribute("BuildTag", BuildTag);
+
+  /// ## FrozenSet (getter)
+  Object? get FrozenSet => getAttribute("FrozenSet");
+
+  /// ## FrozenSet (setter)
+  set FrozenSet(Object? FrozenSet) => setAttribute("FrozenSet", FrozenSet);
+
   /// ## NormalizedName (getter)
   Object? get NormalizedName => getAttribute("NormalizedName");
 
   /// ## NormalizedName (setter)
   set NormalizedName(Object? NormalizedName) =>
       setAttribute("NormalizedName", NormalizedName);
+
+  /// ## Tuple (getter)
+  Object? get Tuple => getAttribute("Tuple");
+
+  /// ## Tuple (setter)
+  set Tuple(Object? Tuple) => setAttribute("Tuple", Tuple);
+
+  /// ## Union (getter)
+  Object? get Union => getAttribute("Union");
+
+  /// ## Union (setter)
+  set Union(Object? Union) => setAttribute("Union", Union);
 }

@@ -39,6 +39,10 @@ scripts:
     run: dart pub get && dart pub outdated
     exec:
       concurrency: 1
+  dartpip-install:
+    run: dartpip install
+    exec:
+      concurrency: 1
   test:
     run: melos run dart-test && melos run flutter-test
   dart-test:

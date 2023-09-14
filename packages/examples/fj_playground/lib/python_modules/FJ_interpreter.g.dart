@@ -1180,7 +1180,7 @@ final class UnexpectedCharacters extends PythonClass {
   ///
   /// An exception that is raised by the lexer, when it cannot match the next
   /// string of characters to any of its terminals.
-  Object? get pos_in_stream => getAttribute("pos_in_stream");
+  Null get pos_in_stream => getAttribute("pos_in_stream");
 
   /// ## pos_in_stream (setter)
   ///
@@ -1188,139 +1188,8 @@ final class UnexpectedCharacters extends PythonClass {
   ///
   /// An exception that is raised by the lexer, when it cannot match the next
   /// string of characters to any of its terminals.
-  set pos_in_stream(Object? pos_in_stream) =>
+  set pos_in_stream(Null pos_in_stream) =>
       setAttribute("pos_in_stream", pos_in_stream);
-
-  /// ## line (getter)
-  ///
-  /// ### python docstring
-  ///
-  /// An exception that is raised by the lexer, when it cannot match the next
-  /// string of characters to any of its terminals.
-  Object? get line => getAttribute("line");
-
-  /// ## line (setter)
-  ///
-  /// ### python docstring
-  ///
-  /// An exception that is raised by the lexer, when it cannot match the next
-  /// string of characters to any of its terminals.
-  set line(Object? line) => setAttribute("line", line);
-
-  /// ## column (getter)
-  ///
-  /// ### python docstring
-  ///
-  /// An exception that is raised by the lexer, when it cannot match the next
-  /// string of characters to any of its terminals.
-  Object? get column => getAttribute("column");
-
-  /// ## column (setter)
-  ///
-  /// ### python docstring
-  ///
-  /// An exception that is raised by the lexer, when it cannot match the next
-  /// string of characters to any of its terminals.
-  set column(Object? column) => setAttribute("column", column);
-
-  /// ## state (getter)
-  ///
-  /// ### python docstring
-  ///
-  /// An exception that is raised by the lexer, when it cannot match the next
-  /// string of characters to any of its terminals.
-  Object? get state => getAttribute("state");
-
-  /// ## state (setter)
-  ///
-  /// ### python docstring
-  ///
-  /// An exception that is raised by the lexer, when it cannot match the next
-  /// string of characters to any of its terminals.
-  set state(Object? state) => setAttribute("state", state);
-
-  /// ## allowed (getter)
-  ///
-  /// ### python docstring
-  ///
-  /// An exception that is raised by the lexer, when it cannot match the next
-  /// string of characters to any of its terminals.
-  Object? get allowed => getAttribute("allowed");
-
-  /// ## allowed (setter)
-  ///
-  /// ### python docstring
-  ///
-  /// An exception that is raised by the lexer, when it cannot match the next
-  /// string of characters to any of its terminals.
-  set allowed(Object? allowed) => setAttribute("allowed", allowed);
-
-  /// ## considered_tokens (getter)
-  ///
-  /// ### python docstring
-  ///
-  /// An exception that is raised by the lexer, when it cannot match the next
-  /// string of characters to any of its terminals.
-  Object? get considered_tokens => getAttribute("considered_tokens");
-
-  /// ## considered_tokens (setter)
-  ///
-  /// ### python docstring
-  ///
-  /// An exception that is raised by the lexer, when it cannot match the next
-  /// string of characters to any of its terminals.
-  set considered_tokens(Object? considered_tokens) =>
-      setAttribute("considered_tokens", considered_tokens);
-
-  /// ## considered_rules (getter)
-  ///
-  /// ### python docstring
-  ///
-  /// An exception that is raised by the lexer, when it cannot match the next
-  /// string of characters to any of its terminals.
-  Object? get considered_rules => getAttribute("considered_rules");
-
-  /// ## considered_rules (setter)
-  ///
-  /// ### python docstring
-  ///
-  /// An exception that is raised by the lexer, when it cannot match the next
-  /// string of characters to any of its terminals.
-  set considered_rules(Object? considered_rules) =>
-      setAttribute("considered_rules", considered_rules);
-
-  /// ## token_history (getter)
-  ///
-  /// ### python docstring
-  ///
-  /// An exception that is raised by the lexer, when it cannot match the next
-  /// string of characters to any of its terminals.
-  Object? get token_history => getAttribute("token_history");
-
-  /// ## token_history (setter)
-  ///
-  /// ### python docstring
-  ///
-  /// An exception that is raised by the lexer, when it cannot match the next
-  /// string of characters to any of its terminals.
-  set token_history(Object? token_history) =>
-      setAttribute("token_history", token_history);
-
-  /// ## char (getter)
-  ///
-  /// ### python docstring
-  ///
-  /// An exception that is raised by the lexer, when it cannot match the next
-  /// string of characters to any of its terminals.
-  Object? get char => getAttribute("char");
-
-  /// ## char (setter)
-  ///
-  /// ### python docstring
-  ///
-  /// An exception that is raised by the lexer, when it cannot match the next
-  /// string of characters to any of its terminals.
-  set char(Object? char) => setAttribute("char", char);
 }
 
 /// ## FJ_interpreter

@@ -1223,6 +1223,82 @@ final class tags extends PythonModule {
               ))
           .cast<Tag>();
 
+  /// ## sys
+  sys get $sys => sys.import();
+
+  /// ## logger (getter)
+  Object? get logger => getAttribute("logger");
+
+  /// ## logger (setter)
+  set logger(Object? logger) => setAttribute("logger", logger);
+
+  /// ## Dict (getter)
+  Object? get Dict => getAttribute("Dict");
+
+  /// ## Dict (setter)
+  set Dict(Object? Dict) => setAttribute("Dict", Dict);
+
+  /// ## FrozenSet (getter)
+  Object? get FrozenSet => getAttribute("FrozenSet");
+
+  /// ## FrozenSet (setter)
+  set FrozenSet(Object? FrozenSet) => setAttribute("FrozenSet", FrozenSet);
+
+  /// ## Iterable (getter)
+  Object? get $Iterable => getAttribute("Iterable");
+
+  /// ## Iterable (setter)
+  set $Iterable(Object? $Iterable) => setAttribute("Iterable", $Iterable);
+
+  /// ## Iterator (getter)
+  Object? get $Iterator => getAttribute("Iterator");
+
+  /// ## Iterator (setter)
+  set $Iterator(Object? $Iterator) => setAttribute("Iterator", $Iterator);
+
+  /// ## List (getter)
+  Object? get $List => getAttribute("List");
+
+  /// ## List (setter)
+  set $List(Object? $List) => setAttribute("List", $List);
+
+  /// ## MacVersion (getter)
+  Object? get MacVersion => getAttribute("MacVersion");
+
+  /// ## MacVersion (setter)
+  set MacVersion(Object? MacVersion) => setAttribute("MacVersion", MacVersion);
+
+  /// ## Optional (getter)
+  Object? get Optional => getAttribute("Optional");
+
+  /// ## Optional (setter)
+  set Optional(Object? Optional) => setAttribute("Optional", Optional);
+
+  /// ## PythonVersion (getter)
+  Object? get PythonVersion => getAttribute("PythonVersion");
+
+  /// ## PythonVersion (setter)
+  set PythonVersion(Object? PythonVersion) =>
+      setAttribute("PythonVersion", PythonVersion);
+
+  /// ## Sequence (getter)
+  Object? get Sequence => getAttribute("Sequence");
+
+  /// ## Sequence (setter)
+  set Sequence(Object? Sequence) => setAttribute("Sequence", Sequence);
+
+  /// ## Tuple (getter)
+  Object? get Tuple => getAttribute("Tuple");
+
+  /// ## Tuple (setter)
+  set Tuple(Object? Tuple) => setAttribute("Tuple", Tuple);
+
+  /// ## Union (getter)
+  Object? get Union => getAttribute("Union");
+
+  /// ## Union (setter)
+  set Union(Object? Union) => setAttribute("Union", Union);
+
   /// ## EXTENSION_SUFFIXES (getter)
   Object? get EXTENSION_SUFFIXES => getAttribute("EXTENSION_SUFFIXES");
 
@@ -1244,7 +1320,7 @@ final class sys extends PythonModule {
   sys.from(super.pythonModule) : super.from();
 
   static sys import() => PythonFfiDart.instance.importModule(
-        "sys",
+        "packaging.sys",
         sys.from,
       );
 

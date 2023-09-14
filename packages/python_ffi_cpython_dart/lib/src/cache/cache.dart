@@ -36,11 +36,13 @@ abstract base class _Cache {
   Future<void> _tryDeleteCacheFileLock(File cacheFileLock) async {
     try {
       await cacheFileLock.delete();
-    } on PathNotFoundException catch (e) {
+    } on FileSystemException catch (e) {
       logger.trace("Failed to delete $_loggerFileIdentifier lock: $e");
     }
   }
 
+  // TODO: make locking thread-safe: if multiple instances fight for this lock,
+  //       weird things can happen
   /// Lock file format:
   /// - 1 byte: uuid of the process that holds the lock
   /// - 8 bytes: timestamp of when the lock was acquired

@@ -35,7 +35,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 /// ```
 final class InfinityType extends PythonClass {
   factory InfinityType() => PythonFfiDart.instance.importClass(
-        "packaging._structures",
+        "packaging.version",
         "InfinityType",
         InfinityType.from,
         <Object?>[],
@@ -181,7 +181,7 @@ final class InvalidVersion extends PythonClass {
 /// ```
 final class NegativeInfinityType extends PythonClass {
   factory NegativeInfinityType() => PythonFfiDart.instance.importClass(
-        "packaging._structures",
+        "packaging.version",
         "NegativeInfinityType",
         NegativeInfinityType.from,
         <Object?>[],
@@ -1293,7 +1293,7 @@ final class Version extends PythonClass {
 /// ## accumulate
 final class accumulate extends PythonClass {
   factory accumulate() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.version",
         "accumulate",
         accumulate.from,
         <Object?>[],
@@ -1305,7 +1305,7 @@ final class accumulate extends PythonClass {
 /// ## chain
 final class chain extends PythonClass {
   factory chain() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.version",
         "chain",
         chain.from,
         <Object?>[],
@@ -1317,7 +1317,7 @@ final class chain extends PythonClass {
 /// ## combinations
 final class combinations extends PythonClass {
   factory combinations() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.version",
         "combinations",
         combinations.from,
         <Object?>[],
@@ -1329,7 +1329,7 @@ final class combinations extends PythonClass {
 /// ## combinations_with_replacement
 final class combinations_with_replacement extends PythonClass {
   factory combinations_with_replacement() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.version",
         "combinations_with_replacement",
         combinations_with_replacement.from,
         <Object?>[],
@@ -1341,7 +1341,7 @@ final class combinations_with_replacement extends PythonClass {
 /// ## compress
 final class compress extends PythonClass {
   factory compress() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.version",
         "compress",
         compress.from,
         <Object?>[],
@@ -1353,7 +1353,7 @@ final class compress extends PythonClass {
 /// ## count
 final class count extends PythonClass {
   factory count() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.version",
         "count",
         count.from,
         <Object?>[],
@@ -1365,7 +1365,7 @@ final class count extends PythonClass {
 /// ## cycle
 final class cycle extends PythonClass {
   factory cycle() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.version",
         "cycle",
         cycle.from,
         <Object?>[],
@@ -1377,7 +1377,7 @@ final class cycle extends PythonClass {
 /// ## dropwhile
 final class dropwhile extends PythonClass {
   factory dropwhile() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.version",
         "dropwhile",
         dropwhile.from,
         <Object?>[],
@@ -1389,7 +1389,7 @@ final class dropwhile extends PythonClass {
 /// ## filterfalse
 final class filterfalse extends PythonClass {
   factory filterfalse() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.version",
         "filterfalse",
         filterfalse.from,
         <Object?>[],
@@ -1401,7 +1401,7 @@ final class filterfalse extends PythonClass {
 /// ## groupby
 final class groupby extends PythonClass {
   factory groupby() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.version",
         "groupby",
         groupby.from,
         <Object?>[],
@@ -1413,7 +1413,7 @@ final class groupby extends PythonClass {
 /// ## islice
 final class islice extends PythonClass {
   factory islice() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.version",
         "islice",
         islice.from,
         <Object?>[],
@@ -1425,7 +1425,7 @@ final class islice extends PythonClass {
 /// ## pairwise
 final class pairwise extends PythonClass {
   factory pairwise() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.version",
         "pairwise",
         pairwise.from,
         <Object?>[],
@@ -1437,7 +1437,7 @@ final class pairwise extends PythonClass {
 /// ## permutations
 final class permutations extends PythonClass {
   factory permutations() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.version",
         "permutations",
         permutations.from,
         <Object?>[],
@@ -1449,7 +1449,7 @@ final class permutations extends PythonClass {
 /// ## product
 final class product extends PythonClass {
   factory product() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.version",
         "product",
         product.from,
         <Object?>[],
@@ -1461,7 +1461,7 @@ final class product extends PythonClass {
 /// ## repeat
 final class repeat extends PythonClass {
   factory repeat() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.version",
         "repeat",
         repeat.from,
         <Object?>[],
@@ -1473,7 +1473,7 @@ final class repeat extends PythonClass {
 /// ## starmap
 final class starmap extends PythonClass {
   factory starmap() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.version",
         "starmap",
         starmap.from,
         <Object?>[],
@@ -1485,7 +1485,7 @@ final class starmap extends PythonClass {
 /// ## takewhile
 final class takewhile extends PythonClass {
   factory takewhile() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.version",
         "takewhile",
         takewhile.from,
         <Object?>[],
@@ -1497,7 +1497,7 @@ final class takewhile extends PythonClass {
 /// ## zip_longest
 final class zip_longest extends PythonClass {
   factory zip_longest() => PythonFfiDart.instance.importClass(
-        "itertools",
+        "packaging.version",
         "zip_longest",
         zip_longest.from,
         <Object?>[],
@@ -2124,6 +2124,231 @@ final class version extends PythonModule {
         kwargs: <String, Object?>{},
       );
 
+  /// ## itertools
+  itertools get $itertools => itertools.import();
+
+  /// ## Infinity (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.version import parse, Version
+  Object? get Infinity => getAttribute("Infinity");
+
+  /// ## Infinity (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.version import parse, Version
+  set Infinity(Object? Infinity) => setAttribute("Infinity", Infinity);
+
+  /// ## NegativeInfinity (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.version import parse, Version
+  Object? get NegativeInfinity => getAttribute("NegativeInfinity");
+
+  /// ## NegativeInfinity (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.version import parse, Version
+  set NegativeInfinity(Object? NegativeInfinity) =>
+      setAttribute("NegativeInfinity", NegativeInfinity);
+
+  /// ## Callable (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.version import parse, Version
+  Object? get Callable => getAttribute("Callable");
+
+  /// ## Callable (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.version import parse, Version
+  set Callable(Object? Callable) => setAttribute("Callable", Callable);
+
+  /// ## CmpKey (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.version import parse, Version
+  Object? get CmpKey => getAttribute("CmpKey");
+
+  /// ## CmpKey (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.version import parse, Version
+  set CmpKey(Object? CmpKey) => setAttribute("CmpKey", CmpKey);
+
+  /// ## InfiniteTypes (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.version import parse, Version
+  Object? get InfiniteTypes => getAttribute("InfiniteTypes");
+
+  /// ## InfiniteTypes (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.version import parse, Version
+  set InfiniteTypes(Object? InfiniteTypes) =>
+      setAttribute("InfiniteTypes", InfiniteTypes);
+
+  /// ## LocalType (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.version import parse, Version
+  Object? get LocalType => getAttribute("LocalType");
+
+  /// ## LocalType (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.version import parse, Version
+  set LocalType(Object? LocalType) => setAttribute("LocalType", LocalType);
+
+  /// ## Optional (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.version import parse, Version
+  Object? get Optional => getAttribute("Optional");
+
+  /// ## Optional (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.version import parse, Version
+  set Optional(Object? Optional) => setAttribute("Optional", Optional);
+
+  /// ## PrePostDevType (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.version import parse, Version
+  Object? get PrePostDevType => getAttribute("PrePostDevType");
+
+  /// ## PrePostDevType (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.version import parse, Version
+  set PrePostDevType(Object? PrePostDevType) =>
+      setAttribute("PrePostDevType", PrePostDevType);
+
+  /// ## SubLocalType (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.version import parse, Version
+  Object? get SubLocalType => getAttribute("SubLocalType");
+
+  /// ## SubLocalType (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.version import parse, Version
+  set SubLocalType(Object? SubLocalType) =>
+      setAttribute("SubLocalType", SubLocalType);
+
+  /// ## Tuple (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.version import parse, Version
+  Object? get Tuple => getAttribute("Tuple");
+
+  /// ## Tuple (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.version import parse, Version
+  set Tuple(Object? Tuple) => setAttribute("Tuple", Tuple);
+
+  /// ## Union (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.version import parse, Version
+  Object? get Union => getAttribute("Union");
+
+  /// ## Union (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.version import parse, Version
+  set Union(Object? Union) => setAttribute("Union", Union);
+
+  /// ## VersionComparisonMethod (getter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.version import parse, Version
+  Object? get VersionComparisonMethod =>
+      getAttribute("VersionComparisonMethod");
+
+  /// ## VersionComparisonMethod (setter)
+  ///
+  /// ### python docstring
+  ///
+  /// .. testsetup::
+  ///
+  ///     from packaging.version import parse, Version
+  set VersionComparisonMethod(Object? VersionComparisonMethod) =>
+      setAttribute("VersionComparisonMethod", VersionComparisonMethod);
+
   /// ## VERSION_PATTERN (getter)
   ///
   /// ### python docstring
@@ -2149,7 +2374,7 @@ final class itertools extends PythonModule {
   itertools.from(super.pythonModule) : super.from();
 
   static itertools import() => PythonFfiDart.instance.importModule(
-        "itertools",
+        "packaging.itertools",
         itertools.from,
       );
 }

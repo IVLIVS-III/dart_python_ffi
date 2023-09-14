@@ -81,10 +81,6 @@ flutter:
     - python-modules/lark/parsers/lalr_interactive_parser.py
     - python-modules/lark/parsers/grammar_analysis.py
     - python-modules/lark/parsers/earley.py
-    - python-modules/lark/tools/serialize.py
-    - python-modules/lark/tools/standalone.py
-    - python-modules/lark/tools/__init__.py
-    - python-modules/lark/tools/nearley.py
     - python-modules/lark/__pyinstaller/__init__.py
     - python-modules/lark/__pyinstaller/hook-lark.py
     - python-modules/lark/visitors.py
@@ -119,8 +115,8 @@ flutter:
     - python-modules/FJ_interpreter.py
     - python-modules/FJ_parser.py
     - python-modules/FJ_computation.py
-    - python-modules/FJ_AST.py
     - python-modules/FJ_auxiliary_typing.py
+    - python-modules/FJ_AST.py
     - python-modules/python_ffi.py
     - python-modules/modules.json
 
