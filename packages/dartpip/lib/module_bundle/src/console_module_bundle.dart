@@ -7,19 +7,16 @@ final class _ConsoleModuleBundle<T extends Object> extends _ModuleBundle<T> {
   });
 
   @override
-  Directory get _pythonModuleDestinationDirectory => Directory(
-        <String>[_appRootDirectory.path, "lib", "python_modules", "src"].join(
-          Platform.pathSeparator,
-        ),
-      );
+  Directory get _pythonModuleDestinationDirectory =>
+      Directory(p.join(_appRootDirectory.path, "lib", "python_modules", "src"));
 
   static const String _pythonModulesDartFileName = "python_modules.g.dart";
 
   _SourceFile get _pythonModulesDartFile => _SourceFile(
-        <String>[
+        p.join(
           _pythonModuleDestinationDirectory.path,
           _pythonModulesDartFileName,
-        ].join(Platform.pathSeparator),
+        ),
       );
 
   @override

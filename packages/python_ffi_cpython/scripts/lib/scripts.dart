@@ -6,6 +6,7 @@ import "dart:math";
 import "package:args/args.dart";
 import "package:args/command_runner.dart";
 import "package:cli_util/cli_logging.dart";
+import "package:path/path.dart" as p;
 
 part "src/commands/build.dart";
 part "src/commands/clone.dart";

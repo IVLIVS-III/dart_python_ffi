@@ -35,7 +35,7 @@ sealed class _PythonModule<T extends Object> {
     required String version,
   }) async {
     final String cachePath =
-        "${(await PyPIService().cacheDir).path}/$projectName-$version";
+        p.join((await PyPIService().cacheDir).path, "$projectName-$version");
     return _MultiFileCachePythonModule._findPath(
       projectName: projectName,
       projectVersion: version,
@@ -293,21 +293,22 @@ final class _MultiFileCachePythonModule extends _MultiFilePythonModule {
 
     // Look for a single file with the same name as the project.
     final String defaultFilePath =
-        "${projectCacheDirectory.path}/$projectName.py";
+        p.join(projectCacheDirectory.path, "projectName.py");
     if (File(defaultFilePath).existsSync()) {
       yield fileModule(defaultFilePath);
       didYield = true;
     }
 
     // Look for a directory with the same name as the project.
-    final String defaultDirPath = "${projectCacheDirectory.path}/$projectName";
+    final String defaultDirPath =
+        p.join(projectCacheDirectory.path, "projectName");
     if (Directory(defaultDirPath).existsSync()) {
       yield dirModule(defaultDirPath);
       didYield = true;
     }
 
     // Look for modules in the src directory.
-    final String defaultSrcPath = "${projectCacheDirectory.path}/src";
+    final String defaultSrcPath = p.join(projectCacheDirectory.path, "src");
     if (Directory(defaultSrcPath).existsSync()) {
       yield* yieldFromDirectory(Directory(defaultSrcPath));
       didYield = true;

@@ -12,7 +12,7 @@ final class PyPIService {
   final LazyFuture<Directory> _cacheDir = LazyFuture<Directory>(
     () async {
       final Directory cacheDir = Directory(
-        "${Platform.environment["HOME"]}/.dartpip/cache/pypi",
+        p.join(Platform.environment["HOME"] ?? "", ".dartpip", "cache", "pypi"),
       );
       await cacheDir.create(recursive: true);
       PythonFfiDelegate.logger.trace("Cache directory: ${cacheDir.path}");
@@ -47,7 +47,7 @@ final class PyPIService {
       return null;
     }
     final Directory projectDir =
-        Directory("${outputDir.path}/$projectName-$effectiveVersion");
+        Directory(p.join(outputDir.path, "$projectName-$effectiveVersion"));
     if (projectDir.existsSync()) {
       PythonFfiDelegate.logger.trace(
         "Project '$projectName' is already downloaded.",
@@ -68,7 +68,7 @@ final class PyPIService {
     PythonFfiDelegate.logger.trace("Downloading $url...");
     final String filename = url.split("/").last;
     final http.Response response = await _httpClient.get(Uri.parse(url));
-    final File outputFile = File("${outputDir.path}/$filename")
+    final File outputFile = File(p.join(outputDir.path, filename))
       ..createSync(recursive: true);
     await outputFile.writeAsBytes(response.bodyBytes);
     PythonFfiDelegate.logger.trace("Extracting ${outputFile.path}...");

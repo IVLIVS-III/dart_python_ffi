@@ -2,8 +2,7 @@ part of dartpip;
 
 String _readPubspec(String appRoot) {
   final Directory appRootDir = Directory(appRoot);
-  final File pubspecFile =
-      File("${appRootDir.path}${Platform.pathSeparator}pubspec.yaml");
+  final File pubspecFile = File(p.join(appRootDir.path, "pubspec.yaml"));
   final String pubspecString = pubspecFile.readAsStringSync();
 
   return pubspecString;
@@ -158,13 +157,13 @@ Future<void> _generateTypeDefs(
     dump: dump,
     parentModulePrefix: parentModulePrefix,
   );
-  final String parentPath = "lib/python_modules/$subPath";
+  final String parentPath = p.join("lib", "python_modules", subPath);
   if (dump && json != null) {
-    final File jsonfile = File("$parentPath$moduleName.g.json");
-    if (!jsonfile.existsSync()) {
-      jsonfile.createSync(recursive: true);
+    final File jsonFile = File("$parentPath$moduleName.g.json");
+    if (!jsonFile.existsSync()) {
+      jsonFile.createSync(recursive: true);
     }
-    await jsonfile.writeAsString(json);
+    await jsonFile.writeAsString(json);
   }
   final File outfile = File("$parentPath$moduleName.g.dart");
   if (!outfile.existsSync()) {
@@ -225,7 +224,7 @@ Future<void> _bundleAndGenerate({
               appType: appType,
               appRoot: appRoot,
               dump: dump,
-              subPath: "$subPath${pythonModule.moduleName}/",
+              subPath: p.join("$subPath${pythonModule.moduleName}", ""),
             ),
           );
         }

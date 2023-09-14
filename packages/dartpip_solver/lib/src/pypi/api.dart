@@ -210,9 +210,7 @@ final class PyPIAPI {
   ///
   /// Reference: https://warehouse.pypa.io/api-reference/json.html#project
   Future<ProjectResponse> project(String projectName) async {
-    final Uri uri = Uri.parse(
-      "https://pypi.org/pypi/$projectName/json",
-    );
+    final Uri uri = Uri.parse("https://pypi.org/pypi/$projectName/json");
     final Map<String, dynamic> responseJson = await _get(uri);
     return ProjectResponse.fromJson(responseJson);
   }
@@ -221,9 +219,8 @@ final class PyPIAPI {
   ///
   /// Reference: https://warehouse.pypa.io/api-reference/json.html#release
   Future<ReleaseResponse> release(String projectName, String version) async {
-    final Uri uri = Uri.parse(
-      "https://pypi.org/pypi/$projectName/$version/json",
-    );
+    final Uri uri =
+        Uri.parse("https://pypi.org/pypi/$projectName/$version/json");
     final Map<String, dynamic> responseJson = await _get(uri);
     return ReleaseResponse.fromJson(responseJson);
   }

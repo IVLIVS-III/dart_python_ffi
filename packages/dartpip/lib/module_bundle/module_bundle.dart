@@ -37,10 +37,10 @@ sealed class _ModuleBundle<T extends Object> {
   String _transformSourceFileName(String fileName) => fileName;
 
   _SourceFile _sourceFile(String fileName) => _SourceFile(
-        <String>[
+        p.join(
           _pythonModuleDestinationDirectory.path,
           _transformSourceFileName(fileName),
-        ].join(Platform.pathSeparator),
+        ),
       );
 
   Future<void> _exportSingleFile(String fileName, ByteData data);
@@ -48,7 +48,7 @@ sealed class _ModuleBundle<T extends Object> {
   Future<void> _exportMultiFile(Map<List<String>, ByteData> data) async {
     for (final MapEntry<List<String>, ByteData> entry in data.entries) {
       await _exportSingleFile(
-        entry.key.join(Platform.pathSeparator),
+        p.joinAll(entry.key),
         entry.value,
       );
     }

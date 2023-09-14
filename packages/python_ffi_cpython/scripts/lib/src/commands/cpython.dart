@@ -2,8 +2,7 @@ part of scripts;
 
 Directory get _current => Directory.current;
 
-Directory get _cpython =>
-    Directory("${_current.path}${Platform.pathSeparator}cpython");
+Directory get _cpython => Directory(p.join(_current.path, "cpython"));
 
 const String _remote = "github.com/python/cpython";
 

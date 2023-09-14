@@ -6,10 +6,10 @@ repository: https://github.com/IVLIVS-III/dart_python_ffi
 environment:
   sdk: ^3.0.1
 
-# Add regular dependencies here.
 dependencies:
   args: ^2.4.1
   cli_util: ^0.4.0
+  path: ^1.8.3
 
 dev_dependencies:
   python_ffi_lint_dart: ^0.1.0

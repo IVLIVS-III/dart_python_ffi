@@ -72,7 +72,7 @@ final class _AssetsInsertionConfig {
   }) {
     final String linePrefix = " " * indent;
     final String yaml = filePaths
-        .map((List<String> filePath) => filePath.join("/"))
+        .map(p.joinAll)
         .where((String filePath) => !assets.contains(filePath))
         .map((String filePath) => "$linePrefix$linePrefix- $filePath")
         .join("\n");
@@ -113,15 +113,11 @@ final class _FlutterModuleBundle<T extends Object> extends _ModuleBundle<T> {
   });
 
   @override
-  Directory get _pythonModuleDestinationDirectory => Directory(
-        <String>[_appRootDirectory.path, "python-modules"]
-            .join(Platform.pathSeparator),
-      );
+  Directory get _pythonModuleDestinationDirectory =>
+      Directory(p.join(_appRootDirectory.path, "python-modules"));
 
-  File get _modulesJsonFile => File(
-        <String>[_pythonModuleDestinationDirectory.path, "modules.json"]
-            .join(Platform.pathSeparator),
-      );
+  File get _modulesJsonFile =>
+      File(p.join(_pythonModuleDestinationDirectory.path, "modules.json"));
 
   @override
   Map<String, dynamic> get moduleInfo {
@@ -158,10 +154,8 @@ final class _FlutterModuleBundle<T extends Object> extends _ModuleBundle<T> {
     final _AssetsInsertionConfig config =
         _AssetsInsertionConfig.fromPubspec(pubspecString);
 
-    final File pubspecFile = File(
-      <String>[_appRootDirectory.path, "pubspec.yaml"]
-          .join(Platform.pathSeparator),
-    );
+    final File pubspecFile =
+        File(p.join(_appRootDirectory.path, "pubspec.yaml"));
     final String newPubspecString = config.insertIntoPubspec(
       filePaths
           .map((List<String> e) => <String>["python-modules", ...e])

@@ -34,7 +34,11 @@ Future<void> _patch(_CpythonPatchConfig config) async {
 
   final String version = await _getVersion(logger);
   final File patchFile = File(
-    "${_current.path}/patches/${Platform.operatingSystem}$version.patch",
+    p.join(
+      _current.path,
+      "patches",
+      "${Platform.operatingSystem}$version.patch",
+    ),
   );
   final Progress checkPatchFileProgress =
       logger.progress("Checking if patch '${patchFile.relativePath}' exists");
@@ -67,7 +71,7 @@ Future<void> _patch(_CpythonPatchConfig config) async {
     },
   );
   final Iterable<Future<void>> deleteTasks = addedFiles.map((String e) async {
-    final File file = File("${_cpython.path}/$e");
+    final File file = File(p.join(_cpython.path, e));
     if (file.existsSync()) {
       await file.delete(recursive: true);
     }

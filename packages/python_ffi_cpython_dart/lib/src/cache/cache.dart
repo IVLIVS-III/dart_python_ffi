@@ -28,10 +28,10 @@ abstract base class _Cache {
   String get _loggerFileIdentifier;
 
   File _cacheFile(_DownloadEntry entry, Directory cacheDir) =>
-      File("${cacheDir.path}/${entry.filename}");
+      File(p.join(cacheDir.path, entry.filename));
 
   File _cacheFileLock(_DownloadEntry entry, Directory cacheDir) =>
-      File("${cacheDir.path}/${entry.filename}.lock");
+      File(p.join(cacheDir.path, "${entry.filename}.lock"));
 
   Future<void> _tryDeleteCacheFileLock(File cacheFileLock) async {
     try {

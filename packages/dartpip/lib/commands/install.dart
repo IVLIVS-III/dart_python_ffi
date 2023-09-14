@@ -67,20 +67,18 @@ class InstallCommand extends Command<void> {
     if (appType != AppType.flutter) {
       return;
     }
-    final File pubspecYamlFile = File(
-      <String>[appRoot, "pubspec.yaml"].join(Platform.pathSeparator),
-    );
+    final File pubspecYamlFile = File(p.join(appRoot, "pubspec.yaml"));
     String pubspecString = pubspecYamlFile.readAsStringSync();
     final _AssetsInsertionConfig assetsInsertionConfig =
         _AssetsInsertionConfig.fromPubspec(pubspecString);
 
     final List<MapEntry<int, int>> deletionSpans = <MapEntry<int, int>>[];
     for (final String asset in assetsInsertionConfig.assets) {
-      if (!asset.startsWith("python-modules/")) {
+      if (!asset.startsWith(p.join("python-modules", ""))) {
         DartpipCommandRunner.logger.trace("skipping $asset");
         continue;
       }
-      if (asset == "python-modules/modules.json") {
+      if (asset == p.join("python-modules", "modules.json")) {
         continue;
       }
       final int assetIndex = pubspecString.indexOf(
@@ -229,7 +227,8 @@ class InstallCommand extends Command<void> {
     final bool dump = argResults[_kDumpOption] as bool;
 
     final String appRoot = Directory.current.path;
-    final PubspecEditor pubspecEditor = PubspecEditor("$appRoot/pubspec.yaml");
+    final PubspecEditor pubspecEditor =
+        PubspecEditor(p.join(appRoot, "pubspec.yaml"));
 
     final _ProjectMap projects = await _downloadAllDependencies(
       argResults: argResults,
@@ -253,18 +252,15 @@ class InstallCommand extends Command<void> {
     // Remove modules.json file if it exists.
     // This is necessary because the file is not overwritten. Otherwise old and
     // no longer used modules would still be listed in the file.
-    final File modulesJsonFile = File(
-      <String>[appRoot, "python-modules", "modules.json"]
-          .join(Platform.pathSeparator),
-    );
+    final File modulesJsonFile =
+        File(p.join(appRoot, "python-modules", "modules.json"));
     if (modulesJsonFile.existsSync()) {
       modulesJsonFile.deleteSync();
     }
 
     // Remove previously generated files.
-    final Directory pythonModulesDir = Directory(
-      <String>[appRoot, "lib", "python_modules"].join(Platform.pathSeparator),
-    );
+    final Directory pythonModulesDir =
+        Directory(p.join(appRoot, "lib", "python_modules"));
     if (pythonModulesDir.existsSync()) {
       await pythonModulesDir
           .list(recursive: true)
