@@ -48,21 +48,24 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - python-modules/python_ffi.py
-    - python-modules/modules.json
+    - python-modules/tests/json_parser_test.py
+    - python-modules/tests/json_lexer_test.py
+    - python-modules/tests/__init__.py
+    - python-modules/tests/LICENSE
+    - python-modules/json_parser/__init__.py
+    - python-modules/json_parser/parser.py
+    - python-modules/json_parser/lexer.py
+    - python-modules/json_parser/LICENSE
     - python-modules/liblax/__init__.py
     - python-modules/liblax/core.py
     - python-modules/liblax/parser.py
     - python-modules/liblax/LICENSE.txt
-    - python-modules/json_parser/__init__.py
-    - python-modules/json_parser/parser.py
-    - python-modules/json_parser/lexer.py
-    - python-modules/json_parser/LICENSE.txt
-    - python-modules/type_mappings.py
     - python-modules/structs.py
+    - python-modules/type_mappings.py
     - python-modules/primitives.py
-    - python-modules/hello_world.py
     - python-modules/data_class.py
+    - python-modules/python_ffi.py
+    - python-modules/modules.json
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -93,10 +96,14 @@ flutter:
 
 python_ffi:
   modules:
-    data_class: any
+    data_class:
+      path: python-modules/data_class.py
     json_parser: any
-    hello_world: any
-    liblax: any
-    primitives: any
-    structs: any
-    type_mappings: any
+    liblax:
+      path: python-modules/liblax
+    primitives:
+      path: python-modules/primitives.py
+    structs:
+      path: python-modules/structs.py
+    type_mappings:
+      path: python-modules/type_mappings.py

@@ -1,7 +1,7 @@
 from tokenize import generate_tokens as split
 from tokenize import NUMBER, NAME, STRING, OP, untokenize
 from io import StringIO
-from liblax.core import *
+from .core import *
 
 def build(data):
     result = []
@@ -19,5 +19,3 @@ def build(data):
 
 def run(data):
     return eval(build(data))
-
-

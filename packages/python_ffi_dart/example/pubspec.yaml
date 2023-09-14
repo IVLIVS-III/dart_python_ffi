@@ -24,5 +24,7 @@ dev_dependencies:
 
 python_ffi:
   modules:
-    type_mappings: any
-    eq_test: any
+    type_mappings:
+      path: python-modules/type_mappings.py
+    eq_test:
+      path: python-modules/eq_test.py

@@ -1,12 +1,12 @@
 import "package:collection/collection.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
-import "package:python_ffi_example/python_modules/type_mappings.dart";
+import "package:python_ffi_example/python_modules/type_mappings.g.dart";
 
 class TypeMappingsPage extends StatelessWidget {
   TypeMappingsPage({Key? key}) : super(key: key);
 
-  final TypeMappingsModule _module = TypeMappingsModule.import();
+  final type_mappings _module = type_mappings.import();
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -15,7 +15,8 @@ class TypeMappingsPage extends StatelessWidget {
         ),
         body: ListView(
           children: <Widget>[
-            TypeMappingEntry<Object?>(
+            // ignore: prefer_void_to_null
+            TypeMappingEntry<Null>(
               dartType: "null",
               pythonType: "None",
               value: null,
@@ -102,7 +103,7 @@ class TypeMappingEntry<T extends Object?> extends StatelessWidget {
   final String? dartType;
   final String pythonType;
   final T value;
-  final void Function(T) sendToPython;
+  final void Function({required T value}) sendToPython;
   final T Function() receiveFromPython;
   final bool Function(T, T)? equals;
 
@@ -122,7 +123,7 @@ class TypeMappingEntry<T extends Object?> extends StatelessWidget {
           children: <Widget>[
             ElevatedButton(
               onPressed: () {
-                sendToPython(value);
+                sendToPython(value: value);
                 debugPrint("dart –> python successful");
               },
               child: const Text("dart –> python"),
@@ -150,7 +151,7 @@ class TypeMappingEntry<T extends Object?> extends StatelessWidget {
       ..add(StringProperty("pythonType", pythonType))
       ..add(DiagnosticsProperty<T>("value", value))
       ..add(
-        ObjectFlagProperty<void Function(T p1)>.has(
+        ObjectFlagProperty<void Function({required T value})>.has(
           "sendToPython",
           sendToPython,
         ),

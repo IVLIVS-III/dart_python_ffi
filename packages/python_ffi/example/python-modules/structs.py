@@ -3,11 +3,17 @@ class Coordinate:
         self.latitude = latitude
         self.longitude = longitude
 
+    def __str__(self) -> str:
+        return f"({self.latitude}, {self.longitude})"
+
 
 class Place:
     def __init__(self, name: str, coordinate: Coordinate) -> 'Place':
         self.name = name
         self.coordinate = coordinate
+
+    def __str__(self) -> str:
+        return f"{self.name} {self.coordinate}"
 
 
 def hello_world() -> str:

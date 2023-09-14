@@ -2,10 +2,10 @@ import "dart:typed_data";
 
 import "package:collection/collection.dart";
 import "package:python_ffi_dart/python_ffi_dart.dart";
-import "package:python_ffi_dart_example/python_modules/eq_test.dart";
-import "package:python_ffi_dart_example/python_modules/type_mappings.dart";
+import "package:python_ffi_dart_example/python_modules/eq_test.g.dart";
+import "package:python_ffi_dart_example/python_modules/type_mappings.g.dart";
 
-typedef SendTyPythonCallback<T> = void Function(T value);
+typedef SendTyPythonCallback<T> = void Function({required T value});
 typedef ReceiveFromPythonCallback<T> = T Function();
 
 class TypeMappingEntry<T extends Object?> {
@@ -36,7 +36,7 @@ class TypeMappingEntry<T extends Object?> {
       if (sendToPython == null) {
         print("├── dart –> python skipped ⚠️");
       } else {
-        sendToPython(value);
+        sendToPython(value: value);
         print("├── dart –> python successful ✅");
       }
 
@@ -59,9 +59,10 @@ class TypeMappingEntry<T extends Object?> {
 }
 
 Future<void> typeMappings() async {
-  final TypeMappingsModule module = TypeMappingsModule.import();
+  final type_mappings module = type_mappings.import();
 
-  TypeMappingEntry<Object?>(
+  // ignore: prefer_void_to_null
+  TypeMappingEntry<Null>(
     dartType: "null",
     pythonType: "None",
     value: null,

@@ -137,7 +137,7 @@ def receive_set(value: set[int]):
 
 
 def request_set() -> set[int]:
-    return kSet
+    return set(kSet)
 
 
 def receive_iterator(value: Iterator[int]):
