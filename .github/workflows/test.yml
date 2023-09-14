@@ -38,6 +38,8 @@ jobs:
 
       - run: dart pub global activate melos
 
+      - run: dart pub global activate dartpip
+
       - name: Install dependencies
         run: melos bs
 
