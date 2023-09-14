@@ -125,18 +125,18 @@ final class inspect extends PythonModule {
     } on PythonExceptionInterface<PythonFfiDelegate<Object?>,
         Object?> catch (e) {
       if (e.type == "TypeError") {
-        print(
+        DartpipCommandRunner.logger.trace(
           "Cannot get source for built-in module, class, or function: $object",
         );
         return null;
       }
       if (e.type == "OSError") {
-        print("Cannot get source for $object: $e");
+        DartpipCommandRunner.logger.trace("Cannot get source for $object: $e");
         return null;
       }
       rethrow;
     } on PythonFfiException catch (e) {
-      print("Cannot get source for $object: $e");
+      DartpipCommandRunner.logger.trace("Cannot get source for $object: $e");
       return null;
     }
   }

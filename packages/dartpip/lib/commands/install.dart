@@ -29,7 +29,15 @@ enum AppType {
 /// Implements the `install` command.
 class InstallCommand extends Command<void> {
   /// Creates a new instance of the [InstallCommand] class.
-  InstallCommand();
+  InstallCommand() {
+    argParser.addFlag(
+      _kDumpOption,
+      abbr: "d",
+      negatable: false,
+      help:
+          "Dump the collected information about the Python modules as *.g.json files.",
+    );
+  }
 
   @override
   final String name = "install";
@@ -69,7 +77,7 @@ class InstallCommand extends Command<void> {
     final List<MapEntry<int, int>> deletionSpans = <MapEntry<int, int>>[];
     for (final String asset in assetsInsertionConfig.assets) {
       if (!asset.startsWith("python-modules/")) {
-        print("skipping $asset");
+        DartpipCommandRunner.logger.trace("skipping $asset");
         continue;
       }
       if (asset == "python-modules/modules.json") {
@@ -107,10 +115,10 @@ class InstallCommand extends Command<void> {
     pubspecYamlFile.writeAsStringSync(pubspecString);
   }
 
-  Iterable<PythonDependency> _collectDirectDependencies({
+  List<PythonDependency> _collectDirectDependencies({
     required ArgResults argResults,
     required PubspecEditor pubspecEditor,
-  }) sync* {
+  }) {
     final List<PythonDependency> existingPythonModules =
         pubspecEditor.dependencies.toList();
     final Iterable<String> existingPythonModulesNames =
@@ -118,14 +126,20 @@ class InstallCommand extends Command<void> {
     final Iterable<PyPiDependency> pythonModules = argResults.rest
         .whereNot(existingPythonModulesNames.contains)
         .map((String e) => PyPiDependency(name: e, version: "any"));
-    print(
-      "Found python modules in pubspec.yaml: ${existingPythonModules.join(", ")}",
-    );
-    print(
-      "Adding python modules to pubspec.yaml: ${pythonModules.join(", ")}",
-    );
-    yield* existingPythonModules;
-    yield* pythonModules;
+    if (existingPythonModules.isNotEmpty) {
+      DartpipCommandRunner.logger.stdout(
+        "Found python modules in pubspec.yaml: ${existingPythonModules.join(", ")}",
+      );
+    }
+    if (pythonModules.isNotEmpty) {
+      DartpipCommandRunner.logger.stdout(
+        "Adding python modules to pubspec.yaml: ${pythonModules.join(", ")}",
+      );
+    }
+    return <PythonDependency>[
+      ...existingPythonModules,
+      ...pythonModules,
+    ];
   }
 
   Future<Iterable<PythonDependency>> _collectAllDependencies(
@@ -166,7 +180,9 @@ class InstallCommand extends Command<void> {
 
     final List<Future<void>> downloadTasks = <Future<void>>[];
     for (final PythonDependency pythonModule in allDependencies) {
-      print("Installing $pythonModule");
+      final Progress installProgress = DartpipCommandRunner.logger.progress(
+        "Installing $pythonModule",
+      );
       switch (pythonModule) {
         case PyPiDependency(
             name: final String moduleName,
@@ -177,6 +193,7 @@ class InstallCommand extends Command<void> {
                 .fetch(projectName: moduleName, version: specifiedVersion)
                 .then(
               (String? version) {
+                installProgress.finish(showTiming: true);
                 if (version == null) {
                   return;
                 }
@@ -209,6 +226,8 @@ class InstallCommand extends Command<void> {
       throw StateError("Options must be provided.");
     }
 
+    final bool dump = argResults[_kDumpOption] as bool;
+
     final String appRoot = Directory.current.path;
     final PubspecEditor pubspecEditor = PubspecEditor("$appRoot/pubspec.yaml");
 
@@ -225,7 +244,9 @@ class InstallCommand extends Command<void> {
     final AppType appType = _getAppType(pubspecYaml);
 
     if (projects.isEmpty) {
-      print("No Python modules specified in pubspec.yaml.");
+      DartpipCommandRunner.logger.stdout(
+        "No Python modules specified in pubspec.yaml.",
+      );
       return;
     }
 
@@ -270,7 +291,9 @@ class InstallCommand extends Command<void> {
         in projects.entries) {
       final String pythonModuleName = project.key;
       final (PythonDependency pythonDependency, String version) = project.value;
-      print("Bundling Python module '$pythonModuleName'...");
+      DartpipCommandRunner.logger.stdout(
+        "Bundling Python module '$pythonModuleName'...",
+      );
       final Future<Iterable<_ModuleBundle<Object>>> bundleTask =
           switch (pythonDependency) {
         PyPiDependency() => _bundleCacheModule(
@@ -297,7 +320,9 @@ class InstallCommand extends Command<void> {
                 final PythonModuleDefinition definition =
                     consoleModuleBundle.definition;
                 await PythonFfiDart.instance.prepareModule(definition);
-                print("prepared '${definition.name}' to be imported");
+                DartpipCommandRunner.logger.trace(
+                  "prepared '${definition.name}' to be imported",
+                );
                 return consoleModuleBundle;
               },
             ),
@@ -315,6 +340,7 @@ class InstallCommand extends Command<void> {
           moduleBundle: e,
           appType: appType,
           appRoot: appRoot,
+          dump: dump,
         ),
       ),
     );

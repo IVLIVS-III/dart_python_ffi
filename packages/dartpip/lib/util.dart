@@ -41,8 +41,9 @@ Future<_ModuleBundle<Object>?> _bundleModule({
       _PythonModule.fromPath(pythonModulePath);
 
   if (pythonModule == null) {
-    // TODO: move to logger
-    print("⚠️   Warning: could not find Python module at '$pythonModulePath'.");
+    DartpipCommandRunner.logger.trace(
+      "⚠️   Warning: could not find Python module at '$pythonModulePath'.",
+    );
     return null;
   }
 
@@ -70,7 +71,7 @@ Future<Iterable<_ModuleBundle<Object>>> _bundleCacheModule({
     version: projectVersion,
   );
 
-  print(
+  DartpipCommandRunner.logger.trace(
     "Discovered ${pythonModules.length} modules in cache directory '$projectName-$projectVersion': ${pythonModules.map((_PythonModule<Object> e) => "${e.moduleName}@${e.path}").join(", ")}.",
   );
 
@@ -141,29 +142,30 @@ Future<void> _generateTypeDefs(
   _ModuleBundle<Object> moduleBundle, {
   required AppType appType,
   required String subPath,
+  required bool dump,
 }) async {
   final String parentModulePrefix =
       subPath.replaceAll(Platform.pathSeparator, ".");
   final String moduleName = moduleBundle.pythonModule.moduleName;
   final String stdlibPath = (await PythonFfiDart.instance.stdlibDir).path;
   final InspectionCache cache = InspectionCache();
-  final String json = await doInspection(
+  final String? json = await doInspection(
     parentModulePrefix.isNotEmpty ? null : moduleBundle.definition,
     moduleName: moduleName,
     appType: appType,
     cache: cache,
     stdlibPath: stdlibPath,
+    dump: dump,
     parentModulePrefix: parentModulePrefix,
   );
-  if (json == "null") {
-    // return;
-  }
   final String parentPath = "lib/python_modules/$subPath";
-  final File jsonfile = File("$parentPath$moduleName.g.json");
-  if (!jsonfile.existsSync()) {
-    jsonfile.createSync(recursive: true);
+  if (dump && json != null) {
+    final File jsonfile = File("$parentPath$moduleName.g.json");
+    if (!jsonfile.existsSync()) {
+      jsonfile.createSync(recursive: true);
+    }
+    await jsonfile.writeAsString(json);
   }
-  await jsonfile.writeAsString(json);
   final File outfile = File("$parentPath$moduleName.g.dart");
   if (!outfile.existsSync()) {
     outfile.createSync(recursive: true);
@@ -182,6 +184,7 @@ Future<void> _bundleAndGenerate({
   required _ModuleBundle<Object>? moduleBundle,
   required AppType appType,
   required String appRoot,
+  required bool dump,
   String subPath = "",
 }) async {
   try {
@@ -191,7 +194,12 @@ Future<void> _bundleAndGenerate({
     if (moduleBundle.isBuiltin) {
       return;
     }
-    await _generateTypeDefs(moduleBundle, appType: appType, subPath: subPath);
+    await _generateTypeDefs(
+      moduleBundle,
+      appType: appType,
+      subPath: subPath,
+      dump: dump,
+    );
 
     // find hidden submodules
     final _PythonModule<Object> pythonModule = moduleBundle.pythonModule;
@@ -203,7 +211,9 @@ Future<void> _bundleAndGenerate({
             in searchDirectory.listSync().whereNot(
                   (FileSystemEntity element) => element.name.startsWith("_"),
                 )) {
-          print("found hidden submodule: '${child.path}'");
+          DartpipCommandRunner.logger.trace(
+            "found hidden submodule: '${child.path}'",
+          );
           nestedFutures.add(
             _bundleAndGenerate(
               moduleBundle: await _bundleModule(
@@ -214,6 +224,7 @@ Future<void> _bundleAndGenerate({
               ),
               appType: appType,
               appRoot: appRoot,
+              dump: dump,
               subPath: "$subPath${pythonModule.moduleName}/",
             ),
           );

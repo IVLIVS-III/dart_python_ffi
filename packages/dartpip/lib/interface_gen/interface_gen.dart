@@ -3,6 +3,7 @@ library interface_gen;
 import "dart:collection";
 import "dart:convert";
 
+import "package:cli_util/cli_logging.dart";
 import "package:collection/collection.dart";
 import "package:dartpip/dartpip.dart";
 import "package:dartpip/interface_gen/modules/ast/ast.dart";

@@ -47,10 +47,12 @@ final class PythonFfiCPythonDart extends PythonFfiCPythonBase
   /// Note: On Windows and Linux the path to the dynamic Python library must be
   ///       provided via the [libPath] parameter.
   PythonFfiCPythonDart(
-    String pythonModulesBase64, {
+    String? pythonModulesBase64, {
     this.libPath,
   }) {
-    _pythonModules.addAll(_decodePythonModules(pythonModulesBase64));
+    if (pythonModulesBase64 != null) {
+      _pythonModules.addAll(_decodePythonModules(pythonModulesBase64));
+    }
   }
 
   static const String _majorVersion = "3";
@@ -239,7 +241,7 @@ base mixin PythonFfiCPythonMixin on PythonFfiCPythonBase {
   FutureOr<Directory> get supportDir async {
     FutureOr<Directory> getAndPrintSupportDir() async {
       final Directory supportDir = await getApplicationSupportDirectory();
-      print("supportDir: ${supportDir.path}");
+      PythonFfiDelegate.logger.trace("supportDir: ${supportDir.path}");
       return supportDir;
     }
 
@@ -409,7 +411,12 @@ base mixin PythonFfiCPythonMixin on PythonFfiCPythonBase {
   }
 
   @override
-  Future<void> initialize({required String? package}) async {
+  Future<void> initialize({
+    required String? package,
+    bool? verboseLogging,
+  }) async {
+    initializeLogger(verboseLogging: verboseLogging);
+
     await copyPythonStdLib();
 
     if (!areBindingsInitialized) {

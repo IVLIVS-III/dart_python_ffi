@@ -106,24 +106,30 @@ String sanitizeName(
   return name;
 }
 
-/// TODO: Document.
-Future<String> doInspection(
+/// Inspects a Python module for interface generation.
+///
+/// If [dump] is `true`, the extracted interface information will be returned as
+/// a json String.
+/// If [dump] is `false`, `null` will be returned.
+Future<String?> doInspection(
   PythonModuleDefinition? moduleDefinition, {
   required String moduleName,
   required AppType appType,
   required InspectionCache cache,
   required String stdlibPath,
+  required bool dump,
   String parentModulePrefix = "",
 }) async {
   try {
-    print(
-      "Generating Dart interface for '$parentModulePrefix$moduleName' via inspect...",
+    final Progress inspectionProgress = DartpipCommandRunner.logger.progress(
+      "Generating Dart interface for '$parentModulePrefix$moduleName' via inspect",
     );
     if (parentModulePrefix.isEmpty) {
       if (moduleDefinition != null) {
         await PythonFfiDart.instance.prepareModule(moduleDefinition);
       } else {
-        return "null";
+        inspectionProgress.finish(showTiming: true);
+        return null;
       }
     }
     final Module interface = PythonFfiDart.instance.importModule(
@@ -179,29 +185,32 @@ Future<String> doInspection(
       };
     }
 
-    final String json = jsonEncode(
-      <String, Object?>{
-        "_module": interface.debugDump(cache: cache),
-        "_entries": cache.entries
-            .whereNot(
-              ((int, InspectEntry) e) =>
-                  e.$2.type == InspectEntryType.primitive,
-            )
-            .map(
-              ((int, InspectEntry) e) => <String, Object?>{
-                "id": e.$1,
-                "entry": e.$2.debugDump(cache: cache),
-              },
-            )
-            .toList(),
-      },
-      toEncodable: toEncodable,
-    );
+    final String? json = dump
+        ? jsonEncode(
+            <String, Object?>{
+              "_module": interface.debugDump(cache: cache),
+              "_entries": cache.entries
+                  .whereNot(
+                    ((int, InspectEntry) e) =>
+                        e.$2.type == InspectEntryType.primitive,
+                  )
+                  .map(
+                    ((int, InspectEntry) e) => <String, Object?>{
+                      "id": e.$1,
+                      "entry": e.$2.debugDump(cache: cache),
+                    },
+                  )
+                  .toList(),
+            },
+            toEncodable: toEncodable,
+          )
+        : null;
+    inspectionProgress.finish(showTiming: true);
     return json;
   } on PythonFfiException catch (e) {
-    print(e);
+    DartpipCommandRunner.logger.stderr(e.toString());
   }
-  return "null";
+  return null;
 }
 
 /// TODO: Document.

@@ -293,39 +293,37 @@ base mixin _PythonObjectCPythonMixin
 
   @override
   void debugDump() {
-    // ignore: avoid_print
-    print("========================================");
-    // ignore: avoid_print
-    print("PythonObjectCPython: @0x${reference.hexAddress}");
+    PythonFfiDelegate.logger.stdout("========================================");
+    PythonFfiDelegate.logger.stdout(
+      "PythonObjectCPython: @0x${reference.hexAddress}",
+    );
     try {
       try {
-        // ignore: avoid_print
-        print("converted: ${reference.toDartObject(platform)}");
+        PythonFfiDelegate.logger.stdout(
+          "converted: ${reference.toDartObject(platform)}",
+        );
       } on PythonFfiException catch (e) {
-        // ignore: avoid_print
-        print("converted: @0x${reference.hexAddress} w/ error: $e");
+        PythonFfiDelegate.logger.stdout(
+          "converted: @0x${reference.hexAddress} w/ error: $e",
+        );
       }
 
       final PythonObjectInterface<PythonFfiCPythonBase, Pointer<PyObject>>
           dict = getAttributeRaw("__dict__");
-      // ignore: avoid_print
-      print("dict: @0x${dict.reference.hexAddress}");
+      PythonFfiDelegate.logger.stdout("dict: @0x${dict.reference.hexAddress}");
       platform.ensureNoPythonError();
 
       final Pointer<PyObject> keys =
           platform.bindings.PyDict_Keys(dict.reference);
       platform.bindings.Py_IncRef(keys);
-      // ignore: avoid_print
-      print("dict-keys: @0x${keys.hexAddress}");
+      PythonFfiDelegate.logger.stdout("dict-keys: @0x${keys.hexAddress}");
       platform.ensureNoPythonError();
 
       if (keys == nullptr) {
-        // ignore: avoid_print
-        print("dict-keys is null");
+        PythonFfiDelegate.logger.stdout("dict-keys is null");
       } else {
         final int len = platform.bindings.PyList_Size(keys);
-        // ignore: avoid_print
-        print("dict-keys-len: $len");
+        PythonFfiDelegate.logger.stdout("dict-keys-len: $len");
         platform.ensureNoPythonError();
 
         for (int i = 0; i < len; i++) {
@@ -344,19 +342,17 @@ base mixin _PythonObjectCPythonMixin
           } on PythonFfiException catch (e) {
             valueObject = "@0x${value.hexAddress} w/ error: $e";
           }
-          // ignore: avoid_print
-          print("$keyString: $valueObject");
+          PythonFfiDelegate.logger.stdout("$keyString: $valueObject");
         }
       }
     } on _PythonExceptionCPython catch (e) {
-      // ignore: avoid_print
-      print("Error(_PythonExceptionCPython): $e");
+      PythonFfiDelegate.logger.stderr("Error(_PythonExceptionCPython): $e");
     } on PythonFfiException catch (e) {
-      // ignore: avoid_print
-      print("Error(PythonFfiException): $e");
+      PythonFfiDelegate.logger.stderr("Error(PythonFfiException): $e");
     } finally {
-      // ignore: avoid_print
-      print("========================================");
+      PythonFfiDelegate.logger.stdout(
+        "========================================",
+      );
     }
   }
 }

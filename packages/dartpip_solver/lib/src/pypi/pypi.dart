@@ -15,7 +15,7 @@ final class PyPIService {
         "${Platform.environment["HOME"]}/.dartpip/cache/pypi",
       );
       await cacheDir.create(recursive: true);
-      print("Cache directory: ${cacheDir.path}");
+      PythonFfiDelegate.logger.trace("Cache directory: ${cacheDir.path}");
       return cacheDir;
     },
   );
@@ -49,10 +49,14 @@ final class PyPIService {
     final Directory projectDir =
         Directory("${outputDir.path}/$projectName-$effectiveVersion");
     if (projectDir.existsSync()) {
-      print("Project '$projectName' is already downloaded.");
+      PythonFfiDelegate.logger.trace(
+        "Project '$projectName' is already downloaded.",
+      );
       return effectiveVersion;
     }
-    print("Downloading Python module '$projectName'...");
+    final Progress downloadProgress = PythonFfiDelegate.logger.progress(
+      "Downloading Python module '$projectName'...",
+    );
     final String? url = await _client.downloadUrl(
       projectName: projectName,
       version: effectiveVersion,
@@ -61,13 +65,13 @@ final class PyPIService {
     if (url == null) {
       return null;
     }
-    print("Downloading $url...");
+    PythonFfiDelegate.logger.trace("Downloading $url...");
     final String filename = url.split("/").last;
     final http.Response response = await _httpClient.get(Uri.parse(url));
     final File outputFile = File("${outputDir.path}/$filename")
       ..createSync(recursive: true);
     await outputFile.writeAsBytes(response.bodyBytes);
-    print("Extracting ${outputFile.path}...");
+    PythonFfiDelegate.logger.trace("Extracting ${outputFile.path}...");
     await extractFileToDisk(outputFile.path, outputDir.path);
     Directory? extractedDir;
     for (final FileSystemEntity entity in outputDir.listSync()) {
@@ -81,6 +85,7 @@ final class PyPIService {
       throw StateError("Could not find extracted directory.");
     }
     await extractedDir.rename(projectDir.path);
+    downloadProgress.finish(showTiming: true);
     return effectiveVersion;
   }
 }

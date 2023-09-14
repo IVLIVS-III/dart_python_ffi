@@ -18,9 +18,15 @@ final class PythonFfiCPython extends PythonFfiCPythonBase
   String? _package;
 
   @override
-  Future<void> initialize({required String? package}) {
+  Future<void> initialize({
+    required String? package,
+    bool? verboseLogging,
+  }) {
     _package = package;
-    return super.initialize(package: package);
+    return super.initialize(
+      package: package,
+      verboseLogging: verboseLogging,
+    );
   }
 
   @override
@@ -141,7 +147,7 @@ final class PythonFfiCPython extends PythonFfiCPythonBase
       ).toSet();
       // ignore: avoid_catching_errors
     } on FlutterError catch (e) {
-      debugPrint("Failed to load python modules: $e");
+      PythonFfiDelegate.logger.stderr("Failed to load python modules: $e");
       return <PythonModuleDefinition>{};
     }
   }

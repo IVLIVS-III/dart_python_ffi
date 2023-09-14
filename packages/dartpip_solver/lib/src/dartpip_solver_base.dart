@@ -46,7 +46,7 @@ class Constraint {
 /// latest version from PyPI, regardless of whether it is compatible with the
 /// other modules or not.
 Future<Set<Dependency>> solve(Iterable<Constraint> constraints) async {
-  await PythonFfiDart.instance.initialize(kPythonModules);
+  await PythonFfiDart.instance.initialize(pythonModules: kPythonModules);
 
   final Set<Dependency> dependencies = <Dependency>{};
   final Queue<Constraint> queue = Queue<Constraint>()..addAll(constraints);
@@ -75,8 +75,7 @@ Future<Set<Dependency>> solve(Iterable<Constraint> constraints) async {
           final Marker typedMarker = Marker.from(marker);
           final bool result = typedMarker.evaluate();
           if (!result) {
-            // TODO: move to logger
-            print(
+            PythonFfiDelegate.logger.trace(
               "⚠️   Warning: skipping requirement '$requirementString' because it has a marker that evaluates to false: '$marker'.",
             );
             return null;

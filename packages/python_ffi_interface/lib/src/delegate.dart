@@ -25,14 +25,33 @@ abstract base class PythonFfiDelegate<R extends Object?> extends BaseInterface {
     _instance = instance;
   }
 
+  static Logger? _logger;
+
+  /// Gets the logger for for all Python FFI sub-features.
+  static Logger get logger => _logger ??= Logger.standard();
+
   /// Checks whether the Python runtime was initialized.
   bool get isInitialized;
 
   /// Initializes the native platform Python runtime.
-  FutureOr<void> initialize({required String? package}) async {
+  FutureOr<void> initialize({
+    required String? package,
+    bool? verboseLogging,
+  }) async {
+    initializeLogger(verboseLogging: verboseLogging);
+
     final Set<PythonModuleDefinition> modules =
         await discoverPythonModules(package: package);
     await FutureOrExtension.wait<void>(modules.map(prepareModule));
+  }
+
+  /// Initializes the logger for the Python FFI.
+  void initializeLogger({bool? verboseLogging}) {
+    if (_logger != null && verboseLogging == null) {
+      return;
+    }
+    final bool verbose = verboseLogging ?? _logger?.isVerbose ?? false;
+    _logger = verbose ? Logger.verbose() : Logger.standard();
   }
 
   /// Directory for the Python standard library.

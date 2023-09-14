@@ -44,7 +44,9 @@ enum PythonSourceEntityPlatform {
     PythonSourceFileEntity? licenseFile;
     for (final Object? child in children) {
       if (child is! Map<String, dynamic>) {
-        print("Unexpected child type<${child.runtimeType}>: $child");
+        PythonFfiDelegate.logger.trace(
+          "Unexpected child type<${child.runtimeType}>: $child",
+        );
         continue;
       }
       final Object? childName = child["name"];
@@ -52,7 +54,7 @@ enum PythonSourceEntityPlatform {
         continue;
       }
       if (childName is! String) {
-        print(
+        PythonFfiDelegate.logger.trace(
           "Unexpected childName type<${childName.runtimeType}>: $childName",
         );
         continue;

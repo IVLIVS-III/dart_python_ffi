@@ -5,9 +5,11 @@ import "dart:async";
 import "dart:io";
 
 import "package:archive/archive_io.dart";
+import "package:cli_util/cli_logging.dart";
 import "package:collection/collection.dart";
 import "package:dartpip_solver/src/pypi/api.dart";
 import "package:http/http.dart" as http;
+import "package:python_ffi_dart/python_ffi_dart.dart";
 
 export "src/dartpip_solver_base.dart";
 

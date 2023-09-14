@@ -7,6 +7,7 @@ import "dart:typed_data";
 
 import "package:args/args.dart";
 import "package:args/command_runner.dart";
+import "package:cli_util/cli_logging.dart";
 import "package:collection/collection.dart";
 import "package:dartpip/interface_gen/interface_gen.dart";
 import "package:dartpip_solver/dartpip_solver.dart";
@@ -17,6 +18,7 @@ import "package:yaml/yaml.dart";
 import "package:yaml_edit/yaml_edit.dart";
 
 part "builtin_modules/python_ffi.py.dart";
+part "command_runner.dart";
 part "commands/bundle.dart";
 part "commands/bundle_module.dart";
 part "commands/download.dart";

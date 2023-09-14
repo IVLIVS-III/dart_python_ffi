@@ -3,10 +3,12 @@ part of dartpip;
 const String _kAppTypeFlutter = "flutter";
 const String _kAppTypeConsole = "console";
 
+const String _kVerboseOption = "verbose";
 const String _kAppRootOption = "app-root";
 const String _kPythonModuleOption = "python-module";
 const String _kAppTypeOption = "app-type";
 const String _kPythonModulesRootOption = "python-modules-root";
+const String _kDumpOption = "dump";
 
 const String _kBuiltinPythonFfiModuleName = "python_ffi";
 

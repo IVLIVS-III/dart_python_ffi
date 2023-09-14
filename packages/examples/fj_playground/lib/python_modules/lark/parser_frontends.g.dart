@@ -7915,7 +7915,7 @@ final class zip_longest extends PythonClass {
 /// a big performance drawback; so running a forest walk is the
 /// lesser of two evils: there can be significantly more Earley
 /// items created during parsing than there are SPPF nodes in the
-/// final tree.
+/// final tree&
 ///
 /// ### python source
 /// ```py

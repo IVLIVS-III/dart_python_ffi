@@ -10878,6 +10878,7 @@ final class RuleOptions extends PythonClass {
 ///
 ///     def renamed(self, f):
 ///         return type(self)(f(self.name))
+/// *
 /// ```
 final class $Symbol extends PythonClass {
   factory $Symbol({
@@ -15125,6 +15126,7 @@ final class Pattern extends PythonClass {
 ///     @property
 ///     def max_width(self) -> int:
 ///         return self._get_width()[1]
+/// #
 /// ```
 final class PatternRE extends PythonClass {
   factory PatternRE({

@@ -47,7 +47,10 @@ void main(List<String> arguments) async {
   final num x = num.parse(numbers[0]);
   final num y = num.parse(numbers[1]);
 
-  await PythonFfiDart.instance.initialize(kPythonModules, libPath: libPath);
+  await PythonFfiDart.instance.initialize(
+    pythonModules: kPythonModules,
+    libPath: libPath,
+  );
 
   final basic_cli_adder basicCliAdder = basic_cli_adder.import();
   final Object? result = basicCliAdder.add(x: x, y: y);

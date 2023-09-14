@@ -355,7 +355,7 @@ final class _MultiFileCachePythonModule extends _MultiFilePythonModule {
       result[<String>[licenseFileName]] = licenseData;
       _fileTree.insert(<String>[licenseFileName]);
     }
-    print(
+    DartpipCommandRunner.logger.trace(
       "Loaded $projectName-$projectVersion from cache at '$path' with file tree: $_fileTree.",
     );
     if (result.isEmpty) {

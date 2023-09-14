@@ -9,6 +9,7 @@ environment:
 # Add regular dependencies here.
 dependencies:
   archive: ^3.3.7
+  cli_util: ^0.4.0
   collection: ^1.18.0
   http: ^1.1.0
   json_annotation: ^4.8.1

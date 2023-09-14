@@ -148,7 +148,8 @@ abstract base class PythonObjectInterface<P extends PythonFfiDelegate<R>,
 
   /// Dumps the python object to the console.
   void debugDump() {
-    // ignore: avoid_print
-    print("PythonObject(reference: $_reference, delegate: $_platform)");
+    PythonFfiDelegate.logger.stdout(
+      "PythonObject(reference: $_reference, delegate: $_platform)",
+    );
   }
 }

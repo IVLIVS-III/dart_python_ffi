@@ -7,7 +7,7 @@ import "package:test/test.dart";
 void main() async {
   group("smoke tests", () {
     setUpAll(() async {
-      await PythonFfiDart.instance.initialize(kPythonModules);
+      await PythonFfiDart.instance.initialize(pythonModules: kPythonModules);
     });
 
     test("attr module can be imported", () {

@@ -118,9 +118,9 @@ flutter:
     - python-modules/FJ_typing.py
     - python-modules/FJ_interpreter.py
     - python-modules/FJ_parser.py
-    - python-modules/FJ_auxiliary_typing.py
     - python-modules/FJ_computation.py
     - python-modules/FJ_AST.py
+    - python-modules/FJ_auxiliary_typing.py
     - python-modules/python_ffi.py
     - python-modules/modules.json
 

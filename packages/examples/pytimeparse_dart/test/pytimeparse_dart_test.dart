@@ -6,7 +6,7 @@ import "package:test/test.dart";
 void main() async {
   group("Examples from Readme:", () {
     setUpAll(() async {
-      await PythonFfiDart.instance.initialize(kPythonModules);
+      await PythonFfiDart.instance.initialize(pythonModules: kPythonModules);
     });
 
     test("32m", () {

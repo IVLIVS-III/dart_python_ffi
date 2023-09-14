@@ -6,7 +6,9 @@ import "package:transitive_dependencies_test/python_modules/sgmllib.g.dart";
 import "package:transitive_dependencies_test/python_modules/src/python_modules.g.dart";
 
 void main() {
-  setUpAll(() async => PythonFfiDart.instance.initialize(kPythonModules));
+  setUpAll(() async {
+    await PythonFfiDart.instance.initialize(pythonModules: kPythonModules);
+  });
 
   test("import module", () {
     expect(feedparser.import(), anything);

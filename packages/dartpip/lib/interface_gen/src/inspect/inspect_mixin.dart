@@ -229,7 +229,7 @@ base mixin InspectMixin
           element.parentModule == instantiatingModule.source,
     );
     if (connection == null) {
-      print(
+      DartpipCommandRunner.logger.trace(
         "⚠️  Warning: found no connection to instantiate for ${instantiatingModule.source.value}",
       );
       return null;

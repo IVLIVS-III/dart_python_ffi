@@ -38,7 +38,7 @@ Future<void> main(List<String> arguments) async {
     ..addCommand(TypeMappingsCommand())
     ..addCommand(EqTestCommand());
 
-  await PythonFfiDart.instance.initialize(kPythonModules);
+  await PythonFfiDart.instance.initialize(pythonModules: kPythonModules);
 
   await runner.run(arguments);
 }

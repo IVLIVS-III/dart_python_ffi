@@ -33,6 +33,14 @@ abstract base class _Cache {
   File _cacheFileLock(_DownloadEntry entry, Directory cacheDir) =>
       File("${cacheDir.path}/${entry.filename}.lock");
 
+  Future<void> _tryDeleteCacheFileLock(File cacheFileLock) async {
+    try {
+      await cacheFileLock.delete();
+    } on PathNotFoundException catch (e) {
+      logger.trace("Failed to delete $_loggerFileIdentifier lock: $e");
+    }
+  }
+
   /// Lock file format:
   /// - 1 byte: uuid of the process that holds the lock
   /// - 8 bytes: timestamp of when the lock was acquired
@@ -54,13 +62,13 @@ abstract base class _Cache {
       }
       if (id == null) {
         // weird state, delete the lock and try again
-        await cacheFileLock.delete();
+        await _tryDeleteCacheFileLock(cacheFileLock);
         continue;
       }
       final DateTime lockAcquired = bytes.skip(1).dateTime;
       if (now.difference(lockAcquired) > const Duration(seconds: 30)) {
         // stale lock, delete it and try again
-        await cacheFileLock.delete();
+        await _tryDeleteCacheFileLock(cacheFileLock);
         continue;
       }
 
@@ -106,7 +114,7 @@ abstract base class _Cache {
     if (cacheFileLock.existsSync()) {
       final int? id = (await cacheFileLock.readAsBytes()).firstOrNull;
       if (id == uuid) {
-        await cacheFileLock.delete();
+        await _tryDeleteCacheFileLock(cacheFileLock);
         logger.trace("Released $_loggerFileIdentifier lock: $uuid");
       }
     }

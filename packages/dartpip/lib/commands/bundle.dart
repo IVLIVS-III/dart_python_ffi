@@ -70,7 +70,7 @@ class BundleCommand extends Command<void> {
     final List<MapEntry<int, int>> deletionSpans = <MapEntry<int, int>>[];
     for (final String asset in assetsInsertionConfig.assets) {
       if (!asset.startsWith("python-modules/")) {
-        print("skipping $asset");
+        DartpipCommandRunner.logger.trace("skipping $asset");
         continue;
       }
       if (asset == "python-modules/modules.json") {
@@ -146,14 +146,16 @@ class BundleCommand extends Command<void> {
       ),
     ];
     for (final String pythonModuleName in pythonModuleNames) {
-      print("Bundling Python module '$pythonModuleName'...");
+      final Progress bundleProgress = DartpipCommandRunner.logger.progress(
+        "Bundling Python module '$pythonModuleName'...",
+      );
       futures.add(
         _bundleModule(
           appRoot: appRoot,
           pythonModulePath: <String>[pythonModuleRoot, pythonModuleName]
               .join(Platform.pathSeparator),
           appType: appType,
-        ),
+        ).then((_) => bundleProgress.finish(showTiming: true)),
       );
     }
 

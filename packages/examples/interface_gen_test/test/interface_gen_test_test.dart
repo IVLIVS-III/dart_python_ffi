@@ -27,7 +27,9 @@ import 'package:python_ffi_dart/python_ffi_dart.dart';
 import 'package:test/test.dart';
 
 void main() {
-  setUpAll(() async => await PythonFfiDart.instance.initialize(kPythonModules));
+  setUpAll(() async {
+    await PythonFfiDart.instance.initialize(pythonModules: kPythonModules);
+  });
 
   group("empty_module", () {
     test("module can be imported", () {

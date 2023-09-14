@@ -41,10 +41,19 @@ class PythonFfiDart extends PythonFfiBase with PythonFfiMixin {
   String get name => "PythonFfiDart";
 
   /// Initializes the native platform Python runtime.
-  FutureOr<void> initialize(String pythonModules, {String? libPath}) {
+  ///
+  /// Pass the generated String `kPythonModules` from
+  /// `lib/python_modules/src/python_modules.g.dart` as [pythonModules] to load
+  /// all bundled Python modules.
+  /// Leave [pythonModules] `null` to load only builtin modules.
+  FutureOr<void> initialize({
+    String? pythonModules,
+    String? libPath,
+    bool? verboseLogging,
+  }) {
     if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
       delegate = PythonFfiCPythonDart(pythonModules, libPath: libPath);
-      return delegate.initialize(package: null);
+      return delegate.initialize(package: null, verboseLogging: verboseLogging);
     }
 
     // TODO: implement for other platforms

@@ -76,8 +76,7 @@ extension _ConvertToDartExtension on Pointer<PyObject> {
 
     final String nameString = typeName;
     // backup conversions matching the name as string
-    // TODO: move to logger
-    print(
+    PythonFfiDelegate.logger.trace(
       "ℹ️   Info: falling back to conversion via name as string for '$nameString'",
     );
     switch (nameString) {
@@ -110,14 +109,14 @@ extension _ConvertToDartExtension on Pointer<PyObject> {
         return asModule(platform);
     }
 
-    print(
+    PythonFfiDelegate.logger.trace(
       "⚠️   Warning: falling back to conversion to generic python object for '$nameString'",
     );
     return _PythonObjectCPython(platform, object);
   }
 
   BigInt _asBigInt(PythonFfiCPythonBase platform) {
-    print(
+    PythonFfiDelegate.logger.trace(
       "⚠️   Warning: falling back to conversion to BigInt for '$typeName': ${toString()} (${BuiltinsModule.import().str(this)})",
     );
     throw _OverflowsIntException(this);

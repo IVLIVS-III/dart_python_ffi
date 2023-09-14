@@ -26545,6 +26545,7 @@ final class Enumerator extends PythonClass {
 ///         start_states = {start:state_to_idx[s] for start, s in parse_table.start_states.items()}
 ///         end_states = {start:state_to_idx[s] for start, s in parse_table.end_states.items()}
 ///         return cls(int_states, start_states, end_states)
+/// ,
 /// ```
 final class IntParseTable extends PythonClass {
   factory IntParseTable({

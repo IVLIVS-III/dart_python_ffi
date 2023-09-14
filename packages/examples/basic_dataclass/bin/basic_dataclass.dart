@@ -38,7 +38,10 @@ void main(List<String> arguments) async {
     _ => null,
   };
 
-  await PythonFfiDart.instance.initialize(kPythonModules, libPath: libPath);
+  await PythonFfiDart.instance.initialize(
+    pythonModules: kPythonModules,
+    libPath: libPath,
+  );
 
   final Person person = Person(name: argResults.rest.first);
   print("<use W,A,S,D to move, press q to quit>");
