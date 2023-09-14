@@ -20,7 +20,7 @@ jobs:
   test:
     strategy:
       matrix:
-        os: [macos-latest] # [ubuntu-latest, macos-latest]
+        os: [ macos-latest ] # [ubuntu-latest, macos-latest]
       fail-fast: true
       max-parallel: 1
     runs-on: ${{ matrix.os }}
@@ -43,6 +43,9 @@ jobs:
 
       - name: Revert codegen changes
         run: git restore packages/python_ffi_cpython_dart/lib/src/ffi/generated_bindings.g.dart
+
+      - name: Generate code Python interface definitions
+        run: melos dartpip-install
 
       - name: Verify formatting
         run: melos format-test
