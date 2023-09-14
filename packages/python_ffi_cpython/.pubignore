@@ -40,3 +40,8 @@ build/
 
 # cpython build scripts
 /scripts/
+
+# cpython tests
+/cpython_test/
+
+lxml2_locations.txt

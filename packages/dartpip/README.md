@@ -18,8 +18,9 @@ and [`python_ffi_dart`](https://pub.dev/packages/python_ffi_dart).
         3. [Bundle Python dependencies](#bundle-python-dependencies)
 2. [Commands](#commands)
     1. [`bundle`](#bundle)
-        1. [Options](#options)
-    2. [`install`](#install)
+    2. [`bundle-module`](#bundle-module)
+    3. [`download`](#download)
+    4. [`install`](#install)
 
 ## Getting Started
 

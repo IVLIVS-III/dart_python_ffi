@@ -1,4 +1,4 @@
-## NEXT
+## 0.4.0
 
 - Refactored to make use of Dart 3.x record types.
 - Increased robustness of file-hash validation.
@@ -9,6 +9,7 @@
 - Fixed
   [Bundling Python modules with external package](https://github.com/IVLIVS-III/dart_python_ffi/issues/10)
   .
+- Updated dependencies.
 
 ## 0.3.1
 

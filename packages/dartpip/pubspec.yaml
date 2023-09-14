@@ -2,7 +2,7 @@ name: dartpip
 description: |
   Add Python modules (packages) to your Dart or Flutter project.
   Like `pip`, but for Dart, heavily inspired by the `pub` command.
-version: 0.1.0
+version: 0.2.0
 repository: https://github.com/IVLIVS-III/dart_python_ffi
 
 environment:
@@ -12,22 +12,22 @@ executables:
   dartpip:
 
 dependencies:
-  archive: ^3.3.7
+  archive: ^3.3.9
   args: ^2.4.2
   cli_util: ^0.4.0
-  collection: ^1.17.2
+  collection: ^1.18.0
   dartpip_solver: ^0.0.1
-  http: ^1.0.0
+  http: ^1.1.0
   json_annotation: ^4.8.1
-  meta: ^1.9.1
+  meta: ^1.10.0
   path: ^1.8.3
-  python_ffi_cpython_dart: ^0.3.1
-  python_ffi_dart: ^0.3.1
+  python_ffi_cpython_dart: ^0.4.0
+  python_ffi_dart: ^0.4.0
   yaml: ^3.1.2
   yaml_edit: ^2.1.1
 
 dev_dependencies:
-  build_runner: ^2.4.5
-  json_serializable: ^6.7.0
-  python_ffi_lint_dart: ^0.1.0
-  test: ^1.24.3
+  build_runner: ^2.4.6
+  json_serializable: ^6.7.1
+  python_ffi_lint_dart: ^0.1.1
+  test: ^1.24.6
