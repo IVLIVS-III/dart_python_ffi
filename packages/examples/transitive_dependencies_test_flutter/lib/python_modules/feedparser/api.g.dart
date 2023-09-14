@@ -2,7 +2,7 @@
 
 library api;
 
-import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:python_ffi/python_ffi.dart";
 
 /// ## CharacterEncodingOverride
 ///
@@ -12,7 +12,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 ///     pass
 /// ```
 final class CharacterEncodingOverride extends PythonClass {
-  factory CharacterEncodingOverride() => PythonFfiDart.instance.importClass(
+  factory CharacterEncodingOverride() => PythonFfi.instance.importClass(
         "feedparser.api",
         "CharacterEncodingOverride",
         CharacterEncodingOverride.from,
@@ -49,7 +49,7 @@ final class CharacterEncodingOverride extends PythonClass {
 ///     pass
 /// ```
 final class CharacterEncodingUnknown extends PythonClass {
-  factory CharacterEncodingUnknown() => PythonFfiDart.instance.importClass(
+  factory CharacterEncodingUnknown() => PythonFfi.instance.importClass(
         "feedparser.api",
         "CharacterEncodingUnknown",
         CharacterEncodingUnknown.from,
@@ -217,7 +217,7 @@ final class CharacterEncodingUnknown extends PythonClass {
 ///         return id(self)
 /// ```
 final class FeedParserDict extends PythonClass {
-  factory FeedParserDict() => PythonFfiDart.instance.importClass(
+  factory FeedParserDict() => PythonFfi.instance.importClass(
         "feedparser.api",
         "FeedParserDict",
         FeedParserDict.from,
@@ -376,7 +376,7 @@ final class LooseFeedParser extends PythonClass {
     Object? encoding,
     Object? entities,
   }) =>
-      PythonFfiDart.instance.importClass(
+      PythonFfi.instance.importClass(
         "feedparser.api",
         "LooseFeedParser",
         LooseFeedParser.from,
@@ -2140,7 +2140,7 @@ final class LooseFeedParser extends PythonClass {
 ///     pass
 /// ```
 final class NonXMLContentType extends PythonClass {
-  factory NonXMLContentType() => PythonFfiDart.instance.importClass(
+  factory NonXMLContentType() => PythonFfi.instance.importClass(
         "feedparser.api",
         "NonXMLContentType",
         NonXMLContentType.from,
@@ -2184,7 +2184,7 @@ final class StrictFeedParser extends PythonClass {
     required Object? baselang,
     required Object? encoding,
   }) =>
-      PythonFfiDart.instance.importClass(
+      PythonFfi.instance.importClass(
         "feedparser.api",
         "StrictFeedParser",
         StrictFeedParser.from,
@@ -2320,7 +2320,7 @@ final class StrictFeedParser extends PythonClass {
   ///             else:
   ///                 c = int(ref)
   ///             text = chr(c).encode('utf-8')
-  ///         self.elementstack[-1][2].append(text)#
+  ///         self.elementstack[-1][2].append(text)
   /// ```
   Object? handle_charref({
     required Object? ref,
@@ -3370,7 +3370,7 @@ final class StrictFeedParser extends PythonClass {
 ///     pass
 /// ```
 final class ThingsNobodyCaresAboutButMe extends PythonClass {
-  factory ThingsNobodyCaresAboutButMe() => PythonFfiDart.instance.importClass(
+  factory ThingsNobodyCaresAboutButMe() => PythonFfi.instance.importClass(
         "feedparser.api",
         "ThingsNobodyCaresAboutButMe",
         ThingsNobodyCaresAboutButMe.from,
@@ -3407,7 +3407,7 @@ final class ThingsNobodyCaresAboutButMe extends PythonClass {
 ///     pass
 /// ```
 final class UndeclaredNamespace extends PythonClass {
-  factory UndeclaredNamespace() => PythonFfiDart.instance.importClass(
+  factory UndeclaredNamespace() => PythonFfi.instance.importClass(
         "feedparser.api",
         "UndeclaredNamespace",
         UndeclaredNamespace.from,
@@ -3438,7 +3438,7 @@ final class UndeclaredNamespace extends PythonClass {
 
 /// ## error
 final class error extends PythonClass {
-  factory error() => PythonFfiDart.instance.importClass(
+  factory error() => PythonFfi.instance.importClass(
         "feedparser.api",
         "error",
         error.from,
@@ -3469,7 +3469,7 @@ final class error extends PythonClass {
 
 /// ## Error
 final class Error extends PythonClass {
-  factory Error() => PythonFfiDart.instance.importClass(
+  factory Error() => PythonFfi.instance.importClass(
         "feedparser.api",
         "Error",
         Error.from,
@@ -3500,7 +3500,7 @@ final class Error extends PythonClass {
 
 /// ## Incomplete
 final class Incomplete extends PythonClass {
-  factory Incomplete() => PythonFfiDart.instance.importClass(
+  factory Incomplete() => PythonFfi.instance.importClass(
         "feedparser.api",
         "Incomplete",
         Incomplete.from,
@@ -3573,7 +3573,7 @@ final class Incomplete extends PythonClass {
 ///     _end_creativeCommons_license = _end_creativecommons_license
 /// ```
 final class Namespace extends PythonClass {
-  factory Namespace() => PythonFfiDart.instance.importClass(
+  factory Namespace() => PythonFfi.instance.importClass(
         "feedparser.api",
         "Namespace",
         Namespace.from,
@@ -3603,7 +3603,7 @@ final class Namespace extends PythonClass {
 ///     pass
 /// ```
 final class SGMLParseError extends PythonClass {
-  factory SGMLParseError() => PythonFfiDart.instance.importClass(
+  factory SGMLParseError() => PythonFfi.instance.importClass(
         "feedparser.api",
         "SGMLParseError",
         SGMLParseError.from,
@@ -4069,7 +4069,7 @@ final class SGMLParser extends PythonClass {
   factory SGMLParser({
     Object? verbose = 0,
   }) =>
-      PythonFfiDart.instance.importClass(
+      PythonFfi.instance.importClass(
         "feedparser.api",
         "SGMLParser",
         SGMLParser.from,
@@ -5014,7 +5014,7 @@ final class TestSGMLParser extends PythonClass {
   factory TestSGMLParser({
     Object? verbose = 0,
   }) =>
-      PythonFfiDart.instance.importClass(
+      PythonFfi.instance.importClass(
         "feedparser.api",
         "TestSGMLParser",
         TestSGMLParser.from,
@@ -6230,7 +6230,7 @@ final class TestSGMLParser extends PythonClass {
 final class api extends PythonModule {
   api.from(super.pythonModule) : super.from();
 
-  static api import() => PythonFfiDart.instance.importModule(
+  static api import() => PythonFfi.instance.importModule(
         "feedparser.api",
         api.from,
       );
@@ -7171,7 +7171,7 @@ final class api extends PythonModule {
 final class http extends PythonModule {
   http.from(super.pythonModule) : super.from();
 
-  static http import() => PythonFfiDart.instance.importModule(
+  static http import() => PythonFfi.instance.importModule(
         "feedparser.http",
         http.from,
       );
@@ -7188,7 +7188,7 @@ final class http extends PythonModule {
 final class zlib extends PythonModule {
   zlib.from(super.pythonModule) : super.from();
 
-  static zlib import() => PythonFfiDart.instance.importModule(
+  static zlib import() => PythonFfi.instance.importModule(
         "feedparser.zlib",
         zlib.from,
       );
@@ -8132,7 +8132,7 @@ final class zlib extends PythonModule {
 final class $mixin extends PythonModule {
   $mixin.from(super.pythonModule) : super.from();
 
-  static $mixin import() => PythonFfiDart.instance.importModule(
+  static $mixin import() => PythonFfi.instance.importModule(
         "feedparser.mixin",
         $mixin.from,
       );
@@ -8142,7 +8142,7 @@ final class $mixin extends PythonModule {
 final class binascii extends PythonModule {
   binascii.from(super.pythonModule) : super.from();
 
-  static binascii import() => PythonFfiDart.instance.importModule(
+  static binascii import() => PythonFfi.instance.importModule(
         "feedparser.binascii",
         binascii.from,
       );
@@ -8225,7 +8225,7 @@ final class binascii extends PythonModule {
 final class cc extends PythonModule {
   cc.from(super.pythonModule) : super.from();
 
-  static cc import() => PythonFfiDart.instance.importModule(
+  static cc import() => PythonFfi.instance.importModule(
         "feedparser.namespaces.cc",
         cc.from,
       );
@@ -8373,7 +8373,7 @@ final class cc extends PythonModule {
 final class dc extends PythonModule {
   dc.from(super.pythonModule) : super.from();
 
-  static dc import() => PythonFfiDart.instance.importModule(
+  static dc import() => PythonFfi.instance.importModule(
         "feedparser.namespaces.dc",
         dc.from,
       );
@@ -8665,7 +8665,7 @@ final class dc extends PythonModule {
 final class georss extends PythonModule {
   georss.from(super.pythonModule) : super.from();
 
-  static georss import() => PythonFfiDart.instance.importModule(
+  static georss import() => PythonFfi.instance.importModule(
         "feedparser.namespaces.georss",
         georss.from,
       );
@@ -8788,7 +8788,7 @@ final class georss extends PythonModule {
 final class itunes extends PythonModule {
   itunes.from(super.pythonModule) : super.from();
 
-  static itunes import() => PythonFfiDart.instance.importModule(
+  static itunes import() => PythonFfi.instance.importModule(
         "feedparser.namespaces.itunes",
         itunes.from,
       );
@@ -8943,7 +8943,7 @@ final class itunes extends PythonModule {
 final class mediarss extends PythonModule {
   mediarss.from(super.pythonModule) : super.from();
 
-  static mediarss import() => PythonFfiDart.instance.importModule(
+  static mediarss import() => PythonFfi.instance.importModule(
         "feedparser.namespaces.mediarss",
         mediarss.from,
       );
@@ -9031,7 +9031,7 @@ final class mediarss extends PythonModule {
 final class psc extends PythonModule {
   psc.from(super.pythonModule) : super.from();
 
-  static psc import() => PythonFfiDart.instance.importModule(
+  static psc import() => PythonFfi.instance.importModule(
         "feedparser.namespaces.psc",
         psc.from,
       );
@@ -9208,7 +9208,7 @@ final class psc extends PythonModule {
 final class util extends PythonModule {
   util.from(super.pythonModule) : super.from();
 
-  static util import() => PythonFfiDart.instance.importModule(
+  static util import() => PythonFfi.instance.importModule(
         "feedparser.util",
         util.from,
       );
@@ -9773,7 +9773,7 @@ final class util extends PythonModule {
 final class sgmllib extends PythonModule {
   sgmllib.from(super.pythonModule) : super.from();
 
-  static sgmllib import() => PythonFfiDart.instance.importModule(
+  static sgmllib import() => PythonFfi.instance.importModule(
         "feedparser.sgmllib",
         sgmllib.from,
       );

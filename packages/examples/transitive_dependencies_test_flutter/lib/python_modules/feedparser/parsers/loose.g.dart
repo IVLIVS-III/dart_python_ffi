@@ -2,7 +2,7 @@
 
 library loose;
 
-import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:python_ffi/python_ffi.dart";
 
 /// ## loose
 ///
@@ -89,7 +89,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 final class loose extends PythonModule {
   loose.from(super.pythonModule) : super.from();
 
-  static loose import() => PythonFfiDart.instance.importModule(
+  static loose import() => PythonFfi.instance.importModule(
         "feedparser.parsers.loose",
         loose.from,
       );

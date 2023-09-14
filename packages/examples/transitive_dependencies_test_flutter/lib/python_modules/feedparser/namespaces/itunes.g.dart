@@ -2,7 +2,7 @@
 
 library itunes;
 
-import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:python_ffi/python_ffi.dart";
 
 /// ## FeedParserDict
 ///
@@ -143,7 +143,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 ///         return id(self)
 /// ```
 final class FeedParserDict extends PythonClass {
-  factory FeedParserDict() => PythonFfiDart.instance.importClass(
+  factory FeedParserDict() => PythonFfi.instance.importClass(
         "feedparser.namespaces.itunes",
         "FeedParserDict",
         FeedParserDict.from,
@@ -370,7 +370,7 @@ final class FeedParserDict extends PythonClass {
 ///         self._get_context()['itunes_explicit'] = (None, False, True)[(value == 'yes' and 2) or value == 'clean' or 0]
 /// ```
 final class Namespace extends PythonClass {
-  factory Namespace() => PythonFfiDart.instance.importClass(
+  factory Namespace() => PythonFfi.instance.importClass(
         "feedparser.namespaces.itunes",
         "Namespace",
         Namespace.from,
@@ -504,7 +504,7 @@ final class Namespace extends PythonClass {
 final class itunes extends PythonModule {
   itunes.from(super.pythonModule) : super.from();
 
-  static itunes import() => PythonFfiDart.instance.importModule(
+  static itunes import() => PythonFfi.instance.importModule(
         "feedparser.namespaces.itunes",
         itunes.from,
       );

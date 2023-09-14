@@ -2,7 +2,7 @@
 
 library psc;
 
-import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:python_ffi/python_ffi.dart";
 
 /// ## Namespace
 ///
@@ -37,7 +37,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 ///             context['chapters'].append(util.FeedParserDict(attrs_d))
 /// ```
 final class Namespace extends PythonClass {
-  factory Namespace() => PythonFfiDart.instance.importClass(
+  factory Namespace() => PythonFfi.instance.importClass(
         "feedparser.namespaces.psc",
         "Namespace",
         Namespace.from,
@@ -201,7 +201,7 @@ final class Namespace extends PythonClass {
 ///         return id(self)
 /// ```
 final class FeedParserDict extends PythonClass {
-  factory FeedParserDict() => PythonFfiDart.instance.importClass(
+  factory FeedParserDict() => PythonFfi.instance.importClass(
         "feedparser.namespaces.psc",
         "FeedParserDict",
         FeedParserDict.from,
@@ -426,7 +426,7 @@ final class FeedParserDict extends PythonClass {
 final class psc extends PythonModule {
   psc.from(super.pythonModule) : super.from();
 
-  static psc import() => PythonFfiDart.instance.importModule(
+  static psc import() => PythonFfi.instance.importModule(
         "feedparser.namespaces.psc",
         psc.from,
       );
@@ -612,7 +612,7 @@ final class psc extends PythonModule {
 final class util extends PythonModule {
   util.from(super.pythonModule) : super.from();
 
-  static util import() => PythonFfiDart.instance.importModule(
+  static util import() => PythonFfi.instance.importModule(
         "feedparser.namespaces.feedparser.util",
         util.from,
       );

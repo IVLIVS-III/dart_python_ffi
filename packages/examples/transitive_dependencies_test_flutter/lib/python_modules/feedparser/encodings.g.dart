@@ -2,7 +2,7 @@
 
 library encodings;
 
-import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:python_ffi/python_ffi.dart";
 
 /// ## CharacterEncodingOverride
 ///
@@ -12,7 +12,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 ///     pass
 /// ```
 final class CharacterEncodingOverride extends PythonClass {
-  factory CharacterEncodingOverride() => PythonFfiDart.instance.importClass(
+  factory CharacterEncodingOverride() => PythonFfi.instance.importClass(
         "feedparser.encodings",
         "CharacterEncodingOverride",
         CharacterEncodingOverride.from,
@@ -49,7 +49,7 @@ final class CharacterEncodingOverride extends PythonClass {
 ///     pass
 /// ```
 final class CharacterEncodingUnknown extends PythonClass {
-  factory CharacterEncodingUnknown() => PythonFfiDart.instance.importClass(
+  factory CharacterEncodingUnknown() => PythonFfi.instance.importClass(
         "feedparser.encodings",
         "CharacterEncodingUnknown",
         CharacterEncodingUnknown.from,
@@ -86,7 +86,7 @@ final class CharacterEncodingUnknown extends PythonClass {
 ///     pass
 /// ```
 final class NonXMLContentType extends PythonClass {
-  factory NonXMLContentType() => PythonFfiDart.instance.importClass(
+  factory NonXMLContentType() => PythonFfi.instance.importClass(
         "feedparser.encodings",
         "NonXMLContentType",
         NonXMLContentType.from,
@@ -405,7 +405,7 @@ final class NonXMLContentType extends PythonClass {
 final class encodings extends PythonModule {
   encodings.from(super.pythonModule) : super.from();
 
-  static encodings import() => PythonFfiDart.instance.importModule(
+  static encodings import() => PythonFfi.instance.importModule(
         "feedparser.encodings",
         encodings.from,
       );

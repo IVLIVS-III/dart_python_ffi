@@ -2,7 +2,7 @@
 
 library exceptions;
 
-import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:python_ffi/python_ffi.dart";
 
 /// ## CharacterEncodingOverride
 ///
@@ -12,7 +12,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 ///     pass
 /// ```
 final class CharacterEncodingOverride extends PythonClass {
-  factory CharacterEncodingOverride() => PythonFfiDart.instance.importClass(
+  factory CharacterEncodingOverride() => PythonFfi.instance.importClass(
         "feedparser.exceptions",
         "CharacterEncodingOverride",
         CharacterEncodingOverride.from,
@@ -49,7 +49,7 @@ final class CharacterEncodingOverride extends PythonClass {
 ///     pass
 /// ```
 final class CharacterEncodingUnknown extends PythonClass {
-  factory CharacterEncodingUnknown() => PythonFfiDart.instance.importClass(
+  factory CharacterEncodingUnknown() => PythonFfi.instance.importClass(
         "feedparser.exceptions",
         "CharacterEncodingUnknown",
         CharacterEncodingUnknown.from,
@@ -86,7 +86,7 @@ final class CharacterEncodingUnknown extends PythonClass {
 ///     pass
 /// ```
 final class NonXMLContentType extends PythonClass {
-  factory NonXMLContentType() => PythonFfiDart.instance.importClass(
+  factory NonXMLContentType() => PythonFfi.instance.importClass(
         "feedparser.exceptions",
         "NonXMLContentType",
         NonXMLContentType.from,
@@ -123,7 +123,7 @@ final class NonXMLContentType extends PythonClass {
 ///     pass
 /// ```
 final class ThingsNobodyCaresAboutButMe extends PythonClass {
-  factory ThingsNobodyCaresAboutButMe() => PythonFfiDart.instance.importClass(
+  factory ThingsNobodyCaresAboutButMe() => PythonFfi.instance.importClass(
         "feedparser.exceptions",
         "ThingsNobodyCaresAboutButMe",
         ThingsNobodyCaresAboutButMe.from,
@@ -160,7 +160,7 @@ final class ThingsNobodyCaresAboutButMe extends PythonClass {
 ///     pass
 /// ```
 final class UndeclaredNamespace extends PythonClass {
-  factory UndeclaredNamespace() => PythonFfiDart.instance.importClass(
+  factory UndeclaredNamespace() => PythonFfi.instance.importClass(
         "feedparser.exceptions",
         "UndeclaredNamespace",
         UndeclaredNamespace.from,
@@ -252,7 +252,7 @@ final class UndeclaredNamespace extends PythonClass {
 final class exceptions extends PythonModule {
   exceptions.from(super.pythonModule) : super.from();
 
-  static exceptions import() => PythonFfiDart.instance.importModule(
+  static exceptions import() => PythonFfi.instance.importModule(
         "feedparser.exceptions",
         exceptions.from,
       );

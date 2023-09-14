@@ -2,7 +2,7 @@
 
 library greek;
 
-import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:python_ffi/python_ffi.dart";
 
 /// ## greek
 ///
@@ -98,7 +98,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 final class greek extends PythonModule {
   greek.from(super.pythonModule) : super.from();
 
-  static greek import() => PythonFfiDart.instance.importModule(
+  static greek import() => PythonFfi.instance.importModule(
         "feedparser.datetimes.greek",
         greek.from,
       );

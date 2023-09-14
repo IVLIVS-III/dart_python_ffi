@@ -2,7 +2,7 @@
 
 library w3dtf;
 
-import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:python_ffi/python_ffi.dart";
 
 /// ## w3dtf
 ///
@@ -126,7 +126,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 final class w3dtf extends PythonModule {
   w3dtf.from(super.pythonModule) : super.from();
 
-  static w3dtf import() => PythonFfiDart.instance.importModule(
+  static w3dtf import() => PythonFfi.instance.importModule(
         "feedparser.datetimes.w3dtf",
         w3dtf.from,
       );

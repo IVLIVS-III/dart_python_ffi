@@ -2,7 +2,7 @@
 
 library korean;
 
-import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:python_ffi/python_ffi.dart";
 
 /// ## korean
 ///
@@ -95,7 +95,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 final class korean extends PythonModule {
   korean.from(super.pythonModule) : super.from();
 
-  static korean import() => PythonFfiDart.instance.importModule(
+  static korean import() => PythonFfi.instance.importModule(
         "feedparser.datetimes.korean",
         korean.from,
       );

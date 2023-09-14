@@ -2,7 +2,7 @@
 
 library urls;
 
-import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:python_ffi/python_ffi.dart";
 
 /// ## RelativeURIResolver
 ///
@@ -64,7 +64,7 @@ final class RelativeURIResolver extends PythonClass {
     required Object? encoding,
     required Object? $_type,
   }) =>
-      PythonFfiDart.instance.importClass(
+      PythonFfi.instance.importClass(
         "feedparser.urls",
         "RelativeURIResolver",
         RelativeURIResolver.from,
@@ -1295,7 +1295,7 @@ final class RelativeURIResolver extends PythonClass {
 final class urls extends PythonModule {
   urls.from(super.pythonModule) : super.from();
 
-  static urls import() => PythonFfiDart.instance.importModule(
+  static urls import() => PythonFfi.instance.importModule(
         "feedparser.urls",
         urls.from,
       );

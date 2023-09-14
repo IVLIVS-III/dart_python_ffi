@@ -2,7 +2,7 @@
 
 library sgml;
 
-import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:python_ffi/python_ffi.dart";
 
 /// ## EndBracketMatch
 ///
@@ -19,7 +19,7 @@ final class EndBracketMatch extends PythonClass {
   factory EndBracketMatch({
     required Object? match,
   }) =>
-      PythonFfiDart.instance.importClass(
+      PythonFfi.instance.importClass(
         "feedparser.sgml",
         "EndBracketMatch",
         EndBracketMatch.from,
@@ -68,7 +68,7 @@ final class EndBracketMatch extends PythonClass {
 ///     pass
 /// ```
 final class SGMLParseError extends PythonClass {
-  factory SGMLParseError() => PythonFfiDart.instance.importClass(
+  factory SGMLParseError() => PythonFfi.instance.importClass(
         "feedparser.sgml",
         "SGMLParseError",
         SGMLParseError.from,
@@ -534,7 +534,7 @@ final class SGMLParser extends PythonClass {
   factory SGMLParser({
     Object? verbose = 0,
   }) =>
-      PythonFfiDart.instance.importClass(
+      PythonFfi.instance.importClass(
         "feedparser.sgml",
         "SGMLParser",
         SGMLParser.from,
@@ -1479,7 +1479,7 @@ final class TestSGMLParser extends PythonClass {
   factory TestSGMLParser({
     Object? verbose = 0,
   }) =>
-      PythonFfiDart.instance.importClass(
+      PythonFfi.instance.importClass(
         "feedparser.sgml",
         "TestSGMLParser",
         TestSGMLParser.from,
@@ -2516,7 +2516,7 @@ final class TestSGMLParser extends PythonClass {
 final class sgml extends PythonModule {
   sgml.from(super.pythonModule) : super.from();
 
-  static sgml import() => PythonFfiDart.instance.importModule(
+  static sgml import() => PythonFfi.instance.importModule(
         "feedparser.sgml",
         sgml.from,
       );
@@ -3151,7 +3151,7 @@ final class sgml extends PythonModule {
 final class sgmllib extends PythonModule {
   sgmllib.from(super.pythonModule) : super.from();
 
-  static sgmllib import() => PythonFfiDart.instance.importModule(
+  static sgmllib import() => PythonFfi.instance.importModule(
         "feedparser.sgmllib",
         sgmllib.from,
       );

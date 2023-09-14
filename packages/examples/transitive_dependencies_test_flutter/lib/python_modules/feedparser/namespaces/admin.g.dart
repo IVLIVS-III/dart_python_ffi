@@ -2,7 +2,7 @@
 
 library admin;
 
-import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:python_ffi/python_ffi.dart";
 
 /// ## FeedParserDict
 ///
@@ -143,7 +143,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 ///         return id(self)
 /// ```
 final class FeedParserDict extends PythonClass {
-  factory FeedParserDict() => PythonFfiDart.instance.importClass(
+  factory FeedParserDict() => PythonFfi.instance.importClass(
         "feedparser.namespaces.admin",
         "FeedParserDict",
         FeedParserDict.from,
@@ -314,7 +314,7 @@ final class FeedParserDict extends PythonClass {
 ///         self.pop('errorreportsto')
 /// ```
 final class Namespace extends PythonClass {
-  factory Namespace() => PythonFfiDart.instance.importClass(
+  factory Namespace() => PythonFfi.instance.importClass(
         "feedparser.namespaces.admin",
         "Namespace",
         Namespace.from,
@@ -392,7 +392,7 @@ final class Namespace extends PythonClass {
 final class admin extends PythonModule {
   admin.from(super.pythonModule) : super.from();
 
-  static admin import() => PythonFfiDart.instance.importModule(
+  static admin import() => PythonFfi.instance.importModule(
         "feedparser.namespaces.admin",
         admin.from,
       );

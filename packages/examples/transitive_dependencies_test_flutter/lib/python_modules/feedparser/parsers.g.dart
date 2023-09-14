@@ -2,7 +2,7 @@
 
 library parsers;
 
-import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:python_ffi/python_ffi.dart";
 
 /// ## UndeclaredNamespace
 ///
@@ -12,7 +12,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 ///     pass
 /// ```
 final class UndeclaredNamespace extends PythonClass {
-  factory UndeclaredNamespace() => PythonFfiDart.instance.importClass(
+  factory UndeclaredNamespace() => PythonFfi.instance.importClass(
         "feedparser.parsers",
         "UndeclaredNamespace",
         UndeclaredNamespace.from,
@@ -45,7 +45,7 @@ final class UndeclaredNamespace extends PythonClass {
 final class parsers extends PythonModule {
   parsers.from(super.pythonModule) : super.from();
 
-  static parsers import() => PythonFfiDart.instance.importModule(
+  static parsers import() => PythonFfi.instance.importModule(
         "feedparser.parsers",
         parsers.from,
       );
@@ -142,7 +142,7 @@ final class parsers extends PythonModule {
 final class loose extends PythonModule {
   loose.from(super.pythonModule) : super.from();
 
-  static loose import() => PythonFfiDart.instance.importModule(
+  static loose import() => PythonFfi.instance.importModule(
         "feedparser.parsers.loose",
         loose.from,
       );
@@ -291,7 +291,7 @@ final class loose extends PythonModule {
 final class strict extends PythonModule {
   strict.from(super.pythonModule) : super.from();
 
-  static strict import() => PythonFfiDart.instance.importModule(
+  static strict import() => PythonFfi.instance.importModule(
         "feedparser.parsers.strict",
         strict.from,
       );

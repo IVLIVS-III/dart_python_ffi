@@ -2,7 +2,7 @@
 
 library datetimes;
 
-import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:python_ffi/python_ffi.dart";
 
 /// ## struct_time
 ///
@@ -17,7 +17,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 /// field tm_year is the actual year, not year - 1900.  See individual
 /// fields' descriptions for details.
 final class struct_time extends PythonClass {
-  factory struct_time() => PythonFfiDart.instance.importClass(
+  factory struct_time() => PythonFfi.instance.importClass(
         "feedparser.datetimes",
         "struct_time",
         struct_time.from,
@@ -555,7 +555,7 @@ final class struct_time extends PythonClass {
 final class datetimes extends PythonModule {
   datetimes.from(super.pythonModule) : super.from();
 
-  static datetimes import() => PythonFfiDart.instance.importModule(
+  static datetimes import() => PythonFfi.instance.importModule(
         "feedparser.datetimes",
         datetimes.from,
       );
@@ -686,7 +686,7 @@ final class datetimes extends PythonModule {
 final class asctime extends PythonModule {
   asctime.from(super.pythonModule) : super.from();
 
-  static asctime import() => PythonFfiDart.instance.importModule(
+  static asctime import() => PythonFfi.instance.importModule(
         "feedparser.datetimes.asctime",
         asctime.from,
       );
@@ -786,7 +786,7 @@ final class asctime extends PythonModule {
 final class greek extends PythonModule {
   greek.from(super.pythonModule) : super.from();
 
-  static greek import() => PythonFfiDart.instance.importModule(
+  static greek import() => PythonFfi.instance.importModule(
         "feedparser.datetimes.greek",
         greek.from,
       );
@@ -872,7 +872,7 @@ final class greek extends PythonModule {
 final class hungarian extends PythonModule {
   hungarian.from(super.pythonModule) : super.from();
 
-  static hungarian import() => PythonFfiDart.instance.importModule(
+  static hungarian import() => PythonFfi.instance.importModule(
         "feedparser.datetimes.hungarian",
         hungarian.from,
       );
@@ -1044,7 +1044,7 @@ final class hungarian extends PythonModule {
 final class iso8601 extends PythonModule {
   iso8601.from(super.pythonModule) : super.from();
 
-  static iso8601 import() => PythonFfiDart.instance.importModule(
+  static iso8601 import() => PythonFfi.instance.importModule(
         "feedparser.datetimes.iso8601",
         iso8601.from,
       );
@@ -1054,7 +1054,7 @@ final class iso8601 extends PythonModule {
 final class time extends PythonModule {
   time.from(super.pythonModule) : super.from();
 
-  static time import() => PythonFfiDart.instance.importModule(
+  static time import() => PythonFfi.instance.importModule(
         "feedparser.time",
         time.from,
       );
@@ -1219,7 +1219,7 @@ final class time extends PythonModule {
 final class korean extends PythonModule {
   korean.from(super.pythonModule) : super.from();
 
-  static korean import() => PythonFfiDart.instance.importModule(
+  static korean import() => PythonFfi.instance.importModule(
         "feedparser.datetimes.korean",
         korean.from,
       );
@@ -1279,7 +1279,7 @@ final class korean extends PythonModule {
 final class perforce extends PythonModule {
   perforce.from(super.pythonModule) : super.from();
 
-  static perforce import() => PythonFfiDart.instance.importModule(
+  static perforce import() => PythonFfi.instance.importModule(
         "feedparser.datetimes.perforce",
         perforce.from,
       );
@@ -1443,7 +1443,7 @@ final class perforce extends PythonModule {
 final class rfc822 extends PythonModule {
   rfc822.from(super.pythonModule) : super.from();
 
-  static rfc822 import() => PythonFfiDart.instance.importModule(
+  static rfc822 import() => PythonFfi.instance.importModule(
         "feedparser.datetimes.rfc822",
         rfc822.from,
       );
@@ -1590,7 +1590,7 @@ final class rfc822 extends PythonModule {
 final class w3dtf extends PythonModule {
   w3dtf.from(super.pythonModule) : super.from();
 
-  static w3dtf import() => PythonFfiDart.instance.importModule(
+  static w3dtf import() => PythonFfi.instance.importModule(
         "feedparser.datetimes.w3dtf",
         w3dtf.from,
       );

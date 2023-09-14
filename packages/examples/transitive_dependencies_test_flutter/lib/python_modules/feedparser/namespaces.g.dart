@@ -2,7 +2,7 @@
 
 library namespaces;
 
-import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:python_ffi/python_ffi.dart";
 
 /// ## FeedParserDict
 ///
@@ -143,7 +143,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 ///         return id(self)
 /// ```
 final class FeedParserDict extends PythonClass {
-  factory FeedParserDict() => PythonFfiDart.instance.importClass(
+  factory FeedParserDict() => PythonFfi.instance.importClass(
         "feedparser.namespaces",
         "FeedParserDict",
         FeedParserDict.from,
@@ -330,7 +330,7 @@ final class FeedParserDict extends PythonClass {
 ///     _end_creativeCommons_license = _end_creativecommons_license
 /// ```
 final class Namespace extends PythonClass {
-  factory Namespace() => PythonFfiDart.instance.importClass(
+  factory Namespace() => PythonFfi.instance.importClass(
         "feedparser.namespaces",
         "Namespace",
         Namespace.from,
@@ -351,7 +351,7 @@ final class Namespace extends PythonClass {
 final class namespaces extends PythonModule {
   namespaces.from(super.pythonModule) : super.from();
 
-  static namespaces import() => PythonFfiDart.instance.importModule(
+  static namespaces import() => PythonFfi.instance.importModule(
         "feedparser.namespaces",
         namespaces.from,
       );
@@ -452,7 +452,7 @@ final class namespaces extends PythonModule {
 final class cc extends PythonModule {
   cc.from(super.pythonModule) : super.from();
 
-  static cc import() => PythonFfiDart.instance.importModule(
+  static cc import() => PythonFfi.instance.importModule(
         "feedparser.namespaces.cc",
         cc.from,
       );
@@ -600,7 +600,7 @@ final class cc extends PythonModule {
 final class dc extends PythonModule {
   dc.from(super.pythonModule) : super.from();
 
-  static dc import() => PythonFfiDart.instance.importModule(
+  static dc import() => PythonFfi.instance.importModule(
         "feedparser.namespaces.dc",
         dc.from,
       );
@@ -892,7 +892,7 @@ final class dc extends PythonModule {
 final class georss extends PythonModule {
   georss.from(super.pythonModule) : super.from();
 
-  static georss import() => PythonFfiDart.instance.importModule(
+  static georss import() => PythonFfi.instance.importModule(
         "feedparser.namespaces.georss",
         georss.from,
       );
@@ -1015,7 +1015,7 @@ final class georss extends PythonModule {
 final class itunes extends PythonModule {
   itunes.from(super.pythonModule) : super.from();
 
-  static itunes import() => PythonFfiDart.instance.importModule(
+  static itunes import() => PythonFfi.instance.importModule(
         "feedparser.namespaces.itunes",
         itunes.from,
       );
@@ -1170,7 +1170,7 @@ final class itunes extends PythonModule {
 final class mediarss extends PythonModule {
   mediarss.from(super.pythonModule) : super.from();
 
-  static mediarss import() => PythonFfiDart.instance.importModule(
+  static mediarss import() => PythonFfi.instance.importModule(
         "feedparser.namespaces.mediarss",
         mediarss.from,
       );
@@ -1258,7 +1258,7 @@ final class mediarss extends PythonModule {
 final class psc extends PythonModule {
   psc.from(super.pythonModule) : super.from();
 
-  static psc import() => PythonFfiDart.instance.importModule(
+  static psc import() => PythonFfi.instance.importModule(
         "feedparser.namespaces.psc",
         psc.from,
       );
@@ -1435,7 +1435,7 @@ final class psc extends PythonModule {
 final class util extends PythonModule {
   util.from(super.pythonModule) : super.from();
 
-  static util import() => PythonFfiDart.instance.importModule(
+  static util import() => PythonFfi.instance.importModule(
         "feedparser.util",
         util.from,
       );

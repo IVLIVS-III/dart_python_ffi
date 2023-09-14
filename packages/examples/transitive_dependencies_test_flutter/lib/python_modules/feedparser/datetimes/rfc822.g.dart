@@ -2,7 +2,7 @@
 
 library rfc822;
 
-import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:python_ffi/python_ffi.dart";
 
 /// ## rfc822
 ///
@@ -162,7 +162,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 final class rfc822 extends PythonModule {
   rfc822.from(super.pythonModule) : super.from();
 
-  static rfc822 import() => PythonFfiDart.instance.importModule(
+  static rfc822 import() => PythonFfi.instance.importModule(
         "feedparser.datetimes.rfc822",
         rfc822.from,
       );

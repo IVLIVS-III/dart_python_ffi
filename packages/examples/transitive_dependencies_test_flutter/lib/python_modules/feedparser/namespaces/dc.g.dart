@@ -2,7 +2,7 @@
 
 library dc;
 
-import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:python_ffi/python_ffi.dart";
 
 /// ## FeedParserDict
 ///
@@ -143,7 +143,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 ///         return id(self)
 /// ```
 final class FeedParserDict extends PythonClass {
-  factory FeedParserDict() => PythonFfiDart.instance.importClass(
+  factory FeedParserDict() => PythonFfi.instance.importClass(
         "feedparser.namespaces.dc",
         "FeedParserDict",
         FeedParserDict.from,
@@ -394,7 +394,7 @@ final class FeedParserDict extends PythonClass {
 ///         self.incontributor = 0
 /// ```
 final class Namespace extends PythonClass {
-  factory Namespace() => PythonFfiDart.instance.importClass(
+  factory Namespace() => PythonFfi.instance.importClass(
         "feedparser.namespaces.dc",
         "Namespace",
         Namespace.from,
@@ -553,7 +553,7 @@ final class Namespace extends PythonClass {
 final class dc extends PythonModule {
   dc.from(super.pythonModule) : super.from();
 
-  static dc import() => PythonFfiDart.instance.importModule(
+  static dc import() => PythonFfi.instance.importModule(
         "feedparser.namespaces.dc",
         dc.from,
       );

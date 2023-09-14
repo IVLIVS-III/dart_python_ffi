@@ -2,7 +2,7 @@
 
 library iso8601;
 
-import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:python_ffi/python_ffi.dart";
 
 /// ## struct_time
 ///
@@ -17,7 +17,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 /// field tm_year is the actual year, not year - 1900.  See individual
 /// fields' descriptions for details.
 final class struct_time extends PythonClass {
-  factory struct_time() => PythonFfiDart.instance.importClass(
+  factory struct_time() => PythonFfi.instance.importClass(
         "feedparser.datetimes.iso8601",
         "struct_time",
         struct_time.from,
@@ -643,7 +643,7 @@ final class struct_time extends PythonClass {
 final class iso8601 extends PythonModule {
   iso8601.from(super.pythonModule) : super.from();
 
-  static iso8601 import() => PythonFfiDart.instance.importModule(
+  static iso8601 import() => PythonFfi.instance.importModule(
         "feedparser.datetimes.iso8601",
         iso8601.from,
       );
@@ -656,7 +656,7 @@ final class iso8601 extends PythonModule {
 final class time extends PythonModule {
   time.from(super.pythonModule) : super.from();
 
-  static time import() => PythonFfiDart.instance.importModule(
+  static time import() => PythonFfi.instance.importModule(
         "feedparser.datetimes.time",
         time.from,
       );

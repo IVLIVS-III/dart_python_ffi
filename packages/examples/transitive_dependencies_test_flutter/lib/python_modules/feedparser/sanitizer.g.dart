@@ -2,7 +2,7 @@
 
 library sanitizer;
 
-import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:python_ffi/python_ffi.dart";
 
 /// ## sanitizer
 ///
@@ -962,7 +962,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 final class sanitizer extends PythonModule {
   sanitizer.from(super.pythonModule) : super.from();
 
-  static sanitizer import() => PythonFfiDart.instance.importModule(
+  static sanitizer import() => PythonFfi.instance.importModule(
         "feedparser.sanitizer",
         sanitizer.from,
       );

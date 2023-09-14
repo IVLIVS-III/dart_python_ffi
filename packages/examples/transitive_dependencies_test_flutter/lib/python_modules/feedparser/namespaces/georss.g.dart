@@ -2,7 +2,7 @@
 
 library georss;
 
-import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:python_ffi/python_ffi.dart";
 
 /// ## FeedParserDict
 ///
@@ -143,7 +143,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 ///         return id(self)
 /// ```
 final class FeedParserDict extends PythonClass {
-  factory FeedParserDict() => PythonFfiDart.instance.importClass(
+  factory FeedParserDict() => PythonFfi.instance.importClass(
         "feedparser.namespaces.georss",
         "FeedParserDict",
         FeedParserDict.from,
@@ -422,7 +422,7 @@ final class FeedParserDict extends PythonClass {
 ///     _end_georss_where = _end_where
 /// ```
 final class Namespace extends PythonClass {
-  factory Namespace() => PythonFfiDart.instance.importClass(
+  factory Namespace() => PythonFfi.instance.importClass(
         "feedparser.namespaces.georss",
         "Namespace",
         Namespace.from,
@@ -732,7 +732,7 @@ final class Namespace extends PythonClass {
 final class georss extends PythonModule {
   georss.from(super.pythonModule) : super.from();
 
-  static georss import() => PythonFfiDart.instance.importModule(
+  static georss import() => PythonFfi.instance.importModule(
         "feedparser.namespaces.georss",
         georss.from,
       );

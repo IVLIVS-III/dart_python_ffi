@@ -2,7 +2,7 @@
 
 library mediarss;
 
-import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:python_ffi/python_ffi.dart";
 
 /// ## FeedParserDict
 ///
@@ -143,7 +143,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 ///         return id(self)
 /// ```
 final class FeedParserDict extends PythonClass {
-  factory FeedParserDict() => PythonFfiDart.instance.importClass(
+  factory FeedParserDict() => PythonFfi.instance.importClass(
         "feedparser.namespaces.mediarss",
         "FeedParserDict",
         FeedParserDict.from,
@@ -402,7 +402,7 @@ final class FeedParserDict extends PythonClass {
 ///         context['media_player']['content'] = value
 /// ```
 final class Namespace extends PythonClass {
-  factory Namespace() => PythonFfiDart.instance.importClass(
+  factory Namespace() => PythonFfi.instance.importClass(
         "feedparser.namespaces.mediarss",
         "Namespace",
         Namespace.from,
@@ -568,7 +568,7 @@ final class Namespace extends PythonClass {
 final class mediarss extends PythonModule {
   mediarss.from(super.pythonModule) : super.from();
 
-  static mediarss import() => PythonFfiDart.instance.importModule(
+  static mediarss import() => PythonFfi.instance.importModule(
         "feedparser.namespaces.mediarss",
         mediarss.from,
       );

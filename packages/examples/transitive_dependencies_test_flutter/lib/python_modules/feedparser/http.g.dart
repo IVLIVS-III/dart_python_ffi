@@ -2,11 +2,11 @@
 
 library http;
 
-import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:python_ffi/python_ffi.dart";
 
 /// ## error
 final class error extends PythonClass {
-  factory error() => PythonFfiDart.instance.importClass(
+  factory error() => PythonFfi.instance.importClass(
         "feedparser.http",
         "error",
         error.from,
@@ -270,7 +270,7 @@ final class error extends PythonClass {
 final class http extends PythonModule {
   http.from(super.pythonModule) : super.from();
 
-  static http import() => PythonFfiDart.instance.importModule(
+  static http import() => PythonFfi.instance.importModule(
         "feedparser.http",
         http.from,
       );
@@ -465,7 +465,7 @@ final class http extends PythonModule {
 final class zlib extends PythonModule {
   zlib.from(super.pythonModule) : super.from();
 
-  static zlib import() => PythonFfiDart.instance.importModule(
+  static zlib import() => PythonFfi.instance.importModule(
         "feedparser.zlib",
         zlib.from,
       );

@@ -2,7 +2,7 @@
 
 library asctime;
 
-import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:python_ffi/python_ffi.dart";
 
 /// ## asctime
 ///
@@ -83,7 +83,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 final class asctime extends PythonModule {
   asctime.from(super.pythonModule) : super.from();
 
-  static asctime import() => PythonFfiDart.instance.importModule(
+  static asctime import() => PythonFfi.instance.importModule(
         "feedparser.datetimes.asctime",
         asctime.from,
       );

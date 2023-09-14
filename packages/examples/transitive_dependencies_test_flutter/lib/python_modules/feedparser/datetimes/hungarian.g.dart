@@ -2,7 +2,7 @@
 
 library hungarian;
 
-import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:python_ffi/python_ffi.dart";
 
 /// ## hungarian
 ///
@@ -84,7 +84,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 final class hungarian extends PythonModule {
   hungarian.from(super.pythonModule) : super.from();
 
-  static hungarian import() => PythonFfiDart.instance.importModule(
+  static hungarian import() => PythonFfi.instance.importModule(
         "feedparser.datetimes.hungarian",
         hungarian.from,
       );

@@ -2394,7 +2394,7 @@ final class StrictFeedParser extends PythonClass {
   ///             else:
   ///                 c = int(ref)
   ///             text = chr(c).encode('utf-8')
-  ///         self.elementstack[-1][2].append(text)#
+  ///         self.elementstack[-1][2].append(text)
   /// ```
   Object? handle_charref({
     required Object? ref,

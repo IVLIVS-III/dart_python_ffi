@@ -2,7 +2,7 @@
 
 library sgmllib;
 
-import "package:python_ffi_dart/python_ffi_dart.dart";
+import "package:python_ffi/python_ffi.dart";
 
 /// ## SGMLParseError
 ///
@@ -17,7 +17,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 ///     pass
 /// ```
 final class SGMLParseError extends PythonClass {
-  factory SGMLParseError() => PythonFfiDart.instance.importClass(
+  factory SGMLParseError() => PythonFfi.instance.importClass(
         "sgmllib",
         "SGMLParseError",
         SGMLParseError.from,
@@ -483,7 +483,7 @@ final class SGMLParser extends PythonClass {
   factory SGMLParser({
     Object? verbose = 0,
   }) =>
-      PythonFfiDart.instance.importClass(
+      PythonFfi.instance.importClass(
         "sgmllib",
         "SGMLParser",
         SGMLParser.from,
@@ -1428,7 +1428,7 @@ final class TestSGMLParser extends PythonClass {
   factory TestSGMLParser({
     Object? verbose = 0,
   }) =>
-      PythonFfiDart.instance.importClass(
+      PythonFfi.instance.importClass(
         "sgmllib",
         "TestSGMLParser",
         TestSGMLParser.from,
@@ -2918,7 +2918,7 @@ final class TestSGMLParser extends PythonClass {
 final class sgmllib extends PythonModule {
   sgmllib.from(super.pythonModule) : super.from();
 
-  static sgmllib import() => PythonFfiDart.instance.importModule(
+  static sgmllib import() => PythonFfi.instance.importModule(
         "sgmllib",
         sgmllib.from,
       );
