@@ -1,3 +1,11 @@
+## 0.2.2
+
+- Updated dependencies.
+
+## 0.2.1
+
+- Fixed an issue with generating Python interface definitions.
+
 ## 0.2.0
 
 - Added `dartpip install`.

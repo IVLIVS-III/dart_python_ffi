@@ -74,7 +74,7 @@ class InstallCommand extends Command<void> {
 
     final List<MapEntry<int, int>> deletionSpans = <MapEntry<int, int>>[];
     for (final String asset in assetsInsertionConfig.assets) {
-      if (!asset.startsWith(p.join("python-modules", ""))) {
+      if (!asset.startsWith("python-modules/")) {
         DartpipCommandRunner.logger.trace("skipping $asset");
         continue;
       }

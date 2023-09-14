@@ -1,6 +1,6 @@
 name: dartpip_solver
 description: Version solver used by the `dartpip` command to resolve python modules.
-version: 0.0.1
+version: 0.0.2
 repository: https://github.com/IVLIVS-III/dart_python_ffi
 
 environment:

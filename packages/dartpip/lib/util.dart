@@ -157,7 +157,10 @@ Future<void> _generateTypeDefs(
     dump: dump,
     parentModulePrefix: parentModulePrefix,
   );
-  final String parentPath = p.join("lib", "python_modules", subPath);
+  // If subPath is empty, we still want a trailing slash.
+  // p.join() ignores empty strings.
+  final String parentPath =
+      p.join("lib", "python_modules") + Platform.pathSeparator + subPath;
   if (dump && json != null) {
     final File jsonFile = File("$parentPath$moduleName.g.json");
     if (!jsonFile.existsSync()) {
@@ -224,7 +227,7 @@ Future<void> _bundleAndGenerate({
               appType: appType,
               appRoot: appRoot,
               dump: dump,
-              subPath: p.join("$subPath${pythonModule.moduleName}", ""),
+              subPath: "$subPath${pythonModule.moduleName}/",
             ),
           );
         }

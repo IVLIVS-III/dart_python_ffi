@@ -73,12 +73,10 @@ sealed class _ModuleBundle<T extends Object> {
   Future<void> export() async {
     final _PythonModule<Object> pythonModule = this.pythonModule;
     if (!(await pythonModule.load())) {
-      DartpipCommandRunner.logger.stderr(
+      DartpipCommandRunner.logger.trace(
         "Failed to load Python module ${pythonModule.moduleName}.",
       );
-      throw StateError(
-        "Failed to load Python module ${pythonModule.moduleName}.",
-      );
+      return;
     }
 
     if (pythonModule is _BuiltinPythonModule) {

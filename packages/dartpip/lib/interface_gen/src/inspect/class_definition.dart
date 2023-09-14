@@ -98,13 +98,11 @@ final class ClassDefinition extends PythonClassDefinition
         }
       }
       return assignments;
-    } on PythonExceptionInterface<PythonFfiDelegate<Object?>,
-        Object?> catch (e) {
+      // ignore: always_specify_types
+    } on PythonExceptionInterface catch (e) {
       // Skip [SyntaxError]s during interface generation for fields from init.
       // Worst case, we miss some fields. But at least we don't crash.
-      if (e.type != "<class 'SyntaxError'>") {
-        rethrow;
-      }
+      DartpipCommandRunner.logger.trace(e.toString());
       return const <String>{};
     }
   }

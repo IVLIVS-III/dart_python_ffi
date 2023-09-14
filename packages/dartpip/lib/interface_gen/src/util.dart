@@ -208,7 +208,7 @@ Future<String?> doInspection(
     inspectionProgress.finish(showTiming: true);
     return json;
   } on PythonFfiException catch (e) {
-    DartpipCommandRunner.logger.stderr(e.toString());
+    DartpipCommandRunner.logger.trace(e.toString());
   }
   return null;
 }

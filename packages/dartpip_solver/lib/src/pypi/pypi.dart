@@ -11,9 +11,10 @@ final class PyPIService {
 
   final LazyFuture<Directory> _cacheDir = LazyFuture<Directory>(
     () async {
-      final Directory cacheDir = Directory(
-        p.join(Platform.environment["HOME"] ?? "", ".dartpip", "cache", "pypi"),
-      );
+      final String homeDir =
+          Platform.environment["HOME"] ?? Directory.systemTemp.path;
+      final Directory cacheDir =
+          Directory(p.join(homeDir, ".dartpip", "cache", "pypi"));
       await cacheDir.create(recursive: true);
       PythonFfiDelegate.logger.trace("Cache directory: ${cacheDir.path}");
       return cacheDir;
