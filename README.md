@@ -48,9 +48,11 @@ dynamic library must be provided during initialization.*
     1. [Basic CLI adder](#importing-your-first-python-module)
     2. [Basic dataclass](#importing-a-python-module-with-a-custom-python-class)
     3. [Importing a Python module from pypi](#importing-a-python-module-from-pypi)
-    4. [Converting all supported types between Dart and Python](#converting-all-supported-types-between-dart-and-python)
-    5. [Importing multiple Python modules in a Flutter app](#importing-multiple-python-modules-in-a-flutter-app)
-    6. [Powering a Flutter GUI-app with a Python backend](#powering-a-flutter-gui-app-with-a-python-backend)
+    4. [Powering a Flutter package with a Python module](#powering-a-flutter-package-with-a-python-module)
+    5. [Importing a Flutter package that uses a Python module](#importing-a-flutter-package-that-uses-a-python-module)
+    6. [Converting all supported types between Dart and Python](#converting-all-supported-types-between-dart-and-python)
+    7. [Importing multiple Python modules in a Flutter app](#importing-multiple-python-modules-in-a-flutter-app)
+    8. [Powering a Flutter GUI-app with a Python backend](#powering-a-flutter-gui-app-with-a-python-backend)
 4. [Type mappings](#type-mappings)
 5. [Package status](#package-status)
 6. [Usage](#usage)
@@ -328,7 +330,7 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 import "python_modules/src/python_modules.g.dart";
 
 void main() async {
-  await PythonFfiDart.instance.initialize(kPythonModules);
+  await PythonFfiDart.instance.initialize(pythonModules: kPythonModules);
   // ...
 }
 ```
@@ -347,7 +349,7 @@ import "python_modules/src/python_modules.g.dart";
 
 void main() async {
   await PythonFfiDart.instance.initialize(
-    kPythonModules,
+    pythonModules: kPythonModules,
     libPath: "path/to/libpython3.11.dylib",
   );
   // ...
@@ -384,6 +386,14 @@ See [`basic_dataclass`](packages/examples/basic_dataclass/README.md).
 ### Importing a Python module from pypi
 
 See [`pytimeparse_dart`](packages/examples/pytimeparse_dart/README.md).
+
+### Powering a Flutter package with a Python module
+
+See [`flutter_package_export`](packages/examples/flutter_package_export/README.md).
+
+### Importing a Flutter package that uses a Python module
+
+See [`flutter_package_import`](packages/examples/flutter_package_import/README.md).
 
 ### Converting all supported types between Dart and Python
 

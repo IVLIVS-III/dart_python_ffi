@@ -73,7 +73,7 @@ export "extensions.dart";
 export "python_modules/pytimeparse.dart";
 
 Future<void> initialize({String? libPath}) async {
-  await PythonFfiDart.instance.initialize(kPythonModules, libPath: libPath);
+  await PythonFfiDart.instance.initialize(pythonModules: kPythonModules, libPath: libPath);
 }
 ```
 
@@ -108,9 +108,10 @@ void main() async {
 }
 ```
 
-*Note: When you look at the file `bin/basic_dataclass.dart` as it is in this repository, you will
-notice that it is quite different. This is because the complete example project allows for passing
-arguments via the command line. This is not relevant for this tutorial, so we have removed it here.*
+*Note: When you look at the file `example/pytimeparse_dart_example.dart` as it is in this
+repository, you will notice that it is quite different. This is because the complete example project
+allows for passing arguments via the command line. This is not relevant for this tutorial, so we
+have removed it here.*
 
 ## Testing the Python module
 
@@ -128,7 +129,7 @@ import "package:test/test.dart";
 void main() async {
   group("Examples from Readme:", () {
     setUpAll(() async {
-      await PythonFfiDart.instance.initialize(kPythonModules);
+      await PythonFfiDart.instance.initialize(pythonModules: kPythonModules);
     });
 
     test("32m", () {
@@ -169,8 +170,5 @@ void main() async {
 
 ## Next step
 
-Converting all supported types between Dart and Python. See
-the [python_ffi_dart example](../../python_ffi_dart/example/README.md).
-
-Importing multiple Python modules in a Flutter app. See
-the [python_ffi example](../../python_ffi/example/README.md).
+Powering a Flutter package with a Python module
+See [`flutter_package_export`](../flutter_package_export/README.md).

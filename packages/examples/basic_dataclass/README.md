@@ -273,7 +273,7 @@ import "package:basic_dataclass/basic_dataclass.dart";
 import "package:python_ffi_dart/python_ffi_dart.dart";
 
 void main(List<String> arguments) async {
-  await PythonFfiDart.instance.initialize(kPythonModules);
+  await PythonFfiDart.instance.initialize(pythonModules: kPythonModules);
 
   final Person person = Person(name: arguments[0]);
   print("<use W,A,S,D to move, press q to quit>");
@@ -314,7 +314,7 @@ import "package:test/test.dart";
 
 void main() async {
   setUpAll(() async {
-    await PythonFfiDart.instance.initialize(kPythonModules);
+    await PythonFfiDart.instance.initialize(pythonModules: kPythonModules);
   });
 
   test("move W", () {

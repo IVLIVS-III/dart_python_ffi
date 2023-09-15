@@ -1,18 +1,17 @@
 name: multi_module_dependency_test
-description: A sample command-line application.
-version: 1.0.0
-# repository: https://github.com/my_org/my_repo
+description: A test of the multi-module dependency feature in interface generation.
+version: 0.2.0
+repository: https://github.com/IVLIVS-III/dart_python_ffi
 
 environment:
   sdk: ^3.0.6
 
-# Add regular dependencies here.
 dependencies:
-  python_ffi_dart: ^0.3.1
+  python_ffi_dart: ^0.4.0
 
 dev_dependencies:
-  python_ffi_lint_dart: ^0.1.0
-  test: ^1.21.0
+  python_ffi_lint_dart: ^0.1.1
+  test: ^1.24.6
 
 python_ffi:
   modules:

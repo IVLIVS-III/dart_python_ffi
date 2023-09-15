@@ -584,6 +584,55 @@ final class product extends PythonClass {
   product.from(super.pythonClass) : super.from();
 }
 
+/// ## last_type
+final class last_type extends PythonClass {
+  factory last_type() => PythonFfiDart.instance.importClass(
+        "lark.utils",
+        "last_type",
+        last_type.from,
+        <Object?>[],
+      );
+
+  last_type.from(super.pythonClass) : super.from();
+
+  /// ## args (getter)
+  Object? get args => getAttribute("args");
+
+  /// ## args (setter)
+  set args(Object? args) => setAttribute("args", args);
+
+  /// ## msg (getter)
+  Object? get msg => getAttribute("msg");
+
+  /// ## msg (setter)
+  set msg(Object? msg) => setAttribute("msg", msg);
+
+  /// ## name (getter)
+  Object? get name => getAttribute("name");
+
+  /// ## name (setter)
+  set name(Object? name) => setAttribute("name", name);
+
+  /// ## path (getter)
+  Object? get path => getAttribute("path");
+
+  /// ## path (setter)
+  set path(Object? path) => setAttribute("path", path);
+
+  /// ## add_note (getter)
+  Object? get add_note => getAttribute("add_note");
+
+  /// ## add_note (setter)
+  set add_note(Object? add_note) => setAttribute("add_note", add_note);
+
+  /// ## with_traceback (getter)
+  Object? get with_traceback => getAttribute("with_traceback");
+
+  /// ## with_traceback (setter)
+  set with_traceback(Object? with_traceback) =>
+      setAttribute("with_traceback", with_traceback);
+}
+
 /// ## UCD
 final class UCD extends PythonClass {
   factory UCD() => PythonFfiDart.instance.importClass(
@@ -1591,6 +1640,13 @@ final class sys extends PythonModule {
 
   /// ## int_info (setter)
   set int_info(Object? int_info) => setAttribute("int_info", int_info);
+
+  /// ## last_traceback (getter)
+  Null get last_traceback => getAttribute("last_traceback");
+
+  /// ## last_traceback (setter)
+  set last_traceback(Null last_traceback) =>
+      setAttribute("last_traceback", last_traceback);
 
   /// ## maxsize (getter)
   Object? get maxsize => getAttribute("maxsize");

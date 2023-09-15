@@ -7,7 +7,7 @@ applications.
 
 ## Table of contents
 
-1. [Usage (the final product)](#usage-the-final-product)
+1. [Usage (the final product)](#usage--the-final-product-)
 2. [Prerequisites](#prerequisites)
 3. [Including the Python module source](#including-the-python-module-source)
 4. [Adding the Python module to the Dart project](#adding-the-python-module-to-the-dart-project)
@@ -164,7 +164,7 @@ void main(List<String> arguments) async {
   final num x = num.parse(arguments[0]);
   final num y = num.parse(arguments[1]);
 
-  await PythonFfiDart.instance.initialize(kPythonModules);
+  await PythonFfiDart.instance.initialize(pythonModules: kPythonModules);
 
   final basic_cli_adder basicCliAdder = basic_cli_adder.import();
   final Object? result = basicCliAdder.add(x: x, y: y);
@@ -190,7 +190,7 @@ import "package:test/test.dart";
 
 void main() async {
   setUpAll(() async {
-    await PythonFfiDart.instance.initialize(kPythonModules);
+    await PythonFfiDart.instance.initialize(pythonModules: kPythonModules);
   });
 
   test("add", () {

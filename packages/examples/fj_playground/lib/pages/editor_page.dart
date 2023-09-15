@@ -216,7 +216,7 @@ class _EditorPageState extends State<EditorPage> {
             showAboutDialog(
               context: context,
               applicationName: "FJ Playground",
-              applicationVersion: "0.0.4",
+              applicationVersion: "0.2.0",
               applicationLegalese: "© 2023 Julius Bredemeyer",
             );
           },
