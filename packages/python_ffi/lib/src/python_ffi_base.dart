@@ -2,7 +2,7 @@ part of python_ffi;
 
 class PythonFfi extends PythonFfiBase with PythonFfiMixin {
   @visibleForTesting
-  factory PythonFfi() => PythonFfi._();
+  PythonFfi();
 
   PythonFfi._();
 
@@ -32,6 +32,12 @@ class PythonFfi extends PythonFfiBase with PythonFfiMixin {
   /// plugin. This will ensure that the Python runtime is initialized with the
   /// correct path to the bundled Python modules when your package is used in a
   /// Flutter app.
-  FutureOr<void> initialize({String? package}) async =>
-      await PythonFfiDelegate.instance.initialize(package: package);
+  FutureOr<void> initialize({
+    String? package,
+    bool? verboseLogging,
+  }) async =>
+      await PythonFfiDelegate.instance.initialize(
+        package: package,
+        verboseLogging: verboseLogging,
+      );
 }

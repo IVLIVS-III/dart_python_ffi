@@ -1,3 +1,7 @@
+## NEXT
+
+- Added `verboseLogging` parameter to `PythonnFfi.instance.initialize`.
+
 ## 0.4.0
 
 - Fixed
