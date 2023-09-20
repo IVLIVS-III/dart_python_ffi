@@ -365,7 +365,7 @@ code:
 import "python_modules/json_parser.dart";
 
 final JsonParserModule jsonParser = JsonParserModule.import();
-final Object? parsedJson = jsonParser.parse('{"Hello": "World"}');
+final Object? parsedJson = jsonParser.parse(json_string: '{"Hello": "World"}');
 
 print(parsedJson);
 ```
