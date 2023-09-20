@@ -439,7 +439,7 @@ or property is available in Python.
 At the moment it is not possible to convert arbitrary Dart classes (not backed by a subtype
 of `PythonClass`) to Python objects. Trying to do so will result in a runtime exception.
 
-*Note: Only exceptions throw in Python are converted to a Dart `Exception` and not vice-versa. The
+*Note: Only exceptions thrown in Python are converted to a Dart `Exception` and not vice-versa. The
 only possible way in which you would want Python code to catch an exception thrown in Dart would be
 when passing a Dart callback to Python, that throws said exception. This seems to be an uncommon
 case.*
