@@ -2,9 +2,11 @@
 
 part of ast;
 
-/// TODO: Document.
+/// Python class definition for the Python class `ASTNode`.
+/// This is hand-crafted and not generated. Thus it only contains a subset of
+/// the actual class.
 final class AST extends PythonClass {
-  /// TODO: Document.
+  /// Creates a new instance of the Python class `ASTNode`.
   factory AST() => PythonFfiDart.instance.importClass(
         "ast",
         "ASTNode",
@@ -13,7 +15,7 @@ final class AST extends PythonClass {
         <String, Object?>{},
       );
 
-  /// TODO: Document.
+  /// Wraps a Python object with the [AST] class definition.
   AST.from(this._classDelegate) : super.from(_classDelegate);
 
   final PythonClassInterface<PythonFfiDelegate<Object?>, Object?>
@@ -41,31 +43,31 @@ final class AST extends PythonClass {
     }
   }
 
-  /// TODO: Document.
+  /// Returns all flattened children of type [FunctionDef].
   Iterable<FunctionDef> get functionDefs => _getTypedChildren(
         name: "FunctionDef",
         constructor: FunctionDef.from,
       );
 
-  /// TODO: Document.
+  /// Returns all flattened children of type [Assign].
   Iterable<Assign> get assigns => _getTypedChildren(
         name: "Assign",
         constructor: Assign.from,
       );
 
-  /// TODO: Document.
+  /// Returns all flattened children of type [AugAssign].
   Iterable<AugAssign> get augAssigns => _getTypedChildren(
         name: "AugAssign",
         constructor: AugAssign.from,
       );
 
-  /// TODO: Document.
+  /// Returns all flattened children of type [AnnAssign].
   Iterable<AnnAssign> get annAssigns => _getTypedChildren(
         name: "AnnAssign",
         constructor: AnnAssign.from,
       );
 
-  /// TODO: Document.
+  /// Returns all flattened children of any type of assignment.
   Iterable<AssignBase> get allAssigns sync* {
     yield* assigns;
     yield* augAssigns;
@@ -73,9 +75,11 @@ final class AST extends PythonClass {
   }
 }
 
-/// TODO: Document.
+/// Python class definition for the Python class `FunctionDef`.
+/// This is hand-crafted and not generated. Thus it only contains a subset of
+/// the actual class.
 final class FunctionDef extends AST {
-  /// TODO: Document.
+  /// Creates a new instance of the Python class `FunctionDef`.
   factory FunctionDef() => PythonFfiDart.instance.importClass(
         "ast",
         "FunctionDef",
@@ -84,22 +88,24 @@ final class FunctionDef extends AST {
         <String, Object?>{},
       );
 
-  /// TODO: Document.
+  /// Wraps a Python object with the [FunctionDef] class definition.
   FunctionDef.from(super.classDelegate) : super.from();
 
-  /// TODO: Document.
+  /// Returns the name of the function.
   String get name => getAttribute("name");
 }
 
-/// TODO: Document.
+/// A common interface for all assignment nodes.
 abstract interface class AssignBase {
-  /// TODO: Document.
+  /// Returns all attributes of this assignment.
   Iterable<Attribute> get attributes;
 }
 
-/// TODO: Document.
+/// Python class definition for the Python class `Assign`.
+/// This is hand-crafted and not generated. Thus it only contains a subset of
+/// the actual class.
 final class Assign extends AST implements AssignBase {
-  /// TODO: Document.
+  /// Creates a new instance of the Python class `Assign`.
   factory Assign() => PythonFfiDart.instance.importClass(
         "ast",
         "Assign",
@@ -108,26 +114,27 @@ final class Assign extends AST implements AssignBase {
         <String, Object?>{},
       );
 
-  /// TODO: Document.
+  /// Wraps a Python object with the [Assign] class definition.
   Assign.from(super.classDelegate) : super.from();
 
-  /// TODO: Document.
+  /// Returns all targets of this assignment.
   Iterable<AST> get targets => List<Object?>.from(
         getAttribute("targets"),
       )
           .cast<PythonClassInterface<PythonFfiDelegate<Object?>, Object?>>()
           .map(AST.from);
 
-  /// TODO: Document.
   @override
   Iterable<Attribute> get attributes => targets
       .where(_isOfType("Attribute"))
       .map((AST e) => Attribute.from(e._classDelegate));
 }
 
-/// TODO: Document.
+/// Python class definition for the Python class `AugAssign`.
+/// This is hand-crafted and not generated. Thus it only contains a subset of
+/// the actual class.
 final class AugAssign extends AST implements AssignBase {
-  /// TODO: Document.
+  /// Creates a new instance of the Python class `AugAssign`.
   factory AugAssign() => PythonFfiDart.instance.importClass(
         "ast",
         "AugAssign",
@@ -136,22 +143,23 @@ final class AugAssign extends AST implements AssignBase {
         <String, Object?>{},
       );
 
-  /// TODO: Document.
+  /// Wraps a Python object with the [AugAssign] class definition.
   AugAssign.from(super.classDelegate) : super.from();
 
-  /// TODO: Document.
+  /// Returns the target of this assignment.
   AST get target => AST.from(getAttribute("target"));
 
-  /// TODO: Document.
   @override
   Iterable<Attribute> get attributes => <AST>[target]
       .where(_isOfType("Attribute"))
       .map((AST e) => Attribute.from(e._classDelegate));
 }
 
-/// TODO: Document.
+/// Python class definition for the Python class `AnnAssign`.
+/// This is hand-crafted and not generated. Thus it only contains a subset of
+/// the actual class.
 final class AnnAssign extends AST implements AssignBase {
-  /// TODO: Document.
+  /// Creates a new instance of the Python class `AnnAssign`.
   factory AnnAssign() => PythonFfiDart.instance.importClass(
         "ast",
         "AnnAssign",
@@ -160,25 +168,26 @@ final class AnnAssign extends AST implements AssignBase {
         <String, Object?>{},
       );
 
-  /// TODO: Document.
+  /// Wraps a Python object with the [AnnAssign] class definition.
   AnnAssign.from(super.classDelegate) : super.from();
 
-  /// TODO: Document.
+  /// Returns the target of this assignment.
   AST get target => AST.from(getAttribute("target"));
 
-  /// TODO: Document.
+  /// Returns the annotation of this assignment.
   AST get annotation => AST.from(getAttribute("annotation"));
 
-  /// TODO: Document.
   @override
   Iterable<Attribute> get attributes => <AST>[target]
       .where(_isOfType("Attribute"))
       .map((AST e) => Attribute.from(e._classDelegate));
 }
 
-/// TODO: Document.
+/// Python class definition for the Python class `Attribute`.
+/// This is hand-crafted and not generated. Thus it only contains a subset of
+/// the actual class.
 final class Attribute extends AST {
-  /// TODO: Document.
+  /// Creates a new instance of the Python class `Attribute`.
   factory Attribute() => PythonFfiDart.instance.importClass(
         "ast",
         "Attribute",
@@ -187,26 +196,28 @@ final class Attribute extends AST {
         <String, Object?>{},
       );
 
-  /// TODO: Document.
+  /// Wraps a Python object with the [Attribute] class definition.
   Attribute.from(super.classDelegate) : super.from();
 
-  /// TODO: Document.
+  /// Returns the value of the attribute.
   AST get value => AST.from(getAttribute("value"));
 }
 
-/// TODO: Document.
+/// Python module definition for the Python module `ast`.
+/// This is hand-crafted and not generated. Thus it only contains a subset of
+/// the actual module.
 final class ast extends PythonModule {
-  /// TODO: Document.
+  /// Wraps a Python object with the [ast] module definition.
   ast.from(super.moduleDelegate) : super.from();
 
-  /// TODO: Document.
+  /// Primary constructor for this module.
   static ast import() => PythonFfiDart.instance.importModule("ast", ast.from);
 
-  /// TODO: Document.
+  /// Parses a Python source string into an AST tree.
   AST parse(String source) =>
       AST.from(getFunction("parse").call(<Object?>[source]));
 
-  /// TODO: Document.
+  /// Returns a flattened iterable of all the AST nodes in the tree.
   Iterator<AST> walk(AST node) => TypedIterator<
           PythonClassInterface<PythonFfiDelegate<Object?>, Object?>>.from(
         getFunction("walk").call(<Object?>[node]),

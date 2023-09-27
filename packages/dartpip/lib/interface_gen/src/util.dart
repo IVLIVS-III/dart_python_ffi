@@ -1,6 +1,10 @@
 part of interface_gen;
 
-/// TODO: Document.
+/// Transforms a Python identifier into the closest possible legal Dart
+/// identifier by prepending a `$` character. Dart keywords and built-in types
+/// are respected.
+/// As an example, a Python function called `get` will be turned into `$get` in
+/// Dart.
 String sanitizeName(
   String name, {
   Set<String> extraKeywords = const <String>{},
@@ -213,7 +217,19 @@ Future<String?> doInspection(
   return null;
 }
 
-/// TODO: Document.
+/// Emits Dart source code of the generated interface definitions.
+///
+/// The returned String is a valid Dart source file. It should be written to a
+/// file with the `.g.dart` extension and formatted with `dart format`.
+///
+/// The [appType] parameter is used to determine which Python FFI package to
+/// import.
+///
+/// If [primaryModuleOnly] is `true`, only the primary module will be emitted.
+/// Otherwise, all found modules will have their module definition included.
+///
+/// The [moduleParentPrefix] parameter is used to prefix the module name of
+/// every module. This is useful for nested modules.
 String emitInspection(
   InspectionCache cache, {
   required AppType appType,

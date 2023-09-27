@@ -2,11 +2,11 @@
 
 part of interface_gen;
 
-/// TODO: Document.
+/// Representation of a Python object.
 final class Object_ extends PythonObject
     with InspectMixin
     implements InspectEntry {
-  /// TODO: Document.
+  /// Wraps a Python object in a [Object_].
   Object_.from(super.objectDelegate)
       : value = objectDelegate,
         super.from();
@@ -14,7 +14,8 @@ final class Object_ extends PythonObject
   @override
   Set<String> get _sanitizationExtraKeywords => sanitizationExtraKeywords;
 
-  /// TODO: Document.
+  /// Returns all identifiers that must be renamed when appearing as fields
+  /// inside an object. Most of them are used by Dart PythonFFI internals.
   static const Set<String> sanitizationExtraKeywords = <String>{
     "from",
     "getFunction",
@@ -55,11 +56,11 @@ final class Object_ extends PythonObject
       );
 }
 
-/// TODO: Document.
+/// Instantiated version of [Object_].
 final class InstantiatedObject_ extends PythonObject
     with InstantiatedInspectMixin, GetterSetterMixin
     implements InstantiatedInspectEntry {
-  /// TODO: Document.
+  /// Creates a new instance of [InstantiatedObject_].
   InstantiatedObject_.from(
     this.source, {
     required this.name,

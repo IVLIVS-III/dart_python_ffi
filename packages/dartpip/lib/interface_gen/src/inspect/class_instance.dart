@@ -1,10 +1,10 @@
 part of interface_gen;
 
-/// TODO: Document.
+/// Representation of a Python class instance.
 final class ClassInstance extends PythonClass
     with InspectMixin
     implements InspectEntry {
-  /// TODO: Document.
+  /// Wraps a Python object in a [ClassInstance].
   ClassInstance.from(super.classDelegate)
       : value = classDelegate,
         super.from();
@@ -29,11 +29,12 @@ final class ClassInstance extends PythonClass
       );
 }
 
-/// TODO: Document.
+/// Instantiated version of [ClassInstance].
+/// This pins the class to a specific module.
 final class InstantiatedClassInstance extends PythonClass
     with InstantiatedInspectMixin
     implements InstantiatedInspectEntry {
-  /// TODO: Document.
+  /// Creates a new instance of [InstantiatedClassInstance].
   InstantiatedClassInstance.from(
     this.source, {
     required this.name,

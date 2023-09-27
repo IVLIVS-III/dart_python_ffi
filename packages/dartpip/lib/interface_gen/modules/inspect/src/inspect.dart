@@ -2,12 +2,14 @@
 
 part of inspect;
 
-/// TODO: Document.
+/// Module definition for the Python module `inspect`.
+/// This is hand-crafted and not generated. Thus it only contains a subset of
+/// the actual module.
 final class inspect extends PythonModule {
-  /// TODO: Document.
+  /// Wraps a Python object with the [inspect] module definition.
   inspect.from(super.moduleDelegate) : super.from();
 
-  /// TODO: Document.
+  /// Primary constructor for this module.
   static inspect import() => PythonFfiDart.instance.importModule(
         "inspect",
         inspect.from,

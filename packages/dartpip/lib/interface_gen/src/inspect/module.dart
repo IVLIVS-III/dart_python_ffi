@@ -1,10 +1,10 @@
 part of interface_gen;
 
-/// TODO: Document.
+/// Representation of a Python module.
 final class Module extends PythonModule
     with InspectMixin
     implements InspectEntry {
-  /// TODO: Document.
+  /// Wraps a Python object in a [Module].
   Module.from(
     super.moduleDelegate, {
     required this.name,
@@ -12,10 +12,9 @@ final class Module extends PythonModule
   })  : value = moduleDelegate,
         super.from();
 
-  /// TODO: Document.
+  /// The name of this module.
   final String name;
 
-  /// TODO: Document.
   @override
   final String sanitizedName;
 
@@ -46,7 +45,8 @@ final class Module extends PythonModule
       );
 }
 
-/// TODO: Document.
+/// Instantiated version of [Module].
+/// This pins the module to a specific module.
 final class InstantiatedModule extends PythonModule
     with
         InstantiatedInspectMixin,
@@ -54,7 +54,7 @@ final class InstantiatedModule extends PythonModule
         GetterSetterMixin,
         GettersSettersMixin
     implements InstantiatedInspectEntry {
-  /// TODO: Document.
+  /// Creates a new instance of [InstantiatedModule].
   InstantiatedModule.from(
     this.source, {
     required this.name,
@@ -63,7 +63,7 @@ final class InstantiatedModule extends PythonModule
   })  : sanitizedName = sanitizedName ?? sanitizeName(name),
         super.from(source.value);
 
-  /// TODO: Document.
+  /// Creates a new instance of [InstantiatedModule] from a [Module].
   InstantiatedModule.fromModule(this.source)
       : name = source.name,
         sanitizedName = source.sanitizedName,
@@ -83,7 +83,8 @@ final class InstantiatedModule extends PythonModule
   @override
   late final InstantiatedModule instantiatingModule;
 
-  /// TODO: Document.
+  /// Returns the Python object's `__name__` attribute or [name] if an error
+  /// occurs.
   String get qualifiedName {
     try {
       // ignore: avoid_dynamic_calls

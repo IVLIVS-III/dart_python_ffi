@@ -1,26 +1,26 @@
 part of interface_gen;
 
-/// TODO: Document.
+/// Represents the inspection entries' type.
 enum InspectEntryType {
-  /// TODO: Document.
+  /// The entry is a module.
   module,
 
-  /// TODO: Document.
+  /// The entry is a class definition.
   classDefinition,
 
-  /// TODO: Document.
+  /// The entry is a class instance.
   class_,
 
-  /// TODO: Document.
+  /// The entry is a function.
   function,
 
-  /// TODO: Document.
+  /// The entry is an object.
   object,
 
-  /// TODO: Document.
+  /// The entry is a primitive.
   primitive;
 
-  /// TODO: Document.
+  /// Returns a human-readable name for this type.
   String get displayName {
     switch (this) {
       case InspectEntryType.module:
@@ -39,23 +39,23 @@ enum InspectEntryType {
   }
 }
 
-/// TODO: Document.
+/// Connects an inspect entry to a module in which it is defined or imported.
 @immutable
 class InspectEntryModuleConnection {
-  /// TODO: Document.
+  /// Creates a new instance of [InspectEntryModuleConnection].
   InspectEntryModuleConnection({
     required this.name,
     required this.sanitizedName,
     required this.parentModule,
   });
 
-  /// TODO: Document.
+  /// The mane of this entry in the parent module.
   final String name;
 
-  /// TODO: Document.
+  /// The sanitized name of this entry in the parent module.
   final String sanitizedName;
 
-  /// TODO: Document.
+  /// The parent module.
   final Module parentModule;
 
   @override
@@ -69,7 +69,7 @@ class InspectEntryModuleConnection {
   @override
   int get hashCode => (name, sanitizedName, parentModule).hashCode;
 
-  /// TODO: Document.
+  /// Emits a JSON representation of this connection.
   Map<String, Object?> debugDump({
     InspectionCache? cache,
     bool expandChildren = true,
@@ -82,14 +82,14 @@ class InspectEntryModuleConnection {
       };
 }
 
-/// TODO: Document.
+/// Base class for inspect entries.
 sealed class InspectEntry {
   // Prevents extending this class.
   // We want to use this class like an interface, but we also want to be able
   // to use it in switch statements with static exhaustiveness checking.
   factory InspectEntry._() => throw UnimplementedError();
 
-  /// TODO: Document.
+  /// Helper to check if this entry has a connection to a module.
   bool hasModuleConnection(InspectEntryModuleConnection connection);
 
   /// Connects this entry to a module.
@@ -97,70 +97,72 @@ sealed class InspectEntry {
   /// already existed.
   bool addModuleConnection(InspectEntryModuleConnection connection);
 
-  /// TODO: Document.
+  /// Returns all modules to which this entry is connected.
   List<InspectEntryModuleConnection> get moduleConnections;
 
-  /// TODO: Document.
+  /// Returns the value of this entry.
   Object? get value;
 
-  /// TODO: Document.
+  /// Returns the type of this entry.
   InspectEntryType get type;
 
-  /// TODO: Document.
+  /// Returns the sanitized name of this entry.
   String get sanitizedName;
 
-  /// TODO: Document.
+  /// Returns all children of this entry.
   Iterable<(String, InspectEntry)> get children;
 
-  /// TODO: Document.
+  /// Returns all instantiations of this entry already created.
   Iterable<InstantiatedInspectEntry> get cachedInstantiations;
 
-  /// TODO: Document.
+  /// Collects all children of this entry during the inspection process.
   void collectChildren(
     InspectionCache cache, {
     required String stdlibPath,
     required Module parentModule,
   });
 
-  /// TODO: Document.
+  /// Creates an instantiation of this entry to the given module.
+  /// Returns null if this entry cannot be instantiated because it is not
+  /// connected to this module.
   InstantiatedInspectEntry? instantiate(InstantiatedModule instantiatingModule);
 
-  /// TODO: Document.
+  /// Emits a JSON representation of this entry.
   Map<String, Object?> debugDump({
     InspectionCache? cache,
     bool expandChildren = true,
   });
 }
 
-/// TODO: Document.
+/// Base class for instantiated inspect entries.
 sealed class InstantiatedInspectEntry {
   // Prevents extending this class.
   // We want to use this class like an interface, but we also want to be able
   // to use it in switch statements with static exhaustiveness checking.
   factory InstantiatedInspectEntry._() => throw UnimplementedError();
 
-  /// TODO: Document.
+  /// Returns the source entry of this instantiation.
   InspectEntry get source;
 
-  /// TODO: Document.
+  /// Returns the name of this entry in the instantiating module.
   String get name;
 
-  /// TODO: Document.
+  /// Returns the sanitized name of this entry in the instantiating module.
   String get sanitizedName;
 
-  /// TODO: Document.
+  /// Returns the instantiating module.
   InstantiatedModule get instantiatingModule;
 
-  /// TODO: Document.
+  /// Emits a Dart source for this entry during interface generation.
   void emit(
     StringBuffer buffer, {
     required InspectionCache cache,
     required AppType appType,
   });
 
-  /// TODO: Document.
+  /// Emits the Python documentation for this entry.
   void emitDoc(StringBuffer buffer);
 
-  /// TODO: Document.
+  /// Emits the Python source for this entry.
   void emitSource(StringBuffer buffer);
 }

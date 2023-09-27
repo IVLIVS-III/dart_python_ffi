@@ -1,8 +1,10 @@
 part of interface_gen;
 
-/// TODO: Document.
+/// Representation of a primitive value.
+/// This is a value that is not an instance of PythonObject, but directly
+/// mapped to a Dart type.
 final class Primitive implements InspectEntry, InstantiatedInspectEntry {
-  /// TODO: Document.
+  /// Wraps a Python object in a [Primitive].
   const Primitive(this.name, this.sanitizedName, this.value);
 
   @override
@@ -82,9 +84,10 @@ final class Primitive implements InspectEntry, InstantiatedInspectEntry {
   }
 }
 
-/// TODO: Document.
+/// A special primitive type that represents any type.
 final class AnyTypePrimitive extends Primitive {
-  /// TODO: Document.
+  /// Creates a new instance of [AnyTypePrimitive] given a [name] and a
+  /// [sanitizedName].
   const AnyTypePrimitive(String name, String sanitizedName)
       : super(name, sanitizedName, null);
 }

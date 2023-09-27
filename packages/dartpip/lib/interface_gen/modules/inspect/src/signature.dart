@@ -12,7 +12,7 @@ final class _SignatureClassDefinition extends PythonClassDefinition {
 ///
 /// Reference: https://docs.python.org/3/library/inspect.html#inspect.Signature
 final class Signature extends PythonClass {
-  /// TODO: Document.
+  /// Wraps a Python object with the [Signature] class definition.
   Signature.from(super.classDelegate) : super.from();
 
   /// A special class-level marker to specify absence of a return annotation.

@@ -1,13 +1,13 @@
 part of interface_gen;
 
-/// TODO: Document.
+/// Type alias for a type string transform.
 typedef Transform = String Function(String);
 
 Transform _idTransform = (String input) => input;
 
-/// TODO: Document.
+/// Holds information about an inspected object.
 class ObjInfo {
-  /// TODO: Document.
+  /// Creates a new instance of [ObjInfo] from a Python object.
   factory ObjInfo(
     PythonObjectInterface<PythonFfiDelegate<Object?>, Object?>? source,
   ) =>
@@ -23,7 +23,7 @@ class ObjInfo {
     required this.module,
   });
 
-  /// TODO: Document.
+  /// Copies this instance with the given fields replaced with the new values.
   ObjInfo copyWith({
     String? name,
     String? qualname,
@@ -35,13 +35,16 @@ class ObjInfo {
         module: module ?? this.module,
       );
 
-  /// TODO: Document.
+  /// Returns the name of the object.
+  /// This is usually the value of the Python object's `__name__` attribute.
   final String? name;
 
-  /// TODO: Document.
+  /// Returns the qualified name of the object.
+  /// This is usually the value of the Python object's `__qualname__` attribute.
   final String? qualname;
 
-  /// TODO: Document.
+  /// Returns the module in which the object is initially defined.
+  /// This is usually the value of the Python object's `__module__` attribute.
   final String? module;
 
   @override

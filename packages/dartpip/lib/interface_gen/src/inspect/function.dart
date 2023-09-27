@@ -2,11 +2,11 @@
 
 part of interface_gen;
 
-/// TODO: Document.
+/// Representation of a Python function.
 final class Function_ extends PythonFunction
     with InspectMixin
     implements InspectEntry {
-  /// TODO: Document.
+  /// Wraps a Python object in a [Function_].
   Function_.from(super.functionDelegate)
       : value = functionDelegate,
         super.from();
@@ -17,10 +17,10 @@ final class Function_ extends PythonFunction
   @override
   InspectEntryType get type => InspectEntryType.function;
 
-  /// TODO: Document.
+  /// Returns this function's signature.
   Signature get signature => inspectModule.signature(value);
 
-  /// TODO: Document.
+  /// Returns this function's parameters.
   Iterable<Parameter> get parameters => signature.parameters.values;
 
   @override
@@ -47,11 +47,12 @@ final class Function_ extends PythonFunction
       );
 }
 
-/// TODO: Document.
+/// Instantiated version of [Function_].
+/// This pins the function to a specific module.
 final class InstantiatedFunction_ extends PythonFunction
     with InstantiatedInspectMixin
     implements InstantiatedInspectEntry {
-  /// TODO: Document.
+  /// Creates a new instance of [InstantiatedFunction_].
   InstantiatedFunction_.from(
     this.source, {
     required this.name,
@@ -86,7 +87,7 @@ final class InstantiatedFunction_ extends PythonFunction
       _parametersOfKind(ParameterKind.keyword_only).isNotEmpty ||
       _parametersOfKind(ParameterKind.var_keyword).isNotEmpty;
 
-  /// TODO: Document.
+  /// Emits the arguments of this function for Dart source generation.
   Iterable<Transform> emitArguments(
     StringBuffer buffer, {
     required InspectionCache cache,

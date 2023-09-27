@@ -19,7 +19,5 @@ part "src/pypi/client.dart";
 part "src/pypi/pypi.dart";
 part "src/util/lazy_future.dart";
 
-// TODO: Export any libraries intended for clients of this package.
-
 /// The version of dartpip_solver.
 const String kDartpipSolverVersion = "0.0.1";

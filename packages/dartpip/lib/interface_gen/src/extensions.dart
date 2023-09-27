@@ -1,8 +1,9 @@
 part of interface_gen;
 
-/// TODO: Document.
+/// Utility extension methods for merge operations on [Iterable]s.
 extension MergeExtension<E> on Iterable<E> {
-  /// TODO: Document.
+  /// Merges this iterable with [other] using [compareTo] to determine the
+  /// order.
   Iterable<E> sortedMerge(
     Iterable<E> other,
     int Function(E a, E b) compareTo,
@@ -38,16 +39,20 @@ extension MergeExtension<E> on Iterable<E> {
   }
 }
 
-/// TODO: Document.
+/// Utility extension methods for set operations on [Iterable]s.
 extension IntersectExtension<E> on Set<E> {
-  /// TODO: Document.
+  /// Returns a new set containing all elements that are contained by both this
+  /// set and [other].
   Set<E> intersection(Set<E> other) =>
       where((E element) => other.contains(element)).toSet();
 }
 
-/// TODO: Document.
+/// Utility extension methods for operations on [Iterable]s.
 extension Extension<E> on Iterable<E> {
-  /// TODO: Document.
+  /// Returns a new iterable containing the elements of this iterable. During
+  /// iteration, the last [count] elements are dropped.
+  /// If [count] is greater than the number of elements in this iterable, an
+  /// empty iterable is returned.
   Iterable<E> skipLast(int count) sync* {
     final Iterator<E> iterator = this.iterator;
     final Queue<E> buffer = Queue<E>();
@@ -59,7 +64,9 @@ extension Extension<E> on Iterable<E> {
     }
   }
 
-  /// TODO: Document.
+  /// Models the Python `enumerate` function.
+  /// Returns a new iterable of tuples where the first element is the index
+  /// and the second element is the value.
   Iterable<(int, E)> enumerate() sync* {
     final Iterator<E> iterator = this.iterator;
     int index = 0;

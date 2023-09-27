@@ -1,6 +1,6 @@
 part of interface_gen;
 
-/// TODO: Document.
+/// Shared implementation of [InspectEntry]s.
 base mixin InspectMixin
     on PythonObjectInterface<PythonFfiDelegate<Object?>, Object?>
     implements InspectEntry {
@@ -69,7 +69,7 @@ base mixin InspectMixin
     _children[name] = child;
   }
 
-  /// TODO: Document.
+  /// Returns a Dart instance of the Python `inspect` module.
   final inspect inspectModule = inspect.import();
 
   Iterable<(String, Object?)> get _members {
@@ -243,7 +243,7 @@ base mixin InspectMixin
     return instantiation;
   }
 
-  /// TODO: Document.
+  /// Returns an instantiation of this entry for each connected module.
   Iterable<InstantiatedInspectEntry> get instantiations sync* {
     for (final InspectEntryModuleConnection connection in moduleConnections) {
       yield _instantiateFrom(
@@ -288,11 +288,11 @@ base mixin InspectMixin
   }
 }
 
-/// TODO: Document.
+/// Shared implementation of [InstantiatedInspectEntry]s.
 base mixin InstantiatedInspectMixin
     on PythonObjectInterface<PythonFfiDelegate<Object?>, Object?>
     implements InstantiatedInspectEntry {
-  /// TODO: Document.
+  /// Returns a Dart instance of the Python `inspect` module.
   final inspect inspectModule = inspect.import();
 
   Set<String> get _sanitizationExtraKeywords => const <String>{};

@@ -1,10 +1,11 @@
 part of inspect;
 
-/// TODO: Document.
+/// Helper class for testing equality of wrapped Python objects.
+/// They are considered equal, if they are the same object in Python.
 @immutable
 final class ReferenceEqualityWrapper
     extends PythonObjectInterface<PythonFfiDelegate<Object?>, Object?> {
-  /// TODO: Document.
+  /// Wraps the given [_source] object for testing equality.
   ReferenceEqualityWrapper(this._source)
       : super(
           _source.platform,

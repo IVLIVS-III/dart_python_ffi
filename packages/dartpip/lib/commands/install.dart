@@ -121,9 +121,9 @@ class InstallCommand extends Command<void> {
         pubspecEditor.dependencies.toList();
     final Iterable<String> existingPythonModulesNames =
         existingPythonModules.map((PythonDependency e) => e.name);
-    final Iterable<PyPiDependency> pythonModules = argResults.rest
+    final Iterable<PyPIDependency> pythonModules = argResults.rest
         .whereNot(existingPythonModulesNames.contains)
-        .map((String e) => PyPiDependency(name: e, version: "any"));
+        .map((String e) => PyPIDependency(name: e, version: "any"));
     if (existingPythonModules.isNotEmpty) {
       DartpipCommandRunner.logger.stdout(
         "Found python modules in pubspec.yaml: ${existingPythonModules.join(", ")}",
@@ -145,16 +145,16 @@ class InstallCommand extends Command<void> {
   ) async {
     final (
       Iterable<PythonDependency> nonPyPiDependencies,
-      Iterable<PyPiDependency> pyPiDependencies
+      Iterable<PyPIDependency> pyPiDependencies
     ) = directDependencies.split();
 
-    final Iterable<PyPiDependency> allPyPiDependencies = await solve(
+    final Iterable<PyPIDependency> allPyPiDependencies = await solve(
       pyPiDependencies.map(
-        (PyPiDependency e) => Constraint(name: e.name, constraint: e.version),
+        (PyPIDependency e) => Constraint(name: e.name, constraint: e.version),
       ),
     ).then(
       (Set<Dependency> value) => value.map(
-        (Dependency e) => PyPiDependency(name: e.name, version: e.version),
+        (Dependency e) => PyPIDependency(name: e.name, version: e.version),
       ),
     );
 
@@ -182,7 +182,7 @@ class InstallCommand extends Command<void> {
         "Installing $pythonModule",
       );
       switch (pythonModule) {
-        case PyPiDependency(
+        case PyPIDependency(
             name: final String moduleName,
             version: final String specifiedVersion,
           ):
@@ -292,7 +292,7 @@ class InstallCommand extends Command<void> {
       );
       final Future<Iterable<_ModuleBundle<Object>>> bundleTask =
           switch (pythonDependency) {
-        PyPiDependency() => _bundleCacheModule(
+        PyPIDependency() => _bundleCacheModule(
             projectName: pythonModuleName,
             projectVersion: version,
             appRoot: appRoot,

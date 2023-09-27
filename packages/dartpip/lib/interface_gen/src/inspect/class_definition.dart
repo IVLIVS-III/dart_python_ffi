@@ -2,16 +2,17 @@
 
 part of interface_gen;
 
-/// TODO: Document.
+/// Representation of a Python class definition.
 final class ClassDefinition extends PythonClassDefinition
     with InspectMixin
     implements InspectEntry {
-  /// TODO: Document.
+  /// Wraps a Python object in a [ClassDefinition].
   ClassDefinition.from(super.classDefinitionDelegate)
       : value = classDefinitionDelegate,
         super.from();
 
-  /// TODO: Document.
+  /// Returns all identifiers that must be renamed when appearing as fields
+  /// inside a class definition.
   static const Set<String> sanitizationExtraKeywords = <String>{
     "newInstance",
     "call",
@@ -198,7 +199,8 @@ final class ClassDefinition extends PythonClassDefinition
       );
 }
 
-/// TODO: Document.
+/// Instantiated version of a [ClassDefinition].
+/// This pins the class to a specific module.
 final class InstantiatedClassDefinition extends PythonClassDefinition
     with
         InstantiatedInspectMixin,
@@ -206,7 +208,7 @@ final class InstantiatedClassDefinition extends PythonClassDefinition
         GetterSetterMixin,
         GettersSettersMixin
     implements InstantiatedInspectEntry {
-  /// TODO: Document.
+  /// Creates a new instance of [InstantiatedClassDefinition].
   InstantiatedClassDefinition.from(
     this.source, {
     required this.name,

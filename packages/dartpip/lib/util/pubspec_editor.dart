@@ -1,8 +1,9 @@
 part of dartpip;
 
-/// TODO: Document.
+/// Helper class for editing a pubspec.yaml file.
+/// Used by the `dartpip` command to add/remove dependencies and manage assets.
 final class PubspecEditor {
-  /// TODO: Document.
+  /// Opens a pubspec.yaml file at the given path.
   PubspecEditor(this._pubspecPath)
       : _yamlEditor = YamlEditor(File(_pubspecPath).readAsStringSync());
 
@@ -17,7 +18,7 @@ final class PubspecEditor {
     }
   }
 
-  /// TODO: Document.
+  /// Writes the changes to disk.
   void save() {
     _ensureOpen();
     if (!_isDirty) {
@@ -83,7 +84,8 @@ final class PubspecEditor {
     return _insertIntoMap(parentPath, pathList.last, newNode);
   }
 
-  /// TODO: Document.
+  /// Retrieves all [PythonDependency]s from the pubspec.yaml file.
+  /// This will extract dependencies from the `python_ffi.modules` node.
   Iterable<PythonDependency> get dependencies sync* {
     _ensureOpen();
     final YamlMap node =
@@ -96,7 +98,7 @@ final class PubspecEditor {
     for (final (String key, Object? value) in entries) {
       switch (value) {
         case String():
-          yield PyPiDependency(name: key, version: value);
+          yield PyPIDependency(name: key, version: value);
         case YamlMap() when value.keys.contains("git"):
           final Object? git = value["git"];
           throw UnimplementedError(
@@ -122,7 +124,7 @@ final class PubspecEditor {
     return dependencies.any((PythonDependency e) => e.name == dependency);
   }
 
-  /// TODO: Document.
+  /// Adds a Python dependency to the pubspec.yaml file.
   void addDependency(String dependency, {String? version}) {
     _ensureOpen();
     if (_contains(dependency)) {
@@ -132,7 +134,8 @@ final class PubspecEditor {
     _insertIntoMap(parentPath, dependency, version ?? "any");
   }
 
-  /// TODO: Document.
+  /// Removes a Python dependency from the pubspec.yaml file.
+  /// If the dependency does not exist, this method does nothing.
   void removeDependency(String dependency) {
     _ensureOpen();
     if (!_contains(dependency)) {
@@ -162,7 +165,7 @@ final class PubspecEditor {
     return true;
   }
 
-  /// TODO: Document.
+  /// Retrieves all flutter assets from the pubspec.yaml file.
   Iterable<String> get assets {
     _ensureOpen();
     final YamlList node = _ensureNode(
@@ -175,7 +178,7 @@ final class PubspecEditor {
         .whereType<String>();
   }
 
-  /// TODO: Document.
+  /// Adds a flutter asset to the pubspec.yaml file.
   void addAsset(String asset) {
     _ensureOpen();
     if (assets.contains(asset)) {
@@ -187,7 +190,8 @@ final class PubspecEditor {
     }
   }
 
-  /// TODO: Document.
+  /// Removes a flutter asset from the pubspec.yaml file.
+  /// If the asset does not exist, this method does nothing.
   void removeAsset(String asset) {
     _ensureOpen();
     if (!assets.contains(asset)) {

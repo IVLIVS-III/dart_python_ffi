@@ -2,12 +2,14 @@
 
 part of types;
 
-/// TODO: Document.
+/// Module definition for the Python module `types`.
+/// This is hand-crafted and not generated. Thus it only contains a subset of
+/// the actual module.
 final class types extends PythonModule {
-  /// TODO: Document.
+  /// Wraps a Python object with the [types] module definition.
   types.from(super.moduleDelegate) : super.from();
 
-  /// TODO: Document.
+  /// The main constructor for this module.
   static types import() => PythonFfiDart.instance.importModule(
         "types",
         types.from,
@@ -29,7 +31,9 @@ final class types extends PythonModule {
     return true;
   }
 
-  /// TODO: Document.
+  /// Decides whether the given [class_] is a Python type object.
+  /// Returns true, if [class_] is a Python object defined in the [types]
+  /// module.
   static bool isType(ClassInstance class_) {
     final Object? classParentModule = class_.definingModule;
     if (classParentModule is! PythonModuleInterface) {
@@ -38,7 +42,9 @@ final class types extends PythonModule {
     return _isType(classParentModule);
   }
 
-  /// TODO: Document.
+  /// Decides whether the given [class_] is a Python type object.
+  /// Returns true, if [class_] is a Python object defined in the [types]
+  /// module.
   static bool isInstantiatedType(InstantiatedClassInstance class_) =>
       _isType(class_.instantiatingModule);
 }

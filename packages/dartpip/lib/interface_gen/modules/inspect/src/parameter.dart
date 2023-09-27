@@ -6,27 +6,44 @@ final class _ParameterClassDefinition extends PythonClassDefinition {
   _ParameterClassDefinition.from(super.classDefinitionDelegate) : super.from();
 }
 
-/// TODO: Document.
+/// Reference: https://docs.python.org/3/library/inspect.html#inspect.Parameter.kind
+///
+/// Describes how argument values are bound to the parameter. The possible
+/// values are accessible via [ParameterKind] (like [ParameterKind.keyword_only]),
+/// and support comparison and ordering, in the following order:
 enum ParameterKind {
-  /// TODO: Document.
+  /// Value must be supplied as a positional argument. Positional only
+  /// parameters are those which appear before a / entry (if present) in a
+  /// Python function definition.
   positional_only,
 
-  /// TODO: Document.
+  /// Value may be supplied as either a keyword or positional argument (this is
+  /// the standard binding behaviour for functions implemented in Python.)
   positional_or_keyword,
 
-  /// TODO: Document.
+  /// A tuple of positional arguments that aren’t bound to any other parameter.
+  /// This corresponds to a *args parameter in a Python function definition.
   var_positional,
 
-  /// TODO: Document.
+  /// Value must be supplied as a keyword argument. Keyword only parameters are
+  /// those which appear after a * or *args entry in a Python function
+  /// definition.
   keyword_only,
 
-  /// TODO: Document.
+  /// A dict of keyword arguments that aren’t bound to any other parameter. This
+  /// corresponds to a **kwargs parameter in a Python function definition.
   var_keyword,
 }
 
 /// Reference: https://docs.python.org/3/library/inspect.html#inspect.Parameter
+///
+/// Python class definition for the [Parameter] class.
+/// This is hand-crafted and not generated. Thus it only contains a subset of
+/// the actual class.
+///
+/// It also contains some helper methods for Dart.
 final class Parameter extends PythonClass {
-  /// TODO: Document.
+  /// Wraps a Python object with the [Parameter] class definition.
   Parameter.from(super.classDelegate) : super.from();
 
   /// A special class-level marker to specify absence of default values and
@@ -89,7 +106,9 @@ final class Parameter extends PythonClass {
   /// identifier.
   String get name => getAttribute("name");
 
-  /// TODO: Document.
+  /// Prevents the parameter to be invalid in Dart.
+  /// Some parameters must not start with an underscore. To ensure this, we add
+  /// a dollar sign in front of the name, if it starts with an underscore.
   String get sanitizedName {
     final String name = sanitizeName(this.name);
     if (name.startsWith("_")) {
@@ -139,7 +158,11 @@ final class Parameter extends PythonClass {
     throw UnimplementedError();
   }
 
-  /// TODO: Document.
+  /// Returns a String that can always be prepended to the parameter name.
+  /// Depending on the [kind], this is either an empty String, or the `required`
+  /// keyword.
+  /// Returns the parameter [name] parameter [kind]s mapped to positional
+  /// arguments in Dart.
   String get requiredString {
     switch (kind) {
       case ParameterKind.positional_only:
@@ -167,7 +190,9 @@ final class Parameter extends PythonClass {
         _ => source.toString(),
       };
 
-  /// TODO: Document.
+  /// Returns a String representation of the default value of the parameter.
+  /// Returns an empty String, if no default value is set or the parameter
+  /// [kind] disallows default values.
   String get defaultString {
     switch (kind) {
       case ParameterKind.positional_only:

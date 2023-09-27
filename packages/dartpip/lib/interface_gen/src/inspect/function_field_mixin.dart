@@ -1,6 +1,6 @@
 part of interface_gen;
 
-/// TODO: Document.
+/// Emits all fields of a class or module that are a function or method.
 base mixin FunctionFieldMixin on InstantiatedInspectMixin {
   /// Emits all member functions of a class or module.
   void _emitFunctionFields(

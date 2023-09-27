@@ -1,59 +1,63 @@
 part of dartpip;
 
-/// TODO: Document.
+/// Base class for Python dependencies.
 sealed class PythonDependency {
   PythonDependency._({required this.name});
 
-  /// TODO: Document.
+  /// The name of the dependency.
   final String name;
 
   @override
   String toString() => name;
 }
 
-/// TODO: Document.
-final class PyPiDependency extends PythonDependency {
-  /// TODO: Document.
-  PyPiDependency({
+/// A Python dependency from PyPI, consisting of a name and a version
+/// constraint.
+final class PyPIDependency extends PythonDependency {
+  /// Creates a new [PyPIDependency].
+  PyPIDependency({
     required super.name,
     required this.version,
   }) : super._();
 
-  /// TODO: Document.
+  /// The version constraint of the dependency.
   final String version;
 
   @override
   String toString() => "$name: $version";
 }
 
-/// TODO: Document.
+/// A Python dependency from a Git repository, consisting of a name, a URL, and
+/// a Git ref.
+/// This can be used to depend on a specific commit, branch, or tag.
 final class GitDependency extends PythonDependency {
-  /// TODO: Document.
+  /// Creates a new [GitDependency].
   GitDependency({
     required super.name,
     required this.url,
     required this.ref,
   }) : super._();
 
-  /// TODO: Document.
+  /// The URL of the Git repository.
   final String url;
 
-  /// TODO: Document.
+  /// The Git ref to depend on. Can be a commit, branch, or tag.
   final String ref;
 
   @override
   String toString() => "$name: $url@$ref";
 }
 
-/// TODO: Document.
+/// A Python dependency from a local path.
+/// The path can be absolute or relative to the project root.
 final class PathDependency extends PythonDependency {
-  /// TODO: Document.
+  /// Creates a new [PathDependency].
   PathDependency({
     required super.name,
     required this.path,
   }) : super._();
 
-  /// TODO: Document.
+  /// The path to the dependency. Can be absolute or relative to the project.
   final String path;
 
   @override
