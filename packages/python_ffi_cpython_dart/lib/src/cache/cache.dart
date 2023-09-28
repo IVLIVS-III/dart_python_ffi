@@ -75,7 +75,8 @@ abstract base class _Cache {
   /// Otherwise all [Exception]s but the last one are swallowed silently in case
   /// of exhaustion of [maxRetries].
   /// Waits for [backoff] between retries, doubles [backoff] after each retry.
-  static Future<(T, Iterable<E>)> exceptionalRetry<T, E extends Exception>(
+  static Future<(T, Iterable<E1>, Iterable<E2>)>
+      exceptionalRetry<T, E1 extends Exception, E2 extends Exception>(
     FutureOr<T> Function() callback, {
     int maxRetries = 7,
     Duration backoff = const Duration(milliseconds: 100),
@@ -83,21 +84,33 @@ abstract base class _Cache {
   }) async {
     try {
       final T result = await callback();
-      return (result, <E>[]);
-    } on E catch (e) {
+      return (result, <E1>[], <E2>[]);
+    } on Exception catch (e) {
+      final List<E1> e1 = <E1>[];
+      final List<E2> e2 = <E2>[];
+
+      if (e is E1) {
+        e1.add(e);
+      } else if (e is E2) {
+        e2.add(e);
+      } else {
+        rethrow;
+      }
+
       if (maxRetries == 0) {
         if (exceptionalReturn != null) {
-          return (exceptionalReturn, <E>[e]);
+          return (exceptionalReturn, e1, e2);
         }
         rethrow;
       }
       await Future<void>.delayed(backoff);
-      final (T result, Iterable<E> errors) = await exceptionalRetry(
+      final (T result, Iterable<E1> prevE1, Iterable<E2> prevE2) =
+          await exceptionalRetry(
         callback,
         maxRetries: maxRetries - 1,
         backoff: backoff * 2,
       );
-      return (result, errors.add(e));
+      return (result, prevE1.followedBy(e1), prevE2.followedBy(e2));
     }
   }
 
@@ -132,14 +145,14 @@ abstract base class _Cache {
       bytes.setRange(offset, offset + chunk.length, chunk);
       offset += chunk.length;
     }
-    await exceptionalRetry<void, OSError>(
+    await exceptionalRetry<void, OSError, FileSystemException>(
       () async {
-        if (cacheFile.existsSync()) {
-          await cacheFile.delete(recursive: true);
+        if (!cacheFile.existsSync()) {
+          cacheFile.createSync(recursive: true);
         }
-        await cacheFile.create(recursive: true);
         final RandomAccessFile fileHandle =
-            cacheFile.openSync(mode: FileMode.write)..lockSync();
+            await cacheFile.open(mode: FileMode.write);
+        await fileHandle.lock();
         await fileHandle.writeFrom(bytes);
         fileHandle
           ..unlockSync()
