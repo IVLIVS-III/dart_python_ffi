@@ -1,20 +1,5 @@
 part of python_ffi_cpython_dart;
 
-extension on DateTime {
-  Uint8List get bytes {
-    final int now = millisecondsSinceEpoch;
-    return Uint8List.fromList(
-      List<int>.generate(8, (int i) => now >> ((8 - i) * 8) & 0xff),
-    );
-  }
-}
-
-extension on Iterable<int> {
-  DateTime get dateTime => DateTime.fromMillisecondsSinceEpoch(
-        take(8).fold(0, (int a, int b) => a << 8 | b),
-      );
-}
-
 abstract base class _Cache {
   _Cache({required this.version, required this.cacheDir});
 
@@ -33,92 +18,39 @@ abstract base class _Cache {
   File _cacheFileLock(_DownloadEntry entry, Directory cacheDir) =>
       File(p.join(cacheDir.path, "${entry.filename}.lock"));
 
-  Future<void> _tryDeleteCacheFileLock(File cacheFileLock) async {
-    try {
-      await cacheFileLock.delete();
-    } on FileSystemException catch (e) {
-      logger.trace("Failed to delete $_loggerFileIdentifier lock: $e");
-    }
-  }
-
-  // TODO: make locking thread-safe: if multiple instances fight for this lock,
-  //       weird things can happen
-  /// Lock file format:
-  /// - 1 byte: uuid of the process that holds the lock
-  /// - 8 bytes: timestamp of when the lock was acquired
-  ///            - must be updated every 10 seconds
-  ///            - if the timestamp is older than 30 seconds, the lock is
-  ///              considered stale and can be deleted
-  Future<bool> _lock(_DownloadEntry entry) async {
+  Future<RandomAccessFile> _lockThreadSafe(_DownloadEntry entry) async {
     final File cacheFileLock = _cacheFileLock(entry, cacheDir);
     // try to get the lock
-    Progress? progress;
-    while (cacheFileLock.existsSync()) {
-      final DateTime now = DateTime.now();
-      final Uint8List bytes = await cacheFileLock.readAsBytes();
-      final int? id = bytes.firstOrNull;
-      if (id == uuid) {
-        // we hold the lock
-        progress?.finish(showTiming: true);
-        break;
-      }
-      if (id == null) {
-        // weird state, delete the lock and try again
-        await _tryDeleteCacheFileLock(cacheFileLock);
-        continue;
-      }
-      final DateTime lockAcquired = bytes.skip(1).dateTime;
-      if (now.difference(lockAcquired) > const Duration(seconds: 30)) {
-        // stale lock, delete it and try again
-        await _tryDeleteCacheFileLock(cacheFileLock);
-        continue;
-      }
-
-      // someone else holds the lock, wait for them to finish
-      progress ??= logger.progress(
-        "Waiting for another command to release the $_loggerFileIdentifier lock",
-      );
-      final Completer<void> completer = Completer<void>();
-      final Timer timeout =
-          Timer(const Duration(seconds: 10), completer.complete);
-      late final StreamSubscription<FileSystemEvent> streamSubscription =
-          cacheFileLock
-              .watch(events: FileSystemEvent.delete)
-              .listen((_) => completer.complete());
-      await completer.future;
-      timeout.cancel();
-      await streamSubscription.cancel();
-    }
-    // create the lock
-    cacheFileLock
-      ..createSync(recursive: true)
-      ..writeAsBytesSync(<int>[uuid, ...DateTime.now().bytes]);
-    Timer.periodic(
-      const Duration(seconds: 10),
-      (Timer timer) async {
-        if (cacheFileLock.existsSync()) {
-          final int? id = (await cacheFileLock.readAsBytes()).firstOrNull;
-          if (id == uuid) {
-            await cacheFileLock
-                .writeAsBytes(<int>[uuid, ...DateTime.now().bytes]);
-            return;
-          }
-        }
-        timer.cancel();
-      },
+    final Progress progress = logger.progress(
+      "Waiting for another command to release the $_loggerFileIdentifier lock",
     );
-    logger.trace("Acquired $_loggerFileIdentifier lock: $uuid");
-    return true;
+    const Duration sleep = Duration(milliseconds: 100);
+    while (true) {
+      try {
+        if (!cacheFileLock.existsSync()) {
+          cacheFileLock.createSync(recursive: true);
+        }
+        final RandomAccessFile file =
+            cacheFileLock.openSync(mode: FileMode.write);
+        await file.lock(FileLock.blockingExclusive);
+        progress.finish(showTiming: true);
+        logger.trace("Acquired $_loggerFileIdentifier lock: $uuid");
+        return file;
+      } on FileSystemException catch (e) {
+        logger.trace("Failed to acquire $_loggerFileIdentifier lock: $e");
+        await Future<void>.delayed(sleep);
+      }
+    }
   }
 
-  Future<void> _unlock(_DownloadEntry entry) async {
-    final File cacheFileLock = _cacheFileLock(entry, cacheDir);
-    if (cacheFileLock.existsSync()) {
-      final int? id = (await cacheFileLock.readAsBytes()).firstOrNull;
-      if (id == uuid) {
-        await _tryDeleteCacheFileLock(cacheFileLock);
-        logger.trace("Released $_loggerFileIdentifier lock: $uuid");
-      }
+  Future<bool> _unlockThreadSafe(RandomAccessFile lockFile) async {
+    try {
+      await lockFile.unlock();
+      await lockFile.close();
+      return true;
+    } on FileSystemException catch (e) {
+      logger.trace("Failed to release $_loggerFileIdentifier lock: $e");
+      return false;
     }
   }
 
@@ -230,13 +162,13 @@ abstract base class _Cache {
     if (entry == null) {
       return false;
     }
-    await _lock(entry);
+    final RandomAccessFile lockFile = await _lockThreadSafe(entry);
     if (await _exists(entry)) {
-      await _unlock(entry);
+      await _unlockThreadSafe(lockFile);
       return true;
     }
     final bool result = await _get(entry);
-    await _unlock(entry);
+    await _unlockThreadSafe(lockFile);
     return result;
   }
 }
