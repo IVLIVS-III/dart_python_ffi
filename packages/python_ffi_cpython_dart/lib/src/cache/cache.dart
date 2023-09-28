@@ -54,14 +54,24 @@ abstract base class _Cache {
     }
   }
 
-  Future<bool> _exists(_DownloadEntry entry) async {
+  /// Must be called while holding the lock.
+  Future<bool> _exists(_DownloadEntry entry, [RandomAccessFile? lock]) async {
+    final RandomAccessFile lockFile = lock ?? await _lockThreadSafe(entry);
     final File cacheFile = _cacheFile(entry, cacheDir);
     if (!cacheFile.existsSync()) {
+      if (lock == null) {
+        await _unlockThreadSafe(lockFile);
+      }
       return false;
     }
     final Uint8List bytes = await cacheFile.readAsBytes();
     final crypto.Digest digest = crypto.sha256.convert(bytes);
-    return digest.toString().toLowerCase() == entry.sha256.toLowerCase();
+    final bool result =
+        digest.toString().toLowerCase() == entry.sha256.toLowerCase();
+    if (lock == null) {
+      await _unlockThreadSafe(lockFile);
+    }
+    return result;
   }
 
   /// Executes [callback] at most [maxRetries] + 1 times, retrying on
@@ -145,7 +155,8 @@ abstract base class _Cache {
       bytes.setRange(offset, offset + chunk.length, chunk);
       offset += chunk.length;
     }
-    await exceptionalRetry<void, OSError, FileSystemException>(
+    final (RandomAccessFile? lockFileHandle, _, _) =
+        await exceptionalRetry<RandomAccessFile?, OSError, FileSystemException>(
       () async {
         if (!cacheFile.existsSync()) {
           cacheFile.createSync(recursive: true);
@@ -154,19 +165,23 @@ abstract base class _Cache {
             await cacheFile.open(mode: FileMode.write);
         await fileHandle.lock();
         await fileHandle.writeFrom(bytes);
-        fileHandle
-          ..unlockSync()
-          ..closeSync();
+        return fileHandle;
       },
       backoff: const Duration(seconds: 1),
+      exceptionalReturn: null,
     );
     downloadProgress.finish(showTiming: true);
+    if (lockFileHandle == null) {
+      logger.stderr("$_loggerFileIdentifier download failed");
+      return false;
+    }
     logger.trace("$_loggerFileIdentifier written to '${cacheFile.path}'");
-    final bool success = await _exists(entry);
+    final bool success = await _exists(entry, lockFileHandle);
     if (!success) {
       logger.stderr("$_loggerFileIdentifier download failed");
       await cacheFile.delete(recursive: true);
     }
+    await _unlockThreadSafe(lockFileHandle);
     return success;
   }
 
@@ -176,7 +191,7 @@ abstract base class _Cache {
       return false;
     }
     final RandomAccessFile lockFile = await _lockThreadSafe(entry);
-    if (await _exists(entry)) {
+    if (await _exists(entry, lockFile)) {
       await _unlockThreadSafe(lockFile);
       return true;
     }
