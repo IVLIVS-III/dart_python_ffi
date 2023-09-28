@@ -1,3 +1,7 @@
+## 0.4.3
+
+- Increased robustness of downloading Python runtime and stdlib.
+
 ## 0.4.2
 
 - Increased robustness of downloading Python runtime and stdlib.
