@@ -1,3 +1,7 @@
+## 0.0.7
+
+- Fixed a crash when deleting a downloaded file that for some reason no longer exists.
+
 ## 0.0.6
 
 - Allows to set the logging level.

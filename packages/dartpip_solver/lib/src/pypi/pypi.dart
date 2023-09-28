@@ -81,7 +81,16 @@ final class PyPIService {
         break;
       }
     }
-    await outputFile.delete();
+    try {
+      await outputFile.delete();
+    } on Exception catch (e) {
+      if (e is! OSError && e is! FileSystemException) {
+        rethrow;
+      }
+      PythonFfiDelegate.logger.trace(
+        "Could not delete ${outputFile.path}: $e",
+      );
+    }
     if (extractedDir == null) {
       throw StateError("Could not find extracted directory.");
     }
