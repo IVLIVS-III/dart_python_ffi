@@ -1,3 +1,8 @@
+## 0.0.6
+
+- Allows to set the logging level.
+- Updated dependencies.
+
 ## 0.0.5
 
 - Updated dependencies.

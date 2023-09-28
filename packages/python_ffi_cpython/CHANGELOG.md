@@ -1,3 +1,11 @@
+## 0.4.4+1
+
+- Fixup for the previous release.
+
+## 0.4.4
+
+- Updated dependencies.
+
 ## 0.4.3
 
 - Updated dependencies.

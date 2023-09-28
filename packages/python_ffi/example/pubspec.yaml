@@ -48,21 +48,21 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - python-modules/tests/json_parser_test.py
-    - python-modules/tests/json_lexer_test.py
-    - python-modules/tests/__init__.py
-    - python-modules/tests/LICENSE
     - python-modules/json_parser/__init__.py
     - python-modules/json_parser/parser.py
     - python-modules/json_parser/lexer.py
     - python-modules/json_parser/LICENSE
+    - python-modules/tests/json_parser_test.py
+    - python-modules/tests/json_lexer_test.py
+    - python-modules/tests/__init__.py
+    - python-modules/tests/LICENSE
     - python-modules/liblax/__init__.py
     - python-modules/liblax/core.py
     - python-modules/liblax/parser.py
     - python-modules/liblax/LICENSE.txt
-    - python-modules/primitives.py
-    - python-modules/structs.py
     - python-modules/type_mappings.py
+    - python-modules/structs.py
+    - python-modules/primitives.py
     - python-modules/data_class.py
     - python-modules/python_ffi.py
     - python-modules/modules.json
