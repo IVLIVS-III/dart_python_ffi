@@ -4,7 +4,7 @@ description: A Flutter app which imports a package, wrapping a python module.
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 0.2.1
+version: 0.2.2
 
 environment:
   sdk: '>=3.0.2 <4.0.0'
@@ -23,8 +23,8 @@ dev_dependencies:
   path: ^1.8.3
   path_provider_platform_interface: ^2.1.1
   plugin_platform_interface: ^2.1.6
-  python_ffi: ^0.4.1
-  python_ffi_cpython: ^0.4.1
+  python_ffi: ^0.4.4
+  python_ffi_cpython: ^0.4.4+1
   python_ffi_lint: ^0.1.1
 
 # For information on the generic Dart part of this file, see the

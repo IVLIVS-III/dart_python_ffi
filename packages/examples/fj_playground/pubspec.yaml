@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 0.2.1
+version: 0.2.2
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -34,7 +34,7 @@ dependencies:
   file_picker: ^5.5.0
   flutter:
     sdk: flutter
-  python_ffi: ^0.4.1
+  python_ffi: ^0.4.4
 
 dev_dependencies:
   flutter_test:
@@ -112,11 +112,11 @@ flutter:
     - python-modules/fj/FJ_computation.py
     - python-modules/fj/FJ_typing.py
     - python-modules/FJ_typing.py
+    - python-modules/FJ_parser.py
+    - python-modules/FJ_interpreter.py
     - python-modules/FJ_computation.py
     - python-modules/FJ_auxiliary_typing.py
     - python-modules/FJ_AST.py
-    - python-modules/FJ_parser.py
-    - python-modules/FJ_interpreter.py
     - python-modules/python_ffi.py
     - python-modules/modules.json
 

@@ -14443,7 +14443,6 @@ final class Pattern extends PythonClass {
 ///     @property
 ///     def max_width(self) -> int:
 ///         return self._get_width()[1]
-/// #
 /// ```
 final class PatternRE extends PythonClass {
   factory PatternRE({

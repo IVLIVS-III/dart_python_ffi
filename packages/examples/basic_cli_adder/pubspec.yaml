@@ -1,6 +1,6 @@
 name: basic_cli_adder
 description: A sample command-line application to showcase importing a simple Python module.
-version: 0.2.1
+version: 0.2.2
 repository: https://github.com/IVLIVS-III/dart_python_ffi
 
 environment:
@@ -8,7 +8,7 @@ environment:
 
 dependencies:
   args: ^2.4.2
-  python_ffi_dart: ^0.4.1
+  python_ffi_dart: ^0.4.4
 
 dev_dependencies:
   python_ffi_lint_dart: ^0.1.1

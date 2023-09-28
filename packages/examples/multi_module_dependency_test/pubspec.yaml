@@ -1,13 +1,13 @@
 name: multi_module_dependency_test
 description: A test of the multi-module dependency feature in interface generation.
-version: 0.2.1
+version: 0.2.2
 repository: https://github.com/IVLIVS-III/dart_python_ffi
 
 environment:
   sdk: ^3.0.6
 
 dependencies:
-  python_ffi_dart: ^0.4.1
+  python_ffi_dart: ^0.4.4
 
 dev_dependencies:
   python_ffi_lint_dart: ^0.1.1

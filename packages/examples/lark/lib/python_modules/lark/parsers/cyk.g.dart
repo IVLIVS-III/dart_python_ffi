@@ -782,6 +782,7 @@ final class RuleNode extends PythonClass {
 ///
 ///     def renamed(self, f):
 ///         return type(self)(f(self.name))
+/// *
 /// ```
 final class $Symbol extends PythonClass {
   factory $Symbol({

@@ -781,6 +781,7 @@ final class ContextualLexer extends PythonClass {
 ///
 ///     def match(self, term, text, index=0):
 ///         return self.regexps[term.name].match(text, index)
+/// 3
 /// ```
 final class EarleyRegexpMatcher extends PythonClass {
   factory EarleyRegexpMatcher({
