@@ -121,19 +121,26 @@ final class _ConsoleModuleBundle<T extends Object> extends _ModuleBundle<T> {
     if (!_pythonModulesDartFile.existsSync()) {
       return <String, Object>{};
     }
-    final String content = _pythonModulesDartFile.readAsStringSync();
-    final RegExpMatch? match = _kPythonModulesDartRegex.firstMatch(content);
-    if (match == null) {
+    try {
+      final String content = _pythonModulesDartFile.readAsStringSync();
+      final RegExpMatch? match = _kPythonModulesDartRegex.firstMatch(content);
+      if (match == null) {
+        return <String, Object>{};
+      }
+      final String? rawBase64 = match.group(1);
+      if (rawBase64 == null) {
+        return <String, Object>{};
+      }
+      final String rawJson = utf8.decode(base64Decode(rawBase64));
+      return Map<String, Object>.from(
+        jsonDecode(rawJson) as Map<String, dynamic>,
+      );
+    } on Exception catch (e) {
+      if (e is! OSError && e is! FileSystemException) {
+        rethrow;
+      }
       return <String, Object>{};
     }
-    final String? rawBase64 = match.group(1);
-    if (rawBase64 == null) {
-      return <String, Object>{};
-    }
-    final String rawJson = utf8.decode(base64Decode(rawBase64));
-    return Map<String, Object>.from(
-      jsonDecode(rawJson) as Map<String, dynamic>,
-    );
   }
 
   @override

@@ -152,6 +152,7 @@ class InstallCommand extends Command<void> {
       pyPiDependencies.map(
         (PyPIDependency e) => Constraint(name: e.name, constraint: e.version),
       ),
+      verboseLogging: DartpipCommandRunner.logger.isVerbose,
     ).then(
       (Set<Dependency> value) => value.map(
         (Dependency e) => PyPIDependency(name: e.name, version: e.version),

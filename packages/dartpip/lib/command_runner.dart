@@ -32,8 +32,6 @@ class DartpipCommandRunner extends CommandRunner<void> {
     final bool verbose = topLevelResults[_kVerboseOption] as bool;
     _logger = verbose ? Logger.verbose() : Logger.standard();
 
-    PythonFfiDart.instance.initialize(verboseLogging: verbose);
-
     return super.runCommand(topLevelResults);
   }
 }
