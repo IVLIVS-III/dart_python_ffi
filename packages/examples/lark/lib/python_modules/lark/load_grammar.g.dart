@@ -13662,7 +13662,7 @@ final class load_grammar extends PythonModule {
   ///         r, b = divmod(n, a)
   ///         if a + b <= max_factor:
   ///             return small_factors(r, max_factor) + [(a, b)]
-  ///     assert False, "Failed to factorize %s" % n+
+  ///     assert False, "Failed to factorize %s" % n
   /// ```
   Object? small_factors({
     required int n,

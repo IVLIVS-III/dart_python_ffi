@@ -1,6 +1,6 @@
 name: flutter_package_export
 description: A Flutter package which wraps a python module.
-version: 0.2.0
+version: 0.2.1
 homepage: https://github.com/IVLIVS-III/dart_python_ffi
 
 environment:
@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  python_ffi: ^0.4.0
+  python_ffi: ^0.4.1
 
 dev_dependencies:
   flutter_test:

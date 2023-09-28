@@ -11,16 +11,6 @@ import "package:python_ffi_dart/python_ffi_dart.dart";
 /// ### python docstring
 ///
 /// CustomIterable(_CustomIterable__iterable: Iterable[~T])
-///
-/// ### python source
-/// ```py
-/// @dataclass
-/// class CustomIterable(Generic[T]):
-///     __iterable: Iterable[T]
-///
-///     def __iter__(self: Self) -> CustomIterator[T]:
-///         return CustomIterator(iter(self.__iterable))
-/// ```
 final class CustomIterable extends PythonClass {
   factory CustomIterable({
     required Iterable<Object?> $_CustomIterable__iterable,
@@ -59,19 +49,6 @@ final class CustomIterable extends PythonClass {
 /// ### python docstring
 ///
 /// CustomIterator(_CustomIterator__iterator: Iterator[~T])
-///
-/// ### python source
-/// ```py
-/// @dataclass
-/// class CustomIterator(Generic[T]):
-///     __iterator: Iterator[T]
-///
-///     def __iter__(self: Self) -> Self:
-///         return self
-///
-///     def __next__(self: Self) -> T:
-///         return next(self.__iterator)
-/// ```
 final class CustomIterator extends PythonClass {
   factory CustomIterator({
     required Iterator<Object?> $_CustomIterator__iterator,
@@ -248,7 +225,7 @@ final class CustomIterator extends PythonClass {
 ///
 ///
 /// def request_set() -> set[int]:
-///     return kSet
+///     return set(kSet)
 ///
 ///
 /// def receive_iterator(value: Iterator[int]):
@@ -727,7 +704,7 @@ final class type_mappings extends PythonModule {
   /// ### python source
   /// ```py
   /// def request_set() -> set[int]:
-  ///     return kSet
+  ///     return set(kSet)
   /// ```
   Set<int> request_set() => Set<int>.from(
         Set.from(

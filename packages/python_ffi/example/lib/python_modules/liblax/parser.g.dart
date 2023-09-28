@@ -198,7 +198,7 @@ final class Div extends PythonClass {
 ///         }
 ///
 ///         Op.__init__(self, lhs, rhs, EXP_ARG_MAP, EXP_OP_MAP, FMT0,
-///                     DEFAULT_EXP_OP_MAP)
+///                     DEFAULT_EXP_OP_MAP)!
 /// ```
 final class Exp extends PythonClass {
   factory Exp({
