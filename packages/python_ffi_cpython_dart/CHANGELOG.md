@@ -1,3 +1,7 @@
+## 0.4.2
+
+- Increased robustness of downloading Python runtime and stdlib.
+
 ## 0.4.1
 
 - Made locking thread-safe while downloading Python runtime and stdlib.

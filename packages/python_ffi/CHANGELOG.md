@@ -1,3 +1,7 @@
+## 0.4.2
+
+- Updated dependencies.
+
 ## 0.4.1
 
 - Added `verboseLogging` parameter to `PythonFfi.instance.initialize`.
