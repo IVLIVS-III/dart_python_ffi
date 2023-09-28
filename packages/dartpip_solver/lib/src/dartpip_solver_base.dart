@@ -45,8 +45,14 @@ class Constraint {
 /// recursively and collects all modules. For each module, it then downloads the
 /// latest version from PyPI, regardless of whether it is compatible with the
 /// other modules or not.
-Future<Set<Dependency>> solve(Iterable<Constraint> constraints) async {
-  await PythonFfiDart.instance.initialize(pythonModules: kPythonModules);
+Future<Set<Dependency>> solve(
+  Iterable<Constraint> constraints, {
+  bool? verboseLogging,
+}) async {
+  await PythonFfiDart.instance.initialize(
+    pythonModules: kPythonModules,
+    verboseLogging: verboseLogging,
+  );
 
   final Set<Dependency> dependencies = <Dependency>{};
   final Queue<Constraint> queue = Queue<Constraint>()..addAll(constraints);
