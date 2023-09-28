@@ -40,9 +40,7 @@ scripts:
     exec:
       concurrency: 1
   dartpip-install:
-    run: dartpip install
-    exec:
-      concurrency: 1
+    exec: dartpip install
   test:
     run: melos run dart-test && melos run flutter-test
   dart-test:

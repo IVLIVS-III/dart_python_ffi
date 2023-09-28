@@ -519,19 +519,24 @@ clients as a dependency. `python_ffi_dart/example` and `python_ffi/example` are 
 used for developing, testing and showcasing the Python FFI.
 
 ```
-┌─────────────────────────────────────────┐
-│  python_ffi            python_ffi_dart  │
-│  │   │                           │   │  │
-│  │   python_ffi_cpython          │   │  │
-│  │   │          │                │   │  │
-│  │   │     python_ffi_cpython_dart   │  │
-│  └───┴────────────┐              │   │  │       dartpip
-│                   python_ffi_interface  │          │
-└─────────────────────────────────────────┘    dartpip_solver
-                                       │             │
-                                       python_ffi_lint
-                                              │
-                                  python_ffi_lint_dart
+                               ╔═════════╗
+╔════════════╗                 ║ dartpip ║
+║ python_ffi ║                 ╚════╤════╝
+╚═╤═══╤════╤═╝                      │
+  │   │    │                  dartpip_solver
+  │   │    └─────────────────┐      │
+  │   │                    ╔═╧══════╧════════╗
+  │   python_ffi_cpython   ║ python_ffi_dart ║
+  │       │   │            ╚════════╤═══╤════╝
+  │       │   │                     │   │
+  │       │   python_ffi_cpython_dart   │
+  │       │                     │       │
+  └───────┴──────────┐          │       │
+                     python_ffi_interface
+                                │
+                        python_ffi_lint
+                                │
+                     python_ffi_lint_dart
 ```
 
 ## Limitations
