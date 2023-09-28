@@ -1,3 +1,7 @@
+## 0.2.4
+
+- Updated dependencies.
+
 ## 0.2.3
 
 - Tests, examples and documentation are mostly ignored by the `dartpip install` command. The command

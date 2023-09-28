@@ -1,3 +1,7 @@
+## 0.4.1
+
+- Updated dependencies.
+
 ## 0.4.0
 
 - Refactored to make use of Dart 3.x record types.

@@ -1,6 +1,7 @@
-## NEXT
+## 0.4.1
 
-- Added `verboseLogging` parameter to `PythonnFfi.instance.initialize`.
+- Added `verboseLogging` parameter to `PythonFfi.instance.initialize`.
+- Updated dependencies.
 
 ## 0.4.0
 
