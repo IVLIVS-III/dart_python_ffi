@@ -556,5 +556,6 @@ This project started out as a bachelors project / bachelors thesis.
 
 ## Contributing
 
-Contributions are welcome after I finished my bachelors thesis involving this project. Until then, I
-will develop this on my own.
+Contributions are welcome.
+I suggest to look at the vast number of examples to get started with the structure of this collection of packages.
+It is preferrable to open an issue first, then create a pull request that refers back to the previously opened issue.
